@@ -61,6 +61,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enum\HttpMethodType.cs" />
+    <Compile Include="EWI\EWIInput.cs" />
+    <Compile Include="EWI\EWIOutput.cs" />
     <Compile Include="Input\InquiryConsultingHistoryListModel.cs" />
     <Compile Include="Output\OutputModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
