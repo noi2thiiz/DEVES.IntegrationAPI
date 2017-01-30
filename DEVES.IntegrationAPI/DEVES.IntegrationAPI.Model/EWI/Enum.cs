@@ -11,27 +11,27 @@ namespace DEVES.IntegrationAPI.Model.EWI
         /// <summary>
         /// Success
         /// </summary>
-        EWI0000I,
+        EWI0000I = 0,
         /// <summary>
         /// Password Expired
         /// </summary>
-        EWI3001E,
+        EWI3001E = 3001,
         /// <summary>
         /// Signon Failed
         /// </summary>
-        EWI3000E,
+        EWI3000E = 3000,
         /// <summary>
         /// Invalid Token
         /// </summary>
-        EWI3002E,
+        EWI3002E = 3002,
         /// <summary>
         /// Invalid Credential
         /// </summary>
-        EWI3003E,
+        EWI3003E = 3003,
         /// <summary>
         /// Bad Request
         /// </summary>
-        EWI3004E,
-        ETC,
+        EWI3004E = 3004,
+        ETC = 9999,
     }
 }
