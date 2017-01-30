@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace DEVES.IntegrationAPI.Model.EWI
 {
@@ -38,6 +39,7 @@ namespace DEVES.IntegrationAPI.Model.EWI
                 }
             }
         }
+        [JsonIgnore]
         private EWIResponseCode? responseCode_ENUM = null;
         public string responseMessage { get; set; }
         public string hostscreen { get; set; }

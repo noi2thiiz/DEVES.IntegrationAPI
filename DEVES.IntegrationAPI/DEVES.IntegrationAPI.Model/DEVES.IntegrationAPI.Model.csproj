@@ -42,6 +42,10 @@
       <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.8.1.0.2\lib\net452\Microsoft.Xrm.Sdk.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.DirectoryServices" />
@@ -64,11 +68,12 @@
     <Compile Include="EWI\Enum.cs" />
     <Compile Include="EWI\EWIInput.cs" />
     <Compile Include="EWI\EWIOutput.cs" />
+    <Compile Include="InquiryConsultingHistoryList\InquiryConsultingHistoryListInput.cs" />
+    <Compile Include="InquiryConsultingHistoryList\InquiryConsultingHistoryListOutput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ClaimRegistration\" />
-    <Folder Include="InquiryConsultingHistoryList\" />
     <Folder Include="UpdateClaimStatus\" />
   </ItemGroup>
   <ItemGroup>
