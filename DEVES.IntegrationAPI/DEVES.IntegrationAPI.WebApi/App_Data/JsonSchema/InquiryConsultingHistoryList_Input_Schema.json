@@ -1,0 +1,22 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"properties": {
+		"ticketNo": {
+			"type": "string",
+			"maxLength": 50
+		},
+		"claimNotiNo": {
+			"type": "string",
+			"maxLength": 15
+		},
+		"claimNo": {
+			"type": "string",
+			"maxLength": 8
+		}
+	},
+	"required": [
+		"ticketNo",
+		"claimNotiNo"
+	]
+}

@@ -11,7 +11,7 @@ namespace DEVES.IntegrationAPI.Core.Helper
     {
         private static readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(FileHelper));
 
-        private static string ReadTextFile(string fileName)
+        public static string ReadTextFile(string fileName)
         {
             var text = string.Empty;
             if (!string.IsNullOrWhiteSpace(fileName) && File.Exists(fileName))
