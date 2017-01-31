@@ -39,8 +39,8 @@
         "shortDateTime": {
             "type": "string",
             "pattern": "[0-9]{4}[0-9]{2}[0-9]{2}",
-            "minLength": 19,
-            "maxLength": 19
+            "minLength": 8,
+            "maxLength": 8
         },
         "generalDateTime": {
             "type": "string",
@@ -375,17 +375,7 @@
                     "reportAccidentResultDate": {
                         "type": "string"
                     }
-                },
-                "required": [
-                    "surveyorCode",
-                    "surveyorClientNumber",
-                    "surveyorName",
-                    "surveyorCompanyName",
-                    "surveyorCompanyMobile",
-                    "surveyorMobile",
-                    "surveyorType",
-                    "reportAccidentResultDate"
-                ]
+                }
             }
         },
         "claimSurvInform": {
@@ -487,40 +477,10 @@
                                 "demageOfPartyCar": {
                                     "type": "string"
                                 }
-                            },
-                            "required": [
-                                "accidentPartyFullname",
-                                "accidentPartyPhone",
-                                "accidentPartyCarPlateNumber",
-                                "accidentPartyCarModel",
-                                "accidentPartyInsuredFlag",
-                                "accidentPartyInsuranceCompany",
-                                "accidentPartyPolicyType",
-                                "accidentPartyPolicyNumber",
-                                "accidentPartyPolicyExpdate",
-                                "demageOfPartyCar"
-                            ]
+                            }
                         }
                     }
-                },
-                "required": [
-                    "accidentLegalResult",
-                    "policeStation",
-                    "policeRecordId",
-                    "policeRecordDate",
-                    "policeBailFlag",
-                    "demageOfPolicyOwnerCar",
-                    "numOfTowTruck",
-                    "nameOfTowCompany",
-                    "detailOfTowEvent",
-                    "numOfAccidentInjury",
-                    "detailOfAccidentInjury",
-                    "numOfDeath",
-                    "detailOfDeath",
-                    "caseOwnerCode",
-                    "caseOwnerFullName",
-                    "accidentPartyInfo"
-                ]
+                }
             }
         }
     },

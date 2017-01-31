@@ -34,7 +34,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             _logImportantMessage = string.Format(_logImportantMessage, ewiRequest.username, ewiRequest.token);
             var contentModel = JsonConvert.DeserializeObject<ClaimRegistrationInputModel>(contentText);
             string outvalidate = string.Empty;
-            var filePath = HttpContext.Current.Server.MapPath("~/App_Data/JsonSchema/InquiryConsultingHistoryList_Input_Schema.json");
+            var filePath = HttpContext.Current.Server.MapPath("~/App_Data/JsonSchema/ClaimRegistration_Input_Schema.json");
 
             if (JsonHelper.TryValidateJson(contentText, filePath, out outvalidate))
             {
