@@ -1,14 +1,8 @@
 ﻿using DEVES.IntegrationAPI.Core.Helper;
-using DEVES.IntegrationAPI.Model.Enum;
 using DEVES.IntegrationAPI.Model.EWI;
 using DEVES.IntegrationAPI.Model.InquiryConsultingHistoryList;
-using Microsoft.Xrm.Sdk;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Schema;
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Net.Http;
 using System.Web;
 using System.Web.Http;
@@ -17,28 +11,32 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
 {
     public class InquiryConsultingHistoryListController : ApiController
     {
+        //To use with log
+        private string _logImportantMessage;
         private readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(InquiryConsultingHistoryListController));
 
-        public object Post([FromBody]object value)
+        public object Get([FromBody]object value)
         {
-            _log.Info("HttpMethod: POST");
-            _log.InfoFormat("IP ADDRESS: {0}", GetIpAddress());
+            _log.InfoFormat("IP ADDRESS: {0}, HttpMethod: Get", CommonHelper.GetIpAddress());
 
             var output = new EWIResponse();
-            if (!TryValidateNullMessage(value, out output))
+            if (!JsonHelper.TryValidateNullMessage(value, out output))
             {
                 return Request.CreateResponse<EWIResponse>(output);
             }
             var valueText = value.ToString();
-            var input = JsonConvert.DeserializeObject<EWIRequest>(valueText);
-            var contentText = input.content.ToString();
-            var contentModel = JsonConvert.DeserializeObject<InquiryConsultingHistoryListInput>(contentText);
+            var ewiRequest = JsonConvert.DeserializeObject<EWIRequest>(valueText);
+            var contentText = ewiRequest.content.ToString();
+            _logImportantMessage = "Username: {0}, Token: {1}, ";
+            _logImportantMessage = string.Format(_logImportantMessage, ewiRequest.username, ewiRequest.token);
+            var contentModel = JsonConvert.DeserializeObject<InquiryConsultingHistoryListInputModel>(contentText);
             string outvalidate = string.Empty;            
             var filePath = HttpContext.Current.Server.MapPath("~/App_Data/JsonSchema/InquiryConsultingHistoryList_Input_Schema.json");
 
             if (JsonHelper.TryValidateJson(contentText, filePath, out outvalidate))
             {
-                output = HandleMessage(contentText, HttpMethodType.POST);
+                _logImportantMessage += "Code: " + contentModel.code;
+                output = HandleMessage(contentText, contentModel);
             }
             else
             {
@@ -52,15 +50,15 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                     hostscreen = string.Empty,
                     content = null
                 };
+                _log.Error(_logImportantMessage);
                 _log.ErrorFormat("ErrorCode: {0} {1} ErrorDescription: {1}", output.responseCode, Environment.NewLine, output.responseMessage);
             }
             return Request.CreateResponse<EWIResponse>(output);
         }
 
-        private EWIResponse HandleMessage(string valueText, HttpMethodType httpMethod)
+        private EWIResponse HandleMessage(string valueText, InquiryConsultingHistoryListInputModel content)
         {
             //TODO: Do what you want
-            var apiRequestId = string.Empty;
             var output = new EWIResponse();
             _log.Info("HandleMessage");
             try
@@ -88,7 +86,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                     errorMessage += Environment.NewLine + "(InnerException)" + e.InnerException.GetType().FullName + " - " + e.InnerException.Message + Environment.NewLine;
                     errorMessage += "StackStrace: " + e.InnerException.StackTrace;
                 }
-                _log.Error("RequestId - " + apiRequestId);
+                _log.Error("RequestId - " + _logImportantMessage);
                 _log.Error(errorMessage);
 
                 output = new EWIResponse()
@@ -104,71 +102,6 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             }
 
             return output;
-        }
-
-        private bool TryValidateNullMessage(object value, out EWIResponse output)
-        {
-            output = new EWIResponse();
-            if (value == null)
-            {
-                output = new EWIResponse()
-                {
-                    username = string.Empty,
-                    token = string.Empty,
-                    success = false,
-                    responseCode = EWIResponseCode.ETC.ToString(),
-                    responseMessage = "There is no message.",
-                    hostscreen = string.Empty,
-                    content = null
-                };
-                _log.ErrorFormat("ErrorCode: {0} {1} ErrorDescription: {2}", output.responseCode, Environment.NewLine, output.responseMessage);
-                return false;
-            }
-            return true;
-        }
-
-        private bool TryValidateJson(string jsontext, out string output)
-        {
-            var validatedText = "TryValidateJson: {0}";
-            output = string.Empty;
-            try
-            {
-                var schemaPath = "~/App_Data/JsonSchema/InquiryConsultingHistoryList_Input_Schema.json";
-                _log.InfoFormat(validatedText, string.Empty);
-                var filePath = HttpContext.Current.Server.MapPath(schemaPath);
-                var schemaText = FileHelper.ReadTextFile(filePath);
-                var schema = JSchema.Parse(schemaText);
-                var jsonObj = JObject.Parse(jsontext);
-                IList<string> errorMessages;
-                bool valid = jsonObj.IsValid(schema, out errorMessages);
-                _log.InfoFormat(validatedText, valid);
-                output = valid.ToString() + Environment.NewLine;
-                if (!valid)
-                {
-                    _log.ErrorFormat(validatedText, jsontext);
-                }
-                foreach (var errorMessage in errorMessages)
-                {
-                    output += errorMessage + Environment.NewLine;
-                    _log.WarnFormat(validatedText, errorMessage);
-                }
-                return valid;
-            }
-            catch (Exception ex)
-            {
-                _log.ErrorFormat(validatedText, ex.Message);
-                _log.ErrorFormat(validatedText, ex.StackTrace);
-                return false;
-            }
-        }
-
-        private string GetIpAddress()
-        {
-            string ipaddress;
-            ipaddress = HttpContext.Current.Request.ServerVariables["HTTP_X_FORWARDED_FOR"];
-            if (string.IsNullOrEmpty(ipaddress))
-                ipaddress += HttpContext.Current.Request.ServerVariables["HTTP_CLIENT_IP"];
-            return ipaddress;
         }
     }
 }

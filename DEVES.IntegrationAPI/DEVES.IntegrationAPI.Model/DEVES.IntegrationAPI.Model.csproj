@@ -64,18 +64,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Enum\HttpMethodType.cs" />
+    <Compile Include="ClaimRegistration\ClaimRegistrationInputModel.cs" />
+    <Compile Include="ClaimRegistration\ClaimRegistrationOutputModel.cs" />
     <Compile Include="EWI\Enum.cs" />
     <Compile Include="EWI\EWIResponse.cs" />
     <Compile Include="EWI\EWIRequest.cs" />
-    <Compile Include="InquiryConsultingHistoryList\InquiryConsultingHistoryListInput.cs" />
-    <Compile Include="InquiryConsultingHistoryList\InquiryConsultingHistoryListOutput.cs" />
+    <Compile Include="InquiryConsultingHistoryList\InquiryConsultingHistoryListInputModel.cs" />
+    <Compile Include="InquiryConsultingHistoryList\InquiryConsultingHistoryListOutputModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UpdateClaimStatus\UpdateClaimStatusInputModel.cs" />
+    <Compile Include="UpdateClaimStatus\UpdateClaimStatusOutputModel.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ClaimRegistration\" />
-    <Folder Include="UpdateClaimStatus\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>

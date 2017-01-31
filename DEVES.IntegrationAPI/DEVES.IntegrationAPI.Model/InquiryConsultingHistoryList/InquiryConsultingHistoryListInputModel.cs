@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace DEVES.IntegrationAPI.Model.InquiryConsultingHistoryList
 {
-    public class InquiryConsultingHistoryListInput
+    public class InquiryConsultingHistoryListInputModel
     {
         public string code { get; set; }
     }

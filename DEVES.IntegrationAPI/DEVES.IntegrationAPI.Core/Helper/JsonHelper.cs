@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using DEVES.IntegrationAPI.Model.EWI;
+using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
 using System;
 using System.Collections.Generic;
@@ -41,6 +42,27 @@ namespace DEVES.IntegrationAPI.Core.Helper
                 _log.ErrorFormat(validatedText, ex.StackTrace);
                 return false;
             }
+        }
+        
+        public static bool TryValidateNullMessage(object value, out EWIResponse output)
+        {
+            output = new EWIResponse();
+            if (value == null)
+            {
+                output = new EWIResponse()
+                {
+                    username = string.Empty,
+                    token = string.Empty,
+                    success = false,
+                    responseCode = EWIResponseCode.ETC.ToString(),
+                    responseMessage = "There is no message.",
+                    hostscreen = string.Empty,
+                    content = null
+                };
+                _log.ErrorFormat("ErrorCode: {0} {1} ErrorDescription: {2}", output.responseCode, Environment.NewLine, output.responseMessage);
+                return false;
+            }
+            return true;
         }
     }
 }
