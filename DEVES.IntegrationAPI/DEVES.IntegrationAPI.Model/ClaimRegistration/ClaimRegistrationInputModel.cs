@@ -8,10 +8,10 @@ namespace DEVES.IntegrationAPI.Model.ClaimRegistration
 {
     public class ClaimRegistrationInputModel
     {
-        public ClaimheaderModel[] claimHeader { get; set; }
-        public ClaimtypeModel[] claimType { get; set; }
-        public ClaimassignsurvModel[] claimAssignSurv { get; set; }
-        public ClaimsurvinformModel[] claimSurvInform { get; set; }
+        public ClaimheaderModel claimHeader { get; set; }
+        public ClaimtypeModel claimType { get; set; }
+        public ClaimassignsurvModel claimAssignSurv { get; set; }
+        public ClaimsurvinformModel claimSurvInform { get; set; }
     }
 
     public class ClaimheaderModel

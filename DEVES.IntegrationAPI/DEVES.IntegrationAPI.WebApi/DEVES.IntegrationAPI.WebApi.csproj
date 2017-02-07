@@ -236,8 +236,8 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\ClaimRegistrationController.cs" />
-    <Compile Include="Controllers\InquiryConsultingHistoryListController.cs" />
-    <Compile Include="Controllers\UpdateClaimStatusController.cs" />
+    <Compile Include="Controllers\InquiryConsultingHistoryController.cs" />
+    <Compile Include="Controllers\UpdateClaimInfoController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

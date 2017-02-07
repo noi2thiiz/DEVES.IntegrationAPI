@@ -1,6 +1,6 @@
 ﻿using DEVES.IntegrationAPI.Core.Helper;
-using DEVES.IntegrationAPI.Model.ClaimRegistration;
 using DEVES.IntegrationAPI.Model.EWI;
+using DEVES.IntegrationAPI.Model.UpdateClaimInfo;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -12,16 +12,17 @@ using System.Web.Http;
 
 namespace DEVES.IntegrationAPI.WebApi.Controllers
 {
-    public class ClaimRegistrationController : ApiController
+    public class UpdateClaimInfoController : ApiController
     {
         //To use with log
         private string _logImportantMessage;
-        private readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(ClaimRegistrationController));
+        private readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(UpdateClaimInfoController));
 
         public object Post([FromBody]object value)
         {
             _log.InfoFormat("IP ADDRESS: {0}, HttpMethod: Get", CommonHelper.GetIpAddress());
 
+            /*
             var output = new EWIResponse();
             if (!JsonHelper.TryValidateNullMessage(value, out output))
             {
@@ -32,53 +33,43 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             var contentText = ewiRequest.content.ToString();
             _logImportantMessage = "Username: {0}, Token: {1}, ";
             _logImportantMessage = string.Format(_logImportantMessage, ewiRequest.username, ewiRequest.token);
-            var contentModel = JsonConvert.DeserializeObject<ClaimRegistrationInputModel>(contentText);
+            */
+            var output = new UpdateClaimInfoInputModel();
+            //if (!JsonHelper.TryValidateNullMessage(value, out output))
+            //{
+            //    return Request.CreateResponse<UpdateClaimStatusInputModel>(output);
+            //}
+            var contentText = value.ToString();
+            var contentModel = JsonConvert.DeserializeObject<UpdateClaimInfoInputModel>(contentText);
             string outvalidate = string.Empty;
-            var filePath = HttpContext.Current.Server.MapPath("~/App_Data/JsonSchema/ClaimRegistration_Input_Schema.json");
+            var filePath = HttpContext.Current.Server.MapPath("~/App_Data/JsonSchema/UpdateClaimStatus_Input_Schema.json");
 
             if (JsonHelper.TryValidateJson(contentText, filePath, out outvalidate))
             {
-                _logImportantMessage += "ticketNo: " + contentModel.claimHeader.ticketNo;
+                _logImportantMessage += "Code: " + contentModel.claimNo;
                 output = HandleMessage(contentText, contentModel);
             }
             else
             {
-                output = new EWIResponse()
-                {
-                    username = string.Empty,
-                    token = string.Empty,
-                    success = false,
-                    responseCode = EWIResponseCode.ETC.ToString(),
-                    responseMessage = outvalidate,
-                    hostscreen = string.Empty,
-                    content = null
-                };
+                output = new UpdateClaimInfoInputModel();
                 _log.Error(_logImportantMessage);
-                _log.ErrorFormat("ErrorCode: {0} {1} ErrorDescription: {1}", output.responseCode, Environment.NewLine, output.responseMessage);
+               // _log.ErrorFormat("ErrorCode: {0} {1} ErrorDescription: {1}", output.responseCode, Environment.NewLine, output.responseMessage);
             }
-            return Request.CreateResponse<EWIResponse>(output);
+
+            return Request.CreateResponse<UpdateClaimInfoInputModel>(output);
         }
 
-        private EWIResponse HandleMessage(string valueText, ClaimRegistrationInputModel content)
+        private UpdateClaimInfoInputModel HandleMessage(string valueText, UpdateClaimInfoInputModel content)
         {
             //TODO: Do what you want
-            var output = new EWIResponse();
-            var updateClaimStatusOutput = new ClaimRegistrationOutputModel();
+            var output = new UpdateClaimInfoInputModel();
+            var updateClaimStatusOutput = new UpdateClaimInfoOutputModel();
             _log.Info("HandleMessage");
             try
             {
                 //TODO: Do something
 
-                output = new EWIResponse()
-                {
-                    username = string.Empty,
-                    token = string.Empty,
-                    success = false,
-                    responseCode = EWIResponseCode.EWI0000I.ToString(),
-                    responseMessage = "Success",
-                    hostscreen = string.Empty,
-                    content = null
-                };
+                
             }
             catch (Exception e)
             {
@@ -93,16 +84,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 _log.Error("RequestId - " + _logImportantMessage);
                 _log.Error(errorMessage);
 
-                output = new EWIResponse()
-                {
-                    username = string.Empty,
-                    token = string.Empty,
-                    success = false,
-                    responseCode = EWIResponseCode.ETC.ToString(),
-                    responseMessage = "Internal process error",
-                    hostscreen = string.Empty,
-                    content = updateClaimStatusOutput
-                };
+                
             }
 
             return output;

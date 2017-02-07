@@ -1,24 +1,21 @@
 ﻿using DEVES.IntegrationAPI.Core.Helper;
-using DEVES.IntegrationAPI.Model.ClaimRegistration;
 using DEVES.IntegrationAPI.Model.EWI;
+using DEVES.IntegrationAPI.Model.InquiryConsultingHistory;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Web;
 using System.Web.Http;
 
 namespace DEVES.IntegrationAPI.WebApi.Controllers
 {
-    public class ClaimRegistrationController : ApiController
+    public class InquiryConsultingHistoryController : ApiController
     {
         //To use with log
         private string _logImportantMessage;
-        private readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(ClaimRegistrationController));
+        private readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(InquiryConsultingHistoryController));
 
-        public object Post([FromBody]object value)
+        public object Get([FromBody]object value)
         {
             _log.InfoFormat("IP ADDRESS: {0}, HttpMethod: Get", CommonHelper.GetIpAddress());
 
@@ -32,13 +29,13 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             var contentText = ewiRequest.content.ToString();
             _logImportantMessage = "Username: {0}, Token: {1}, ";
             _logImportantMessage = string.Format(_logImportantMessage, ewiRequest.username, ewiRequest.token);
-            var contentModel = JsonConvert.DeserializeObject<ClaimRegistrationInputModel>(contentText);
-            string outvalidate = string.Empty;
-            var filePath = HttpContext.Current.Server.MapPath("~/App_Data/JsonSchema/ClaimRegistration_Input_Schema.json");
+            var contentModel = JsonConvert.DeserializeObject<InquiryConsultingHistoryInputModel>(contentText);
+            string outvalidate = string.Empty;            
+            var filePath = HttpContext.Current.Server.MapPath("~/App_Data/JsonSchema/InquiryConsultingHistoryList_Input_Schema.json");
 
             if (JsonHelper.TryValidateJson(contentText, filePath, out outvalidate))
             {
-                _logImportantMessage += "ticketNo: " + contentModel.claimHeader.ticketNo;
+                _logImportantMessage += "Code: " + contentModel.claimNo;
                 output = HandleMessage(contentText, contentModel);
             }
             else
@@ -59,11 +56,10 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             return Request.CreateResponse<EWIResponse>(output);
         }
 
-        private EWIResponse HandleMessage(string valueText, ClaimRegistrationInputModel content)
+        private EWIResponse HandleMessage(string valueText, InquiryConsultingHistoryInputModel content)
         {
             //TODO: Do what you want
             var output = new EWIResponse();
-            var updateClaimStatusOutput = new ClaimRegistrationOutputModel();
             _log.Info("HandleMessage");
             try
             {
@@ -101,7 +97,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                     responseCode = EWIResponseCode.ETC.ToString(),
                     responseMessage = "Internal process error",
                     hostscreen = string.Empty,
-                    content = updateClaimStatusOutput
+                    content = null
                 };
             }
 

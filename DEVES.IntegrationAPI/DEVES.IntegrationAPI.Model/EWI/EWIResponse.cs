@@ -23,7 +23,7 @@ namespace DEVES.IntegrationAPI.Model.EWI
                         re = EWIResponseCode.ETC.ToString() + ".";
                         break;
                     default:
-                        re = EWIResponseCode.ETC.ToString();
+                        re = responseCode_ENUM.ToString();
                         re = re.Insert(3, "-");
                         break;
                 }
@@ -33,7 +33,7 @@ namespace DEVES.IntegrationAPI.Model.EWI
                 string temp = value;
                 temp = temp.Replace("-", "").Replace(".", "");
                 EWIResponseCode mycode;
-                if(System.Enum.TryParse("", out mycode))
+                if(System.Enum.TryParse(temp, out mycode))
                 {
                     responseCode_ENUM = mycode;
                 }
