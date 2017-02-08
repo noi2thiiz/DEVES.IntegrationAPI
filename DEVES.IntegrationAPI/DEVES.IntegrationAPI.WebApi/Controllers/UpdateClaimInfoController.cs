@@ -34,7 +34,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             _logImportantMessage = "Username: {0}, Token: {1}, ";
             _logImportantMessage = string.Format(_logImportantMessage, ewiRequest.username, ewiRequest.token);
             */
-            var output = new UpdateClaimInfoInputModel();
+            var output = new UpdateClaimInfoOutputModel();
             //if (!JsonHelper.TryValidateNullMessage(value, out output))
             //{
             //    return Request.CreateResponse<UpdateClaimStatusInputModel>(output);
@@ -51,25 +51,24 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             }
             else
             {
-                output = new UpdateClaimInfoInputModel();
+                output = new UpdateClaimInfoOutputModel();
                 _log.Error(_logImportantMessage);
                // _log.ErrorFormat("ErrorCode: {0} {1} ErrorDescription: {1}", output.responseCode, Environment.NewLine, output.responseMessage);
             }
 
-            return Request.CreateResponse<UpdateClaimInfoInputModel>(output);
+            return Request.CreateResponse<UpdateClaimInfoOutputModel>(output);
         }
 
-        private UpdateClaimInfoInputModel HandleMessage(string valueText, UpdateClaimInfoInputModel content)
+        private UpdateClaimInfoOutputModel HandleMessage(string valueText, UpdateClaimInfoInputModel content)
         {
             //TODO: Do what you want
-            var output = new UpdateClaimInfoInputModel();
-            var updateClaimStatusOutput = new UpdateClaimInfoOutputModel();
+            var output = new UpdateClaimInfoOutputModel();
+            var updateClaimInfoOutput = new UpdateClaimInfoDataOutputModel();
             _log.Info("HandleMessage");
             try
             {
                 //TODO: Do something
-
-                
+                output.data = updateClaimInfoOutput;
             }
             catch (Exception e)
             {

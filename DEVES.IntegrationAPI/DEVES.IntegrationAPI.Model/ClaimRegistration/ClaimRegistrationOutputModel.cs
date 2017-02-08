@@ -13,7 +13,7 @@ namespace DEVES.IntegrationAPI.Model.ClaimRegistration
         public string description { get; set; }
         public string transactionId { get; set; }
         public DateTime transactionDateTime { get; set; }
-        public ClaimRegistrationDataOutputModel[] data { get; set; }
+        public ClaimRegistrationDataOutputModel data { get; set; }
     }
 
     public class ClaimRegistrationDataOutputModel

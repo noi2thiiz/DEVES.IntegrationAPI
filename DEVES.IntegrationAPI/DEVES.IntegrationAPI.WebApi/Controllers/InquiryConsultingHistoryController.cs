@@ -15,7 +15,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         private string _logImportantMessage;
         private readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(InquiryConsultingHistoryController));
 
-        public object Get([FromBody]object value)
+        public object Post([FromBody]object value)
         {
             _log.InfoFormat("IP ADDRESS: {0}, HttpMethod: Get", CommonHelper.GetIpAddress());
 

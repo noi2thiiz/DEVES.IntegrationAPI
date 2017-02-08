@@ -15,7 +15,7 @@ namespace DEVES.IntegrationAPI.Model.InquiryConsultingHistory
         public string description { get; set; }
         public string transactionId { get; set; }
         public DateTime transactionDateTime { get; set; }
-        public InquiryConsultingHistoryDataOutputModel[] data { get; set; }
+        public InquiryConsultingHistoryDataOutputModel data { get; set; }
     }
 
     public class InquiryConsultingHistoryDataOutputModel
