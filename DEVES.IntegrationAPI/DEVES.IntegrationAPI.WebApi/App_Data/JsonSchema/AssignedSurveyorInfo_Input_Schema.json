@@ -1,0 +1,73 @@
+﻿{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"properties": {
+		"token": {
+			"type": "string",
+			"maxLength": 50
+		},
+		"ticketNo": {
+			"type": "string",
+			"maxLength": 50
+		},
+    "claimNotiNo": {
+      "type": "string",
+      "maxLength": 15
+    },
+    "iSurveyStatusOn": {
+      "type": "string"
+    },
+    "surveyMeetingLatitude": {
+      "type": "number",
+      "maxLength": 20
+    },
+    "surveyMeetingLongitude": {
+      "type": "number",
+      "maxLength": 20
+    },
+    "surveyMeetingDistrict": {
+      "type": "string",
+      "maxLength": 100
+    },
+    "surveyMeetingProvince": {
+      "type": "string",
+      "maxLength": 100
+    },
+    "surveyMeetingPlace": {
+      "type": "string"
+    },
+    "surveyMeetingDate": {
+      "type": "string"
+    },
+    "surveyorCode": {
+      "type": "string",
+      "maxLength": 20
+    },
+    "surveyorClientNumber": {
+      "type": "string",
+      "maxLength": 20
+    },
+    "surveyorName": {
+      "type": "string",
+      "maxLength": 200
+    },
+    "surveyorCompanyName": {
+      "type": "string",
+      "maxLength": 200
+    },
+    "surveyorCompanyMobile": {
+      "type": "string",
+      "maxLength": 100
+    },
+    "surveyorType": {
+      "type": "string",
+      "maxLength": 1
+    }
+	},
+	"required": [
+		"token",
+    "ticketNo",
+    "claimNotiNo",
+    "surveyorType"
+	]
+}

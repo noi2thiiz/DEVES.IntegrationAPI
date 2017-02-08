@@ -64,6 +64,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccidentPrilimSurveyorReport\AccidentPrilimSurveyorReportInputModel.cs" />
+    <Compile Include="AccidentPrilimSurveyorReport\AccidentPrilimSurveyorReportOutputModel.cs" />
+    <Compile Include="AssignedSurveyor\AssignedSurveyorInputModel.cs" />
+    <Compile Include="AssignedSurveyor\AssignedSurveyorOutputModel.cs" />
     <Compile Include="ClaimRegistration\ClaimRegistrationInputModel.cs" />
     <Compile Include="ClaimRegistration\ClaimRegistrationOutputModel.cs" />
     <Compile Include="EWI\Enum.cs" />
@@ -74,6 +78,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UpdateClaimInfo\UpdateClaimInfoInputModel.cs" />
     <Compile Include="UpdateClaimInfo\UpdateClaimInfoOutputModel.cs" />
+    <Compile Include="UpdateSurveyStatus\UpdateSurveyStatusInputModel.cs" />
+    <Compile Include="UpdateSurveyStatus\UpdateSurveyStatusOutputModel.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

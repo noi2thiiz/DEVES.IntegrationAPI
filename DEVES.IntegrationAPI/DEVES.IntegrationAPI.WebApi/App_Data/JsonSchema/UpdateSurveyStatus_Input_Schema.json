@@ -1,0 +1,27 @@
+﻿{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"properties": {
+		"ticketNo": {
+			"type": "string",
+			"maxLength": 50
+		},
+		"claimNotiNo": {
+			"type": "string",
+			"maxLength": 15
+		},
+    "iSurveyStatus": {
+      "type": "string",
+      "maxLength": 2
+    }
+    "iSurveyStatusOn": {
+      "type": "string"
+    }
+	},
+	"required": [
+		"ticketNo",
+    "claimNotiNo",
+    "iSurveyStatus",
+    "iSurveyStatusOn"
+	]
+}

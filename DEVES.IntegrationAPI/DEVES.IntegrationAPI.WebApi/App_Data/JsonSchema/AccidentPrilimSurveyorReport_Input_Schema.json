@@ -1,0 +1,105 @@
+﻿{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "token": {
+      "type": "string",
+      "maxLength": 50
+    },
+    "ticketNo": {
+      "type": "string",
+      "maxLength": 50
+    },
+    "claimNotiNo": {
+      "type": "string",
+      "maxLength": 15
+    },
+    "reportAccidentResultDate": {
+      "type": "string"
+    },
+    "accidentLefalResult": {
+      "type": "string",
+      "maxLength": 1
+    },
+    "policeStation": {
+      "type": "string"
+    },
+    "policeRecordId": {
+      "type": "string"
+    },
+    "policeRecordDate": {
+      "type": "string"
+    },
+    "policeBailFlag": {
+      "type": "string"
+    },
+    "demageOfPolicyOwnerCar": {
+      "type": "string"
+    },
+    "numOfTowTruck": {
+      "type": "integer"
+    },
+    "nameOfTowCompany": {
+      "type": "string"
+    },
+    "detailOfTowEvent": {
+      "type": "string"
+    },
+    "numOfAccidentInjury": {
+      "type": "integer"
+    },
+    "detailOfAccidentInjury": {
+      "type": "string"
+    },
+    "numOfDeath": {
+      "type": "integer"
+    },
+    "detailofDeath": {
+      "type": "string"
+    },
+    "caseOwnercode": {
+      "type": "string"
+    },
+    "caseOwnerFullname": {
+      "type": "string"
+    },
+    "accidentPartyInfo": {
+      "type": "string"
+    },
+    "accidentPartyFullname": {
+      "type": "string"
+    },
+    "accidentPartyPhone": {
+      "type": "string"
+    },
+    "accidentPartyCarPlateNumber": {
+      "type": "string"
+    },
+    "accidentPartyCarModel": {
+      "type": "string"
+    },
+    "accidentPartyInsuredFlag": {
+      "type": "string"
+    },
+    "accidentPartyInsuranceCompany": {
+      "type": "string"
+    },
+    "accidentPartyPolicyType": {
+      "type": "string"
+    },
+    "accidentPartyPolicyNumber": {
+      "type": "string"
+    },
+    "accidentPartyPolicyExpDate": {
+      "type": "string"
+    },
+    "demageOfPartyCar": {
+      "type": "string"
+    }
+  },
+  "required": [
+		"token",
+    "ticketNo",
+    "claimNotiNo"
+	]
+}
