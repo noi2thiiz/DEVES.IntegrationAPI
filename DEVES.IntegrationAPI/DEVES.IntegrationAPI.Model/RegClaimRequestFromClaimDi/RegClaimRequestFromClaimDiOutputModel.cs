@@ -9,7 +9,7 @@ namespace DEVES.IntegrationAPI.Model.RegClaimRequestFromClaimDi
 {
     public class RegClaimRequestFromClaimDiOutputModel
     {
-        public string code { get; set; }
+        public int code { get; set; }
         public string message { get; set; }
         public string description { get; set; }
         public string transactionId { get; set; }

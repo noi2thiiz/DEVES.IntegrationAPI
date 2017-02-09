@@ -25,7 +25,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             var output = new RegClaimRequestFromClaimDiOutputModel();
             if (value == null)
             {
-                output.code = "500";
+                output.code = 500;
                 output.message = "Error";
                 output.description = "innput is null";
                 output.transactionDateTime = DateTime.Now;
@@ -65,7 +65,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
 
                 output = new RegClaimRequestFromClaimDiOutputModel()
                 {
-                    code = "200",
+                    code = 200,
                     message = "Success",
                     description = "Register ClaimRequest from ClaimDi success",
                     transactionDateTime = DateTime.Now,
@@ -88,7 +88,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
 
                 output = new RegClaimRequestFromClaimDiOutputModel()
                 {
-                    code = "500",
+                    code = 500,
                     message = "Error",
                     description = e.Message,
                     transactionDateTime = DateTime.Now,
