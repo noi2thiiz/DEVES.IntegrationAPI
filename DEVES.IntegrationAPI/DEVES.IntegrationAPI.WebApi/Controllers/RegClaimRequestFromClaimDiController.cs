@@ -1,70 +1,76 @@
 ﻿using DEVES.IntegrationAPI.Core.Helper;
 using DEVES.IntegrationAPI.Model.EWI;
-using DEVES.IntegrationAPI.Model.InquiryConsultingHistory;
+using DEVES.IntegrationAPI.Model.RegClaimRequestFromClaimDi;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Web;
 using System.Web.Http;
 
 namespace DEVES.IntegrationAPI.WebApi.Controllers
 {
-    public class InquiryConsultingHistoryController : ApiController
+    public class RegClaimRequestFromClaimDiController : ApiController
     {
         //To use with log
         private string _logImportantMessage;
-        private readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(InquiryConsultingHistoryController));
+        private readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(RegClaimRequestFromClaimDiController));
 
         public object Post([FromBody]object value)
         {
             _log.InfoFormat("IP ADDRESS: {0}, HttpMethod: POST", CommonHelper.GetIpAddress());
 
-            var output = new InquiryConsultingHistoryOutputModel();
+            var output = new RegClaimRequestFromClaimDiOutputModel();
             if (value == null)
             {
-                output.code = 500;
-                output.message = "innput is null";
-                return Request.CreateResponse<InquiryConsultingHistoryOutputModel>(output);
+                output.code = "500";
+                output.message = "Error";
+                output.description = "innput is null";
+                output.transactionDateTime = DateTime.Now;
+                output.transactionId = "1234567";
+                return Request.CreateResponse<RegClaimRequestFromClaimDiOutputModel>(output);
             }
             var valueText = value.ToString();
-            _logImportantMessage = "Username: {0}, Token: {1}, ";
-            var contentModel = JsonConvert.DeserializeObject<InquiryConsultingHistoryInputModel>(valueText);
-            string outvalidate = string.Empty;            
-            var filePath = HttpContext.Current.Server.MapPath("~/App_Data/JsonSchema/InquiryConsultingHistoryList_Input_Schema.json");
+            //_logImportantMessage = "Username: {0}, Token: {1}, ";
+            var contentModel = JsonConvert.DeserializeObject<RegClaimRequestFromClaimDiInputModel>(valueText);
+            string outvalidate = string.Empty;
+            var filePath = HttpContext.Current.Server.MapPath("~/App_Data/JsonSchema/RegClaimRequestFromClaimDi_Input_Schema.json");
 
             if (JsonHelper.TryValidateJson(valueText, filePath, out outvalidate))
             {
-                _logImportantMessage += "Code: " + contentModel.claimNo;
+//                _logImportantMessage += "Code: " + contentModel.claimNo;
                 output = HandleMessage(valueText, contentModel);
             }
             else
             {
-                output = new InquiryConsultingHistoryOutputModel()
+                output = new RegClaimRequestFromClaimDiOutputModel()
                 {
                 };
                 _log.Error(_logImportantMessage);
                 //_log.ErrorFormat("ErrorCode: {0} {1} ErrorDescription: {1}", output.responseCode, Environment.NewLine, output.responseMessage);
             }
-            return Request.CreateResponse<InquiryConsultingHistoryOutputModel>(output);
+            return Request.CreateResponse<RegClaimRequestFromClaimDiOutputModel>(output);
         }
 
-        private InquiryConsultingHistoryOutputModel HandleMessage(string valueText, InquiryConsultingHistoryInputModel content)
+        private RegClaimRequestFromClaimDiOutputModel HandleMessage(string valueText, RegClaimRequestFromClaimDiInputModel content)
         {
             //TODO: Do what you want
-            var output = new InquiryConsultingHistoryOutputModel();
+            RegClaimRequestFromClaimDiOutputModel output ;
             _log.Info("HandleMessage");
             try
             {
                 //TODO: Do something
 
-                output = new InquiryConsultingHistoryOutputModel()
+                output = new RegClaimRequestFromClaimDiOutputModel()
                 {
-                    code = 200,
+                    code = "200",
                     message = "Success",
-                    description = "InquiryConsultingHistory success",
-                    transactionDateTime = DateTime.Now ,
+                    description = "Register ClaimRequest from ClaimDi success",
+                    transactionDateTime = DateTime.Now,
                     transactionId = "1234567",
-                    data = new InquiryConsultingHistoryDataOutputModel()
+                    data = null
                 };
             }
             catch (Exception e)
@@ -80,13 +86,13 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 _log.Error("RequestId - " + _logImportantMessage);
                 _log.Error(errorMessage);
 
-                output = new InquiryConsultingHistoryOutputModel()
+                output = new RegClaimRequestFromClaimDiOutputModel()
                 {
-                    code = 505,
-                    message = string.Format( "error {0}", e.Message ),
-                    description = "",
+                    code = "500",
+                    message = "Error",
+                    description = e.Message,
                     transactionDateTime = DateTime.Now,
-                    transactionId = "",
+                    transactionId = "1234567",
                     data = null
                 };
             }

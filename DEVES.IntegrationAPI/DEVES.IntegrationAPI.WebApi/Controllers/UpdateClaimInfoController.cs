@@ -67,8 +67,17 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             _log.Info("HandleMessage");
             try
             {
+                updateClaimInfoOutput.itemCode = "001";
+                updateClaimInfoOutput.longDescription = "Long description";
+                updateClaimInfoOutput.shortDescription = "short desc";
+
                 //TODO: Do something
+                output.code = 200;
+                output.message = "Success";
+                output.description = "Update ClaimInfo success";
                 output.data = updateClaimInfoOutput;
+                output.transactionDateTime = DateTime.Now;
+                output.transactionId = "1234567";
             }
             catch (Exception e)
             {
@@ -83,9 +92,10 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 _log.Error("RequestId - " + _logImportantMessage);
                 _log.Error(errorMessage);
 
-                
+                output.code = 500;
+                output.message = "Error";
+                output.description = e.Message;
             }
-
             return output;
         }
     }

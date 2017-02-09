@@ -72,6 +72,8 @@
     <Compile Include="InquiryConsultingHistory\InquiryConsultingHistoryOutputModel.cs" />
     <Compile Include="InquiryConsultingHistory\InquiryConsultingHistoryInputModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RegClaimRequestFromClaimDi\RegClaimRequestFromClaimDiInputModel.cs" />
+    <Compile Include="RegClaimRequestFromClaimDi\RegClaimRequestFromClaimDiOutputModel.cs" />
     <Compile Include="UpdateClaimInfo\UpdateClaimInfoInputModel.cs" />
     <Compile Include="UpdateClaimInfo\UpdateClaimInfoOutputModel.cs" />
   </ItemGroup>

@@ -10,7 +10,7 @@ namespace DEVES.IntegrationAPI.Model.InquiryConsultingHistory
 
     public class InquiryConsultingHistoryOutputModel
     {
-        public string code { get; set; }
+        public int code { get; set; }
         public string message { get; set; }
         public string description { get; set; }
         public string transactionId { get; set; }
