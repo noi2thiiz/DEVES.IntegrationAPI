@@ -15,6 +15,7 @@ namespace DEVES.IntegrationAPI.Core.Helper
         {
             var text = string.Empty;
             if (!string.IsNullOrWhiteSpace(fileName) && File.Exists(fileName))
+            //if (File.Exists(fileName))
             {
                 _log.InfoFormat("ReadTextFile: {0} is exists.", fileName);
                 // Open the text file using a stream reader.
