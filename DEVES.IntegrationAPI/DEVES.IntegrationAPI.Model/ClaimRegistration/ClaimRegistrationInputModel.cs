@@ -6,15 +6,20 @@ using System.Threading.Tasks;
 
 namespace DEVES.IntegrationAPI.Model.ClaimRegistration
 {
+
     public class ClaimRegistrationInputModel
     {
-        public ClaimheaderModel claimHeader { get; set; }
-        public ClaimtypeModel claimType { get; set; }
-        public ClaimassignsurvModel claimAssignSurv { get; set; }
-        public ClaimsurvinformModel claimSurvInform { get; set; }
+        public string caseNo { get; set; }
+    }
+    public class LocusClaimRegistrationInputModel
+    {
+        public LocusClaimheaderModel claimHeader { get; set; }
+        public LocusClaimtypeModel claimType { get; set; }
+        public LocusClaimassignsurvModel claimAssignSurv { get; set; }
+        public LocusClaimsurvinformModel claimSurvInform { get; set; }
     }
 
-    public class ClaimheaderModel
+    public class LocusClaimheaderModel
     {
         public string ticketNo { get; set; }
         public string claimNotiNo { get; set; }
@@ -49,7 +54,7 @@ namespace DEVES.IntegrationAPI.Model.ClaimRegistration
         public string claimType { get; set; }
     }
 
-    public class ClaimtypeModel
+    public class LocusClaimtypeModel
     {
         public string informerClientId { get; set; }
         public string informerFullName { get; set; }
@@ -78,7 +83,7 @@ namespace DEVES.IntegrationAPI.Model.ClaimRegistration
         public string sendOutSurveyorCode { get; set; }
     }
 
-    public class ClaimassignsurvModel
+    public class LocusClaimassignsurvModel
     {
         public string surveyorCode { get; set; }
         public string surveyorClientNumber { get; set; }
@@ -90,7 +95,7 @@ namespace DEVES.IntegrationAPI.Model.ClaimRegistration
         public DateTime? reportAccidentResultDate { get; set; }
     }
 
-    public class ClaimsurvinformModel
+    public class LocusClaimsurvinformModel
     {
         public string accidentLegalResult { get; set; }
         public string policeStation { get; set; }
@@ -107,10 +112,10 @@ namespace DEVES.IntegrationAPI.Model.ClaimRegistration
         public string detailOfDeath { get; set; }
         public string caseOwnerCode { get; set; }
         public string caseOwnerFullName { get; set; }
-        public Accidentpartyinfo[] accidentPartyInfo { get; set; }
+        public LocusAccidentpartyinfo[] accidentPartyInfo { get; set; }
     }
 
-    public class Accidentpartyinfo
+    public class LocusAccidentpartyinfo
     {
         public string accidentPartyFullname { get; set; }
         public string accidentPartyPhone { get; set; }

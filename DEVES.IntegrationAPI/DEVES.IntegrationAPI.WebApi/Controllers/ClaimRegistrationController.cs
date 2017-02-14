@@ -50,7 +50,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             var contentText = ewiRequest.content.ToString();
             _logImportantMessage = "Username: {0}, Token: {1}, ";
             _logImportantMessage = string.Format(_logImportantMessage, ewiRequest.username, ewiRequest.token);
-            var contentModel = JsonConvert.DeserializeObject<ClaimRegistrationInputModel>(contentText);
+            var contentModel = JsonConvert.DeserializeObject<LocusClaimRegistrationInputModel>(contentText);
             string outvalidate = string.Empty;
             var filePath = HttpContext.Current.Server.MapPath("~/App_Data/JsonSchema/ClaimRegistration_Input_Schema.json");
 
@@ -77,11 +77,11 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             return Request.CreateResponse<EWIResponse>(output);
         }
 
-        private EWIResponse HandleMessage(string valueText, ClaimRegistrationInputModel content)
+        private EWIResponse HandleMessage(string valueText, LocusClaimRegistrationInputModel content)
         {
             //TODO: Do what you want
             var output = new EWIResponse();
-            var updateClaimStatusOutput = new ClaimRegistrationOutputModel();
+            var updateClaimStatusOutput = new LocusClaimRegistrationOutputModel();
             _log.Info("HandleMessage");
             try
             {
