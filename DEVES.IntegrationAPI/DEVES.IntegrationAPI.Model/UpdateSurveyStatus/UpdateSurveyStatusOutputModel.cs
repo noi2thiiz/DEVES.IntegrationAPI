@@ -8,7 +8,7 @@ namespace DEVES.IntegrationAPI.Model.UpdateSurveyStatus
 {
     public class UpdateSurveyStatusOutputModel
     {
-        public string code { get; set; } // service's response code
+        public int code { get; set; } // service's response code
         public string message { get; set; } // service's response description
         public string description { get; set; }
         public string transactionId { get; set; }

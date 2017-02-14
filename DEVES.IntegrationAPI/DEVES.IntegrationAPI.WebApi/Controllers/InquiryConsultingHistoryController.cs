@@ -17,54 +17,63 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
 
         public object Post([FromBody]object value)
         {
-            _log.InfoFormat("IP ADDRESS: {0}, HttpMethod: POST", CommonHelper.GetIpAddress());
+            _log.InfoFormat("IP ADDRESS: {0}, HttpMethod: Get", CommonHelper.GetIpAddress());
 
-            var output = new InquiryConsultingHistoryOutputModel();
-            if (value == null)
+            var output = new EWIResponse();
+            if (!JsonHelper.TryValidateNullMessage(value, out output))
             {
-                output.code = 500;
-                output.message = "innput is null";
-                return Request.CreateResponse<InquiryConsultingHistoryOutputModel>(output);
+                return Request.CreateResponse<EWIResponse>(output);
             }
             var valueText = value.ToString();
+            var ewiRequest = JsonConvert.DeserializeObject<EWIRequest>(valueText);
+            var contentText = ewiRequest.content.ToString();
             _logImportantMessage = "Username: {0}, Token: {1}, ";
-            var contentModel = JsonConvert.DeserializeObject<InquiryConsultingHistoryInputModel>(valueText);
+            _logImportantMessage = string.Format(_logImportantMessage, ewiRequest.username, ewiRequest.token);
+            var contentModel = JsonConvert.DeserializeObject<InquiryConsultingHistoryInputModel>(contentText);
             string outvalidate = string.Empty;            
             var filePath = HttpContext.Current.Server.MapPath("~/App_Data/JsonSchema/InquiryConsultingHistoryList_Input_Schema.json");
 
-            if (JsonHelper.TryValidateJson(valueText, filePath, out outvalidate))
+            if (JsonHelper.TryValidateJson(contentText, filePath, out outvalidate))
             {
                 _logImportantMessage += "Code: " + contentModel.claimNo;
-                output = HandleMessage(valueText, contentModel);
+                output = HandleMessage(contentText, contentModel);
             }
             else
             {
-                output = new InquiryConsultingHistoryOutputModel()
+                output = new EWIResponse()
                 {
+                    username = string.Empty,
+                    token = string.Empty,
+                    success = false,
+                    responseCode = EWIResponseCode.ETC.ToString(),
+                    responseMessage = outvalidate,
+                    hostscreen = string.Empty,
+                    content = null
                 };
                 _log.Error(_logImportantMessage);
-                //_log.ErrorFormat("ErrorCode: {0} {1} ErrorDescription: {1}", output.responseCode, Environment.NewLine, output.responseMessage);
+                _log.ErrorFormat("ErrorCode: {0} {1} ErrorDescription: {1}", output.responseCode, Environment.NewLine, output.responseMessage);
             }
-            return Request.CreateResponse<InquiryConsultingHistoryOutputModel>(output);
+            return Request.CreateResponse<EWIResponse>(output);
         }
 
-        private InquiryConsultingHistoryOutputModel HandleMessage(string valueText, InquiryConsultingHistoryInputModel content)
+        private EWIResponse HandleMessage(string valueText, InquiryConsultingHistoryInputModel content)
         {
             //TODO: Do what you want
-            var output = new InquiryConsultingHistoryOutputModel();
+            var output = new EWIResponse();
             _log.Info("HandleMessage");
             try
             {
                 //TODO: Do something
 
-                output = new InquiryConsultingHistoryOutputModel()
+                output = new EWIResponse()
                 {
-                    code = 200,
-                    message = "Success",
-                    description = "InquiryConsultingHistory success",
-                    transactionDateTime = DateTime.Now ,
-                    transactionId = "1234567",
-                    data = new InquiryConsultingHistoryDataOutputModel()
+                    username = string.Empty,
+                    token = string.Empty,
+                    success = false,
+                    responseCode = EWIResponseCode.EWI0000I.ToString(),
+                    responseMessage = "Success",
+                    hostscreen = string.Empty,
+                    content = null
                 };
             }
             catch (Exception e)
@@ -80,14 +89,15 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 _log.Error("RequestId - " + _logImportantMessage);
                 _log.Error(errorMessage);
 
-                output = new InquiryConsultingHistoryOutputModel()
+                output = new EWIResponse()
                 {
-                    code = 505,
-                    message = string.Format( "error {0}", e.Message ),
-                    description = "",
-                    transactionDateTime = DateTime.Now,
-                    transactionId = "",
-                    data = null
+                    username = string.Empty,
+                    token = string.Empty,
+                    success = false,
+                    responseCode = EWIResponseCode.ETC.ToString(),
+                    responseMessage = "Internal process error",
+                    hostscreen = string.Empty,
+                    content = null
                 };
             }
 

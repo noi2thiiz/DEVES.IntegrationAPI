@@ -47,12 +47,16 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         {
             //TODO: Do what you want
             var output = new AccidentPrilimSurveyorReportOutputModel();
-            var updateClaimInfoOutput = new AccidentPrilimSurveyorReportDataOutputModel();
+            var AccidentPrilimSurveyorReportOutput = new AccidentPrilimSurveyorReportDataOutputModel();
             _log.Info("HandleMessage");
             try
             {
                 //TODO: Do something
-                output.data = updateClaimInfoOutput;
+                output.code = 200;
+                output.message = "Success";
+
+                output.data = AccidentPrilimSurveyorReportOutput;
+
             }
             catch (Exception e)
             {

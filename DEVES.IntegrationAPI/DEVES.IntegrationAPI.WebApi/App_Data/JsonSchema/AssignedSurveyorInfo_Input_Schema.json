@@ -61,6 +61,10 @@
     },
     "surveyorType": {
       "type": "string",
+      "enum": [
+				"0",
+				"1"
+			],
       "maxLength": 1
     }
 	},

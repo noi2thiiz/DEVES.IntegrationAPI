@@ -21,8 +21,8 @@ namespace DEVES.IntegrationAPI.Model.ClaimRegistration
         public string claimNotiRefer { get; set; }
         public string policyNo { get; set; }
         public int fleetCarNo { get; set; }
-        public int policySeqNo { get; set; }
-        public int renewalNo { get; set; }
+        public int? policySeqNo { get; set; }
+        public int? renewalNo { get; set; }
         public string barcode { get; set; }
         public string insureCardNo { get; set; }
         public string policyIssueDate { get; set; }
@@ -40,7 +40,7 @@ namespace DEVES.IntegrationAPI.Model.ClaimRegistration
         public string carVehicleYear { get; set; }
         public string carVehicleBody { get; set; }
         public string carVehicleSize { get; set; }
-        public int policyDeduct { get; set; }
+        public int? policyDeduct { get; set; }
         public string vipCaseFlag { get; set; }
         public string privilegeLevel { get; set; }
         public string highLossCaseFlag { get; set; }
@@ -69,7 +69,7 @@ namespace DEVES.IntegrationAPI.Model.ClaimRegistration
         public string informOn { get; set; }
         public string accidentOn { get; set; }
         public string accidentDescCode { get; set; }
-        public int numOfExpectInjury { get; set; }
+        public int? numOfExpectInjury { get; set; }
         public string accidentPlace { get; set; }
         public string accidentLatitude { get; set; }
         public string accidentLongitude { get; set; }
@@ -87,7 +87,7 @@ namespace DEVES.IntegrationAPI.Model.ClaimRegistration
         public string surveyorCompanyMobile { get; set; }
         public string surveyorMobile { get; set; }
         public string surveyorType { get; set; }
-        public DateTime reportAccidentResultDate { get; set; }
+        public DateTime? reportAccidentResultDate { get; set; }
     }
 
     public class ClaimsurvinformModel
@@ -95,15 +95,15 @@ namespace DEVES.IntegrationAPI.Model.ClaimRegistration
         public string accidentLegalResult { get; set; }
         public string policeStation { get; set; }
         public string policeRecordId { get; set; }
-        public DateTime policeRecordDate { get; set; }
+        public DateTime? policeRecordDate { get; set; }
         public string policeBailFlag { get; set; }
         public string demageOfPolicyOwnerCar { get; set; }
-        public int numOfTowTruck { get; set; }
+        public int? numOfTowTruck { get; set; }
         public string nameOfTowCompany { get; set; }
         public string detailOfTowEvent { get; set; }
-        public int numOfAccidentInjury { get; set; }
+        public int? numOfAccidentInjury { get; set; }
         public string detailOfAccidentInjury { get; set; }
-        public int numOfDeath { get; set; }
+        public int? numOfDeath { get; set; }
         public string detailOfDeath { get; set; }
         public string caseOwnerCode { get; set; }
         public string caseOwnerFullName { get; set; }
@@ -120,7 +120,7 @@ namespace DEVES.IntegrationAPI.Model.ClaimRegistration
         public string accidentPartyInsuranceCompany { get; set; }
         public string accidentPartyPolicyType { get; set; }
         public string accidentPartyPolicyNumber { get; set; }
-        public DateTime accidentPartyPolicyExpdate { get; set; }
+        public DateTime? accidentPartyPolicyExpdate { get; set; }
         public string demageOfPartyCar { get; set; }
     }
 }

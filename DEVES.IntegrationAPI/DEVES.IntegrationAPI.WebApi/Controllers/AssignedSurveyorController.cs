@@ -46,20 +46,19 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         {
             //TODO: Do what you want
             var output = new AssignedSurveyorOutputModel();
-            var updateClaimInfoOutput = new AssignedSurveyorDataOutputModel();
+            var AssignedSurveyorOutput = new AssignedSurveyorDataOutputModel();
             _log.Info("HandleMessage");
             try
             {
                 //TODO: Do something
-                output.code = EWIResponseCode.EWI0000I.ToString();
-                output.message = "PASS";
-                output.description = "PASS PASS";
-                output.transactionId = "1";
+                output.code = 200;
+                output.message = "Success";
+
                 output.transactionDateTime = System.DateTime.Now;
-                updateClaimInfoOutput.descItem = "abc";
-                updateClaimInfoOutput.shortdesc = "def";
-                updateClaimInfoOutput.longdesc = "xyz";
-                output.data = updateClaimInfoOutput;
+                AssignedSurveyorOutput.descItem = "abc";
+                AssignedSurveyorOutput.shortdesc = "def";
+                AssignedSurveyorOutput.longdesc = "xyz";
+                output.data = AssignedSurveyorOutput;
             }
             catch (Exception e)
             {

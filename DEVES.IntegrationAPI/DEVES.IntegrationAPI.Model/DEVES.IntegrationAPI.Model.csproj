@@ -80,6 +80,8 @@
     <Compile Include="RegClaimRequestFromClaimDi\RegClaimRequestFromClaimDiOutputModel.cs" />
     <Compile Include="UpdateClaimInfo\UpdateClaimInfoInputModel.cs" />
     <Compile Include="UpdateClaimInfo\UpdateClaimInfoOutputModel.cs" />
+    <Compile Include="UpdateCompliantStatus\UpdateCompliantStatusInputModel.cs" />
+    <Compile Include="UpdateCompliantStatus\UpdateCompliantStatusOutputModel.cs" />
     <Compile Include="UpdateSurveyStatus\UpdateSurveyStatusInputModel.cs" />
     <Compile Include="UpdateSurveyStatus\UpdateSurveyStatusOutputModel.cs" />
   </ItemGroup>

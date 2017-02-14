@@ -1,6 +1,6 @@
 ﻿using DEVES.IntegrationAPI.Core.Helper;
 using DEVES.IntegrationAPI.Model.EWI;
-using DEVES.IntegrationAPI.Model.UpdateSurveyStatus;
+using DEVES.IntegrationAPI.Model.UpdateCompliantStatus;
 using Newtonsoft.Json;
 using System;
 using System.Net.Http;
@@ -9,44 +9,45 @@ using System.Web.Http;
 
 namespace DEVES.IntegrationAPI.WebApi.Controllers
 {
-    public class UpdateSurveyStatusController : ApiController
+    public class UpdateCompliantStatusController : ApiController
     {
+
         //To use with log
         private string _logImportantMessage;
-        private readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(UpdateSurveyStatusController));
+        private readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(UpdateCompliantStatusController));
 
         public object Post([FromBody]object value)
         {
             _log.InfoFormat("IP ADDRESS: {0}, HttpMethod: POST", CommonHelper.GetIpAddress());
 
-            var output = new UpdateSurveyStatusOutputModel();
+            var output = new UpdateCompliantStatusOutputModel();
 
             var contentText = value.ToString();
             //_logImportantMessage = string.Format(_logImportantMessage, output.transactionId);
-            var contentModel = JsonConvert.DeserializeObject<UpdateSurveyStatusInputModel>(contentText);
+            var contentModel = JsonConvert.DeserializeObject<UpdateCompliantStatusInputModel>(contentText);
             string outvalidate = string.Empty;
-            var filePath = HttpContext.Current.Server.MapPath("~/App_Data/JsonSchema/UpdateSurveyStatus_Input_Schema.json");
+            var filePath = HttpContext.Current.Server.MapPath("~/App_Data/JsonSchema/UpdateCompliantStatus_Input_Schema.json");
 
             if (JsonHelper.TryValidateJson(contentText, filePath, out outvalidate))
             {
-                _logImportantMessage += "Code: " + contentModel.ticketNo;
+                _logImportantMessage += "Code: " + contentModel.caseNo;
                 output = HandleMessage(contentText, contentModel);
             }
             else
             {
 
-                output = new UpdateSurveyStatusOutputModel();
+                output = new UpdateCompliantStatusOutputModel();
                 _log.Error(_logImportantMessage);
                 _log.ErrorFormat("ErrorCode: {0} {1} ErrorDescription: {1}", output.code, Environment.NewLine, output.message);
             }
-            return Request.CreateResponse<UpdateSurveyStatusOutputModel>(output);
+            return Request.CreateResponse<UpdateCompliantStatusOutputModel>(output);
         }
 
-        private UpdateSurveyStatusOutputModel HandleMessage(string valueText, UpdateSurveyStatusInputModel content)
+        private UpdateCompliantStatusOutputModel HandleMessage(string valueText, UpdateCompliantStatusInputModel content)
         {
             //TODO: Do what you want
-            var output = new UpdateSurveyStatusOutputModel();
-            var UpdateSurveyStatusOutput = new UpdateSurveyStatusDataOutputModel();
+            var output = new UpdateCompliantStatusOutputModel();
+            var UpdateCompliantStatusOutput = new UpdateCompliantStatusDataOutputModel();
             _log.Info("HandleMessage");
             try
             {
@@ -55,7 +56,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 output.code = 200;
                 output.message = "Success";
 
-                output.data = UpdateSurveyStatusOutput;
+                output.data = UpdateCompliantStatusOutput;
 
             }
             catch (Exception e)

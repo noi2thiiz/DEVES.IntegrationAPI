@@ -239,12 +239,13 @@
     <Compile Include="Controllers\AssignedSurveyorController.cs" />
     <Compile Include="Controllers\ClaimRegistrationController.cs" />
     <Compile Include="Controllers\InquiryConsultingHistoryController.cs" />
-    <Compile Include="Controllers\RegClaimRequestFromClaimDiController.cs" />
     <Compile Include="Controllers\UpdateClaimInfoController.cs" />
+    <Compile Include="Controllers\UpdateCompliantStatusController.cs" />
     <Compile Include="Controllers\UpdateSurveyStatusController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="QueryInfo.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -272,7 +273,7 @@
     <Content Include="App_Data\JsonSchema\UpdateSurveyStatus_Input_Schema.json" />
     <Content Include="App_Data\JsonSchema\AssignedSurveyorInfo_Input_Schema.json" />
     <Content Include="App_Data\JsonSchema\AccidentPrilimSurveyorReport_Input_Schema.json" />
-    <Content Include="App_Data\JsonSchema\RegClaimRequestFromClaimDi_Input_Schema.json" />
+    <Content Include="App_Data\JsonSchema\UpdateCompliantStatus_Input_Schema.json" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

@@ -9,6 +9,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web;
 using System.Web.Http;
+using DEVES.IntegrationAPI.WebApi;
 
 namespace DEVES.IntegrationAPI.WebApi.Controllers
 {
@@ -17,6 +18,23 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         //To use with log
         private string _logImportantMessage;
         private readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(ClaimRegistrationController));
+
+        // private QueryInfo q = new QueryInfo();
+        // private System.Data.DataTable dt = new System.Data.DataTable();
+
+        /*
+        private object Mapping()
+        {
+            dt = new System.Data.DataTable();
+            // DECLARE @ticketNo AS NVARCHAR(20) = 'CAS201702-00003';
+            // DECLARE @uniqueID AS UNIQUEIDENTIFIER = 'D246086E-C1EE-E611-80D4-0050568D1874';
+            dt = q.Queryinfo_CallerId("CAS201702-00003", "D246086E-C1EE-E611-80D4-0050568D1874");
+
+            dt.Rows[0]["ticketNunber"].ToString();
+
+            return "";
+        }
+        */
 
         public object Post([FromBody]object value)
         {

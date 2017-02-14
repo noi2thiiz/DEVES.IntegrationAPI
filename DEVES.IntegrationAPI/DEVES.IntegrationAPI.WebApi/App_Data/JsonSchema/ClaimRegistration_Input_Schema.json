@@ -71,17 +71,29 @@
                     "fleetCarNo": {
                         "type": "integer"
                     },
-                    "policySeqNo": {
-                        "type": "integer"
+                  "policySeqNo": {
+                    "anyOf": [ {"type" : "integer"
+                        }, {
+                            "type": "null"
+                        }]
                     },
                     "renewalNo": {
-                        "type": "integer"
+                    "anyOf": [ {"type" : "integer"
+                        }, {
+                            "type": "null"
+                        }]
                     },
                     "barcode": {
-                        "type": "string"
+                        "anyOf": [ {"type" : "string"
+                            }, {
+                                "type": "null"
+                            }]
                     },
                     "insureCardNo": {
-                        "type": "string"
+                        "anyOf": [ {"type" : "string"
+                            }, {
+                                "type": "null"
+                            }]
                     },
                     "policyIssueDate": {
                         "anyOf": [{
