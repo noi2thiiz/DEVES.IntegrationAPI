@@ -72,14 +72,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             cr.claimHeader.policyGarageFlag = isStringNull("policyGarageFlag");
             cr.claimHeader.policyPaymentStatus = isStringNull("policyPaymentStatus");
             cr.claimHeader.policyCarRegisterNo = isStringNull("policyCarRegisterNo");
-            if (dt.Rows[0]["policyCarRegisterProv"] == null)
-            {
-                cr.claimHeader.policyCarRegisterProv = null;
-            }
-            else
-            {
-                cr.claimHeader.policyCarRegisterProv = dt.Rows[0]["policyCarRegisterProv"].ToString(); ;
-            }
+            cr.claimHeader.policyCarRegisterProv = isStringNull("policyCarRegisterProv");
             cr.claimHeader.carChassisNo = dt.Rows[0]["carChassisNo"].ToString();
             cr.claimHeader.carVehicleType = dt.Rows[0]["carVehicleType"].ToString();
             cr.claimHeader.carVehicleModel = dt.Rows[0]["carVehicleModel"].ToString();
