@@ -40,63 +40,48 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         {
             _log.InfoFormat("IP ADDRESS: {0}, HttpMethod: Get", CommonHelper.GetIpAddress());
 
-            var output = new EWIResponse();
-            if (!JsonHelper.TryValidateNullMessage(value, out output))
+            var output = new ClaimRegistrationOutputModel();
+            if (value==null)
             {
-                return Request.CreateResponse<EWIResponse>(output);
+                return Request.CreateResponse<ClaimRegistrationOutputModel>(output);
             }
-            var valueText = value.ToString();
-            var ewiRequest = JsonConvert.DeserializeObject<EWIRequest>(valueText);
-            var contentText = ewiRequest.content.ToString();
-            _logImportantMessage = "Username: {0}, Token: {1}, ";
-            _logImportantMessage = string.Format(_logImportantMessage, ewiRequest.username, ewiRequest.token);
-            var contentModel = JsonConvert.DeserializeObject<LocusClaimRegistrationInputModel>(contentText);
+            var contentText = value.ToString();
+            var contentModel = JsonConvert.DeserializeObject<ClaimRegistrationInputModel>(contentText);
             string outvalidate = string.Empty;
-            var filePath = HttpContext.Current.Server.MapPath("~/App_Data/JsonSchema/ClaimRegistration_Input_Schema.json");
+            var filePath = HttpContext.Current.Server.MapPath("~/App_Data/JsonSchema/InternalClaimRegistration_Input_Schema.json");
 
             if (JsonHelper.TryValidateJson(contentText, filePath, out outvalidate))
             {
-                _logImportantMessage += "ticketNo: " + contentModel.claimHeader.ticketNo;
+                _logImportantMessage += "ticketNo: " + contentModel.caseNo;
                 output = HandleMessage(contentText, contentModel);
             }
             else
             {
-                output = new EWIResponse()
-                {
-                    username = string.Empty,
-                    token = string.Empty,
-                    success = false,
-                    responseCode = EWIResponseCode.ETC.ToString(),
-                    responseMessage = outvalidate,
-                    hostscreen = string.Empty,
-                    content = null
-                };
+                _logImportantMessage = "Error: Input is not valid.";
+                output.claimID = _logImportantMessage;
                 _log.Error(_logImportantMessage);
-                _log.ErrorFormat("ErrorCode: {0} {1} ErrorDescription: {1}", output.responseCode, Environment.NewLine, output.responseMessage);
+//                _log.ErrorFormat("ErrorCode: {0} {1} ErrorDescription: {1}", output.responseCode, Environment.NewLine, output.responseMessage);
             }
-            return Request.CreateResponse<EWIResponse>(output);
+            return Request.CreateResponse<ClaimRegistrationOutputModel>(output);
         }
 
-        private EWIResponse HandleMessage(string valueText, LocusClaimRegistrationInputModel content)
+        private LocusClaimRegistrationOutputModel RegisterClaimOnLocus(string caseNo)
+        {
+            LocusClaimRegistrationInputModel locusInputModel = Mapping( caseNo );
+
+        }
+
+        private ClaimRegistrationOutputModel HandleMessage(string valueText, ClaimRegistrationInputModel content)
         {
             //TODO: Do what you want
-            var output = new EWIResponse();
-            var updateClaimStatusOutput = new LocusClaimRegistrationOutputModel();
+            var output = new ClaimRegistrationOutputModel();
+            LocusClaimRegistrationOutputModel locusClaimRegOutput = new LocusClaimRegistrationOutputModel();
             _log.Info("HandleMessage");
             try
             {
                 //TODO: Do something
-
-                output = new EWIResponse()
-                {
-                    username = string.Empty,
-                    token = string.Empty,
-                    success = false,
-                    responseCode = EWIResponseCode.EWI0000I.ToString(),
-                    responseMessage = "Success",
-                    hostscreen = string.Empty,
-                    content = null
-                };
+                locusClaimRegOutput = RegisterClaimOnLocus(content.caseNo);
+                output.claimID = locusClaimRegOutput.data.claimId;
             }
             catch (Exception e)
             {
@@ -111,16 +96,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 _log.Error("RequestId - " + _logImportantMessage);
                 _log.Error(errorMessage);
 
-                output = new EWIResponse()
-                {
-                    username = string.Empty,
-                    token = string.Empty,
-                    success = false,
-                    responseCode = EWIResponseCode.ETC.ToString(),
-                    responseMessage = "Internal process error",
-                    hostscreen = string.Empty,
-                    content = updateClaimStatusOutput
-                };
+                output.claimID = errorMessage;
             }
 
             return output;
