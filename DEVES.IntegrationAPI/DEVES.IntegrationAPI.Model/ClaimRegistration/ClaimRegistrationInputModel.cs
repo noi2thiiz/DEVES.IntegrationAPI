@@ -14,14 +14,14 @@ namespace DEVES.IntegrationAPI.Model.ClaimRegistration
     public class LocusClaimRegistrationInputModel
     {
         public LocusClaimheaderModel claimHeader { get; set; }
-        public LocusClaimtypeModel claimType { get; set; }
+        public LocusClaimtypeModel claimInform { get; set; }
         public LocusClaimassignsurvModel claimAssignSurv { get; set; }
         public LocusClaimsurvinformModel claimSurvInform { get; set; }
     }
 
     public class LocusClaimheaderModel
     {
-        public string ticketNo { get; set; }
+        public string ticketNumber { get; set; }
         public string claimNotiNo { get; set; }
         public string claimNotiRefer { get; set; }
         public string policyNo { get; set; }
@@ -49,7 +49,7 @@ namespace DEVES.IntegrationAPI.Model.ClaimRegistration
         public string vipCaseFlag { get; set; }
         public string privilegeLevel { get; set; }
         public string highLossCaseFlag { get; set; }
-        public string LegalCaseFlag { get; set; }
+        public string legalCaseFlag { get; set; }
         public string claimNotiRemark { get; set; }
         public string claimType { get; set; }
     }
@@ -71,7 +71,7 @@ namespace DEVES.IntegrationAPI.Model.ClaimRegistration
         public string relationshipWithInsurer { get; set; }
         public string currentCarRegisterNo { get; set; }
         public string currentCarRegisterProv { get; set; }
-        public string informOn { get; set; }
+        public string informerOn { get; set; }
         public string accidentOn { get; set; }
         public string accidentDescCode { get; set; }
         public int? numOfExpectInjury { get; set; }
@@ -102,7 +102,7 @@ namespace DEVES.IntegrationAPI.Model.ClaimRegistration
         public string policeRecordId { get; set; }
         public DateTime? policeRecordDate { get; set; }
         public string policeBailFlag { get; set; }
-        public string demageOfPolicyOwnerCar { get; set; }
+        public string damageOfPolicyOwnerCar { get; set; }
         public int? numOfTowTruck { get; set; }
         public string nameOfTowCompany { get; set; }
         public string detailOfTowEvent { get; set; }

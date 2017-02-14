@@ -274,6 +274,7 @@
     <Content Include="App_Data\JsonSchema\AssignedSurveyorInfo_Input_Schema.json" />
     <Content Include="App_Data\JsonSchema\AccidentPrilimSurveyorReport_Input_Schema.json" />
     <Content Include="App_Data\JsonSchema\UpdateCompliantStatus_Input_Schema.json" />
+    <Content Include="App_Data\JsonSchema\LOCUS_Integration_Input_Schema.json" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
