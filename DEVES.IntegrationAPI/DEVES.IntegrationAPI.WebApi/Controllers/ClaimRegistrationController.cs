@@ -19,22 +19,83 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         private string _logImportantMessage;
         private readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(ClaimRegistrationController));
 
-        // private QueryInfo q = new QueryInfo();
-        // private System.Data.DataTable dt = new System.Data.DataTable();
+        private QueryInfo q = new QueryInfo();
+        private System.Data.DataTable dt = new System.Data.DataTable();
+        private LocusClaimRegistrationInputModel cr = new LocusClaimRegistrationInputModel();
 
-        /*
-        private object Mapping()
+        private LocusClaimRegistrationInputModel Mapping(string caseNo)
         {
+            /*
             dt = new System.Data.DataTable();
             // DECLARE @ticketNo AS NVARCHAR(20) = 'CAS201702-00003';
             // DECLARE @uniqueID AS UNIQUEIDENTIFIER = 'D246086E-C1EE-E611-80D4-0050568D1874';
-            dt = q.Queryinfo_CallerId("CAS201702-00003", "D246086E-C1EE-E611-80D4-0050568D1874");
+            dt = q.Queryinfo_CallerId("CAS201702-00003", null);
 
-            dt.Rows[0]["ticketNunber"].ToString();
 
-            return "";
+            // claimHeader
+            cr.claimHeader.ticketNumber = dt.Rows[0]["ticketNunber"].ToString();
+            cr.claimHeader.claimNotiNo = dt.Rows[0]["claimNotiNo"].ToString();
+            cr.claimHeader.claimNotiRefer = dt.Rows[0]["claimNotiRefer"].ToString();
+            cr.claimHeader.policyNo = dt.Rows[0]["policyNo"].ToString();
+            cr.claimHeader.fleetCarNo = Convert.ToInt32(dt.Rows[0]["fleetCarNo"]);
+            if (dt.Rows[0]["policySeqNo"] == null)
+            {
+                cr.claimHeader.policySeqNo = null;
+            } 
+            else
+            {
+                cr.claimHeader.policySeqNo = Convert.ToInt32(dt.Rows[0]["policySeqNo"]);
+            }
+            if (dt.Rows[0]["renewalNo"] == null)
+            {
+                cr.claimHeader.renewalNo = null;
+            }
+            else
+            {
+                cr.claimHeader.renewalNo = Convert.ToInt32(dt.Rows[0]["renewalNo"]);
+            }
+            if (dt.Rows[0]["barcode"] == null)
+            {
+                cr.claimHeader.barcode = null;
+            }
+            else
+            {
+                cr.claimHeader.barcode = dt.Rows[0]["barcode"].ToString();
+            }
+            if (dt.Rows[0]["insureCardNo"] == null)
+            {
+                cr.claimHeader.insureCardNo = null;
+            }
+            else
+            {
+                cr.claimHeader.insureCardNo = dt.Rows[0]["insureCardNo"].ToString(); ;
+            }
+            cr.claimHeader.policyIssueDate = dt.Rows[0]["policyIssueDate"].ToString();
+            cr.claimHeader.policyEffectiveDate = dt.Rows[0]["policyEffectiveDate"].ToString();
+            cr.claimHeader.policyExpiryDate = dt.Rows[0]["policyExpiryDate"].ToString();
+            cr.claimHeader.policyProductTypeCode = dt.Rows[0]["policyProductTypeCode"].ToString();
+            cr.claimHeader.policyProductTypeName = dt.Rows[0]["policyProductTypeName"].ToString();
+            cr.claimHeader.policyGarageFlag = dt.Rows[0]["policyGarageFlag"].ToString();
+            cr.claimHeader.policyPaymentStatus = dt.Rows[0]["policyPaymentStatus"].ToString();
+            cr.claimHeader.policyGarageFlag = dt.Rows[0]["policyGarageFlag"].ToString();
+            cr.claimHeader.policyGarageFlag = dt.Rows[0]["policyGarageFlag"].ToString();
+            cr.claimHeader.policyGarageFlag = dt.Rows[0]["policyGarageFlag"].ToString();
+            cr.claimHeader.policyGarageFlag = dt.Rows[0]["policyGarageFlag"].ToString();
+            cr.claimHeader.policyGarageFlag = dt.Rows[0]["policyGarageFlag"].ToString();
+            cr.claimHeader.policyGarageFlag = dt.Rows[0]["policyGarageFlag"].ToString();
+            cr.claimHeader.policyGarageFlag = dt.Rows[0]["policyGarageFlag"].ToString();
+            cr.claimHeader.policyGarageFlag = dt.Rows[0]["policyGarageFlag"].ToString();
+            cr.claimHeader.policyGarageFlag = dt.Rows[0]["policyGarageFlag"].ToString();
+            cr.claimHeader.policyGarageFlag = dt.Rows[0]["policyGarageFlag"].ToString();
+            cr.claimHeader.policyGarageFlag = dt.Rows[0]["policyGarageFlag"].ToString();
+            cr.claimHeader.policyGarageFlag = dt.Rows[0]["policyGarageFlag"].ToString();
+            cr.claimHeader.policyGarageFlag = dt.Rows[0]["policyGarageFlag"].ToString();
+            cr.claimHeader.policyGarageFlag = dt.Rows[0]["policyGarageFlag"].ToString();
+            cr.claimHeader.policyGarageFlag = dt.Rows[0]["policyGarageFlag"].ToString();
+            */
+
+            return cr;
         }
-        */
 
         public object Post([FromBody]object value)
         {
@@ -68,6 +129,8 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         private LocusClaimRegistrationOutputModel RegisterClaimOnLocus(string caseNo)
         {
             LocusClaimRegistrationInputModel locusInputModel = Mapping( caseNo );
+
+            return null;
 
         }
 
