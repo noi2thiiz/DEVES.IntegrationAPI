@@ -78,6 +78,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegClaimRequestFromClaimDi\RegClaimRequestFromClaimDiInputModel.cs" />
     <Compile Include="RegClaimRequestFromClaimDi\RegClaimRequestFromClaimDiOutputModel.cs" />
+    <Compile Include="Simulate_Integration\Simulate_Integration_ClaimRegistration_InputModel.cs" />
+    <Compile Include="Simulate_Integration\Simulate_Integration_ClaimRegistration_OutputModel.cs" />
     <Compile Include="UpdateClaimInfo\UpdateClaimInfoInputModel.cs" />
     <Compile Include="UpdateClaimInfo\UpdateClaimInfoOutputModel.cs" />
     <Compile Include="UpdateCompliantStatus\UpdateCompliantStatusInputModel.cs" />

@@ -18,7 +18,6 @@ namespace DEVES.IntegrationAPI.Model.ClaimRegistration
 
     public class ClaimRegistrationDataOutputModel
     {
-        public string claimNo { get; set; }
         public string claimId { get; set; }
         public string ticketNumber { get; set; }
     }
