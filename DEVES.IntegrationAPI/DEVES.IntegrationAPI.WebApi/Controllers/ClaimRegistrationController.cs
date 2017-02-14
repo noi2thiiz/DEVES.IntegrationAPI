@@ -7,8 +7,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Web;
 using System.Web.Http;
+using System.Threading.Tasks;
 using DEVES.IntegrationAPI.WebApi;
 
 namespace DEVES.IntegrationAPI.WebApi.Controllers
@@ -128,9 +130,29 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
 
         private LocusClaimRegistrationOutputModel RegisterClaimOnLocus(string caseNo)
         {
-            LocusClaimRegistrationInputModel locusInputModel = Mapping( caseNo );
 
-            return null;
+            ///PFC:: Change fixed values to be the configurable values
+            ///
+
+            LocusClaimRegistrationInputModel locusInputModel = Mapping(caseNo);
+            EWIRequest reqModel = new EWIRequest()
+            {
+                username = "ClaimMotor",
+                password = "1234",
+                token = "",
+                content = locusInputModel
+            };
+
+            HttpClient client = new HttpClient();
+            client.BaseAddress = new Uri("http://192.168.3.194/ServiceProxy/ClaimMotor/jsonproxy/");
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            HttpResponseMessage response = client.PostAsJsonAsync("LOCUS_ClaimRegistration", reqModel).Result;
+            response.EnsureSuccessStatusCode();
+            LocusClaimRegistrationOutputModel locusOutput = response.Content.ReadAsAsync<LocusClaimRegistrationOutputModel>().Result;
+
+            return locusOutput;
 
         }
 
