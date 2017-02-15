@@ -2,10 +2,6 @@
 	"$schema": "http://json-schema.org/draft-04/schema#",
 	"type": "object",
 	"properties": {
-		"token": {
-			"type": "string",
-			"maxLength": 50
-		},
 		"ticketNo": {
 			"type": "string",
 			"maxLength": 50
@@ -69,7 +65,6 @@
     }
 	},
 	"required": [
-		"token",
     "ticketNo",
     "claimNotiNo",
     "surveyorType"

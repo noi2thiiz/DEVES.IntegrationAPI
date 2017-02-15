@@ -54,7 +54,7 @@
     "numOfDeath": {
       "type": "integer"
     },
-    "detailofDeath": {
+    "detailOfDeath": {
       "type": "string"
     },
     "caseOwnercode": {

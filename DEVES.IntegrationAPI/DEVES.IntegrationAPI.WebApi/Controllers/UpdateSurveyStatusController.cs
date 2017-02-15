@@ -19,7 +19,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         {
             _log.InfoFormat("IP ADDRESS: {0}, HttpMethod: POST", CommonHelper.GetIpAddress());
 
-            var output = new UpdateSurveyStatusOutputModel();
+            var output = new UpdateSurveyStatusOutputModel_Pass();
 
             var contentText = value.ToString();
             //_logImportantMessage = string.Format(_logImportantMessage, output.transactionId);
@@ -35,22 +35,22 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             else
             {
 
-                output = new UpdateSurveyStatusOutputModel();
+                output = new UpdateSurveyStatusOutputModel_Pass();
                 _log.Error(_logImportantMessage);
                 _log.ErrorFormat("ErrorCode: {0} {1} ErrorDescription: {1}", output.code, Environment.NewLine, output.message);
             }
-            return Request.CreateResponse<UpdateSurveyStatusOutputModel>(output);
+            return Request.CreateResponse<UpdateSurveyStatusOutputModel_Pass>(output);
         }
 
-        private UpdateSurveyStatusOutputModel HandleMessage(string valueText, UpdateSurveyStatusInputModel content)
+        private UpdateSurveyStatusOutputModel_Pass HandleMessage(string valueText, UpdateSurveyStatusInputModel content)
         {
             //TODO: Do what you want
-            var output = new UpdateSurveyStatusOutputModel();
-            var UpdateSurveyStatusOutput = new UpdateSurveyStatusDataOutputModel();
+            var output = new UpdateSurveyStatusOutputModel_Pass();
+            // var UpdateSurveyStatusOutput = new UpdateSurveyStatusDataOutputModel();
             _log.Info("HandleMessage");
             try
             {
-
+                var UpdateSurveyStatusOutput = new UpdateSurveyStatusDataOutputModel_Pass();
                 //TODO: Do something
                 output.code = 200;
                 output.message = "Success";

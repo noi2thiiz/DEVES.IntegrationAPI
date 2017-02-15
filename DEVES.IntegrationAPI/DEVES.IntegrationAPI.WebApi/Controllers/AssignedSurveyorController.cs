@@ -20,7 +20,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         {
             _log.InfoFormat("IP ADDRESS: {0}, HttpMethod: POST", CommonHelper.GetIpAddress());
 
-            var output = new AssignedSurveyorOutputModel();
+            var output = new AssignedSurveyorOutputModel_Pass();
 
             var contentText = value.ToString();
             //_logImportantMessage = string.Format(_logImportantMessage, output.transactionId);
@@ -35,29 +35,27 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             }
             else
             {
-                output = new AssignedSurveyorOutputModel();
+                output = new AssignedSurveyorOutputModel_Pass();
                 _log.Error(_logImportantMessage);
                 _log.ErrorFormat("ErrorCode: {0} {1} ErrorDescription: {1}", output.code, Environment.NewLine, output.message);
             }
-            return Request.CreateResponse<AssignedSurveyorOutputModel>(output);
+            return Request.CreateResponse<AssignedSurveyorOutputModel_Pass>(output);
         }
 
-        private AssignedSurveyorOutputModel HandleMessage(string valueText, AssignedSurveyorInputModel content)
+        private AssignedSurveyorOutputModel_Pass HandleMessage(string valueText, AssignedSurveyorInputModel content)
         {
             //TODO: Do what you want
-            var output = new AssignedSurveyorOutputModel();
-            var AssignedSurveyorOutput = new AssignedSurveyorDataOutputModel();
+            var output = new AssignedSurveyorOutputModel_Pass();
+            
             _log.Info("HandleMessage");
             try
             {
+                var AssignedSurveyorOutput = new AssignedSurveyorDataOutputModel_Pass();
                 //TODO: Do something
                 output.code = 200;
                 output.message = "Success";
 
                 output.transactionDateTime = System.DateTime.Now;
-                AssignedSurveyorOutput.descItem = "abc";
-                AssignedSurveyorOutput.shortdesc = "def";
-                AssignedSurveyorOutput.longdesc = "xyz";
                 output.data = AssignedSurveyorOutput;
             }
             catch (Exception e)

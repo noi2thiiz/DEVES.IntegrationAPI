@@ -6,20 +6,19 @@ using System.Threading.Tasks;
 
 namespace DEVES.IntegrationAPI.Model.UpdateSurveyStatus
 {
-    public class UpdateSurveyStatusOutputModel
+    public class UpdateSurveyStatusOutputModel_Pass
     {
         public int code { get; set; } // service's response code
         public string message { get; set; } // service's response description
         public string description { get; set; }
         public string transactionId { get; set; }
         public DateTime transactionDateTime { get; set; }
-        public UpdateSurveyStatusDataOutputModel data { get; set; }
+        public UpdateSurveyStatusDataOutputModel_Pass data { get; set; }
     }
 
-    public class UpdateSurveyStatusDataOutputModel
+    public class UpdateSurveyStatusDataOutputModel_Pass
     {
-        public string descItem { get; set; }
-        public string longdesc { get; set; }
-        public string shortdesc { get; set; }
+        public string message { get; set; }
     }
+
 }

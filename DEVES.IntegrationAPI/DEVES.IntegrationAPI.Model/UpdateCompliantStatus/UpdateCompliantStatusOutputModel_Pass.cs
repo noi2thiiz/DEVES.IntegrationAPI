@@ -3,24 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 
-namespace DEVES.IntegrationAPI.Model.AssignedSurveyor
+namespace DEVES.IntegrationAPI.Model.UpdateCompliantStatus
 {
-    public class AssignedSurveyorOutputModel
+    public class UpdateCompliantStatusOutputModel_Pass
     {
         public int code { get; set; }
         public string message { get; set; }
         public string description { get; set; }
         public string transactionId { get; set; }
         public DateTime transactionDateTime { get; set; }
-        public AssignedSurveyorDataOutputModel data { get; set; }
+        public UpdateCompliantStatusDataOutputModel_Pass data { get; set; }
     }
 
-    public class AssignedSurveyorDataOutputModel
+    public class UpdateCompliantStatusDataOutputModel_Pass
     {
-        public string descItem { get; set; }
-        public string longdesc { get; set; }
-        public string shortdesc { get; set; }
+        public string message { get; set; }
     }
 }

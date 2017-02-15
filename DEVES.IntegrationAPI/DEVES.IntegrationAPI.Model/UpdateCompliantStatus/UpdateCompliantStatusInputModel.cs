@@ -11,8 +11,8 @@ namespace DEVES.IntegrationAPI.Model.UpdateCompliantStatus
         public string caseNo { get; set; }
         public int tempID { get; set; }
         public string complaintNo { get; set; }
-        public char compliantStatus { get; set; }
+        public string compliantStatus { get; set; }
         public string compliantStep { get; set; }
-        public DateTime complaintStepdate { get; set; }
+        public string complaintStepdate { get; set; }
     }
 }

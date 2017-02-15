@@ -9,7 +9,6 @@ namespace DEVES.IntegrationAPI.Model.AssignedSurveyor
 {
     public class AssignedSurveyorInputModel
     {
-        public string token { get; set; }
         public string ticketNo { get; set; }
         public string claimNotiNo { get; set; }
         public string iSurveyStatusOn { get; set; } // DateTime??

@@ -20,7 +20,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         {
             _log.InfoFormat("IP ADDRESS: {0}, HttpMethod: POST", CommonHelper.GetIpAddress());
 
-            var output = new UpdateCompliantStatusOutputModel();
+            var output = new UpdateCompliantStatusOutputModel_Pass();
 
             var contentText = value.ToString();
             //_logImportantMessage = string.Format(_logImportantMessage, output.transactionId);
@@ -36,22 +36,22 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             else
             {
 
-                output = new UpdateCompliantStatusOutputModel();
+                output = new UpdateCompliantStatusOutputModel_Pass();
                 _log.Error(_logImportantMessage);
                 _log.ErrorFormat("ErrorCode: {0} {1} ErrorDescription: {1}", output.code, Environment.NewLine, output.message);
             }
-            return Request.CreateResponse<UpdateCompliantStatusOutputModel>(output);
+            return Request.CreateResponse<UpdateCompliantStatusOutputModel_Pass>(output);
         }
 
-        private UpdateCompliantStatusOutputModel HandleMessage(string valueText, UpdateCompliantStatusInputModel content)
+        private UpdateCompliantStatusOutputModel_Pass HandleMessage(string valueText, UpdateCompliantStatusInputModel content)
         {
             //TODO: Do what you want
-            var output = new UpdateCompliantStatusOutputModel();
-            var UpdateCompliantStatusOutput = new UpdateCompliantStatusDataOutputModel();
+            var output = new UpdateCompliantStatusOutputModel_Pass();
+            
             _log.Info("HandleMessage");
             try
             {
-
+                var UpdateCompliantStatusOutput = new UpdateCompliantStatusDataOutputModel_Pass();
                 //TODO: Do something
                 output.code = 200;
                 output.message = "Success";

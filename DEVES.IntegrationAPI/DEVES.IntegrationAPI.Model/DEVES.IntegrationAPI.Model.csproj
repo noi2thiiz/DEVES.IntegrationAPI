@@ -67,7 +67,8 @@
     <Compile Include="AccidentPrilimSurveyorReport\AccidentPrilimSurveyorReportInputModel.cs" />
     <Compile Include="AccidentPrilimSurveyorReport\AccidentPrilimSurveyorReportOutputModel.cs" />
     <Compile Include="AssignedSurveyor\AssignedSurveyorInputModel.cs" />
-    <Compile Include="AssignedSurveyor\AssignedSurveyorOutputModel.cs" />
+    <Compile Include="AssignedSurveyor\AssignedSurveyorOutputModel_Fail.cs" />
+    <Compile Include="AssignedSurveyor\AssignedSurveyorOutputModel_Pass.cs" />
     <Compile Include="ClaimRegistration\ClaimRegistrationInputModel.cs" />
     <Compile Include="ClaimRegistration\ClaimRegistrationOutputModel.cs" />
     <Compile Include="EWI\Enum.cs" />
@@ -83,9 +84,11 @@
     <Compile Include="UpdateClaimInfo\UpdateClaimInfoInputModel.cs" />
     <Compile Include="UpdateClaimInfo\UpdateClaimInfoOutputModel.cs" />
     <Compile Include="UpdateCompliantStatus\UpdateCompliantStatusInputModel.cs" />
-    <Compile Include="UpdateCompliantStatus\UpdateCompliantStatusOutputModel.cs" />
+    <Compile Include="UpdateCompliantStatus\UpdateCompliantStatusOutputModel_Fail.cs" />
+    <Compile Include="UpdateCompliantStatus\UpdateCompliantStatusOutputModel_Pass.cs" />
     <Compile Include="UpdateSurveyStatus\UpdateSurveyStatusInputModel.cs" />
-    <Compile Include="UpdateSurveyStatus\UpdateSurveyStatusOutputModel.cs" />
+    <Compile Include="UpdateSurveyStatus\UpdateSurveyStatusOutputModel_Fail.cs" />
+    <Compile Include="UpdateSurveyStatus\UpdateSurveyStatusOutputModel_Pass.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

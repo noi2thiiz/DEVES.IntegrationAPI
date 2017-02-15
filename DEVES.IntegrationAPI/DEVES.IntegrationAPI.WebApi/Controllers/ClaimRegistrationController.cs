@@ -12,6 +12,7 @@ using System.Web;
 using System.Web.Http;
 using System.Threading.Tasks;
 using DEVES.IntegrationAPI.WebApi;
+using System.Globalization;
 
 namespace DEVES.IntegrationAPI.WebApi.Controllers
 {
@@ -48,7 +49,9 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         }
         private LocusClaimRegistrationInputModel Mapping(string caseNo)
         {
-            
+            string format = "yyyy-MM-dd HH:mm:ss";
+            CultureInfo provider = new CultureInfo("th-TH");
+
             dt = new System.Data.DataTable();
             // DECLARE @ticketNo AS NVARCHAR(20) = 'CAS201702-00003';
             // DECLARE @uniqueID AS UNIQUEIDENTIFIER = 'D246086E-C1EE-E611-80D4-0050568D1874';
@@ -58,7 +61,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
 
             cr.claimHeader = new LocusClaimheaderModel();
             // claimHeader
-            cr.claimHeader.ticketNumber = isStringNull("ticketNunber");
+            cr.claimHeader.ticketNumber = isStringNull("ticketNumber");
             cr.claimHeader.claimNotiNo = isStringNull("claimNotiNo");
             cr.claimHeader.claimNotiRefer = isStringNull("claimNotiRefer");
             cr.claimHeader.policyNo = isStringNull("policyNo");
@@ -86,7 +89,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             cr.claimHeader.vipCaseFlag = isStringNull("vipCaseFlag");
             cr.claimHeader.privilegeLevel = isStringNull("privilegeLevel");
             cr.claimHeader.highLossCaseFlag = isStringNull("highLossCaseFlag");
-            cr.claimHeader.legalCaseFlag = isStringNull("LegalCaseFlag");
+            cr.claimHeader.legalCaseFlag = isStringNull("legalCaseFlag");
             cr.claimHeader.claimNotiRemark = isStringNull("claimNotiRemark");
             cr.claimHeader.claimType = isStringNull("claimType");
 
@@ -107,7 +110,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             cr.claimInform.relationshipWithInsurer = isStringNull("relationshipWithInsurer");
             cr.claimInform.currentCarRegisterNo = isStringNull("currentCarRegisterNo");
             cr.claimInform.currentCarRegisterProv = isStringNull("currentCarRegisterProv");
-            cr.claimInform.informerOn = isStringNull("informOn");
+            cr.claimInform.informerOn = isStringNull("informerOn");
             cr.claimInform.accidentOn = isStringNull("accidentOn");
             cr.claimInform.accidentDescCode = isStringNull("accidentDescCode");
             cr.claimInform.numOfExpectInjury = isIntNull("numOfExpectInjury");
@@ -127,7 +130,8 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             cr.claimAssignSurv.surveyorCompanyMobile = isStringNull("surveyorCompanyMobile");
             cr.claimAssignSurv.surveyorMobile = isStringNull("surveyorMobile");
             cr.claimAssignSurv.surveyorType = isStringNull("surveyorType");
-            cr.claimAssignSurv.reportAccidentResultDate = null; //DateTime.ParseExact(dt.Rows[0]["reportAccidentResultDate"].ToString(), "yyyy-MM-dd HH:mm tt", null);
+            cr.claimAssignSurv.reportAccidentResultDate = DateTime.Now; //DateTime.ParseExact(dt.Rows[0]["reportAccidentResultDate"].ToString(), "yyyy-MM-dd HH:mm tt", null);
+            // cr.claimAssignSurv.reportAccidentResultDate = DateTime.ParseExact(dt.Rows[0]["reportAccidentResultDate"].ToString(), format, provider);
 
             cr.claimSurvInform = new LocusClaimsurvinformModel();
             // claimSurvInform
@@ -136,8 +140,8 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             cr.claimSurvInform.policeRecordId = isStringNull("policeRecordId");
             cr.claimSurvInform.policeRecordDate = null; //DateTime.ParseExact(dt.Rows[0]["policeRecordDate"].ToString(), "yyyy-MM-dd HH:mm tt", null);
             cr.claimSurvInform.policeBailFlag = isStringNull("policeBailFlag");
-            cr.claimSurvInform.damageOfPolicyOwnerCar = isStringNull("demageOfPolicyOwnerCar");
-            cr.claimSurvInform.numOfTowTruck = 0; // isIntNull("numOfTowTruck"); check type of this vaule in sqlserver
+            cr.claimSurvInform.damageOfPolicyOwnerCar = isStringNull("damageOfPolicyOwnerCar");
+            cr.claimSurvInform.numOfTowTruck = 0; //isIntNull("numOfTowTruck"); check type of this vaule in sqlserver
             cr.claimSurvInform.nameOfTowCompany = isStringNull("nameOfTowCompany");
             cr.claimSurvInform.detailOfTowEvent = isStringNull("detailOfTowEvent");
             cr.claimSurvInform.numOfAccidentInjury = isIntNull("numOfAccidentInjury");
@@ -198,6 +202,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             ///PFC:: Change fixed values to be the configurable values
             ///
 
+            
             LocusClaimRegistrationInputModel locusInputModel = Mapping(caseNo);
             EWIRequest reqModel = new EWIRequest()
             {
@@ -208,13 +213,18 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             };
 
             string x = JsonConvert.SerializeObject(reqModel);
-
+            
             HttpClient client = new HttpClient();
+
             client.BaseAddress = new Uri("http://192.168.3.194/ServiceProxy/ClaimMotor/jsonproxy/");
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            HttpResponseMessage response = client.PostAsJsonAsync("LOCUS_ClaimRegistration", reqModel).Result;
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "LOCUS_ClaimRegistration");
+            request.Content = new StringContent(JsonConvert.SerializeObject(reqModel, Formatting.Indented), System.Text.Encoding.UTF8, "application/json");
+            // request.Content = new StringContent(Dummy_Input(), System.Text.Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = client.SendAsync(request).Result;
             response.EnsureSuccessStatusCode();
             LocusClaimRegistrationOutputModel locusOutput = response.Content.ReadAsAsync<LocusClaimRegistrationOutputModel>().Result;
 
@@ -230,6 +240,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             _log.Info("HandleMessage");
             try
             {
+                
                 //TODO: Do something
                 locusClaimRegOutput = RegisterClaimOnLocus(content.caseNo);
                 output.claimID = locusClaimRegOutput.data.claimId;
@@ -251,6 +262,12 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             }
 
             return output;
+        }
+
+        private string Dummy_Input()
+        {
+            string a = "{\"username\":\"ClaimMotor\",\"password\":\"1234\",\"token\":\"\",\"content\":{\"claimHeader\":{\"ticketNumber\":\"CAS201702-00003\",\"claimNotiNo\":\"201702-00005\",\"claimNotiRefer\":\"\",\"policyNo\":\"V0284555\",\"fleetCarNo\":1,\"policySeqNo\":9,\"renewalNo\":7,\"barcode\":\"2080004701062\",\"insureCardNo\":\"\",\"policyIssueDate\":\"20151102\",\"policyEffectiveDate\":\"20151115\",\"policyExpiryDate\":\"20170210\",\"policyProductTypeCode\":\"TP\",\"policyProductTypeName\":\"ประเภท 3\",\"policyGarageFlag\":\"N\",\"policyPaymentStatus\":\"N\",\"policyCarRegisterNo\":\"กร1170\",\"policyCarRegisterProv\": \"\",\"carChassisNo\":\"10801620088706\",\"carVehicleType\":\"110\",\"carVehicleModel\":\"MERCEDES BENZ S280\",\"carVehicleYear\":\"1972\",\"carVehicleBody\":\"SEDAN\",\"carVehicleSize\":\"5/2954.00\",\"policyDeduct\":0,\"vipCaseFlag\":\"N\",\"highLossCaseFlag\":\"N\",\"legalCaseFlag\":\"N\",\"claimNotiRemark\":\"-\",\"claimType\":\"I\"},\"claimInform\":{\"informerClientId\":\"11608685\",\"informerFullName\":\"ธีระเดช เลขาชินบุตร\",\"informerMobile\":\"0812345678\",\"informerPhoneNo\":\"\",\"driverClientId\":\"11608685\",\"driverFullName\":\"ธีระเดช เลขาชินบุตร\",\"driverMobile\":\"0812345678\",\"driverPhoneNo\":\"\",\"insuredClientId\":\"11608685\",\"insuredFullName\":\"\",\"insuredMobile\":\"\",\"insuredPhoneNo\":\"\",\"relationshipWithInsurer\":\"00\",\"currentCarRegisterNo\":\"กร1170\",\"currentCarRegisterProv\":\"\",\"informerOn\":\"09/02/2017 20:30:00\",\"accidentOn\":\"09/02/2017 20:00:00\",\"accidentDescCode\":\"\",\"numOfExpectInjury\":0,\"accidentPlace\":\"นวลจันทร์ เขต คลองเตย กรุงเทพมหานคร ประเทศไทย\",\"accidentLatitude\":\"13.742097\",\"accidentLongitude\":\"100.552975\",\"accidentProvn\":\"\",\"accidentDist\":\"\",\"sendOutSurveyorCode\":\"01\"},\"claimAssignSurv\":{\"surveyorCode\":\"\",\"surveyorClientNumber\":\"\",\"surveyorName\":\"สมชาย\",\"surveyorCompanyName\":\"บริษัท บริลเลี่ยน เซอร์เวย์ จำกัด (บางนา)\",\"surveyorCompanyMobile\":\"02-150-8844\",\"surveyorMobile\":\"\",\"surveyorType\":\"O\",\"reportAccidentResultDate\":null},\"claimSurvInform\":{\"accidentLegalResult\":\"\",n\"policeStation\":\"\",\"policeRecordId\":\"\",\"policeRecordDate\":null,\"policeBailFlag\": \"\",\"damageOfPolicyOwnerCar\":\"\",\"numOfTowTruck\":0,\"nameOfTowCompany\":\"\",\"detailOfTowEvent\":\"\",\"numOfAccidentInjury\":0,\"detailOfAccidentInjury\":\"\",\"numOfDeath\":0,\"detailOfDeath\":\"\",\"caseOwnerCode\":\"\",\"caseOwnerFullName\":\"\",\"accidentPartyInfo\":null}}}";
+            return a;
         }
     }
 }

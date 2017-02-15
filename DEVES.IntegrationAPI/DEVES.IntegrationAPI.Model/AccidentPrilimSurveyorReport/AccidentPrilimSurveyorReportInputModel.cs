@@ -25,7 +25,7 @@ namespace DEVES.IntegrationAPI.Model.AccidentPrilimSurveyorReport
         public int numOfAccidentInjury { get; set; }
         public string detailOfAccidentInjury { get; set; }
         public int numOfDeath { get; set; }
-        public string detailofDeath { get; set; }
+        public string detailOfDeath { get; set; }
         public string caseOwnercode { get; set; }
         public string caseOwnerFullname { get; set; }
         public string accidentPartyInfo { get; set; }
