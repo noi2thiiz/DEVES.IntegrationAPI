@@ -25,6 +25,13 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         private QueryInfo q = new QueryInfo();
         private System.Data.DataTable dt = new System.Data.DataTable();
 
+        /*
+         * isStringNull กับ isIntNull ทำหน้าที่คล้าย ๆ กันครับ
+         * 
+         * เมื่อรับค่ามาจาก Store ก็จะมีการเช็ค value ก่อนว่าเป็น null ไหม 
+         * จริง ๆ ไม่มีอะไรครับ แค่เขียนแยกเพื่อจำได้ไม่ต้องเขียนหลาย ๆ รอบใน Code method Mapping
+         *
+         **/
         private string isStringNull(string a)
         {
             if (dt.Rows[0][a] == null)
@@ -47,6 +54,11 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 return Convert.ToInt32(dt.Rows[0][a]);
             }
         }
+
+        /* 
+         * Method นี้เป็นการ Map ค่าจาก Model ที่ชื่อว่า "LocusClaimRegistrationInputModel" กับข้อมูลใน Store ครับ
+         * ปัญหาของตอนนี้คือแปลง object หรือ string value ไปเป็น datetime format ครับ
+         **/
         private LocusClaimRegistrationInputModel Mapping(string caseNo)
         {
             string format = "yyyy-MM-dd HH:mm:ss";
@@ -61,6 +73,11 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
 
             cr.claimHeader = new LocusClaimheaderModel();
             // claimHeader
+            // Recently Add 
+            cr.claimHeader.premiumClass = "";
+            cr.claimHeader.teamCd = "";
+            cr.claimHeader.claimStatus = "";
+            // Recently Add 
             cr.claimHeader.ticketNumber = isStringNull("ticketNumber");
             cr.claimHeader.claimNotiNo = isStringNull("claimNotiNo");
             cr.claimHeader.claimNotiRefer = isStringNull("claimNotiRefer");
@@ -95,6 +112,9 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
 
             cr.claimInform = new LocusClaimtypeModel();
             // claimInform
+            // Recently Add 
+            cr.claimInform.accidentDesc = "";
+            // Recently Add 
             cr.claimInform.informerClientId = isStringNull("informerClientId");
             cr.claimInform.informerFullName = isStringNull("informerFullName");
             cr.claimInform.informerMobile = isStringNull("informerMobile");
@@ -131,10 +151,24 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             cr.claimAssignSurv.surveyorMobile = isStringNull("surveyorMobile");
             cr.claimAssignSurv.surveyorType = isStringNull("surveyorType");
             cr.claimAssignSurv.reportAccidentResultDate = DateTime.Now; //DateTime.ParseExact(dt.Rows[0]["reportAccidentResultDate"].ToString(), "yyyy-MM-dd HH:mm tt", null);
-            // cr.claimAssignSurv.reportAccidentResultDate = DateTime.ParseExact(dt.Rows[0]["reportAccidentResultDate"].ToString(), format, provider);
+            // cr.claimAssignSurv.reportAccidentResultDate = DateTime.ParseExact(dt.Rows[0]["reportAccidentResultDate"], format, provider);
+            // Recently Add 
+            cr.claimAssignSurv.branchSurvey = "";
+            cr.claimAssignSurv.latitudeLongitude = "";
+            cr.claimAssignSurv.location = "";
+            cr.claimAssignSurv.createBy = "";
+            cr.claimAssignSurv.createDate = "";
+            cr.claimAssignSurv.updateBy = "";
+            cr.claimAssignSurv.updateDate = "";
+            // Recently Add 
 
             cr.claimSurvInform = new LocusClaimsurvinformModel();
             // claimSurvInform
+            // Recently Add 
+            cr.claimSurvInform.excessFee = 0; // int
+            cr.claimSurvInform.deductibleFee = 0; // int
+            cr.claimSurvInform.reportAccidentResultDate = DateTime.Now; // datetime
+            // Recently Add 
             cr.claimSurvInform.accidentLegalResult = isStringNull("accidentLegalResult");
             cr.claimSurvInform.policeStation = isStringNull("policeStation");
             cr.claimSurvInform.policeRecordId = isStringNull("policeRecordId");
@@ -167,6 +201,9 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             return cr;
         }
 
+        /* 
+         * เป็น Method ที่รับค่าที่ยิงมาจาก Postman ครับ
+         **/
         public object Post([FromBody]object value)
         {
             _log.InfoFormat("IP ADDRESS: {0}, HttpMethod: Get", CommonHelper.GetIpAddress());
@@ -196,6 +233,10 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             return Request.CreateResponse<ClaimRegistrationOutputModel>(output);
         }
 
+        /*
+         * หลังจากเรามี input header ที่ชื่อว่า content แล้ว 
+         * Method นี้จะ wrap เข้ากับ header ของ EWI อีกทีครีบ
+         **/
         private LocusClaimRegistrationOutputModel RegisterClaimOnLocus(string caseNo)
         {
 
@@ -212,18 +253,28 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 content = locusInputModel
             };
 
+            /* 
+             * json format 
+             * username = "ClaimMotor",
+                password = "1234",
+                token = "",
+                content = locusInputModel
+             * */
             string x = JsonConvert.SerializeObject(reqModel);
             
             HttpClient client = new HttpClient();
 
+            // URL
             client.BaseAddress = new Uri("http://192.168.3.194/ServiceProxy/ClaimMotor/jsonproxy/");
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
+            // + ENDPOINT
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "LOCUS_ClaimRegistration");
             request.Content = new StringContent(JsonConvert.SerializeObject(reqModel, Formatting.Indented), System.Text.Encoding.UTF8, "application/json");
             // request.Content = new StringContent(Dummy_Input(), System.Text.Encoding.UTF8, "application/json");
 
+            // เช็ค check reponse 
             HttpResponseMessage response = client.SendAsync(request).Result;
             response.EnsureSuccessStatusCode();
             LocusClaimRegistrationOutputModel locusOutput = response.Content.ReadAsAsync<LocusClaimRegistrationOutputModel>().Result;
@@ -232,6 +283,11 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
 
         }
 
+        /*
+         * Method นี้คือการ Return ผลลัพธ์ครับ (claimID) 
+         * การทำงานคือจะต้องสร้าง object สำหรับเก็บค่า output มาก่อนแล้ว map value จาก json response เข้ากับ output ครับ
+         * หลังจากนั้นก็ return ค่า
+         **/
         private ClaimRegistrationOutputModel HandleMessage(string valueText, ClaimRegistrationInputModel content)
         {
             //TODO: Do what you want
@@ -264,6 +320,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             return output;
         }
 
+        // อันนี้เป็น Hard Json ไว้เทสตอนยิงครับ เป็น Json ที่ยิงได้ code 200 บน service proxy
         private string Dummy_Input()
         {
             string a = "{\"username\":\"ClaimMotor\",\"password\":\"1234\",\"token\":\"\",\"content\":{\"claimHeader\":{\"ticketNumber\":\"CAS201702-00003\",\"claimNotiNo\":\"201702-00005\",\"claimNotiRefer\":\"\",\"policyNo\":\"V0284555\",\"fleetCarNo\":1,\"policySeqNo\":9,\"renewalNo\":7,\"barcode\":\"2080004701062\",\"insureCardNo\":\"\",\"policyIssueDate\":\"20151102\",\"policyEffectiveDate\":\"20151115\",\"policyExpiryDate\":\"20170210\",\"policyProductTypeCode\":\"TP\",\"policyProductTypeName\":\"ประเภท 3\",\"policyGarageFlag\":\"N\",\"policyPaymentStatus\":\"N\",\"policyCarRegisterNo\":\"กร1170\",\"policyCarRegisterProv\": \"\",\"carChassisNo\":\"10801620088706\",\"carVehicleType\":\"110\",\"carVehicleModel\":\"MERCEDES BENZ S280\",\"carVehicleYear\":\"1972\",\"carVehicleBody\":\"SEDAN\",\"carVehicleSize\":\"5/2954.00\",\"policyDeduct\":0,\"vipCaseFlag\":\"N\",\"highLossCaseFlag\":\"N\",\"legalCaseFlag\":\"N\",\"claimNotiRemark\":\"-\",\"claimType\":\"I\"},\"claimInform\":{\"informerClientId\":\"11608685\",\"informerFullName\":\"ธีระเดช เลขาชินบุตร\",\"informerMobile\":\"0812345678\",\"informerPhoneNo\":\"\",\"driverClientId\":\"11608685\",\"driverFullName\":\"ธีระเดช เลขาชินบุตร\",\"driverMobile\":\"0812345678\",\"driverPhoneNo\":\"\",\"insuredClientId\":\"11608685\",\"insuredFullName\":\"\",\"insuredMobile\":\"\",\"insuredPhoneNo\":\"\",\"relationshipWithInsurer\":\"00\",\"currentCarRegisterNo\":\"กร1170\",\"currentCarRegisterProv\":\"\",\"informerOn\":\"09/02/2017 20:30:00\",\"accidentOn\":\"09/02/2017 20:00:00\",\"accidentDescCode\":\"\",\"numOfExpectInjury\":0,\"accidentPlace\":\"นวลจันทร์ เขต คลองเตย กรุงเทพมหานคร ประเทศไทย\",\"accidentLatitude\":\"13.742097\",\"accidentLongitude\":\"100.552975\",\"accidentProvn\":\"\",\"accidentDist\":\"\",\"sendOutSurveyorCode\":\"01\"},\"claimAssignSurv\":{\"surveyorCode\":\"\",\"surveyorClientNumber\":\"\",\"surveyorName\":\"สมชาย\",\"surveyorCompanyName\":\"บริษัท บริลเลี่ยน เซอร์เวย์ จำกัด (บางนา)\",\"surveyorCompanyMobile\":\"02-150-8844\",\"surveyorMobile\":\"\",\"surveyorType\":\"O\",\"reportAccidentResultDate\":null},\"claimSurvInform\":{\"accidentLegalResult\":\"\",n\"policeStation\":\"\",\"policeRecordId\":\"\",\"policeRecordDate\":null,\"policeBailFlag\": \"\",\"damageOfPolicyOwnerCar\":\"\",\"numOfTowTruck\":0,\"nameOfTowCompany\":\"\",\"detailOfTowEvent\":\"\",\"numOfAccidentInjury\":0,\"detailOfAccidentInjury\":\"\",\"numOfDeath\":0,\"detailOfDeath\":\"\",\"caseOwnerCode\":\"\",\"caseOwnerFullName\":\"\",\"accidentPartyInfo\":null}}}";

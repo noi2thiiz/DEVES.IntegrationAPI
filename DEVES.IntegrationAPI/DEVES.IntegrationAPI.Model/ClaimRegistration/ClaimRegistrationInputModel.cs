@@ -17,10 +17,14 @@ namespace DEVES.IntegrationAPI.Model.ClaimRegistration
         public LocusClaimtypeModel claimInform { get; set; }
         public LocusClaimassignsurvModel claimAssignSurv { get; set; }
         public LocusClaimsurvinformModel claimSurvInform { get; set; }
+
     }
 
     public class LocusClaimheaderModel
     {
+        public string premiumClass { get; set; }
+        public string teamCd { get; set; }
+        public string claimStatus { get; set; }
         public string ticketNumber { get; set; }
         public string claimNotiNo { get; set; }
         public string claimNotiRefer { get; set; }
@@ -56,6 +60,7 @@ namespace DEVES.IntegrationAPI.Model.ClaimRegistration
 
     public class LocusClaimtypeModel
     {
+        public string accidentDesc { get; set; }
         public string informerClientId { get; set; }
         public string informerFullName { get; set; }
         public string informerMobile { get; set; }
@@ -93,10 +98,21 @@ namespace DEVES.IntegrationAPI.Model.ClaimRegistration
         public string surveyorMobile { get; set; }
         public string surveyorType { get; set; }
         public DateTime? reportAccidentResultDate { get; set; }
+        public string branchSurvey { get; set; }
+        public string latitudeLongitude { get; set; }
+        public string location { get; set; }
+        public string createBy { get; set; }
+        public string createDate { get; set; } // DateTime format?
+        public string updateBy { get; set; }
+        public string updateDate { get; set; } // DateTime format?
+
     }
 
     public class LocusClaimsurvinformModel
     {
+        public int excessFee { get; set; }
+        public int deductibleFee { get; set; }
+        public DateTime? reportAccidentResultDate { get; set; }
         public string accidentLegalResult { get; set; }
         public string policeStation { get; set; }
         public string policeRecordId { get; set; }
@@ -126,6 +142,6 @@ namespace DEVES.IntegrationAPI.Model.ClaimRegistration
         public string accidentPartyPolicyType { get; set; }
         public string accidentPartyPolicyNumber { get; set; }
         public DateTime? accidentPartyPolicyExpdate { get; set; }
-        public string demageOfPartyCar { get; set; }
+        public string damageOfPartyCar { get; set; }
     }
 }

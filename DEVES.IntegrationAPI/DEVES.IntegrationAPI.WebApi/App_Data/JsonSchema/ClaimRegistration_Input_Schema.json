@@ -55,165 +55,216 @@
             "type": "array",
             "items": {
                 "type": "object",
-                "properties": {
-                    "ticketNo": {
-                        "type": "string"
-                    },
-                    "claimNotiNo": {
-                        "$ref": "#/definitions/claimNo"
-                    },
-                    "claimNotiRefer": {
-                        "$ref": "#/definitions/claimNo"
-                    },
-                    "policyNo": {
-                        "type": "string"
-                    },
-                    "fleetCarNo": {
-                        "type": "integer"
-                    },
-                  "policySeqNo": {
-                    "anyOf": [ {"type" : "integer"
-                        }, {
-                            "type": "null"
-                        }]
-                    },
-                    "renewalNo": {
-                    "anyOf": [ {"type" : "integer"
-                        }, {
-                            "type": "null"
-                        }]
-                    },
-                    "barcode": {
-                        "anyOf": [ {"type" : "string"
-                            }, {
-                                "type": "null"
-                            }]
-                    },
-                    "insureCardNo": {
-                        "anyOf": [ {"type" : "string"
-                            }, {
-                                "type": "null"
-                            }]
-                    },
-                    "policyIssueDate": {
-                        "anyOf": [{
-                            "$ref": "#/definitions/shortDateTime"
-                        }, {
-                            "type": "null"
-                        }]
-                    },
-                    "policyEffectiveDate": {
-                        "anyOf": [{
-                            "$ref": "#/definitions/shortDateTime"
-                        }, {
-                            "type": "null"
-                        }]
-                    },
-                    "policyExpiryDate": {
-                        "anyOf": [{
-                            "$ref": "#/definitions/shortDateTime"
-                        }, {
-                            "type": "null"
-                        }]
-                    },
-                    "policyProductTypeCode": {
-                        "type": "string"
-                    },
-                    "policyProductTypeName": {
-                        "type": "string"
-                    },
-                    "policyGarageFlag": {
-                        "anyOf": [{
-                            "$ref": "#/definitions/yesNoFlag"
-                        }, {
-                            "type": "null"
-                        }]
-                    },
-                    "policyPaymentStatus": {
-                        "anyOf": [{
-                            "$ref": "#/definitions/yesNoFlag"
-                        }, {
-                            "type": "null"
-                        }]
-                    },
-                    "policyCarRegisterNo": {
-                        "type": "string"
-                    },
-                    "policyCarRegisterProv": {
-                        "type": "string"
-                    },
-                    "carChassisNo": {
-                        "type": "string"
-                    },
-                    "carVehicleType": {
-                        "type": "string"
-                    },
-                    "carVehicleModel": {
-                        "type": "string"
-                    },
-                    "carVehicleYear": {
-                        "type": "string"
-                    },
-                    "carVehicleBody": {
-                        "type": "string"
-                    },
-                    "carVehicleSize": {
-                        "type": "string"
-                    },
-                    "policyDeduct": {
-                        "type": "integer"
-                    },
-                    "vipCaseFlag": {
-                        "anyOf": [{
-                            "$ref": "#/definitions/yesNoFlag"
-                        }, {
-                            "type": "null"
-                        }]
-                    },
-                    "privilegeLevel": {
-                        "anyOf": [{
-                                "type": "string",
-                                "enum": [
-                                    "1",
-                                    "2",
-                                    "3",
-                                    "4"
-                                ],
-                                "maxLength": 1
-                            },
-                            {
-                                "type": "null"
-                            }
-                        ]
-                    },
-                    "highLossCaseFlag": {
-                        "anyOf": [{
-                            "$ref": "#/definitions/yesNoFlag"
-                        }, {
-                            "type": "null"
-                        }]
-                    },
-                    "LegalCaseFlag": {
-                        "anyOf": [{
-                            "$ref": "#/definitions/yesNoFlag"
-                        }, {
-                            "type": "null"
-                        }]
-                    },
-                    "claimNotiRemark": {
-                        "type": "string"
-                    },
-                    "claimType": {
-                        "anyOf": [{
-
-                                "$ref": "#/definitions/iOFlag"
-                            },
-                            {
-                                "type": "null"
-                            }
-                        ]
-                    }
+              "properties": {
+                "premiumClass": {
+                  "type": "string"
                 },
+                "teamCd": {
+                  "type": "string"
+                },
+                "claimStatus": {
+                  "type": "string"
+                },
+                "ticketNumber": {
+                  "type": "string"
+                },
+                "claimNotiNo": {
+                  "$ref": "#/definitions/claimNo"
+                },
+                "claimNotiRefer": {
+                  "$ref": "#/definitions/claimNo"
+                },
+                "policyNo": {
+                  "type": "string"
+                },
+                "fleetCarNo": {
+                  "type": "integer"
+                },
+                "policySeqNo": {
+                  "anyOf": [
+                    {
+                      "type": "integer"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "renewalNo": {
+                  "anyOf": [
+                    {
+                      "type": "integer"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "barcode": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "insureCardNo": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "policyIssueDate": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/definitions/shortDateTime"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "policyEffectiveDate": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/definitions/shortDateTime"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "policyExpiryDate": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/definitions/shortDateTime"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "policyProductTypeCode": {
+                  "type": "string"
+                },
+                "policyProductTypeName": {
+                  "type": "string"
+                },
+                "policyGarageFlag": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/definitions/yesNoFlag"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "policyPaymentStatus": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/definitions/yesNoFlag"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "policyCarRegisterNo": {
+                  "type": "string"
+                },
+                "policyCarRegisterProv": {
+                  "type": "string"
+                },
+                "carChassisNo": {
+                  "type": "string"
+                },
+                "carVehicleType": {
+                  "type": "string"
+                },
+                "carVehicleModel": {
+                  "type": "string"
+                },
+                "carVehicleYear": {
+                  "type": "string"
+                },
+                "carVehicleBody": {
+                  "type": "string"
+                },
+                "carVehicleSize": {
+                  "type": "string"
+                },
+                "policyDeduct": {
+                  "type": "integer"
+                },
+                "vipCaseFlag": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/definitions/yesNoFlag"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "privilegeLevel": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "enum": [
+                        "1",
+                        "2",
+                        "3",
+                        "4"
+                      ],
+                      "maxLength": 1
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "highLossCaseFlag": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/definitions/yesNoFlag"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "LegalCaseFlag": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/definitions/yesNoFlag"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "claimNotiRemark": {
+                  "type": "string"
+                },
+                "claimType": {
+                  "anyOf": [
+                    {
+
+                      "$ref": "#/definitions/iOFlag"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
                 "required": [
                     "ticketNo",
                     "claimNotiNo",
@@ -228,7 +279,10 @@
             "items": {
                 "type": "object",
                 "properties": {
-                    "informerClientId": {
+                  "accidentDesc": {
+                    "type": "string"
+                  },
+                  "informerClientId": {
                         "type": "string"
                     },
                     "informerFullName": {
@@ -384,9 +438,31 @@
                             }
                         ]
                     },
-                    "reportAccidentResultDate": {
-                        "type": "string"
-                    }
+                  "reportAccidentResultDate": {
+                    "type": "string"
+                  },
+                  "branchSurvey": {
+                    "type": "string"
+                  },
+                  "latitudeLongitude": {
+                    "type": "string"
+                  },
+                  "location": {
+                    "type": "string"
+                  },
+                  "createBy": {
+                    "type": "string"
+                  },
+                  "createDate": {
+                    "type": "string"
+                  },
+                  "updateBy": {
+                    "type": "string"
+                  },
+                  "updateDate": {
+                    "type": "string"
+                  },
+
                 }
             }
         },
@@ -394,105 +470,115 @@
             "type": "array",
             "items": {
                 "type": "object",
-                "properties": {
-                    "accidentLegalResult": {
-                        "anyOf": [{
-                                "type": "string",
-                                "enum": [
-                                    "1",
-                                    "2",
-                                    "3",
-                                    "4",
-                                    "5"
-                                ],
-                                "maxLength": 1
-                            },
-                            {
-                                "type": "null"
-                            }
-                        ]
+              "properties": {
+                "excessFee": {
+                  "type": "integer"
+                },
+                "deductibleFee": {
+                  "type": "integer"
+                },
+                "reportAccidentResultDate": {
+                  "type": "string"
+                },
+                "accidentLegalResult": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "enum": [
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5"
+                      ],
+                      "maxLength": 1
                     },
-                    "policeStation": {
-                        "type": "string"
-                    },
-                    "policeRecordId": {
-                        "type": "string"
-                    },
-                    "policeRecordDate": {
-                        "type": "string"
-                    },
-                    "policeBailFlag": {
-                        "$ref": "#/definitions/zeroOneFlag"
-                    },
-                    "demageOfPolicyOwnerCar": {
-                        "type": "string"
-                    },
-                    "numOfTowTruck": {
-                        "type": "integer"
-                    },
-                    "nameOfTowCompany": {
-                        "type": "string"
-                    },
-                    "detailOfTowEvent": {
-                        "type": "string"
-                    },
-                    "numOfAccidentInjury": {
-                        "type": "integer"
-                    },
-                    "detailOfAccidentInjury": {
-                        "type": "string"
-                    },
-                    "numOfDeath": {
-                        "type": "integer"
-                    },
-                    "detailOfDeath": {
-                        "type": "string"
-                    },
-                    "caseOwnerCode": {
-                        "type": "string"
-                    },
-                    "caseOwnerFullName": {
-                        "type": "string"
-                    },
-                    "accidentPartyInfo": {
-                        "type": "array",
-                        "items": {
-                            "type": "object",
-                            "properties": {
-                                "accidentPartyFullname": {
-                                    "type": "string"
-                                },
-                                "accidentPartyPhone": {
-                                    "type": "string"
-                                },
-                                "accidentPartyCarPlateNumber": {
-                                    "type": "string"
-                                },
-                                "accidentPartyCarModel": {
-                                    "type": "string"
-                                },
-                                "accidentPartyInsuredFlag": {
-                                    "type": "string"
-                                },
-                                "accidentPartyInsuranceCompany": {
-                                    "type": "string"
-                                },
-                                "accidentPartyPolicyType": {
-                                    "type": "string"
-                                },
-                                "accidentPartyPolicyNumber": {
-                                    "type": "string"
-                                },
-                                "accidentPartyPolicyExpdate": {
-                                    "type": "string"
-                                },
-                                "demageOfPartyCar": {
-                                    "type": "string"
-                                }
-                            }
-                        }
+                    {
+                      "type": "null"
                     }
+                  ]
+                },
+                "policeStation": {
+                  "type": "string"
+                },
+                "policeRecordId": {
+                  "type": "string"
+                },
+                "policeRecordDate": {
+                  "type": "string"
+                },
+                "policeBailFlag": {
+                  "$ref": "#/definitions/zeroOneFlag"
+                },
+                "demageOfPolicyOwnerCar": {
+                  "type": "string"
+                },
+                "numOfTowTruck": {
+                  "type": "integer"
+                },
+                "nameOfTowCompany": {
+                  "type": "string"
+                },
+                "detailOfTowEvent": {
+                  "type": "string"
+                },
+                "numOfAccidentInjury": {
+                  "type": "integer"
+                },
+                "detailOfAccidentInjury": {
+                  "type": "string"
+                },
+                "numOfDeath": {
+                  "type": "integer"
+                },
+                "detailOfDeath": {
+                  "type": "string"
+                },
+                "caseOwnerCode": {
+                  "type": "string"
+                },
+                "caseOwnerFullName": {
+                  "type": "string"
+                },
+                "accidentPartyInfo": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "accidentPartyFullname": {
+                        "type": "string"
+                      },
+                      "accidentPartyPhone": {
+                        "type": "string"
+                      },
+                      "accidentPartyCarPlateNumber": {
+                        "type": "string"
+                      },
+                      "accidentPartyCarModel": {
+                        "type": "string"
+                      },
+                      "accidentPartyInsuredFlag": {
+                        "type": "string"
+                      },
+                      "accidentPartyInsuranceCompany": {
+                        "type": "string"
+                      },
+                      "accidentPartyPolicyType": {
+                        "type": "string"
+                      },
+                      "accidentPartyPolicyNumber": {
+                        "type": "string"
+                      },
+                      "accidentPartyPolicyExpdate": {
+                        "type": "string"
+                      },
+                      "demageOfPartyCar": {
+                        "type": "string"
+                      }
+                    }
+                  }
                 }
+              }
             }
         }
     },
