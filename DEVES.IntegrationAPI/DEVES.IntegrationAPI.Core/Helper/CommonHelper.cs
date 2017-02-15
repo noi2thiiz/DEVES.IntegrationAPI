@@ -18,4 +18,17 @@ namespace DEVES.IntegrationAPI.Core.Helper
             return ipaddress;
         }
     }
+
+    public static class DateTimeExtension
+    {
+        public static string ToEWIDateTime(DateTime dt)
+        {
+            return dt.ToString("yyyy-MM-dd HH:mm:ss");
+        }
+        public static string ToEWIDateOnly(DateTime dt)
+        {
+            return dt.ToString("yyyy-MM-dd 00:00:00");
+        }
+    }
+
 }
