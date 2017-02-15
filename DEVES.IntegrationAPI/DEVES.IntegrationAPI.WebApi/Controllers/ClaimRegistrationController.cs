@@ -137,7 +137,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             cr.claimSurvInform.policeRecordDate = null; //DateTime.ParseExact(dt.Rows[0]["policeRecordDate"].ToString(), "yyyy-MM-dd HH:mm tt", null);
             cr.claimSurvInform.policeBailFlag = isStringNull("policeBailFlag");
             cr.claimSurvInform.damageOfPolicyOwnerCar = isStringNull("demageOfPolicyOwnerCar");
-            cr.claimSurvInform.numOfTowTruck = 0; // isIntNull("numOfTowTruck");
+            cr.claimSurvInform.numOfTowTruck = 0; // isIntNull("numOfTowTruck"); check type of this vaule in sqlserver
             cr.claimSurvInform.nameOfTowCompany = isStringNull("nameOfTowCompany");
             cr.claimSurvInform.detailOfTowEvent = isStringNull("detailOfTowEvent");
             cr.claimSurvInform.numOfAccidentInjury = isIntNull("numOfAccidentInjury");
