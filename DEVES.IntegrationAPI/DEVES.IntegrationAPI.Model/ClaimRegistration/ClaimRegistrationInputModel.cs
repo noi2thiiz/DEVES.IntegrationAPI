@@ -34,9 +34,9 @@ namespace DEVES.IntegrationAPI.Model.ClaimRegistration
         public int? renewalNo { get; set; }
         public string barcode { get; set; }
         public string insureCardNo { get; set; }
-        public string policyIssueDate { get; set; }
-        public string policyEffectiveDate { get; set; }
-        public string policyExpiryDate { get; set; }
+        public DateTime? policyIssueDate { get; set; }
+        public DateTime? policyEffectiveDate { get; set; }
+        public DateTime? policyExpiryDate { get; set; }
         public string policyProductTypeCode { get; set; }
         public string policyProductTypeName { get; set; }
         public string policyGarageFlag { get; set; }
@@ -76,8 +76,8 @@ namespace DEVES.IntegrationAPI.Model.ClaimRegistration
         public string relationshipWithInsurer { get; set; }
         public string currentCarRegisterNo { get; set; }
         public string currentCarRegisterProv { get; set; }
-        public string informerOn { get; set; }
-        public string accidentOn { get; set; }
+        public DateTime? informerOn { get; set; }
+        public DateTime? accidentOn { get; set; }
         public string accidentDescCode { get; set; }
         public int? numOfExpectInjury { get; set; }
         public string accidentPlace { get; set; }
@@ -102,9 +102,9 @@ namespace DEVES.IntegrationAPI.Model.ClaimRegistration
         public string latitudeLongitude { get; set; }
         public string location { get; set; }
         public string createBy { get; set; }
-        public string createDate { get; set; } // DateTime format?
+        public DateTime? createDate { get; set; } // DateTime format?
         public string updateBy { get; set; }
-        public string updateDate { get; set; } // DateTime format?
+        public DateTime? updateDate { get; set; } // DateTime format?
 
     }
 

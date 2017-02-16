@@ -32,6 +32,19 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
          * จริง ๆ ไม่มีอะไรครับ แค่เขียนแยกเพื่อจำได้ไม่ต้องเขียนหลาย ๆ รอบใน Code method Mapping
          *
          **/
+
+        private DateTime? isDateNull(string a)
+        {
+            DateTime? d = null;
+            try
+            {
+                d= (DateTime)dt.Rows[0][a];
+            }
+            catch(Exception e) {
+            }
+            return d;
+        }
+
         private string isStringNull(string a)
         {
             if (dt.Rows[0][a] == null)
@@ -87,9 +100,9 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             cr.claimHeader.renewalNo = isIntNull("renewalNo");
             cr.claimHeader.barcode = isStringNull("barcode");
             cr.claimHeader.insureCardNo = isStringNull("insureCardNo");
-            cr.claimHeader.policyIssueDate = isStringNull("policyIssueDate");
-            cr.claimHeader.policyEffectiveDate = isStringNull("policyEffectiveDate");
-            cr.claimHeader.policyExpiryDate = isStringNull("policyExpiryDate");
+            cr.claimHeader.policyIssueDate = isDateNull("policyIssueDate");
+            cr.claimHeader.policyEffectiveDate = isDateNull("policyEffectiveDate");
+            cr.claimHeader.policyExpiryDate = isDateNull("policyExpiryDate");
             cr.claimHeader.policyProductTypeCode = isStringNull("policyProductTypeCode");
             cr.claimHeader.policyProductTypeName = isStringNull("policyProductTypeName");
             cr.claimHeader.policyGarageFlag = isStringNull("policyGarageFlag");
@@ -130,8 +143,8 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             cr.claimInform.relationshipWithInsurer = isStringNull("relationshipWithInsurer");
             cr.claimInform.currentCarRegisterNo = isStringNull("currentCarRegisterNo");
             cr.claimInform.currentCarRegisterProv = isStringNull("currentCarRegisterProv");
-            cr.claimInform.informerOn = isStringNull("informerOn");
-            cr.claimInform.accidentOn = isStringNull("accidentOn");
+            cr.claimInform.informerOn = isDateNull("informerOn");
+            cr.claimInform.accidentOn = isDateNull("accidentOn");
             cr.claimInform.accidentDescCode = isStringNull("accidentDescCode");
             cr.claimInform.numOfExpectInjury = isIntNull("numOfExpectInjury");
             cr.claimInform.accidentPlace = isStringNull("accidentPlace");
@@ -150,16 +163,16 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             cr.claimAssignSurv.surveyorCompanyMobile = isStringNull("surveyorCompanyMobile");
             cr.claimAssignSurv.surveyorMobile = isStringNull("surveyorMobile");
             cr.claimAssignSurv.surveyorType = isStringNull("surveyorType");
-            cr.claimAssignSurv.reportAccidentResultDate = DateTime.Now; //DateTime.ParseExact(dt.Rows[0]["reportAccidentResultDate"].ToString(), "yyyy-MM-dd HH:mm tt", null);
+            cr.claimAssignSurv.reportAccidentResultDate = isDateNull("reportAccidentResultDate"); //DateTime.ParseExact(dt.Rows[0]["reportAccidentResultDate"].ToString(), "yyyy-MM-dd HH:mm tt", null);
             // cr.claimAssignSurv.reportAccidentResultDate = DateTime.ParseExact(dt.Rows[0]["reportAccidentResultDate"], format, provider);
             // Recently Add 
             cr.claimAssignSurv.branchSurvey = "";
             cr.claimAssignSurv.latitudeLongitude = "";
             cr.claimAssignSurv.location = "";
             cr.claimAssignSurv.createBy = "";
-            cr.claimAssignSurv.createDate = "";
+            cr.claimAssignSurv.createDate = null;
             cr.claimAssignSurv.updateBy = "";
-            cr.claimAssignSurv.updateDate = "";
+            cr.claimAssignSurv.updateDate = null;
             // Recently Add 
 
             cr.claimSurvInform = new LocusClaimsurvinformModel();
@@ -167,7 +180,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             // Recently Add 
             cr.claimSurvInform.excessFee = 0; // int
             cr.claimSurvInform.deductibleFee = 0; // int
-            cr.claimSurvInform.reportAccidentResultDate = DateTime.Now; // datetime
+            cr.claimSurvInform.reportAccidentResultDate = isDateNull("reportAccidentResultDate"); // datetime
             // Recently Add 
             cr.claimSurvInform.accidentLegalResult = isStringNull("accidentLegalResult");
             cr.claimSurvInform.policeStation = isStringNull("policeStation");
@@ -249,6 +262,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             {
                 username = "ClaimMotor",
                 password = "1234",
+                gid = "ClaimMotor",
                 token = "",
                 content = locusInputModel
             };
@@ -260,7 +274,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 token = "",
                 content = locusInputModel
              * */
-            string x = JsonConvert.SerializeObject(reqModel);
+            string jsonReqModel = JsonConvert.SerializeObject(reqModel , Formatting.Indented , new EWIDatetimeConverter() );
             
             HttpClient client = new HttpClient();
 
@@ -271,7 +285,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
 
             // + ENDPOINT
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "LOCUS_ClaimRegistration");
-            request.Content = new StringContent(JsonConvert.SerializeObject(reqModel, Formatting.Indented), System.Text.Encoding.UTF8, "application/json");
+            request.Content = new StringContent(jsonReqModel, System.Text.Encoding.UTF8, "application/json");
             // request.Content = new StringContent(Dummy_Input(), System.Text.Encoding.UTF8, "application/json");
 
             // เช็ค check reponse 
