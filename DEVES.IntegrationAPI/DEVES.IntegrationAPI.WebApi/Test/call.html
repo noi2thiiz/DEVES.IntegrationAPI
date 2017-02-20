@@ -1,0 +1,78 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+	<meta charset="utf-8" />
+</head>
+<body>
+    <div>
+        <p id="textMessage"></p>
+        <table>
+            <tr>
+                <td>Username</td><td><input type="UserName" name="UserName" id="UserName" value="agenttest1" placeholder="Username"></td>
+            </tr>
+            <tr>
+                <td>Phone Number</td>
+                <td><input type="text" name="DestinationNumber" id="DestinationNumber" placeholder="Phone Number"> 
+                    (นำหน้าด้วย 9 เช่น 908655xxxcc)</td>
+            </tr>
+        </table>
+        <br/>
+     
+        <button id="btnCall">
+            Call
+        </button>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"
+            integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+            crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function () {
+            $("#btnCall").click(function () {
+                var valid = true;
+                var UserName = $("#UserName").val();
+                if ($.trim(UserName)=="") {
+                    $('#textMessage').html("<h2 style='color:blue'>กรุณาระบุ User Name</h2>");
+                    valid = false;
+                    return false;
+                }
+                var DestinationNumber = $("#DestinationNumber").val();
+                if ($.trim(DestinationNumber) == "") {
+                    $('#textMessage').html("<h2 style='color:blue'>กรุณาระบุหมายเลขโทรออก</h2>");
+                    valid = false;
+                    return false;
+                }
+                $.ajax({
+                    crossDomain: true,
+                    url: "/api/WebDialer/makeCall",
+                    processData: false,
+                    method: "post",
+                    headers: {
+                          Accept: "application/json; charset=utf-8",
+                          "Content-Type": "application/json; charset=utf-8",
+                          "Access-Control-Allow-Origin": '*'
+                    },
+                    data: JSON.stringify({
+                        "UserName": UserName,
+                        "DestinationNumber": DestinationNumber
+                    })
+                }).then(function (data) {
+                    if ($.trim(data.Code)=="0" || Number(data.Code) == 0 ) {
+                        $('#textMessage').html("<h2 style='color:green'>" + data.Description + "</h2>");
+                    } else {
+                        $('#textMessage').html("<h2 style='color:red'>" + data.Description + "</h2>");
+                    }
+                  
+                   
+
+                }, function (data) {
+                    $('#textMessage').html("<h2 style='color:red'> ERROR:" + data.Description + "</h2>");
+
+                });
+            });
+        })
+
+    </script>
+</body>
+</html>
