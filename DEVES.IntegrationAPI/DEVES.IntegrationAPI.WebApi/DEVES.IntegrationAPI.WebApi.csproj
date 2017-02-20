@@ -242,10 +242,16 @@
     <Compile Include="Controllers\UpdateClaimInfoController.cs" />
     <Compile Include="Controllers\UpdateCompliantStatusController.cs" />
     <Compile Include="Controllers\UpdateSurveyStatusController.cs" />
+    <Compile Include="Controllers\WebDialerController.cs" />
     <Compile Include="EWIDatetimeConverter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\WebDialer\IServiceRequestAble.cs" />
+    <Compile Include="Models\WebDialer\IServiceResult.cs" />
+    <Compile Include="Models\WebDialer\MakeCallRequestModel.cs" />
+    <Compile Include="Models\WebDialer\MakeCallResultModel.cs" />
+    <Compile Include="Models\WebDialer\WebDialerRequester.cs" />
     <Compile Include="QueryInfo.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -297,7 +303,6 @@
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\_references.js" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
