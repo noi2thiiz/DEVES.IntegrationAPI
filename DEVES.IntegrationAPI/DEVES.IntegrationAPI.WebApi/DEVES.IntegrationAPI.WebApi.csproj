@@ -239,6 +239,7 @@
     <Compile Include="Controllers\AssignedSurveyorController.cs" />
     <Compile Include="Controllers\ClaimRegistrationController.cs" />
     <Compile Include="Controllers\InquiryConsultingHistoryController.cs" />
+    <Compile Include="Controllers\RequestSurveyorController.cs" />
     <Compile Include="Controllers\UpdateClaimInfoController.cs" />
     <Compile Include="Controllers\UpdateCompliantStatusController.cs" />
     <Compile Include="Controllers\UpdateSurveyStatusController.cs" />
@@ -272,10 +273,11 @@
     <Content Include="App_Data\JsonSchema\UpdateClaimStatus_Input_Schema.json" />
     <Content Include="App_Data\JsonSchema\ClaimRegistration_Input_Schema.json" />
     <Content Include="App_Data\JsonSchema\UpdateSurveyStatus_Input_Schema.json" />
-    <Content Include="App_Data\JsonSchema\AssignedSurveyorInfo_Input_Schema.json" />
     <Content Include="App_Data\JsonSchema\AccidentPrilimSurveyorReport_Input_Schema.json" />
     <Content Include="App_Data\JsonSchema\UpdateCompliantStatus_Input_Schema.json" />
     <Content Include="App_Data\JsonSchema\LOCUS_Integration_Input_Schema.json" />
+    <Content Include="App_Data\JsonSchema\RequestSurveyor_Input_Schema.json" />
+    <Content Include="App_Data\JsonSchema\AssignedSurveyorInfo_Input_Schema.json" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

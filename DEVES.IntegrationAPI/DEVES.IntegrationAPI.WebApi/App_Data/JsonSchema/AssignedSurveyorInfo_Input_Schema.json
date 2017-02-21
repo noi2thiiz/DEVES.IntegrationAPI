@@ -55,18 +55,22 @@
       "type": "string",
       "maxLength": 100
     },
-    "surveyorType": {
+    "surveyType": {
       "type": "string",
       "enum": [
-				"0",
-				"1"
-			],
+        "0",
+        "1"
+      ],
       "maxLength": 1
+    },
+    "surveyTeam": {
+      "type": "string",
+      "maxLength": 8
     }
 	},
 	"required": [
     "ticketNo",
     "claimNotiNo",
-    "surveyorType"
+    "surveyType"
 	]
 }

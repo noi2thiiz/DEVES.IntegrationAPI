@@ -24,5 +24,6 @@ namespace DEVES.IntegrationAPI.Model.AssignedSurveyor
         public string surveyorCompanyName { get; set; }
         public string surveyorCompanyMobile { get; set; }
         public string surveyType { get; set; }
+        public string surveyTeam { get; set; }
     }
 }

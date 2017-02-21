@@ -1,0 +1,123 @@
+﻿{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "EventCode": {
+      "type": "string",
+      "maxLength": 15
+    },
+    "claimnotirefer": {
+      "type": "string",
+      "maxLength": 8
+    },
+    "InsureID": {
+      "type": "string",
+      "maxLength": 8
+    },
+    "RSKNo": {
+      "type": "string",
+      "maxLength": 4
+    },
+    "TranNo": {
+      "type": "string",
+      "maxLength": 5
+    },
+    "NotifyName": {
+      "type": "string",
+      "maxLength": 100
+    },
+    "Mobile": {
+      "type": "string",
+      "maxLength": 30
+    },
+    "Driver": {
+      "type": "string",
+      "maxLength": 100
+    },
+    "DriverTel": {
+      "type": "string",
+      "maxLength": 30
+    },
+    "current_VehicleLicence": {
+      "type": "string",
+      "maxLength": 20
+    },
+    "current_Province": {
+      "type": "string",
+      "maxLength": 20
+    },
+    "EventDate": {
+      "type": "string"
+    },
+    "ActivityDate": {
+      "type": "string"
+    },
+    "EventDetail": {
+      "type": "string",
+      "maxLength": 2000
+    },
+    "isCasualty": {
+      "type": "integer"
+    },
+    "EventLocation": {
+      "type": "string",
+      "maxLength": 2000
+    },
+    "accidentLocation": {
+      "type": "string"
+    },
+    "accidentLat": {
+      "type": "string"
+    },
+    "accidentLng": {
+      "type": "string"
+    },
+    "IsVIP": {
+      "type": "string",
+      "maxLength": 1
+    },
+    "Remark": {
+      "type": "string",
+      "maxLength": 2000
+    },
+    "ClameTypeID": {
+      "type": "integer"
+    },
+    "SubClameTypeID": {
+      "type": "integer"
+    },
+    "informBy": {
+      "type": "string",
+      "maxLength": 20
+    },
+    "appointLat": {
+      "type": "string"
+    },
+    "appointLong": {
+      "type": "string"
+    },
+    "appointLocation": {
+      "type": "string",
+      "maxLength": 2000
+    },
+    "appointDate": {
+      "type": "string"
+    },
+    "appointName": {
+      "type": "string"
+    },
+    "appointPhone": {
+      "type": "string"
+    },
+    "contractName": {
+      "type": "string"
+    },
+    "contractPhone": {
+      "type": "string"
+    }
+  },
+  "required": [
+		"EventCode",
+    "NotifyName"
+	]
+}

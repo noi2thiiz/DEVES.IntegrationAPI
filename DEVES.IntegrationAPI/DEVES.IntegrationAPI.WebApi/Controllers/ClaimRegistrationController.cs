@@ -87,7 +87,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             cr.claimHeader = new LocusClaimheaderModel();
             // claimHeader
             // Recently Add 
-            cr.claimHeader.premiumClass = "MVS";
+            cr.claimHeader.premiumClass = isStringNull("premiumClass");
             cr.claimHeader.teamCd = "";
             cr.claimHeader.claimStatus = "";
             // Recently Add 
