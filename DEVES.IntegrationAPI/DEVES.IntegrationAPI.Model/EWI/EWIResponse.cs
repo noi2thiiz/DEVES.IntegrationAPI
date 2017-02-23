@@ -63,6 +63,8 @@ namespace DEVES.IntegrationAPI.Model.EWI
         public string claimId { get; set; }
         public string claimNo { get; set; }
         public string ticketNumber { get; set; }
+
+        public string EventID { get; set; }
     }
 
 
