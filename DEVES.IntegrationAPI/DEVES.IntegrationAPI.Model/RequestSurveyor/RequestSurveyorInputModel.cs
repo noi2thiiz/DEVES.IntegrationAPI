@@ -6,6 +6,11 @@ using System.Threading.Tasks;
 
 namespace DEVES.IntegrationAPI.Model.RequestSurveyor
 {
+
+    public class RequestSurveyorInputModel_WebService
+    {
+        public string caseNo { get; set; }
+    }
     public class RequestSurveyorInputModel
     {
         public string EventCode { get; set; }
@@ -22,15 +27,15 @@ namespace DEVES.IntegrationAPI.Model.RequestSurveyor
         public string EventDate { get; set; }
         public string ActivityDate { get; set; }
         public string EventDetail { get; set; }
-        public string isCasualty { get; set; }
+        public int? isCasualty { get; set; }
         public string EventLocation { get; set; }
         public string accidentLocation { get; set; }
         public double accidentLat { get; set; }
         public double accidentLng { get; set; }
         public string IsVIP { get; set; }
         public string Remark { get; set; }
-        public int ClameTypeID { get; set; }
-        public int SubClameTypeID { get; set; }
+        public int? ClameTypeID { get; set; }
+        public int? SubClameTypeID { get; set; }
         public string informBy { get; set; }
         public double appointLat { get; set; }
         public double appointLong { get; set; }

@@ -45,4 +45,11 @@ namespace DEVES.IntegrationAPI.Model.EWI
         public string hostscreen { get; set; }
         public object content { get; set; }
     }
+
+    public class EWIResponseContentData
+    {
+        public string EventID { get; set; }
+    }
+
+
 }

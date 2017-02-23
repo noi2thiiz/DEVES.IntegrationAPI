@@ -215,17 +215,19 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         }
 
         /* 
-         * เป็น Method ที่รับค่าที่ยิงมาจาก Postman ครับ
+         * เป็น Method ที่รับค่าที่ยิงมาจาก Postman หรือ Web Service ครับ
          **/
         public object Post([FromBody]object value)
         {
             _log.InfoFormat("IP ADDRESS: {0}, HttpMethod: Get", CommonHelper.GetIpAddress());
 
             var output = new ClaimRegistrationOutputModel();
+
             if (value==null)
             {
                 return Request.CreateResponse<ClaimRegistrationOutputModel>(output);
             }
+
             var contentText = value.ToString();
             var contentModel = JsonConvert.DeserializeObject<ClaimRegistrationInputModel>(contentText);
             string outvalidate = string.Empty;

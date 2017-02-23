@@ -21,4 +21,26 @@ namespace DEVES.IntegrationAPI.Model.RequestSurveyor
         public string EventID { get; set; }
     }
 
+    public class ISurvey_RequestSurveyorDataOutputModel
+    {
+        public string gid { get; set; } 
+        public string success { get; set; }
+        public string responseMessage { get; set; }
+        public ISurvey_RequestSurveyorContentDataOutputModel content { get; set; }
+        public string username { get; set; }
+        public string token { get; set; }
+        public string responseCode { get; set; }
+    }
+
+    public class ISurvey_RequestSurveyorContentDataOutputModel
+    {
+        /*
+        public ISurvey_RequestSurveyorContentDataOutputModel(EWI.EWIResponseContentData contentData)
+        {
+            this.eventid = contentData.EventID;
+        }
+        */
+        public string eventid { get; set; }
+    }
+
 }
