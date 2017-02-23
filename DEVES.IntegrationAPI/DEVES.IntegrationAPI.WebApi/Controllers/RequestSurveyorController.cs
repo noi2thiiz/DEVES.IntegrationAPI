@@ -61,30 +61,30 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
 
             RequestSurveyorInputModel rsModel = new RequestSurveyorInputModel();
 
-            rsModel.EventCode = isStringNull("EventCode");
-            rsModel.claimnotirefer = isStringNull("claimnotirefer");
-            rsModel.InsureID = isStringNull("InsureID");
-            rsModel.RSKNo = isStringNull("RSKNo");
-            rsModel.TranNo = isStringNull("TranNo");
-            rsModel.NotifyName = isStringNull("NotifyName");
-            rsModel.Mobile = isStringNull("Mobile");
-            rsModel.Driver = isStringNull("Driver");
-            rsModel.DriverTel = isStringNull("DriverTel");
-            rsModel.current_VehicleLicence = isStringNull("current_VehicleLicence");
-            rsModel.current_Province = isStringNull("current_Province");
-            rsModel.EventDate = isStringNull("EventDate");
-            rsModel.ActivityDate = isStringNull("ActivityDate");
-            rsModel.EventDetail = isStringNull("EventDetail");
+            rsModel.claimNotiNo = isStringNull("EventCode");
+            rsModel.claimNotirefer = isStringNull("claimnotirefer");
+            rsModel.insureID = isStringNull("InsureID");
+            rsModel.rskNo = isStringNull("RSKNo");
+            rsModel.tranNo = isStringNull("TranNo");
+            rsModel.notifyName = isStringNull("NotifyName");
+            rsModel.mobile = isStringNull("Mobile");
+            rsModel.driver = isStringNull("Driver");
+            rsModel.driverTel = isStringNull("DriverTel");
+            rsModel.currentVehicleLicence = isStringNull("current_VehicleLicence");
+            rsModel.currentProvince = isStringNull("current_Province");
+            rsModel.eventDate = isStringNull("EventDate");
+            rsModel.activityDate = isStringNull("ActivityDate");
+            rsModel.eventDetail = isStringNull("EventDetail");
             rsModel.isCasualty = isIntNull("isCasualty");
-            rsModel.EventLocation = isStringNull("EventLocation");
+            rsModel.eventLocation = isStringNull("EventLocation");
             rsModel.accidentLocation = isStringNull("accidentLocation");
             rsModel.accidentLat = isDoubleNull("accidentLat");
             rsModel.accidentLng = isDoubleNull("accidentLng");
-            rsModel.IsVIP = isStringNull("IsVIP");
-            rsModel.Remark = isStringNull("Remark");
-            rsModel.ClameTypeID = isIntNull("ClameTypeID");
-            rsModel.SubClameTypeID = isIntNull("SubClameTypeID");
-            rsModel.informBy = isStringNull("informBy");
+            rsModel.ISVIP = isStringNull("IsVIP");
+            rsModel.remark = isStringNull("Remark");
+            rsModel.claimTypeID = isIntNull("ClameTypeID");
+            rsModel.subClaimTypeID = isIntNull("SubClameTypeID");
+            rsModel.empCode = isStringNull("informBy");
             rsModel.appointLat = isDoubleNull("appointLat");
             rsModel.appointLong = isDoubleNull("appointLong");
             rsModel.appointLocation = isStringNull("appointLocation");
@@ -184,7 +184,8 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             _log.Info("HandleMessage");
             try
             {
-                iSurveyOutput = RequestSurveyorOniSurvey("CAS201702-00003", "G001");
+                //content.caseNo
+                iSurveyOutput = RequestSurveyorOniSurvey(content.caseNo, content.userCode);
                 //locusClaimRegOutput = RequestSurveyorOniSurvey("CAS201702-00003", "G001");
                 //output.EventID = "EventID";
 

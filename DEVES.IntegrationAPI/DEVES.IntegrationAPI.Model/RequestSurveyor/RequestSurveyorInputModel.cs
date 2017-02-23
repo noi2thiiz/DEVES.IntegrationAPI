@@ -10,33 +10,34 @@ namespace DEVES.IntegrationAPI.Model.RequestSurveyor
     public class RequestSurveyorInputModel_WebService
     {
         public string caseNo { get; set; }
+        public string userCode { get; set; }
     }
     public class RequestSurveyorInputModel
     {
-        public string EventCode { get; set; }
-        public string claimnotirefer { get; set; }
-        public string InsureID { get; set; }
-        public string RSKNo { get; set; }
-        public string TranNo { get; set; }
-        public string NotifyName { get; set; }
-        public string Mobile { get; set; }
-        public string Driver { get; set; }
-        public string DriverTel { get; set; }
-        public string current_VehicleLicence { get; set; }
-        public string current_Province { get; set; }
-        public string EventDate { get; set; }
-        public string ActivityDate { get; set; }
-        public string EventDetail { get; set; }
+        public string claimNotiNo { get; set; }
+        public string claimNotirefer { get; set; }
+        public string insureID { get; set; }
+        public string rskNo { get; set; }
+        public string tranNo { get; set; }
+        public string notifyName { get; set; }
+        public string mobile { get; set; }
+        public string driver { get; set; }
+        public string driverTel { get; set; }
+        public string currentVehicleLicence { get; set; }
+        public string currentProvince { get; set; }
+        public string eventDate { get; set; }
+        public string activityDate { get; set; }
+        public string eventDetail { get; set; }
         public int? isCasualty { get; set; }
-        public string EventLocation { get; set; }
+        public string eventLocation { get; set; }
         public string accidentLocation { get; set; }
         public double accidentLat { get; set; }
         public double accidentLng { get; set; }
-        public string IsVIP { get; set; }
-        public string Remark { get; set; }
-        public int? ClameTypeID { get; set; }
-        public int? SubClameTypeID { get; set; }
-        public string informBy { get; set; }
+        public string ISVIP { get; set; }
+        public string remark { get; set; }
+        public int? claimTypeID { get; set; }
+        public int? subClaimTypeID { get; set; }
+        public string empCode { get; set; }
         public double appointLat { get; set; }
         public double appointLong { get; set; }
         public string appointLocation { get; set; }

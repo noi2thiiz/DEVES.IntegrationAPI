@@ -35,8 +35,11 @@ namespace DEVES.IntegrationAPI.Model.RequestSurveyor
     public class ISurvey_RequestSurveyorContentDataOutputModel
     {
         /*
+        private EWI.EWIResponseContentData _data;
+
         public ISurvey_RequestSurveyorContentDataOutputModel(EWI.EWIResponseContentData contentData)
         {
+            _data = contentData;
             this.eventid = contentData.EventID;
         }
         */

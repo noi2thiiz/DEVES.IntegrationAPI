@@ -2,64 +2,64 @@
   "$schema": "http://json-schema.org/draft-04/schema#",
   "type": "object",
   "properties": {
-    "EventCode": {
+    "claimNotiNo": {
       "type": "string",
       "maxLength": 15
     },
-    "claimnotirefer": {
+    "claimNotirefer": {
       "type": "string",
       "maxLength": 8
     },
-    "InsureID": {
+    "insureID": {
       "type": "string",
       "maxLength": 8
     },
-    "RSKNo": {
+    "rskNo": {
       "type": "string",
       "maxLength": 4
     },
-    "TranNo": {
+    "tranNo": {
       "type": "string",
       "maxLength": 5
     },
-    "NotifyName": {
+    "notifyName": {
       "type": "string",
       "maxLength": 100
     },
-    "Mobile": {
+    "mobile": {
       "type": "string",
       "maxLength": 30
     },
-    "Driver": {
+    "driver": {
       "type": "string",
       "maxLength": 100
     },
-    "DriverTel": {
+    "driverTel": {
       "type": "string",
       "maxLength": 30
     },
-    "current_VehicleLicence": {
+    "currentVehicleLicence": {
       "type": "string",
       "maxLength": 20
     },
-    "current_Province": {
+    "currentProvince": {
       "type": "string",
       "maxLength": 20
     },
-    "EventDate": {
+    "eventDate": {
       "type": "string"
     },
-    "ActivityDate": {
+    "activityDate": {
       "type": "string"
     },
-    "EventDetail": {
+    "eventDetail": {
       "type": "string",
       "maxLength": 2000
     },
     "isCasualty": {
       "type": "integer"
     },
-    "EventLocation": {
+    "eventLocation": {
       "type": "string",
       "maxLength": 2000
     },
@@ -72,21 +72,21 @@
     "accidentLng": {
       "type": "string"
     },
-    "IsVIP": {
+    "ISVIP": {
       "type": "string",
       "maxLength": 1
     },
-    "Remark": {
+    "remark": {
       "type": "string",
       "maxLength": 2000
     },
-    "ClameTypeID": {
+    "claimTypeID": {
       "type": "integer"
     },
-    "SubClameTypeID": {
+    "subClaimTypeID": {
       "type": "integer"
     },
-    "informBy": {
+    "empCode": {
       "type": "string",
       "maxLength": 20
     },
@@ -117,7 +117,7 @@
     }
   },
   "required": [
-		"EventCode",
-    "NotifyName"
+		"eventCode",
+    "notifyName"
 	]
 }
