@@ -252,7 +252,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
          * หลังจากเรามี input header ที่ชื่อว่า content แล้ว 
          * Method นี้จะ wrap เข้ากับ header ของ EWI อีกทีครีบ
          **/
-        private LocusClaimRegistrationOutputModel RegisterClaimOnLocus(string caseNo)
+        private EWIResponseContent RegisterClaimOnLocus(string caseNo)
         {
 
             ///PFC:: Change fixed values to be the configurable values
@@ -284,6 +284,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             client.BaseAddress = new Uri("http://192.168.3.194/ServiceProxy/ClaimMotor/jsonproxy/");
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Add("Accept-Encoding", "utf-8");
 
             // + ENDPOINT
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "LOCUS_ClaimRegistration");
@@ -293,9 +294,13 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             // เช็ค check reponse 
             HttpResponseMessage response = client.SendAsync(request).Result;
             response.EnsureSuccessStatusCode();
-            LocusClaimRegistrationOutputModel locusOutput = response.Content.ReadAsAsync<LocusClaimRegistrationOutputModel>().Result;
 
+            EWIResponse ewiRes = response.Content.ReadAsAsync<EWIResponse>().Result;
+            EWIResponseContent locusOutput = ewiRes.content;
             return locusOutput;
+
+            //string sResContent = response.Content.ReadAsStringAsync().Result;
+            //return new LocusClaimRegistrationOutputModel();
 
         }
 
@@ -308,14 +313,15 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         {
             //TODO: Do what you want
             var output = new ClaimRegistrationOutputModel();
-            LocusClaimRegistrationOutputModel locusClaimRegOutput = new LocusClaimRegistrationOutputModel();
+            EWIResponseContent locusClaimRegOutput = new EWIResponseContent();
             _log.Info("HandleMessage");
             try
             {
                 
                 //TODO: Do something
                 locusClaimRegOutput = RegisterClaimOnLocus(content.caseNo);
-                output.claimID = locusClaimRegOutput.data.claimId;
+                LocusClaimRegistrationDataOutputModel regOutputData = new LocusClaimRegistrationDataOutputModel(locusClaimRegOutput.data);
+                output.claimID = regOutputData.claimId;
             }
             catch (Exception e)
             {

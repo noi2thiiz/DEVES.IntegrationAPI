@@ -23,7 +23,18 @@ namespace DEVES.IntegrationAPI.Model.ClaimRegistration
 
     public class LocusClaimRegistrationDataOutputModel
     {
+        private EWI.EWIResponseContentData _data;
+
+        public LocusClaimRegistrationDataOutputModel(EWI.EWIResponseContentData data)
+        {
+            _data = data;
+            this.claimId = data.claimId;
+            this.claimNo = data.claimNo;
+            this.ticketNumber = data.ticketNumber;
+        }
+
         public string claimId { get; set; }
+        public string claimNo { get; set; }
         public string ticketNumber { get; set; }
     }
 }
