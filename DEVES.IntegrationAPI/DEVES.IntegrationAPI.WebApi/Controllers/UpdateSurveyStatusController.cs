@@ -12,6 +12,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
     public class UpdateSurveyStatusController : ApiController
     {
 
+        // log
         private string _logImportantMessage;
         private readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(UpdateSurveyStatusController));
 
