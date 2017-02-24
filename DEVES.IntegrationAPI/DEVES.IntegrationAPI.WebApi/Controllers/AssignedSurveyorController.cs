@@ -6,11 +6,14 @@ using System;
 using System.Net.Http;
 using System.Web;
 using System.Web.Http;
+using Microsoft.Crm.Sdk;
+using Microsoft.Xrm.Sdk;
 
 namespace DEVES.IntegrationAPI.WebApi.Controllers
 {
     public class AssignedSurveyorController : ApiController
     {
+
         private string _logImportantMessage;
         private readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(AssignedSurveyorController));
 
@@ -69,9 +72,9 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 output.transactionId = content.ticketNo;
                 output.transactionDateTime = System.DateTime.Now;
                 output.data = AssignedSurveyorOutput;
-                output.data.message = "ClaimNoti Number: " + content.claimNotiNo + 
-                    " Survey type: " + content.surveyType + 
-                    " Surveyor code: " + content.surveyorCode + 
+                output.data.message = "ClaimNoti Number: " + content.claimNotiNo +
+                    " Survey type: " + content.surveyType +
+                    " Surveyor code: " + content.surveyorCode +
                     " Surveyor name: " + content.surveyorName;
                 // string strSql = string.Format(output.data.message, content.claimNotiNo, content.surveyType, content.surveyorCode, content.surveyorName);
             }

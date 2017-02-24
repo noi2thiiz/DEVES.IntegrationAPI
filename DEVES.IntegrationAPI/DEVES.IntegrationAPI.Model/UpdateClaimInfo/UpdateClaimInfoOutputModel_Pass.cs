@@ -6,21 +6,18 @@ using System.Threading.Tasks;
 
 namespace DEVES.IntegrationAPI.Model.UpdateClaimInfo
 {
-    public class UpdateClaimInfoOutputModel
+    public class UpdateClaimInfoOutputModel_Pass
     {
         public int code { get; set; }
         public string message { get; set; }
         public string description { get; set; }
         public string transactionId { get; set; }
         public DateTime transactionDateTime { get; set; }
-
-        public UpdateClaimInfoDataOutputModel data { get; set; }
+        public UpdateClaimInfoDataOutputModel_Pass data { get; set; }
     }
 
-    public class UpdateClaimInfoDataOutputModel
+    public class UpdateClaimInfoDataOutputModel_Pass
     {
-        public string itemCode { get; set; }
-        public string longDescription { get; set; }
-        public string shortDescription { get; set; }
+        public string message { get; set; }
     }
 }

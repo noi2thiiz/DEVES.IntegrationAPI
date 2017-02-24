@@ -84,7 +84,8 @@
     <Compile Include="Simulate_Integration\Simulate_Integration_ClaimRegistration_InputModel.cs" />
     <Compile Include="Simulate_Integration\Simulate_Integration_ClaimRegistration_OutputModel.cs" />
     <Compile Include="UpdateClaimInfo\UpdateClaimInfoInputModel.cs" />
-    <Compile Include="UpdateClaimInfo\UpdateClaimInfoOutputModel.cs" />
+    <Compile Include="UpdateClaimInfo\UpdateClaimInfoOutputModel_Fail.cs" />
+    <Compile Include="UpdateClaimInfo\UpdateClaimInfoOutputModel_Pass.cs" />
     <Compile Include="UpdateCompliantStatus\UpdateCompliantStatusInputModel.cs" />
     <Compile Include="UpdateCompliantStatus\UpdateCompliantStatusOutputModel_Fail.cs" />
     <Compile Include="UpdateCompliantStatus\UpdateCompliantStatusOutputModel_Pass.cs" />

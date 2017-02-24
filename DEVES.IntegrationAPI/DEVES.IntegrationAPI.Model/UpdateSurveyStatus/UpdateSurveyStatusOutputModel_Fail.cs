@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DEVES.IntegrationAPI.Model.UpdateSurveyStatus
 {
-    class UpdateSurveyStatusOutputModel_Fail
+    public class UpdateSurveyStatusOutputModel_Fail
     {
         public int code { get; set; } // service's response code
         public string message { get; set; } // service's response description
