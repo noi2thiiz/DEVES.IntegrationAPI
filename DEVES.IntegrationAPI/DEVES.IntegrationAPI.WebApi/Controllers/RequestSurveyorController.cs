@@ -33,7 +33,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         }
         private int? isIntNull(string a)
         {
-            if (dt.Rows[0][a] == null)
+            if (string.IsNullOrEmpty(dt.Rows[0][a].ToString()))
             {
                 return 0;
             }
