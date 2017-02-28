@@ -67,5 +67,53 @@ namespace DEVES.IntegrationAPI.Model.EWI
         public string EventID { get; set; }
     }
 
+    public class EWIResponse_ReqSur
+    {
+        public string gid { get; set; }
+        public string username { get; set; }
+        public string token { get; set; }
+        public bool success { get; set; }
+        public string responseCode
+        {
+            get
+            {
+                string re = string.Empty;
+                switch (responseCode_ENUM)
+                {
+                    case null:
+                        break;
+                    case EWIResponseCode.ETC:
+                        re = EWIResponseCode.ETC.ToString() + ".";
+                        break;
+                    default:
+                        re = responseCode_ENUM.ToString();
+                        re = re.Insert(3, "-");
+                        break;
+                }
+                return re;
+            }
+            set
+            {
+                string temp = value;
+                temp = temp.Replace("-", "").Replace(".", "");
+                EWIResponseCode mycode;
+                if (System.Enum.TryParse(temp, out mycode))
+                {
+                    responseCode_ENUM = mycode;
+                }
+            }
+        }
+        [JsonIgnore]
+        private EWIResponseCode? responseCode_ENUM = null;
+        public string responseMessage { get; set; }
+        public string hostscreen { get; set; }
+        public EWIResponseContent_ReqSur content { get; set; }
+    }
+
+    public class EWIResponseContent_ReqSur
+    {
+        public string eventid { get; set; }
+    }
+
 
 }

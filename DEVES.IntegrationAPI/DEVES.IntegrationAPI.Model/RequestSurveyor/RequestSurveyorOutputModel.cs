@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace DEVES.IntegrationAPI.Model.RequestSurveyor
 {
+    /*
     public class RequestSurveyorOutputModel
     {
         public int code { get; set; }
@@ -15,12 +16,14 @@ namespace DEVES.IntegrationAPI.Model.RequestSurveyor
         public DateTime transactionDateTime { get; set; }
         public RequestSurveyorDataOutputModel data { get; set; }
     }
+    */
 
     public class RequestSurveyorDataOutputModel
     {
         public string EventID { get; set; }
     }
 
+    /*
     public class ISurvey_RequestSurveyorDataOutputModel
     {
         public string gid { get; set; } 
@@ -31,10 +34,11 @@ namespace DEVES.IntegrationAPI.Model.RequestSurveyor
         public string token { get; set; }
         public string responseCode { get; set; }
     }
+    */
 
     public class ISurvey_RequestSurveyorContentDataOutputModel
     {
-        /*
+        
         private EWI.EWIResponseContentData _data;
 
         public ISurvey_RequestSurveyorContentDataOutputModel(EWI.EWIResponseContentData contentData)
@@ -42,7 +46,7 @@ namespace DEVES.IntegrationAPI.Model.RequestSurveyor
             _data = contentData;
             this.eventid = contentData.EventID;
         }
-        */
+
         public string eventid { get; set; }
     }
 

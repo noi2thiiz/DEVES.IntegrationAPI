@@ -8,6 +8,11 @@ using System.Web;
 using System.Web.Http;
 using Microsoft.Crm.Sdk;
 using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Tooling.Connector;
+using System.Configuration;
+using Microsoft.Xrm.Sdk.Client;
+
+using earlybound;
 
 namespace DEVES.IntegrationAPI.WebApi.Controllers
 {
@@ -16,6 +21,9 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
 
         private string _logImportantMessage;
         private readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(AssignedSurveyorController));
+
+        OrganizationServiceProxy _serviceProxy;
+        private Guid _accountId;
 
         public object Post([FromBody]object value)
         {
@@ -37,7 +45,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             {
                 outputPass = new AssignedSurveyorOutputModel_Pass();
                 _logImportantMessage += "TicketNo: " + contentModel2.ticketNo;
-                outputPass = HandleMessage(contentText2, contentModel2);
+                outputPass = HandleMessage(contentText2, contentModel, contentModel2);
                 return Request.CreateResponse<AssignedSurveyorOutputModel_Pass>(outputPass);
             }
             else
@@ -56,7 +64,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             }
         }
 
-        private AssignedSurveyorOutputModel_Pass HandleMessage(string valueText, AssignedSurveyorInputModel content)
+        private AssignedSurveyorOutputModel_Pass HandleMessage(string valueText, EWIRequest header, AssignedSurveyorInputModel content)
         {
             //TODO: Do what you want
             var output = new AssignedSurveyorOutputModel_Pass();
@@ -65,6 +73,41 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             try
             {
                 var AssignedSurveyorOutput = new AssignedSurveyorDataOutputModel_Pass();
+
+                var connection = new CrmServiceClient(ConfigurationManager.ConnectionStrings["CRM_DEVES"].ConnectionString);
+                // var connection = new CrmServiceClient(System.Configuration.ConfigurationManager.ConnectionStrings["CRM_DEVES"].ConnectionString);
+
+                _serviceProxy = connection.OrganizationServiceProxy;
+                // _accountId = content.
+
+                // Incident incident = new earlybound.Incident();
+
+                Incident retrievedIncident = (Incident)_serviceProxy.Retrieve(Incident.EntityLogicalName, new Guid(header.gid), new Microsoft.Xrm.Sdk.Query.ColumnSet(true));
+
+                try
+                {
+                    retrievedIncident.pfc_survey_meeting_province = content.surveyMeetingProvince;
+                    retrievedIncident.pfc_survey_meeting_place = content.surveyMeetingPlace;
+                    retrievedIncident.pfc_survey_meeting_date = content.surveyMeetingDate;
+                    retrievedIncident.pfc_surveyor_code = content.surveyorCode;
+                    retrievedIncident.pfc_surveyor_client_number = content.surveyorClientNumber;
+                    retrievedIncident.pfc_surveyor_name = content.surveyorName;
+                    retrievedIncident.pfc_surveyor_company_name = content.surveyorCompanyName;
+                    retrievedIncident.pfc_surveyor_company_mobile = content.surveyorCompanyMobile;
+                    //incident.pfc_surveyor_type = new OptionSetValue(content.surveyType);
+                    //incident.pfc_isurvey_status = "100000015 (แจ้งผู้สำรวจภัย)";
+                    retrievedIncident.pfc_isurvey_status_on = DateTime.Now;
+
+                    _serviceProxy.Update(retrievedIncident);
+                }
+                catch (Exception e)
+                {
+                    output.description = "Retrieving data PROBLEM";
+                    return output;
+                }
+                
+
+
                 //TODO: Do something
                 output.code = 200;
                 output.message = "Success";
@@ -78,6 +121,13 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                     " Surveyor name: " + content.surveyorName;
                 // string strSql = string.Format(output.data.message, content.claimNotiNo, content.surveyType, content.surveyorCode, content.surveyorName);
             }
+            
+            catch (System.ServiceModel.FaultException e)
+            {
+                output.description = "CRM PROBLEM";
+                return output;
+            }
+            
             catch (Exception e)
             {
                 var errorMessage = e.GetType().FullName + ": " + e.Message + Environment.NewLine;

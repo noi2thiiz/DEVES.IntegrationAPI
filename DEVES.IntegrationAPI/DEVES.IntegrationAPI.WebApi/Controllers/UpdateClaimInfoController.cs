@@ -1,9 +1,13 @@
 ﻿using DEVES.IntegrationAPI.Core.Helper;
 using DEVES.IntegrationAPI.Model.EWI;
 using DEVES.IntegrationAPI.Model.UpdateClaimInfo;
+using earlybound;
+using Microsoft.Xrm.Sdk.Client;
+using Microsoft.Xrm.Tooling.Connector;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -16,6 +20,8 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
     {
         private string _logImportantMessage;
         private readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(AssignedSurveyorController));
+
+        OrganizationServiceProxy _serviceProxy;
 
         public object Post([FromBody]object value)
         {
@@ -64,6 +70,11 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             _log.Info("HandleMessage");
             try
             {
+
+                var connection = new CrmServiceClient(ConfigurationManager.ConnectionStrings["CRM_DEVES"].ConnectionString);
+                _serviceProxy = connection.OrganizationServiceProxy;
+                Incident incident = new earlybound.Incident();
+
                 var AssignedSurveyorOutput = new UpdateClaimInfoDataOutputModel_Pass();
                 //TODO: Do something
                 output.code = 200;

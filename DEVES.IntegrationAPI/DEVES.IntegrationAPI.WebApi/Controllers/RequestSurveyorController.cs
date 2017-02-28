@@ -46,7 +46,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         {
             if(string.IsNullOrEmpty(dt.Rows[0][a].ToString()))
             {
-                return Double.NaN;
+                return 0;
             }
             else
             {
@@ -75,18 +75,18 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             rsModel.eventDate = isStringNull("EventDate");
             rsModel.activityDate = isStringNull("ActivityDate");
             rsModel.eventDetail = isStringNull("EventDetail");
-            rsModel.isCasualty = isIntNull("isCasualty");
+            rsModel.isCasualty = isStringNull("isCasualty");
             rsModel.eventLocation = isStringNull("EventLocation");
             rsModel.accidentLocation = isStringNull("accidentLocation");
-            rsModel.accidentLat = isDoubleNull("accidentLat");
-            rsModel.accidentLng = isDoubleNull("accidentLng");
+            rsModel.accidentLat = isStringNull("accidentLat");
+            rsModel.accidentLng = isStringNull("accidentLng");
             rsModel.ISVIP = isStringNull("IsVIP");
             rsModel.remark = isStringNull("Remark");
             rsModel.claimTypeID = isIntNull("ClameTypeID");
             rsModel.subClaimTypeID = isIntNull("SubClameTypeID");
             rsModel.empCode = isStringNull("informBy");
-            rsModel.appointLat = isDoubleNull("appointLat");
-            rsModel.appointLong = isDoubleNull("appointLong");
+            rsModel.appointLat = isStringNull("appointLat");
+            rsModel.appointLong = isStringNull("appointLong");
             rsModel.appointLocation = isStringNull("appointLocation");
             rsModel.appointDate = isStringNull("appointDate");
             rsModel.appointName = isStringNull("appointName");
@@ -97,7 +97,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             return rsModel;
         }
 
-        private ISurvey_RequestSurveyorDataOutputModel RequestSurveyorOniSurvey(string caseNo, string userCode)
+        private EWIResponseContent_ReqSur RequestSurveyorOniSurvey(string caseNo, string userCode)
         {
 
             ///PFC:: Change fixed values to be the configurable values
@@ -122,6 +122,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             client.BaseAddress = new Uri("http://192.168.3.194/ServiceProxy/ClaimMotor/jsonservice/");
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Add("Accept-Encoding", "utf-8");
 
             // + ENDPOINT
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "MOTOR_RequestSurveyor");
@@ -131,9 +132,15 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             // check reponse 
             HttpResponseMessage response = client.SendAsync(request).Result;
             response.EnsureSuccessStatusCode();
+
+            EWIResponse_ReqSur ewiRes = response.Content.ReadAsAsync<EWIResponse_ReqSur>().Result;
+            EWIResponseContent_ReqSur iSurveyOutput = ewiRes.content;
+            return iSurveyOutput;
+            /*
             ISurvey_RequestSurveyorDataOutputModel iSurveyOutput = response.Content.ReadAsAsync<ISurvey_RequestSurveyorDataOutputModel>().Result;
 
             return iSurveyOutput;
+            */
 
         }
 
@@ -144,11 +151,11 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
 
             //RequestSurveyorInputModel iSurveyInputModel = Mapping("CAS201702-00003", "");
 
-            var output = new ISurvey_RequestSurveyorDataOutputModel();
+            var output = new RequestSurveyorDataOutputModel();
             
             if (value==null)
             {
-                return Request.CreateResponse<ISurvey_RequestSurveyorDataOutputModel>(output);
+                return Request.CreateResponse<RequestSurveyorDataOutputModel>(output);
             }
             
             var contentText = value.ToString();
@@ -164,14 +171,14 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             else
             {
                 _logImportantMessage = "Error: Input is not valid.";
-                output.responseMessage = _logImportantMessage;
+                output.EventID = _logImportantMessage;
                 _log.Error(_logImportantMessage);
 //                _log.ErrorFormat("ErrorCode: {0} {1} ErrorDescription: {1}", output.responseCode, Environment.NewLine, output.responseMessage);
             }
-            return Request.CreateResponse<ISurvey_RequestSurveyorDataOutputModel>(output);
+            return Request.CreateResponse<RequestSurveyorDataOutputModel>(output);
         }
 
-        private ISurvey_RequestSurveyorDataOutputModel HandleMessage(string valueText, RequestSurveyorInputModel_WebService content)
+        private RequestSurveyorDataOutputModel HandleMessage(string valueText, RequestSurveyorInputModel_WebService content)
         {
             //TODO: Do what you want
             // var output = new RequestSurveyorDataOutputModel();
@@ -180,12 +187,15 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             locusClaimRegOutput.data = new RequestSurveyorDataOutputModel();
             var output = locusClaimRegOutput.data;
             */
-            ISurvey_RequestSurveyorDataOutputModel iSurveyOutput = new ISurvey_RequestSurveyorDataOutputModel();
+            RequestSurveyorDataOutputModel output = new RequestSurveyorDataOutputModel();
+            EWIResponseContent_ReqSur iSurveyOutput = new EWIResponseContent_ReqSur();
             _log.Info("HandleMessage");
             try
             {
                 //content.caseNo
                 iSurveyOutput = RequestSurveyorOniSurvey(content.caseNo, content.userCode);
+                // ISurvey_RequestSurveyorContentDataOutputModel regOutputData = new ISurvey_RequestSurveyorContentDataOutputModel(iSurveyOutput.eventid);
+                output.EventID = iSurveyOutput.eventid;
                 //locusClaimRegOutput = RequestSurveyorOniSurvey("CAS201702-00003", "G001");
                 //output.EventID = "EventID";
 
@@ -214,10 +224,10 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 _log.Error("RequestId - " + _logImportantMessage);
                 _log.Error(errorMessage);
 
-                iSurveyOutput.responseMessage = errorMessage;
+                output.EventID = errorMessage;
             }
 
-            return iSurveyOutput;
+            return output;
         }
 
         private string Dummy_Input()

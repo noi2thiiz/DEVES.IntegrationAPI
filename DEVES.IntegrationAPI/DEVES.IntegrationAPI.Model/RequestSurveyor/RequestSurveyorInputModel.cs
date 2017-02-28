@@ -28,18 +28,18 @@ namespace DEVES.IntegrationAPI.Model.RequestSurveyor
         public string eventDate { get; set; }
         public string activityDate { get; set; }
         public string eventDetail { get; set; }
-        public int? isCasualty { get; set; }
+        public string isCasualty { get; set; }
         public string eventLocation { get; set; }
         public string accidentLocation { get; set; }
-        public double accidentLat { get; set; }
-        public double accidentLng { get; set; }
+        public string accidentLat { get; set; }
+        public string accidentLng { get; set; }
         public string ISVIP { get; set; }
         public string remark { get; set; }
         public int? claimTypeID { get; set; }
         public int? subClaimTypeID { get; set; }
         public string empCode { get; set; }
-        public double appointLat { get; set; }
-        public double appointLong { get; set; }
+        public string appointLat { get; set; }
+        public string appointLong { get; set; }
         public string appointLocation { get; set; }
         public string appointDate { get; set; }
         public string appointName { get; set; }
