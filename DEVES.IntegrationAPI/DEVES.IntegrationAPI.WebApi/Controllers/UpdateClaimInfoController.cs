@@ -1,7 +1,7 @@
 ﻿using DEVES.IntegrationAPI.Core.Helper;
 using DEVES.IntegrationAPI.Model.EWI;
 using DEVES.IntegrationAPI.Model.UpdateClaimInfo;
-using earlybound;
+using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Client;
 using Microsoft.Xrm.Tooling.Connector;
 using Newtonsoft.Json;
@@ -22,6 +22,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         private readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(AssignedSurveyorController));
 
         OrganizationServiceProxy _serviceProxy;
+        private Guid _accountId;
 
         public object Post([FromBody]object value)
         {
@@ -44,7 +45,26 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 outputPass = new UpdateClaimInfoOutputModel_Pass();
                 _logImportantMessage += "TicketNo: " + contentModel2.ticketNo;
                 outputPass = HandleMessage(contentText2, contentModel2);
-                return Request.CreateResponse<UpdateClaimInfoOutputModel_Pass>(outputPass);
+
+                EWIResponse_ReqSur res = new EWIResponse_ReqSur();
+
+                if (outputPass.data == null)
+                {
+                    res.success = false;
+                    res.responseMessage = "Something went wrong";
+                }
+                else
+                {
+                    res.gid = contentModel.gid;
+                    res.username = contentModel.username;
+                    res.token = contentModel.token;
+                    res.success = true;
+                    res.responseCode = "EWI0000I";
+                    res.responseMessage = "Updating survey status is success!";
+                    res.content = outputPass;
+                }
+
+                return Request.CreateResponse<EWIResponse_ReqSur>(res);
             }
             else
             {
@@ -70,19 +90,46 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             _log.Info("HandleMessage");
             try
             {
+                var UpdateClaimInfoOutput = new UpdateClaimInfoDataOutputModel_Pass();
 
                 var connection = new CrmServiceClient(ConfigurationManager.ConnectionStrings["CRM_DEVES"].ConnectionString);
                 _serviceProxy = connection.OrganizationServiceProxy;
-                Incident incident = new earlybound.Incident();
+                ServiceContext svcContext = new ServiceContext(_serviceProxy);
 
-                var AssignedSurveyorOutput = new UpdateClaimInfoDataOutputModel_Pass();
+                var query = from c in svcContext.IncidentSet
+                            where c.pfc_claim_noti_number == content.claimNotiNo
+                            select c;
+
+                Incident incident = query.FirstOrDefault<Incident>();
+                _accountId = new Guid(incident.IncidentId.ToString());
+
+                Incident retrievedIncident = (Incident)_serviceProxy.Retrieve(Incident.EntityLogicalName, _accountId, new Microsoft.Xrm.Sdk.Query.ColumnSet(true));
+                try
+                {
+
+                    retrievedIncident.pfc_locus_claim_status_code = content.claimStatusCode;
+                    retrievedIncident.pfc_locus_claim_status_desc = content.claimStatusDesc;
+                    retrievedIncident.pfc_customer_vip = true; //content.vipCaseFlag;
+                    retrievedIncident.pfc_high_loss_case_flag = true; //content.highLossCaseFlag;
+                    retrievedIncident.pfc_legal_case_flag = true; //content.LegalCaseFlag;
+
+                    _serviceProxy.Update(retrievedIncident);
+
+                }
+                catch (Exception e)
+                {
+                    output.description = "Retrieving data PROBLEM";
+                    return output;
+                }
+
                 //TODO: Do something
+
                 output.code = 200;
                 output.message = "Success";
                 output.description = "Update claim info is done!";
                 output.transactionId = content.ticketNo;
                 output.transactionDateTime = System.DateTime.Now;
-                output.data = AssignedSurveyorOutput;
+                output.data = UpdateClaimInfoOutput;
                 output.data.message = "ClaimNoti Number: " + content.claimNotiNo +
                     " Claim Number: " + content.claimNo +
                     " Claim Status code: " + content.claimStatusCode +
@@ -106,6 +153,12 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             }
 
             return output;
+        }
+
+        private string convertOptionSet(object entity, string fieldName, string value)
+        {
+            string valOption = "10000000" + value;
+            return valOption;
         }
 
         /*

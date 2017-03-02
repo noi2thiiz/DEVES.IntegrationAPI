@@ -134,7 +134,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             response.EnsureSuccessStatusCode();
 
             EWIResponse_ReqSur ewiRes = response.Content.ReadAsAsync<EWIResponse_ReqSur>().Result;
-            EWIResponseContent_ReqSur iSurveyOutput = ewiRes.content;
+            EWIResponseContent_ReqSur iSurveyOutput = (EWIResponseContent_ReqSur)ewiRes.content;
             return iSurveyOutput;
             /*
             ISurvey_RequestSurveyorDataOutputModel iSurveyOutput = response.Content.ReadAsAsync<ISurvey_RequestSurveyorDataOutputModel>().Result;

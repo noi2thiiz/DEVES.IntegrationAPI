@@ -1,11 +1,16 @@
 ﻿using DEVES.IntegrationAPI.Core.Helper;
 using DEVES.IntegrationAPI.Model.EWI;
 using DEVES.IntegrationAPI.Model.UpdateSurveyStatus;
+using Microsoft.Xrm.Sdk.Client;
+using Microsoft.Xrm.Tooling.Connector;
 using Newtonsoft.Json;
 using System;
+using System.Configuration;
 using System.Net.Http;
 using System.Web;
 using System.Web.Http;
+using System.Linq;
+using Microsoft.Xrm.Sdk;
 
 namespace DEVES.IntegrationAPI.WebApi.Controllers
 {
@@ -15,6 +20,9 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         // log
         private string _logImportantMessage;
         private readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(UpdateSurveyStatusController));
+
+        OrganizationServiceProxy _serviceProxy;
+        private Guid _accountId;
 
         public object Post([FromBody]object value)
         {
@@ -37,7 +45,18 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 outputPass = new UpdateSurveyStatusOutputModel_Pass();
                 _logImportantMessage += "TicketNo: " + contentModel2.ticketNo;
                 outputPass = HandleMessage(contentText2, contentModel2);
-                return Request.CreateResponse<UpdateSurveyStatusOutputModel_Pass>(outputPass);
+
+                EWIResponse_ReqSur res = new EWIResponse_ReqSur();
+
+                res.gid = contentModel.gid;
+                res.username = contentModel.username;
+                res.token = contentModel.token;
+                res.success = true;
+                res.responseCode = "EWI0000I";
+                res.responseMessage = "Updating survey status is success!";
+                res.content = outputPass;
+
+                return Request.CreateResponse<EWIResponse_ReqSur>(res);
             }
             else
             {
@@ -63,19 +82,54 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             _log.Info("HandleMessage");
             try
             {
-                var AssignedSurveyorOutput = new UpdateSurveyStatusDataOutputModel_Pass();
+                var UpdateSurveyStatusOutput = new UpdateSurveyStatusDataOutputModel_Pass();
+
+                var connection = new CrmServiceClient(ConfigurationManager.ConnectionStrings["CRM_DEVES"].ConnectionString);
+                _serviceProxy = connection.OrganizationServiceProxy;
+                ServiceContext svcContext = new ServiceContext(_serviceProxy);
+
+                var query = from c in svcContext.IncidentSet
+                            where c.pfc_claim_noti_number == content.claimNotiNo
+                            select c;
+
+                Incident incident = query.FirstOrDefault<Incident>();
+                _accountId = new Guid(incident.IncidentId.ToString());
+
+                Incident retrievedIncident = (Incident)_serviceProxy.Retrieve(Incident.EntityLogicalName, _accountId, new Microsoft.Xrm.Sdk.Query.ColumnSet(true));
+                try
+                {
+
+                    retrievedIncident.pfc_isurvey_status = new OptionSetValue(Int32.Parse(convertOptionSet(Incident.EntityLogicalName, "pfc_isurvey_status", content.iSurveyStatus)));
+                    retrievedIncident.pfc_isurvey_status_on = content.iSurveyStatusOn;
+
+                    _serviceProxy.Update(retrievedIncident);
+
+                }
+                catch (Exception e)
+                {
+                    output.description = "Retrieving data PROBLEM";
+                    return output;
+                }
+
                 //TODO: Do something
                 output.code = 200;
                 output.message = "Success";
-                output.description = "Update surveyor is done!";
+                output.description = "Update survey status is done!";
                 output.transactionId = content.ticketNo;
                 output.transactionDateTime = System.DateTime.Now;
-                output.data = AssignedSurveyorOutput;
+                output.data = UpdateSurveyStatusOutput;
                 output.data.message = "ClaimNoti Number: " + content.claimNotiNo +
                     " i-Survey status: " + content.iSurveyStatus +
                     " i-Survey status on: " + content.iSurveyStatusOn;
                 // string strSql = string.Format(output.data.message, content.claimNotiNo, content.surveyType, content.surveyorCode, content.surveyorName);
             }
+
+            catch (System.ServiceModel.FaultException e)
+            {
+                output.description = "CRM PROBLEM";
+                return output;
+            }
+
             catch (Exception e)
             {
                 var errorMessage = e.GetType().FullName + ": " + e.Message + Environment.NewLine;
@@ -93,6 +147,21 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             }
 
             return output;
+        }
+
+        private string convertOptionSet(object entity, string fieldName, string value)
+        {
+            string valOption;
+            if (value.Length == 1)
+            {
+                valOption = "10000000" + value;
+            }
+            else
+            {
+                valOption = "1000000" + value;
+            }
+            
+            return valOption;
         }
 
         /*

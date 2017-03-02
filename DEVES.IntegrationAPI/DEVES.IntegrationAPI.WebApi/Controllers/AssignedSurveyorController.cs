@@ -11,8 +11,9 @@ using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Tooling.Connector;
 using System.Configuration;
 using Microsoft.Xrm.Sdk.Client;
+using System.Linq;
 
-using earlybound;
+// using earlybound;
 
 namespace DEVES.IntegrationAPI.WebApi.Controllers
 {
@@ -45,8 +46,27 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             {
                 outputPass = new AssignedSurveyorOutputModel_Pass();
                 _logImportantMessage += "TicketNo: " + contentModel2.ticketNo;
-                outputPass = HandleMessage(contentText2, contentModel, contentModel2);
-                return Request.CreateResponse<AssignedSurveyorOutputModel_Pass>(outputPass);
+                outputPass = HandleMessage(contentText2, contentModel2);
+
+                EWIResponse_ReqSur res = new EWIResponse_ReqSur();
+
+                if (outputPass.data == null)
+                {
+                    res.success = false;
+                    res.responseMessage = "Something went wrong";
+                }
+                else
+                {
+                    res.gid = contentModel.gid;
+                    res.username = contentModel.username;
+                    res.token = contentModel.token;
+                    res.success = true;
+                    res.responseCode = "EWI0000I";
+                    res.responseMessage = "Assigning surveyor is success!";
+                    res.content = outputPass;
+                }
+                
+                return Request.CreateResponse<EWIResponse_ReqSur>(res);
             }
             else
             {
@@ -64,7 +84,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             }
         }
 
-        private AssignedSurveyorOutputModel_Pass HandleMessage(string valueText, EWIRequest header, AssignedSurveyorInputModel content)
+        private AssignedSurveyorOutputModel_Pass HandleMessage(string valueText, AssignedSurveyorInputModel content)
         {
             //TODO: Do what you want
             var output = new AssignedSurveyorOutputModel_Pass();
@@ -80,12 +100,21 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 _serviceProxy = connection.OrganizationServiceProxy;
                 // _accountId = content.
 
+                ServiceContext svcContext = new ServiceContext(_serviceProxy);
+
                 // Incident incident = new earlybound.Incident();
+                var query = from c in svcContext.IncidentSet
+                            where c.pfc_claim_noti_number == content.claimNotiNo
+                            select c;
 
-                Incident retrievedIncident = (Incident)_serviceProxy.Retrieve(Incident.EntityLogicalName, new Guid(header.gid), new Microsoft.Xrm.Sdk.Query.ColumnSet(true));
+                Incident incident = query.FirstOrDefault<Incident>();
+                _accountId = new Guid(incident.IncidentId.ToString());
 
+                // Incident retrievedIncident = (Incident)_serviceProxy.Retrieve(Incident.EntityLogicalName, new Guid(header.gid), new Microsoft.Xrm.Sdk.Query.ColumnSet(true));
+                Incident retrievedIncident = (Incident)_serviceProxy.Retrieve(Incident.EntityLogicalName, _accountId, new Microsoft.Xrm.Sdk.Query.ColumnSet(true));
                 try
                 {
+                    
                     retrievedIncident.pfc_survey_meeting_province = content.surveyMeetingProvince;
                     retrievedIncident.pfc_survey_meeting_place = content.surveyMeetingPlace;
                     retrievedIncident.pfc_survey_meeting_date = content.surveyMeetingDate;
@@ -94,19 +123,19 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                     retrievedIncident.pfc_surveyor_name = content.surveyorName;
                     retrievedIncident.pfc_surveyor_company_name = content.surveyorCompanyName;
                     retrievedIncident.pfc_surveyor_company_mobile = content.surveyorCompanyMobile;
-                    //incident.pfc_surveyor_type = new OptionSetValue(content.surveyType);
-                    //incident.pfc_isurvey_status = "100000015 (แจ้งผู้สำรวจภัย)";
+                    retrievedIncident.pfc_surveyor_type = new OptionSetValue(Int32.Parse(convertOptionSet(incident, "pfc_surveyor_type", content.surveyType)));
+                    //retrievedIncident.pfc_surveyor_type = new OptionSetValue(Convert.ToInt32(content.surveyType));
+                    retrievedIncident.pfc_isurvey_status = new OptionSetValue(Int32.Parse("100000015"));
                     retrievedIncident.pfc_isurvey_status_on = DateTime.Now;
 
                     _serviceProxy.Update(retrievedIncident);
+                    
                 }
                 catch (Exception e)
                 {
                     output.description = "Retrieving data PROBLEM";
                     return output;
                 }
-                
-
 
                 //TODO: Do something
                 output.code = 200;
@@ -140,11 +169,17 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 }
                 _log.Error("RequestId - " + _logImportantMessage);
                 _log.Error(errorMessage);
-
+                output.description = "ไม่พบ claimNotiNo";
 
             }
 
             return output;
+        }
+
+        private string convertOptionSet(object entity, string fieldName, string value)
+        {
+            string valOption = "10000000" + value;
+            return valOption;
         }
 
         /*

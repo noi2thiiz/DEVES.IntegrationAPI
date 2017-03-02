@@ -70,9 +70,12 @@ namespace DEVES.IntegrationAPI.Model.EWI
     public class EWIResponse_ReqSur
     {
         public string gid { get; set; }
+        public bool success { get; set; }
+        public string responseMessage { get; set; }
+        // public string hostscreen { get; set; }
+        public object content { get; set; }
         public string username { get; set; }
         public string token { get; set; }
-        public bool success { get; set; }
         public string responseCode
         {
             get
@@ -105,9 +108,6 @@ namespace DEVES.IntegrationAPI.Model.EWI
         }
         [JsonIgnore]
         private EWIResponseCode? responseCode_ENUM = null;
-        public string responseMessage { get; set; }
-        public string hostscreen { get; set; }
-        public EWIResponseContent_ReqSur content { get; set; }
     }
 
     public class EWIResponseContent_ReqSur

@@ -24,7 +24,7 @@ namespace DEVES.IntegrationAPI.Model.ClaimRegistration
     {
         public string premiumClass { get; set; }
         public string teamCd { get; set; }
-        public string claimStatus { get; set; }
+        // public string claimStatus { get; set; }
         public string ticketNumber { get; set; }
         public string claimNotiNo { get; set; }
         public string claimNotiRefer { get; set; }
@@ -56,6 +56,7 @@ namespace DEVES.IntegrationAPI.Model.ClaimRegistration
         public string legalCaseFlag { get; set; }
         public string claimNotiRemark { get; set; }
         public string claimType { get; set; }
+        public string serviceBranch { get; set; }
     }
 
     public class LocusClaimtypeModel
@@ -83,9 +84,9 @@ namespace DEVES.IntegrationAPI.Model.ClaimRegistration
         public string accidentPlace { get; set; }
         public string accidentLatitude { get; set; }
         public string accidentLongitude { get; set; }
+        public string sendOutSurveyorCode { get; set; }
         public string accidentProvn { get; set; }
         public string accidentDist { get; set; }
-        public string sendOutSurveyorCode { get; set; }
     }
 
     public class LocusClaimassignsurvModel
@@ -97,6 +98,8 @@ namespace DEVES.IntegrationAPI.Model.ClaimRegistration
         public string surveyorCompanyMobile { get; set; }
         public string surveyorMobile { get; set; }
         public string surveyorType { get; set; }
+        public string surveyTeam { get; set; }
+        /*
         public DateTime? reportAccidentResultDate { get; set; }
         public string branchSurvey { get; set; }
         public string latitudeLongitude { get; set; }
@@ -105,7 +108,7 @@ namespace DEVES.IntegrationAPI.Model.ClaimRegistration
         public DateTime? createDate { get; set; } // DateTime format?
         public string updateBy { get; set; }
         public DateTime? updateDate { get; set; } // DateTime format?
-
+        */
     }
 
     public class LocusClaimsurvinformModel
@@ -128,7 +131,18 @@ namespace DEVES.IntegrationAPI.Model.ClaimRegistration
         public string detailOfDeath { get; set; }
         public string caseOwnerCode { get; set; }
         public string caseOwnerFullName { get; set; }
-        public LocusAccidentpartyinfo[] accidentPartyInfo { get; set; }
+        // this part added 
+        public string accidentPartyFullname { get; set; }
+        public string accidentPartyPhone { get; set; }
+        public string accidentPartyCarPlateNumber { get; set; }
+        public string accidentPartyCarModel { get; set; }
+        public string accidentPartyInsuredFlag { get; set; }
+        public string accidentPartyInsuranceCompany { get; set; }
+        public string accidentPartyPolicyType { get; set; }
+        public string accidentPartyPolicyNumber { get; set; }
+        public DateTime? accidentPartyPolicyExpdate { get; set; }
+        public string damageOfPartyCar { get; set; }
+        // public LocusAccidentpartyinfo[] accidentPartyInfo { get; set; }
     }
 
     public class LocusAccidentpartyinfo

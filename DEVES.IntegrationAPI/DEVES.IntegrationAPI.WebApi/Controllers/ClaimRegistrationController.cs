@@ -89,7 +89,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             // Recently Add 
             cr.claimHeader.premiumClass = isStringNull("premiumClass");
             cr.claimHeader.teamCd = "";
-            cr.claimHeader.claimStatus = "";
+            //cr.claimHeader.claimStatus = "";
             // Recently Add 
             cr.claimHeader.ticketNumber = isStringNull("ticketNumber");
             cr.claimHeader.claimNotiNo = isStringNull("claimNotiNo");
@@ -163,6 +163,8 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             cr.claimAssignSurv.surveyorCompanyMobile = isStringNull("surveyorCompanyMobile");
             cr.claimAssignSurv.surveyorMobile = isStringNull("surveyorMobile");
             cr.claimAssignSurv.surveyorType = isStringNull("surveyorType");
+            /*
+             * just comment
             cr.claimAssignSurv.reportAccidentResultDate = isDateNull("reportAccidentResultDate"); //DateTime.ParseExact(dt.Rows[0]["reportAccidentResultDate"].ToString(), "yyyy-MM-dd HH:mm tt", null);
             // cr.claimAssignSurv.reportAccidentResultDate = DateTime.ParseExact(dt.Rows[0]["reportAccidentResultDate"], format, provider);
             // Recently Add 
@@ -174,6 +176,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             cr.claimAssignSurv.updateBy = "";
             cr.claimAssignSurv.updateDate = null;
             // Recently Add 
+            */
 
             cr.claimSurvInform = new LocusClaimsurvinformModel();
             // claimSurvInform
