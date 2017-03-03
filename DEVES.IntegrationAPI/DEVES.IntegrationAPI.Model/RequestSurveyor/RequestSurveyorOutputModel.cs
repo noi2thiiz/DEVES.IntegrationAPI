@@ -41,12 +41,13 @@ namespace DEVES.IntegrationAPI.Model.RequestSurveyor
         
         private EWI.EWIResponseContentData _data;
 
+        
         public ISurvey_RequestSurveyorContentDataOutputModel(EWI.EWIResponseContentData contentData)
         {
             _data = contentData;
             this.eventid = contentData.EventID;
         }
-
+        
         public string eventid { get; set; }
     }
 

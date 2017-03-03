@@ -33,38 +33,18 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             var outputFail = new UpdateClaimInfoOutputModel_Fail();
 
             var contentText = value.ToString();
-            var contentModel = JsonConvert.DeserializeObject<EWIRequest>(contentText);
+            var contentModel = JsonConvert.DeserializeObject<UpdateClaimInfoInputModel>(contentText);
 
-            var contentText2 = contentModel.content.ToString();
-            var contentModel2 = JsonConvert.DeserializeObject<UpdateClaimInfoInputModel>(contentText2);
             string outvalidate = string.Empty;
             var filePath = HttpContext.Current.Server.MapPath("~/App_Data/JsonSchema/UpdateClaimInfo_Input_Schema.json");
 
-            if (JsonHelper.TryValidateJson(contentText2, filePath, out outvalidate))
+            if (JsonHelper.TryValidateJson(contentText, filePath, out outvalidate))
             {
                 outputPass = new UpdateClaimInfoOutputModel_Pass();
-                _logImportantMessage += "TicketNo: " + contentModel2.ticketNo;
-                outputPass = HandleMessage(contentText2, contentModel2);
+                _logImportantMessage += "TicketNo: " + contentModel.ticketNo;
+                outputPass = HandleMessage(contentText, contentModel);
 
-                EWIResponse_ReqSur res = new EWIResponse_ReqSur();
-
-                if (outputPass.data == null)
-                {
-                    res.success = false;
-                    res.responseMessage = "Something went wrong";
-                }
-                else
-                {
-                    res.gid = contentModel.gid;
-                    res.username = contentModel.username;
-                    res.token = contentModel.token;
-                    res.success = true;
-                    res.responseCode = "EWI0000I";
-                    res.responseMessage = "Updating survey status is success!";
-                    res.content = outputPass;
-                }
-
-                return Request.CreateResponse<EWIResponse_ReqSur>(res);
+                return Request.CreateResponse<UpdateClaimInfoOutputModel_Pass>(outputPass);
             }
             else
             {
@@ -109,9 +89,9 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
 
                     retrievedIncident.pfc_locus_claim_status_code = content.claimStatusCode;
                     retrievedIncident.pfc_locus_claim_status_desc = content.claimStatusDesc;
-                    retrievedIncident.pfc_customer_vip = true; //content.vipCaseFlag;
-                    retrievedIncident.pfc_high_loss_case_flag = true; //content.highLossCaseFlag;
-                    retrievedIncident.pfc_legal_case_flag = true; //content.LegalCaseFlag;
+                    retrievedIncident.pfc_customer_vip = convertBool(content.vipCaseFlag); //content.vipCaseFlag;
+                    retrievedIncident.pfc_high_loss_case_flag = convertBool(content.highLossCaseFlag); //content.highLossCaseFlag;
+                    retrievedIncident.pfc_legal_case_flag = convertBool(content.LegalCaseFlag); //content.LegalCaseFlag;
 
                     _serviceProxy.Update(retrievedIncident);
 
@@ -159,6 +139,22 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         {
             string valOption = "10000000" + value;
             return valOption;
+        }
+
+        private bool convertBool(string value)
+        {
+            bool valBool = false;
+
+            if (value == "Y")
+            {
+                valBool = true;
+            }
+            else
+            {
+                valBool = false;
+            }
+
+            return valBool;
         }
 
         /*

@@ -35,38 +35,17 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             var outputFail = new AssignedSurveyorOutputModel_Fail();
 
             var contentText = value.ToString();
-            var contentModel = JsonConvert.DeserializeObject<EWIRequest>(contentText);
+            var contentModel = JsonConvert.DeserializeObject<AssignedSurveyorInputModel>(contentText);
 
-            var contentText2 = contentModel.content.ToString();
-            var contentModel2 = JsonConvert.DeserializeObject<AssignedSurveyorInputModel>(contentText2);
             string outvalidate = string.Empty;
             var filePath = HttpContext.Current.Server.MapPath("~/App_Data/JsonSchema/AssignedSurveyorInfo_Input_Schema.json");
 
-            if (JsonHelper.TryValidateJson(contentText2, filePath, out outvalidate))
+            if (JsonHelper.TryValidateJson(contentText, filePath, out outvalidate))
             {
                 outputPass = new AssignedSurveyorOutputModel_Pass();
-                _logImportantMessage += "TicketNo: " + contentModel2.ticketNo;
-                outputPass = HandleMessage(contentText2, contentModel2);
-
-                EWIResponse_ReqSur res = new EWIResponse_ReqSur();
-
-                if (outputPass.data == null)
-                {
-                    res.success = false;
-                    res.responseMessage = "Something went wrong";
-                }
-                else
-                {
-                    res.gid = contentModel.gid;
-                    res.username = contentModel.username;
-                    res.token = contentModel.token;
-                    res.success = true;
-                    res.responseCode = "EWI0000I";
-                    res.responseMessage = "Assigning surveyor is success!";
-                    res.content = outputPass;
-                }
-                
-                return Request.CreateResponse<EWIResponse_ReqSur>(res);
+                _logImportantMessage += "TicketNo: " + contentModel.ticketNo;
+                outputPass = HandleMessage(contentText, contentModel);
+                return Request.CreateResponse<AssignedSurveyorOutputModel_Pass>(outputPass);
             }
             else
             {
@@ -76,7 +55,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 dataFail.fieldError = new AssignedSurveyorFieldErrorOutputModel_Fail();
                 var fieldError = dataFail.fieldError;
                 fieldError.name = "Invalid Input(s)";
-                fieldError.message = "Some of your input was invalid. Please recheck again.";
+                fieldError.message = "Some of your input is invalid. Please recheck again.";
 
                 _log.Error(_logImportantMessage);
                 _log.ErrorFormat("ErrorCode: {0} {1} ErrorDescription: {1}", fieldError.name, Environment.NewLine, fieldError.message);

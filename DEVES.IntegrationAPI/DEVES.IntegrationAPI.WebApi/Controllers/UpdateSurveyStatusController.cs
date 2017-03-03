@@ -33,30 +33,18 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             var outputFail = new UpdateSurveyStatusOutputModel_Fail();
 
             var contentText = value.ToString();
-            var contentModel = JsonConvert.DeserializeObject<EWIRequest>(contentText);
+            var contentModel = JsonConvert.DeserializeObject<UpdateSurveyStatusInputModel>(contentText);
 
-            var contentText2 = contentModel.content.ToString();
-            var contentModel2 = JsonConvert.DeserializeObject<UpdateSurveyStatusInputModel>(contentText2);
             string outvalidate = string.Empty;
             var filePath = HttpContext.Current.Server.MapPath("~/App_Data/JsonSchema/UpdateSurveyStatus_Input_Schema.json");
 
-            if (JsonHelper.TryValidateJson(contentText2, filePath, out outvalidate))
+            if (JsonHelper.TryValidateJson(contentText, filePath, out outvalidate))
             {
                 outputPass = new UpdateSurveyStatusOutputModel_Pass();
-                _logImportantMessage += "TicketNo: " + contentModel2.ticketNo;
-                outputPass = HandleMessage(contentText2, contentModel2);
+                _logImportantMessage += "TicketNo: " + contentModel.ticketNo;
+                outputPass = HandleMessage(contentText, contentModel);
 
-                EWIResponse_ReqSur res = new EWIResponse_ReqSur();
-
-                res.gid = contentModel.gid;
-                res.username = contentModel.username;
-                res.token = contentModel.token;
-                res.success = true;
-                res.responseCode = "EWI0000I";
-                res.responseMessage = "Updating survey status is success!";
-                res.content = outputPass;
-
-                return Request.CreateResponse<EWIResponse_ReqSur>(res);
+                return Request.CreateResponse<UpdateSurveyStatusOutputModel_Pass>(outputPass);
             }
             else
             {
