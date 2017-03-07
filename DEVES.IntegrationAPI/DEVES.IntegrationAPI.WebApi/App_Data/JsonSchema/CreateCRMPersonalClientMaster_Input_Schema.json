@@ -1,0 +1,269 @@
+﻿{
+
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+
+    "generalHeader": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "cleansingId": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "clientID": {
+            "type": "string",
+            "maxLength": 8
+          },
+          "crmPersonId": {
+            "type": "string",
+            "maxLength": 20
+          },
+          "sapId": {
+            "type": "string",
+            "maxLength": 10
+          },
+          "roleCode": {
+            "type": "string",
+            "maxLength": 5
+          },
+          "isPayee": {
+            "type": "string",
+            "maxLength": 1
+          },
+          "sapAuthenFlag": {
+            "type": "string",
+            "maxLength": 1
+          }
+        },
+        "required": [
+          "roleCode",
+          "isPayee",
+          "sapAuthenFlag"
+        ]
+      }
+    },
+
+    "profileInfo": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "salutation": {
+            "type": "string",
+            "maxLength": 8
+          },
+          "personalName": {
+            "type": "string",
+            "maxLength": 60
+          },
+          "personalSurname": {
+            "type": "string",
+            "maxLength": 60
+          },
+          "sex": {
+            "type": "string",
+            "maxLength": 1
+          },
+          "idCitizen": {
+            "type": "string",
+            "maxLength": 24
+          },
+          "idPassport": {
+            "type": "string",
+            "maxLength": 20
+          },
+          "idAlien": {
+            "type": "string",
+            "maxLength": 20
+          },
+          "idDriving": {
+            "type": "string",
+            "maxLength": 20
+          },
+          "birthDate": {
+            "type": "string",
+            "maxLength": 20
+          },
+          "natioanality": {
+            "type": "string",
+            "maxLength": 3
+          },
+          "language": {
+            "type": "string",
+            "maxLength": 1
+          },
+          "married": {
+            "type": "string",
+            "maxLength": 1
+          },
+          "occupation": {
+            "type": "string",
+            "maxLength": 3
+          },
+          "vipStatus": {
+            "type": "string",
+            "maxLength": 1
+          }
+        },
+        "required": 
+        [
+          "salutation",
+          "personalName",
+          "personalSurname",
+          "sex"
+        ]
+      }
+    },
+
+    "contactInfo": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "telephone1": {
+            "type": "string",
+            "maxLength": 10
+          },
+          "telephone1Ext": {
+            "type": "string",
+            "maxLength": 5
+          },
+          "telephone2": {
+            "type": "string",
+            "maxLength": 10
+          },
+          "telephone2Ext": {
+            "type": "string",
+            "maxLength": 5
+          },
+          "telNo": {
+            "type": "string",
+            "maxLength": 10
+          },
+          "telNoExt": {
+            "type": "string",
+            "maxLength": 5
+          },
+          "mobilePhone": {
+            "type": "string",
+            "maxLength": 16
+          },
+          "fax": {
+            "type": "string",
+            "maxLength": 16
+          },
+          "emailAddress": {
+            "type": "string",
+            "maxLength": 50
+          },
+          "lineID": {
+            "type": "string",
+            "maxLength": 50
+          },
+          "facebook": {
+            "type": "string",
+            "maxLength": 100
+          }
+        }
+      }
+    },
+
+    "addressInfo": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "address1": {
+            "type": "string",
+            "maxLength": 30
+          },
+          "address2": {
+            "type": "string",
+            "maxLength": 30
+          },
+          "address3": {
+            "type": "string",
+            "maxLength": 30
+          },
+          "subDistrictCode": {
+            "type": "string",
+            "maxLength": 6
+          },
+          "districtCode": {
+            "type": "string",
+            "maxLength": 4
+          },
+          "provinceCode": {
+            "type": "string",
+            "maxLength": 2
+          },
+          "postalCode": {
+            "type": "string",
+            "maxLength": 10
+          },
+          "country": {
+            "type": "string",
+            "maxLength": 3
+          },
+          "addressType": {
+            "type": "string",
+            "maxLength": 1
+          },
+          "latitude": {
+            "type": "string",
+            "maxLength": 20
+          },
+          "longtitude": {
+            "type": "string",
+            "maxLength": 20
+          }
+        }
+      }
+    },
+
+    "sapInfo": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "vendorGroup": {
+            "type": "string",
+            "maxLength": 4
+          },
+          "bankCode": {
+            "type": "string",
+            "maxLength": 3
+          },
+          "bankBranchCode": {
+            "type": "string",
+            "maxLength": 4
+          },
+          "bankAccountNo": {
+            "type": "string",
+            "maxLength": 18
+          },
+          "bankAccountHolder": {
+            "type": "string",
+            "maxLength": 60
+          },
+          "payMethod": {
+            "type": "string",
+            "maxLength": 10
+          },
+          "withHoldingTaxCode": {
+            "type": "string",
+            "maxLength": 2
+          },
+          "receiptType": {
+            "type": "string",
+            "maxLength": 2
+          }
+        }
+      }
+    }
+
+  }
+}

@@ -87,6 +87,8 @@
     <Compile Include="AssignedSurveyor\AssignedSurveyorOutputModel_Pass.cs" />
     <Compile Include="ClaimRegistration\ClaimRegistrationInputModel.cs" />
     <Compile Include="ClaimRegistration\ClaimRegistrationOutputModel.cs" />
+    <Compile Include="CreateCRMPersonalClientMaster\CreateCRMPersonalClientMasterInputModel.cs" />
+    <Compile Include="CreateCRMPersonalClientMaster\CreateCRMPersonalClientMasterOutputModel.cs" />
     <Compile Include="EWI\Enum.cs" />
     <Compile Include="EWI\EWIResponse.cs" />
     <Compile Include="EWI\EWIRequest.cs" />
