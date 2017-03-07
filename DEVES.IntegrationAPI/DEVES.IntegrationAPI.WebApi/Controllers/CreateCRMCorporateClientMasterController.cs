@@ -1,23 +1,17 @@
 ﻿using DEVES.IntegrationAPI.Core.Helper;
-using DEVES.IntegrationAPI.Model.EWI;
-using DEVES.IntegrationAPI.Model.CreateCRMPersonalClientMaster;
-using Newtonsoft.Json;
 using System;
-using System.Net.Http;
+using DEVES.IntegrationAPI.Model.CreateCRMCorporateClientMaster;
+using System.Collections.Generic;
+using System.Linq;
 using System.Web;
 using System.Web.Http;
-using Microsoft.Crm.Sdk;
-using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Tooling.Connector;
-using System.Configuration;
-using Microsoft.Xrm.Sdk.Client;
-using System.Linq;
+using Newtonsoft.Json;
+using System.Net.Http;
 
 namespace DEVES.IntegrationAPI.WebApi.Controllers
 {
-    public class CreateCRMPersonalClientMasterController : ApiController
+    public class CreateCRMCorporateClientMasterController : ApiController
     {
-
         private string _logImportantMessage;
         private readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(AssignedSurveyorController));
 
@@ -26,26 +20,26 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
 
             _log.InfoFormat("IP ADDRESS: {0}, HttpMethod: POST", CommonHelper.GetIpAddress());
 
-            var outputPass = new CreateCRMPersonalClientMasterOutputModel_Pass();
-            var outputFail = new CreateCRMPersonalClientMasterOutputModel_Fail();
+            var outputPass = new CreateCRMCorporateClientMasterOutputModel_Pass();
+            var outputFail = new CreateCRMCorporateClientMasterOutputModel_Fail();
 
             var contentText = value.ToString();
-            var contentModel = JsonConvert.DeserializeObject<CreateCRMPersonalClientMasterInputModel>(contentText);
+            var contentModel = JsonConvert.DeserializeObject<CreateCRMCorporateClientMasterInputModel>(contentText);
 
             string outvalidate = string.Empty;
-            var filePath = HttpContext.Current.Server.MapPath("~/App_Data/JsonSchema/CreateCRMPersonalClientMaster_Input_Schema.json");
+            var filePath = HttpContext.Current.Server.MapPath("~/App_Data/JsonSchema/CreateCRMCorporateClientMaster_Input_Schema.json");
 
             if (JsonHelper.TryValidateJson(contentText, filePath, out outvalidate))
             {
-                outputPass = new CreateCRMPersonalClientMasterOutputModel_Pass();
+                outputPass = new CreateCRMCorporateClientMasterOutputModel_Pass();
                 _logImportantMessage += "TicketNo: " + contentModel.generalHeader;
                 //outputPass = HandleMessage(contentText, contentModel);
-                return Request.CreateResponse<CreateCRMPersonalClientMasterOutputModel_Pass>(outputPass);
+                return Request.CreateResponse<CreateCRMCorporateClientMasterOutputModel_Pass>(outputPass);
             }
             else
             {
-                outputFail = new CreateCRMPersonalClientMasterOutputModel_Fail();
-                outputFail.data = new CreateCRMPersonalClientMasterDataOutputModel_Fail();
+                outputFail = new CreateCRMCorporateClientMasterOutputModel_Fail();
+                outputFail.data = new CreateCRMCorporateClientMasterDataOutputModel_Fail();
                 var dataFail = outputFail.data;
                 dataFail.name = "Invalid Input(s)";
                 dataFail.message = "Some of your input is invalid. Please recheck again.";
@@ -53,20 +47,20 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
 
                 _log.Error(_logImportantMessage);
                 _log.ErrorFormat("ErrorCode: {0} {1} ErrorDescription: {1}", dataFail.name, Environment.NewLine, dataFail.message);
-                return Request.CreateResponse<CreateCRMPersonalClientMasterDataOutputModel_Fail>(dataFail);
+                return Request.CreateResponse<CreateCRMCorporateClientMasterDataOutputModel_Fail>(dataFail);
             }
         }
 
-        private CreateCRMPersonalClientMasterOutputModel_Pass HandleMessage(string valueText, CreateCRMPersonalClientMasterInputModel content)
+        private CreateCRMCorporateClientMasterOutputModel_Pass HandleMessage(string valueText, CreateCRMCorporateClientMasterInputModel content)
         {
-            var output = new CreateCRMPersonalClientMasterOutputModel_Pass();
+            var output = new CreateCRMCorporateClientMasterOutputModel_Pass();
             _log.Info("HandleMessage");
 
             try
             {
-                var CreateCRMPersonalClientMasterOutput = new CreateCRMPersonalClientMasterDataOutputModel_Pass();
+                var CreateCRMCorporateClientMasterOutput = new CreateCRMCorporateClientMasterDataOutputModel_Pass();
 
-                output.data = CreateCRMPersonalClientMasterOutput;
+                output.data = CreateCRMCorporateClientMasterOutput;
 
                 return output;
             }
@@ -83,13 +77,12 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 _log.Error("RequestId - " + _logImportantMessage);
                 _log.Error(errorMessage);
                 output.description = "ไม่พบ claimNotiNo";
-            
+
             }
             return output;
 
         }
+
+
     }
-
-    
-
 }

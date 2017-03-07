@@ -6,6 +6,9 @@ using System;
 using System.Net.Http;
 using System.Web;
 using System.Web.Http;
+using Microsoft.Xrm.Sdk.Client;
+using System.Configuration;
+using Microsoft.Xrm.Tooling.Connector;
 
 namespace DEVES.IntegrationAPI.WebApi.Controllers
 {
@@ -15,6 +18,9 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         //To use with log
         private string _logImportantMessage;
         private readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(AccidentPrilimSurveyorReportController));
+
+        OrganizationServiceProxy _serviceProxy;
+        private Guid _accountId;
 
         public object Post([FromBody]object value)
         {
@@ -51,6 +57,36 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             _log.Info("HandleMessage");
             try
             {
+                var connection = new CrmServiceClient(ConfigurationManager.ConnectionStrings["CRM_DEVES"].ConnectionString);
+                _serviceProxy = connection.OrganizationServiceProxy;
+                ServiceContext svcContext = new ServiceContext(_serviceProxy);
+
+                try
+                {
+                    // Motor Accident 
+                    pfc_motor_accident MotorAccident = new pfc_motor_accident();
+                    MotorAccident.pfc_motor_accident_name = "Napat เอง";
+                    _serviceProxy.Create(MotorAccident);
+
+                    // Motor Accident Part
+                    //pfc_motor_accident_parts MotorAccidentPart = new pfc_motor_accident_parts();
+                    //_serviceProxy.Create(MotorAccidentParty);
+
+                    // Motor Accident Parties
+                    //pfc_motor_accident_parties MotorAccidentParties = new pfc_motor_accident_parties();
+                    //_serviceProxy.Create(MotorAccidentParties);
+
+                    // Motor Accident Parties Part
+                    //pfc_motor_accident_parties_parts MotorAccidentPartiesPart = new pfc_motor_accident_parties_parts();
+                    //_serviceProxy.Create(MotorAccidentPartiesPart);
+
+                }
+                catch (Exception e)
+                {
+                    output.description = "Create Motor Accident PROBLEM";
+                    return output;
+                }
+
                 //TODO: Do something
                 output.code = 200;
                 output.message = "Success";

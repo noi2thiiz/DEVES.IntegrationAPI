@@ -4,48 +4,46 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DEVES.IntegrationAPI.Model.CreateCRMPersonalClientMaster
+namespace DEVES.IntegrationAPI.Model.CreateCRMCorporateClientMaster
 {
-    class CreateCRMPersonalClientMasterOutputModel
+    class CreateCRMCorporateClientMasterOutputModel
     {
     }
 
-    public class CreateCRMPersonalClientMasterOutputModel_Pass
+    public class CreateCRMCorporateClientMasterOutputModel_Pass
     {
         public int code { get; set; }
         public string message { get; set; }
         public string description { get; set; }
         public string transactionId { get; set; }
         public DateTime transactionDateTime { get; set; }
-        public CreateCRMPersonalClientMasterDataOutputModel_Pass data { get; set; }
+        public CreateCRMCorporateClientMasterDataOutputModel_Pass data { get; set; }
     }
 
-    public class CreateCRMPersonalClientMasterDataOutputModel_Pass
+    public class CreateCRMCorporateClientMasterDataOutputModel_Pass
     {
         public string cleasingId { get; set; }
         public string clientId { get; set; }
         public string sapId { get; set; }
-        public string salutationText { get; set; }
-        public string personalName { get; set; }
-        public string personalSurname { get; set; }
-
+        public string corporateName1 { get; set; }
+        public string corporateName2 { get; set; }
+        public string corporateBranch { get; set; }
     }
 
-    public class CreateCRMPersonalClientMasterOutputModel_Fail
+    public class CreateCRMCorporateClientMasterOutputModel_Fail
     {
         public int code { get; set; }
         public string message { get; set; }
         public string description { get; set; }
         public string transactionId { get; set; }
         public DateTime transactionDateTime { get; set; }
-        public CreateCRMPersonalClientMasterDataOutputModel_Fail data { get; set; }
+        public CreateCRMCorporateClientMasterDataOutputModel_Fail data { get; set; }
     }
 
-    public class CreateCRMPersonalClientMasterDataOutputModel_Fail
+    public class CreateCRMCorporateClientMasterDataOutputModel_Fail
     {
         public string fieldError { get; set; }
         public string name { get; set; }
         public string message { get; set; }
     }
-
 }
