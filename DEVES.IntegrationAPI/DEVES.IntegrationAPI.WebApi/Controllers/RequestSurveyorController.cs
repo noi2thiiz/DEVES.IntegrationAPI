@@ -15,7 +15,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
     public class RequestSurveyorController : ApiController
     {
         private string _logImportantMessage;
-        private readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(ClaimRegistrationController));
+        private readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(RequestSurveyorController));
 
         private QueryInfo q = new QueryInfo();
         private System.Data.DataTable dt = new System.Data.DataTable();

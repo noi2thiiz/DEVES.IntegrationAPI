@@ -13,7 +13,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
     public class CreateCRMCorporateClientMasterController : ApiController
     {
         private string _logImportantMessage;
-        private readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(AssignedSurveyorController));
+        private readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(CreateCRMCorporateClientMasterController));
 
         public object Post([FromBody]object value)
         {
@@ -33,7 +33,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             {
                 outputPass = new CreateCRMCorporateClientMasterOutputModel_Pass();
                 _logImportantMessage += "TicketNo: " + contentModel.generalHeader;
-                //outputPass = HandleMessage(contentText, contentModel);
+                outputPass = HandleMessage(contentText, contentModel);
                 return Request.CreateResponse<CreateCRMCorporateClientMasterOutputModel_Pass>(outputPass);
             }
             else

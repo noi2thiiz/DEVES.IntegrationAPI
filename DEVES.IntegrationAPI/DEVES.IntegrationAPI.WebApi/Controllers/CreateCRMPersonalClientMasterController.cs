@@ -19,31 +19,43 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
     {
 
         private string _logImportantMessage;
-        private readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(AssignedSurveyorController));
+        private readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(CreateCRMPersonalClientMasterController));
 
+
+        /**
+         *  Method สำหรับรับค่าที่จะยิงมาใน [Postman, Web service (ที่จะสร้างในอนาคต), หรือ จากอีกฝั่ง] ครับ
+         **/
         public object Post([FromBody]object value)
         {
 
             _log.InfoFormat("IP ADDRESS: {0}, HttpMethod: POST", CommonHelper.GetIpAddress());
 
+            // อิงตาม spec จะมีรูปแบบ output 2 แบบครับ (pass or fail) ก็เลยต้องกำหนด output ไว้ 2 แบบ
             var outputPass = new CreateCRMPersonalClientMasterOutputModel_Pass();
             var outputFail = new CreateCRMPersonalClientMasterOutputModel_Fail();
 
+            // การรับค่า input เก็บในตัวแปร contentText
             var contentText = value.ToString();
+            // ตัวนี้จริง ๆ ถ้าเรายิงค่าจาก [Postman, Web service] นั่นจะไม่จำเป็นครับ แต่ถ้าในอนาคดเขาส่งมาในรูปแบบ Json จะต้องทำการ Deserialize Json format ก่อน
             var contentModel = JsonConvert.DeserializeObject<CreateCRMPersonalClientMasterInputModel>(contentText);
 
             string outvalidate = string.Empty;
+            // map file path ที่จะเข้าไปเช็ค output เรากับไฟล์ Schema ที่เราสร้างครับ
             var filePath = HttpContext.Current.Server.MapPath("~/App_Data/JsonSchema/CreateCRMPersonalClientMaster_Input_Schema.json");
 
+            // Method สำหรับ Validate Input ว่าตรงตาม Format Schema หรือป่าว
             if (JsonHelper.TryValidateJson(contentText, filePath, out outvalidate))
             {
                 outputPass = new CreateCRMPersonalClientMasterOutputModel_Pass();
                 _logImportantMessage += "TicketNo: " + contentModel.generalHeader;
-                //outputPass = HandleMessage(contentText, contentModel);
+                // เรียก Method HandleMessage สำหรับจัดการค่า output ถ้าหาก Validate Json ผ่าน
+                outputPass = HandleMessage(contentText, contentModel);
                 return Request.CreateResponse<CreateCRMPersonalClientMasterOutputModel_Pass>(outputPass);
             }
             else
             {
+                // จะใช้งานหาก validate json ไม่ผ่าน หรือก็คือ input ที่อีกฝั่งส่งมามีค่าที่ผิดจาก Schema ครับ
+
                 outputFail = new CreateCRMPersonalClientMasterOutputModel_Fail();
                 outputFail.data = new CreateCRMPersonalClientMasterDataOutputModel_Fail();
                 var dataFail = outputFail.data;
@@ -57,6 +69,10 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             }
         }
 
+        /**
+         *  Method สำหรับการจัดการค่า Output ครับ
+         *  parameter ที่รับมาเป็น Input จะต้องเอาไป set value ใน output บางตัวครับ
+         **/
         private CreateCRMPersonalClientMasterOutputModel_Pass HandleMessage(string valueText, CreateCRMPersonalClientMasterInputModel content)
         {
             var output = new CreateCRMPersonalClientMasterOutputModel_Pass();
@@ -65,9 +81,15 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             try
             {
                 var CreateCRMPersonalClientMasterOutput = new CreateCRMPersonalClientMasterDataOutputModel_Pass();
+                // map Input ไป set value ใน output 
+                CreateCRMPersonalClientMasterOutput.cleasingId = content.generalHeader.cleansingId;
+                CreateCRMPersonalClientMasterOutput.clientId = content.generalHeader.clientId;
+                CreateCRMPersonalClientMasterOutput.sapId = content.generalHeader.sapId;
+                CreateCRMPersonalClientMasterOutput.salutationText = content.profileInfo.salutation;
+                CreateCRMPersonalClientMasterOutput.personalName = content.profileInfo.personalName;
+                CreateCRMPersonalClientMasterOutput.personalSurname = content.profileInfo.personalSurname;
 
                 output.data = CreateCRMPersonalClientMasterOutput;
-
                 return output;
             }
             catch (Exception e)

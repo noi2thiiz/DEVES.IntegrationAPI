@@ -19,7 +19,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
     public class UpdateClaimInfoController : ApiController
     {
         private string _logImportantMessage;
-        private readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(AssignedSurveyorController));
+        private readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(UpdateClaimInfoController));
 
         OrganizationServiceProxy _serviceProxy;
         private Guid _accountId;
