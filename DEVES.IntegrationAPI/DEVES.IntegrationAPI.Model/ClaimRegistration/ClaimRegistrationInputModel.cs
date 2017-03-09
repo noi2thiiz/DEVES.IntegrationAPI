@@ -9,6 +9,7 @@ namespace DEVES.IntegrationAPI.Model.ClaimRegistration
 
     public class ClaimRegistrationInputModel
     {
+        [CrmMapping(FieldName = "caseNo", Source = ENUMDataSource.srcSQL)]
         public string caseNo { get; set; }
     }
     public class LocusClaimRegistrationInputModel
