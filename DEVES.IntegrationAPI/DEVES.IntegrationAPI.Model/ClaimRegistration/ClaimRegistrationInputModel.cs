@@ -12,7 +12,9 @@ namespace DEVES.IntegrationAPI.Model.ClaimRegistration
         [CrmMapping(FieldName = "caseNo", Source = ENUMDataSource.srcSQL)]
         public string caseNo { get; set; }
     }
-    public class LocusClaimRegistrationInputModel
+
+    [CrmClassToMapData]
+    public class LocusClaimRegistrationInputModel: BaseDataModel
     {
         public LocusClaimheaderModel claimHeader { get; set; }
         public LocusClaimtypeModel claimInform { get; set; }
@@ -21,7 +23,8 @@ namespace DEVES.IntegrationAPI.Model.ClaimRegistration
 
     }
 
-    public class LocusClaimheaderModel
+    [CrmClassToMapData]
+    public class LocusClaimheaderModel: BaseDataModel
     {
         public string premiumClass { get; set; }
         public string teamCd { get; set; }
@@ -60,7 +63,8 @@ namespace DEVES.IntegrationAPI.Model.ClaimRegistration
         public string serviceBranch { get; set; }
     }
 
-    public class LocusClaimtypeModel
+    [CrmClassToMapData]
+    public class LocusClaimtypeModel: BaseDataModel
     {
         public string accidentDesc { get; set; }
         public string informerClientId { get; set; }
@@ -90,7 +94,8 @@ namespace DEVES.IntegrationAPI.Model.ClaimRegistration
         public string accidentDist { get; set; }
     }
 
-    public class LocusClaimassignsurvModel
+    [CrmClassToMapData]
+    public class LocusClaimassignsurvModel: BaseDataModel
     {
         public string surveyorCode { get; set; }
         public string surveyorClientNumber { get; set; }
@@ -112,7 +117,8 @@ namespace DEVES.IntegrationAPI.Model.ClaimRegistration
         */
     }
 
-    public class LocusClaimsurvinformModel
+    [CrmClassToMapData]
+    public class LocusClaimsurvinformModel: BaseDataModel
     {
         public int excessFee { get; set; }
         public int deductibleFee { get; set; }
@@ -146,7 +152,8 @@ namespace DEVES.IntegrationAPI.Model.ClaimRegistration
         // public LocusAccidentpartyinfo[] accidentPartyInfo { get; set; }
     }
 
-    public class LocusAccidentpartyinfo
+    [CrmClassToMapData]
+    public class LocusAccidentpartyinfo: BaseDataModel
     {
         public string accidentPartyFullname { get; set; }
         public string accidentPartyPhone { get; set; }

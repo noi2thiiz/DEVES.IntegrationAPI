@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace DEVES.IntegrationAPI.WebApi.Templates
 {
-    interface ICommand
+    public interface ICommand
     {
+        void Execute();
     }
 }

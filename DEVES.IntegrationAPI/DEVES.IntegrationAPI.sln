@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DEVES.IntegrationAPI.Model"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DEVES.IntegrationAPI.Core", "DEVES.IntegrationAPI.Core\DEVES.IntegrationAPI.Core.csproj", "{FA3FFF57-1EF3-4143-BA73-0233A653B435}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevesAPIConsoleAppForTest", "DevesAPIConsoleAppForTest\DevesAPIConsoleAppForTest.csproj", "{2D276C0B-4158-49EF-94E7-DC116AA6C5AB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{FA3FFF57-1EF3-4143-BA73-0233A653B435}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA3FFF57-1EF3-4143-BA73-0233A653B435}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA3FFF57-1EF3-4143-BA73-0233A653B435}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D276C0B-4158-49EF-94E7-DC116AA6C5AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D276C0B-4158-49EF-94E7-DC116AA6C5AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D276C0B-4158-49EF-94E7-DC116AA6C5AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D276C0B-4158-49EF-94E7-DC116AA6C5AB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

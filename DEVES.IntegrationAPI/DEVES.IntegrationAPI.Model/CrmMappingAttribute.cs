@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace DEVES.IntegrationAPI.Model
 {
+
+    public abstract class BaseDataModel
+    { }
+
     public enum ENUMDataSource
     {
         undefined,
@@ -22,6 +26,11 @@ namespace DEVES.IntegrationAPI.Model
     {
         public ENUMDataSource Source = ENUMDataSource.undefined;
         public string FieldName=null;
+    }
+
+    public class CrmClassToMapDataAttribute : System.Attribute
+    {
+        
     }
 
 }
