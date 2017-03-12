@@ -102,6 +102,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegClaimRequestFromClaimDi\RegClaimRequestFromClaimDiInputModel.cs" />
     <Compile Include="RegClaimRequestFromClaimDi\RegClaimRequestFromClaimDiOutputModel.cs" />
+    <Compile Include="RegClaimRequestFromRVP\RegClaimRequestFromRVPInputModel.cs" />
+    <Compile Include="RegClaimRequestFromRVP\RegClaimRequestFromRVPOutputModel.cs" />
     <Compile Include="RequestSurveyor\RequestSurveyorInputModel.cs" />
     <Compile Include="RequestSurveyor\RequestSurveyorOutputModel.cs" />
     <Compile Include="Simulate_Integration\Simulate_Integration_ClaimRegistration_InputModel.cs" />
@@ -109,6 +111,8 @@
     <Compile Include="UpdateClaimInfo\UpdateClaimInfoInputModel.cs" />
     <Compile Include="UpdateClaimInfo\UpdateClaimInfoOutputModel_Fail.cs" />
     <Compile Include="UpdateClaimInfo\UpdateClaimInfoOutputModel_Pass.cs" />
+    <Compile Include="UpdateClaimNo\UpdateClaimNoInputModel.cs" />
+    <Compile Include="UpdateClaimNo\UpdateClaimNoOutputModel.cs" />
     <Compile Include="UpdateCompliantStatus\UpdateCompliantStatusInputModel.cs" />
     <Compile Include="UpdateCompliantStatus\UpdateCompliantStatusOutputModel_Fail.cs" />
     <Compile Include="UpdateCompliantStatus\UpdateCompliantStatusOutputModel_Pass.cs" />

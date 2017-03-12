@@ -1,0 +1,36 @@
+﻿{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+  "properties": {
+    "ticketNo": {
+      "type": "string",
+      "maxLength": 50
+    },
+    "claimNotiNo": {
+      "type": "string",
+      "maxLength": 15
+    },
+    "claimNo": {
+      "type": "string",
+      "maxLength": 8
+    },
+    "claimId": {
+      "type": "string",
+      "maxLength": 20
+    },
+    "claimStatusCode": {
+      "type": "string",
+      "maxLength": 5
+    },
+    "claimStatusDesc": {
+      "type": "string",
+      "maxLength": 100
+    }
+  },
+  "required": [
+    "ticketNo",
+    "claimNotiNo",
+    "claimStatusCode",
+    "claimStatusDesc"
+  ]
+}
