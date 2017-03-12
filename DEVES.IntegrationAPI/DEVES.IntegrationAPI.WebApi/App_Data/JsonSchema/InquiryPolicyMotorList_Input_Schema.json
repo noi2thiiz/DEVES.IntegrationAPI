@@ -1,0 +1,25 @@
+﻿{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+  "properties": {
+    "policyNo": {
+      "type": "string",
+      "maxLength": 50
+    },
+    "carChassisNo": {
+      "type": "string",
+      "maxLength": 30
+    },
+    "carRegisNo": {
+      "type": "string",
+      "maxLength": 20
+    },
+    "carRegisProv": {
+      "type": "string",
+      "maxLength": 5
+    }
+  },
+  "required": [
+    "policyNo"
+  ]
+}
