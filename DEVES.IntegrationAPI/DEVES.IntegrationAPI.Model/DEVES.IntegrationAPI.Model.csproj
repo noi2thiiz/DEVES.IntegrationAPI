@@ -104,6 +104,7 @@
     <Compile Include="RegClaimRequestFromClaimDi\RegClaimRequestFromClaimDiOutputModel.cs" />
     <Compile Include="RegClaimRequestFromRVP\RegClaimRequestFromRVPInputModel.cs" />
     <Compile Include="RegClaimRequestFromRVP\RegClaimRequestFromRVPOutputModel.cs" />
+    <Compile Include="RegClaimRequestFromRVP\TEST_RegClaimRequestFromRVPOutputModel.cs" />
     <Compile Include="RequestSurveyor\RequestSurveyorInputModel.cs" />
     <Compile Include="RequestSurveyor\RequestSurveyorOutputModel.cs" />
     <Compile Include="Simulate_Integration\Simulate_Integration_ClaimRegistration_InputModel.cs" />

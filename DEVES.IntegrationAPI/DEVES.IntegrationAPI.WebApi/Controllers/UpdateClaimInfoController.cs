@@ -145,7 +145,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         {
             bool valBool = false;
 
-            if (value == "Y")
+            if (value.Equals("Y") || value.Equals("1"))
             {
                 valBool = true;
             }

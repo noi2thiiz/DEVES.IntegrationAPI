@@ -2,10 +2,7 @@
   "$schema": "http://json-schema.org/draft-04/schema#",
   "type": "object",
   "properties": {
-    "token": {
-      "type": "string",
-      "maxLength": 50
-    },
+
     "ticketNo": {
       "type": "string",
       "maxLength": 50
@@ -14,92 +11,332 @@
       "type": "string",
       "maxLength": 15
     },
+    "eventId": {
+      "type": "string",
+      "maxLength": 20
+    },
+    "caseOwnerCode": {
+      "type": "string",
+      "maxLength": 20
+    },
+    "caseOwnerFullName": {
+      "type": "string",
+      "maxLength": 250
+    },
     "reportAccidentResultDate": {
       "type": "string"
     },
-    "accidentLefalResult": {
-      "type": "string",
-      "maxLength": 1
+
+    "eventDetailInfo": {
+      "type": "object",
+      "items": {
+        "type": "object",
+        "properties": {
+          "accidentOn": {
+            "type": "string",
+            "maxLength": 20
+          },
+          "accidentLatitude": {
+            "type": "string",
+            "maxLength": 20
+          },
+          "accidentLongitude": {
+            "type": "string",
+            "maxLength": 20
+          },
+          "accidentPlace": {
+            "type": "string",
+            "maxLength": 2000
+          },
+          "accidentNatureDesc": {
+            "type": "string",
+            "maxLength": 2000
+          },
+          "accidentRemark": {
+            "type": "string",
+            "maxLength": 2000
+          },
+          "accidentLegalResult": {
+            "type": "string",
+            "maxLength": 1
+          },
+          "policeStation": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "policeRecordId": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "policeRecordDate": {
+            "type": "string"
+          },
+          "policeBailFlag": {
+            "type": "string",
+            "maxLength": 1
+          },
+          "numOfTowTruck": {
+            "type": "integer"
+          },
+          "numOfAccidentInjury": {
+            "type": "integer"
+          },
+          "numOfDeath": {
+            "type": "integer"
+          },
+          "deductibleFee": {
+            "type": "integer"
+          },
+          "excessFee": {
+            "type": "integer"
+          },
+          "totalEvent": {
+            "type": "string",
+            "maxLength": 20
+          },
+          "iSurveyCreatedDate": {
+            "type": "string",
+            "maxLength": 20
+          },
+          "iSurveyModifiedDate": {
+            "type": "string",
+            "maxLength": 20
+          },
+          "iSurveyIsDeleted": {
+            "type": "string",
+            "maxLength": 1
+          },
+          "iSurveyIsDeletedDate": {
+            "type": "string",
+            "maxLength": 20
+          },
+          "numOfAccidentParty": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "accidentOn",
+          "accidentLegalResult",
+          "numOfTowTruck",
+          "numOfAccidentInjury",
+          "numOfDeath",
+          "iSurveyCreatedDate",
+          "iSurveyModifiedDate",
+          "iSurveyIsDeleted",
+          "iSurveyIsDeletedDate",
+          "numOfAccidentParty"
+        ]
+      }
     },
-    "policeStation": {
-      "type": "string"
+
+    "partiesInfo": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "partiesEventId": {
+            "type": "string",
+            "maxLength": 20
+          },
+          "partiesEventItem": {
+            "type": "string",
+            "maxLength": 20
+          },
+          "partiesId": {
+            "type": "string",
+            "maxLength": 50
+          },
+          "partiesFullname": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "partiesType": {
+            "type": "integer"
+          },
+          "partiesCarPlateNo": {
+            "type": "string",
+            "maxLength": 50
+          },
+          "partiesCarPlateProv": {
+            "type": "string",
+            "maxLength": 50
+          },
+          "partiesCarBrand": {
+            "type": "string",
+            "maxLength": 50
+          },
+          "partiesCarColor": {
+            "type": "string",
+            "maxLength": 50
+          },
+          "partiesPartyPhone": {
+            "type": "string",
+            "maxLength": 50
+          },
+          "partiesInsuranceCompany": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "partiesPolicyNumber": {
+            "type": "string",
+            "maxLength": 50
+          },
+          "partiesPolicyType": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "partiesCreatedDate": {
+            "type": "string",
+            "maxLength": 20
+          },
+          "partiesModifiedDate": {
+            "type": "string",
+            "maxLength": 20
+          },
+          "partiesIsDeleted": {
+            "type": "string",
+            "maxLength": 1
+          },
+          "partiesIsDeletedDate": {
+            "type": "string",
+            "maxLength": 20
+          }
+        },
+        "required": [
+          "partiesFullname",
+          "partiesType",
+          "partiesCreatedDate",
+          "partiesModifiedDate",
+          "partiesIsDeleted",
+          "partiesIsDeletedDate"
+        ]
+      }
     },
-    "policeRecordId": {
-      "type": "string"
+
+    "claimDetailInfo": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "claimDetailEventId": {
+            "type": "string",
+            "maxLength": 20
+          },
+          "claimDetailItem": {
+            "type": "string",
+            "maxLength": 20
+          },
+          "claimDetailDetailid": {
+            "type": "string",
+            "maxLength": 20
+          },
+          "claimDetailDetail": {
+            "type": "string",
+            "maxLength": 255
+          },
+          "claimDetailLevels": {
+            "type": "string",
+            "maxLength": 1
+          },
+          "claimDetailIsRepair": {
+            "type": "string",
+            "maxLength": 1
+          },
+          "claimDetailRemark": {
+            "type": "string",
+            "maxLength": 2000
+          },
+          "claimDetailCreatedDate": {
+            "type": "string",
+            "maxLength": 20
+          },
+          "claimDetailModifiedDate": {
+            "type": "string",
+            "maxLength": 20
+          },
+          "claimDetailIsDeleted": {
+            "type": "string",
+            "maxLength": 1
+          },
+          "claimDetailIsDeletedDate": {
+            "type": "string",
+            "maxLength": 20
+          }
+        },
+        "required": [
+          "claimDetailCreatedDate",
+          "claimDetailModifiedDate",
+          "claimDetailIsDeleted",
+          "claimDetailIsDeletedDate"
+        ]
+      }
     },
-    "policeRecordDate": {
-      "type": "string"
-    },
-    "policeBailFlag": {
-      "type": "string"
-    },
-    "demageOfPolicyOwnerCar": {
-      "type": "string"
-    },
-    "numOfTowTruck": {
-      "type": "integer"
-    },
-    "nameOfTowCompany": {
-      "type": "string"
-    },
-    "detailOfTowEvent": {
-      "type": "string"
-    },
-    "numOfAccidentInjury": {
-      "type": "integer"
-    },
-    "detailOfAccidentInjury": {
-      "type": "string"
-    },
-    "numOfDeath": {
-      "type": "integer"
-    },
-    "detailOfDeath": {
-      "type": "string"
-    },
-    "caseOwnercode": {
-      "type": "string"
-    },
-    "caseOwnerFullname": {
-      "type": "string"
-    },
-    "accidentPartyInfo": {
-      "type": "string"
-    },
-    "accidentPartyFullname": {
-      "type": "string"
-    },
-    "accidentPartyPhone": {
-      "type": "string"
-    },
-    "accidentPartyCarPlateNumber": {
-      "type": "string"
-    },
-    "accidentPartyCarModel": {
-      "type": "string"
-    },
-    "accidentPartyInsuredFlag": {
-      "type": "string"
-    },
-    "accidentPartyInsuranceCompany": {
-      "type": "string"
-    },
-    "accidentPartyPolicyType": {
-      "type": "string"
-    },
-    "accidentPartyPolicyNumber": {
-      "type": "string"
-    },
-    "accidentPartyPolicyExpDate": {
-      "type": "string"
-    },
-    "demageOfPartyCar": {
-      "type": "string"
+
+    "claimDetailPartiesInfo": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "claimDetailPartiesPartiesId": {
+            "type": "string",
+            "maxLength": 20
+          },
+          "claimDetailPartiesItem": {
+            "type": "string",
+            "maxLength": 20
+          },
+          "claimDetailPartiesDetailId": {
+            "type": "string",
+            "maxLength": 20
+          },
+          "claimDetailPartiesDetail": {
+            "type": "string",
+            "maxLength": 255
+          },
+          "claimDetailPartiesLevels": {
+            "type": "string",
+            "maxLength": 1
+          },
+          "claimDetailPartieslIsRepair": {
+            "type": "string",
+            "maxLength": 1
+          },
+          "claimDetailPartiesRemark": {
+            "type": "string",
+            "maxLength": 2000
+          },
+          "claimDetailPartiesCreatedDate": {
+            "type": "string",
+            "maxLength": 20
+          },
+          "claimDetailPartiesModifiedDate": {
+            "type": "string",
+            "maxLength": 20
+          },
+          "claimDetailPartiesIsDeleted": {
+            "type": "string",
+            "maxLength": 1
+          },
+          "claimDetailPartiesIsDeletedDate": {
+            "type": "string",
+            "maxLength": 20
+          }
+        },
+        "required": [
+          "claimDetailPartiesCreatedDate",
+          "claimDetailPartiesModifiedDate",
+          "claimDetailPartiesIsDeleted",
+          "claimDetailPartiesIsDeletedDate"
+        ]
+      }
     }
+
   },
   "required": [
-		"token",
-    "ticketNo",
-    "claimNotiNo"
+		"claimNotiNo",
+    "eventId",
+    "caseOwnerCode",
+    "caseOwnerFullName",
+    "reportAccidentResultDate"
 	]
 }

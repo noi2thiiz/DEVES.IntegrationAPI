@@ -103,7 +103,6 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                     retrievedIncident.pfc_surveyor_company_name = content.surveyorCompanyName;
                     retrievedIncident.pfc_surveyor_company_mobile = content.surveyorCompanyMobile;
                     retrievedIncident.pfc_surveyor_type = new OptionSetValue(Int32.Parse(convertOptionSet(incident, "pfc_surveyor_type", content.surveyType)));
-                    //retrievedIncident.pfc_surveyor_type = new OptionSetValue(Convert.ToInt32(content.surveyType));
                     retrievedIncident.pfc_isurvey_status = new OptionSetValue(Int32.Parse("100000015"));
                     retrievedIncident.pfc_isurvey_status_on = DateTime.Now;
 
