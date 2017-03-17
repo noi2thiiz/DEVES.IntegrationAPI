@@ -9,10 +9,23 @@ namespace DEVES.IntegrationAPI.Core.Helper
 {
     public static class JsonHelper
     {
+        private static List<string> returnError = new List<string>();
         private static readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(JsonHelper));
+
+
+        public static List<string> getReturnError()
+        {
+            return returnError;
+        }
+
+        public static void setReturnError()
+        {
+            returnError.Clear();
+        }
 
         public static bool TryValidateJson(string jsontext, string filePath, out string output)
         {
+            setReturnError();
             var validatedText = "TryValidateJson: {0}";
             output = string.Empty;
             try
@@ -26,14 +39,16 @@ namespace DEVES.IntegrationAPI.Core.Helper
                 _log.InfoFormat(validatedText, valid);
                 output = valid.ToString() + Environment.NewLine;
                 if (!valid)
-                {
+                {   
                     _log.ErrorFormat(validatedText, jsontext);
                 }
                 foreach (var errorMessage in errorMessages)
                 {
+                    returnError.Add(errorMessage);
                     output += errorMessage + Environment.NewLine;
                     _log.WarnFormat(validatedText, errorMessage);
                 }
+                // returnError = output;
                 return valid;
             }
             catch (Exception ex)

@@ -87,7 +87,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                     string DB_claimNumber = retrievedIncident.pfc_claim_number;
                     string DB_claimStatusCode = retrievedIncident.pfc_locus_claim_status_code;
                     string DB_claimStatusDesc = retrievedIncident.pfc_locus_claim_status_desc;
-                    // retrievedIncident.pfc_claimId = content.claimId;
+                    //retrievedIncident.pfc_claimId = content.claimId;
                     retrievedIncident.pfc_claim_number = content.claimNo;
                     retrievedIncident.pfc_locus_claim_status_code = content.claimStatusCode;
                     retrievedIncident.pfc_locus_claim_status_desc = content.claimStatusDesc;

@@ -10,288 +10,279 @@
 
     "policyInfo": {
       "type": "object",
-      "items": {
-        "type": "object",
-        "properties": {
-          "crmPolicyDetailId": {
-            "type": "string",
-            "maxLength": 40
-          },
-          "crmPolicyDetailCode": {
-            "type": "string",
-            "maxLength": 100
-          },
-          "policyNo": {
-            "type": "string",
-            "maxLength": 10
-          },
-          "renewalNo": {
-            "type": "string",
-            "maxLength": 10
-          },
-          "fleetCarNo": {
-            "type": "string",
-            "maxLength": 10
-          },
-          "barcode": {
-            "type": "string",
-            "maxLength": 50
-          },
-          "currentCarRegisterNo": {
-            "type": "string",
-            "maxLength": 20
-          },
-          "currentCarRegisterProv": {
-            "type": "string",
-            "maxLength": 5
-          },
-          "insuredCleansingId": {
-            "type": "string",
-            "maxLength": 20
-          },
-          "insuredClientType": {
-            "type": "string",
-            "maxLength": 2
-          },
-          "insuredFullName": {
-            "type": "string",
-            "maxLength": 120
-          },
-          "insuredClientId": {
-            "type": "string",
-            "maxLength": 10
-          }
+      "properties": {
+        "crmPolicyDetailId": {
+          "type": "string",
+          "maxLength": 40
         },
-        "required": [
-          "crmPolicyDetailId",
-          "crmPolicyDetailCode",
-          "policyNo",
-          "renewalNo",
-          "fleetCarNo",
-          "barcode",
-          "currentCarRegisterNo",
-          "currentCarRegisterProv",
-          "insuredClientType",
-          "insuredFullName",
-          "insuredClientId"
-        ]
-      }
+        "crmPolicyDetailCode": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "policyNo": {
+          "type": "string",
+          "maxLength": 10
+        },
+        "renewalNo": {
+          "type": "string",
+          "maxLength": 10
+        },
+        "fleetCarNo": {
+          "type": "string",
+          "maxLength": 10
+        },
+        "barcode": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "currentCarRegisterNo": {
+          "type": "string",
+          "maxLength": 20
+        },
+        "currentCarRegisterProv": {
+          "type": "string",
+          "maxLength": 5
+        },
+        "insuredCleansingId": {
+          "type": "string",
+          "maxLength": 20
+        },
+        "insuredClientType": {
+          "type": "string",
+          "maxLength": 2
+        },
+        "insuredFullName": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "insuredClientId": {
+          "type": "string",
+          "maxLength": 10
+        }
+      },
+      "required": [
+        "crmPolicyDetailId",
+        "crmPolicyDetailCode",
+        "policyNo",
+        "renewalNo",
+        "fleetCarNo",
+        "barcode",
+        "currentCarRegisterNo",
+        "currentCarRegisterProv",
+        "insuredClientType",
+        "insuredFullName",
+        "insuredClientId"
+      ]
     },
 
     "policyDriverInfo": {
       "type": "object",
-      "items": {
-        "type": "object",
-        "properties": {
-          "driverCleansingId": {
-            "type": "string",
-            "maxLength": 20
-          },
-          "driverFullName": {
-            "type": "string",
-            "maxLength": 120
-          },
-          "driverClientId": {
-            "type": "string",
-            "maxLength": 10
-          },
-          "driverMobile": {
-            "type": "string",
-            "maxLength": 20
-          },
-          "driverPhoneNo": {
-            "type": "string",
-            "maxLength": 20
-          }
+      "properties": {
+        "driverCleansingId": {
+          "type": "string",
+          "maxLength": 20
         },
-        "required": [
-          "driverFullName",
-          "driverClientId"
-        ]
-      }
+        "driverFullName": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "driverClientId": {
+          "type": "string",
+          "maxLength": 10
+        },
+        "driverMobile": {
+          "type": "string",
+          "maxLength": 20
+        },
+        "driverPhoneNo": {
+          "type": "string",
+          "maxLength": 20
+        }
+      },
+      "required": [
+        "driverFullName",
+        "driverClientId"
+      ]
     },
 
     "claimInform": {
       "type": "object",
-      "items": {
-        "type": "object",
-        "properties": {
-          "informerOn": {
-            "type": "string",
-            "maxLength": 20
-          },
-          "accidentOn": {
-            "type": "string",
-            "maxLength": 20
-          },
-          "accidentDescCode": {
-            "type": "string",
-            "maxLength": 100
-          },
-          "accidentDesc": {
-            "type": "string",
-            "maxLength": 2000
-          },
-          "numOfExpectInjury": {
-            "type": "integer"
-          },
-          "accidentLatitude": {
-            "type": "string",
-            "maxLength": 20
-          },
-          "accidentLongitude": {
-            "type": "string",
-            "maxLength": 20
-          },
-          "accidentPlace": {
-            "type": "string",
-            "maxLength": 2000
-          },
-          "accidentProvn": {
-            "type": "string",
-            "maxLength": 2
-          },
-          "accidentDist": {
-            "type": "string",
-            "maxLength": 4
-          },
-          "claimType": {
-            "type": "string",
-            "maxLength": 1
-          },
-          "sendOutSurveyorCode": {
-            "type": "string",
-            "maxLength": 2
-          },
-          "reportAccidentResultDate": {
-            "type": "string"
-          },
-          "caseOwnerCode": {
-            "type": "string",
-            "maxLength": 20
-          },
-          "caseOwnerFullName": {
-            "type": "string",
-            "maxLength": 250
-          },
-          "informByCrmId": {
-            "type": "string",
-            "maxLength": 20
-          },
-          "informByCrmName": {
-            "type": "string",
-            "maxLength": 200
-          },
-          "submitByCrmId": {
-            "type": "string",
-            "maxLength": 20
-          },
-          "submitByCrmName": {
-            "type": "string",
-            "maxLength": 200
-          },
-          "accidentLegalResult": {
-            "type": "string",
-            "maxLength": 1
-          },
-          "numOfAccidentInjury": {
-            "type": "integer"
-          },
-          "numOfDeath": {
-            "type": "integer"
-          },
-          "excessFee": {
-            "type": "integer"
-          },
-          "deductibleFee": {
-            "type": "integer"
-          },
-          "accidentNatureDesc": {
-            "type": "string",
-            "maxLength": 2000
-          },
-          "policeStation": {
-            "type": "string",
-            "maxLength": 200
-          },
-          "policeRecordId": {
-            "type": "string",
-            "maxLength": 200
-          },
-          "policeRecordDate": {
-            "type": "string"
-          },
-          "policeBailFlag": {
-            "type": "string",
-            "maxLength": 1
-          },
-          "numOfAccidentParty": {
-            "type": "integer"
-          }
+      "properties": {
+        "informerOn": {
+          "type": "string",
+          "maxLength": 20
         },
-        "required": [
-          "informerOn",
-          "accidentOn",
-          "accidentDescCode",
-          "numOfExpectInjury",
-          "claimType",
-          "sendOutSurveyorCode",
-          "reportAccidentResultDate",
-          "caseOwnerCode",
-          "caseOwnerFullName",
-          "informByCrmId",
-          "informByCrmName",
-          "submitByCrmId",
-          "submitByCrmName",
-          "accidentLegalResult",
-          "numOfAccidentInjury",
-          "numOfAccidentParty"
-        ]
-      }
+        "accidentOn": {
+          "type": "string",
+          "maxLength": 20
+        },
+        "accidentDescCode": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "accidentDesc": {
+          "type": "string",
+          "maxLength": 2000
+        },
+        "numOfExpectInjury": {
+          "type": "integer"
+        },
+        "accidentLatitude": {
+          "type": "string",
+          "maxLength": 20
+        },
+        "accidentLongitude": {
+          "type": "string",
+          "maxLength": 20
+        },
+        "accidentPlace": {
+          "type": "string",
+          "maxLength": 2000
+        },
+        "accidentProvn": {
+          "type": "string",
+          "maxLength": 2
+        },
+        "accidentDist": {
+          "type": "string",
+          "maxLength": 4
+        },
+        "claimType": {
+          "type": "string",
+          "maxLength": 1
+        },
+        "sendOutSurveyorCode": {
+          "type": "string",
+          "maxLength": 2
+        },
+        "reportAccidentResultDate": {
+          "type": "string"
+        },
+        "caseOwnerCode": {
+          "type": "string",
+          "maxLength": 20
+        },
+        "caseOwnerFullName": {
+          "type": "string",
+          "maxLength": 250
+        },
+        "informByCrmId": {
+          "type": "string",
+          "maxLength": 20
+        },
+        "informByCrmName": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "submitByCrmId": {
+          "type": "string",
+          "maxLength": 20
+        },
+        "submitByCrmName": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "accidentLegalResult": {
+          "type": "string",
+          "maxLength": 1
+        },
+        "numOfAccidentInjury": {
+          "type": "integer"
+        },
+        "numOfDeath": {
+          "type": "integer"
+        },
+        "excessFee": {
+          "type": "integer"
+        },
+        "deductibleFee": {
+          "type": "integer"
+        },
+        "accidentNatureDesc": {
+          "type": "string",
+          "maxLength": 2000
+        },
+        "policeStation": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "policeRecordId": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "policeRecordDate": {
+          "type": "string"
+        },
+        "policeBailFlag": {
+          "type": "string",
+          "maxLength": 1
+        },
+        "numOfAccidentParty": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "informerOn",
+        "accidentOn",
+        "accidentDescCode",
+        "numOfExpectInjury",
+        "claimType",
+        "sendOutSurveyorCode",
+        "reportAccidentResultDate",
+        "caseOwnerCode",
+        "caseOwnerFullName",
+        "informByCrmId",
+        "informByCrmName",
+        "submitByCrmId",
+        "submitByCrmName",
+        "accidentLegalResult",
+        "numOfAccidentInjury",
+        "numOfAccidentParty"
+      ]
     },
 
     "accidentPartyInfo": {
       "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "rvpAccidentPartySeq": {
-            "type": "integer"
-          },
-          "accidentPartyFullname": {
-            "type": "string",
-            "maxLength": 200
-          },
-          "accidentPartyPhone": {
-            "type": "string",
-            "maxLength": 50
-          },
-          "accidentPartyCarPlateNo": {
-            "type": "string",
-            "maxLength": 50
-          },
-          "accidentPartyCarPlateProv": {
-            "type": "string",
-            "maxLength": 50
-          },
-          "accidentPartyInsuranceCompany": {
-            "type": "string",
-            "maxLength": 200
-          },
-          "accidentPartyPolicyNumber": {
-            "type": "string",
-            "maxLength": 50
-          },
-          "accidentPartyPolicyType": {
-            "type": "string",
-            "maxLength": 200
-          }
+      "properties": {
+        "rvpAccidentPartySeq": {
+          "type": "integer"
+        },
+        "accidentPartyFullname": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "accidentPartyPhone": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "accidentPartyCarPlateNo": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "accidentPartyCarPlateProv": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "accidentPartyInsuranceCompany": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "accidentPartyPolicyNumber": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "accidentPartyPolicyType": {
+          "type": "string",
+          "maxLength": 200
         }
       }
     }
 
   },
   "required": [
-    "rvpClaimNo"
+    "rvpClaimNo",
+    "policyInfo",
+    "policyDriverInfo",
+    "claimInform"
   ]
 }

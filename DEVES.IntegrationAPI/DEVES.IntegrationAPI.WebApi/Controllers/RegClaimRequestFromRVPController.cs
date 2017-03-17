@@ -17,7 +17,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
     public class RegClaimRequestFromRVPController : ApiController
     {
         private string _logImportantMessage;
-        private readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(InquiryConsultingHistoryController));
+        private readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(RegClaimRequestFromRVPController));
 
         OrganizationServiceProxy _serviceProxy;
         private Guid _accountId;

@@ -157,6 +157,13 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
 
                     // Motor Accident Parties Part
                     pfc_motor_accident_parties_parts motorAccidentPartiesPart = new pfc_motor_accident_parties_parts();
+                    var accPartiesPart = new List<ClaimDetailPartiesInfoModel>();
+                    int cntApp = 0;
+                    foreach(var val in content.claimDetailPartiesInfo)
+                    {
+                        motorAccidentPartiesPart.pfc_ref_isurvey_partiesid += content.claimDetailPartiesInfo[cntApp].claimDetailPartiesPartiesId;
+                    }
+                    //content.claimDetailPartiesInfo
                     //motorAccidentPartiesPart.pfc_ref_isurvey_partiesid
                     //motorAccidentPartiesPart.pfc_ref_isurvey_item
                     //motorAccidentPartiesPart.pfc_ref_isurvey_detailid
