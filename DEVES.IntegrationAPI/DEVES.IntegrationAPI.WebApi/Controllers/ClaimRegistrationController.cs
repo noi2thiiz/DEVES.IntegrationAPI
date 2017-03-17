@@ -13,6 +13,8 @@ using System.Web.Http;
 using System.Threading.Tasks;
 using DEVES.IntegrationAPI.WebApi;
 using System.Globalization;
+using DEVES.IntegrationAPI.WebApi.Logic;
+using DEVES.IntegrationAPI.Model;
 
 namespace DEVES.IntegrationAPI.WebApi.Controllers
 {
@@ -72,149 +74,154 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
          * Method นี้เป็นการ Map ค่าจาก Model ที่ชื่อว่า "LocusClaimRegistrationInputModel" กับข้อมูลใน Store ครับ
          * ปัญหาของตอนนี้คือแปลง object หรือ string value ไปเป็น datetime format ครับ
          **/
+
+
+
         private LocusClaimRegistrationInputModel Mapping(string caseNo)
         {
-            string format = "yyyy-MM-dd HH:mm:ss";
-            CultureInfo provider = new CultureInfo("th-TH");
+            throw new NotImplementedException();
 
-            dt = new System.Data.DataTable();
-            // DECLARE @ticketNo AS NVARCHAR(20) = 'CAS201702-00003';
-            // DECLARE @uniqueID AS UNIQUEIDENTIFIER = 'D246086E-C1EE-E611-80D4-0050568D1874';
-            dt = q.Queryinfo_CallerId(caseNo, null);
+            //string format = "yyyy-MM-dd HH:mm:ss";
+            //CultureInfo provider = new CultureInfo("th-TH");
 
-            LocusClaimRegistrationInputModel cr = new LocusClaimRegistrationInputModel();
+            //dt = new System.Data.DataTable();
+            //// DECLARE @ticketNo AS NVARCHAR(20) = 'CAS201702-00003';
+            //// DECLARE @uniqueID AS UNIQUEIDENTIFIER = 'D246086E-C1EE-E611-80D4-0050568D1874';
+            //dt = q.Queryinfo_CallerId(caseNo, null);
 
-            cr.claimHeader = new LocusClaimheaderModel();
-            // claimHeader
-            // Recently Add 
-            cr.claimHeader.premiumClass = isStringNull("premiumClass");
-            cr.claimHeader.teamCd = "";
-            //cr.claimHeader.claimStatus = "";
-            // Recently Add 
-            cr.claimHeader.ticketNumber = isStringNull("ticketNumber");
-            cr.claimHeader.claimNotiNo = isStringNull("claimNotiNo");
-            cr.claimHeader.claimNotiRefer = isStringNull("claimNotiRefer");
-            cr.claimHeader.policyNo = isStringNull("policyNo");
-            cr.claimHeader.fleetCarNo = isIntNull("fleetCarNo");
-            cr.claimHeader.policySeqNo = isIntNull("policySeqNo");
-            cr.claimHeader.renewalNo = isIntNull("renewalNo");
-            cr.claimHeader.barcode = isStringNull("barcode");
-            cr.claimHeader.insureCardNo = isStringNull("insureCardNo");
-            cr.claimHeader.policyIssueDate = isDateNull("policyIssueDate");
-            cr.claimHeader.policyEffectiveDate = isDateNull("policyEffectiveDate");
-            cr.claimHeader.policyExpiryDate = isDateNull("policyExpiryDate");
-            cr.claimHeader.policyProductTypeCode = isStringNull("policyProductTypeCode");
-            cr.claimHeader.policyProductTypeName = isStringNull("policyProductTypeName");
-            cr.claimHeader.policyGarageFlag = isStringNull("policyGarageFlag");
-            cr.claimHeader.policyPaymentStatus = isStringNull("policyPaymentStatus");
-            cr.claimHeader.policyCarRegisterNo = isStringNull("policyCarRegisterNo");
-            cr.claimHeader.policyCarRegisterProv = isStringNull("policyCarRegisterProv");
-            cr.claimHeader.carChassisNo = isStringNull("carChassisNo");
-            cr.claimHeader.carVehicleType = isStringNull("carVehicleType");
-            cr.claimHeader.carVehicleModel = isStringNull("carVehicleModel");
-            cr.claimHeader.carVehicleYear = isStringNull("carVehicleYear");
-            cr.claimHeader.carVehicleBody = isStringNull("carVehicleBody");
-            cr.claimHeader.carVehicleSize = isStringNull("carVehicleSize");
-            cr.claimHeader.policyDeduct = isIntNull("policyDeduct");
-            cr.claimHeader.vipCaseFlag = isStringNull("vipCaseFlag");
-            cr.claimHeader.privilegeLevel = isStringNull("privilegeLevel");
-            cr.claimHeader.highLossCaseFlag = isStringNull("highLossCaseFlag");
-            cr.claimHeader.legalCaseFlag = isStringNull("legalCaseFlag");
-            cr.claimHeader.claimNotiRemark = isStringNull("claimNotiRemark");
-            cr.claimHeader.claimType = isStringNull("claimType");
+            //LocusClaimRegistrationInputModel cr = new LocusClaimRegistrationInputModel();
 
-            cr.claimInform = new LocusClaimtypeModel();
-            // claimInform
-            // Recently Add 
-            cr.claimInform.accidentDesc = "";
-            // Recently Add 
-            cr.claimInform.informerClientId = isStringNull("informerClientId");
-            cr.claimInform.informerFullName = isStringNull("informerFullName");
-            cr.claimInform.informerMobile = isStringNull("informerMobile");
-            cr.claimInform.informerPhoneNo = isStringNull("informerPhoneNo");
-            cr.claimInform.driverClientId = isStringNull("driverClientId");
-            cr.claimInform.driverFullName = isStringNull("driverFullName");
-            cr.claimInform.driverMobile = isStringNull("driverMobile");
-            cr.claimInform.driverPhoneNo = isStringNull("driverPhoneNo");
-            cr.claimInform.insuredClientId = isStringNull("insuredClientId");
-            cr.claimInform.insuredFullName = isStringNull("insuredFullName");
-            cr.claimInform.insuredMobile = isStringNull("insuredMobile");
-            cr.claimInform.insuredPhoneNo = isStringNull("insuredPhoneNo");
-            cr.claimInform.relationshipWithInsurer = isStringNull("relationshipWithInsurer");
-            cr.claimInform.currentCarRegisterNo = isStringNull("currentCarRegisterNo");
-            cr.claimInform.currentCarRegisterProv = isStringNull("currentCarRegisterProv");
-            cr.claimInform.informerOn = isDateNull("informerOn");
-            cr.claimInform.accidentOn = isDateNull("accidentOn");
-            cr.claimInform.accidentDescCode = isStringNull("accidentDescCode");
-            cr.claimInform.numOfExpectInjury = isIntNull("numOfExpectInjury");
-            cr.claimInform.accidentPlace = isStringNull("accidentPlace");
-            cr.claimInform.accidentLatitude = isStringNull("accidentLatitude");
-            cr.claimInform.accidentLongitude = isStringNull("accidentLongitude");
-            cr.claimInform.accidentProvn = isStringNull("accidentProvn");
-            cr.claimInform.accidentDist = isStringNull("accidentDist");
-            cr.claimInform.sendOutSurveyorCode = isStringNull("sendOutSurveyorCode");
+            //cr.claimHeader = new LocusClaimheaderModel();
+            //// claimHeader
+            //// Recently Add 
+            //cr.claimHeader.premiumClass = isStringNull("premiumClass");
+            //cr.claimHeader.teamCd = "";
+            ////cr.claimHeader.claimStatus = "";
+            //// Recently Add 
+            //cr.claimHeader.ticketNumber = isStringNull("ticketNumber");
+            //cr.claimHeader.claimNotiNo = isStringNull("claimNotiNo");
+            //cr.claimHeader.claimNotiRefer = isStringNull("claimNotiRefer");
+            //cr.claimHeader.policyNo = isStringNull("policyNo");
+            //cr.claimHeader.fleetCarNo = isIntNull("fleetCarNo");
+            //cr.claimHeader.policySeqNo = isIntNull("policySeqNo");
+            //cr.claimHeader.renewalNo = isIntNull("renewalNo");
+            //cr.claimHeader.barcode = isStringNull("barcode");
+            //cr.claimHeader.insureCardNo = isStringNull("insureCardNo");
+            //cr.claimHeader.policyIssueDate = isDateNull("policyIssueDate");
+            //cr.claimHeader.policyEffectiveDate = isDateNull("policyEffectiveDate");
+            //cr.claimHeader.policyExpiryDate = isDateNull("policyExpiryDate");
+            //cr.claimHeader.policyProductTypeCode = isStringNull("policyProductTypeCode");
+            //cr.claimHeader.policyProductTypeName = isStringNull("policyProductTypeName");
+            //cr.claimHeader.policyGarageFlag = isStringNull("policyGarageFlag");
+            //cr.claimHeader.policyPaymentStatus = isStringNull("policyPaymentStatus");
+            //cr.claimHeader.policyCarRegisterNo = isStringNull("policyCarRegisterNo");
+            //cr.claimHeader.policyCarRegisterProv = isStringNull("policyCarRegisterProv");
+            //cr.claimHeader.carChassisNo = isStringNull("carChassisNo");
+            //cr.claimHeader.carVehicleType = isStringNull("carVehicleType");
+            //cr.claimHeader.carVehicleModel = isStringNull("carVehicleModel");
+            //cr.claimHeader.carVehicleYear = isStringNull("carVehicleYear");
+            //cr.claimHeader.carVehicleBody = isStringNull("carVehicleBody");
+            //cr.claimHeader.carVehicleSize = isStringNull("carVehicleSize");
+            //cr.claimHeader.policyDeduct = isIntNull("policyDeduct");
+            //cr.claimHeader.vipCaseFlag = isStringNull("vipCaseFlag");
+            //cr.claimHeader.privilegeLevel = isStringNull("privilegeLevel");
+            //cr.claimHeader.highLossCaseFlag = isStringNull("highLossCaseFlag");
+            //cr.claimHeader.legalCaseFlag = isStringNull("legalCaseFlag");
+            //cr.claimHeader.claimNotiRemark = isStringNull("claimNotiRemark");
+            //cr.claimHeader.claimType = isStringNull("claimType");
 
-            cr.claimAssignSurv = new LocusClaimassignsurvModel();
-            // claimAssignSurv
-            cr.claimAssignSurv.surveyorCode = isStringNull("surveyorCode");
-            cr.claimAssignSurv.surveyorClientNumber = isStringNull("surveyorClientNumber");
-            cr.claimAssignSurv.surveyorName = isStringNull("surveyorName");
-            cr.claimAssignSurv.surveyorCompanyName = isStringNull("surveyorCompanyName");
-            cr.claimAssignSurv.surveyorCompanyMobile = isStringNull("surveyorCompanyMobile");
-            cr.claimAssignSurv.surveyorMobile = isStringNull("surveyorMobile");
-            cr.claimAssignSurv.surveyorType = isStringNull("surveyorType");
-            /*
-             * just comment
-            cr.claimAssignSurv.reportAccidentResultDate = isDateNull("reportAccidentResultDate"); //DateTime.ParseExact(dt.Rows[0]["reportAccidentResultDate"].ToString(), "yyyy-MM-dd HH:mm tt", null);
-            // cr.claimAssignSurv.reportAccidentResultDate = DateTime.ParseExact(dt.Rows[0]["reportAccidentResultDate"], format, provider);
-            // Recently Add 
-            cr.claimAssignSurv.branchSurvey = "";
-            cr.claimAssignSurv.latitudeLongitude = "";
-            cr.claimAssignSurv.location = "";
-            cr.claimAssignSurv.createBy = "";
-            cr.claimAssignSurv.createDate = null;
-            cr.claimAssignSurv.updateBy = "";
-            cr.claimAssignSurv.updateDate = null;
-            // Recently Add 
-            */
+            //cr.claimInform = new LocusClaiminformModel();
+            //// claimInform
+            //// Recently Add 
+            //cr.claimInform.accidentDesc = "";
+            //// Recently Add 
+            //cr.claimInform.informerClientId = isStringNull("informerClientId");
+            //cr.claimInform.informerFullName = isStringNull("informerFullName");
+            //cr.claimInform.informerMobile = isStringNull("informerMobile");
+            //cr.claimInform.informerPhoneNo = isStringNull("informerPhoneNo");
+            //cr.claimInform.driverClientId = isStringNull("driverClientId");
+            //cr.claimInform.driverFullName = isStringNull("driverFullName");
+            //cr.claimInform.driverMobile = isStringNull("driverMobile");
+            //cr.claimInform.driverPhoneNo = isStringNull("driverPhoneNo");
+            //cr.claimInform.insuredClientId = isStringNull("insuredClientId");
+            //cr.claimInform.insuredFullName = isStringNull("insuredFullName");
+            //cr.claimInform.insuredMobile = isStringNull("insuredMobile");
+            //cr.claimInform.insuredPhoneNo = isStringNull("insuredPhoneNo");
+            //cr.claimInform.relationshipWithInsurer = isStringNull("relationshipWithInsurer");
+            //cr.claimInform.currentCarRegisterNo = isStringNull("currentCarRegisterNo");
+            //cr.claimInform.currentCarRegisterProv = isStringNull("currentCarRegisterProv");
+            //cr.claimInform.informerOn = isDateNull("informerOn");
+            //cr.claimInform.accidentOn = isDateNull("accidentOn");
+            //cr.claimInform.accidentDescCode = isStringNull("accidentDescCode");
+            //cr.claimInform.numOfExpectInjury = isIntNull("numOfExpectInjury");
+            //cr.claimInform.accidentPlace = isStringNull("accidentPlace");
+            //cr.claimInform.accidentLatitude = isStringNull("accidentLatitude");
+            //cr.claimInform.accidentLongitude = isStringNull("accidentLongitude");
+            //cr.claimInform.accidentProvn = isStringNull("accidentProvn");
+            //cr.claimInform.accidentDist = isStringNull("accidentDist");
+            //cr.claimInform.sendOutSurveyorCode = isStringNull("sendOutSurveyorCode");
 
-            cr.claimSurvInform = new LocusClaimsurvinformModel();
-            // claimSurvInform
-            // Recently Add 
-            cr.claimSurvInform.excessFee = 0; // int
-            cr.claimSurvInform.deductibleFee = 0; // int
-            cr.claimSurvInform.reportAccidentResultDate = isDateNull("reportAccidentResultDate"); // datetime
-            // Recently Add 
-            cr.claimSurvInform.accidentLegalResult = isStringNull("accidentLegalResult");
-            cr.claimSurvInform.policeStation = isStringNull("policeStation");
-            cr.claimSurvInform.policeRecordId = isStringNull("policeRecordId");
-            cr.claimSurvInform.policeRecordDate = null; //DateTime.ParseExact(dt.Rows[0]["policeRecordDate"].ToString(), "yyyy-MM-dd HH:mm tt", null);
-            cr.claimSurvInform.policeBailFlag = isStringNull("policeBailFlag");
-            cr.claimSurvInform.damageOfPolicyOwnerCar = isStringNull("damageOfPolicyOwnerCar");
-            cr.claimSurvInform.numOfTowTruck = 0; //isIntNull("numOfTowTruck"); check type of this vaule in sqlserver
-            cr.claimSurvInform.nameOfTowCompany = isStringNull("nameOfTowCompany");
-            cr.claimSurvInform.detailOfTowEvent = isStringNull("detailOfTowEvent");
-            cr.claimSurvInform.numOfAccidentInjury = isIntNull("numOfAccidentInjury");
-            cr.claimSurvInform.detailOfAccidentInjury = isStringNull("detailOfAccidentInjury");
-            cr.claimSurvInform.numOfDeath = isIntNull("numOfDeath");
-            cr.claimSurvInform.detailOfDeath = isStringNull("detailOfDeath");
-            cr.claimSurvInform.caseOwnerCode = isStringNull("caseOwnerCode");
-            cr.claimSurvInform.caseOwnerFullName = isStringNull("caseOwnerFullName");
-            // LocusAccidentpartyinfo[] accidentPartyInfo 
-            /*
-            cr.claimSurvInform.accidentPartyInfo[0] = null;
-            cr.claimSurvInform.accidentPartyInfo[1] = null;
-            cr.claimSurvInform.accidentPartyInfo[2] = null;
-            cr.claimSurvInform.accidentPartyInfo[3] = null;
-            cr.claimSurvInform.accidentPartyInfo[4] = null;
-            cr.claimSurvInform.accidentPartyInfo[5] = null;
-            cr.claimSurvInform.accidentPartyInfo[6] = null;
-            cr.claimSurvInform.accidentPartyInfo[7] = null;
-            cr.claimSurvInform.accidentPartyInfo[8] = null;
-            cr.claimSurvInform.accidentPartyInfo[9] = null;
-            */
+            //cr.claimAssignSurv = new LocusClaimassignsurvModel();
+            //// claimAssignSurv
+            //cr.claimAssignSurv.surveyorCode = isStringNull("surveyorCode");
+            //cr.claimAssignSurv.surveyorClientNumber = isStringNull("surveyorClientNumber");
+            //cr.claimAssignSurv.surveyorName = isStringNull("surveyorName");
+            //cr.claimAssignSurv.surveyorCompanyName = isStringNull("surveyorCompanyName");
+            //cr.claimAssignSurv.surveyorCompanyMobile = isStringNull("surveyorCompanyMobile");
+            //cr.claimAssignSurv.surveyorMobile = isStringNull("surveyorMobile");
+            //cr.claimAssignSurv.surveyorType = isStringNull("surveyorType");
+            ///*
+            // * just comment
+            //cr.claimAssignSurv.reportAccidentResultDate = isDateNull("reportAccidentResultDate"); //DateTime.ParseExact(dt.Rows[0]["reportAccidentResultDate"].ToString(), "yyyy-MM-dd HH:mm tt", null);
+            //// cr.claimAssignSurv.reportAccidentResultDate = DateTime.ParseExact(dt.Rows[0]["reportAccidentResultDate"], format, provider);
+            //// Recently Add 
+            //cr.claimAssignSurv.branchSurvey = "";
+            //cr.claimAssignSurv.latitudeLongitude = "";
+            //cr.claimAssignSurv.location = "";
+            //cr.claimAssignSurv.createBy = "";
+            //cr.claimAssignSurv.createDate = null;
+            //cr.claimAssignSurv.updateBy = "";
+            //cr.claimAssignSurv.updateDate = null;
+            //// Recently Add 
+            //*/
 
-            return cr;
+            //cr.claimSurvInform = new LocusClaimsurvinformModel();
+            //// claimSurvInform
+            //// Recently Add 
+            //cr.claimSurvInform.excessFee = 0; // int
+            //cr.claimSurvInform.deductibleFee = 0; // int
+            //cr.claimSurvInform.reportAccidentResultDate = isDateNull("reportAccidentResultDate"); // datetime
+            //// Recently Add 
+            //cr.claimSurvInform.accidentLegalResult = isStringNull("accidentLegalResult");
+            //cr.claimSurvInform.policeStation = isStringNull("policeStation");
+            //cr.claimSurvInform.policeRecordId = isStringNull("policeRecordId");
+            //cr.claimSurvInform.policeRecordDate = null; //DateTime.ParseExact(dt.Rows[0]["policeRecordDate"].ToString(), "yyyy-MM-dd HH:mm tt", null);
+            //cr.claimSurvInform.policeBailFlag = isStringNull("policeBailFlag");
+            //cr.claimSurvInform.damageOfPolicyOwnerCar = isStringNull("damageOfPolicyOwnerCar");
+            //cr.claimSurvInform.numOfTowTruck = 0; //isIntNull("numOfTowTruck"); check type of this vaule in sqlserver
+            //cr.claimSurvInform.nameOfTowCompany = isStringNull("nameOfTowCompany");
+            //cr.claimSurvInform.detailOfTowEvent = isStringNull("detailOfTowEvent");
+            //cr.claimSurvInform.numOfAccidentInjury = isIntNull("numOfAccidentInjury");
+            //cr.claimSurvInform.detailOfAccidentInjury = isStringNull("detailOfAccidentInjury");
+            //cr.claimSurvInform.numOfDeath = isIntNull("numOfDeath");
+            //cr.claimSurvInform.detailOfDeath = isStringNull("detailOfDeath");
+            //cr.claimSurvInform.caseOwnerCode = isStringNull("caseOwnerCode");
+            //cr.claimSurvInform.caseOwnerFullName = isStringNull("caseOwnerFullName");
+            //// LocusAccidentpartyinfo[] accidentPartyInfo 
+            ///*
+            //cr.claimSurvInform.accidentPartyInfo[0] = null;
+            //cr.claimSurvInform.accidentPartyInfo[1] = null;
+            //cr.claimSurvInform.accidentPartyInfo[2] = null;
+            //cr.claimSurvInform.accidentPartyInfo[3] = null;
+            //cr.claimSurvInform.accidentPartyInfo[4] = null;
+            //cr.claimSurvInform.accidentPartyInfo[5] = null;
+            //cr.claimSurvInform.accidentPartyInfo[6] = null;
+            //cr.claimSurvInform.accidentPartyInfo[7] = null;
+            //cr.claimSurvInform.accidentPartyInfo[8] = null;
+            //cr.claimSurvInform.accidentPartyInfo[9] = null;
+            //*/
+
+            //return cr;
         }
 
         /* 
@@ -222,6 +229,11 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
          **/
         public object Post([FromBody]object value)
         {
+
+            #region ReleasedCandidate_1
+
+            /*
+
             _log.InfoFormat("IP ADDRESS: {0}, HttpMethod: Get", CommonHelper.GetIpAddress());
 
             var output = new ClaimRegistrationOutputModel();
@@ -249,6 +261,14 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
 //                _log.ErrorFormat("ErrorCode: {0} {1} ErrorDescription: {1}", output.responseCode, Environment.NewLine, output.responseMessage);
             }
             return Request.CreateResponse<ClaimRegistrationOutputModel>(output);
+            */
+            #endregion ReleasedCandidate_1
+
+            
+            BuzClaimRegistrationCommand buzCommand = new BuzClaimRegistrationCommand();
+            BaseDataModel output = buzCommand.Execute(value);
+            return Request.CreateResponse<ClaimRegistrationOutputModel>((ClaimRegistrationOutputModel)output);
+
         }
 
         /*

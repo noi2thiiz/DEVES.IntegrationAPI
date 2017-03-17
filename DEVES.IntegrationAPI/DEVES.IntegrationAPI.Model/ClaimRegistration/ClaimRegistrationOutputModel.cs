@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace DEVES.IntegrationAPI.Model.ClaimRegistration
 {
-    public class ClaimRegistrationOutputModel
+    public class ClaimRegistrationOutputModel: BaseDataModel
     {
         public string claimID { get; set; }
     }
 
-    public class LocusClaimRegistrationDataOutputModel
+    public class LocusClaimRegistrationDataOutputModel: BaseDataModel
     {
         private EWI.EWIResponseContentData _data;
 
