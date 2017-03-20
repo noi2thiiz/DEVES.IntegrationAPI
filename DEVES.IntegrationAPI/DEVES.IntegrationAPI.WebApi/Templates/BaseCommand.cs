@@ -14,11 +14,14 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Reflection;
 
+using System.Configuration;
+using System.ServiceModel.Description;
+
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Client;
-using System.ServiceModel.Description;
 using Microsoft.Xrm.Sdk.Query;
+using Microsoft.Xrm.Tooling.Connector;
 
 namespace DEVES.IntegrationAPI.WebApi.Templates
 {
@@ -41,7 +44,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             throw new NotImplementedException();
         }
 
-        internal EWIResponseContent CallEWIService(string EWIendpoint, BaseDataModel JSON , string UID)
+        internal EWIResponseContent CallEWIService(string EWIendpointKey, BaseDataModel JSON , string UID)
         {
             EWIRequest reqModel = new EWIRequest()
             {
@@ -63,6 +66,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             client.DefaultRequestHeaders.Add("Accept-Encoding", "utf-8");
 
             // + ENDPOINT
+            string EWIendpoint = GetEWIEndpoint(EWIendpointKey);
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, EWIendpoint);
             request.Content = new StringContent(jsonReqModel, System.Text.Encoding.UTF8, "application/json");
 
@@ -208,20 +212,20 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
 
         internal OrganizationServiceProxy GetCrmServiceProxy()
         {
-            //using (var connection = new CrmServiceClient(ConfigurationManager.ConnectionStrings["CRM_DEVES"].ConnectionString))
-            //{
-            //    using (_serviceProxy = connection.OrganizationServiceProxy)
-            //    {
-            //        // This statement is required to enable early-bound type support.
-            //        _serviceProxy.EnableProxyTypes();
+            using (var connection = new CrmServiceClient(ConfigurationManager.ConnectionStrings["CRM_DEVES"].ConnectionString))
+            {
+                using (_serviceProxy = connection.OrganizationServiceProxy)
+                {
+                    // This statement is required to enable early-bound type support.
+                    _serviceProxy.EnableProxyTypes();
 
-            //        //_service = (IOrganizationService)_serviceProxy;
-            //        //ServiceContext svcContext = new ServiceContext(_serviceProxy);
+                    //_service = (IOrganizationService)_serviceProxy;
+                    //ServiceContext svcContext = new ServiceContext(_serviceProxy);
 
-            //        return _serviceProxy;
-            //    }
-            //}
-            throw new NotImplementedException();
+                    return _serviceProxy;
+                }
+            }
+            //throw new NotImplementedException();
         }
 
         string GetLatestToken()
@@ -232,6 +236,49 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
         internal string GetAppConfigurationSetting(string key)
         {
             return System.Configuration.ConfigurationManager.AppSettings[key].ToString();
+        }
+
+        string GetEWIEndpoint(string key)
+        {
+            return System.Configuration.ConfigurationManager.AppSettings[key].ToString();
+        }
+
+        enum ENUM_f_GetSystemUserByFieldInfo_Attr
+        {
+            DomainName,
+            EmployeeId,
+            FullName,
+            Branch
+        }
+        string CallFn_f_GetSystemUserByFieldInfo(Guid UserId, ENUM_f_GetSystemUserByFieldInfo_Attr attr )
+        {
+            using (SqlConnection cnnSQL = new SqlConnection(System.Configuration.ConfigurationManager.AppSettings["CRMDB"].ToString()))
+            {
+
+                SqlCommand cmdSQL = new SqlCommand("Select dbo.f_GetSystemUserByFieldInfo( @TargetAttrName , @SystemUserId )", cnnSQL);
+                cmdSQL.CommandTimeout = 600;
+
+                SqlParameter param1 = new SqlParameter("@TargetAttrName", SqlDbType.NVarChar);
+                param1.Value = attr.ToString() ;
+                cmdSQL.Parameters.Add(param1);
+
+                SqlParameter param2 = new SqlParameter("@SystemUserId", SqlDbType.UniqueIdentifier);
+                param2.Value = UserId;
+                cmdSQL.Parameters.Add(param2);
+
+                cnnSQL.Open();
+                return (string)cmdSQL.ExecuteScalar();
+            }
+        }
+
+        internal string GetDomainName(Guid UserId)
+        {
+            return CallFn_f_GetSystemUserByFieldInfo(UserId, ENUM_f_GetSystemUserByFieldInfo_Attr.DomainName);
+        }
+
+        internal string GetEmployeeCode(Guid UserId)
+        {
+            return CallFn_f_GetSystemUserByFieldInfo(UserId, ENUM_f_GetSystemUserByFieldInfo_Attr.EmployeeId);
         }
 
     }

@@ -175,6 +175,7 @@ namespace DEVES.IntegrationAPI.Model.ClaimRegistration
     }*/
 
 
+
     public class LocusClaimheaderModel : BaseDataModel
     {
         [CrmMapping(FieldName = "premiumClass", Source = ENUMDataSource.srcSQL)]
@@ -209,13 +210,13 @@ namespace DEVES.IntegrationAPI.Model.ClaimRegistration
         public String insureCardNo { set; get; }
         [CrmMapping(FieldName = "policyIssueDate", Source = ENUMDataSource.srcSQL)]
         [CrmMapping(FieldName = "pfc_issue_date", Source = ENUMDataSource.srcCrm)]
-        public String policyIssueDate { set; get; }
+        public DateTime? policyIssueDate { set; get; }
         [CrmMapping(FieldName = "policyEffectiveDate", Source = ENUMDataSource.srcSQL)]
         [CrmMapping(FieldName = "pfc_effective_date", Source = ENUMDataSource.srcCrm)]
-        public String policyEffectiveDate { set; get; }
+        public DateTime? policyEffectiveDate { set; get; }
         [CrmMapping(FieldName = "policyExpiryDate", Source = ENUMDataSource.srcSQL)]
         [CrmMapping(FieldName = "pfc_expiry_date", Source = ENUMDataSource.srcCrm)]
-        public String policyExpiryDate { set; get; }
+        public DateTime? policyExpiryDate { set; get; }
         [CrmMapping(FieldName = "policyProductTypeCode", Source = ENUMDataSource.srcSQL)]
         [CrmMapping(FieldName = "pfc_cover_code", Source = ENUMDataSource.srcCrm)]
         public String policyProductTypeCode { set; get; }
@@ -310,7 +311,7 @@ namespace DEVES.IntegrationAPI.Model.ClaimRegistration
         [CrmMapping(FieldName = "pfc_informer_mobile", Source = ENUMDataSource.srcCrm)]
         public String informerMobile { set; get; }
         [CrmMapping(FieldName = "informerPhoneNo", Source = ENUMDataSource.srcSQL)]
-
+        [CrmMapping(FieldName = "0", Source = ENUMDataSource.srcCrm)]
         public String informerPhoneNo { set; get; }
         [CrmMapping(FieldName = "driverClientId", Source = ENUMDataSource.srcSQL)]
         [CrmMapping(FieldName = "pfc_driver_client_number", Source = ENUMDataSource.srcCrm)]
@@ -322,7 +323,7 @@ namespace DEVES.IntegrationAPI.Model.ClaimRegistration
         [CrmMapping(FieldName = "pfc_driver_mobile", Source = ENUMDataSource.srcCrm)]
         public String driverMobile { set; get; }
         [CrmMapping(FieldName = "driverPhoneNo", Source = ENUMDataSource.srcSQL)]
-
+        [CrmMapping(FieldName = "0", Source = ENUMDataSource.srcCrm)]
         public String driverPhoneNo { set; get; }
         [CrmMapping(FieldName = "insuredClientId", Source = ENUMDataSource.srcSQL)]
         [CrmMapping(FieldName = "pfc_cus_client_number", Source = ENUMDataSource.srcCrm)]
@@ -331,10 +332,10 @@ namespace DEVES.IntegrationAPI.Model.ClaimRegistration
         [CrmMapping(FieldName = "pfc_customerIdName", Source = ENUMDataSource.srcCrm)]
         public String insuredFullName { set; get; }
         [CrmMapping(FieldName = "insuredMobile", Source = ENUMDataSource.srcSQL)]
-
+        [CrmMapping(FieldName = "0", Source = ENUMDataSource.srcCrm)]
         public String insuredMobile { set; get; }
         [CrmMapping(FieldName = "insuredPhoneNo", Source = ENUMDataSource.srcSQL)]
-
+        [CrmMapping(FieldName = "0", Source = ENUMDataSource.srcCrm)]
         public String insuredPhoneNo { set; get; }
         [CrmMapping(FieldName = "relationshipWithInsurer", Source = ENUMDataSource.srcSQL)]
         [CrmMapping(FieldName = "pfc_relation_cutomer_accident_party", Source = ENUMDataSource.srcCrm)]
@@ -347,10 +348,10 @@ namespace DEVES.IntegrationAPI.Model.ClaimRegistration
         public String currentCarRegisterProv { set; get; }
         [CrmMapping(FieldName = "informerOn", Source = ENUMDataSource.srcSQL)]
         [CrmMapping(FieldName = "pfc_isurvey_status_on", Source = ENUMDataSource.srcCrm)]
-        public String informerOn { set; get; }
+        public DateTime? informerOn { set; get; }
         [CrmMapping(FieldName = "accidentOn", Source = ENUMDataSource.srcSQL)]
         [CrmMapping(FieldName = "pfc_accident_on", Source = ENUMDataSource.srcCrm)]
-        public String accidentOn { set; get; }
+        public DateTime? accidentOn { set; get; }
         [CrmMapping(FieldName = "accidentDescCode", Source = ENUMDataSource.srcSQL)]
         [CrmMapping(FieldName = "pfc_accident_desc_code", Source = ENUMDataSource.srcCrm)]
         public String accidentDescCode { set; get; }
@@ -370,10 +371,10 @@ namespace DEVES.IntegrationAPI.Model.ClaimRegistration
         [CrmMapping(FieldName = "pfc_accident_longitude", Source = ENUMDataSource.srcCrm)]
         public String accidentLongitude { set; get; }
         [CrmMapping(FieldName = "accidentProvn", Source = ENUMDataSource.srcSQL)]
-
+        [CrmMapping(FieldName = "0", Source = ENUMDataSource.srcCrm)]
         public String accidentProvn { set; get; }
         [CrmMapping(FieldName = "accidentDist", Source = ENUMDataSource.srcSQL)]
-
+        [CrmMapping(FieldName = "0", Source = ENUMDataSource.srcCrm)]
         public String accidentDist { set; get; }
         [CrmMapping(FieldName = "sendOutSurveyorCode", Source = ENUMDataSource.srcSQL)]
         [CrmMapping(FieldName = "pfc_send_out_surveyor", Source = ENUMDataSource.srcCrm)]
@@ -397,7 +398,7 @@ namespace DEVES.IntegrationAPI.Model.ClaimRegistration
         [CrmMapping(FieldName = "pfc_surveyor_company_mobile", Source = ENUMDataSource.srcCrm)]
         public String surveyorCompanyMobile { set; get; }
         [CrmMapping(FieldName = "surveyorMobile", Source = ENUMDataSource.srcSQL)]
-
+        [CrmMapping(FieldName = "0", Source = ENUMDataSource.srcCrm)]
         public String surveyorMobile { set; get; }
         [CrmMapping(FieldName = "surveyorType", Source = ENUMDataSource.srcSQL)]
         [CrmMapping(FieldName = "pfc_surveyor_type", Source = ENUMDataSource.srcCrm)]
@@ -491,10 +492,12 @@ namespace DEVES.IntegrationAPI.Model.ClaimRegistration
         public String accidentPartyPolicyNumber { set; get; }
         [CrmMapping(FieldName = "accidentPartyPolicyExpdate", Source = ENUMDataSource.srcSQL)]
         [CrmMapping(FieldName = "pfc_accident_party_policy_expdate", Source = ENUMDataSource.srcCrm)]
-        public String accidentPartyPolicyExpdate { set; get; }
+        public DateTime? accidentPartyPolicyExpdate { set; get; }
         [CrmMapping(FieldName = "demageOfPartyCar", Source = ENUMDataSource.srcSQL)]
         [CrmMapping(FieldName = "pfc_demage_of_party_car", Source = ENUMDataSource.srcCrm)]
         public String demageOfPartyCar { set; get; }
+
+
     }
 
 }
