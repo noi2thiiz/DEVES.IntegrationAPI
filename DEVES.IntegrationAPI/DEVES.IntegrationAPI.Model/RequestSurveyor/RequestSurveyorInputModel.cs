@@ -9,8 +9,8 @@ namespace DEVES.IntegrationAPI.Model.RequestSurveyor
 
     public class RequestSurveyorInputModel_WebService
     {
-        public string incidentId { get; set; }
-        public string currentUserId { get; set; }
+        public string caseNo { get; set; }
+        public string userCode { get; set; }
     }
     public class RequestSurveyorInputModel
     {
