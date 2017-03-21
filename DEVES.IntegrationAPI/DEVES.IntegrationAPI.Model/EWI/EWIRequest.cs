@@ -14,6 +14,7 @@ namespace DEVES.IntegrationAPI.Model.EWI
         /// Base64 encryption
         /// </summary>
         public string password { get; set; }
+        public string uid { get; set; }
         public string gid { get; set; }
         public string uid { get; set; }
         public string token { get; set; }
