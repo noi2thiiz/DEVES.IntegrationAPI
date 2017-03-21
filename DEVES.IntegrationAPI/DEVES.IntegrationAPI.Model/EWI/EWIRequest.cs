@@ -15,6 +15,7 @@ namespace DEVES.IntegrationAPI.Model.EWI
         /// </summary>
         public string password { get; set; }
         public string gid { get; set; }
+        public string uid { get; set; }
         public string token { get; set; }
         public object content { get; set; }
     }

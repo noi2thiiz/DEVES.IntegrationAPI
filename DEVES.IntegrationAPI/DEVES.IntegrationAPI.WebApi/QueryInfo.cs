@@ -15,10 +15,10 @@ namespace DEVES.IntegrationAPI.WebApi
         public static string SQL_RequestSurveyor = @"DECLARE @TicketNumber AS NVARCHAR(20) = 'CAS201702-00003';
                                                     DECLARE @CurrentUserCode AS NVARCHAR(20) = 'G001';
                                                     EXEC [dbo].[sp_CustomApp_RequestSurveyor_Incident] @TicketNumber, @CurrentUserCode"
-        */
-        public static string SQL_RequestSurveyor = @"DECLARE @TicketNumber AS NVARCHAR(20) = '{0}';
-                                                    DECLARE @CurrentUserCode AS NVARCHAR(20) = 'G001';
-                                                    EXEC [dbo].[sp_CustomApp_RequestSurveyor_Incident] @TicketNumber, @CurrentUserCode;";
+        */  
+        public static string SQL_RequestSurveyor = @"DECLARE @IncidentId AS UNIQUEIDENTIFIER = '{0}';
+                                                    DECLARE @CurrentUserId AS UNIQUEIDENTIFIER = '{1}';
+                                                    EXEC [dbo].[sp_CustomApp_RequestSurveyor_Incident] @IncidentId, @CurrentUserId;";
 
         public static string SQL_InquiryPolicyMotorList = @"DECLARE @policyNo AS NVARCHAR(100) = '{0}'
                                                     DECLARE @chassisNo AS NVARCHAR(100) = '{1}'
@@ -45,9 +45,9 @@ namespace DEVES.IntegrationAPI.WebApi
         /// <returns>
         /// DataTable of @TicketNumber= 'CAS201702-00003' and @CurrentUserCode = 'G001'
         /// </returns>
-        public System.Data.DataTable Queryinfo_RequestSurveyor(string TicketNumber, string CurrentUserCode)
+        public System.Data.DataTable Queryinfo_RequestSurveyor(string IncidentId, string CurrentUserId)
         {
-            string strSql = string.Format(SQL_RequestSurveyor, TicketNumber);
+            string strSql = string.Format(SQL_RequestSurveyor, IncidentId, CurrentUserId); 
             System.Data.DataTable dt = new System.Data.DataTable();
             System.Data.SqlClient.SqlDataAdapter da = new System.Data.SqlClient.SqlDataAdapter(strSql, System.Configuration.ConfigurationManager.AppSettings["CRMDB"].ToString());
             da.Fill(dt);

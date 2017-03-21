@@ -54,10 +54,10 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             }
         }
 
-        private RequestSurveyorInputModel Mapping(string caseNo, string userCode)
+        private RequestSurveyorInputModel Mapping(string incidentId, string currentUserId)
         {
             dt = new System.Data.DataTable();
-            dt = q.Queryinfo_RequestSurveyor(caseNo, userCode);
+            dt = q.Queryinfo_RequestSurveyor(incidentId, currentUserId);
 
             RequestSurveyorInputModel rsModel = new RequestSurveyorInputModel();
 
@@ -97,20 +97,21 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             return rsModel;
         }
 
-        private EWIResponseContent_ReqSur RequestSurveyorOniSurvey(string caseNo, string userCode)
+        private EWIResponseContent_ReqSur RequestSurveyorOniSurvey(string incidentId, string currentUserId)
         {
 
             ///PFC:: Change fixed values to be the configurable values
             ///
 
 
-            RequestSurveyorInputModel iSurveyInputModel = Mapping(caseNo, userCode);
+            RequestSurveyorInputModel iSurveyInputModel = Mapping(incidentId, currentUserId);
             EWIRequest reqModel = new EWIRequest()
             {
-                username = "ClaimMotor",
-                password = "1234",
+                username = "sysdynamic",
+                password = "REZOJUNtN04=",
+                gid = "CRMClaim",
+                uid = "CRMClaim",
                 token = "",
-                gid = "",
                 content = iSurveyInputModel
             };
 
@@ -167,13 +168,13 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
 
             if (JsonHelper.TryValidateJson(contentText, filePath, out outvalidate))
             {
-                _logImportantMessage += "caseNo: " + contentModel.caseNo;
+                _logImportantMessage += "IncidentId: " + contentModel.incidentId;
                 output = HandleMessage(contentText, contentModel);
             }
             else
-            {
+                {
                 _logImportantMessage = "Error: Input is not valid.";
-                output.EventID = _logImportantMessage;
+                output.eventID = _logImportantMessage;
                 _log.Error(_logImportantMessage);
 //                _log.ErrorFormat("ErrorCode: {0} {1} ErrorDescription: {1}", output.responseCode, Environment.NewLine, output.responseMessage);
             }
@@ -195,9 +196,10 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             try
             {
                 //content.caseNo
-                iSurveyOutput = RequestSurveyorOniSurvey(content.caseNo, content.userCode);
+                // iSurveyOutput = RequestSurveyorOniSurvey(content.incidentId, content.currentUserId);
+                iSurveyOutput = RequestSurveyorOniSurvey(content.incidentId, content.currentUserId);
                 // ISurvey_RequestSurveyorContentDataOutputModel regOutputData = new ISurvey_RequestSurveyorContentDataOutputModel(iSurveyOutput.eventid);
-                output.EventID = iSurveyOutput.eventid;
+                output.eventID = iSurveyOutput.eventid;
                 //locusClaimRegOutput = RequestSurveyorOniSurvey("CAS201702-00003", "G001");
                 //output.EventID = "EventID";
 
@@ -226,7 +228,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 _log.Error("RequestId - " + _logImportantMessage);
                 _log.Error(errorMessage);
 
-                output.EventID = errorMessage;
+                output.eventID = errorMessage;
             }
 
             return output;
