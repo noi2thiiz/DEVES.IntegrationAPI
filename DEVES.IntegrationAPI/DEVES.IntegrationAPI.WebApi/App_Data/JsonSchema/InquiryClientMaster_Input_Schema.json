@@ -1,0 +1,68 @@
+﻿{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+  "properties": {
+
+    "conditionHeader": {
+      "type": "object",
+      "properties": {
+        "clientType": {
+          "type": "string",
+          "maxLength": 1
+        },
+        "roleCode": {
+          "type": "string",
+          "maxLength": 5
+        }
+      },
+      "required": [
+        "clientType",
+        "roleCode"
+      ]
+    },
+
+    "conditionDetail": {
+      "type": "object",
+      "properties": {
+        "cleansingId": {
+          "type": "string",
+          "maxLength": 20
+        },
+        "polisyClientId": {
+          "type": "string",
+          "maxLength": 8
+        },
+        "crmClientId": {
+          "type": "string",
+          "maxLength": 20
+        },
+        "clientName1": {
+          "type": "string",
+          "maxLength": 60
+        },
+        "clientName2": {
+          "type": "string",
+          "maxLength": 60
+        },
+        "clientFullname": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "idCard": {
+          "type": "string",
+          "maxLength": 24
+        },
+        "corporateBranch": {
+          "type": "string",
+          "maxLength": 6
+        },
+        "emcsCode": {
+          "type": "string",
+          "maxLength": 10
+        }
+      }
+    }
+
+  }
+	
+}

@@ -25,7 +25,7 @@ namespace DEVES.IntegrationAPI.Model.RequestSurveyor
         public string driver { get; set; }
         public string driverTel { get; set; }
         public string currentVehicleLicense { get; set; }
-        public string currentProvinse { get; set; }
+        public string currentProvince { get; set; }
         public string eventDate { get; set; }
         public string activityDate { get; set; }
         public string eventDetail { get; set; }

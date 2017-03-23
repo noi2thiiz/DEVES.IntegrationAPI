@@ -72,7 +72,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             rsModel.driver = isStringNull("Driver");
             rsModel.driverTel = isStringNull("DriverTel");
             rsModel.currentVehicleLicense = isStringNull("current_VehicleLicence");
-            rsModel.currentProvinse = isStringNull("current_Province");
+            rsModel.currentProvince = isStringNull("current_Province");
             rsModel.eventDate = isStringNull("EventDate");
             rsModel.activityDate = isStringNull("ActivityDate");
             rsModel.eventDetail = isStringNull("EventDetail");
