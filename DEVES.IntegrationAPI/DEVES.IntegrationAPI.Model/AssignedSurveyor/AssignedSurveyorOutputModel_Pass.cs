@@ -9,11 +9,11 @@ namespace DEVES.IntegrationAPI.Model.AssignedSurveyor
 {
     public class AssignedSurveyorOutputModel_Pass
     {
-        public int code { get; set; }
+        public string code { get; set; }
         public string message { get; set; }
         public string description { get; set; }
         public string transactionId { get; set; }
-        public DateTime transactionDateTime { get; set; }
+        public string transactionDateTime { get; set; }
         public AssignedSurveyorDataOutputModel_Pass data { get; set; }
     }
 

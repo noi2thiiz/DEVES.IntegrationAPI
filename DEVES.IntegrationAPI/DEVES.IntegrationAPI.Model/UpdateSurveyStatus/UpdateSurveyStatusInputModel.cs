@@ -12,6 +12,6 @@ namespace DEVES.IntegrationAPI.Model.UpdateSurveyStatus
         public string ticketNo { get; set; } // string 
         public string claimNotiNo { get; set; } // string 
         public string iSurveyStatus { get; set; } // enum ??
-        public DateTime iSurveyStatusOn { get; set; }
+        public string iSurveyStatusOn { get; set; } // datetime yyyy-MM-dd HH:mm:ss format
     }
 }

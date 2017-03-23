@@ -12,6 +12,7 @@ using Microsoft.Xrm.Tooling.Connector;
 using System.Configuration;
 using Microsoft.Xrm.Sdk.Client;
 using System.Linq;
+using System.Collections.Generic;
 
 // using earlybound;
 
@@ -51,15 +52,172 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             {
                 outputFail = new AssignedSurveyorOutputModel_Fail();
                 outputFail.data = new AssignedSurveyorDataOutputModel_Fail();
-                var dataFail = outputFail.data;
-                dataFail.fieldError = new AssignedSurveyorFieldErrorOutputModel_Fail();
-                var fieldError = dataFail.fieldError;
-                fieldError.name = "Invalid Input(s)";
-                fieldError.message = "Some of your input is invalid. Please recheck again.";
+                outputFail.data.fieldError = new List<AssignedSurveyorFieldErrorOutputModel_Fail>();
+
+                List<string> errorMessage = JsonHelper.getReturnError();
+                foreach (var text in errorMessage)
+                {
+                    string fieldMessage = "";
+                    string fieldName = "";
+                    if (text.Contains("Required properties"))
+                    {
+                        int indexEnd = 0;
+                        for (int i = 0; i < text.Length - 1; i++)
+                        {
+                            if (text.Substring(i, 1).Equals(":"))
+                            {
+                                fieldMessage = text.Substring(0, i);
+                                indexEnd = i + 1;
+                            }
+                            if (text.Substring(i, 1).Equals("."))
+                            {
+                                fieldName = text.Substring(indexEnd, i - indexEnd).Trim();
+                                break;
+                            }
+                        }
+                    }
+                    else if (text.Contains("exceeds maximum length"))
+                    {
+                        bool isMessage = false;
+                        int endMessage = 0;
+                        int startName = 0;
+                        int endName = 0;
+                        for (int i = 0; i < text.Length - 4; i++)
+                        {
+                            if (text.Substring(i, 4).Equals("Path"))
+                            {
+                                fieldMessage = text.Substring(0, i - 1);
+                                isMessage = true;
+                                endMessage = i + "Path".Length;
+                            }
+                            if (isMessage)
+                            {
+                                if (text.Substring(i, 1).Equals("'"))
+                                {
+                                    if (startName == 0)
+                                    {
+                                        startName = i + 1;
+                                    }
+                                    else if (endName == 0)
+                                    {
+                                        endName = i - 1;
+                                    }
+                                }
+                                if (startName != 0 && endName != 0)
+                                {
+                                    fieldName = text.Substring(startName, i - startName).Trim();
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    else if (text.Contains("minimum length"))
+                    {
+                        bool isMessage = false;
+                        int startName = 0;
+                        int endName = 0;
+                        for (int i = 0; i < text.Length - 7; i++)
+                        {
+                            string check = text.Substring(i, 7);
+                            if (text.Substring(i, 7).Equals("minimum"))
+                            {
+                                fieldMessage = "Required field must not be null";
+                                isMessage = true;
+                            }
+                            if (isMessage)
+                            {
+                                if (text.Substring(i, 1).Equals("'"))
+                                {
+                                    if (startName == 0)
+                                    {
+                                        startName = i + 1;
+                                    }
+                                    else if (endName == 0)
+                                    {
+                                        endName = i - 1;
+                                    }
+                                }
+                                if (startName != 0 && endName != 0)
+                                {
+                                    fieldName = text.Substring(startName, i - startName).Trim();
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    else if (text.Contains("Invalid type."))
+                    {
+                        int startIndex = "Invalid type.".Length;
+                        int endMessage = 0;
+                        int startName = 0;
+                        int endName = 0;
+                        for (int i = startIndex; i < text.Length - 1; i++)
+                        {
+                            if (text.Substring(i, 1).Equals("."))
+                            {
+                                fieldMessage = text.Substring(0, i);
+                                endMessage = i + 1;
+                            }
+                            if (text.Substring(i, 1).Equals("'"))
+                            {
+                                if (startName == 0)
+                                {
+                                    startName = i + 1;
+                                }
+                                else if (endName == 0)
+                                {
+                                    endName = i - 1;
+                                }
+                            }
+                            if (startName != 0 && endName != 0)
+                            {
+                                fieldName = text.Substring(startName, i - startName).Trim();
+                                break;
+                            }
+                        }
+                    }
+                    else if (text.Contains("not defined in enum"))
+                    {
+                        int startName = 0;
+                        int endName = 0;
+
+                        for(int i = 0; i < text.Length - 1; i++)
+                        {
+                            if (text.Substring(i, 1).Equals("."))
+                            {
+                                fieldMessage = text.Substring(0, i);
+                            }
+                            if (text.Substring(i, 1).Equals("'"))
+                            {
+                                if (startName == 0)
+                                {
+                                    startName = i + 1;
+                                }
+                                else if (endName == 0)
+                                {
+                                    endName = i - 1;
+                                }
+                            }
+                            if (startName != 0 && endName != 0)
+                            {
+                                fieldName = text.Substring(startName, i - startName).Trim();
+                                break;
+                            }
+                        }
+                    }
+
+                    outputFail.data.fieldError.Add(new AssignedSurveyorFieldErrorOutputModel_Fail(fieldName, fieldMessage));
+                }
+
+                outputFail.code = "400";
+                outputFail.message = "Invalid Input(s)";
+                outputFail.description = "Some of your input is invalid. Please recheck again.";
+                outputFail.transactionId = "Ticket ID: " + contentModel.ticketNo + ", Claim Noti No: " + contentModel.claimNotiNo;
+                outputFail.transactionDateTime = DateTime.Now.ToString();
 
                 _log.Error(_logImportantMessage);
-                _log.ErrorFormat("ErrorCode: {0} {1} ErrorDescription: {1}", fieldError.name, Environment.NewLine, fieldError.message);
-                return Request.CreateResponse<AssignedSurveyorFieldErrorOutputModel_Fail>(fieldError);
+                // _log.ErrorFormat("ErrorCode: {0} {1} ErrorDescription: {1}", fieldError.name, Environment.NewLine, fieldError.message);
+                return Request.CreateResponse<AssignedSurveyorOutputModel_Fail>(outputFail);
             }
         }
 
@@ -74,6 +232,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 var AssignedSurveyorOutput = new AssignedSurveyorDataOutputModel_Pass();
 
                 var connection = new CrmServiceClient(ConfigurationManager.ConnectionStrings["CRM_DEVES"].ConnectionString);
+                bool check = connection.IsReady;
                 // var connection = new CrmServiceClient(System.Configuration.ConfigurationManager.ConnectionStrings["CRM_DEVES"].ConnectionString);
 
                 _serviceProxy = connection.OrganizationServiceProxy;
@@ -93,45 +252,62 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 Incident retrievedIncident = (Incident)_serviceProxy.Retrieve(Incident.EntityLogicalName, _accountId, new Microsoft.Xrm.Sdk.Query.ColumnSet(true));
                 try
                 {
-                    
+                    retrievedIncident.pfc_survey_meeting_latitude = content.surveyMeetingLatitude;
+                    retrievedIncident.pfc_survey_meeting_longitude = content.surveyMeetingLongtitude;
+                    retrievedIncident.pfc_survey_meeting_district = content.surveyMeetingDistrict;
                     retrievedIncident.pfc_survey_meeting_province = content.surveyMeetingProvince;
                     retrievedIncident.pfc_survey_meeting_place = content.surveyMeetingPlace;
-                    retrievedIncident.pfc_survey_meeting_date = content.surveyMeetingDate;
+                    retrievedIncident.pfc_survey_meeting_date = Convert.ToDateTime(content.surveyMeetingDate);
                     retrievedIncident.pfc_surveyor_code = content.surveyorCode;
                     retrievedIncident.pfc_surveyor_client_number = content.surveyorClientNumber;
                     retrievedIncident.pfc_surveyor_name = content.surveyorName;
                     retrievedIncident.pfc_surveyor_company_name = content.surveyorCompanyName;
                     retrievedIncident.pfc_surveyor_company_mobile = content.surveyorCompanyMobile;
                     retrievedIncident.pfc_surveyor_type = new OptionSetValue(Int32.Parse(convertOptionSet(incident, "pfc_surveyor_type", content.surveyType)));
+                    retrievedIncident.pfc_surveyor_team = content.surveyTeam;
+                    retrievedIncident.pfc_surveyor_mobile = content.surveyorMobile;
                     retrievedIncident.pfc_isurvey_status = new OptionSetValue(Int32.Parse("100000015"));
                     retrievedIncident.pfc_isurvey_status_on = DateTime.Now;
 
                     _serviceProxy.Update(retrievedIncident);
                     
+                    
                 }
                 catch (Exception e)
                 {
+                    output.code = "501";
+                    output.message = "False";
                     output.description = "Retrieving data PROBLEM";
+                    output.transactionId = "";
+                    output.transactionDateTime = DateTime.Now.ToString();
+                    output.data = null;
+                    
                     return output;
                 }
 
                 //TODO: Do something
-                output.code = 200;
+                output.code = "200";
                 output.message = "Success";
                 output.description = "Assigning surveyor is done!";
-                output.transactionId = content.ticketNo;
-                output.transactionDateTime = System.DateTime.Now;
+                output.transactionId = "Ticket ID: " + content.ticketNo + ", Claim Noti No: " + content.claimNotiNo;
+                output.transactionDateTime = DateTime.Now.ToString();
                 output.data = AssignedSurveyorOutput;
                 output.data.message = "ClaimNoti Number: " + content.claimNotiNo +
-                    " Survey type: " + content.surveyType +
-                    " Surveyor code: " + content.surveyorCode +
-                    " Surveyor name: " + content.surveyorName;
+                    ", Survey type: " + content.surveyType +
+                    ", Surveyor code: " + content.surveyorCode +
+                    ", Surveyor name: " + content.surveyorName;
                 // string strSql = string.Format(output.data.message, content.claimNotiNo, content.surveyType, content.surveyorCode, content.surveyorName);
             }
             
             catch (System.ServiceModel.FaultException e)
             {
+                output.code = "500";
+                output.message = "False";
                 output.description = "CRM PROBLEM";
+                output.transactionId = "";
+                output.transactionDateTime = DateTime.Now.ToString();
+                output.data = null;
+                
                 return output;
             }
             
@@ -147,8 +323,13 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 }
                 _log.Error("RequestId - " + _logImportantMessage);
                 _log.Error(errorMessage);
-                output.description = "ไม่พบ claimNotiNo";
 
+                output.code = "400";
+                output.message = "False";
+                output.description = "ไม่พบ claimNotiNo";
+                output.transactionId = "Claim Noti No: null";
+                output.transactionDateTime = DateTime.Now.ToString();
+                output.data = null;
             }
 
             return output;
@@ -156,9 +337,19 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
 
         private string convertOptionSet(object entity, string fieldName, string value)
         {
-            string valOption = "10000000" + value;
+            string valOption = "";
+            if (value.Equals("0"))
+            {
+                valOption = "100000001"; // In-house
+            }
+            else if (value.Equals("1"))
+            {
+                valOption = "100000002"; // Outsource
+            }
+            
             return valOption;
         }
+
 
         /*
         //To use with log

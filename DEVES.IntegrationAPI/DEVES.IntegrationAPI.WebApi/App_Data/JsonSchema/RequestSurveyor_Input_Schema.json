@@ -2,6 +2,10 @@
   "$schema": "http://json-schema.org/draft-04/schema#",
   "type": "object",
   "properties": {
+    "CaseID": {
+      "type": "string",
+      "maxLength": 50
+    },
     "claimNotiNo": {
       "type": "string",
       "maxLength": 15
@@ -38,11 +42,11 @@
       "type": "string",
       "maxLength": 30
     },
-    "currentVehicleLicence": {
+    "currentVehicleLicense": {
       "type": "string",
       "maxLength": 20
     },
-    "currentProvince": {
+    "currentProvinse": {
       "type": "string",
       "maxLength": 20
     },
@@ -57,7 +61,7 @@
       "maxLength": 2000
     },
     "isCasualty": {
-      "type": "integer"
+      "type": "string"
     },
     "eventLocation": {
       "type": "string",
@@ -81,10 +85,10 @@
       "maxLength": 2000
     },
     "claimTypeID": {
-      "type": "integer"
+      "type": "string"
     },
-    "subClaimTypeID": {
-      "type": "integer"
+    "subClaimtypeID": {
+      "type": "string"
     },
     "empCode": {
       "type": "string",
@@ -117,7 +121,16 @@
     }
   },
   "required": [
-		"claimNotiNo",
-    "notifyName"
-	]
+    "CaseID",
+    "claimNotiNo",
+    "notifyName",
+    "mobile",
+    "driver",
+    "driverTel",
+    "currentVehicleLicence",
+    "currentProvinse",
+    "claimTypeID",
+    "subClaimtypeID",
+    "empCode"
+  ]
 }
