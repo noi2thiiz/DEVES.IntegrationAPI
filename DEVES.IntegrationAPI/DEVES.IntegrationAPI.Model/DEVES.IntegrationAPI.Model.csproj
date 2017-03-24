@@ -95,6 +95,8 @@
     <Compile Include="EWI\Enum.cs" />
     <Compile Include="EWI\EWIResponse.cs" />
     <Compile Include="EWI\EWIRequest.cs" />
+    <Compile Include="InquiryClientMaster\InquiryClientMasterInputModel.cs" />
+    <Compile Include="InquiryClientMaster\InquiryClientMasterOutputModel.cs" />
     <Compile Include="InquiryConsultingHistory\InquiryConsultingHistoryOutputModel.cs" />
     <Compile Include="InquiryConsultingHistory\InquiryConsultingHistoryInputModel.cs" />
     <Compile Include="InquiryPolicyMotorList\InquiryPolicyMotorListInputModel.cs" />
