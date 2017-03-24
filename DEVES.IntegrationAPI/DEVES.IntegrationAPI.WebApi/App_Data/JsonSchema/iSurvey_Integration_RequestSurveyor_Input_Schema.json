@@ -2,11 +2,16 @@
 	"$schema": "http://json-schema.org/draft-04/schema#",
 	"type": "object",
 	"properties": {
-		"caseNo": {
-			"type": "string"
-		}
+    "incidentId": {
+      "type": "string"
+    },
+    "currentUserId": 
+    {
+      "type": "string"
+    }
 	},
 	"required": [
-		"caseNo"
+    "incidentId",
+    "currentUserId"
 	]
 }

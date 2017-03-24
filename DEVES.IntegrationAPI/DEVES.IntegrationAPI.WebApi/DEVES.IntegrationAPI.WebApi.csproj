@@ -276,9 +276,13 @@
     <Compile Include="Controllers\ClaimRegistrationController.cs" />
     <Compile Include="Controllers\CreateCRMCorporateClientMasterController.cs" />
     <Compile Include="Controllers\CreateCRMPersonalClientMasterController.cs" />
+    <Compile Include="Controllers\InquiryClientMasterController.cs" />
     <Compile Include="Controllers\InquiryConsultingHistoryController.cs" />
+    <Compile Include="Controllers\InquiryCRMPayeeListController.cs" />
     <Compile Include="Controllers\InquiryPolicyMotorListClientController.cs" />
     <Compile Include="Controllers\RegClaimRequestFromRVPController.cs" />
+    <Compile Include="Controllers\RegClientPersonalController.cs" />
+    <Compile Include="Controllers\RegPayeePersonalController.cs" />
     <Compile Include="Controllers\RequestSurveyorController.cs" />
     <Compile Include="Controllers\TEST_RegClaimRequestFromRVPController.cs" />
     <Compile Include="Controllers\UpdateClaimInfoController.cs" />
@@ -330,6 +334,10 @@
     <Content Include="App_Data\JsonSchema\InquiryPolicyMotorList_Input_Schema.json" />
     <Content Include="App_Data\JsonSchema\UpdateClaimNo_Input_Schema.json" />
     <Content Include="App_Data\JsonSchema\RegClaimRequestFromRVP_Input_Schema.json" />
+    <Content Include="App_Data\JsonSchema\InquiryCRMPayeeList_Input_Schema.json" />
+    <Content Include="App_Data\JsonSchema\RegClientPersonal_Input_Schema.json" />
+    <Content Include="App_Data\JsonSchema\RegPayeePersonal_Input_Schema.json" />
+    <Content Include="App_Data\JsonSchema\InquiryClientMaster_Input_Schema.json" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

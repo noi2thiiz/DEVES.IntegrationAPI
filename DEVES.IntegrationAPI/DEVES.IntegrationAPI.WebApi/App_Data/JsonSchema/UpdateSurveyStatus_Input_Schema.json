@@ -4,16 +4,18 @@
 	"properties": {
     "ticketNo": {
       "type": "string",
+      "minLength": 1,
       "maxLength": 50
     },
     "claimNotiNo": {
       "type": "string",
-      "maxLength": 15
+      "minLength": 1,
+      "maxLength": 15,
     },
     "iSurveyStatus": {
       "type": "string",
       "enum": [
-				"09",
+        "09",
         "10",
         "15",
         "17",
@@ -23,11 +25,13 @@
         "70",
         "71",
         "99"
-			],
+      ],
+      "minLength": 2,
       "maxLength": 2
     },
     "iSurveyStatusOn": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     }
 	},
 	"required": [

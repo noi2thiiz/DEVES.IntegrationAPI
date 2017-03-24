@@ -99,6 +99,8 @@
     <Compile Include="InquiryClientMaster\InquiryClientMasterOutputModel.cs" />
     <Compile Include="InquiryConsultingHistory\InquiryConsultingHistoryOutputModel.cs" />
     <Compile Include="InquiryConsultingHistory\InquiryConsultingHistoryInputModel.cs" />
+    <Compile Include="InquiryCRMPayeeList\InquiryCRMPayeeListInputModel.cs" />
+    <Compile Include="InquiryCRMPayeeList\InquiryCRMPayeeListOutputModel.cs" />
     <Compile Include="InquiryPolicyMotorList\InquiryPolicyMotorListInputModel.cs" />
     <Compile Include="InquiryPolicyMotorList\InquiryPolicyMotorListOutputModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -107,6 +109,14 @@
     <Compile Include="RegClaimRequestFromRVP\RegClaimRequestFromRVPInputModel.cs" />
     <Compile Include="RegClaimRequestFromRVP\RegClaimRequestFromRVPOutputModel.cs" />
     <Compile Include="RegClaimRequestFromRVP\TEST_RegClaimRequestFromRVPOutputModel.cs" />
+    <Compile Include="RegClientCorporate\RegClientCorporateInputModel.cs" />
+    <Compile Include="RegClientCorporate\RegClientCorporateOutputModel.cs" />
+    <Compile Include="RegClientPersonal\RegClientPersonalInputModel.cs" />
+    <Compile Include="RegClientPersonal\RegClientPersonalOutputModel.cs" />
+    <Compile Include="RegPayeeCorporate\RegPayeeCorporateInputModel.cs" />
+    <Compile Include="RegPayeeCorporate\RegPayeeCorporateOutputModel.cs" />
+    <Compile Include="RegPayeePersonal\RegPayeePersonalInputModel.cs" />
+    <Compile Include="RegPayeePersonal\RegPayeePersonalOutputModel.cs" />
     <Compile Include="RequestSurveyor\RequestSurveyorInputModel.cs" />
     <Compile Include="RequestSurveyor\RequestSurveyorOutputModel.cs" />
     <Compile Include="Simulate_Integration\Simulate_Integration_ClaimRegistration_InputModel.cs" />

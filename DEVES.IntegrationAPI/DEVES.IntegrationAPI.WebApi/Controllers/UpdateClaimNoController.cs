@@ -1,5 +1,6 @@
 ﻿using DEVES.IntegrationAPI.Core.Helper;
 using DEVES.IntegrationAPI.Model.UpdateClaimNo;
+using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Client;
 using Microsoft.Xrm.Tooling.Connector;
 using Newtonsoft.Json;
@@ -87,7 +88,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                     string DB_claimNumber = retrievedIncident.pfc_claim_number;
                     string DB_claimStatusCode = retrievedIncident.pfc_locus_claim_status_code;
                     string DB_claimStatusDesc = retrievedIncident.pfc_locus_claim_status_desc;
-                    //retrievedIncident.pfc_claimId = content.claimId;
+                    // retrievedIncident.pfc_claimId = new EntityReference(content.claimId, _accountId); // look up form
                     retrievedIncident.pfc_claim_number = content.claimNo;
                     retrievedIncident.pfc_locus_claim_status_code = content.claimStatusCode;
                     retrievedIncident.pfc_locus_claim_status_desc = content.claimStatusDesc;

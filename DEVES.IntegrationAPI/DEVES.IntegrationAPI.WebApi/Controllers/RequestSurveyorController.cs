@@ -31,7 +31,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 return dt.Rows[0][a].ToString();
             }
         }
-        private int? isIntNull(string a)
+        private int isIntNull(string a)
         {
             if (string.IsNullOrEmpty(dt.Rows[0][a].ToString()))
             {
@@ -44,7 +44,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         }
         private double isDoubleNull(string a)
         {
-            if(string.IsNullOrEmpty(dt.Rows[0][a].ToString()))
+            if (string.IsNullOrEmpty(dt.Rows[0][a].ToString()))
             {
                 return 0;
             }
@@ -54,13 +54,14 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             }
         }
 
-        private RequestSurveyorInputModel Mapping(string caseNo, string userCode)
+        private RequestSurveyorInputModel Mapping(string incidentId, string currentUserId)
         {
             dt = new System.Data.DataTable();
-            dt = q.Queryinfo_RequestSurveyor(caseNo, userCode);
+            dt = q.Queryinfo_RequestSurveyor(incidentId, currentUserId);
 
             RequestSurveyorInputModel rsModel = new RequestSurveyorInputModel();
 
+            rsModel.CaseID = isStringNull("ticketNunber");  
             rsModel.claimNotiNo = isStringNull("EventCode");
             rsModel.claimNotirefer = isStringNull("claimnotirefer");
             rsModel.insureID = isStringNull("InsureID");
@@ -70,7 +71,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             rsModel.mobile = isStringNull("Mobile");
             rsModel.driver = isStringNull("Driver");
             rsModel.driverTel = isStringNull("DriverTel");
-            rsModel.currentVehicleLicence = isStringNull("current_VehicleLicence");
+            rsModel.currentVehicleLicense = isStringNull("current_VehicleLicence");
             rsModel.currentProvince = isStringNull("current_Province");
             rsModel.eventDate = isStringNull("EventDate");
             rsModel.activityDate = isStringNull("ActivityDate");
@@ -82,8 +83,8 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             rsModel.accidentLng = isStringNull("accidentLng");
             rsModel.ISVIP = isStringNull("IsVIP");
             rsModel.remark = isStringNull("Remark");
-            rsModel.claimTypeID = isIntNull("ClameTypeID");
-            rsModel.subClaimTypeID = isIntNull("SubClameTypeID");
+            rsModel.claimTypeID = isStringNull("ClameTypeID");
+            rsModel.subClaimtypeID = isStringNull("SubClameTypeID");
             rsModel.empCode = isStringNull("informBy");
             rsModel.appointLat = isStringNull("appointLat");
             rsModel.appointLong = isStringNull("appointLong");
@@ -97,20 +98,50 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             return rsModel;
         }
 
-        private EWIResponseContent_ReqSur RequestSurveyorOniSurvey(string caseNo, string userCode)
+        private EWIResponseContent_ReqSur RequestSurveyorOniSurvey(string incidentId, string currentUserId)
         {
 
             ///PFC:: Change fixed values to be the configurable values
             ///
 
 
-            RequestSurveyorInputModel iSurveyInputModel = Mapping(caseNo, userCode);
+            RequestSurveyorInputModel iSurveyInputModel = Mapping(incidentId, currentUserId);
+
+
+            /*
+            string iSurveyInputContent = iSurveyInputModel.ToString();
+            var fileJsonPath = HttpContext.Current.Server.MapPath("~/App_Data/JsonSchema/RequestSurveyor_Input_Schema.json");
+            string outvalidate = string.Empty;
+
+            if (!JsonHelper.TryValidateJson(iSurveyInputContent, fileJsonPath, out outvalidate))
+            {
+            */
+                /*
+                 *  "CaseID":"", (เพิ่มเติม เลข Case ID)
+                    "notifyName": "",
+                    "mobile": "",
+                    "driver": "",
+                    "driverTel": "",
+                    "currentVehicleLicence": "",
+                    "currentProvince": "",
+                    "claimTypeID": 0,
+                    "subClaimTypeID": 0,
+                    "empCode": "G001",
+                 */
+
+                 /*
+                EWIResponseContent_ReqSur error = new EWIResponseContent_ReqSur();
+                error.eventid = "Required field is not follow schema";
+                return error;
+            }
+             */
             EWIRequest reqModel = new EWIRequest()
             {
-                username = "ClaimMotor",
-                password = "1234",
+                username = "sysdynamic",
+                password = "REZOJUNtN04=",
+                gid = "CRMClaim",
+                uid = "CRMClaim",
                 token = "",
-                gid = "",
                 content = iSurveyInputModel
             };
 
@@ -154,12 +185,12 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             //RequestSurveyorInputModel iSurveyInputModel = Mapping("CAS201702-00003", "");
 
             var output = new RequestSurveyorDataOutputModel();
-            
-            if (value==null)
+
+            if (value == null)
             {
                 return Request.CreateResponse<RequestSurveyorDataOutputModel>(output);
             }
-            
+
             var contentText = value.ToString();
             var contentModel = JsonConvert.DeserializeObject<RequestSurveyorInputModel_WebService>(contentText);
             string outvalidate = string.Empty;
@@ -167,15 +198,15 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
 
             if (JsonHelper.TryValidateJson(contentText, filePath, out outvalidate))
             {
-                _logImportantMessage += "caseNo: " + contentModel.caseNo;
+                _logImportantMessage += "IncidentId: " + contentModel.incidentId;
                 output = HandleMessage(contentText, contentModel);
             }
             else
             {
                 _logImportantMessage = "Error: Input is not valid.";
-                output.EventID = _logImportantMessage;
+                output.eventID = _logImportantMessage;
                 _log.Error(_logImportantMessage);
-//                _log.ErrorFormat("ErrorCode: {0} {1} ErrorDescription: {1}", output.responseCode, Environment.NewLine, output.responseMessage);
+                //                _log.ErrorFormat("ErrorCode: {0} {1} ErrorDescription: {1}", output.responseCode, Environment.NewLine, output.responseMessage);
             }
             return Request.CreateResponse<RequestSurveyorDataOutputModel>(output);
         }
@@ -195,9 +226,10 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             try
             {
                 //content.caseNo
-                iSurveyOutput = RequestSurveyorOniSurvey(content.caseNo, content.userCode);
+                // iSurveyOutput = RequestSurveyorOniSurvey(content.incidentId, content.currentUserId);
+                iSurveyOutput = RequestSurveyorOniSurvey(content.incidentId, content.currentUserId);
                 // ISurvey_RequestSurveyorContentDataOutputModel regOutputData = new ISurvey_RequestSurveyorContentDataOutputModel(iSurveyOutput.eventid);
-                output.EventID = iSurveyOutput.eventid;
+                output.eventID = iSurveyOutput.eventid;
                 //locusClaimRegOutput = RequestSurveyorOniSurvey("CAS201702-00003", "G001");
                 //output.EventID = "EventID";
 
@@ -226,7 +258,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 _log.Error("RequestId - " + _logImportantMessage);
                 _log.Error(errorMessage);
 
-                output.EventID = errorMessage;
+                output.eventID = errorMessage;
             }
 
             return output;

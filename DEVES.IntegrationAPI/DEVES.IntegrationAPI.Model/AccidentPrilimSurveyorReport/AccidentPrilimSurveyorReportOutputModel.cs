@@ -13,11 +13,11 @@ namespace DEVES.IntegrationAPI.Model.AccidentPrilimSurveyorReport
     }
     public class AccidentPrilimSurveyorReportOutputModel_Pass
     {
-        public int code { get; set; }
+        public string code { get; set; }
         public string message { get; set; }
         public string description { get; set; }
         public string transactionId { get; set; }
-        public DateTime transactionDateTime { get; set; }
+        public string transactionDateTime { get; set; }
         public AccidentPrilimSurveyorReportDataOutputModel_Pass data { get; set; }
     }
 
@@ -28,11 +28,11 @@ namespace DEVES.IntegrationAPI.Model.AccidentPrilimSurveyorReport
 
     public class AccidentPrilimSurveyorReportOutputModel_Fail
     {
-        public int code { get; set; }
+        public string code { get; set; }
         public string message { get; set; }
         public string description { get; set; }
         public string transactionId { get; set; }
-        public DateTime transactionDateTime { get; set; }
+        public string transactionDateTime { get; set; }
         public AccidentPrilimSurveyorReportDataOutputModel_Fail data { get; set; }
     }
 
@@ -45,5 +45,11 @@ namespace DEVES.IntegrationAPI.Model.AccidentPrilimSurveyorReport
     {
         public string name { get; set; }
         public string message { get; set; }
+
+        public AccidentPrilimSurveyorReportFieldErrorsModel(string n, string m)
+        {
+            name = n;
+            message = m;
+        }
     }
 }

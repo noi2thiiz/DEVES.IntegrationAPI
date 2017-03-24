@@ -9,11 +9,12 @@ namespace DEVES.IntegrationAPI.Model.RequestSurveyor
 
     public class RequestSurveyorInputModel_WebService
     {
-        public string caseNo { get; set; }
-        public string userCode { get; set; }
+        public string incidentId { get; set; }
+        public string currentUserId { get; set; }
     }
     public class RequestSurveyorInputModel
     {
+        public string CaseID { get; set; }
         public string claimNotiNo { get; set; }
         public string claimNotirefer { get; set; }
         public string insureID { get; set; }
@@ -23,7 +24,7 @@ namespace DEVES.IntegrationAPI.Model.RequestSurveyor
         public string mobile { get; set; }
         public string driver { get; set; }
         public string driverTel { get; set; }
-        public string currentVehicleLicence { get; set; }
+        public string currentVehicleLicense { get; set; }
         public string currentProvince { get; set; }
         public string eventDate { get; set; }
         public string activityDate { get; set; }
@@ -35,8 +36,8 @@ namespace DEVES.IntegrationAPI.Model.RequestSurveyor
         public string accidentLng { get; set; }
         public string ISVIP { get; set; }
         public string remark { get; set; }
-        public int? claimTypeID { get; set; }
-        public int? subClaimTypeID { get; set; }
+        public string claimTypeID { get; set; }
+        public string subClaimtypeID { get; set; }
         public string empCode { get; set; }
         public string appointLat { get; set; }
         public string appointLong { get; set; }
