@@ -16,10 +16,10 @@ namespace DEVES.IntegrationAPI.Model.CLS
 
     public class CLSInquiryPersonalClientContentOutputModel : BaseContentOutputModel
     {
-        [JsonProperty(Order = 16)]
+        [JsonProperty(Order = 20)]
         public bool success { set; get; }
 
-        [JsonProperty(Order = 17)]
+        [JsonProperty(Order = 21)]
         public List<CLSInquiryPersonalClientOutputModel> data { set; get; }
     }
     public class CLSInquiryPersonalClientOutputModel : BaseDataModel

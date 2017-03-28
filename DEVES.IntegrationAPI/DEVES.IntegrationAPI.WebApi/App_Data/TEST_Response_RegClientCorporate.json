@@ -1,0 +1,17 @@
+﻿{
+  "code": "200",
+  "message": "SUCCESS",
+  "description": null,
+  "transactionId": "074c5443-9a74-4ac5-a3b6-865c653c60ab",
+  "transactionDateTime": "2017-03-28 11:49:16",
+  "data": [
+    {
+		"polisyClientId":"",
+		"cleansingId":"",
+		"crmClientId":"",
+		"corporateName1":"",
+		"corporateName2":"",
+		"corporateBranch":""
+	}
+  ]
+}

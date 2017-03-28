@@ -4,18 +4,18 @@ using System.Linq;
 using System.Web;
 using DEVES.IntegrationAPI.Model;
 using DEVES.IntegrationAPI.Model.InquiryClientMaster;
-using CLS=DEVES.IntegrationAPI.Model.CLS;
+using CLS = DEVES.IntegrationAPI.Model.CLS;
 using DEVES.IntegrationAPI.WebApi.Templates;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
-    public class TransformCLSInquiryPersonalClientContentOut_to_CrmInquiryClientMasterContentOut : BaseTransformer
+    public class TransformCLSInquiryCorporateClientContentOut_to_CrmInquiryClientMasterContentOut: BaseTransformer
     {
-        public override BaseDataModel TransformModel (Model.BaseDataModel input, BaseDataModel output)
+        public override BaseDataModel TransformModel(Model.BaseDataModel input, BaseDataModel output)
         {
-            CLS.CLSInquiryPersonalClientContentOutputModel srcContent = (CLS.CLSInquiryPersonalClientContentOutputModel)input;
-            CLS.CLSInquiryPersonalClientOutputModel src = srcContent.data.First<CLS.CLSInquiryPersonalClientOutputModel>();
-            CRMInquiryClientContentOutputModel trgtContent = (CRMInquiryClientContentOutputModel)output; 
+            CLS.CLSInquiryCorporateClientContentOutputModel srcContent = (CLS.CLSInquiryCorporateClientContentOutputModel)input;
+            CLS.CLSInquiryCorporateClientOutputModel src = srcContent.data.First<CLS.CLSInquiryCorporateClientOutputModel>();
+            CRMInquiryClientContentOutputModel trgtContent = (CRMInquiryClientContentOutputModel)output;
             CRMInquiryClientOutputDataModel trgt = trgtContent.data.First<CRMInquiryClientOutputDataModel>();
 
             trgt.generalHeader.cleansingId = src.cleansing_id;
@@ -26,7 +26,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             trgt.profileInfo.fullName = src.cls_full_name;
             trgt.profileInfo.salutationText = src.salutl;
             trgt.profileInfo.sex = src.cls_sex;
-            trgt.profileInfo.idCard = src.cls_citizen_id_new;
+            trgt.profileInfo.idTax = src.cls_citizen_id_new;
             trgt.profileInfo.occupationText = src.cls_occpcode;
 
             trgt.contactInfo.telephone1 = src.cltphone01;
