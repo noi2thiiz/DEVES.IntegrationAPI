@@ -42,7 +42,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             string uid = GetDomainName(contentModel.CurrentUserId);
             Model.EWI.EWIResponseContent ret = CallEWIService(ewiEndpointKeyClaimRegistration, input, uid);
             LocusClaimRegistrationDataOutputModel locusClaimRegOutput = new LocusClaimRegistrationDataOutputModel(ret.data);
-
+        
+            
             //+ Update CRM
             using (OrganizationServiceProxy crmSvc = GetCrmServiceProxy())
             {
@@ -85,6 +86,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 //}
 
             }
+            
 
             //+ Response
             ClaimRegistrationOutputModel output = new ClaimRegistrationOutputModel();

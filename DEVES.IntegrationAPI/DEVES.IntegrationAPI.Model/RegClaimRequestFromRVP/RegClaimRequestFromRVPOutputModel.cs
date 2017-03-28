@@ -38,13 +38,19 @@ namespace DEVES.IntegrationAPI.Model.RegClaimRequestFromRVP
 
     public class RegClaimRequestFromRVPDataOutputModel_Fail
     {
-        public RegClaimRequestFromRVPFieldErrors fieldErrors { get; set; }
+        public List<RegClaimRequestFromRVPFieldErrors> fieldErrors { get; set; }
     }
 
     public class RegClaimRequestFromRVPFieldErrors
     {
         public string name { get; set; }
         public string message { get; set; }
+
+        public RegClaimRequestFromRVPFieldErrors(string inName, string inMessage)
+        {
+            name = inName;
+            message = inMessage;
+        }
     }
 
 }

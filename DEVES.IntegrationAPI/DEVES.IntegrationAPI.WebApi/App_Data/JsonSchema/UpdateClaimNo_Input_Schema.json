@@ -4,10 +4,12 @@
   "properties": {
     "ticketNo": {
       "type": "string",
+      "minLength": 1,
       "maxLength": 50
     },
     "claimNotiNo": {
       "type": "string",
+      "minLength": 1,
       "maxLength": 15
     },
     "claimNo": {
@@ -20,10 +22,12 @@
     },
     "claimStatusCode": {
       "type": "string",
+      "minLength": 1,
       "maxLength": 5
     },
     "claimStatusDesc": {
       "type": "string",
+      "minLength": 1,
       "maxLength": 100
     }
   },

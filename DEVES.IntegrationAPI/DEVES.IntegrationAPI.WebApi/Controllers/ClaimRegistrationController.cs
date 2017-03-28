@@ -275,6 +275,8 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
          * หลังจากเรามี input header ที่ชื่อว่า content แล้ว 
          * Method นี้จะ wrap เข้ากับ header ของ EWI อีกทีครีบ
          **/
+        
+        /*
         private EWIResponseContent RegisterClaimOnLocus(string caseNo)
         {
 
@@ -291,14 +293,6 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 token = "",
                 content = locusInputModel
             };
-
-            /* 
-             * json format 
-             * username = "ClaimMotor",
-                password = "1234",
-                token = "",
-                content = locusInputModel
-             * */
             string jsonReqModel = JsonConvert.SerializeObject(reqModel , Formatting.Indented , new EWIDatetimeConverter() );
             
             HttpClient client = new HttpClient();
@@ -326,12 +320,14 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             //return new LocusClaimRegistrationOutputModel();
 
         }
-
+        */
         /*
          * Method นี้คือการ Return ผลลัพธ์ครับ (claimID) 
          * การทำงานคือจะต้องสร้าง object สำหรับเก็บค่า output มาก่อนแล้ว map value จาก json response เข้ากับ output ครับ
          * หลังจากนั้นก็ return ค่า
          **/
+
+        /*
         private ClaimRegistrationOutputModel HandleMessage(string valueText, ClaimRegistrationInputModel content)
         {
             //TODO: Do what you want
@@ -371,5 +367,6 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             string a = "{\"username\":\"ClaimMotor\",\"password\":\"1234\",\"token\":\"\",\"content\":{\"claimHeader\":{\"ticketNumber\":\"CAS201702-00003\",\"claimNotiNo\":\"201702-00005\",\"claimNotiRefer\":\"\",\"policyNo\":\"V0284555\",\"fleetCarNo\":1,\"policySeqNo\":9,\"renewalNo\":7,\"barcode\":\"2080004701062\",\"insureCardNo\":\"\",\"policyIssueDate\":\"20151102\",\"policyEffectiveDate\":\"20151115\",\"policyExpiryDate\":\"20170210\",\"policyProductTypeCode\":\"TP\",\"policyProductTypeName\":\"ประเภท 3\",\"policyGarageFlag\":\"N\",\"policyPaymentStatus\":\"N\",\"policyCarRegisterNo\":\"กร1170\",\"policyCarRegisterProv\": \"\",\"carChassisNo\":\"10801620088706\",\"carVehicleType\":\"110\",\"carVehicleModel\":\"MERCEDES BENZ S280\",\"carVehicleYear\":\"1972\",\"carVehicleBody\":\"SEDAN\",\"carVehicleSize\":\"5/2954.00\",\"policyDeduct\":0,\"vipCaseFlag\":\"N\",\"highLossCaseFlag\":\"N\",\"legalCaseFlag\":\"N\",\"claimNotiRemark\":\"-\",\"claimType\":\"I\"},\"claimInform\":{\"informerClientId\":\"11608685\",\"informerFullName\":\"ธีระเดช เลขาชินบุตร\",\"informerMobile\":\"0812345678\",\"informerPhoneNo\":\"\",\"driverClientId\":\"11608685\",\"driverFullName\":\"ธีระเดช เลขาชินบุตร\",\"driverMobile\":\"0812345678\",\"driverPhoneNo\":\"\",\"insuredClientId\":\"11608685\",\"insuredFullName\":\"\",\"insuredMobile\":\"\",\"insuredPhoneNo\":\"\",\"relationshipWithInsurer\":\"00\",\"currentCarRegisterNo\":\"กร1170\",\"currentCarRegisterProv\":\"\",\"informerOn\":\"09/02/2017 20:30:00\",\"accidentOn\":\"09/02/2017 20:00:00\",\"accidentDescCode\":\"\",\"numOfExpectInjury\":0,\"accidentPlace\":\"นวลจันทร์ เขต คลองเตย กรุงเทพมหานคร ประเทศไทย\",\"accidentLatitude\":\"13.742097\",\"accidentLongitude\":\"100.552975\",\"accidentProvn\":\"\",\"accidentDist\":\"\",\"sendOutSurveyorCode\":\"01\"},\"claimAssignSurv\":{\"surveyorCode\":\"\",\"surveyorClientNumber\":\"\",\"surveyorName\":\"สมชาย\",\"surveyorCompanyName\":\"บริษัท บริลเลี่ยน เซอร์เวย์ จำกัด (บางนา)\",\"surveyorCompanyMobile\":\"02-150-8844\",\"surveyorMobile\":\"\",\"surveyorType\":\"O\",\"reportAccidentResultDate\":null},\"claimSurvInform\":{\"accidentLegalResult\":\"\",n\"policeStation\":\"\",\"policeRecordId\":\"\",\"policeRecordDate\":null,\"policeBailFlag\": \"\",\"damageOfPolicyOwnerCar\":\"\",\"numOfTowTruck\":0,\"nameOfTowCompany\":\"\",\"detailOfTowEvent\":\"\",\"numOfAccidentInjury\":0,\"detailOfAccidentInjury\":\"\",\"numOfDeath\":0,\"detailOfDeath\":\"\",\"caseOwnerCode\":\"\",\"caseOwnerFullName\":\"\",\"accidentPartyInfo\":null}}}";
             return a;
         }
+        */
     }
 }

@@ -8,11 +8,11 @@ namespace DEVES.IntegrationAPI.Model.UpdateClaimInfo
 {
     public class UpdateClaimInfoOutputModel_Pass
     {
-        public int code { get; set; }
+        public string code { get; set; }
         public string message { get; set; }
         public string description { get; set; }
         public string transactionId { get; set; }
-        public DateTime transactionDateTime { get; set; }
+        public string transactionDateTime { get; set; }
         public UpdateClaimInfoDataOutputModel_Pass data { get; set; }
     }
 

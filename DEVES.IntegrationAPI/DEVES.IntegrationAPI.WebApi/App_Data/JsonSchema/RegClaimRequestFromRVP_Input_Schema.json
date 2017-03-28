@@ -5,6 +5,7 @@
 
     "rvpClaimNo": {
       "type": "string",
+      "minLength": 1,
       "maxLength": 20
     },
 
@@ -12,7 +13,7 @@
       "type": "object",
       "properties": {
         "crmPolicyDetailId": {
-          "type": "string",
+          "type": "string", 
           "maxLength": 40
         },
         "crmPolicyDetailCode": {
@@ -35,12 +36,18 @@
           "type": "string",
           "maxLength": 50
         },
+        "carChassisNo": {
+          "type": "string",
+          "maxLength": 30
+        },
         "currentCarRegisterNo": {
           "type": "string",
+          "minLength": 1,
           "maxLength": 20
         },
         "currentCarRegisterProv": {
           "type": "string",
+          "minLength": 1,
           "maxLength": 5
         },
         "insuredCleansingId": {
@@ -61,17 +68,8 @@
         }
       },
       "required": [
-        "crmPolicyDetailId",
-        "crmPolicyDetailCode",
-        "policyNo",
-        "renewalNo",
-        "fleetCarNo",
-        "barcode",
         "currentCarRegisterNo",
-        "currentCarRegisterProv",
-        "insuredClientType",
-        "insuredFullName",
-        "insuredClientId"
+        "currentCarRegisterProv"
       ]
     },
 
@@ -84,10 +82,12 @@
         },
         "driverFullName": {
           "type": "string",
+          "minLength": 1,
           "maxLength": 120
         },
         "driverClientId": {
           "type": "string",
+          "minLength": 1,
           "maxLength": 10
         },
         "driverMobile": {
@@ -110,14 +110,25 @@
       "properties": {
         "informerOn": {
           "type": "string",
+          "minLength": 1,
           "maxLength": 20
         },
         "accidentOn": {
           "type": "string",
+          "minLength": 1,
           "maxLength": 20
         },
         "accidentDescCode": {
           "type": "string",
+          "enum": [
+            "101",
+            "102",
+            "114",
+            "201",
+            "999"
+
+          ],
+          "minLength": 1,
           "maxLength": 100
         },
         "accidentDesc": {
@@ -125,7 +136,9 @@
           "maxLength": 2000
         },
         "numOfExpectInjury": {
-          "type": "integer"
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 20
         },
         "accidentLatitude": {
           "type": "string",
@@ -149,10 +162,25 @@
         },
         "claimType": {
           "type": "string",
+          "enum": [
+            "I",
+            "O"
+          ],
+          "minLength": 1,
           "maxLength": 1
         },
         "sendOutSurveyorCode": {
           "type": "string",
+          "enum": [
+            "01",
+            "02",
+            "03",
+            "04",
+            "05",
+            "06",
+            "07"
+          ],
+          "minLength": 2,
           "maxLength": 2
         },
         "reportAccidentResultDate": {
@@ -184,6 +212,14 @@
         },
         "accidentLegalResult": {
           "type": "string",
+          "enum": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5"
+          ],
+          "minLength": 1,
           "maxLength": 1
         },
         "numOfAccidentInjury": {
@@ -215,6 +251,11 @@
         },
         "policeBailFlag": {
           "type": "string",
+          "enum": [
+            "Y",
+            "N"
+          ],
+          "minLength": 1,
           "maxLength": 1
         },
         "numOfAccidentParty": {
