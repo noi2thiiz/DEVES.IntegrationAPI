@@ -24,6 +24,7 @@ namespace DEVES.IntegrationAPI.Model.RegClaimRequestFromRVP
         public string renewalNo { get; set; }
         public string fleetCarNo { get; set; }
         public string barcode { get; set; }
+        public string carChassisNo { get; set; }
         public string currentCarRegisterNo { get; set; }
         public string currentCarRegisterProv { get; set; }
         public string insuredCleansingId { get; set; }

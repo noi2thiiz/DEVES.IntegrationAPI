@@ -37,13 +37,19 @@ namespace DEVES.IntegrationAPI.Model.UpdateClaimNo
 
     public class UpdateClaimNoDataOutputModel_Fail
     {
-        public UpdateClaimNoFieldErrors fieldErrors { get; set; }
+        public List<UpdateClaimNoFieldErrors> fieldErrors { get; set; }
     }
 
     public class UpdateClaimNoFieldErrors
     {
         public string name { get; set; }
         public string message { get; set; }
+
+        public UpdateClaimNoFieldErrors(string n, string m)
+        {
+            name = n;
+            message = m;
+        }
     }
 
 }

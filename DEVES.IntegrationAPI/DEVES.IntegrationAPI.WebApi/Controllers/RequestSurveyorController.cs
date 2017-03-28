@@ -188,6 +188,9 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
 
             if (value == null)
             {
+                _logImportantMessage = "Error: Json format is invalid.";
+                output.eventID = _logImportantMessage;
+                _log.Error(_logImportantMessage);
                 return Request.CreateResponse<RequestSurveyorDataOutputModel>(output);
             }
 

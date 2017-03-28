@@ -1,23 +1,15 @@
 {
 	"$schema": "http://json-schema.org/draft-04/schema#",
-	"definitions": {
-		"yesNoFlag": {
-			"type": "string",
-			"enum": [
-				"Y",
-				"N"
-			],
-			"maxLength": 1
-		}
-	},
 	"type": "object",
 	"properties": {
 		"ticketNo": {
-			"type": "string",
+      "type": "string",
+      "minLength": 1,
 			"maxLength": 50
 		},
 		"claimNotiNo": {
-			"type": "string",
+      "type": "string",
+      "minLength": 1,
 			"maxLength": 15
 		},
 		"claimNo": {
@@ -25,40 +17,50 @@
 			"maxLength": 8
 		},
 		"claimStatusCode": {
-			"type": "string"
+      "type": "string",
+      "minLength": 1,
+			"maxLength": 15
 		},
 		"claimStatusDesc": {
-			"type": "string"
+      "type": "string",
+      "minLength": 1,
+			"maxLength": 100
 		},
 		"vipCaseFlag": {
-			"anyOf": [{
-					"$ref": "#/definitions/yesNoFlag"
-				}, {
-					"type": "null"
-				}
-			]
+      "type": "string",
+      "enum": [
+        "Y",
+        "N"
+      ],
+      "minLength": 1,
+			"maxLength": 1
 		},
-		"highlossCaseFlag": {
-			"anyOf": [{
-					"$ref": "#/definitions/yesNoFlag"
-				}, {
-					"type": "null"
-				}
-			]
+		"highLossCaseFlag": {
+			"type": "string",
+      "enum": [
+        "Y",
+        "N"
+      ],
+      "minLength": 1,
+			"maxLength": 1
 		},
 		"legalCaseFlag": {
-			"anyOf": [{
-					"$ref": "#/definitions/yesNoFlag"
-				}, {
-					"type": "null"
-				}
-			]
+			"type": "string",
+      "enum": [
+        "Y",
+        "N"
+      ],
+      "minLength": 1,
+			"maxLength": 1
 		}
 	},
 	"required": [
 		"ticketNo",
 		"claimNotiNo",
 		"claimStatusCode",
-		"claimStatusDesc"
+    "claimStatusDesc",
+    "vipCaseFlag",
+    "highLossCaseFlag",
+    "legalCaseFlag"
 	]
 }
