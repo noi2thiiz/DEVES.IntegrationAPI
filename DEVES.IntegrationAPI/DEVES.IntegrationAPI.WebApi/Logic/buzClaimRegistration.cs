@@ -19,10 +19,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         const string sqlcmd_Get_RegClaimInfo = "sp_CustomApp_RegClaimInfo_Incident";
         const string ewiEndpointKeyClaimRegistration = "EWI_ENDPOINT_ClaimRegistration";
 
-        public override BaseDataModel Execute( object value)
+        public override BaseContentOutputModel Execute(object input)
         {
             //+ Deserialize Input
-            ClaimRegistrationInputModel contentModel = DeserializeJson<ClaimRegistrationInputModel>(value.ToString());
+            ClaimRegistrationInputModel contentModel = DeserializeJson<ClaimRegistrationInputModel>(input.ToString());
 
             //+ Prepare input data model
             LocusClaimRegistrationInputModel data = new LocusClaimRegistrationInputModel();
@@ -30,17 +30,17 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             data.claimAssignSurv = new LocusClaimassignsurvModel();
             data.claimInform = new LocusClaiminformModel();
             data.claimSurvInform = new LocusClaimsurvinformModel();
-            BaseDataModel input = data;
+            BaseDataModel inputData = data;
 
             //+ Call SQL to get data
             List<CommandParameter> listParam = new List<CommandParameter>();
             listParam.Add(new CommandParameter("incidentId", contentModel.IncidentId ));
             listParam.Add(new CommandParameter("CurrentUserId", contentModel.CurrentUserId ));
-            FillModelUsingSQL(ref input , sqlcmd_Get_RegClaimInfo, listParam);
+            FillModelUsingSQL(ref inputData, sqlcmd_Get_RegClaimInfo, listParam);
 
             //+ Call Locus_RegisterClaim through ServiceProxy
             string uid = GetDomainName(contentModel.CurrentUserId);
-            Model.EWI.EWIResponseContent ret = CallEWIService(ewiEndpointKeyClaimRegistration, input, uid);
+            Model.EWI.EWIResponseContent ret = (Model.EWI.EWIResponseContent)CallEWIService<Model.EWI.EWIResponse>(ewiEndpointKeyClaimRegistration, inputData, uid);
             LocusClaimRegistrationDataOutputModel locusClaimRegOutput = new LocusClaimRegistrationDataOutputModel(ret.data);
 
             //+ Update CRM
@@ -87,10 +87,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             }
 
             //+ Response
+            ClaimRegistrationContentOutputModel contentOutput = new ClaimRegistrationContentOutputModel();
+            contentOutput.data = new List<ClaimRegistrationOutputModel>();
             ClaimRegistrationOutputModel output = new ClaimRegistrationOutputModel();
             output.claimID = locusClaimRegOutput.claimId;
             output.claimNo = locusClaimRegOutput.claimNo;
-            return output;
+            contentOutput.data.Add(output);
+            return contentOutput;
         }
     }
 }

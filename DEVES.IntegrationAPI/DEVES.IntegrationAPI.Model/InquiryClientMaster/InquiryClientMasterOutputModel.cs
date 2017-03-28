@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace DEVES.IntegrationAPI.Model.InquiryClientMaster
 {
-    class InquiryClientMasterOutputModel
+    public class InquiryClientMasterOutputModel : BaseContentOutputModel
     {
     }
 
-    public class InquiryClientMasterOutputModel_Pass
+    public class InquiryClientMasterOutputModel_Pass: BaseDataModel
     {
         public string code { get; set; }
         public string message { get; set; }
@@ -20,7 +20,7 @@ namespace DEVES.IntegrationAPI.Model.InquiryClientMaster
         public List<InquiryClientMasterDataOutputModel_Pass> data { get; set; }
     }
 
-    public class InquiryClientMasterDataOutputModel_Pass
+    public class InquiryClientMasterDataOutputModel_Pass: BaseDataModel
     {
         public GeneralHeaderModel generalHeader { get; set; }
         public ProfileInfoModel profileInfo { get; set; }
@@ -29,7 +29,7 @@ namespace DEVES.IntegrationAPI.Model.InquiryClientMaster
         public AsrhHeaderModel asrhHeader { get; set; }
     }
 
-    public class GeneralHeaderModel
+    public class GeneralHeaderModel: BaseDataModel
     {
         public string clientType { get; set; }
         public string roleCode { get; set; }
@@ -42,7 +42,7 @@ namespace DEVES.IntegrationAPI.Model.InquiryClientMaster
         public string sourceData { get; set; }
     }
 
-    public class ProfileInfoModel
+    public class ProfileInfoModel: BaseDataModel
     {
         public string name1 { get; set; }
         public string name2 { get; set; }

@@ -8,8 +8,8 @@ namespace DEVES.IntegrationAPI.Model.InquiryClientMaster
 {
     public class InquiryClientMasterInputModel : BaseDataModel
     {
-        ConditionHeaderModel conditionHeader;
-        ConditionDetailModel conditionDetail;
+        public ConditionHeaderModel conditionHeader;
+        public ConditionDetailModel conditionDetail;
     }
     public class ConditionHeaderModel : BaseDataModel
     {

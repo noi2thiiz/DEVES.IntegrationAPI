@@ -27,6 +27,9 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
 {
     public abstract class BaseCommand
     {
+        internal const string CONST_CODE_SUCCESS = "200";
+        internal const string CONST_CODE_FAILED = "500";
+
         private OrganizationServiceProxy _serviceProxy;
         private IOrganizationService _service;
 
@@ -35,8 +38,14 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
         private const string CONST_JSON_SCHEMA_FILE = "JSON_SCHEMA_{0}";
 
         //This is like the Main() function. And need to be implemented.
-        public abstract BaseDataModel Execute(object input);
+        public abstract Model.BaseContentOutputModel Execute(object input);
 
+        //internal Model.EWI.EWIResponse WrapModel(Model.BaseDataModel model)
+        //{
+        //    Model.EWI.EWIResponse res = new EWIResponse();
+        //    res.content = model;
+            
+        //}
 
         private bool ValidateJSON(string strJSON)
         {
@@ -44,7 +53,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             throw new NotImplementedException();
         }
 
-        internal EWIResponseContent CallEWIService(string EWIendpointKey, BaseDataModel JSON , string UID)
+        internal BaseContentOutputModel CallEWIService<T1>(string EWIendpointKey, BaseDataModel JSON, string UID) where T1 : BaseEWIResponse 
         {
             EWIRequest reqModel = new EWIRequest()
             {
@@ -74,9 +83,44 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             HttpResponseMessage response = client.SendAsync(request).Result;
             response.EnsureSuccessStatusCode();
 
-            EWIResponse ewiRes = response.Content.ReadAsAsync<EWIResponse>().Result;
-            EWIResponseContent output = ewiRes.content;
+            T1 ewiRes = response.Content.ReadAsAsync<T1>().Result;
+            BaseContentOutputModel output =  (BaseContentOutputModel)typeof(T1).GetProperty("content").GetValue(ewiRes);
             return output;
+        }
+
+        internal string CallEWIService(string EWIendpointKey, BaseDataModel JSON)
+        {
+            string UID = "ClaimMotor";
+            EWIRequest reqModel = new EWIRequest()
+            {
+                //user & password must be switch to get from calling k.Ton's API rather than fixed values.
+                username = "sysdynamic",
+                password = "REZOJUNtN04=",
+                uid = UID,
+                gid = UID,
+                token = GetLatestToken(),
+                content = JSON
+            };
+
+            string jsonReqModel = JsonConvert.SerializeObject(reqModel, Formatting.Indented, new EWIDatetimeConverter());
+
+            HttpClient client = new HttpClient();
+
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Add("Accept-Encoding", "utf-8");
+
+            // + ENDPOINT
+            string EWIendpoint = GetEWIEndpoint(EWIendpointKey);
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, EWIendpoint);
+            request.Content = new StringContent(jsonReqModel, System.Text.Encoding.UTF8, "application/json");
+
+            // เช็ค check reponse 
+            HttpResponseMessage response = client.SendAsync(request).Result;
+            response.EnsureSuccessStatusCode();
+
+            string strResult = response.Content.ReadAsStringAsync().Result;
+            return strResult;
         }
 
         internal T DeserializeJson<T>(string contentText)
@@ -213,7 +257,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
         internal OrganizationServiceProxy GetCrmServiceProxy()
         {
             using (var connection = new CrmServiceClient(ConfigurationManager.ConnectionStrings["CRM_DEVES"].ConnectionString))
-            {
+            { 
                 using (_serviceProxy = connection.OrganizationServiceProxy)
                 {
                     // This statement is required to enable early-bound type support.
@@ -281,5 +325,71 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             return CallFn_f_GetSystemUserByFieldInfo(UserId, ENUM_f_GetSystemUserByFieldInfo_Attr.EmployeeId);
         }
 
+
+        internal  bool IsOutputSuccess( BaseContentOutputModel content )
+        {
+            bool success=false;
+            if (content.code == "200")
+                success = true;
+            return success;
+        }
+
+        internal List<string> SearchCrmContactClientId(string cleansingId)
+        {
+            List<string> lstCrmClientId = new List<string>();
+            List<CommandParameter> lstParam = new List<CommandParameter>();
+            lstParam.Add(new CommandParameter("clientType", "P"));
+            lstParam.Add(new CommandParameter("cleansingId", cleansingId));
+
+            DataTable dt = CallSQLStoredProc("sp_CustomApp_GetCrmClientid_byCleansingId" ,  lstParam);
+            foreach (DataRow row in dt.Rows)
+            {
+                lstCrmClientId.Add(row[0].ToString());
+            }
+            return lstCrmClientId;
+
+            /* For performance, until we found the way to cache the ServiceProxy, we prefer SQL rather than Crm
+             * 
+            //using (OrganizationServiceProxy sp = GetCrmServiceProxy())
+            //{
+            //    ServiceContext sc = new ServiceContext(sp);
+            //    var q = from contacts in sc.ContactSet
+            //            where contacts.pfc_cleansing_cusormer_profile_code == cleansingId && contacts.StateCode == ContactState.Active
+            //            select contacts.pfc_crm_person_id;
+            //    List<string> lstCrmClientId = q.ToList<string>();
+            //    return lstCrmClientId;
+            //}
+            */
+        }
+        internal List<string> SearchCrmAccountClientId(string cleansingId)
+        {
+            List<string> lstCrmClientId = new List<string>();
+            List<CommandParameter> lstParam = new List<CommandParameter>();
+            lstParam.Add(new CommandParameter("clientType", "C"));
+            lstParam.Add(new CommandParameter("cleansingId", cleansingId));
+
+            DataTable dt = CallSQLStoredProc("sp_CustomApp_GetCrmClientid_byCleansingId", lstParam);
+            foreach (DataRow row in dt.Rows)
+            {
+                lstCrmClientId.Add(row[0].ToString());
+            }
+            return lstCrmClientId;
+
+            /* For performance, until we found the way to cache the ServiceProxy, we prefer SQL rather than Crm
+             * 
+            //using (OrganizationServiceProxy sp = GetCrmServiceProxy())
+            //{
+            //    ServiceContext sc = new ServiceContext(sp);
+            //    var q = from accounts in sc.AccountSet
+            //            where accounts.pfc_cleansing_cusormer_profile_code == cleansingId && accounts.StateCode == AccountState.Active
+            //            select accounts.AccountNumber; 
+            //    List<string> lstCrmClientId = q.ToList<string>();
+            //    return lstCrmClientId;
+            //}
+            */
+        }
+
+
     }
 }
+ 
