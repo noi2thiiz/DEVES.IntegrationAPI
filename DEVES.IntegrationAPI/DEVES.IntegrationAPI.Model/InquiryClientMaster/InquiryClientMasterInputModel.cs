@@ -6,28 +6,27 @@ using System.Threading.Tasks;
 
 namespace DEVES.IntegrationAPI.Model.InquiryClientMaster
 {
-    public class InquiryClientMasterInputModel
+    public class InquiryClientMasterInputModel : BaseDataModel
     {
-        public ConditionHeaderModel conditionHeader { get; set; }
-        public ConditionDetailModel conditionDetail { get; set; }
+        public ConditionHeaderModel conditionHeader;
+        public ConditionDetailModel conditionDetail;
+    }
+    public class ConditionHeaderModel : BaseDataModel
+    {
+        public String clientType { set; get; }
+        public String roleCode { set; get; }
+    }
+    public class ConditionDetailModel : BaseDataModel
+    {
+        public String cleansingId { set; get; }
+        public String polisyClientId { set; get; }
+        public String crmClientId { set; get; }
+        public String clientName1 { set; get; }
+        public String clientName2 { set; get; }
+        public String clientFullname { set; get; }
+        public String idCard { set; get; }
+        public String corporateBranch { set; get; }
+        public string emcsCode { set; get; }
     }
 
-    public class ConditionHeaderModel
-    {
-        public string clientType { get; set; }
-        public string roleCode { get; set; }
-    }
-
-    public class ConditionDetailModel
-    {
-        public string cleansingId { get; set; }
-        public string polisyClientId { get; set; }
-        public string crmClientId { get; set; }
-        public string clientName1 { get; set; }
-        public string clientName2 { get; set; }
-        public string clientFullname { get; set; }
-        public string idCard { get; set; }
-        public string corporateBranch { get; set; }
-        public string emcsCode { get; set; }
-    }
 }

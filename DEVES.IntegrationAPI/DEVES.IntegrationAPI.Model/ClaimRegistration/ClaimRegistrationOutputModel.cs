@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace DEVES.IntegrationAPI.Model.ClaimRegistration
 {
+    public class ClaimRegistrationContentOutputModel : BaseContentOutputModel
+    {
+        public List<ClaimRegistrationOutputModel> data { set; get; }
+    }
     public class ClaimRegistrationOutputModel: BaseDataModel
     {
         [CrmMapping(FieldName = "claimId", Source = ENUMDataSource.srcEWI)]
