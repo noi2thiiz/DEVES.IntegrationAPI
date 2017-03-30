@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -12,7 +13,7 @@ namespace DEVES.IntegrationAPI.Model.ASHR
     /// <summary>
     /// End Point: http://192.168.3.194/ServiceProxy/ClaimMotor/jsonservice/MOTOR_InquiryMasterASRH
     /// </summary>
-    public class InquiryMasterASRHDataModel : BaseDataModel
+    public class InquiryMasterASRHDataInputModel : BaseDataModel
     {
         public string vendorCode { get; set; }
         public string taxNo { get; set; }
@@ -22,11 +23,8 @@ namespace DEVES.IntegrationAPI.Model.ASHR
         public string fullName { get; set; }
         public string emcsCode { get; set; }
 
-     
     }
-    
-    
-    
+
     public class InquiryMasterASRHModel : BaseEWIResponseModel
     {
         [JsonProperty(Order = 10)]
@@ -78,4 +76,5 @@ namespace DEVES.IntegrationAPI.Model.ASHR
         public string assessorFlag { get; set; }
 
     }
+
 }
