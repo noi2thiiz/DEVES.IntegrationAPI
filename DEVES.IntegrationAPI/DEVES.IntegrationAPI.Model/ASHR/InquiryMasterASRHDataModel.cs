@@ -9,7 +9,6 @@ using DEVES.IntegrationAPI.Model.EWI;
 
 namespace DEVES.IntegrationAPI.Model.ASHR
 {
-
     /// <summary>
     /// End Point: http://192.168.3.194/ServiceProxy/ClaimMotor/jsonservice/MOTOR_InquiryMasterASRH
     /// </summary>
@@ -25,24 +24,26 @@ namespace DEVES.IntegrationAPI.Model.ASHR
 
     }
 
-    public class InquiryMasterASRHModel : BaseEWIResponseModel
+    public class InquiryMasterASRHContentOutputModel : BaseEWIResponseModel
     {
         [JsonProperty(Order = 10)]
-        public InquiryMasterASRHContentOutputModel content { set; get; }
+        public InquiryMasterASRHContentModel content { set; get; }
     }
 
    
 
-    public class InquiryMasterASRHContentOutputModel : BaseContentJsonServiceOutputModel
+    public class InquiryMasterASRHContentModel : BaseContentJsonServiceOutputModel
     {
         [JsonProperty(Order = 21)]
-        public InquiryMasterASRHContentASRHListCollectionModel ASRHListCollection { set; get; }
+        public List<InquiryMasterASRHContentASRHListCollectionDataOutputModel> ASRHListCollection { set; get; }
     }
 
-    public class InquiryMasterASRHContentASRHListCollectionModel
+    public class InquiryMasterASRHContentASRHListCollectionDataOutputModel
     {
-        public List<InquiryMasterASRHListOutputModel> ASRHList { set; get; }
+        public InquiryMasterASRHListOutputModel ASRHList { set; get; }
     }
+
+
     public class InquiryMasterASRHListOutputModel : BaseDataModel
     {
 
