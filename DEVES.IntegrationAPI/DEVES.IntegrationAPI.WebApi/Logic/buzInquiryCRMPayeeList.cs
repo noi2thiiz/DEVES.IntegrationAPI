@@ -23,7 +23,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             InquiryAPARPayeeListInputModel inqAPARIn = (InquiryAPARPayeeListInputModel)DataModelFactory.GetModel( typeof(InquiryAPARPayeeListInputModel) );
             inqAPARIn = (InquiryAPARPayeeListInputModel)TransformerFactory.TransformModel(inqCrmPayeeListIn, inqAPARIn);
             
-            CallDevesServiceProxy< CommonConstant. >
+            //CallDevesServiceProxy< CommonConstant. > 
 
             buzCrmInquiryClientMaster searchCleansing = new buzCrmInquiryClientMaster();
             BaseContentJsonProxyOutputModel contentSearchCleansing = (BaseContentJsonProxyOutputModel)searchCleansing.Execute(input);
