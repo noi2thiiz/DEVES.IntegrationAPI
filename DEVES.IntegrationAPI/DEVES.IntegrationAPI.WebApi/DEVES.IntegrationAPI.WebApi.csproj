@@ -300,6 +300,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Logic\buzClaimRegistration.cs" />
+    <Compile Include="Logic\buzCreateCrmClientInfo.cs" />
     <Compile Include="Logic\buzCrmInquiryClientMaster.cs" />
     <Compile Include="Logic\buzCrmInquiryCorporateClientMaster.cs" />
     <Compile Include="Logic\buzCrmInquiryPersonalClient.cs" />
