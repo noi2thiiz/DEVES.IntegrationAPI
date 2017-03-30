@@ -43,7 +43,6 @@ namespace DEVES.IntegrationAPI.Model.ASHR
         public InquiryMasterASRHListModel ASRHList { set; get; }
     }
 
-
     public class InquiryMasterASRHListModel : BaseDataModel
     {
 
