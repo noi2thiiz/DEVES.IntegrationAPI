@@ -29,12 +29,12 @@ namespace DEVES.IntegrationAPI.Model.APAR
     public class InquiryAPARPayeeContentOutputModel : BaseContentJsonServiceOutputModel
     {
         [JsonProperty(Order = 21)]
-        public InquiryAPARPayeeContentAparPayeeListCollectionModel aparPayeeListCollection { set; get; }
+        public List<InquiryAPARPayeeContentAparPayeeListCollectionModel> aparPayeeListCollection { set; get; }
     }
 
     public class InquiryAPARPayeeContentAparPayeeListCollectionModel
     {
-        public List<InquiryAPARPayeeListOutputModel> aparPayeeList { set; get; }
+        public InquiryAPARPayeeListOutputModel aparPayeeList { set; get; }
     }
     public class InquiryAPARPayeeListOutputModel : BaseDataModel
     {

@@ -20,7 +20,7 @@ namespace DEVES.IntegrationAPI.Model.Polisy400
         public int? backDay { set; get; }
     }
 
-    public class COMPInquiryClientMasterClientListModel : BaseDataModel
+    public class COMPInquiryClientMasterClientModel : BaseDataModel
     {
         public String clientType { set; get; }
 
@@ -90,12 +90,12 @@ namespace DEVES.IntegrationAPI.Model.Polisy400
     public class COMPInquiryClientMasterContentOutputModel : BaseContentJsonServiceOutputModel
     {
         [JsonProperty(Order = 21)]
-        public COMPInquiryClientMasterContentClientListCollectionModel clientListCollection { set; get; }
+        public List<COMPInquiryClientMasterContentClientListModel> clientListCollection { set; get; }
     }
 
-    public class COMPInquiryClientMasterContentClientListCollectionModel
+    public class COMPInquiryClientMasterContentClientListModel
     {
-        public List<COMPInquiryClientMasterClientListModel> clientList { set; get; }
+        public COMPInquiryClientMasterClientModel clientList { set; get; }
     }
 
 
