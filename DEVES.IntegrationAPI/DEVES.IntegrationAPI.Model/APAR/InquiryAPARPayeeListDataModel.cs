@@ -19,21 +19,26 @@ namespace DEVES.IntegrationAPI.Model.APAR
 
     
     }
+
+    public class InquiryAPARPayeeContentOutputModel : BaseContentJsonServiceOutputModel
+    {
+        [JsonProperty(Order = 10)]
+        public InquiryAPARPayeeContentOutputModel content { set; get; }
+
+
+    }
+
    
 
     public class InquiryAPARPayeeModel : BaseEWIResponseModel
     {
-        [JsonProperty(Order = 10)]
-        public InquiryAPARPayeeContentOutputModel content { set; get; }
+        [JsonProperty(Order = 21)]
+        public InquiryAPARPayeeContentAparPayeeListCollectionModel aparPayeeListCollection { set; get; }
     }
 
    
 
-    public class InquiryAPARPayeeContentOutputModel : BaseContentJsonServiceOutputModel
-    {
-        [JsonProperty(Order = 21)]
-        public InquiryAPARPayeeContentAparPayeeListCollectionModel aparPayeeListCollection { set; get; }
-    }
+
 
     public class InquiryAPARPayeeContentAparPayeeListCollectionModel
     {
