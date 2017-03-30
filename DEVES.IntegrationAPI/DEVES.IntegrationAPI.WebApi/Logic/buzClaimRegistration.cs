@@ -19,7 +19,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         const string sqlcmd_Get_RegClaimInfo = "sp_CustomApp_RegClaimInfo_Incident";
         const string ewiEndpointKeyClaimRegistration = "EWI_ENDPOINT_ClaimRegistration";
 
-        public override BaseContentOutputModel Execute(object input)
+        public override BaseDataModel Execute(object input)
         {
             //+ Deserialize Input
             ClaimRegistrationInputModel contentModel = DeserializeJson<ClaimRegistrationInputModel>(input.ToString());
@@ -40,7 +40,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             //+ Call Locus_RegisterClaim through ServiceProxy
             string uid = GetDomainName(contentModel.CurrentUserId);
-            Model.EWI.EWIResponseContent ret = (Model.EWI.EWIResponseContent)CallEWIService<Model.EWI.EWIResponse>(ewiEndpointKeyClaimRegistration, inputData, uid);
+            Model.EWI.EWIResponseContent ret = (Model.EWI.EWIResponseContent)CallDevesJsonProxy<Model.EWI.EWIResponse>(ewiEndpointKeyClaimRegistration, inputData, uid);
             LocusClaimRegistrationDataOutputModel locusClaimRegOutput = new LocusClaimRegistrationDataOutputModel(ret.data);
         
             

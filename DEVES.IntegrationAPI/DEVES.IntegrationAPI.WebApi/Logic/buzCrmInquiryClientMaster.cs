@@ -12,7 +12,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 {
     public class buzCrmInquiryClientMaster:BaseCommand
     {
-        public override BaseContentOutputModel Execute(object input)
+        public override BaseDataModel Execute(object input)
         {
             //+ Deserialize Input
             InquiryClientMasterInputModel contentModel = DeserializeJson<InquiryClientMasterInputModel>(input.ToString());
@@ -23,13 +23,20 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     cmd = new buzCrmInquiryPersonalClientMaster();
                     break;
                 case "C":
-                    cmd = new buzCrmInquiryCorporateClientMaster();
+                    if (contentModel.conditionHeader.roleCode == "G")
+                    {
+                        cmd = new buzCrmInquiryCorporateClientMaster();
+                    }
+                    else // A, S, R, H
+                    {
+                        throw new NotImplementedException("CrmInquiryClientMaster for A,S,R,H");
+                    }
                     break;
                 default:
                     break;
             }
 
-            BaseContentOutputModel res = cmd.Execute(input);
+            BaseContentJsonProxyOutputModel res = (BaseContentJsonProxyOutputModel)cmd.Execute(input);
             return res;
         }
     }

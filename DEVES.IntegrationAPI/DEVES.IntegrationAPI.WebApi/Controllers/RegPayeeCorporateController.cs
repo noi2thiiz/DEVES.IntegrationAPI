@@ -18,7 +18,5 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             var contentOutput = JsonConvert.DeserializeObject(data);
             return Request.CreateResponse(contentOutput);
         }
-
-
     }
 }

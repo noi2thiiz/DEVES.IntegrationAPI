@@ -8,7 +8,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
 {
     public class NullCommand : BaseCommand
     {
-        public override BaseContentOutputModel Execute(object input)
+        public override BaseDataModel Execute(object input)
         {
             throw new NotImplementedException();
         }

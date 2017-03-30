@@ -29,6 +29,8 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
     {
         internal const string CONST_CODE_SUCCESS = "200";
         internal const string CONST_CODE_FAILED = "500";
+        internal const string CONST_DEFAULT_UID = "uid";
+
 
         private OrganizationServiceProxy _serviceProxy;
         private IOrganizationService _service;
@@ -38,7 +40,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
         private const string CONST_JSON_SCHEMA_FILE = "JSON_SCHEMA_{0}";
 
         //This is like the Main() function. And need to be implemented.
-        public abstract Model.BaseContentOutputModel Execute(object input);
+        public abstract Model.BaseDataModel Execute(object input);
 
         //internal Model.EWI.EWIResponse WrapModel(Model.BaseDataModel model)
         //{
@@ -53,7 +55,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             throw new NotImplementedException();
         }
 
-        internal BaseContentOutputModel CallEWIService<T1>(string EWIendpointKey, BaseDataModel JSON, string UID) where T1 : BaseEWIResponse 
+        internal BaseContentJsonProxyOutputModel CallDevesJsonProxy<T1>(string EWIendpointKey, BaseDataModel JSON, string UID=CONST_DEFAULT_UID) where T1 : BaseEWIResponseModel 
         {
             EWIRequest reqModel = new EWIRequest()
             {
@@ -84,13 +86,14 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             response.EnsureSuccessStatusCode();
 
             T1 ewiRes = response.Content.ReadAsAsync<T1>().Result;
-            BaseContentOutputModel output =  (BaseContentOutputModel)typeof(T1).GetProperty("content").GetValue(ewiRes);
+            BaseContentJsonProxyOutputModel output =  (BaseContentJsonProxyOutputModel)typeof(T1).GetProperty("content").GetValue(ewiRes);
             return output;
         }
 
-        internal string CallEWIService(string EWIendpointKey, BaseDataModel JSON)
+        internal T2 CallDevesServiceProxy<T1, T2>(string EWIendpointKey, BaseDataModel JSON, string UID = CONST_DEFAULT_UID) 
+                                        where T1 : BaseEWIResponseModel 
+                                        //where T2 : BaseContentJsonProxyOutputModel, BaseContentJsonServiceOutputModel
         {
-            string UID = "ClaimMotor";
             EWIRequest reqModel = new EWIRequest()
             {
                 //user & password must be switch to get from calling k.Ton's API rather than fixed values.
@@ -119,9 +122,46 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             HttpResponseMessage response = client.SendAsync(request).Result;
             response.EnsureSuccessStatusCode();
 
-            string strResult = response.Content.ReadAsStringAsync().Result;
-            return strResult;
+            T1 ewiRes = response.Content.ReadAsAsync<T1>().Result;
+            T2 output = (T2)typeof(T1).GetProperty("content").GetValue(ewiRes);
+            return output;
         }
+
+
+        //internal string CallEWIService(string EWIendpointKey, BaseDataModel JSON)
+        //{
+        //    string UID = "ClaimMotor";
+        //    EWIRequest reqModel = new EWIRequest()
+        //    {
+        //        //user & password must be switch to get from calling k.Ton's API rather than fixed values.
+        //        username = "sysdynamic",
+        //        password = "REZOJUNtN04=",
+        //        uid = UID,
+        //        gid = UID,
+        //        token = GetLatestToken(),
+        //        content = JSON
+        //    };
+
+        //    string jsonReqModel = JsonConvert.SerializeObject(reqModel, Formatting.Indented, new EWIDatetimeConverter());
+
+        //    HttpClient client = new HttpClient();
+
+        //    client.DefaultRequestHeaders.Accept.Clear();
+        //    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        //    client.DefaultRequestHeaders.Add("Accept-Encoding", "utf-8");
+
+        //    // + ENDPOINT
+        //    string EWIendpoint = GetEWIEndpoint(EWIendpointKey);
+        //    HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, EWIendpoint);
+        //    request.Content = new StringContent(jsonReqModel, System.Text.Encoding.UTF8, "application/json");
+
+        //    // เช็ค check reponse 
+        //    HttpResponseMessage response = client.SendAsync(request).Result;
+        //    response.EnsureSuccessStatusCode();
+
+        //    string strResult = response.Content.ReadAsStringAsync().Result;
+        //    return strResult;
+        //}
 
         internal T DeserializeJson<T>(string contentText)
         {
@@ -326,7 +366,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
         }
 
 
-        internal  bool IsOutputSuccess( BaseContentOutputModel content )
+        internal  bool IsOutputSuccess( BaseContentJsonProxyOutputModel content )
         {
             bool success=false;
             if (content.code == "200")

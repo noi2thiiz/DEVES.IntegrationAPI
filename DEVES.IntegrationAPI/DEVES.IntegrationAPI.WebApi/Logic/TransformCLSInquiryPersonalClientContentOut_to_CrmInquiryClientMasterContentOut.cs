@@ -13,6 +13,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
     {
         public override BaseDataModel TransformModel (Model.BaseDataModel input, BaseDataModel output)
         {
+            /*
+             * ToDo:    Correct the case that there are many records input
+             *          1. Loop through the input, 
+             *          2. create a new output, 
+             *          3. transfer data from input to output
+            */
+
             CLS.CLSInquiryPersonalClientContentOutputModel srcContent = (CLS.CLSInquiryPersonalClientContentOutputModel)input;
             CLS.CLSInquiryPersonalClientOutputModel src = srcContent.data.First<CLS.CLSInquiryPersonalClientOutputModel>();
             CRMInquiryClientContentOutputModel trgtContent = (CRMInquiryClientContentOutputModel)output; 

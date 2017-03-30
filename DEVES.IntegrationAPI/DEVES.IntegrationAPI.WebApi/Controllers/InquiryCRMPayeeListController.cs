@@ -8,6 +8,8 @@ using System.Net.Http;
 using System.Web;
 using System.Web.Http;
 
+using DEVES.IntegrationAPI.WebApi.Logic;
+
 namespace DEVES.IntegrationAPI.WebApi.Controllers
 {
     public class InquiryCRMPayeeListController : ApiController
@@ -17,6 +19,13 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         private readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(InquiryCRMPayeeListController));
 
         public object Post([FromBody]object value)
+        {
+            buzInquiryCRMPayeeList cmd = new buzInquiryCRMPayeeList();
+            var content = cmd.Execute(value);
+            return Request.CreateResponse(content);
+        }
+
+        public object Put([FromBody]object value)
         {
 
             _log.InfoFormat("IP ADDRESS: {0}, HttpMethod: POST", CommonHelper.GetIpAddress());

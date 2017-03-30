@@ -18,7 +18,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
     {
         const string ewiEndpointKeyCLSInquiryCorporateClient = "EWI_ENDPOINT_CLSInquiryCorporateClient";
 
-        public override BaseContentOutputModel Execute(object input)
+        public override BaseDataModel Execute(object input)
         {
             CRMInquiryClientContentOutputModel crmInqContent = (CRMInquiryClientContentOutputModel)Model.DataModelFactory.GetModel(typeof(CRMInquiryClientContentOutputModel));
             crmInqContent.transactionDateTime = DateTime.Now;
@@ -33,7 +33,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                 //+ Call CLS_InquiryCLSPersonalClient through ServiceProxy
                 string uid = "CRMClaim";
-                CLSInquiryCorporateClientContentOutputModel retCLSInqCorpClient = (CLSInquiryCorporateClientContentOutputModel)CallEWIService<EWIResCLSInquiryCorporateClient>
+                CLSInquiryCorporateClientContentOutputModel retCLSInqCorpClient = (CLSInquiryCorporateClientContentOutputModel)CallDevesJsonProxy<EWIResCLSInquiryCorporateClient>
                                                                                         (ewiEndpointKeyCLSInquiryCorporateClient, clsCorpInput, uid);
 
                 //+ If Success then pour the data from Cleansing to contentOutputModel

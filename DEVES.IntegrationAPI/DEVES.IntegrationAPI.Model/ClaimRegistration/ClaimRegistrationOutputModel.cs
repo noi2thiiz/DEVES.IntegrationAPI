@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DEVES.IntegrationAPI.Model.ClaimRegistration
 {
-    public class ClaimRegistrationContentOutputModel : BaseContentOutputModel
+    public class ClaimRegistrationContentOutputModel : BaseContentJsonProxyOutputModel
     {
         public List<ClaimRegistrationOutputModel> data { set; get; }
     }

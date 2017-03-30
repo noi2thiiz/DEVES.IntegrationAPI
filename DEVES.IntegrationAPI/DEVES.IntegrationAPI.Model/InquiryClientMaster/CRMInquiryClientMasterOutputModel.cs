@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 namespace DEVES.IntegrationAPI.Model.InquiryClientMaster
 {
 
-    public class CRMInquiryClientContentOutputModel : BaseContentOutputModel
+    public class CRMInquiryClientContentOutputModel : BaseContentJsonProxyOutputModel
     {
         [JsonProperty(Order=20)]
         public List<CRMInquiryClientOutputDataModel> data { set; get; }
