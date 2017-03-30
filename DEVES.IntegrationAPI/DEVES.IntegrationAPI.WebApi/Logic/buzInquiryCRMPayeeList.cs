@@ -8,6 +8,8 @@ using Newtonsoft.Json;
 using DEVES.IntegrationAPI.Model;
 using DEVES.IntegrationAPI.Model.EWI;
 using DEVES.IntegrationAPI.Model.CLS;
+using DEVES.IntegrationAPI.Model.APAR;
+using DEVES.IntegrationAPI.Model.InquiryCRMPayeeList;
 using DEVES.IntegrationAPI.Model.InquiryClientMaster;
 using DEVES.IntegrationAPI.WebApi.Templates;
 
@@ -17,10 +19,16 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
     {
         public override BaseDataModel Execute(object input)
         {
+            InquiryCRMPayeeListInputModel inqCrmPayeeListIn = (InquiryCRMPayeeListInputModel)input;
+            InquiryAPARPayeeListInputModel inqAPARIn = (InquiryAPARPayeeListInputModel)DataModelFactory.GetModel( typeof(InquiryAPARPayeeListInputModel) );
+            inqAPARIn = (InquiryAPARPayeeListInputModel)TransformerFactory.TransformModel(inqCrmPayeeListIn, inqAPARIn);
+            
+            CallDevesServiceProxy< CommonConstant. >
+
             buzCrmInquiryClientMaster searchCleansing = new buzCrmInquiryClientMaster();
             BaseContentJsonProxyOutputModel contentSearchCleansing = (BaseContentJsonProxyOutputModel)searchCleansing.Execute(input);
 
-
+            contentSearchCleansing.code = CONST_CODE_SUCCESS;
 
             return contentSearchCleansing;
         }

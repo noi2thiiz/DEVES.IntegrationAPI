@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DEVES.IntegrationAPI.Model.InquiryCRMPayeeList
 {
-    public class InquiryCRMPayeeListInputModel
+    public class InquiryCRMPayeeListInputModel : BaseDataModel
     {
         public string clientType { get; set; }
         public string roleCode { get; set; }

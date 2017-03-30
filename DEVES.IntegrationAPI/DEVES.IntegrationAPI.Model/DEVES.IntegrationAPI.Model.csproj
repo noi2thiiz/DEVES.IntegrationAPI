@@ -82,6 +82,7 @@
   <ItemGroup>
     <Compile Include="AccidentPrilimSurveyorReport\AccidentPrilimSurveyorReportInputModel.cs" />
     <Compile Include="AccidentPrilimSurveyorReport\AccidentPrilimSurveyorReportOutputModel.cs" />
+    <Compile Include="APAR\InquiryAPARPayeeListDataModel.cs" />
     <Compile Include="AssignedSurveyor\AssignedSurveyorInputModel.cs" />
     <Compile Include="AssignedSurveyor\AssignedSurveyorOutputModel_Fail.cs" />
     <Compile Include="AssignedSurveyor\AssignedSurveyorOutputModel_Pass.cs" />

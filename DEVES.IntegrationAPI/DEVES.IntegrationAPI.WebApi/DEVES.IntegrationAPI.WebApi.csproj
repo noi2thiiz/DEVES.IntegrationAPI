@@ -305,6 +305,7 @@
     <Compile Include="Logic\buzCrmInquiryCorporateClientMaster.cs" />
     <Compile Include="Logic\buzCrmInquiryPersonalClient.cs" />
     <Compile Include="Logic\buzInquiryCRMPayeeList.cs" />
+    <Compile Include="Logic\CommonConstant.cs" />
     <Compile Include="Logic\TransformCLSInquiryCorporateClientContentOut_to_CrmInquiryClientMasterContentOut.cs" />
     <Compile Include="Logic\TransformCLSInquiryPersonalClientContentOut_to_CrmInquiryClientMasterContentOut.cs" />
     <Compile Include="Logic\TransformCOMPInquiryClientMasterContentOutputModel_to_CrmInquiryClientMasterContentOut.cs" />

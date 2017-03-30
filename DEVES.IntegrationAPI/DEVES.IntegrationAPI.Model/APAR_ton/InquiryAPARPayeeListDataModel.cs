@@ -15,6 +15,8 @@ namespace DEVES.IntegrationAPI.Model.APAR
         public string requester { get; set; }
         public string polisyClntnum { get; set; }
         public string fullName { get; set; }
+
+    
     }
    
 

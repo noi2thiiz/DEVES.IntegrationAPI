@@ -27,7 +27,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             try
             {
                 //+ Deserialize Input
-                InquiryClientMasterInputModel contentModel = DeserializeJson<InquiryClientMasterInputModel>(input.ToString());
+                InquiryClientMasterInputModel contentModel = (InquiryClientMasterInputModel) input ;// DeserializeJson<InquiryClientMasterInputModel>(input.ToString());
                 CLSInquiryCorporateClientInputModel clsCorpInput = new CLSInquiryCorporateClientInputModel();
                 clsCorpInput = (CLSInquiryCorporateClientInputModel)TransformerFactory.TransformModel(contentModel, clsCorpInput);
 
