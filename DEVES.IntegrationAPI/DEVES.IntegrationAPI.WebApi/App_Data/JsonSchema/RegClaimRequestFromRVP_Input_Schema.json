@@ -22,7 +22,7 @@
         },
         "policyNo": {
           "type": "string",
-          "maxLength": 10
+          "maxLength": 15
         },
         "renewalNo": {
           "type": "string",

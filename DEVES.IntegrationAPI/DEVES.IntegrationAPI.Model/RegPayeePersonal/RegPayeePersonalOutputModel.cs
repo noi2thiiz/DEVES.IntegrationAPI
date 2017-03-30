@@ -27,6 +27,15 @@ namespace DEVES.IntegrationAPI.Model.RegPayeePersonal
         public string sapVendorGroupCode { get; set; }
         public string personalName { get; set; }
         public string personalSurname { get; set; }
+
+        public RegPayeePersonalDataOutputModel_Pass()
+        {
+            polisyClientId = "";
+            sapVendorCode = "";
+            sapVendorGroupCode = "";
+            personalName = "";
+            personalSurname = "";
+        }
     }
 
     public class RegPayeePersonalOutputModel_Fail

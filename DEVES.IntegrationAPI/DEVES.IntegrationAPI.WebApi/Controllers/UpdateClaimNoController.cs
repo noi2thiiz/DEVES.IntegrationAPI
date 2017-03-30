@@ -232,24 +232,42 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 _serviceProxy = connection.OrganizationServiceProxy;
                 ServiceContext svcContext = new ServiceContext(_serviceProxy);
 
-                var query = from c in svcContext.IncidentSet
-                            where c.TicketNumber == content.ticketNo && c.pfc_claim_noti_number == content.claimNotiNo
-                            select c;
-                Incident incident = query.FirstOrDefault<Incident>();
-
-                _accountId = new Guid(incident.IncidentId.ToString());
-                Incident retrievedIncident = (Incident)_serviceProxy.Retrieve(Incident.EntityLogicalName, _accountId, new Microsoft.Xrm.Sdk.Query.ColumnSet(true));
-
+                // Create
                 try
                 {
+                    Incident incident = new Incident();
+                    incident.pfc_claim_number = content.claimNo;
+                    //incident.pfc_claim_zre
+                }
+                catch (Exception e)
+                {
+                    output.code = "501";
+                    output.message = "Create data PROBLEM";
+                    output.description = e.ToString();
+                    output.transactionId = "";
+                    output.transactionDateTime = DateTime.Now.ToString();
+                    output.data = null;
+
+                    return output;
+                }
+                // Update
+                try
+                {
+                    var query = from c in svcContext.IncidentSet
+                                where c.TicketNumber == content.ticketNo && c.pfc_claim_noti_number == content.claimNotiNo
+                                select c;
+                    Incident incident = query.FirstOrDefault<Incident>();
+
+                    _accountId = new Guid(incident.IncidentId.ToString());
+                    Incident retrievedIncident = (Incident)_serviceProxy.Retrieve(Incident.EntityLogicalName, _accountId, new Microsoft.Xrm.Sdk.Query.ColumnSet(true));
+
                     string DB_claimNumber = retrievedIncident.pfc_claim_number;
+                    string DB_claimId = retrievedIncident.pfc_locus_claim_id;
                     string DB_claimStatusCode = retrievedIncident.pfc_locus_claim_status_code;
                     string DB_claimStatusDesc = retrievedIncident.pfc_locus_claim_status_desc;
 
-                    // retrievedIncident.pfc_claimId = new EntityReference(content.claimId, _accountId); // look up form
-                    //retrievedIncident["pfc_claimId"] = new EntityReference(content.claimId, _accountId);
-
                     retrievedIncident.pfc_claim_number = content.claimNo;
+                    retrievedIncident.pfc_locus_claim_id = content.claimId; 
                     retrievedIncident.pfc_locus_claim_status_code = content.claimStatusCode;
                     retrievedIncident.pfc_locus_claim_status_desc = content.claimStatusDesc;
 

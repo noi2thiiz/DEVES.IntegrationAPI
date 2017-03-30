@@ -27,6 +27,15 @@ namespace DEVES.IntegrationAPI.Model.RegClientPersonal
         public string crmClientId { get; set; }
         public string personalName { get; set; }
         public string personalSurname { get; set; }
+
+        public RegClientPersonalDataOutputModel_Pass()
+        {
+            cleansingId = "";
+            polisyClientId = "";
+            crmClientId = "";
+            personalName = "";
+            personalSurname = "";
+        }
     }
 
     public class RegClientPersonalOutputModel_Fail

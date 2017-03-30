@@ -19,6 +19,9 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         private string _logImportantMessage;
         private readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(RegClaimRequestFromRVPController));
 
+        private QueryInfo q = new QueryInfo();
+        private System.Data.DataTable dt = new System.Data.DataTable();
+
         OrganizationServiceProxy _serviceProxy;
         private Guid _accountId;
 
@@ -223,6 +226,49 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
 
             _log.Info("HandleMessage");
 
+            dt = new System.Data.DataTable();
+
+            // Check number of policy that exec in stored 
+            try
+            {
+                dt = q.Queryinfo_InquiryPolicyMotorList(content.policyInfo.policyNo, content.policyInfo.carChassisNo, content.policyInfo.currentCarRegisterNo, content.policyInfo.currentCarRegisterProv);
+                
+                if(dt.Rows.Count == 0)
+                {
+                    output.code = "400";
+                    output.message = "พบปัญหาเกี่ยวกับการค้นหา Policy";
+                    output.description = "ไม่พบ Policy";
+                    output.transactionId = "";
+                    output.transactionDateTime = DateTime.Now.ToString();
+                    output.data = new RegClaimRequestFromRVPDataOutputModel_Pass();
+                    return output;
+
+                }
+                else if(dt.Rows.Count > 1)
+                {
+                    output.code = "400";
+                    output.message = "พบปัญหาเกี่ยวกับการค้นหา Policy";
+                    output.description = "พบ Policy มากกว่า 1 Policy";
+                    output.transactionId = "";
+                    output.transactionDateTime = DateTime.Now.ToString();
+                    output.data = null;
+
+                    return output;
+                }
+            }
+            catch (Exception e)
+            {
+                output.code = "500";
+                output.message = "Connect Stored Procedured Error";
+                output.description = e.ToString();
+                output.transactionId = "";
+                output.transactionDateTime = DateTime.Now.ToString();
+                output.data = null;
+
+                return output;
+            }
+
+            // create case, motor accident, motor accident party
             try
             {
                 var RegClaimRequestFromRVPOutput = new RegClaimRequestFromRVPDataOutputModel_Pass();
@@ -233,30 +279,30 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
 
                 try
                 {
-                    
+                    /*
                     // ยังไงก็ต้องสร้าง Case
                     Incident incidentCase = new Incident();
-                    // incidentCase.Title = ""; // มาจากการ Concast CaseType+Cate ตาม Business บนหน้าจอ
+                    incidentCase.Title = ""; // มาจากการ Concast CaseType+Cate ตาม Business บนหน้าจอ
                     incidentCase.CaseOriginCode = new OptionSetValue(100000002); // fix
-                                                                                 // incidentCase.pfc_case_vip = ""; // เป็นไปตาม Logic. ของหน้า Case ที่ว่า ถ้า Policy หรือ Customer เป็น VIP Case นั้นๆต้องเป็น VIP
-                                                                                 // incidentCase.pfc_policy_additionalId = ""; // เอา params.crmPolicyDetailId มาใช้หรือ หาจาก policyNo+renewalNo+fleetCarNo+barcodeเอา params.crmPolicyDetailId มาใช้หรือ หาจาก policyNo+renewalNo+fleetCarNo+barcode
-                                                                                 // incidentCase.pfc_policy_additional_number = ""; // (PolicyAdditional.pfc_policy_additional_name)
-                                                                                 // incidentCase.pfc_policyId = ""; // (policyAdditional.pfc_policyId)
-                                                                                 // incidentCase.pfc_policy_client_number = ""; // (Policy.pfc_cus_client_number)
-                                                                                 // incidentCase.pfc_policyId = ""; // (policyAdditional.pfc_policyId)
-                                                                                 // incidentCase.pfc_policy_client_number = ""; // (Policy.pfc_cus_client_number)
-                                                                                 // incidentCase.pfc_policy_number = ""; // (Policy.pfc_chdr_num), (PolicyAdditional.pfc_chdr_num)
-                                                                                 // incidentCase.pfc_policy_vip = ""; // (policyAdditional.pfc_policy_vip)
-                                                                                 // incidentCase.pfc_policy_mc_nmc = ""; // (Policy.pfc_policy_mc_nmc)
+                    incidentCase.pfc_case_vip = ""; // เป็นไปตาม Logic. ของหน้า Case ที่ว่า ถ้า Policy หรือ Customer เป็น VIP Case นั้นๆต้องเป็น VIP
+                    incidentCase.pfc_policy_additionalId = ""; // เอา params.crmPolicyDetailId มาใช้หรือ หาจาก policyNo+renewalNo+fleetCarNo+barcodeเอา params.crmPolicyDetailId มาใช้หรือ หาจาก policyNo+renewalNo+fleetCarNo+barcode
+                    incidentCase.pfc_policy_additional_number = ""; // (PolicyAdditional.pfc_policy_additional_name)
+                    incidentCase.pfc_policyId = ""; // (policyAdditional.pfc_policyId)
+                    incidentCase.pfc_policy_client_number = ""; // (Policy.pfc_cus_client_number)
+                    incidentCase.pfc_policyId = ""; // (policyAdditional.pfc_policyId)
+                    incidentCase.pfc_policy_client_number = ""; // (Policy.pfc_cus_client_number)
+                    incidentCase.pfc_policy_number = ""; // (Policy.pfc_chdr_num), (PolicyAdditional.pfc_chdr_num)
+                    incidentCase.pfc_policy_vip = ""; // (policyAdditional.pfc_policy_vip)
+                    incidentCase.pfc_policy_mc_nmc = ""; // (Policy.pfc_policy_mc_nmc)
                     incidentCase.pfc_current_reg_num = content.policyInfo.currentCarRegisterNo;
                     incidentCase.pfc_current_reg_num_prov = content.policyInfo.currentCarRegisterProv;
-                    // incidentCase.CaseTypeCode = ""; // fix: 2 ( Service Request )
-                    // incidentCase.pfc_categoryId = ""; // fix: (สินไหม (Motor)), ต้องหา CategoryCode ในการ Mapping, ห้าม Hardcode โดยใช้ GUID เด็ดขาด
-                    // incidentCase.pfc_sub_categoryId = ""; // fix: (แจ้งอุบัติเหตุรถยนต์ (ผ่าน บ.กลาง)), ต้องหา Sub CategoryCode ในการ Mapping, ห้าม Hardcode โดยใช้ GUID เด็ดขาด
+                    incidentCase.CaseTypeCode = ""; // fix: 2 ( Service Request )
+                    incidentCase.pfc_categoryId = ""; // fix: (สินไหม (Motor)), ต้องหา CategoryCode ในการ Mapping, ห้าม Hardcode โดยใช้ GUID เด็ดขาด
+                    incidentCase.pfc_sub_categoryId = ""; // fix: (แจ้งอุบัติเหตุรถยนต์ (ผ่าน บ.กลาง)), ต้องหา Sub CategoryCode ในการ Mapping, ห้าม Hardcode โดยใช้ GUID เด็ดขาด
                     incidentCase.pfc_source_data = new OptionSetValue(100000002); // fix
-                                                                                  // incidentCase.CustomerId = // เอา params.insuredCleansingId, insuredClientId + insuredClientType มาใช้หรือ จะเอาจาก pfc_policy.pfc_customerId ก็ได้
-                                                                                  // incidentCase.pfc_customer_vip = ""; // account/contact.pfc_customer_sensitive_level
-                                                                                  // incidentCase.pfc_customer_privilege = "";  // account/contact.pfc_customer_privilege_level
+                    incidentCase.CustomerId = // เอา params.insuredCleansingId, insuredClientId + insuredClientType มาใช้หรือ จะเอาจาก pfc_policy.pfc_customerId ก็ได้
+                    incidentCase.pfc_customer_vip = ""; // account/contact.pfc_customer_sensitive_level
+                    incidentCase.pfc_customer_privilege = "";  // account/contact.pfc_customer_privilege_level
                     incidentCase.pfc_notification_date = Convert.ToDateTime(content.claimInform.accidentOn);
                     incidentCase.pfc_accident_on = Convert.ToDateTime(content.claimInform.accidentOn);
                     incidentCase.pfc_accident_desc_code = content.claimInform.accidentDescCode;
@@ -265,13 +311,13 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                     incidentCase.pfc_accident_latitude = content.claimInform.accidentLatitude;
                     incidentCase.pfc_accident_longitude = content.claimInform.accidentLongitude;
                     incidentCase.pfc_accident_place = content.claimInform.accidentPlace;
-                    //incidentCase.pfc_informer_name = ""; // fix (Corperate)(บ.กลาง), ต้องหา Code หรือ Key ในการ Map กับ Corperate
-                    //incidentCase.pfc_driver_name = ""; // fix (Corperate)(บ.กลาง), ต้องหา Code หรือ Key ในการ Map กับ Corperate
+                    incidentCase.pfc_informer_name = ""; // fix (Corperate)(บ.กลาง), ต้องหา Code หรือ Key ในการ Map กับ Corperate
+                    incidentCase.pfc_driver_name = ""; // fix (Corperate)(บ.กลาง), ต้องหา Code หรือ Key ในการ Map กับ Corperate
                     incidentCase.pfc_driver_client_number = content.policyDriverInfo.driverClientId;
                     incidentCase.pfc_driver_mobile = content.policyDriverInfo.driverMobile;
                     incidentCase.pfc_relation_cutomer_accident_party = new OptionSetValue(100000000); // fix
-                                                                                                      // incidentCase.pfc_high_loss_case_flag = true; // เป็นไปตาม Logic. ใน Case ว่าในกรณีที่มีการใช้รถยก (Incident.pfc_num_of_tow_truck is not null and pfc_num_of_tow_truck != 100000000) ให้ Fix: 1 (เสียหาย)
-                                                                                                      // incidentCase.pfc_legal_case_flag = true; // not sure
+                    incidentCase.pfc_high_loss_case_flag = true; // เป็นไปตาม Logic. ใน Case ว่าในกรณีที่มีการใช้รถยก (Incident.pfc_num_of_tow_truck is not null and pfc_num_of_tow_truck != 100000000) ให้ Fix: 1 (เสียหาย)
+                    incidentCase.pfc_legal_case_flag = true; // not sure
                     incidentCase.pfc_claim_type = new OptionSetValue(Int32.Parse(content.claimInform.claimType));
                     incidentCase.pfc_send_out_surveyor = new OptionSetValue(Int32.Parse(content.claimInform.sendOutSurveyorCode));
                     incidentCase.pfc_isurvey_status = new OptionSetValue(100000099); // fix
@@ -284,34 +330,31 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                     incidentCase.pfc_num_of_death = new OptionSetValue(content.claimInform.numOfDeath);
                     incidentCase.pfc_excess_fee = content.claimInform.excessFee;
                     incidentCase.pfc_deductable_fee = content.claimInform.deductibleFee;
-                    // incidentCase.reportAccidentResultDate = content.claimInform.reportAccidentResultDate; // หา reportAccidentResultDate ไม่เจอ
-                    
+                    incidentCase.reportAccidentResultDate = content.claimInform.reportAccidentResultDate; // หา reportAccidentResultDate ไม่เจอ
 
-                    if (Int32.Parse(content.claimInform.numOfAccidentParty) > 0)
+                    // Motor Accident   
+                    pfc_motor_accident MotorAccident = new pfc_motor_accident();
+                    MotorAccident.pfc_motor_accident_name // ให้เป็นไปตาม Logic. ของหน้า Motor Accident
+                    MotorAccident.pfc_parent_caseId // ให้ผูกกับ Case ด้านบน
+                    MotorAccident.pfc_activity_date // ใช้ params.accidentOn ได้เลย
+                    MotorAccident.pfc_event_code // ให้เป็นไปตาม Logic. ของหน้า Motor Accident
+                    MotorAccident.pfc_event_sequence = 1;
+                    MotorAccident.pfc_accident_event_detail // accidentNatureDesc
+                    MotorAccident.pfc_motor_accident_parties_sum = Int32.Parse(content.claimInform.numOfAccidentParty);
+                    MotorAccident.pfc_ref_rvp_claim_no = content.rvpCliamNo;
+                    MotorAccident.pfc_motor_accident_parties_name // ให้เป็นไปตาม Logic. ของหน้า Motor Accident Parties
+
+                    */
+                    if (Int32.Parse(content.claimInform.numOfAccidentParty) == 0)
                     {
-                        incidentCase.pfc_motor_accident_sum = 0; // fix: 1 หาก params.numOfAccidentParty มีมากกว่า 0
-                        // _serviceProxy.Create(incidentCase);
+                        //incidentCase.pfc_motor_accident_sum = 0; // fix: 1 หาก params.numOfAccidentParty มีมากกว่า 0
+                        
                     }
 
                     else
                     {
                         // Create 3 un 
-                        incidentCase.pfc_motor_accident_sum = 1;
-
-                        // Motor Accident   
-                        pfc_motor_accident MotorAccident = new pfc_motor_accident();
-                        //MotorAccident.pfc_motor_accident_name // ให้เป็นไปตาม Logic. ของหน้า Motor Accident
-                        //MotorAccident.pfc_parent_caseId // ให้ผูกกับ Case ด้านบน
-                        //MotorAccident.pfc_activity_date // ใช้ params.accidentOn ได้เลย
-                        //MotorAccident.pfc_event_code // ให้เป็นไปตาม Logic. ของหน้า Motor Accident
-                        MotorAccident.pfc_event_sequence = 1;
-                        //MotorAccident.pfc_accident_event_detail // accidentNatureDesc
-                        MotorAccident.pfc_motor_accident_parties_sum = Int32.Parse(content.claimInform.numOfAccidentParty);
-                        //MotorAccident.pfc_ref_rvp_claim_no = content.rvpCliamNo;
-                        //MotorAccident.pfc_motor_accident_parties_name // ให้เป็นไปตาม Logic. ของหน้า Motor Accident Parties
-
-                        //_serviceProxy.Create(incidentCase);
-                        //_serviceProxy.Create(MotorAccident);
+                        //incidentCase.pfc_motor_accident_sum = 1; // fix: 1 หาก params.numOfAccidentParty มีมากกว่า 0
 
                         // Motor Accident Parties <List>
                         pfc_motor_accident_parties MotorAccidentParties = new pfc_motor_accident_parties();
@@ -337,26 +380,30 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                                 MotorAccidentParties.pfc_ref_rvp_parties_seq
                                 */
 
-                            // value in array json input
-                            //content.accidentPartyInfo[i].rvpAccidentPartySeq
-                            //content.accidentPartyInfo[i].accidentPartyFullname
-                            //content.accidentPartyInfo[i].accidentPartyPhone
-                            //content.accidentPartyInfo[i].accidentPartyCarPlateNo
-                            //content.accidentPartyInfo[i].accidentPartyCarPlateProv
-                            //content.accidentPartyInfo[i].accidentPartyInsuranceCompany
-                            //content.accidentPartyInfo[i].accidentPartyPolicyNumber
-                            //content.accidentPartyInfo[i].accidentPartyPolicyType
-                            //MotorAccidentParties
-                            
+                    // value in array json input
+                    //content.accidentPartyInfo[i].rvpAccidentPartySeq
+                    //content.accidentPartyInfo[i].accidentPartyFullname
+                    //content.accidentPartyInfo[i].accidentPartyPhone
+                    //content.accidentPartyInfo[i].accidentPartyCarPlateNo
+                    //content.accidentPartyInfo[i].accidentPartyCarPlateProv
+                    //content.accidentPartyInfo[i].accidentPartyInsuranceCompany
+                    //content.accidentPartyInfo[i].accidentPartyPolicyNumber
+                    //content.accidentPartyInfo[i].accidentPartyPolicyType
+                    //MotorAccidentParties
+
+                    
                         }
                         
-                        _serviceProxy.Create(MotorAccidentParties);
+                        //_serviceProxy.Create(MotorAccidentParties);
+                        
                     }
-                    
+                    //_serviceProxy.Create(incidentCase);
+                    //_serviceProxy.Create(MotorAccident);
 
                     // 2. execute stored
 
                     // 3. update vaule to crm form
+
 
                 }
                 catch (Exception e)
