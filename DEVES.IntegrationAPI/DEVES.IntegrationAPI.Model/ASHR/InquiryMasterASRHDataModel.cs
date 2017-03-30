@@ -24,7 +24,7 @@ namespace DEVES.IntegrationAPI.Model.ASHR
 
     }
 
-    public class InquiryMasterASRHContentOutputModel : BaseEWIResponseModel
+    public class InquiryMasterASRHOutputModel : BaseEWIResponseModel
     {
         [JsonProperty(Order = 10)]
         public InquiryMasterASRHContentModel content { set; get; }
@@ -35,16 +35,16 @@ namespace DEVES.IntegrationAPI.Model.ASHR
     public class InquiryMasterASRHContentModel : BaseContentJsonServiceOutputModel
     {
         [JsonProperty(Order = 21)]
-        public List<InquiryMasterASRHContentASRHListCollectionDataOutputModel> ASRHListCollection { set; get; }
+        public List<InquiryMasterASRHContentASRHListCollectionDataModel> ASRHListCollection { set; get; }
     }
 
-    public class InquiryMasterASRHContentASRHListCollectionDataOutputModel
+    public class InquiryMasterASRHContentASRHListCollectionDataModel
     {
-        public InquiryMasterASRHListOutputModel ASRHList { set; get; }
+        public InquiryMasterASRHListModel ASRHList { set; get; }
     }
 
 
-    public class InquiryMasterASRHListOutputModel : BaseDataModel
+    public class InquiryMasterASRHListModel : BaseDataModel
     {
 
         //"vendorCode": "10108819",
