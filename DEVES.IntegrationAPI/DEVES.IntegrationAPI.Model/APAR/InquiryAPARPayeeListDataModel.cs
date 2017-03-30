@@ -33,7 +33,7 @@ namespace DEVES.IntegrationAPI.Model.APAR
     public class InquiryAPARPayeeModel : BaseEWIResponseModel
     {
         [JsonProperty(Order = 21)]
-        public InquiryAPARPayeeContentAparPayeeListCollectionModel aparPayeeListCollection { set; get; }
+        public List<InquiryAPARPayeeContentAparPayeeListCollectionModel> aparPayeeListCollection { set; get; }
     }
 
    
@@ -42,7 +42,7 @@ namespace DEVES.IntegrationAPI.Model.APAR
 
     public class InquiryAPARPayeeContentAparPayeeListCollectionModel
     {
-        public List<InquiryAPARPayeeListOutputModel> aparPayeeList { set; get; }
+        public InquiryAPARPayeeListOutputModel aparPayeeList { set; get; }
     }
     public class InquiryAPARPayeeListOutputModel : BaseDataModel
     {

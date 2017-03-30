@@ -19,16 +19,34 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
     {
         public override BaseDataModel Execute(object input)
         {
-            InquiryCRMPayeeListInputModel inqCrmPayeeListIn = (InquiryCRMPayeeListInputModel)input;
-            InquiryAPARPayeeListInputModel inqAPARIn = (InquiryAPARPayeeListInputModel)DataModelFactory.GetModel( typeof(InquiryAPARPayeeListInputModel) );
-            inqAPARIn = (InquiryAPARPayeeListInputModel)TransformerFactory.TransformModel(inqCrmPayeeListIn, inqAPARIn);
-            
-            //CallDevesServiceProxy< CommonConstant. > 
+            CRMInquiryPayeeContentOutputModel crmInqPayeeOut = new CRMInquiryPayeeContentOutputModel();
+            try
+            {
 
-            buzCrmInquiryClientMaster searchCleansing = new buzCrmInquiryClientMaster();
-            BaseContentJsonProxyOutputModel contentSearchCleansing = (BaseContentJsonProxyOutputModel)searchCleansing.Execute(input);
+                InquiryCRMPayeeListInputModel inqCrmPayeeListIn = (InquiryCRMPayeeListInputModel)input;
+                InquiryAPARPayeeListInputModel inqAPARIn = (InquiryAPARPayeeListInputModel)DataModelFactory.GetModel(typeof(InquiryAPARPayeeListInputModel));
+                inqAPARIn = (InquiryAPARPayeeListInputModel)TransformerFactory.TransformModel(inqCrmPayeeListIn, inqAPARIn);
 
-            contentSearchCleansing.code = CONST_CODE_SUCCESS;
+                InquiryAPARPayeeContentOutputModel inqAPAROut = CallDevesServiceProxy<InquiryAPARPayeeModel, InquiryAPARPayeeContentOutputModel>(CommonConstant.ewiEndpointKeyClaimRegistration, inqAPARIn);
+                if (inqAPAROut != null)
+                {
+                    if (inqAPAROut.aparPayeeListCollection.Count > 0)
+                    {
+
+                    }
+                }
+
+
+                buzCrmInquiryClientMaster searchCleansing = new buzCrmInquiryClientMaster();
+                BaseContentJsonProxyOutputModel contentSearchCleansing = (BaseContentJsonProxyOutputModel)searchCleansing.Execute(input);
+
+                contentSearchCleansing.code = CONST_CODE_SUCCESS;
+
+            }
+            catch (Exception e)
+            {
+
+            }
 
             return contentSearchCleansing;
         }

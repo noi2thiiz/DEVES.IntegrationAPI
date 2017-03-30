@@ -22,7 +22,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             */
 
             COMPInquiryClientMasterContentOutputModel srcContent = (COMPInquiryClientMasterContentOutputModel)input;
-            COMPInquiryClientMasterClientListModel src = srcContent.clientListCollection.clientList.First<COMPInquiryClientMasterClientListModel>();
+            COMPInquiryClientMasterClientModel src = srcContent.clientListCollection.First().clientList;
             CRMInquiryClientContentOutputModel trgtContent = (CRMInquiryClientContentOutputModel)output;
             CRMInquiryClientOutputDataModel trgt = trgtContent.data.First<CRMInquiryClientOutputDataModel>();
 
