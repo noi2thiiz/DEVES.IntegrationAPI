@@ -21,18 +21,31 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
         public static BaseTransformer GetTransformer( Type inputType , Type outputType )
         {
             BaseTransformer t = new NullTransformer();
-            if (inputType == typeof(Model.InquiryClientMaster.InquiryClientMasterInputModel) && outputType == typeof(Model.CLS.CLSInquiryPersonalClientInputModel))
+            if (inputType == typeof(Model.InquiryClientMaster.InquiryClientMasterInputModel) )
             {
-                t = new TransformCRMInquiryCRMClientMasterInput_to_CLSInquiryCLSPersonalClientInput();
+                if (outputType == typeof(Model.CLS.CLSInquiryPersonalClientInputModel))
+                {
+                    t = new TransformCRMInquiryCRMClientMasterInput_to_CLSInquiryCLSPersonalClientInput();
+                }
+                else if (outputType == typeof(Model.CLS.CLSInquiryCorporateClientInputModel))
+                {
+                    t = new TransformCRMInquiryCRMClientMasterInput_to_CLSInquiryCorporateClientInputModel();
+                }
+                else if (outputType == typeof(Model.Polisy400.COMPInquiryClientMasterInputModel))
+                {
+                    t = new TransformCRMInquiryCRMClientMasterInput_to_COMPInquiryClientMasterInput();
+                }
+
             }
             else if (inputType == typeof(Model.CLS.CLSInquiryPersonalClientContentOutputModel) && outputType == typeof(Model.InquiryClientMaster.CRMInquiryClientContentOutputModel))
             {
                 t = new TransformCLSInquiryPersonalClientContentOut_to_CrmInquiryClientMasterContentOut();
             }
-            else if (inputType == typeof(Model.InquiryClientMaster.InquiryClientMasterInputModel) && outputType == typeof(Model.CLS.CLSInquiryCorporateClientInputModel))
+            else if (inputType == typeof(Model.Polisy400.COMPInquiryClientMasterContentOutputModel) && outputType == typeof(Model.InquiryClientMaster.CRMInquiryClientContentOutputModel))
             {
-                t = new TransformCRMInquiryCRMClientMasterInput_to_CLSInquiryCorporateClientInputModel();
+                t = new TransformCOMPInquiryClientMasterContentOutputModel_to_CrmInquiryClientMasterContentOut();
             }
+
             return t;
         }
     }

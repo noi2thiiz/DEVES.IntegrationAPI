@@ -106,6 +106,7 @@
     <Compile Include="InquiryConsultingHistory\InquiryConsultingHistoryOutputModel.cs" />
     <Compile Include="InquiryConsultingHistory\InquiryConsultingHistoryInputModel.cs" />
     <Compile Include="InquiryCRMPayeeList\InquiryCRMPayeeListInputModel.cs" />
+    <Compile Include="InquiryCRMPayeeList\InquiryCrmPayeeListModels.cs" />
     <Compile Include="InquiryCRMPayeeList\InquiryCRMPayeeListOutputModel.cs" />
     <Compile Include="InquiryPolicyMotorList\InquiryPolicyMotorListInputModel.cs" />
     <Compile Include="InquiryPolicyMotorList\InquiryPolicyMotorListOutputModel.cs" />

@@ -22,6 +22,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             trgt.fullName = src.conditionDetail.clientFullname;
             trgt.idcard = src.conditionDetail.idCard;
             trgt.branchCode = src.conditionDetail.corporateBranch;
+            trgt.backDay = 3;
 
             return output;
         }

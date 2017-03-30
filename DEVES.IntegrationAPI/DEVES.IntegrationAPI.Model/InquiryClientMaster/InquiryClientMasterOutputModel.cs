@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DEVES.IntegrationAPI.Model.InquiryClientMaster
 {
-    public class InquiryClientMasterOutputModel : BaseContentOutputModel
+    public class InquiryClientMasterOutputModel : BaseContentJsonProxyOutputModel
     {
     }
 

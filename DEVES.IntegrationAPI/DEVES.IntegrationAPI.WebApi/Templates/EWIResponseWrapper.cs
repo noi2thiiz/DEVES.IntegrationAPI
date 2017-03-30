@@ -8,11 +8,11 @@ using DEVES.IntegrationAPI.Model;
 
 namespace DEVES.IntegrationAPI.WebApi.Templates
 {
-    public class EWIResponseWrapper: BaseEWIResponse
+    public class EWIResponseWrapper: BaseEWIResponseModel
     {
         public object content { set; get; }
 
-        public EWIResponseWrapper( EWIRequest req , BaseContentOutputModel contentModel)
+        public EWIResponseWrapper( EWIRequest req , BaseContentJsonProxyOutputModel contentModel)
         {
             this.content = content;
             this.username = req.username;

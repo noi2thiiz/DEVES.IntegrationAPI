@@ -28,6 +28,10 @@ namespace DEVES.IntegrationAPI.Model
                 crmInqClient.data.Add(data);
                 o = crmInqClient;
             }
+            else
+            {
+                throw new NotImplementedException("GetModel(T) for type<T>:" + t.Name );
+            }
 
 
             return o;

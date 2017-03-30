@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace DEVES.IntegrationAPI.Model.EWI
 {
-    public class BaseEWIResponse
+    public class BaseEWIResponseModel
     {
         [JsonProperty(Order = 1)]
         public string username { get; set; }
@@ -34,7 +34,7 @@ namespace DEVES.IntegrationAPI.Model.EWI
         public string hostscreen { get; set; }
     }
 
-    public class EWIResponse: BaseEWIResponse
+    public class EWIResponse: BaseEWIResponseModel
     {
         //public string gid { get; set; }
         //public string uid { get; set; }
@@ -78,7 +78,7 @@ namespace DEVES.IntegrationAPI.Model.EWI
     }
 
 
-    public class EWIResponseContent : BaseContentOutputModel
+    public class EWIResponseContent : BaseContentJsonProxyOutputModel
     {
         //public string code { get; set; }
         //public string message { get; set; }

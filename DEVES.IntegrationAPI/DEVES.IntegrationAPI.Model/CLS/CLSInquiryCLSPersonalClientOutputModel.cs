@@ -8,13 +8,13 @@ using DEVES.IntegrationAPI.Model.EWI;
 
 namespace DEVES.IntegrationAPI.Model.CLS
 {
-    public class EWIResCLSInquiryPersonalClient : BaseEWIResponse
+    public class EWIResCLSInquiryPersonalClient : BaseEWIResponseModel
     {
         [JsonProperty(Order = 10)]
         public CLSInquiryPersonalClientContentOutputModel content { set; get; }
     }
 
-    public class CLSInquiryPersonalClientContentOutputModel : BaseContentOutputModel
+    public class CLSInquiryPersonalClientContentOutputModel : BaseContentJsonProxyOutputModel
     {
         [JsonProperty(Order = 20)]
         public bool success { set; get; }
@@ -45,7 +45,7 @@ namespace DEVES.IntegrationAPI.Model.CLS
         public String cls_vip { set; get; }
         public String cls_tier { set; get; }
         public String cls_occpcode { set; get; }
-        public String cls_start_date { set; get; }
+        public DateTime? cls_start_date { set; get; }
         public String crm_ref_code1 { set; get; }
 
         public List<CLSAddressListsCollectionModel> addressListsCollection { set; get; }
