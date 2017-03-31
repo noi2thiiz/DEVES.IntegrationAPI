@@ -1,0 +1,95 @@
+﻿{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "definitions": {
+        "EnumClientType": {
+            "type": "string",
+            "enum": [
+                "P",
+                "C"
+            ],
+            "maxLength": 1
+        },
+        "EnumClientRole": {
+            "type": "string",
+            "enum": [
+                "G",
+                "A",
+                "S",
+                "R",
+                "H"
+            ],
+            "maxLength": 1
+        },
+        "yesNoFlag": {
+            "type": "string",
+            "enum": [
+                "Y",
+                "N"
+            ],
+            "maxLength": 1
+        },
+        "zeroOneFlag": {
+            "type": "string",
+            "enum": [
+                "0",
+                "1"
+            ],
+            "maxLength": 1
+        },
+        "iOFlag": {
+            "type": "string",
+            "enum": [
+                "I",
+                "O"
+            ],
+            "maxLength": 1
+        },
+        "dateTime": {
+            "type": "string",
+            "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}",
+            "minLength": 19,
+            "maxLength": 19
+        },
+        "shortDateTime": {
+            "type": "string",
+            "pattern": "[0-9]{4}[0-9]{2}[0-9]{2}",
+            "minLength": 8,
+            "maxLength": 8
+        },
+        "generalDateTime": {
+            "type": "string",
+            "pattern": "[0-9]{2}\/[0-9]{2}\/[0-9]{4} [0-9]{2}:[0-9]{2}:[0-9]{2}",
+            "minLength": 19,
+            "maxLength": 19
+        }
+    },
+    "type": "object",
+    "properties": {
+          "clientType": {
+            "$ref": "#/definitions/EnumClientType"
+          },
+          "roleCode": {
+            "$ref": "#/definitions/EnumClientRole"
+          },
+          "polisyClientId": {
+            "type": "string","maxLength": 8
+          },
+          "sapVendorCode": {
+            "type": "string","maxLength": 10
+          },
+          "fullname": {
+            "type": "string","maxLength": 100
+          },
+          "taxNo": {
+            "type": "string","maxLength": 24
+          },
+          "taxBranchCode": {
+            "type": "string","maxLength": 18
+          },
+          "emcsCode": {
+            "type": "string",
+            "maxLength": 10
+          }
+                
+	}
+}
