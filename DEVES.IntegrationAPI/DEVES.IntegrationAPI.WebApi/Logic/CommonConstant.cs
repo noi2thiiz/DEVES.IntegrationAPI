@@ -12,7 +12,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         public const string ewiEndpointKeyCOMPInquiryClient = "EWI_ENDPOINT_COMPInquiryClientMaster";
         public const string ewiEndpointKeyLOCUSClaimRegistration = "EWI_ENDPOINT_ClaimRegistration";
         public const string ewiEndpointKeySAPInquiryVendor = "EWI_ENDPOINT_SAPInquiryVendor";
-
+        public const string ewiEndpointKeyMOTORInquiryMasterASRH = "EWI_ENDPOINT_MOTORInquiryMasterASRH";
+        
 
         public const string sqlcmd_Get_RegClaimInfo = "sp_CustomApp_RegClaimInfo_Incident";
 
