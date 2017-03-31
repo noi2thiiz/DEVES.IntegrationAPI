@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DEVES.IntegrationAPI.Model.RegClientCorporate
 {
-    public class RegClientCorporateInputModel
+    public class RegClientCorporateInputModel : BaseDataModel
     {
         public GeneralHeaderModel generalHeader { get; set; }
         public ProfileHeaderModel profileHeader { get; set; }
@@ -15,17 +15,21 @@ namespace DEVES.IntegrationAPI.Model.RegClientCorporate
         public AsrhHeaderModel asrhHeader { get; set; }
     }
 
-    public class GeneralHeaderModel
+    public class GeneralHeaderModel : BaseDataModel
     {
         public string roleCode { get; set; }
         public string cleansingId { get; set; }
         public string polisyClientId { get; set; }
         public string crmClientId { get; set; }
         public string clientAdditionalExistFlag { get; set; }
+        public string assessorFlag { get; set; }
+        public string solicitorFlag { get; set; }
+        public string repairerFlag { get; set; }
+        public string hospitalFlag { get; set; }
     }
 
 
-    public class ProfileHeaderModel
+    public class ProfileHeaderModel : BaseDataModel
     {
         public string corporateName1 { get; set; }
         public string corporateName2 { get; set; }
@@ -41,7 +45,7 @@ namespace DEVES.IntegrationAPI.Model.RegClientCorporate
         public string vipStatus { get; set; }
     }
 
-    public class ContactHeaderModel
+    public class ContactHeaderModel : BaseDataModel
     {
         public string telephone1 { get; set; }
         public string telephone1Ext { get; set; }
@@ -56,7 +60,7 @@ namespace DEVES.IntegrationAPI.Model.RegClientCorporate
         public string facebook { get; set; }
     }
 
-    public class AddressHeaderModel
+    public class AddressHeaderModel : BaseDataModel
     {
         public string address1 { get; set; }
         public string address2 { get; set; }
@@ -71,7 +75,7 @@ namespace DEVES.IntegrationAPI.Model.RegClientCorporate
         public string longtitude { get; set; }
     }
 
-    public class AsrhHeaderModel
+    public class AsrhHeaderModel : BaseDataModel
     {
         public string assessorOregNum { get; set; }
         public string assessorDelistFlag { get; set; }

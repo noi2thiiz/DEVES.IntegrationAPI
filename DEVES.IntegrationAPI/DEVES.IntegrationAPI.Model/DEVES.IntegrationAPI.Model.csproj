@@ -119,6 +119,7 @@
     <Compile Include="RegClaimRequestFromRVP\TEST_RegClaimRequestFromRVPOutputModel.cs" />
     <Compile Include="RegClientCorporate\RegClientCorporateInputModel.cs" />
     <Compile Include="RegClientCorporate\RegClientCorporateOutputModel.cs" />
+    <Compile Include="RegClientPersonal\CRMRegClientPersonalOutputModel.cs" />
     <Compile Include="RegClientPersonal\RegClientPersonalInputModel.cs" />
     <Compile Include="RegClientPersonal\RegClientPersonalOutputModel.cs" />
     <Compile Include="RegPayeeCorporate\RegPayeeCorporateInputModel.cs" />
