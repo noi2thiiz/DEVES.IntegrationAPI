@@ -240,6 +240,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                     
                     // Incident (Case)
                     Incident incident = new Incident();
+                    /*
                     incident.pfc_accident_legal_result = new OptionSetValue(Int32.Parse(convertOptionSet(Incident.EntityLogicalName, "", content.eventDetailInfo.accidentLegalResult)));
                     incident.pfc_police_station = content.eventDetailInfo.policeStation;
                     incident.pfc_police_record_id = content.eventDetailInfo.policeRecordId;
@@ -251,10 +252,12 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                     incident.pfc_excess_fee = content.eventDetailInfo.excessFee;
                     incident.pfc_deductable_fee = content.eventDetailInfo.deductibleFee;
                     incident.pfc_accident_prilim_surveyor_report_date = content.reportAccidentResultDate;
+                    */
                     // _serviceProxy.Create(incident);
 
                     // Motor Accident 
                     pfc_motor_accident motorAccident = new pfc_motor_accident();
+                    /*
                     //motorAccident.pfc_motor_accident_name = ""; // ให้เป็นไปตาม Logic. ของหน้า Motor Accident Parties
                     //motorAccident.pfc_parent_caseId = ""; //ให้ผูกกับ Case ด้านบน ??
                     motorAccident.pfc_activity_date = Convert.ToDateTime(content.eventDetailInfo.accidentOn);
@@ -272,6 +275,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                     motorAccident.pfc_ref_isurvey_isdeleted = convertBool(content.eventDetailInfo.iSurveyIsDeleted);
                     motorAccident.pfc_ref_isurvey_isdeleted_date = Convert.ToDateTime(content.eventDetailInfo.iSurveyIsDeletedDate);
                     motorAccident.pfc_motor_accident_parties_sum = content.eventDetailInfo.numOfAccidentParty;
+                    */
                     // _serviceProxy.Create(motorAccident);
 
                     // Motor Accident Parties   

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DEVES.IntegrationAPI.Model.RegClientPersonal
 {
-    public class RegClientPersonalInputModel
+    public class RegClientPersonalInputModel : BaseDataModel
     {
         public GeneralHeaderModel generalHeader { get; set; }
         public ProfileInfoModel profileInfo { get; set; }
@@ -14,7 +14,7 @@ namespace DEVES.IntegrationAPI.Model.RegClientPersonal
         public AddressInfoModel addressInfo { get; set; }
     }
 
-    public class GeneralHeaderModel
+    public class GeneralHeaderModel : BaseDataModel
     {
         public string roleCode { get; set; }
         public string cleansingId { get; set; }
@@ -23,7 +23,7 @@ namespace DEVES.IntegrationAPI.Model.RegClientPersonal
         public string clientAdditionalExistFlag { get; set; }
     }
 
-    public class ProfileInfoModel
+    public class ProfileInfoModel : BaseDataModel
     {
         public string salutation { get; set; }
         public string personalName { get; set; }
@@ -43,7 +43,7 @@ namespace DEVES.IntegrationAPI.Model.RegClientPersonal
         public string remark { get; set; }
     }
 
-    public class ContactInfoModel
+    public class ContactInfoModel : BaseDataModel
     {
         public string telephone1 { get; set; }
         public string telephone1Ext { get; set; }
@@ -58,7 +58,7 @@ namespace DEVES.IntegrationAPI.Model.RegClientPersonal
         public string facebook { get; set; }
     }
 
-    public class AddressInfoModel
+    public class AddressInfoModel : BaseDataModel
     {
         public string address1 { get; set; }
         public string address2 { get; set; }

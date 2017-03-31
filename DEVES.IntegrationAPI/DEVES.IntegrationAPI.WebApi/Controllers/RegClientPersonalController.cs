@@ -1,5 +1,6 @@
 ﻿using DEVES.IntegrationAPI.Core.Helper;
 using DEVES.IntegrationAPI.Model.RegClientPersonal;
+using DEVES.IntegrationAPI.WebApi.Logic;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,13 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         private readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(RegClientPersonalController));
 
         public object Post([FromBody]object value)
+        {
+            buzCreateCrmClientPersonal cmd = new buzCreateCrmClientPersonal();
+            var content = cmd.Execute(value);
+            return Request.CreateResponse(content);
+        }
+
+        public object Put([FromBody]object value)
         {
 
             _log.InfoFormat("IP ADDRESS: {0}, HttpMethod: POST", CommonHelper.GetIpAddress());

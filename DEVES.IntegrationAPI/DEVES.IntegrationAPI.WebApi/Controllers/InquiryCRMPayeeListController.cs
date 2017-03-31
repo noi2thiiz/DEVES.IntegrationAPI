@@ -18,14 +18,14 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         private string _logImportantMessage;
         private readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(InquiryCRMPayeeListController));
 
-        public object Post([FromBody]object value)
+        public object Put([FromBody]object value)
         {
             buzInquiryCRMPayeeList cmd = new buzInquiryCRMPayeeList();
             var content = cmd.Execute(value);
             return Request.CreateResponse(content);
         }
 
-        public object Put([FromBody]object value)
+        public object Post([FromBody]object value)
         {
 
             _log.InfoFormat("IP ADDRESS: {0}, HttpMethod: POST", CommonHelper.GetIpAddress());
