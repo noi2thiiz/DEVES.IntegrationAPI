@@ -10,6 +10,7 @@ using DEVES.IntegrationAPI.Model.EWI;
 using DEVES.IntegrationAPI.Model.CLS;
 using DEVES.IntegrationAPI.Model.APAR;
 using DEVES.IntegrationAPI.Model.SAP;
+using DEVES.IntegrationAPI.Model.MASTER;
 using DEVES.IntegrationAPI.Model.InquiryCRMPayeeList;
 using DEVES.IntegrationAPI.Model.InquiryClientMaster;
 using DEVES.IntegrationAPI.WebApi.Templates;
@@ -37,7 +38,6 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     InquiryAPARPayeeListInputModel inqAPARIn = (InquiryAPARPayeeListInputModel)DataModelFactory.GetModel(typeof(InquiryAPARPayeeListInputModel));
                     inqAPARIn = (InquiryAPARPayeeListInputModel)TransformerFactory.TransformModel(inqCrmPayeeListIn, inqAPARIn);
 
-                    //InquiryAPARPayeeContentOutputModel inqAPAROut = CallDevesServiceProxy<InquiryAPARPayeeModel, InquiryAPARPayeeContentOutputModel>(CommonConstant.ewiEndpointKeyClaimRegistration, inqAPARIn);
                     InquiryAPARPayeeContentModel inqAPAROut = CallDevesServiceProxy<InquiryAPARPayeeOutputModel, InquiryAPARPayeeContentModel>(CommonConstant.ewiEndpointKeyAPARInquiryPayeeList, inqAPARIn);
                     if (inqAPAROut != null && inqAPAROut.aparPayeeListCollection != null)
                     {
@@ -52,6 +52,19 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 else
                 {
                     // Search in MASTER: MOTOR_InquiryMasterASRH()
+                    InquiryMasterASRHDataInputModel inqASRHIn = (InquiryMasterASRHDataInputModel)DataModelFactory.GetModel(typeof(InquiryMasterASRHDataInputModel));
+                    inqASRHIn = (InquiryMasterASRHDataInputModel)TransformerFactory.TransformModel(inqCrmPayeeListIn, inqASRHIn);
+                    InquiryMasterASRHContentModel inqASRHOut = CallDevesServiceProxy<InquiryMasterASRHOutputModel, InquiryMasterASRHContentModel>(CommonConstant.ewiEndpointKeyAPARInquiryPayeeList, inqASRHIn);
+
+                    if (inqASRHOut != null && inqASRHOut.ASRHListCollection != null)
+                    {
+                        if (inqASRHOut.ASRHListCollection.Count > 0)
+                        {
+                            crmInqPayeeOut = (CRMInquiryPayeeContentOutputModel)TransformerFactory.TransformModel(inqASRHOut, crmInqPayeeOut);
+                            bFoundIn_APAR_or_Master = true;
+                        }
+                    }
+
                 }
 
                 /*
