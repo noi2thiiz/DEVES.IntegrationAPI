@@ -120,7 +120,6 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             return output;
         }
-
         public bankInfoModel TransformSAPInquiryVendorBankInfoModelToBankInfoModel(SAPInquiryVendorBankInfoModel input,
             bankInfoModel output)
         {
