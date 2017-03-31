@@ -372,6 +372,7 @@
     <Content Include="App_Data\JsonSchema\JSON_SCHEMA_InquiryClientMasterInputModel.json" />
     <Content Include="App_Data\TEST_Response_RegClientCorporate.json" />
     <Content Include="App_Data\TEST_Response_RegPayeeCorporate.json" />
+    <Content Include="App_Data\JsonSchema\JSON_SCHEMA_InquiryCRMPayeeListInputModel.json" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
