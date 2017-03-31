@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DEVES.IntegrationAPI.Model.RegPayeePersonal
 {
-    public class RegPayeePersonalInputModel
+    public class RegPayeePersonalInputModel : BaseDataModel
     {
         public GeneralHeaderModel generalHeader { get; set; }
         public ProfileInfoModel profileInfo { get; set; }
@@ -15,7 +15,7 @@ namespace DEVES.IntegrationAPI.Model.RegPayeePersonal
         public SapVendorInfoModel sapVendorInfo { get; set; }
     }
 
-    public class GeneralHeaderModel
+    public class GeneralHeaderModel : BaseDataModel
     {
         public string roleCode { get; set; }
         public string cleansingId { get; set; }
@@ -23,7 +23,7 @@ namespace DEVES.IntegrationAPI.Model.RegPayeePersonal
         public string crmClientId { get; set; }
     }
 
-    public class ProfileInfoModel
+    public class ProfileInfoModel : BaseDataModel
     {
         public string salutation { get; set; }
         public string personalName { get; set; }
@@ -43,7 +43,7 @@ namespace DEVES.IntegrationAPI.Model.RegPayeePersonal
         public string remark { get; set; }
     }
 
-    public class ContactInfoModel
+    public class ContactInfoModel : BaseDataModel
     {
         public string telephone1 { get; set; }
         public string telephone1Ext { get; set; }
@@ -58,7 +58,7 @@ namespace DEVES.IntegrationAPI.Model.RegPayeePersonal
         public string facebook { get; set; }
     }
 
-    public class AddressInfoModel
+    public class AddressInfoModel : BaseDataModel
     {
         public string address1 { get; set; }
         public string address2 { get; set; }
@@ -73,14 +73,14 @@ namespace DEVES.IntegrationAPI.Model.RegPayeePersonal
         public string longtitude { get; set; }
     }
 
-    public class SapVendorInfoModel
+    public class SapVendorInfoModel : BaseDataModel
     {
         public string sapVendorGroupCode { get; set; }
         public BankInfoModel bankInfo { get; set; }
         public WithHoldingTaxInfoModel withHoldingTaxInfo { get; set; }
     }
 
-    public class BankInfoModel
+    public class BankInfoModel : BaseDataModel
     {
         public string bankCountryCode { get; set; }
         public string bankCode { get; set; }
@@ -90,7 +90,7 @@ namespace DEVES.IntegrationAPI.Model.RegPayeePersonal
         public string paymentMethods { get; set; }
     }
 
-    public class WithHoldingTaxInfoModel
+    public class WithHoldingTaxInfoModel : BaseDataModel
     {
         public string whtTaxCode { get; set; }
         public string receiptType { get; set; }
