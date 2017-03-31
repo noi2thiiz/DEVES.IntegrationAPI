@@ -1,5 +1,5 @@
 ﻿using DEVES.IntegrationAPI.Model;
-using DEVES.IntegrationAPI.Model.ASHR;
+using DEVES.IntegrationAPI.Model.MASTER;
 using DEVES.IntegrationAPI.Model.InquiryCRMPayeeList;
 using DEVES.IntegrationAPI.WebApi.Templates;
 

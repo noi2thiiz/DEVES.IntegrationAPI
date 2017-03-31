@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using DEVES.IntegrationAPI.Model.EWI;
 
-namespace DEVES.IntegrationAPI.Model.ASHR
+namespace DEVES.IntegrationAPI.Model.MASTER
 {
     /// <summary>
     /// End Point: http://192.168.3.194/ServiceProxy/ClaimMotor/jsonservice/MOTOR_InquiryMasterASRH

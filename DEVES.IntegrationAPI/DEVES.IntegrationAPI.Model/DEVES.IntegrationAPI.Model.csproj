@@ -129,6 +129,7 @@
     <Compile Include="RegPayeePersonal\RegPayeePersonalOutputModel.cs" />
     <Compile Include="RequestSurveyor\RequestSurveyorInputModel.cs" />
     <Compile Include="RequestSurveyor\RequestSurveyorOutputModel.cs" />
+    <Compile Include="SAP\SAPInquiryVendorDataModel.cs" />
     <Compile Include="Simulate_Integration\Simulate_Integration_ClaimRegistration_InputModel.cs" />
     <Compile Include="Simulate_Integration\Simulate_Integration_ClaimRegistration_OutputModel.cs" />
     <Compile Include="UpdateClaimInfo\UpdateClaimInfoInputModel.cs" />

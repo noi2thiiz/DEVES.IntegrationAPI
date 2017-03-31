@@ -312,6 +312,9 @@
     <Compile Include="Logic\TransformCRMInquiryCRMClientMasterInput_to_CLSInquiryCLSPersonalClientInput.cs" />
     <Compile Include="Logic\TransformCRMInquiryCRMClientMasterInput_to_CLSInquiryCorporateClientInputModel.cs" />
     <Compile Include="Logic\TransformCRMInquiryCRMClientMasterInput_to_COMPInquiryClientMasterInput.cs" />
+    <Compile Include="Logic\TransformCRMInquiryCRMPayeeListInputModel_to_APARInquiryAPARPayeeListInputModel.cs" />
+    <Compile Include="Logic\TransformCRMInquiryCRMPayeeListInputModel_to_InquiryMasterASRHInputModel.cs" />
+    <Compile Include="Logic\TransformCRMInquiryCRMPayeeListInputModel_to_SAPInquiryVendorInputModel.cs" />
     <Compile Include="QueryInfo.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />

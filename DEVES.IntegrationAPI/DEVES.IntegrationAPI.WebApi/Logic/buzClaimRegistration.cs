@@ -38,7 +38,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             //+ Call Locus_RegisterClaim through ServiceProxy
             string uid = GetDomainName(contentModel.CurrentUserId);
-            Model.EWI.EWIResponseContent ret = (Model.EWI.EWIResponseContent)CallDevesJsonProxy<Model.EWI.EWIResponse>(CommonConstant.ewiEndpointKeyClaimRegistration, inputData, uid);
+            Model.EWI.EWIResponseContent ret = (Model.EWI.EWIResponseContent)CallDevesJsonProxy<Model.EWI.EWIResponse>(CommonConstant.ewiEndpointKeyLOCUSClaimRegistration, inputData, uid);
             LocusClaimRegistrationDataOutputModel locusClaimRegOutput = new LocusClaimRegistrationDataOutputModel(ret.data);
         
             
