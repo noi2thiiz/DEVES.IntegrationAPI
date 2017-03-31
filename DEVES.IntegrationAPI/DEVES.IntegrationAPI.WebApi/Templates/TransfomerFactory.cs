@@ -6,7 +6,7 @@ using System.Web;
 using DEVES.IntegrationAPI.WebApi.Logic;
 //using DEVES.IntegrationAPI.Model.InquiryClientMaster;
 using DEVES.IntegrationAPI.Model;
-
+using DEVES.IntegrationAPI.Model.InquiryCRMPayeeList;
 
 namespace DEVES.IntegrationAPI.WebApi.Templates
 {
@@ -75,6 +75,15 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             }
 
             #endregion API:InquiryCRMPayeeListInputModel
+
+            else if(inputType == typeof(Model.APAR.InquiryAPARPayeeOutputModel))
+            {
+                if (outputType == typeof(CRMInquiryPayeeContentOutputModel))
+                {
+                    t = new TransformAPARInquiryAPARPayeeListContentOutputModel_to_InquiryCRMPayeeListDataOutputModel();
+                }
+
+            }
 
             return t;
         }
