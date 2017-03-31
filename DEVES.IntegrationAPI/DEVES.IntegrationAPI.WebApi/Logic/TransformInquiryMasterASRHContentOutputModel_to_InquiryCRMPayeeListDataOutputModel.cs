@@ -5,7 +5,6 @@ using DEVES.IntegrationAPI.Model.InquiryCRMPayeeList;
 using DEVES.IntegrationAPI.Model.MASTER;
 using DEVES.IntegrationAPI.WebApi.Templates;
 
-
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
     public class
