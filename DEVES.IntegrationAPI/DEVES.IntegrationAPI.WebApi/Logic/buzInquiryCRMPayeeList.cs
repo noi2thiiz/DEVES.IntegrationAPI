@@ -29,7 +29,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             {
                 Console.WriteLine(input.ToString());
 
-                InquiryCRMPayeeListInputModel inqCrmPayeeListIn = JsonConvert.DeserializeObject<InquiryCRMPayeeListInputModel>(input.ToString());
+                InquiryCRMPayeeListInputModel inqCrmPayeeListIn = (InquiryCRMPayeeListInputModel)input;
 
                 //inqCrmPayeeListIn.roleCode == "G"
                 if (inqCrmPayeeListIn.roleCode.ToUpper() == ENUM_CLIENT_ROLE.G.ToString())

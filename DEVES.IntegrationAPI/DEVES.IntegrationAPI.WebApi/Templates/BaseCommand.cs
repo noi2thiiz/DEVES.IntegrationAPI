@@ -335,6 +335,9 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
 
         internal string GetAppConfigurationSetting(string key)
         {
+            Console.WriteLine("==================key=================");
+            Console.WriteLine(key);
+            Console.WriteLine("==================End Key=================");
             return System.Configuration.ConfigurationManager.AppSettings[key].ToString();
         }
 
