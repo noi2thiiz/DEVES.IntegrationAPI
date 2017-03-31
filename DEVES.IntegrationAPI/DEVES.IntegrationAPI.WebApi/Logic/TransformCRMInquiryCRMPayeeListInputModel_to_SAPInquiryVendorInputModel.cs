@@ -17,7 +17,6 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             trgt.TAX4 = src.taxBranchCode;
             trgt.VCODE = src.sapVendorCode;
 
-
             return output;
         }
     }
