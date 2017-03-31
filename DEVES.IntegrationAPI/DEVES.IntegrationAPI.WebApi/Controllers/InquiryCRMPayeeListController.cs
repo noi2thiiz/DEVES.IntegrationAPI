@@ -23,7 +23,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         {
             Console.WriteLine(value.ToJson());
             buzInquiryCRMPayeeList cmd = new buzInquiryCRMPayeeList();
-            var content = cmd.Execute(value);
+            var content = cmd.Execute(cmd.DeserializeJson<InquiryCRMPayeeListInputModel>(value.ToString()));
             return Request.CreateResponse(content);
         }
 
