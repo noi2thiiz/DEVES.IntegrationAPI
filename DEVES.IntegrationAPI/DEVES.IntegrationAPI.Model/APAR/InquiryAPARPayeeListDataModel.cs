@@ -10,35 +10,39 @@ namespace DEVES.IntegrationAPI.Model.APAR
 {
     public class InquiryAPARPayeeListInputModel : BaseDataModel
     {
+        public string polisyClntnum { get; set; }
         public string vendorCode { get; set; }
+        public string fullName { get; set; }
+        public string taxNo { get; set; }
         public string taxBranchCode { get; set; }
         public string requester { get; set; }
-        public string polisyClntnum { get; set; }
-        public string fullName { get; set; }
 
     
     }
-   
 
-    public class InquiryAPARPayeeModel : BaseEWIResponseModel
+    public class InquiryAPARPayeeOutputModel : BaseEWIResponseModel
     {
         [JsonProperty(Order = 10)]
-        public InquiryAPARPayeeContentOutputModel content { set; get; }
+        public InquiryAPARPayeeContentModel content { set; get; }
+
+
     }
 
    
 
-    public class InquiryAPARPayeeContentOutputModel : BaseContentJsonServiceOutputModel
+    public class InquiryAPARPayeeContentModel : BaseContentJsonServiceOutputModel
     {
         [JsonProperty(Order = 21)]
-        public InquiryAPARPayeeContentAparPayeeListCollectionModel aparPayeeListCollection { set; get; }
+        public List<InquiryAPARPayeeContentAparPayeeListCollectionDataModel> aparPayeeListCollection { set; get; }
     }
 
-    public class InquiryAPARPayeeContentAparPayeeListCollectionModel
+
+
+    public class InquiryAPARPayeeContentAparPayeeListCollectionDataModel
     {
-        public List<InquiryAPARPayeeListOutputModel> aparPayeeList { set; get; }
+        public InquiryAPARPayeeListModel aparPayeeList { set; get; }
     }
-    public class InquiryAPARPayeeListOutputModel : BaseDataModel
+    public class InquiryAPARPayeeListModel : BaseDataModel
     {
 
         public string telephone1 { get; set; }

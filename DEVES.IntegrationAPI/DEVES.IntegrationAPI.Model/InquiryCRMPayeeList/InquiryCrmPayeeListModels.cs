@@ -21,7 +21,7 @@ namespace DEVES.IntegrationAPI.Model.InquiryCRMPayeeList
         public string emcsCode { set; get; }
     }
 
-    public class CRMInquiryClientContentOutputModel : BaseContentJsonProxyOutputModel
+    public class CRMInquiryPayeeContentOutputModel : BaseContentJsonProxyOutputModel
     {
         [JsonProperty(Order = 20)]
         public List<InquiryCrmPayeeListDataModel> data { set; get; }

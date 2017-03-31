@@ -121,10 +121,17 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             // เช็ค check reponse 
             HttpResponseMessage response = client.SendAsync(request).Result;
             response.EnsureSuccessStatusCode();
-
+            
             T1 ewiRes = response.Content.ReadAsAsync<T1>().Result;
-            T2 output = (T2)typeof(T1).GetProperty("content").GetValue(ewiRes);
-            return output;
+            if (ewiRes.success)
+            {
+                T2 output = (T2)typeof(T1).GetProperty("content").GetValue(ewiRes);
+                return output;
+            }
+            else
+            {
+                throw new Exception(String.Format("Error:{0}, Message:{1}", ewiRes.responseCode , ewiRes.responseMessage));
+            }
         }
 
 
@@ -178,7 +185,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             }
             else
             {
-                throw new JsonSerializationException("Cannot ");
+                throw new JsonSerializationException("Validation Error!");
             }
         }
 

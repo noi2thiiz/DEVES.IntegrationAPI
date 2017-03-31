@@ -104,8 +104,10 @@
                   "type": "string","maxLength": 6
                 },
                 "emcsCode": {
-                  "type": "string","maxLength": 10
+                  "type": "string",
+                  "maxLength": 10
                 }
+                
 			}
 		}
 	}

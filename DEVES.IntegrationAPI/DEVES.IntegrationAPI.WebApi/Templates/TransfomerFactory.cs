@@ -21,7 +21,9 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
         public static BaseTransformer GetTransformer( Type inputType , Type outputType )
         {
             BaseTransformer t = new NullTransformer();
-            if (inputType == typeof(Model.InquiryClientMaster.InquiryClientMasterInputModel) )
+
+            #region API:InquiryClientMaster
+            if (inputType == typeof(Model.InquiryClientMaster.InquiryClientMasterInputModel))
             {
                 if (outputType == typeof(Model.CLS.CLSInquiryPersonalClientInputModel))
                 {
@@ -37,14 +39,42 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                 }
 
             }
-            else if (inputType == typeof(Model.CLS.CLSInquiryPersonalClientContentOutputModel) && outputType == typeof(Model.InquiryClientMaster.CRMInquiryClientContentOutputModel))
+            else if (outputType == typeof(Model.InquiryClientMaster.CRMInquiryClientContentOutputModel))
             {
-                t = new TransformCLSInquiryPersonalClientContentOut_to_CrmInquiryClientMasterContentOut();
+                if (inputType == typeof(Model.CLS.CLSInquiryPersonalClientContentOutputModel))
+                {
+                    t = new TransformCLSInquiryPersonalClientContentOut_to_CrmInquiryClientMasterContentOut();
+                }
+                else if (inputType == typeof(Model.Polisy400.EWIResCOMPInquiryClientMasterContentModel))
+                {
+                    t = new TransformCOMPInquiryClientMasterContentOutputModel_to_CrmInquiryClientMasterContentOut();
+                }
+                else if (inputType == typeof(Model.CLS.CLSInquiryCorporateClientContentOutputModel))
+                {
+                    t = new TransformCLSInquiryCorporateClientContentOut_to_CrmInquiryClientMasterContentOut();
+                }
+
             }
-            else if (inputType == typeof(Model.Polisy400.COMPInquiryClientMasterContentOutputModel) && outputType == typeof(Model.InquiryClientMaster.CRMInquiryClientContentOutputModel))
+            #endregion API:InquiryClientMaster
+
+            #region API:InquiryCRMPayeeListInputModel
+            else if (inputType == typeof(Model.InquiryCRMPayeeList.InquiryCRMPayeeListInputModel))
             {
-                t = new TransformCOMPInquiryClientMasterContentOutputModel_to_CrmInquiryClientMasterContentOut();
+                if (outputType == typeof(Model.SAP.SAPInquiryVendorInputModel))
+                {
+                    t = new TransformCRMInquiryCRMPayeeListInputModel_to_SAPInquiryVendorInputModel();
+                }
+                else if (outputType == typeof(Model.MASTER.InquiryMasterASRHDataInputModel))
+                {
+                    t = new TransformCRMInquiryCRMPayeeListInputModel_to_InquiryMasterASRHDataInputModel();
+                }
+                else if (outputType == typeof(Model.APAR.InquiryAPARPayeeListInputModel))
+                {
+                    t = new TransformCRMInquiryCRMPayeeListInputModel_to_APARInquiryAPARPayeeListInputModel();
+                }
             }
+
+            #endregion API:InquiryCRMPayeeListInputModel
 
             return t;
         }
