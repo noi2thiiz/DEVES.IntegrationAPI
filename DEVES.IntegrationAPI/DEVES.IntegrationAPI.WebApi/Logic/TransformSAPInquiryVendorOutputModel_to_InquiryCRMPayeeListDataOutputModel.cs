@@ -17,7 +17,6 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             CRMInquiryPayeeContentOutputModel trgtContent = (CRMInquiryPayeeContentOutputModel)output;
 
              //@todo Process Data
-
             return trgtContent;
         }
     }
