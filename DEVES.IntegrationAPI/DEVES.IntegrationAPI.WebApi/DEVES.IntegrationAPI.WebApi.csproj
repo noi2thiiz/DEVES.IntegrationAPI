@@ -288,6 +288,7 @@
     <Compile Include="Controllers\RegPayeeCorporateController.cs" />
     <Compile Include="Controllers\RegPayeePersonalController.cs" />
     <Compile Include="Controllers\RequestSurveyorController.cs" />
+    <Compile Include="Controllers\TestModelController.cs" />
     <Compile Include="Controllers\TEST_CLSInquiryClientPersonalController.cs" />
     <Compile Include="Controllers\TEST_RegClaimRequestFromRVPController.cs" />
     <Compile Include="Controllers\UpdateClaimInfoController.cs" />
@@ -317,6 +318,7 @@
     <Compile Include="Logic\TransformCRMInquiryCRMPayeeListInputModel_to_APARInquiryAPARPayeeListInputModel.cs" />
     <Compile Include="Logic\TransformCRMInquiryCRMPayeeListInputModel_to_InquiryMasterASRHInputModel.cs" />
     <Compile Include="Logic\TransformCRMInquiryCRMPayeeListInputModel_to_SAPInquiryVendorInputModel.cs" />
+    <Compile Include="Logic\TransformSAPInquiryVendorOutputModel_to_InquiryCRMPayeeListDataOutputModel.cs" />
     <Compile Include="QueryInfo.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />

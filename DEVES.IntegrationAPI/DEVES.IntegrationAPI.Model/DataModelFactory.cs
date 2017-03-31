@@ -3,8 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DEVES.IntegrationAPI.Model.APAR;
 using Model = DEVES.IntegrationAPI.Model;
 using DEVES.IntegrationAPI.Model.InquiryClientMaster;
+using DEVES.IntegrationAPI.Model.MASTER;
+using DEVES.IntegrationAPI.Model.Polisy400;
+using DEVES.IntegrationAPI.Model.SAP;
 using CLS = DEVES.IntegrationAPI.Model.CLS;
 
 namespace DEVES.IntegrationAPI.Model
@@ -28,6 +32,49 @@ namespace DEVES.IntegrationAPI.Model
                 //crmInqClient.data.Add(data);
                 o = crmInqClient;
             }
+            else if (t == typeof(InquiryAPARPayeeListInputModel))
+            {
+                InquiryAPARPayeeListInputModel model = new InquiryAPARPayeeListInputModel();
+
+
+                o = model;
+            }
+
+            else if (t == typeof(Model.SAP.SAPInquiryVendorInputModel))
+            {
+                SAPInquiryVendorInputModel input = new SAPInquiryVendorInputModel();
+
+                //crmInqClient.data.Add(data);
+                o = input;
+            }
+            else if (t == typeof(Model.MASTER.InquiryMasterASRHDataInputModel))
+            {
+                InquiryMasterASRHDataInputModel input = new InquiryMasterASRHDataInputModel();
+
+                //crmInqClient.data.Add(data);
+                o = input;
+            }
+            else if (t == typeof(Model.MASTER.InquiryMasterASRHContentModel))
+            {
+
+                var modelContent = new InquiryAPARPayeeContentModel();
+                modelContent.aparPayeeListCollection = new List<InquiryAPARPayeeContentAparPayeeListCollectionDataModel>();
+                var colData = new InquiryAPARPayeeContentAparPayeeListCollectionDataModel();
+                colData.aparPayeeList = new InquiryAPARPayeeListModel();
+
+                o = modelContent;
+            }
+
+            else if (t == typeof(EWIResCOMPInquiryClientMasterContentModel))
+            {
+
+                var modelContent = new EWIResCOMPInquiryClientMasterContentModel();
+                modelContent.clientListCollection = new List<COMPInquiryClientMasterContentClientListModel>();
+
+
+                o = modelContent;
+            }
+
             else
             {
                 throw new NotImplementedException("GetModel(T) for type<T>:" + t.Name );

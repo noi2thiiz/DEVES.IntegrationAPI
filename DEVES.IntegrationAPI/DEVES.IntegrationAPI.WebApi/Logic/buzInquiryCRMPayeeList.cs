@@ -27,8 +27,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             crmInqPayeeOut.transactionId = Guid.NewGuid().ToString();
             try
             {
+                Console.WriteLine(input.ToString());
 
-                InquiryCRMPayeeListInputModel inqCrmPayeeListIn = (InquiryCRMPayeeListInputModel)input;
+                InquiryCRMPayeeListInputModel inqCrmPayeeListIn = JsonConvert.DeserializeObject<InquiryCRMPayeeListInputModel>(input.ToString());
 
                 //inqCrmPayeeListIn.roleCode == "G"
                 if (inqCrmPayeeListIn.roleCode.ToUpper() == ENUM_CLIENT_ROLE.G.ToString())
