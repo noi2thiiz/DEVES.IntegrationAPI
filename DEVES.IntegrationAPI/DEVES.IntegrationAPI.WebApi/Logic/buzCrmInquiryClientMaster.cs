@@ -15,7 +15,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         public override BaseDataModel Execute(object input)
         {
             //+ Deserialize Input
-            InquiryClientMasterInputModel contentModel = DeserializeJson<InquiryClientMasterInputModel>(input.ToString());
+            InquiryClientMasterInputModel contentModel = (InquiryClientMasterInputModel)input;
             BaseCommand cmd = new NullCommand();
             switch (contentModel.conditionHeader.clientType)
             {

@@ -46,7 +46,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     try
                     {
                         List<string> lstCrmClientId = SearchCrmContactClientId(retCLSInqPersClient.data.First().cleansing_id);
-                        if (lstCrmClientId.Count == 1)
+                        if (lstCrmClientId != null && lstCrmClientId.Count == 1)
                         {
                             crmClientId = lstCrmClientId.First();
                         }
@@ -67,9 +67,19 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         compInqClientInput = (COMPInquiryClientMasterInputModel)TransformerFactory.TransformModel(contentModel, compInqClientInput);
 
                         //+ Call CLS_InquiryCLSPersonalClient through ServiceProxy
-                        COMPInquiryClientMasterContentOutputModel retCOMPInqClient = CallDevesServiceProxy<EWIResCOMPInquiryClientMasterModel, COMPInquiryClientMasterContentOutputModel>
+                        EWIResCOMPInquiryClientMasterContentModel retCOMPInqClient = CallDevesServiceProxy<COMPInquiryClientMasterOutputModel, EWIResCOMPInquiryClientMasterContentModel>
                                                                                                 (CommonConstant.ewiEndpointKeyCOMPInquiryClient, compInqClientInput);
-                        crmInqContent = (CRMInquiryClientContentOutputModel)TransformerFactory.TransformModel(retCOMPInqClient, crmInqContent);
+
+                        //Found in Polisy400
+                        if (retCOMPInqClient.clientListCollection != null) 
+                        {
+                            crmInqContent = (CRMInquiryClientContentOutputModel)TransformerFactory.TransformModel(retCOMPInqClient, crmInqContent);
+                        }
+                        //Not found in Polisy400
+                        else
+                        {
+
+                        }
 
                     }
                     catch (Exception e)

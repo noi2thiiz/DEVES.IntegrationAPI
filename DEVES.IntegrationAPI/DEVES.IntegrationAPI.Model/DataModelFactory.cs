@@ -18,14 +18,14 @@ namespace DEVES.IntegrationAPI.Model
             {
                 CRMInquiryClientContentOutputModel crmInqClient = new CRMInquiryClientContentOutputModel();
                 crmInqClient.data = new List<CRMInquiryClientOutputDataModel>();
-                CRMInquiryClientOutputDataModel data = new CRMInquiryClientOutputDataModel();
-                data.addressInfo = new CRMInquiryClientAddressInfoModel();
-                data.asrhHeader = new CRMInquiryClientAsrhHeaderModel();
-                data.contactInfo = new CRMInquiryClientContactInfoModel();
-                data.generalHeader = new CRMInquiryClientGeneralHeaderModel();
-                data.profileInfo = new CRMInquiryClientProfileInfoModel();
+                //CRMInquiryClientOutputDataModel data = new CRMInquiryClientOutputDataModel();
+                //data.addressInfo = new CRMInquiryClientAddressInfoModel();
+                //data.asrhHeader = new CRMInquiryClientAsrhHeaderModel();
+                //data.contactInfo = new CRMInquiryClientContactInfoModel();
+                //data.generalHeader = new CRMInquiryClientGeneralHeaderModel();
+                //data.profileInfo = new CRMInquiryClientProfileInfoModel();
 
-                crmInqClient.data.Add(data);
+                //crmInqClient.data.Add(data);
                 o = crmInqClient;
             }
             else
