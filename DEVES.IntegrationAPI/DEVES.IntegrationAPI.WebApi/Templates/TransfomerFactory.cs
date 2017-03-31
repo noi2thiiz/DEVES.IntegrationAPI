@@ -73,23 +73,6 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                     t = new TransformCRMInquiryCRMPayeeListInputModel_to_APARInquiryAPARPayeeListInputModel();
                 }
             }
-            else if (outputType == typeof(Model.InquiryCRMPayeeList.CRMInquiryPayeeContentOutputModel))
-            {
-                if (inputType == typeof(Model.SAP.EWIResSAPInquiryVendorContentModel))
-                {
-                    t = new TransformSAPInquiryVendorOutputModel_to_InquiryCRMPayeeListDataOutputModel();
-                }
-                else if (inputType == typeof(Model.MASTER.InquiryMasterASRHContentModel))
-                {
-                    
-                    t= new TransformInquiryMasterASRHContentOutputModel_to_InquiryCRMPayeeListDataOutputModel();
-                }
-                else if (inputType == typeof(Model.APAR.InquiryAPARPayeeContentModel))
-                {
-                    
-                    t = new TransformAPARInquiryAPARPayeeListContentOutputModel_to_InquiryCRMPayeeListDataOutputModel();
-                }
-            }
 
             #endregion API:InquiryCRMPayeeListInputModel
 
