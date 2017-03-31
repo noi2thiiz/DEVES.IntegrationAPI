@@ -38,7 +38,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                     //InquiryAPARPayeeContentOutputModel inqAPAROut = CallDevesServiceProxy<InquiryAPARPayeeModel, InquiryAPARPayeeContentOutputModel>(CommonConstant.ewiEndpointKeyClaimRegistration, inqAPARIn);
                     InquiryAPARPayeeContentModel inqAPAROut = CallDevesServiceProxy<InquiryAPARPayeeOutputModel, InquiryAPARPayeeContentModel>(CommonConstant.ewiEndpointKeyAPARInquiryPayeeList, inqAPARIn);
-                    if (inqAPAROut != null)
+                    if (inqAPAROut != null && inqAPAROut.aparPayeeListCollection != null)
                     {
                         if (inqAPAROut.aparPayeeListCollection.Count > 0)
                         {
@@ -53,6 +53,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     // Search in MASTER: MOTOR_InquiryMasterASRH()
                 }
 
+                /*
                 if (!bFoundIn_APAR_or_Master)
                 {
                     // Search in [CLS: CLS_InquiryPersonalClient or CLS_InquiryCorporateClient ] & Polisy400: COMP_InquiryClientMaster
@@ -60,7 +61,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     BaseContentJsonProxyOutputModel contentSearchCleansing = (BaseContentJsonProxyOutputModel)searchCleansing.Execute(input);
 
                     //Merge crmInqPayeeOut with contentSearchCleansing
+
+
                 }
+                */
+
 
                 //Search In SAP: SAP_InquiryVendor()
                 SAPInquiryVendorInputModel inqSAPVendorIn = (SAPInquiryVendorInputModel)DataModelFactory.GetModel(typeof(SAPInquiryVendorInputModel));
