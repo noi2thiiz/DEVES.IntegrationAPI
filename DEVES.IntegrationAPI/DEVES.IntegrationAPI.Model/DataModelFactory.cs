@@ -18,6 +18,7 @@ namespace DEVES.IntegrationAPI.Model
         public static BaseDataModel GetModel(Type t)
         {
             BaseDataModel o = new NullDataModel();
+            #region Model.InquiryClientMaster.CRMInquiryClientContentOutputModel
             if (t == typeof(Model.InquiryClientMaster.CRMInquiryClientContentOutputModel))
             {
                 CRMInquiryClientContentOutputModel crmInqClient = new CRMInquiryClientContentOutputModel();
@@ -32,6 +33,8 @@ namespace DEVES.IntegrationAPI.Model
                 //crmInqClient.data.Add(data);
                 o = crmInqClient;
             }
+            #endregion Model.InquiryClientMaster.CRMInquiryClientContentOutputModel
+            #region InquiryAPARPayeeListInputModel
             else if (t == typeof(InquiryAPARPayeeListInputModel))
             {
                 InquiryAPARPayeeListInputModel model = new InquiryAPARPayeeListInputModel();
@@ -39,6 +42,8 @@ namespace DEVES.IntegrationAPI.Model
 
                 o = model;
             }
+            #endregion InquiryAPARPayeeListInputModel
+            #region Model.SAP.SAPInquiryVendorInputModel
 
             else if (t == typeof(Model.SAP.SAPInquiryVendorInputModel))
             {
@@ -47,6 +52,8 @@ namespace DEVES.IntegrationAPI.Model
                 //crmInqClient.data.Add(data);
                 o = input;
             }
+            #endregion Model.SAP.SAPInquiryVendorInputModel
+            #region Model.MASTER.InquiryMasterASRHDataInputModel
             else if (t == typeof(Model.MASTER.InquiryMasterASRHDataInputModel))
             {
                 InquiryMasterASRHDataInputModel input = new InquiryMasterASRHDataInputModel();
@@ -54,6 +61,8 @@ namespace DEVES.IntegrationAPI.Model
                 //crmInqClient.data.Add(data);
                 o = input;
             }
+            #endregion Model.MASTER.InquiryMasterASRHDataInputModel
+            #region Model.MASTER.InquiryMasterASRHContentModel
             else if (t == typeof(Model.MASTER.InquiryMasterASRHContentModel))
             {
 
@@ -64,7 +73,8 @@ namespace DEVES.IntegrationAPI.Model
 
                 o = modelContent;
             }
-
+            #endregion Model.MASTER.InquiryMasterASRHContentModel
+            #region EWIResCOMPInquiryClientMasterContentModel
             else if (t == typeof(EWIResCOMPInquiryClientMasterContentModel))
             {
 
@@ -74,10 +84,10 @@ namespace DEVES.IntegrationAPI.Model
 
                 o = modelContent;
             }
-
+            #endregion EWIResCOMPInquiryClientMasterContentModel
             else
             {
-                throw new NotImplementedException("GetModel(T) for type<T>:" + t.Name );
+                throw new NotImplementedException("GetModel(T) for type<T>:" + t.Name);
             }
 
 
