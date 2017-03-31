@@ -1,4 +1,5 @@
 ﻿using DEVES.IntegrationAPI.Model;
+
 using DEVES.IntegrationAPI.Model.InquiryCRMPayeeList;
 using DEVES.IntegrationAPI.Model.SAP;
 using DEVES.IntegrationAPI.WebApi.Templates;
@@ -16,6 +17,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             trgt.TAX3 = src.taxNo;
             trgt.TAX4 = src.taxBranchCode;
             trgt.VCODE = src.sapVendorCode;
+
 
             return output;
         }
