@@ -9,7 +9,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
     public class TransformSAPInquiryVendorOutputModel_to_InquiryCRMPayeeListDataOutputModel : BaseTransformer
     {
         private Dictionary<string, SAPInquiryVendorContentVendorInfoModel> _tmpSAPInquiryVendorContentModel;
-
+       
         public override BaseDataModel TransformModel(BaseDataModel input, BaseDataModel output)
         {
             EWIResSAPInquiryVendorContentModel srcContent = (EWIResSAPInquiryVendorContentModel) input;
@@ -18,13 +18,21 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             CRMInquiryPayeeContentOutputModel outputContent = new CRMInquiryPayeeContentOutputModel();
             outputContent.data = new List<InquiryCrmPayeeListDataModel>();
             _tmpSAPInquiryVendorContentModel = new Dictionary<string, SAPInquiryVendorContentVendorInfoModel>();
-
+           
             foreach (var vendorInfo in srcContent.VendorInfo)
             {
                 if (vendorInfo.PREVACC != null)
                 {
                     _tmpSAPInquiryVendorContentModel.Add(vendorInfo.PREVACC, vendorInfo);
                 }
+            }
+            if (trgtContent == null)
+            {
+                trgtContent = new CRMInquiryPayeeContentOutputModel();
+            }
+            if (trgtContent.data == null)
+            {
+                trgtContent.data = new List<InquiryCrmPayeeListDataModel>();
             }
 
             foreach (var dataItrm in trgtContent.data)
@@ -36,12 +44,16 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
 
                     outputContent.data.Add(TransformDataModel(_srcContentData, dataItrm));
+                    _tmpSAPInquiryVendorContentModel.Remove(dataItrm.polisyClientId);
                 }
-                else
-                {
-                    outputContent.data.Add(TransformDataModel(new SAPInquiryVendorContentVendorInfoModel(), dataItrm));
-                }
+               
             }
+            foreach (var vendorItrm in _tmpSAPInquiryVendorContentModel)
+            {
+                outputContent.data.Add(TransformDataModel(vendorItrm.Value, new InquiryCrmPayeeListDataModel()));
+            }
+
+
 
             return outputContent;
         }
