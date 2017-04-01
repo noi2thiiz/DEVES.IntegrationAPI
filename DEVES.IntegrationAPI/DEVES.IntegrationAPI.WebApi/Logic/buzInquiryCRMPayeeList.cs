@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 
@@ -92,6 +93,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     crmInqPayeeOut = (CRMInquiryPayeeContentOutputModel) TransformerFactory.TransformModel(inqSAPVendorContentOut, crmInqPayeeOut);
                 }
                 crmInqPayeeOut.code = CONST_CODE_SUCCESS;
+                
                 crmInqPayeeOut.message = "SUCCESS";
 
             }
@@ -100,9 +102,16 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 crmInqPayeeOut.code = CONST_CODE_FAILED;
                 crmInqPayeeOut.message = e.Message;
                 crmInqPayeeOut.description = e.StackTrace;
-            }
+               
 
+
+            }
+            crmInqPayeeOut.transactionId = TransactionId;
+            crmInqPayeeOut.transactionDateTime = DateTime.Now;
             return crmInqPayeeOut;
         }
+
+        public string TransactionId { get; set; }
+     
     }
 }
