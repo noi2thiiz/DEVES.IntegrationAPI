@@ -106,8 +106,6 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 crmInqPayeeOut.code = CONST_CODE_FAILED;
                 crmInqPayeeOut.message = e.Message;
                 crmInqPayeeOut.description = e.StackTrace;
-               
-
 
             }
             crmInqPayeeOut.transactionId = TransactionId;
