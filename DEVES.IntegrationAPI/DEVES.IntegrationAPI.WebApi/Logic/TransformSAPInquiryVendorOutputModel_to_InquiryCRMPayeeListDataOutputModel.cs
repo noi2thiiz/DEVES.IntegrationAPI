@@ -26,6 +26,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     _tmpSAPInquiryVendorContentModel.Add(vendorInfo.PREVACC, vendorInfo);
                 }
             }
+            if (trgtContent == null)
+            {
+                trgtContent = new CRMInquiryPayeeContentOutputModel();
+            }
+            if (trgtContent.data == null)
+            {
+                trgtContent.data = new List<InquiryCrmPayeeListDataModel>();
+            }
 
             foreach (var dataItrm in trgtContent.data)
             {
