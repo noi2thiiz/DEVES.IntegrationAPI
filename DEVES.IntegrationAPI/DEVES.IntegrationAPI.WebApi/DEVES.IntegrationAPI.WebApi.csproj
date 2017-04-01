@@ -309,6 +309,7 @@
     <Compile Include="Logic\buzCrmInquiryPersonalClient.cs" />
     <Compile Include="Logic\buzInquiryCRMPayeeList.cs" />
     <Compile Include="Logic\CommonConstant.cs" />
+    <Compile Include="Logic\TransformAPARInquiryAPARPayeeListContentOutputModel_to_InquiryCRMPayeeListDataOutputModel.cs" />
     <Compile Include="Logic\TransformCLSInquiryCorporateClientContentOut_to_CrmInquiryClientMasterContentOut.cs" />
     <Compile Include="Logic\TransformCLSInquiryPersonalClientContentOut_to_CrmInquiryClientMasterContentOut.cs" />
     <Compile Include="Logic\TransformCOMPInquiryClientMasterContentOutputModel_to_CrmInquiryClientMasterContentOut.cs" />
@@ -318,6 +319,7 @@
     <Compile Include="Logic\TransformCRMInquiryCRMPayeeListInputModel_to_APARInquiryAPARPayeeListInputModel.cs" />
     <Compile Include="Logic\TransformCRMInquiryCRMPayeeListInputModel_to_InquiryMasterASRHInputModel.cs" />
     <Compile Include="Logic\TransformCRMInquiryCRMPayeeListInputModel_to_SAPInquiryVendorInputModel.cs" />
+    <Compile Include="Logic\TransformInquiryMasterASRHContentOutputModel_to_InquiryCRMPayeeListDataOutputModel.cs" />
     <Compile Include="Logic\TransformSAPInquiryVendorOutputModel_to_InquiryCRMPayeeListDataOutputModel.cs" />
     <Compile Include="QueryInfo.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />

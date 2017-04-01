@@ -32,7 +32,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                 InquiryCRMPayeeListInputModel inqCrmPayeeListIn = (InquiryCRMPayeeListInputModel)input;
 
-                //inqCrmPayeeListIn.roleCode == "G"
+                #region IF inqCrmPayeeListIn.roleCode == "G" -> APAR.InquiryAPARPayeeList
                 if (inqCrmPayeeListIn.roleCode.ToUpper() == ENUM_CLIENT_ROLE.G.ToString())
                 {
                     InquiryAPARPayeeListInputModel inqAPARIn = (InquiryAPARPayeeListInputModel)DataModelFactory.GetModel(typeof(InquiryAPARPayeeListInputModel));
@@ -48,7 +48,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         }
                     }
                 }
-                // inqCrmPayeeListIn.roleCode == {A,S,R,H}
+                #endregion inqCrmPayeeListIn.roleCode == "G" -> APAR.InquiryAPARPayeeList
+
+                #region IF inqCrmPayeeListIn.roleCode == {A,S,R,H} -> Master.InquiryMasterASRH
                 else
                 {
                     // Search in MASTER: MOTOR_InquiryMasterASRH()
@@ -64,24 +66,25 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                             bFoundIn_APAR_or_Master = true;
                         }
                     }
-
                 }
+                #endregion inqCrmPayeeListIn.roleCode == {A,S,R,H} -> Master.InquiryMasterASRH
 
-                /*
+                #region Search in Cleansing(CLS) then search in Polisy400
                 if (!bFoundIn_APAR_or_Master)
                 {
-                    // Search in [CLS: CLS_InquiryPersonalClient or CLS_InquiryCorporateClient ] & Polisy400: COMP_InquiryClientMaster
-                    buzCrmInquiryClientMaster searchCleansing = new buzCrmInquiryClientMaster();
-                    BaseContentJsonProxyOutputModel contentSearchCleansing = (BaseContentJsonProxyOutputModel)searchCleansing.Execute(input);
+                    /*
+                        // Search in [CLS: CLS_InquiryPersonalClient or CLS_InquiryCorporateClient ] & Polisy400: COMP_InquiryClientMaster
+                        buzCrmInquiryClientMaster searchCleansing = new buzCrmInquiryClientMaster();
+                        BaseContentJsonProxyOutputModel contentSearchCleansing = (BaseContentJsonProxyOutputModel)searchCleansing.Execute(input);
 
-                    //Merge crmInqPayeeOut with contentSearchCleansing
+                        //Merge crmInqPayeeOut with contentSearchCleansing
 
+                    */
 
                 }
-                */
-
-
-                //Search In SAP: SAP_InquiryVendor()
+                #endregion Search in Cleansing(CLS) then search in Polisy400
+                
+                #region Search In SAP: SAP_InquiryVendor()
                 SAPInquiryVendorInputModel inqSAPVendorIn = (SAPInquiryVendorInputModel)DataModelFactory.GetModel(typeof(SAPInquiryVendorInputModel));
                 inqSAPVendorIn = (SAPInquiryVendorInputModel)TransformerFactory.TransformModel(inqCrmPayeeListIn, inqSAPVendorIn);
 
@@ -91,9 +94,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 {
                     crmInqPayeeOut = (CRMInquiryPayeeContentOutputModel) TransformerFactory.TransformModel(inqSAPVendorContentOut, crmInqPayeeOut);
                 }
+                #endregion Search In SAP: SAP_InquiryVendor()
+
                 crmInqPayeeOut.code = CONST_CODE_SUCCESS;
                 crmInqPayeeOut.message = "SUCCESS";
-
             }
             catch (Exception e)
             {
