@@ -13,7 +13,6 @@ namespace DEVES.IntegrationAPI.Model.CLS
     {
         //roleCode String	5	M G : General Client
         public string roleCode { get; set; }
-
         //clientId String	8	O
         public string clientId { get; set; }
         //crmPersonId String	20	O
