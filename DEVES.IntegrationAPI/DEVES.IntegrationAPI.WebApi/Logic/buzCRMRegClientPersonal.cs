@@ -46,7 +46,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 }
 
                 buzCreateCrmClientPersonal cmdCreateCrmClient = new buzCreateCrmClientPersonal();
-                CreateCrmPresonInfoOutputModel crmContentOutput = (CreateCrmPresonInfoOutputModel)cmdCreateCrmClient.Execute(regClientPersonalInput);
+                CreateCrmPersonInfoOutputModel crmContentOutput = (CreateCrmPersonInfoOutputModel)cmdCreateCrmClient.Execute(regClientPersonalInput);
 
                 if (crmContentOutput.code == CONST_CODE_SUCCESS)
                 {
