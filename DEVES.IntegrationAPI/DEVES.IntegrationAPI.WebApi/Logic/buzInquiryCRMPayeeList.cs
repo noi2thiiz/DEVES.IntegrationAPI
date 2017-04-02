@@ -3,6 +3,7 @@ using DEVES.IntegrationAPI.Model;
 using DEVES.IntegrationAPI.Model.CLS;
 using DEVES.IntegrationAPI.Model.APAR;
 using DEVES.IntegrationAPI.Model.SAP;
+using DEVES.IntegrationAPI.Model.Polisy400;
 using DEVES.IntegrationAPI.Model.MASTER;
 using DEVES.IntegrationAPI.Model.InquiryCRMPayeeList;
 using DEVES.IntegrationAPI.WebApi.Templates;
@@ -64,18 +65,43 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 #region Search in Cleansing(CLS) then search in Polisy400
                 if (!bFoundIn_APAR_or_Master)
                 {
-                    /*
-                        // Search in [CLS: CLS_InquiryPersonalClient or CLS_InquiryCorporateClient ] & Polisy400: COMP_InquiryClientMaster
-                        buzCrmInquiryClientMaster searchCleansing = new buzCrmInquiryClientMaster();
-                        BaseContentJsonProxyOutputModel contentSearchCleansing = (BaseContentJsonProxyOutputModel)searchCleansing.Execute(input);
+                    foreach(InquiryCrmPayeeListDataModel data in crmInqPayeeOut.data )
+                    {
 
-                        //Merge crmInqPayeeOut with contentSearchCleansing
+                        /*
 
-                    */
+                        List<string> crmData = SearchCrmContactClientId(data.cleansingId);
+                        if (crmData != null && crmData.Count == 1)
+                        {
+                            data.generalHeader.crmClientId = crmData.First();
+                        }
+                        else
+                        {
+                            #region Call COMP_Inquiry through ServiceProxy
+                            COMPInquiryClientMasterInputModel compInqClientInput = new COMPInquiryClientMasterInputModel();
+                            compInqClientInput = (COMPInquiryClientMasterInputModel)TransformerFactory.TransformModel(contentModel, compInqClientInput);
+
+                            //+ Call CLS_InquiryCLSPersonalClient through ServiceProxy
+                            EWIResCOMPInquiryClientMasterContentModel retCOMPInqClient = CallDevesServiceProxy<COMPInquiryClientMasterOutputModel, EWIResCOMPInquiryClientMasterContentModel>
+                                                                                                    (CommonConstant.ewiEndpointKeyCOMPInquiryClient, compInqClientInput);
+
+                            //Found in Polisy400
+                            if (retCOMPInqClient.clientListCollection != null)
+                            {
+                                crmInqContent = (CRMInquiryClientContentOutputModel)TransformerFactory.TransformModel(retCOMPInqClient, crmInqContent);
+                            }
+
+
+                            #endregion Call COMP_Inquiry through ServiceProxy
+                        }
+
+
+                        */
+                    }
 
                 }
                 #endregion Search in Cleansing(CLS) then search in Polisy400
-                
+
                 #region Search In SAP: SAP_InquiryVendor()
                 SAPInquiryVendorInputModel inqSAPVendorIn = (SAPInquiryVendorInputModel)DataModelFactory.GetModel(typeof(SAPInquiryVendorInputModel));
                 inqSAPVendorIn = (SAPInquiryVendorInputModel)TransformerFactory.TransformModel(inqCrmPayeeListIn, inqSAPVendorIn);
