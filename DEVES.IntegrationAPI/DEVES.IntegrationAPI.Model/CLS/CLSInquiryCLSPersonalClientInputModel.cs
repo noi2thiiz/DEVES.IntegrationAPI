@@ -6,14 +6,6 @@ using System.Threading.Tasks;
 
 namespace DEVES.IntegrationAPI.Model.CLS
 {
-    public enum ENUM_CLIENT_ROLE
-    {
-        G,
-        A,
-        S,
-        R,
-        H
-    }
 
     public class CLSInquiryPersonalClientInputModel : BaseDataModel
     {

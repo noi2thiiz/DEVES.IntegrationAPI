@@ -94,6 +94,7 @@
     <Compile Include="CLS\CLSInquiryCLSPersonalClientOutputModel.cs" />
     <Compile Include="CLS\CLS_CreateCorporateClient.cs" />
     <Compile Include="CLS\CLS_CreatePersonalClient.cs" />
+    <Compile Include="CreateCrmClientInfoModel.cs" />
     <Compile Include="CreateCRMCorporateClientMaster\CreateCRMCorporateClientMasterInputModel.cs" />
     <Compile Include="CreateCRMCorporateClientMaster\CreateCRMCorporateClientMasterOutputModel.cs" />
     <Compile Include="CreateCRMPersonalClientMaster\CreateCRMPersonalClientMasterInputModel.cs" />

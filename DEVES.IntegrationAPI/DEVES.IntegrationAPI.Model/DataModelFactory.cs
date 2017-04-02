@@ -8,8 +8,19 @@ using DEVES.IntegrationAPI.Model.SAP;
 
 namespace DEVES.IntegrationAPI.Model
 {
+    public enum ENUM_CLIENT_ROLE
+    {
+        G,
+        A,
+        S,
+        R,
+        H
+    }
+
+
     public static class DataModelFactory
     {
+
         public static BaseDataModel GetModel(Type t)
         {
             BaseDataModel o = new NullDataModel();
