@@ -12,7 +12,7 @@ namespace DEVES.IntegrationAPI.Model.Polisy400
     public class CLIENTCreateCorporateClientAndAdditionalInfoInputModel : BaseDataModel
     {
         //"telephones2": "0811111111",
-        public string telephones2 { get; set; }
+        public string telephone2 { get; set; }
 
         //"remark": "ทดสอบผ่าน Service Proxy Fulfill Create Corporate",
         public string remark { get; set; }
@@ -21,6 +21,8 @@ namespace DEVES.IntegrationAPI.Model.Polisy400
         //"address2": "เขตท่าพระอาทืตย์",
         public string address2 { get; set; }
         //"specialIndicator": "01",
+
+        public string address3 { get; set; }
         public string specialIndicator { get; set; }
         //"add  public string xxx { get; set; }ress3": "แขวงกรุงทัย",
         public string ress3 { get; set; }

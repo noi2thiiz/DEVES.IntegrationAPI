@@ -5,6 +5,7 @@ using DEVES.IntegrationAPI.Model.InquiryClientMaster;
 using DEVES.IntegrationAPI.Model.MASTER;
 using DEVES.IntegrationAPI.Model.Polisy400;
 using DEVES.IntegrationAPI.Model.SAP;
+using DEVES.IntegrationAPI.Model;
 
 namespace DEVES.IntegrationAPI.Model
 {
@@ -91,6 +92,20 @@ namespace DEVES.IntegrationAPI.Model
                 o = modelContent;
             }
             #endregion EWIResCOMPInquiryClientMasterContentModel
+            #region CLS.CLSCreatePersonalClientInputModel
+            else if (t == typeof(Model.CLS.CLSCreatePersonalClientInputModel))
+            {
+                var modelContent = new Model.CLS.CLSCreatePersonalClientInputModel();
+                o = modelContent;
+            }
+            #endregion CLS.CLSCreatePersonalClientInputModel
+            #region CLIENTCreatePersonalClientAndAdditionalInfoInputModel
+            else if (t == typeof(CLIENTCreatePersonalClientAndAdditionalInfoInputModel))
+            {
+                var modelContent = new CLIENTCreatePersonalClientAndAdditionalInfoInputModel();
+                o = modelContent;
+            }
+            #endregion CLIENTCreatePersonalClientAndAdditionalInfoInputModel
             else
             {
                 throw new NotImplementedException("GetModel(T) for type<T>:" + t.Name);
