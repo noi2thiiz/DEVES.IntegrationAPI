@@ -10,8 +10,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
     {
         public override BaseDataModel TransformModel(BaseDataModel input, BaseDataModel output)
         {
-            CRMRegClientPersonalOutputDataModel src = (CRMRegClientPersonalOutputDataModel)input;
-            CRMRegClientPersonalOutputDataModel trgt = (CRMRegClientPersonalOutputDataModel)output;
+            CRMRegClientPersonalOutputModel src = (CRMRegClientPersonalOutputModel)input;
+            CRMRegClientPersonalOutputModel trgt = (CRMRegClientPersonalOutputModel)output;
 
             trgt = src;
 

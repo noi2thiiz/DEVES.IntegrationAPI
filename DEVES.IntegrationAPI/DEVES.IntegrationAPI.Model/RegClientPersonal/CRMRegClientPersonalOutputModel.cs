@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 
 namespace DEVES.IntegrationAPI.Model.RegClientPersonal
 {
-    public class CRMRegClientPersonalOutputModel : BaseEWIResponseModel
+    public class CRMRegClientPersonalOutputModel : BaseContentJsonProxyOutputModel
     {
         public List<CRMRegClientPersonalOutputDataModel> data { set; get; }
     }
