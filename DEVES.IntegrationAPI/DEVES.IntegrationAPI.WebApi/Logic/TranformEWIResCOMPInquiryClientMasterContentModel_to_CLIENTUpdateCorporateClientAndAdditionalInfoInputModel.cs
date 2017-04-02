@@ -1,7 +1,6 @@
 ﻿using System;
 using DEVES.IntegrationAPI.Model;
 using DEVES.IntegrationAPI.Model.Polisy400;
-using DEVES.IntegrationAPI.Model.RegClientCorporate;
 using DEVES.IntegrationAPI.WebApi.Templates;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
