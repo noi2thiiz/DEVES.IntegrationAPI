@@ -20,6 +20,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         public object Post([FromBody]object value)
         {
             buzCreateCrmClientPersonal cmd = new buzCreateCrmClientPersonal();
+            cmd.TransactionId = Request.Properties["TransactionID"].ToString();
             var content = cmd.Execute(value);
             return Request.CreateResponse(content);
         }

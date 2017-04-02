@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DEVES.IntegrationAPI.Model.RegClientPersonal
 {
@@ -33,7 +29,7 @@ namespace DEVES.IntegrationAPI.Model.RegClientPersonal
         public string idPassport { get; set; }
         public string idAlien { get; set; }
         public string idDriving { get; set; }
-        public string birthDate { get; set; }
+        public DateTime birthDate { get; set; }
         public string nationality { get; set; }
         public string language { get; set; }
         public string married { get; set; }
