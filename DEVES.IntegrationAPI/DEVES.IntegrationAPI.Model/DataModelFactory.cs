@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Model = DEVES.IntegrationAPI.Model;
 using DEVES.IntegrationAPI.Model.InquiryClientMaster;
 using CLS = DEVES.IntegrationAPI.Model.CLS;
+using DEVES.IntegrationAPI.Model.APAR;
 
 namespace DEVES.IntegrationAPI.Model
 {
@@ -30,7 +31,7 @@ namespace DEVES.IntegrationAPI.Model
             }
             else
             {
-                throw new NotImplementedException("GetModel(T) for type<T>:" + t.Name );
+                throw new NotImplementedException("GetModel(T) for type<T>:" + t.Name);
             }
 
 
