@@ -28,7 +28,7 @@ namespace DEVES.IntegrationAPI.Model.APAR
 
     }
 
-   
+
 
     public class InquiryAPARPayeeContentModel : BaseContentJsonServiceOutputModel
     {

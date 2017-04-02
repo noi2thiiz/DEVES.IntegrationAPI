@@ -10,6 +10,7 @@ using DEVES.IntegrationAPI.Model.MASTER;
 using DEVES.IntegrationAPI.Model.Polisy400;
 using DEVES.IntegrationAPI.Model.SAP;
 using CLS = DEVES.IntegrationAPI.Model.CLS;
+using DEVES.IntegrationAPI.Model.APAR;
 
 namespace DEVES.IntegrationAPI.Model
 {

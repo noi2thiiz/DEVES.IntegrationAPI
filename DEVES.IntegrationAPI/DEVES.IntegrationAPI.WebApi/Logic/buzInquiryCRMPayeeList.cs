@@ -31,7 +31,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             {
                 Console.WriteLine(input.ToString());
 
-                InquiryCRMPayeeListInputModel inqCrmPayeeListIn = (InquiryCRMPayeeListInputModel)input;
+                InquiryCRMPayeeListInputModel inqCrmPayeeListIn = JsonConvert.DeserializeObject<InquiryCRMPayeeListInputModel>(input.ToString());
 
                 #region IF inqCrmPayeeListIn.roleCode == "G" -> APAR.InquiryAPARPayeeList
                 if (inqCrmPayeeListIn.roleCode.ToUpper() == ENUM_CLIENT_ROLE.G.ToString())

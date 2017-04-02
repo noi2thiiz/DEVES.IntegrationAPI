@@ -263,8 +263,6 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             return Request.CreateResponse<ClaimRegistrationOutputModel>(output);
             */
             #endregion ReleasedCandidate_1
-
-            
             BuzClaimRegistrationCommand buzCommand = new BuzClaimRegistrationCommand();
             BaseDataModel output = buzCommand.Execute(value);
             ClaimRegistrationContentOutputModel outputData = (ClaimRegistrationContentOutputModel)output;
