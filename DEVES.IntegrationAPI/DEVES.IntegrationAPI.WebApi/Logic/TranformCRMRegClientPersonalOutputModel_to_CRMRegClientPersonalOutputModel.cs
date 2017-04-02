@@ -6,7 +6,7 @@ using DEVES.IntegrationAPI.WebApi.Templates;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
-    public class TranformCRMRegClientPersonalOutputDataModel_to_CRMRegClientPersonalOutputDataModel : BaseTransformer
+    public class TranformCRMRegClientPersonalOutputModel_to_CRMRegClientPersonalOutputModel : BaseTransformer
     {
         public override BaseDataModel TransformModel(BaseDataModel input, BaseDataModel output)
         {
