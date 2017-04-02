@@ -113,7 +113,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             return crmInqPayeeOut;
         }
 
-        public string TransactionId { get; set; }
+      
      
     }
 }

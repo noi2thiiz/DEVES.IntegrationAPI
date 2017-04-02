@@ -31,6 +31,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
         internal const string CONST_CODE_FAILED = "500";
         internal const string CONST_DEFAULT_UID = "uid";
 
+        public string TransactionId { get; set; }
 
         private OrganizationServiceProxy _serviceProxy;
         private IOrganizationService _service;
