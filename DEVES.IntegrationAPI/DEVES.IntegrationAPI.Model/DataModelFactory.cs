@@ -1,21 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DEVES.IntegrationAPI.Model.APAR;
-using Model = DEVES.IntegrationAPI.Model;
 using DEVES.IntegrationAPI.Model.InquiryClientMaster;
 using DEVES.IntegrationAPI.Model.MASTER;
 using DEVES.IntegrationAPI.Model.Polisy400;
 using DEVES.IntegrationAPI.Model.SAP;
-using CLS = DEVES.IntegrationAPI.Model.CLS;
-using DEVES.IntegrationAPI.Model.APAR;
 
 namespace DEVES.IntegrationAPI.Model
 {
+    public enum ENUM_CLIENT_ROLE
+    {
+        G,
+        A,
+        S,
+        R,
+        H
+    }
+
+
     public static class DataModelFactory
     {
+
         public static BaseDataModel GetModel(Type t)
         {
             BaseDataModel o = new NullDataModel();

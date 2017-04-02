@@ -5,6 +5,7 @@ using DEVES.IntegrationAPI.Model.CLS;
 using DEVES.IntegrationAPI.Model.InquiryCRMPayeeList;
 using DEVES.IntegrationAPI.Model.MASTER;
 using DEVES.IntegrationAPI.Model.Polisy400;
+using DEVES.IntegrationAPI.Model.RegClientPersonal;
 using DEVES.IntegrationAPI.Model.SAP;
 using DEVES.IntegrationAPI.WebApi.Logic;
 
@@ -195,7 +196,68 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             return Ok(model);
         }
 
+        [HttpGet]
+        [Route("CLIENTCreatePersonalClientAndAdditionalInfoOutputModel")]
+        public IHttpActionResult CLIENTCreatePersonalClientAndAdditionalInfoOutputModel()
+        {
+            var model = new CLIENTCreatePersonalClientAndAdditionalInfoOutputModel();
+            model.content = new CLIENTCreatePersonalClientAndAdditionalInfoContentModel();
+           
+
+            return Ok(model);
+        }
+
+        [HttpGet]
+        [Route("CLIENTCreateCorporateClientAndAdditionalInfoOutputModel")]
+        public IHttpActionResult CLIENTCreateCorporateClientAndAdditionalInfoOutputModel()
+        {
+            var model = new CLIENTCreateCorporateClientAndAdditionalInfoOutputModel();
+            model.content = new CLIENTCreateCorporateClientAndAdditionalInfoContentModel();
 
 
+            return Ok(model);
+        }
+
+        [HttpGet]
+        [Route("CLIENTUpdateCorporateClientAndAdditionalInfoOutputModel")]
+        public IHttpActionResult CLIENTUpdateCorporateClientAndAdditionalInfoOutputModel()
+        {
+            var model = new CLIENTUpdateCorporateClientAndAdditionalInfoOutputModel();
+            model.content = new CLIENTUpdateCorporateClientAndAdditionalInfoContentModel();
+
+
+            return Ok(model);
+        }
+
+        [HttpGet]
+        [Route("TransformSAPInquiryVendorOutputModel_to_InquiryCRMPayeeListDataOutputModel")]
+        public IHttpActionResult TransformSAPInquiryVendorOutputModel_to_InquiryCRMPayeeListDataOutputModel()
+        {
+            var src =  new RegClientPersonalInputModel();
+            var trgt = new CLSCreatePersonalClientInputModel();
+
+            var tranformer = new TranformRegClientPersonalInputModel_to_CLSCreatePersonalClientInputModel();
+            var output = tranformer.TransformModel(src, trgt);
+
+            return Ok(output);
+        }
+
+        [HttpGet]
+        [Route("TranformRegClientPersonalInputModel_to_CLIENTCreatePersonalClientAndAdditionalInfoInputModel")]
+        public IHttpActionResult TranformRegClientPersonalInputModel_to_CLIENTCreatePersonalClientAndAdditionalInfoInputModel()
+        {
+            var src = new RegClientPersonalInputModel();
+            src.profileInfo = new ProfileInfoModel();
+            src.profileInfo.idDriving = "1111";
+            var trgt = new CLIENTCreatePersonalClientAndAdditionalInfoInputModel();
+            
+
+            var tranformer = new TranformRegClientPersonalInputModel_to_CLIENTCreatePersonalClientAndAdditionalInfoInputModel();
+            var output = tranformer.TransformModel(src, trgt);
+
+            return Ok(output);
+        }
+
+        
     }
 }

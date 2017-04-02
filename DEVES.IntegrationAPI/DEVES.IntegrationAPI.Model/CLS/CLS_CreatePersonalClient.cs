@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using DEVES.IntegrationAPI.Model.EWI;
 using Newtonsoft.Json;
 
 namespace DEVES.IntegrationAPI.Model.CLS
 {
-    class CLSCreatePersonalClientInputModel : BaseDataModel
+    public class CLSCreatePersonalClientInputModel : BaseDataModel
     {
+      
         //roleCode String	5	M G : General Client
         public string roleCode { get; set; }
         //clientId String	8	O

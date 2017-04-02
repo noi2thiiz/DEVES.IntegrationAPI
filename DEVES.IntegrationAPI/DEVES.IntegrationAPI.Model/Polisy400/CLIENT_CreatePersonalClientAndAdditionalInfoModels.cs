@@ -44,7 +44,7 @@ namespace DEVES.IntegrationAPI.Model.Polisy400
         //"facebook": "148976652",
         public string facebook { get; set; }
         // "birthDate": "",
-        public string birthDate { get; set; }
+        public DateTime birthDate { get; set; }
         //"telNo": "0999999999",
         public string telNo { get; set; }
         //"natioanality": "T",
@@ -136,8 +136,26 @@ namespace DEVES.IntegrationAPI.Model.Polisy400
     public class CLIENTCreatePersonalClientAndAdditionalInfoContentModel : BaseContentJsonServiceOutputModel
     {
 
-        //[JsonProperty(Order = 21)]
-        //public List<...> xxx { set; get; }
+        // "riskLevel_Driver1": "",
+        public string riskLevel_Driver1 { get; set; }
+
+        //"riskLevel_Customer": "",
+        public string riskLevel_Customer { get; set; }
+
+        //"clientID_Customer": "",
+        public string clientID_Customer { get; set; }
+
+        //"clientID": "16960784",
+        public string clientID { get; set; }
+
+        //"riskLevel_Driver2": "",
+        public string riskLevel_Driver2 { get; set; }
+
+        //"clientID_Driver1": "",
+        public string clientID_Driver1 { get; set; }
+
+        //"clientID_Driver2": ""
+        public string clientID_Driver2 { get; set; }
     }
 
 

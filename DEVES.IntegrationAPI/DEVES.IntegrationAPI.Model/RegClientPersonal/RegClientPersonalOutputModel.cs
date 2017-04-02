@@ -9,6 +9,14 @@ namespace DEVES.IntegrationAPI.Model.RegClientPersonal
     class RegClientPersonalOutputModel
     {
     }
+    public class RegClientPersonalContentOutputModel : BaseContentJsonProxyOutputModel
+    {
+        public List<RegClientPersonalDataOutputModel> data { get; set; }
+    }
+
+    public abstract class RegClientPersonalDataOutputModel : BaseDataModel
+    {
+    }
 
     public class RegClientPersonalOutputModel_Pass
     {
@@ -20,7 +28,7 @@ namespace DEVES.IntegrationAPI.Model.RegClientPersonal
         public List<RegClientPersonalDataOutputModel_Pass> data { get; set; }
     }
 
-    public class RegClientPersonalDataOutputModel_Pass
+    public class RegClientPersonalDataOutputModel_Pass : RegClientPersonalDataOutputModel
     {
         public string cleansingId { get; set; }
         public string polisyClientId { get; set; }
@@ -48,7 +56,7 @@ namespace DEVES.IntegrationAPI.Model.RegClientPersonal
         public List<RegClientPersonalDataOutputModel_Fail> data { get; set; }
     }
 
-    public class RegClientPersonalDataOutputModel_Fail
+    public class RegClientPersonalDataOutputModel_Fail: RegClientPersonalDataOutputModel
     {
         public string fieldErrors { get; set; }
         public string message { get; set; }

@@ -361,7 +361,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 dataOutput.data.Add(output);
                 */
             }
-
+            dataOutput.transactionId = TransactionId;
+            dataOutput.transactionDateTime = DateTime.Now;
             return dataOutput;
         }
     }
