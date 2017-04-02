@@ -9,7 +9,7 @@ using DEVES.IntegrationAPI.Model;
 
 namespace DEVES.IntegrationAPI.Model
 {
-    public class CreateCrmPresonInfoOutputModel : BaseContentJsonProxyOutputModel
+    public class CreateCrmPersonInfoOutputModel : BaseContentJsonProxyOutputModel
     {
         public string crmClientId { set; get; }
     }

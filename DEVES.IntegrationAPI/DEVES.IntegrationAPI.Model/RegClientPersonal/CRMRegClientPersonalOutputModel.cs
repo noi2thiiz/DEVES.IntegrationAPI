@@ -10,9 +10,9 @@ namespace DEVES.IntegrationAPI.Model.RegClientPersonal
 {
     public class CRMRegClientPersonalOutputModel : BaseContentJsonProxyOutputModel
     {
-        public List<CRMRegClientPersonalOutputDataModel> data { set; get; }
+        public string data { set; get; }
     }
-    public class CRMRegClientPersonalOutputDataModel : BaseDataModel
+    public class CRMRegClientPersonalOutputDataModel
     {
         public string cleansingId { get; set; }
         public string polisyClientId { get; set; }

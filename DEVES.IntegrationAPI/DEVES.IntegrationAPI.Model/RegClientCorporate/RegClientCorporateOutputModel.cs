@@ -6,9 +6,21 @@ using System.Threading.Tasks;
 
 namespace DEVES.IntegrationAPI.Model.RegClientCorporate
 {
+
+    public class RegClientCorporateContentOutputModel : BaseContentJsonProxyOutputModel
+    {
+        public List<RegClientCorporateDataOutputModel> data { set; get; }
+    }
+
+    public abstract class RegClientCorporateDataOutputModel : BaseDataModel
+    {
+    }
+
+
+
     public class RegClientCorporateOutputModel : BaseContentJsonProxyOutputModel
     {
-        public List<RegClientCorporateDataOutputModel_Pass> data { set; get; }
+        public string data { set; get; }
     }
 
     public class RegClientCorporateOutputModel_Pass
@@ -21,7 +33,7 @@ namespace DEVES.IntegrationAPI.Model.RegClientCorporate
         public List<RegClientCorporateDataOutputModel_Pass> data { get; set; }
     }
 
-    public class RegClientCorporateDataOutputModel_Pass : BaseDataModel
+    public class RegClientCorporateDataOutputModel_Pass : RegClientCorporateDataOutputModel
     {
         public string cleansingId { get; set; }
         public string polisyClientId { get; set; }
@@ -41,7 +53,7 @@ namespace DEVES.IntegrationAPI.Model.RegClientCorporate
         public List<RegClientCorporateDataOutputModel_Fail> data { get; set; }
     }
 
-    public class RegClientCorporateDataOutputModel_Fail 
+    public class RegClientCorporateDataOutputModel_Fail : RegClientCorporateDataOutputModel
     {
         public string fieldErrors { get; set; }
         public string message { get; set; }

@@ -106,6 +106,14 @@ namespace DEVES.IntegrationAPI.Model
                 o = modelContent;
             }
             #endregion CLIENTCreatePersonalClientAndAdditionalInfoInputModel
+            #region CLIENTUpdateCorporateClientAndAdditionalInfoInputModel
+            else if (t == typeof(CLIENTUpdateCorporateClientAndAdditionalInfoInputModel))
+            {
+                var modelContent = new CLIENTUpdateCorporateClientAndAdditionalInfoInputModel();
+                o = modelContent;
+            }
+
+            #endregion CLIENTUpdateCorporateClientAndAdditionalInfoInputModel
             else
             {
                 throw new NotImplementedException("GetModel(T) for type<T>:" + t.Name);
