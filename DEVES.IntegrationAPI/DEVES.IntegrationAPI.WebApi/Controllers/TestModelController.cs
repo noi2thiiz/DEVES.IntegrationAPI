@@ -5,6 +5,7 @@ using DEVES.IntegrationAPI.Model.CLS;
 using DEVES.IntegrationAPI.Model.InquiryCRMPayeeList;
 using DEVES.IntegrationAPI.Model.MASTER;
 using DEVES.IntegrationAPI.Model.Polisy400;
+using DEVES.IntegrationAPI.Model.RegClientPersonal;
 using DEVES.IntegrationAPI.Model.SAP;
 using DEVES.IntegrationAPI.WebApi.Logic;
 
@@ -227,7 +228,20 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
 
             return Ok(model);
         }
-        
+
+        [HttpGet]
+        [Route("TransformSAPInquiryVendorOutputModel_to_InquiryCRMPayeeListDataOutputModel")]
+        public IHttpActionResult TransformSAPInquiryVendorOutputModel_to_InquiryCRMPayeeListDataOutputModel()
+        {
+            var src =  new RegClientPersonalInputModel();
+            var trgt = new CLSCreatePersonalClientInputModel();
+
+            var tranformer = new TranformRegClientPersonalInputModel_to_CLSCreatePersonalClientInputModel();
+            var output = tranformer.TransformModel(src, trgt);
+
+            return Ok(output);
+        }
+
 
     }
 }
