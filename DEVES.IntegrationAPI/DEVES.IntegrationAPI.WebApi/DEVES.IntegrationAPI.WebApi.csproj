@@ -307,6 +307,7 @@
     <Compile Include="Logic\buzCrmInquiryClientMaster.cs" />
     <Compile Include="Logic\buzCrmInquiryCorporateClientMaster.cs" />
     <Compile Include="Logic\buzCrmInquiryPersonalClient.cs" />
+    <Compile Include="Logic\buzCRMRegClientCorporate.cs" />
     <Compile Include="Logic\buzCRMRegClientPersonal.cs" />
     <Compile Include="Logic\buzInquiryCRMPayeeList.cs" />
     <Compile Include="Logic\CommonConstant.cs" />
