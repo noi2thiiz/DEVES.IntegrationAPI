@@ -46,19 +46,24 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 }
 
                 buzCreateCrmClientPersonal cmdCreateCrmClient = new buzCreateCrmClientPersonal();
-                CRMRegClientPersonalOutputModel crmContentOutput = (CRMRegClientPersonalOutputModel)cmdCreateCrmClient.Execute(regClientPersonalInput);
+                CreateCrmPresonInfoOutputModel crmContentOutput = (CreateCrmPresonInfoOutputModel)cmdCreateCrmClient.Execute(regClientPersonalInput);
 
-                if(crmContentOutput.code == CONST_CODE_SUCCESS)
+                if (crmContentOutput.code == CONST_CODE_SUCCESS)
                 {
                     regClientPersonOutput.code = CONST_CODE_SUCCESS;
                     regClientPersonOutput.message = "SUCCESS";
                     RegClientPersonalDataOutputModel_Pass dataOutPass = new RegClientPersonalDataOutputModel_Pass();
                     dataOutPass.cleansingId = regClientPersonalInput.generalHeader.cleansingId;
                     dataOutPass.polisyClientId = regClientPersonalInput.generalHeader.polisyClientId;
-                    dataOutPass.crmClientId = "";
+                    dataOutPass.crmClientId = crmContentOutput.crmClientId;
                     regClientPersonOutput.data.Add(dataOutPass);
                 }
-
+                else
+                {
+                    regClientPersonOutput.code = CONST_CODE_FAILED;
+                    regClientPersonOutput.message = crmContentOutput.message;
+                    regClientPersonOutput.description = crmContentOutput.description;
+                }
             }
             catch (Exception e)
             {
