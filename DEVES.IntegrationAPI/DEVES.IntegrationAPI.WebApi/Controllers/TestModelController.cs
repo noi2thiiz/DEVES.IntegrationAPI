@@ -217,7 +217,16 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             return Ok(model);
         }
 
+        [HttpGet]
+        [Route("CLIENTUpdateCorporateClientAndAdditionalInfoOutputModel")]
+        public IHttpActionResult CLIENTUpdateCorporateClientAndAdditionalInfoOutputModel()
+        {
+            var model = new CLIENTUpdateCorporateClientAndAdditionalInfoOutputModel();
+            model.content = new CLIENTUpdateCorporateClientAndAdditionalInfoContentModel();
 
+
+            return Ok(model);
+        }
         
 
     }
