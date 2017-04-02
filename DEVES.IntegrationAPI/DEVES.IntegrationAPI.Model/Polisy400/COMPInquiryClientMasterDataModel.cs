@@ -33,7 +33,7 @@ namespace DEVES.IntegrationAPI.Model.Polisy400
         public List<COMPInquiryClientMasterContentClientListModel> clientListCollection { set; get; }
     }
 
-    public class COMPInquiryClientMasterContentClientListModel
+    public class COMPInquiryClientMasterContentClientListModel : BaseDataModel
     {
         public COMPInquiryClientMasterClientModel clientList { set; get; }
     }

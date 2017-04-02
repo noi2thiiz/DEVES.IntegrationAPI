@@ -44,8 +44,34 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     regClientCorporateInput = (RegClientCorporateInputModel)TransformerFactory.TransformModel(polCreateClientContent, regClientCorporateInput);
                 }
 
+                if(regClientCorporateInput.generalHeader.assessorFlag == "Y" 
+                    || regClientCorporateInput.generalHeader.solicitorFlag == "Y" 
+                    || regClientCorporateInput.generalHeader.repairerFlag == "Y" 
+                    || regClientCorporateInput.generalHeader.hospitalFlag == "Y" )
+                {
+                    COMPInquiryClientMasterInputModel compInqClientInput = new COMPInquiryClientMasterInputModel();
+                    compInqClientInput = (COMPInquiryClientMasterInputModel)TransformerFactory.TransformModel(regClientCorporateInput, compInqClientInput);
+
+                    //+ Call CLS_InquiryCLSPersonalClient through ServiceProxy
+                    EWIResCOMPInquiryClientMasterContentModel retCOMPInqClient = CallDevesServiceProxy<COMPInquiryClientMasterOutputModel, EWIResCOMPInquiryClientMasterContentModel>
+                                                                                            (CommonConstant.ewiEndpointKeyCOMPInquiryClient, compInqClientInput);
+
+                    //Found in Polisy400
+                    if (retCOMPInqClient.clientListCollection != null && retCOMPInqClient.clientListCollection.Count == 1)
+                    {
+                        COMPInquiryClientMasterContentClientListModel inqClientPolisy400Out = retCOMPInqClient.clientListCollection.First();
+
+                        BaseDataModel updateClientPolisy400In = DataModelFactory.GetModel( typeof( CLIENTUpdateCorporateClientAndAdditionalInfoInputModel) );
+                        updateClientPolisy400In = TransformerFactory.TransformModel(inqClientPolisy400Out, updateClientPolisy400In);
+
+                        CallDevesServiceProxy<CLIENTUpdateCorporateClientAndAdditionalInfoOutputModel, CLIENTUpdateCorporateClientAndAdditionalInfoContentModel>(CommonConstant.ewiEndpointKeyCLIENTUpdateCorporateClient, updateClientPolisy400In);
+                        
+                        //CLIENTUpdateCorporateClientAndAdditionalInfoContentModel updateClientPolisy400Out = CallDevesServiceProxy<CLIENTUpdateCorporateClientAndAdditionalInfoOutputModel, CLIENTUpdateCorporateClientAndAdditionalInfoContentModel>(CommonConstant.ewiEndpointKeyCLIENTUpdateCorporateClient, updateClientPolisy400In);
+                    }
+                }
+
                 buzCreateCrmClientCorporate cmdCreateCrmClient = new buzCreateCrmClientCorporate();
-                CreateCrmPresonInfoOutputModel crmContentOutput = (CreateCrmPresonInfoOutputModel)cmdCreateCrmClient.Execute(regClientCorporateInput);
+                CreateCrmCorporateInfoOutputModel crmContentOutput = (CreateCrmCorporateInfoOutputModel)cmdCreateCrmClient.Execute(regClientCorporateInput);
 
                 if (crmContentOutput.code == CONST_CODE_SUCCESS)
                 {
