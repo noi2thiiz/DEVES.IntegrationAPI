@@ -44,7 +44,7 @@ namespace DEVES.IntegrationAPI.Model.Polisy400
         //"facebook": "148976652",
         public string facebook { get; set; }
         // "birthDate": "",
-        public string birthDate { get; set; }
+        public DateTime birthDate { get; set; }
         //"telNo": "0999999999",
         public string telNo { get; set; }
         //"natioanality": "T",

@@ -309,6 +309,7 @@
     <Compile Include="Logic\buzCrmInquiryPersonalClient.cs" />
     <Compile Include="Logic\buzInquiryCRMPayeeList.cs" />
     <Compile Include="Logic\CommonConstant.cs" />
+    <Compile Include="Logic\TranformRegClientPersonalInputModel_to_CLIENTCreatePersonalClientAndAdditionalInfoInputModel.cs" />
     <Compile Include="Logic\TranformRegClientPersonalInputModel_to_CLSCreatePersonalClientInputModel.cs" />
     <Compile Include="Logic\TransformAPARInquiryAPARPayeeListContentOutputModel_to_InquiryCRMPayeeListDataOutputModel.cs" />
     <Compile Include="Logic\TransformCLSInquiryCorporateClientContentOut_to_CrmInquiryClientMasterContentOut.cs" />

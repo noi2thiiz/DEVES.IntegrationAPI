@@ -242,6 +242,22 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             return Ok(output);
         }
 
+        [HttpGet]
+        [Route("TranformRegClientPersonalInputModel_to_CLIENTCreatePersonalClientAndAdditionalInfoInputModel")]
+        public IHttpActionResult TranformRegClientPersonalInputModel_to_CLIENTCreatePersonalClientAndAdditionalInfoInputModel()
+        {
+            var src = new RegClientPersonalInputModel();
+            src.profileInfo = new ProfileInfoModel();
+            src.profileInfo.idDriving = "1111";
+            var trgt = new CLIENTCreatePersonalClientAndAdditionalInfoInputModel();
+            
 
+            var tranformer = new TranformRegClientPersonalInputModel_to_CLIENTCreatePersonalClientAndAdditionalInfoInputModel();
+            var output = tranformer.TransformModel(src, trgt);
+
+            return Ok(output);
+        }
+
+        
     }
 }
