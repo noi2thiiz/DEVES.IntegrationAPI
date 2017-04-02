@@ -21,7 +21,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         public override BaseDataModel Execute(object input)
         {
 
-            RegClientPersonalInputModel contentModel = (RegClientPersonalInputModel)input;
+            RegClientPersonalInputModel contentModel = JsonConvert.DeserializeObject<RegClientPersonalInputModel>(input.ToString());
 
             // 1. ให้ search crmClientID ก่อน ว่ามีอยู่ใน CRM ไหม
             // 1.1 (ถ้ามี) return cleansingID เลย แต่ไม่ต้องสร้างข้อมูลใหม่ใน CRM
@@ -90,8 +90,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         // contact
                         contact.pfc_date_of_birth = Convert.ToDateTime(contentModel.profileInfo.birthDate);
                         // account, contact
-                        // contact.pfc_nationalityId = contentModel.profileInfo.nationality; // Lookup
-                        // account.pfc_nationalityId = contentModel.profileInfo.nationality; // Lookup
+                        contact.pfc_polisy_nationality_code = contentModel.profileInfo.nationality;
+                        account.pfc_polisy_nationality_code = contentModel.profileInfo.nationality;
                         // account, contact
                         // account.pfc_language = contentModel.profileInfo.language; // optionset
                         // contact.pfc_language = contentModel.profileInfo.language; // optionset
@@ -101,7 +101,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         // contact
                         // contact.pfc_client_legal_status = contentModel.profileInfo.riskLevel; // optionset
                         // contact
-                        // contact.pfc_customer_vip = contentModel.profileInfo.vipStatus; // bool
+                        bool isVIP = false;
+                        if(contentModel.profileInfo.vipStatus.Equals("Y"))
+                        {
+                            isVIP = true;
+                        }
+                        contact.pfc_customer_vip = isVIP; // bool
                         // contentModel.profileInfo.remark;
 
                         // contactInfo 
@@ -137,6 +142,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         contentModel.addressInfo.latitude;
                         contentModel.addressInfo.longtitude;
 
+                        */
 
                         ExecuteTransactionRequest tranReq = new ExecuteTransactionRequest()
                         {
@@ -147,11 +153,96 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         CreateRequest createClaimReq = new CreateRequest() { Target = contact };
                         tranReq.Requests.Add(createClaimReq);
                         ExecuteTransactionResponse tranRes = (ExecuteTransactionResponse)crmSvc.Execute(tranReq);
-                        */
+                        
                     }
                     // Update Client Additional Records
                     else if (contentModel.generalHeader.clientAdditionalExistFlag.Equals("Y"))
                     {
+                        // logic for update
+                        // generalHeader
+                        // contentModel.generalHeader.roleCode; 
+                        // account, contact
+                        contact.pfc_cleansing_cusormer_profile_code = contentModel.generalHeader.cleansingId;
+                        account.pfc_cleansing_cusormer_profile_code = contentModel.generalHeader.cleansingId;
+                        // account, contact
+                        contact.pfc_polisy_client_id = contentModel.generalHeader.polisyClientId;
+                        account.pfc_polisy_client_id = contentModel.generalHeader.polisyClientId;
+                        // account, contact
+                        contact.pfc_crm_person_id = contentModel.generalHeader.crmClientId;
+                        account.AccountNumber = contentModel.generalHeader.crmClientId;
+
+                        // profileInfo
+                        // account, contact
+                        contact.Salutation = contentModel.profileInfo.salutation;
+                        account.pfc_saluation = contentModel.profileInfo.salutation;
+                        // contact
+                        contact.FirstName = contentModel.profileInfo.personalName;
+                        contact.LastName = contentModel.profileInfo.personalSurname;
+                        // contentModel.profileInfo.sex;
+                        // contact
+                        contact.pfc_citizen_id = contentModel.profileInfo.idCitizen;
+                        // contact
+                        contact.pfc_passport_id = contentModel.profileInfo.idPassport;
+                        // contact
+                        contact.pfc_alien_id = contentModel.profileInfo.idAlien;
+                        // contact
+                        contact.pfc_driver_license = contentModel.profileInfo.idDriving;
+                        // contact
+                        contact.pfc_date_of_birth = Convert.ToDateTime(contentModel.profileInfo.birthDate);
+                        // account, contact
+                        contact.pfc_polisy_nationality_code = contentModel.profileInfo.nationality;
+                        account.pfc_polisy_nationality_code = contentModel.profileInfo.nationality;
+                        // account, contact
+                        // account.pfc_language = contentModel.profileInfo.language; // optionset
+                        // contact.pfc_language = contentModel.profileInfo.language; // optionset
+                        // contact
+                        // contact.FamilyStatusCode = contentModel.profileInfo.married; // optionset
+                        // contentModel.profileInfo.occupation;
+                        // contact
+                        // contact.pfc_client_legal_status = contentModel.profileInfo.riskLevel; // optionset
+                        // contact
+                        bool isVIP = false;
+                        if (contentModel.profileInfo.vipStatus.Equals("N"))
+                        {
+                            isVIP = true;
+                        }
+                        contact.pfc_customer_vip = isVIP; // bool
+                        // contentModel.profileInfo.remark;
+
+                        // contactInfo 
+                        // account, contact
+                        contact.Telephone1 = contentModel.contactInfo.telephone1 + '#' + contentModel.contactInfo.telephone1Ext;
+                        contact.Telephone2 = contentModel.contactInfo.telephone2 + '#' + contentModel.contactInfo.telephone2Ext;
+                        contact.Telephone3 = contentModel.contactInfo.telephone3 + '#' + contentModel.contactInfo.telephone3Ext;
+                        // account, contact
+                        contact.pfc_moblie_phone1 = contentModel.contactInfo.mobilePhone;
+                        account.pfc_moblie_phone1 = contentModel.contactInfo.mobilePhone;
+                        // account, contact
+                        contact.EMailAddress1 = contentModel.contactInfo.emailAddress;
+                        account.EMailAddress1 = contentModel.contactInfo.emailAddress;
+                        // account, contact
+                        contact.pfc_line_id = contentModel.contactInfo.lineID;
+                        account.pfc_line_id = contentModel.contactInfo.lineID;
+                        // account, contact
+                        contact.pfc_facebook = contentModel.contactInfo.facebook;
+                        account.pfc_facebook = contentModel.contactInfo.facebook;
+
+
+                        // addressInfo
+                        /*
+                        contentModel.addressInfo.address1;
+                        contentModel.addressInfo.address2;
+                        contentModel.addressInfo.address3;
+                        contentModel.addressInfo.subDistrictCode;
+                        contentModel.addressInfo.districtCode;
+                        contentModel.addressInfo.provinceCode;
+                        contentModel.addressInfo.postalCode;
+                        contentModel.addressInfo.country;
+                        contentModel.addressInfo.addressType;
+                        contentModel.addressInfo.latitude;
+                        contentModel.addressInfo.longtitude;
+
+                        */
 
                         ExecuteTransactionRequest tranReq = new ExecuteTransactionRequest()
                         {
@@ -177,22 +268,98 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             }
             else // Means List crmData is not empty (1 or many)
             {
+                // Create new one and map input value to CRM
+                using (OrganizationServiceProxy crmSvc = GetCrmServiceProxy())
+                {
+                    crmSvc.EnableProxyTypes();
+
+                    Guid guid = new Guid();
+
+                    bool isVIP = false;
+                    if (contentModel.profileInfo.vipStatus.Equals("N"))
+                    {
+                        isVIP = true;
+                    }
+
+                    Contact contact = new Contact()
+                    {
+                        pfc_cleansing_cusormer_profile_code = contentModel.generalHeader.cleansingId,
+                        pfc_polisy_client_id = contentModel.generalHeader.polisyClientId,
+                        pfc_crm_person_id = contentModel.generalHeader.crmClientId,
+                        Salutation = contentModel.profileInfo.salutation,
+                        FirstName = contentModel.profileInfo.personalName,
+                        LastName = contentModel.profileInfo.personalSurname,
+                        pfc_citizen_id = contentModel.profileInfo.idCitizen,
+                        pfc_passport_id = contentModel.profileInfo.idPassport,
+                        pfc_alien_id = contentModel.profileInfo.idAlien,
+                        pfc_driver_license = contentModel.profileInfo.idDriving,
+                        pfc_date_of_birth = Convert.ToDateTime(contentModel.profileInfo.birthDate),
+                        pfc_polisy_nationality_code = contentModel.profileInfo.nationality,
+                        pfc_customer_vip = isVIP,
+                        Telephone1 = contentModel.contactInfo.telephone1 + '#' + contentModel.contactInfo.telephone1Ext,
+                        Telephone2 = contentModel.contactInfo.telephone2 + '#' + contentModel.contactInfo.telephone2Ext,
+                        Telephone3 = contentModel.contactInfo.telephone3 + '#' + contentModel.contactInfo.telephone3Ext,
+                        pfc_moblie_phone1 = contentModel.contactInfo.mobilePhone,
+                        EMailAddress1 = contentModel.contactInfo.emailAddress,
+                        pfc_line_id = contentModel.contactInfo.lineID,
+                        pfc_facebook = contentModel.contactInfo.facebook
+                    };
+
+                    /*
+                    Account account = new Account();
+                    {
+                        pfc_cleansing_cusormer_profile_code = contentModel.generalHeader.cleansingId,
+                        pfc_polisy_client_id = contentModel.generalHeader.polisyClientId,
+                        AccountNumber = contentModel.generalHeader.crmClientId,
+                        pfc_saluation = contentModel.profileInfo.salutation,
+                        pfc_polisy_nationality_code = contentModel.profileInfo.nationality,
+                        pfc_moblie_phone1 = contentModel.contactInfo.mobilePhone,
+                        EMailAddress1 = contentModel.contactInfo.emailAddress,
+                        pfc_line_id = contentModel.contactInfo.lineID,
+                        pfc_facebook = contentModel.contactInfo.facebook,
+                    };
+                    */
+
+                    if (contentModel.generalHeader.clientAdditionalExistFlag.Equals("Y"))
+                    {
+                        ExecuteTransactionRequest tranReq = new ExecuteTransactionRequest()
+                        {
+                            Requests = new OrganizationRequestCollection(),
+                            ReturnResponses = true
+                        };
+
+                        UpdateRequest updateCaseReq = new UpdateRequest { Target = contact };
+                        tranReq.Requests.Add(updateCaseReq);
+                        ExecuteTransactionResponse tranRes = (ExecuteTransactionResponse)crmSvc.Execute(tranReq);
+                    }
+
+                    CRMRegClientPersonalOutputDataModel output = new CRMRegClientPersonalOutputDataModel();
+
+                    output.cleansingId = contentModel.generalHeader.cleansingId;
+                    output.polisyClientId = contentModel.generalHeader.polisyClientId;
+                    output.crmClientId = contentModel.generalHeader.crmClientId;
+                    output.personalName = contentModel.profileInfo.personalName;
+                    output.personalSurname = contentModel.profileInfo.personalSurname;
+
+                    dataOutput.data.Add(output);
+
+                    return dataOutput;
+                }
+                /*
                 CRMRegClientPersonalOutputDataModel output = new CRMRegClientPersonalOutputDataModel();
 
+                // หาได้จาก input ที่ใส่มา
                 output.cleansingId = contentModel.generalHeader.cleansingId;
+                // น่าจะ get มาจาก polisy400
                 output.polisyClientId = contentModel.generalHeader.polisyClientId;
-                output.crmClientId = contentModel.generalHeader.crmClientId;
-                // output.personalName = contentModel.profileInfo.personalName;
-                foreach (object obj in crmData)
-                {
-                    output.personalName += obj;
-                    // loop body
-                }
-                output.personalName = crmData[0];
-                // output.personalSurname = contentModel.profileInfo.personalSurname;
-                output.personalSurname = crmData[0].ToString();
+                // ต้อง get มาจาก crmData ที่ check crmClientId
+                output.crmClientId = crmData[0];
+                // 
+                output.personalName = contentModel.profileInfo.personalName;
+                output.personalSurname = contentModel.profileInfo.personalSurname;
 
                 dataOutput.data.Add(output);
+                */
             }
 
             return dataOutput;
