@@ -15,7 +15,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
     {
         public override BaseDataModel Execute(object input)
         {
-            RegClientCorporateInputModel contentModel = DeserializeJson<RegClientCorporateInputModel>(input.ToString());
+            RegClientCorporateInputModel contentModel = (RegClientCorporateInputModel)input;
 
             // 1. ให้ search crmClientID ก่อน ว่ามีอยู่ใน CRM ไหม
             // 1.1 (ถ้ามี) return cleansingID เลย แต่ไม่ต้องสร้างข้อมูลใหม่ใน CRM
@@ -39,108 +39,168 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             // Search ข้อมูลจาก cleansing มาเก็ยภายใน List
             List<string> crmData = SearchCrmAccountClientId(data.generalHeader.cleansingId);
 
-            RegClientCorporateOutputModel dataOutput = new RegClientCorporateOutputModel();
-            dataOutput.data = new List<RegClientCorporateDataOutputModel_Pass>();
+            CreateCrmCorporateInfoOutputModel dataOutput = new CreateCrmCorporateInfoOutputModel();
+            // dataOutput.data = new List<RegClientCorporateDataOutputModel_Pass>();
+
             if (crmData.Count == 0) // Means List crmData is empty
             {
-                // Create new one and map input value to CRM
                 using (OrganizationServiceProxy crmSvc = GetCrmServiceProxy())
                 {
-                    crmSvc.EnableProxyTypes();
 
                     Contact contact = new Contact();
+                    Account account = new Account();
+                    // Address address = new Address();
+                    crmSvc.EnableProxyTypes();
 
-                    /*
-                    // generalHeader
-                    contentModel.generalHeader.roleCode; // contact
-                    contentModel.generalHeader.cleansingId; // account, contact
-                    contentModel.generalHeader.polisyClientId; // account
-                    contentModel.generalHeader.crmClientId; // account, contact
-                    contentModel.generalHeader.clientAdditionalExistFlag;
-                    contentModel.generalHeader.assessorFlag;
-                    contentModel.generalHeader.solicitorFlag;
-                    contentModel.generalHeader.repairerFlag;
-                    contentModel.generalHeader.hospitalFlag;
-
-                    // profileHeader
-                    contentModel.profileHeader.corporateName1;
-                    contentModel.profileHeader.corporateName2;
-                    contentModel.profileHeader.contactPerson; 
-                    contentModel.profileHeader.idRegCorp;
-                    contentModel.profileHeader.idTax;
-                    contentModel.profileHeader.dateInCorporate;
-                    contentModel.profileHeader.corporateBranch;
-                    contentModel.profileHeader.econActivity;
-                    contentModel.profileHeader.countryOrigin;
-                    contentModel.profileHeader.language; // account, contact
-                    contentModel.profileHeader.riskLevel; // contact
-                    contentModel.profileHeader.vipStatus; // contact
-
-                    // contactHeader 
-                    contentModel.contactHeader.telephone1; // account, contact
-                    contentModel.contactHeader.telephone1Ext; // account, contact
-                    contentModel.contactHeader.telephone2; // account , contact
-                    contentModel.contactHeader.telephone2Ext; // account, contact
-                    contentModel.contactHeader.telephone3; // account, contact
-                    contentModel.contactHeader.telephone3Ext; // account, contact
-                    contentModel.contactHeader.mobilePhone; // account, contact
-                    contentModel.contactHeader.fax; // account, contact
-                    contentModel.contactHeader.emailAddress; // account, contact
-                    contentModel.contactHeader.lineID; // account, contact
-                    contentModel.contactHeader.facebook; // account, contact
-
-                    // addressHeader
-                    contentModel.addressHeader.address1;
-                    contentModel.addressHeader.address2;
-                    contentModel.addressHeader.address3;
-                    contentModel.addressHeader.subDistrictCode;
-                    contentModel.addressHeader.districtCode;
-                    contentModel.addressHeader.provinceCode;
-                    contentModel.addressHeader.postalCode;
-                    contentModel.addressHeader.country;
-                    contentModel.addressHeader.addressType;
-                    contentModel.addressHeader.latitude;
-                    contentModel.addressHeader.longtitude;
-                    */
-
-                    /*
-                    // asrhHeader
-                    contentModel.asrhHeader.assessorOregNum;
-                    contentModel.asrhHeader.assessorDelistFlag;
-                    contentModel.asrhHeader.assessorBlackListFlag;
-                    contentModel.asrhHeader.assessorTerminateDate;
-                    contentModel.asrhHeader.solicitorOregNum;
-                    contentModel.asrhHeader.solicitorDelistFlag;
-                    contentModel.asrhHeader.solicitorBlackListFlag;
-                    contentModel.asrhHeader.solicitorTerminateDate;
-                    contentModel.asrhHeader.repairerOregNum;
-                    contentModel.asrhHeader.repairerDelistFlag;
-                    contentModel.asrhHeader.repairerBlackListFlag;
-                    contentModel.asrhHeader.repairerTerminateDate;
-                    */
-                    ExecuteTransactionRequest tranReq = new ExecuteTransactionRequest()
+                    //Create Client Additional Records
+                    if (contentModel.generalHeader.clientAdditionalExistFlag.Equals("N"))
                     {
-                        Requests = new OrganizationRequestCollection(),
-                        ReturnResponses = true
-                    };
+                        
+                        // generalHeader
+                        // contentModel.generalHeader.roleCode; 
+                        // account, contact
+                        contact.pfc_cleansing_cusormer_profile_code = contentModel.generalHeader.cleansingId;
+                        account.pfc_cleansing_cusormer_profile_code = contentModel.generalHeader.cleansingId;
+                        // account, contact
+                        contact.pfc_polisy_client_id = contentModel.generalHeader.polisyClientId;
+                        account.pfc_polisy_client_id = contentModel.generalHeader.polisyClientId;
+                        // account, contact
+                        contact.pfc_crm_person_id = contentModel.generalHeader.crmClientId;
+                        account.AccountNumber = contentModel.generalHeader.crmClientId;
 
-                    CreateRequest createClaimReq = new CreateRequest() { Target = contact };
-                    tranReq.Requests.Add(createClaimReq);
-                    ExecuteTransactionResponse tranRes = (ExecuteTransactionResponse)crmSvc.Execute(tranReq);
+                        // profileHeader
+
+                        //contentModel.profileHeader.corporateName1;
+                        //contentModel.profileHeader.corporateName2;
+                        account.Name = contentModel.profileHeader.corporateName1 + " " + contentModel.profileHeader.corporateName2;
+                        // contentModel.profileHeader.contactPerson; 
+                        account.pfc_register_no = contentModel.profileHeader.idRegCorp; // contentModel.profileHeader.idRegCorp;
+                        account.pfc_tax_no = contentModel.profileHeader.idTax; // contentModel.profileHeader.idTax;
+                        // contentModel.profileHeader.dateInCorporate;
+                        account.pfc_tac_branch = contentModel.profileHeader.corporateBranch; // contentModel.profileHeader.corporateBranch;
+                        // contentModel.profileHeader.econActivity;
+                        // contentModel.profileHeader.countryOrigin;
+                        // contentModel.profileHeader.language; // account, contact
+                        // contact
+                        // contentModel.profileHeader.riskLevel; // contact
+                        bool isVIP = false;
+                        if (contentModel.profileHeader.vipStatus.Equals("Y"))
+                        {
+                            isVIP = true;
+                        }
+                        contact.pfc_customer_vip = isVIP; // bool
+
+                        // contactHeader 
+                        // account, contact
+                        contact.Telephone1 = contentModel.contactHeader.telephone1 + '#' + contentModel.contactHeader.telephone1Ext;
+                        contact.Telephone2 = contentModel.contactHeader.telephone2 + '#' + contentModel.contactHeader.telephone2Ext;
+                        contact.Telephone3 = contentModel.contactHeader.telephone3 + '#' + contentModel.contactHeader.telephone3Ext;
+                        // account, contact
+                        contact.pfc_moblie_phone1 = contentModel.contactHeader.mobilePhone;
+                        account.pfc_moblie_phone1 = contentModel.contactHeader.mobilePhone;
+                        // account, contact
+                        contact.EMailAddress1 = contentModel.contactHeader.emailAddress;
+                        account.EMailAddress1 = contentModel.contactHeader.emailAddress;
+                        // account, contact
+                        contact.pfc_line_id = contentModel.contactHeader.lineID;
+                        account.pfc_line_id = contentModel.contactHeader.lineID;
+                        // account, contact
+                        contact.pfc_facebook = contentModel.contactHeader.facebook;
+                        account.pfc_facebook = contentModel.contactHeader.facebook;
+
+                        /*
+                        // addressHeader
+                        contentModel.addressHeader.address1;
+                        contentModel.addressHeader.address2;
+                        contentModel.addressHeader.address3;
+                        contentModel.addressHeader.subDistrictCode;
+                        contentModel.addressHeader.districtCode;
+                        contentModel.addressHeader.provinceCode;
+                        contentModel.addressHeader.postalCode;
+                        contentModel.addressHeader.country;
+                        contentModel.addressHeader.addressType;
+                        contentModel.addressHeader.latitude;
+                        contentModel.addressHeader.longtitude;
+                        */
+
+                        /*
+                        // asrhHeader
+                        contentModel.asrhHeader.assessorOregNum;
+                        contentModel.asrhHeader.assessorDelistFlag;
+                        contentModel.asrhHeader.assessorBlackListFlag;
+                        contentModel.asrhHeader.assessorTerminateDate;
+                        contentModel.asrhHeader.solicitorOregNum;
+                        contentModel.asrhHeader.solicitorDelistFlag;
+                        contentModel.asrhHeader.solicitorBlackListFlag;
+                        contentModel.asrhHeader.solicitorTerminateDate;
+                        contentModel.asrhHeader.repairerOregNum;
+                        contentModel.asrhHeader.repairerDelistFlag;
+                        contentModel.asrhHeader.repairerBlackListFlag;
+                        contentModel.asrhHeader.repairerTerminateDate;
+                        */
+
+                        ExecuteTransactionRequest tranReq = new ExecuteTransactionRequest()
+                        {
+                            Requests = new OrganizationRequestCollection(),
+                            ReturnResponses = true
+                        };
+
+                        CreateRequest createClaimReq = new CreateRequest() { Target = contact };
+                        tranReq.Requests.Add(createClaimReq);
+                        createClaimReq = new CreateRequest() { Target = account };
+                        tranReq.Requests.Add(createClaimReq);
+                        ExecuteTransactionResponse tranRes = (ExecuteTransactionResponse)crmSvc.Execute(tranReq);
+
+                    }
+                    // Update Client Additional Records
+                    else if (contentModel.generalHeader.clientAdditionalExistFlag.Equals("Y"))
+                    {
+                        // logic for update
+
+                        /*
+                        ExecuteTransactionRequest tranReq = new ExecuteTransactionRequest()
+                        {
+                            Requests = new OrganizationRequestCollection(),
+                            ReturnResponses = true
+                        };
+
+                        UpdateRequest updateCaseReq = new UpdateRequest { Target = contact };
+                        tranReq.Requests.Add(updateCaseReq);
+                        ExecuteTransactionResponse tranRes = (ExecuteTransactionResponse)crmSvc.Execute(tranReq);
+                        */
+                    }
 
                 }
+               
+                List<string> crmIdOutput = SearchCrmContactClientId(data.generalHeader.cleansingId);
+
+                dataOutput.crmClientId = crmIdOutput[0]; // generate from crm
+                // dataOutput.data = "Waiting for generating algorithm";
+                //dataOutput.data = contentModel.generalHeader.crmClientId;
+                dataOutput.code = "200";
+                dataOutput.transactionId = TransactionId;
+                dataOutput.transactionDateTime = DateTime.Now;
+                return dataOutput;
             }
-            else // Means List crmData is not empty (1 or many)
+            else if (crmData.Count == 1) // Means List crmData has 1 data
             {
-                RegClientCorporateDataOutputModel_Pass output = new RegClientCorporateDataOutputModel_Pass();
-                output.cleansingId = contentModel.generalHeader.cleansingId;
-                output.polisyClientId = contentModel.generalHeader.polisyClientId;
-                output.crmClientId = contentModel.generalHeader.crmClientId;
-                output.corporateName1 = contentModel.profileHeader.corporateName1;
-                output.corporateName2 = contentModel.profileHeader.corporateName2;
-                output.corporateBranch = contentModel.profileHeader.corporateBranch;
+                dataOutput.crmClientId = crmData[0];
+
+                dataOutput.code = "200";
+                dataOutput.transactionId = TransactionId;
+                dataOutput.transactionDateTime = DateTime.Now;
+                return dataOutput;
             }
-            return dataOutput;
+            else
+            {
+                dataOutput.code = "500";
+                dataOutput.transactionId = TransactionId;
+                dataOutput.transactionDateTime = DateTime.Now;
+                return dataOutput;
+            }
+
         }
+
+
     }
 }
