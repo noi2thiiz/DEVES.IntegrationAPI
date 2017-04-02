@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using DEVES.IntegrationAPI.Model.EWI;
 using Newtonsoft.Json;
 
+
 namespace DEVES.IntegrationAPI.Model.CLS
 {
     class CLSCreateCorporateClientInputModel : BaseDataModel

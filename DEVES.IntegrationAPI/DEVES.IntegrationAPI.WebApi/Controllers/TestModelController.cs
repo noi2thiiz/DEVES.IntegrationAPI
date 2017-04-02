@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Web.Http;
 using DEVES.IntegrationAPI.Model.APAR;
+using DEVES.IntegrationAPI.Model.CLS;
 using DEVES.IntegrationAPI.Model.InquiryCRMPayeeList;
 using DEVES.IntegrationAPI.Model.MASTER;
 using DEVES.IntegrationAPI.Model.Polisy400;
@@ -180,6 +181,18 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 aparPayeeList = new InquiryAPARPayeeListModel()
             });
             return model;
+        }
+
+        [HttpGet]
+        [Route("CLSCreatePersonalClientOutputModel")]
+        public IHttpActionResult CLSCreatePersonalClientOutputModel()
+        {
+            var model = new CLSCreatePersonalClientOutputModel();
+            model.content = new CLSCreatePersonalClientContentOutputModel();
+            model.content.data = new CLSCreatePersonalClientDataOutputModel();
+
+
+            return Ok(model);
         }
 
 
