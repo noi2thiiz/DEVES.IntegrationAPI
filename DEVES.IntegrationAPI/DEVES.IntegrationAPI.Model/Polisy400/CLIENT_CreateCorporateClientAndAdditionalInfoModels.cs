@@ -69,7 +69,7 @@ namespace DEVES.IntegrationAPI.Model.Polisy400
         //"corporateName2": "Corporate Proxy",
         public string corporateName2 { get; set; }
         //"corporateName1": "Case 1 Corporate JSON",
-        public string xxx { get; set; }
+        public string corporateName1 { get; set; }
         //"dateInCorporate": "20160303",
         public string dateInCorporate { get; set; }
         //"mailing": "isaidyouknowme@hotmail.com",
@@ -88,8 +88,8 @@ namespace DEVES.IntegrationAPI.Model.Polisy400
         public DateTime assessorTerminateDate { get; set; }
         //"repairerOregNum": "",
         public string repairerOregNum { get; set; }
-        //"repai  public string xxx { get; set; }rerDelistFlag": "",
-
+        //"repai rerDelistFlag": "",
+        public string rerDelistFlag { get; set; }
         //"countryOrigin": "N",
         public string countryOrigin { get; set; }
         //"lineId": "789410",
