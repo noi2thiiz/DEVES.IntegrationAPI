@@ -315,6 +315,7 @@
     <Compile Include="Logic\TranformCLSCreateCorporateClientContentOutputModel_to_RegClientCorporateInputModel.cs" />
     <Compile Include="Logic\TranformCLSCreatePersonalClientOutputModel_to_RegClientPersonalInputModel.cs" />
     <Compile Include="Logic\TranformCRMRegClientPersonalOutputModel_to_CRMRegClientPersonalOutputModel.cs" />
+    <Compile Include="Logic\TranformEWIResCOMPInquiryClientMasterContentModel_to_CLIENTUpdateCorporateClientAndAdditionalInfoInputModel.cs" />
     <Compile Include="Logic\TranformRegClientCorporateInputModel_to_CLIENTCreateCorporateClientAndAdditionalInfoInputModel.cs" />
     <Compile Include="Logic\TranformRegClientCorporateInputModel_to_COMPInquiryClientMasterInputModel.cs" />
     <Compile Include="Logic\TranformRegClientPersonalInputModel_to_CLIENTCreatePersonalClientAndAdditionalInfoInputModel.cs" />

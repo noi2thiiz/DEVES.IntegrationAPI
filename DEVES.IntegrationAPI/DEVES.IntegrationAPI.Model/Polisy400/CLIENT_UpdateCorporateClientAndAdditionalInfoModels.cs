@@ -12,8 +12,8 @@ namespace DEVES.IntegrationAPI.Model.Polisy400
     //    class CLIENTUpdateCorporateClientAndAdditionalInfoModels
     public class CLIENTUpdateCorporateClientAndAdditionalInfoInputModel : BaseDataModel
     {
-        //"telephones2": "0833333333",
-        public string telephones2 { get; set; }
+      
+        
         //"remark": "ทดสอบผ่าน Service Proxy Fulfill Create and Update Corporate",
         public string remark { get; set; }
         //"address1": "43/21 ม.7",
@@ -24,6 +24,9 @@ namespace DEVES.IntegrationAPI.Model.Polisy400
         public string specialIndicator { get; set; }
         //"address3": "แขวงกรุงธน",
         public string address3 { get; set; }
+
+        public string address4 { get; set; }
+
         //"capital": "สมุทรปราการ",
         public string capital { get; set; }
         //"hospitalFlag": "Y",
@@ -82,6 +85,10 @@ namespace DEVES.IntegrationAPI.Model.Polisy400
         public string telex { get; set; }
         //"telephones": "023333333",
         public string telephones { get; set; }
+
+        //"telephones2": "0833333333",
+        public string telephones2 { get; set; }
+
         //"repairerFlag": "Y",
         public string repairerFlag { get; set; }
         //"clientNumber": "16960644",
