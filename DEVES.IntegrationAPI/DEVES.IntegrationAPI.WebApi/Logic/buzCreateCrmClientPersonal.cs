@@ -21,7 +21,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         public override BaseDataModel Execute(object input)
         {
 
-            RegClientPersonalInputModel contentModel = JsonConvert.DeserializeObject<RegClientPersonalInputModel>(input.ToString());
+            RegClientPersonalInputModel contentModel = (RegClientPersonalInputModel)input;
 
             // 1. ให้ search crmClientID ก่อน ว่ามีอยู่ใน CRM ไหม
             // 1.1 (ถ้ามี) return cleansingID เลย แต่ไม่ต้องสร้างข้อมูลใหม่ใน CRM
