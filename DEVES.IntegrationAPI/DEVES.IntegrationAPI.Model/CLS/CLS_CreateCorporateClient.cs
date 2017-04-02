@@ -12,7 +12,8 @@ namespace DEVES.IntegrationAPI.Model.CLS
 {
     public class CLSCreateCorporateClientInputModel : BaseDataModel
     {
-                   // "cleansingId": "",
+       
+        // "cleansingId": "",
         public string cleansingId { get; set; }
         public string clientId { get; set; }
         
@@ -34,6 +35,10 @@ namespace DEVES.IntegrationAPI.Model.CLS
         public string taxNo { get; set; }
         //"dateInCorporate": "2017-06-02 00:00:00",
         public DateTime dateInCorporate { get; set; }
+
+        public string corporateBranch { get; set; }
+        public string idTax { get; set; }
+
         //"corporateStaffNo": "152312",
         public string corporateStaffNo { get; set; }
         //"econActivity": "9823822",
