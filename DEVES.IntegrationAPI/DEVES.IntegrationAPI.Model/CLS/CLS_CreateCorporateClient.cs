@@ -10,10 +10,12 @@ using Newtonsoft.Json;
 
 namespace DEVES.IntegrationAPI.Model.CLS
 {
-    class CLSCreateCorporateClientInputModel : BaseDataModel
+    public class CLSCreateCorporateClientInputModel : BaseDataModel
     {
                    // "cleansingId": "",
         public string cleansingId { get; set; }
+        public string clientId { get; set; }
+        
         //  "roleCode":"G",
         public string roleCode { get; set; }
         //  "crmPersonId":"",

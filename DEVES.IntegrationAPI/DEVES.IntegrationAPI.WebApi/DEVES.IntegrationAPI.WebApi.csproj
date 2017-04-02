@@ -313,6 +313,7 @@
     <Compile Include="Logic\TranformCLSCreatePersonalClientOutputModel_to_RegClientPersonalInputModel.cs" />
     <Compile Include="Logic\TranformCRMRegClientPersonalOutputModel_to_CRMRegClientPersonalOutputModel.cs" />
     <Compile Include="Logic\TranformRegClientPersonalInputModel_to_CLIENTCreatePersonalClientAndAdditionalInfoInputModel.cs" />
+    <Compile Include="Logic\TranformRegClientCorporateInputModel_to_CLSCreateCorporateClientInputModel.cs" />
     <Compile Include="Logic\TranformRegClientPersonalInputModel_to_CLSCreatePersonalClientInputModel.cs" />
     <Compile Include="Logic\TransformAPARInquiryAPARPayeeListContentOutputModel_to_InquiryCRMPayeeListDataOutputModel.cs" />
     <Compile Include="Logic\TransformCLSInquiryCorporateClientContentOut_to_CrmInquiryClientMasterContentOut.cs" />
