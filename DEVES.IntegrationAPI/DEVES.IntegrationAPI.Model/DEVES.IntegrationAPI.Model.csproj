@@ -118,7 +118,7 @@
     <Compile Include="Polisy400\CLIENT_CreateCorporateClientAndAdditionalInfoModels.cs" />
     <Compile Include="Polisy400\CLIENT_CreatePersonalClientAndAdditionalInfoModels.cs" />
     <Compile Include="Polisy400\CLIENT_UpdateCorporateClientAndAdditionalInfoModels.cs" />
-    <Compile Include="Polisy400\POLInquiryClientMasterDataModel.cs" />
+    <Compile Include="Polisy400\COMPInquiryClientMasterDataModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegClaimRequestFromClaimDi\RegClaimRequestFromClaimDiInputModel.cs" />
     <Compile Include="RegClaimRequestFromClaimDi\RegClaimRequestFromClaimDiOutputModel.cs" />
