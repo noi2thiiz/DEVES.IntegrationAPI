@@ -195,7 +195,18 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             return Ok(model);
         }
 
+        [HttpGet]
+        [Route("CLIENTCreatePersonalClientAndAdditionalInfoOutputModel")]
+        public IHttpActionResult CLIENTCreatePersonalClientAndAdditionalInfoOutputModel()
+        {
+            var model = new CLIENTCreatePersonalClientAndAdditionalInfoOutputModel();
+            model.content = new CLIENTCreatePersonalClientAndAdditionalInfoContentModel();
+           
 
+            return Ok(model);
+        }
+
+        
 
     }
 }
