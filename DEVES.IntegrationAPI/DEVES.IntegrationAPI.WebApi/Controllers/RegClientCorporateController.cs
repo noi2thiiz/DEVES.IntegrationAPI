@@ -8,6 +8,7 @@ using System.Web;
 using System.IO;
 using Newtonsoft.Json;
 using DEVES.IntegrationAPI.WebApi.Logic;
+using DEVES.IntegrationAPI.Model.RegClientCorporate;
 
 namespace DEVES.IntegrationAPI.WebApi.Controllers
 {
@@ -15,8 +16,9 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
     {
         public object Post([FromBody]object value)
         {
-            var data = File.ReadAllText(HttpContext.Current.Server.MapPath("~/App_Data/TEST_Response_RegClientCorporate.json"));
-            var contentOutput = JsonConvert.DeserializeObject(data);
+            // var data = File.ReadAllText(HttpContext.Current.Server.MapPath("~/App_Data/TEST_Response_RegClientCorporate.json"));
+            buzCRMRegClientCorporate cmdCrmRegClientCorporate = new buzCRMRegClientCorporate();
+            var contentOutput = cmdCrmRegClientCorporate.Execute(cmdCrmRegClientCorporate.DeserializeJson<RegClientCorporateInputModel>(value.ToString()));
             return Request.CreateResponse(contentOutput);
         }
 

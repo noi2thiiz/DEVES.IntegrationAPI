@@ -1,0 +1,211 @@
+﻿{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+
+    "generalHeader": {
+      "type": "object",
+      "properties": {
+        "roleCode": {
+          "type": "string",
+          "maxLength": 5
+        },
+        "cleansingId": {
+          "type": "string",
+          "maxLength": 20
+        },
+        "polisyClientId": {
+          "type": "string",
+          "maxLength": 8
+        },
+        "crmClientId": {
+          "type": "string",
+          "maxLength": 20
+        },
+        "clientAdditionalExistFlag": {
+          "type": "string",
+          "maxLength": 1
+        },
+        "assessorFlag": {
+          "type": "string",
+          "maxLength": 1
+        },
+        "solicitorFlag": {
+          "type": "string",
+          "maxLength": 1
+        },
+        "repairerFlag": {
+          "type": "string",
+          "maxLength": 1
+        },
+        "hospitalFlag": {
+          "type": "string",
+          "maxLength": 1
+        }
+      },
+      "required": [
+        "roleCode",
+        "clientAdditionalExistFlag"
+      ]
+    },
+
+    "profileInfo": {
+      "type": "object",
+      "properties": {
+        "corporateName1": {
+          "type": "string",
+          "maxLength": 60
+        },
+        "corporateName2": {
+          "type": "string",
+          "maxLength": 60
+        },
+        "contactPerson": {
+          "type": "string",
+          "maxLength": 30
+        },
+        "idRegCorp": {
+          "type": "string",
+          "maxLength": 24
+        },
+        "idTax": {
+          "type": "string",
+          "maxLength": 20
+        },
+        "dateInCorporate": {
+          "type": "string",
+          "maxLength": 10
+        },
+        "corporateBranch": {
+          "type": "string",
+          "maxLength": 6
+        },
+        "econActivity": {
+          "type": "string",
+          "maxLength": 4
+        },
+        "countryOrigin": {
+          "type": "string",
+          "maxLength": 3
+        },
+        "language": {
+          "type": "string",
+          "maxLength": 1
+        },
+        "riskLevel": {
+          "type": "string",
+          "maxLength": 2
+        },
+        "vipStatus": {
+          "type": "string",
+          "maxLength": 1
+        }
+      },
+      "required": [
+        "corporateName1",
+        "corporateBranch"
+      ]
+    },
+
+    "contactInfo": {
+      "type": "object",
+      "properties": {
+        "telephone1": {
+          "type": "string",
+          "maxLength": 10
+        },
+        "telephone1Ext": {
+          "type": "string",
+          "maxLength": 5
+        },
+        "telephone2": {
+          "type": "string",
+          "maxLength": 10
+        },
+        "telephone2Ext": {
+          "type": "string",
+          "maxLength": 5
+        },
+        "telephone3": {
+          "type": "string",
+          "maxLength": 10
+        },
+        "telephone3Ext": {
+          "type": "string",
+          "maxLength": 5
+        },
+        "mobilePhone": {
+          "type": "string",
+          "maxLength": 16
+        },
+        "fax": {
+          "type": "string",
+          "maxLength": 16
+        },
+        "emailAddress": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "lineID": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "facebook": {
+          "type": "string",
+          "maxLength": 100
+        }
+      }
+    },
+
+    "addressInfo": {
+      "type": "object",
+      "properties": {
+        "address1": {
+          "type": "string",
+          "maxLength": 30
+        },
+        "address2": {
+          "type": "string",
+          "maxLength": 30
+        },
+        "address3": {
+          "type": "string",
+          "maxLength": 30
+        },
+        "subDistrictCode": {
+          "type": "string",
+          "maxLength": 6
+        },
+        "districtCode": {
+          "type": "string",
+          "maxLength": 4
+        },
+        "provinceCode": {
+          "type": "string",
+          "maxLength": 2
+        },
+        "postalCode": {
+          "type": "string",
+          "maxLength": 10
+        },
+        "country": {
+          "type": "string",
+          "maxLength": 3
+        },
+        "addressType": {
+          "type": "string",
+          "maxLength": 2
+        },
+        "latitude": {
+          "type": "string",
+          "maxLength": 20
+        },
+        "longtitude": {
+          "type": "string",
+          "maxLength": 20
+        }
+      }
+    }
+
+  }
+}
