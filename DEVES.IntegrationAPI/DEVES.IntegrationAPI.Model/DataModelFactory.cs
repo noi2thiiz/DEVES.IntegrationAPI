@@ -3,8 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DEVES.IntegrationAPI.Model.APAR;
 using Model = DEVES.IntegrationAPI.Model;
 using DEVES.IntegrationAPI.Model.InquiryClientMaster;
+using DEVES.IntegrationAPI.Model.MASTER;
+using DEVES.IntegrationAPI.Model.Polisy400;
+using DEVES.IntegrationAPI.Model.SAP;
 using CLS = DEVES.IntegrationAPI.Model.CLS;
 using DEVES.IntegrationAPI.Model.APAR;
 
@@ -15,6 +19,7 @@ namespace DEVES.IntegrationAPI.Model
         public static BaseDataModel GetModel(Type t)
         {
             BaseDataModel o = new NullDataModel();
+            #region Model.InquiryClientMaster.CRMInquiryClientContentOutputModel
             if (t == typeof(Model.InquiryClientMaster.CRMInquiryClientContentOutputModel))
             {
                 CRMInquiryClientContentOutputModel crmInqClient = new CRMInquiryClientContentOutputModel();
@@ -29,6 +34,58 @@ namespace DEVES.IntegrationAPI.Model
                 //crmInqClient.data.Add(data);
                 o = crmInqClient;
             }
+            #endregion Model.InquiryClientMaster.CRMInquiryClientContentOutputModel
+            #region InquiryAPARPayeeListInputModel
+            else if (t == typeof(InquiryAPARPayeeListInputModel))
+            {
+                InquiryAPARPayeeListInputModel model = new InquiryAPARPayeeListInputModel();
+
+
+                o = model;
+            }
+            #endregion InquiryAPARPayeeListInputModel
+            #region Model.SAP.SAPInquiryVendorInputModel
+
+            else if (t == typeof(Model.SAP.SAPInquiryVendorInputModel))
+            {
+                SAPInquiryVendorInputModel input = new SAPInquiryVendorInputModel();
+
+                //crmInqClient.data.Add(data);
+                o = input;
+            }
+            #endregion Model.SAP.SAPInquiryVendorInputModel
+            #region Model.MASTER.InquiryMasterASRHDataInputModel
+            else if (t == typeof(Model.MASTER.InquiryMasterASRHDataInputModel))
+            {
+                InquiryMasterASRHDataInputModel input = new InquiryMasterASRHDataInputModel();
+
+                //crmInqClient.data.Add(data);
+                o = input;
+            }
+            #endregion Model.MASTER.InquiryMasterASRHDataInputModel
+            #region Model.MASTER.InquiryMasterASRHContentModel
+            else if (t == typeof(Model.MASTER.InquiryMasterASRHContentModel))
+            {
+
+                var modelContent = new InquiryAPARPayeeContentModel();
+                modelContent.aparPayeeListCollection = new List<InquiryAPARPayeeContentAparPayeeListCollectionDataModel>();
+                var colData = new InquiryAPARPayeeContentAparPayeeListCollectionDataModel();
+                colData.aparPayeeList = new InquiryAPARPayeeListModel();
+
+                o = modelContent;
+            }
+            #endregion Model.MASTER.InquiryMasterASRHContentModel
+            #region EWIResCOMPInquiryClientMasterContentModel
+            else if (t == typeof(EWIResCOMPInquiryClientMasterContentModel))
+            {
+
+                var modelContent = new EWIResCOMPInquiryClientMasterContentModel();
+                modelContent.clientListCollection = new List<COMPInquiryClientMasterContentClientListModel>();
+
+
+                o = modelContent;
+            }
+            #endregion EWIResCOMPInquiryClientMasterContentModel
             else
             {
                 throw new NotImplementedException("GetModel(T) for type<T>:" + t.Name);

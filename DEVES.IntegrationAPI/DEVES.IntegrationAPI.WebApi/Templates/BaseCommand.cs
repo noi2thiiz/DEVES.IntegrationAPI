@@ -62,8 +62,8 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                 //user & password must be switch to get from calling k.Ton's API rather than fixed values.
                 username = "sysdynamic",
                 password = "REZOJUNtN04=",
-                uid = UID,
-                gid = UID,
+                uid = "cleansing",
+                gid = "cleansing",
                 token = GetLatestToken(),
                 content = JSON
             };
@@ -99,8 +99,8 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                 //user & password must be switch to get from calling k.Ton's API rather than fixed values.
                 username = "sysdynamic",
                 password = "REZOJUNtN04=",
-                uid = UID,
-                gid = UID,
+                uid = "cleansing",
+                gid = "cleansing",
                 token = GetLatestToken(),
                 content = JSON
             };
@@ -116,20 +116,29 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             // + ENDPOINT
             string EWIendpoint = GetEWIEndpoint(EWIendpointKey);
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, EWIendpoint);
-            request.Content = new StringContent(jsonReqModel, System.Text.Encoding.UTF8, "application/json");
+            Console.WriteLine("==========jsonReqModel========");
+            Console.WriteLine(jsonReqModel.ToJson());
 
+            request.Content = new StringContent(jsonReqModel, System.Text.Encoding.UTF8, "application/json");
+            Console.WriteLine("==========request========");
+            Console.WriteLine(request.ToJson());
             // เช็ค check reponse 
             HttpResponseMessage response = client.SendAsync(request).Result;
             response.EnsureSuccessStatusCode();
             
             T1 ewiRes = response.Content.ReadAsAsync<T1>().Result;
+
+            Console.WriteLine("==========response========");
+            Console.WriteLine(ewiRes.ToJson());
             if (ewiRes.success)
             {
+
                 T2 output = (T2)typeof(T1).GetProperty("content").GetValue(ewiRes);
                 return output;
             }
             else
             {
+
                 throw new Exception(String.Format("Error:{0}, Message:{1}", ewiRes.responseCode , ewiRes.responseMessage));
             }
         }
@@ -326,6 +335,9 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
 
         internal string GetAppConfigurationSetting(string key)
         {
+            Console.WriteLine("==================key=================");
+            Console.WriteLine(key);
+            Console.WriteLine("==================End Key=================");
             return System.Configuration.ConfigurationManager.AppSettings[key].ToString();
         }
 

@@ -1,4 +1,5 @@
-﻿using DEVES.IntegrationAPI.Model;
+﻿using System;
+using DEVES.IntegrationAPI.Model;
 using DEVES.IntegrationAPI.Model.APAR;
 using DEVES.IntegrationAPI.Model.InquiryCRMPayeeList;
 using DEVES.IntegrationAPI.WebApi.Templates;
@@ -25,7 +26,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             // cannot map to trgt
             //src.emcsCode
 
-            return output;
+           /// Console.WriteLine(trgt.ToJson());
+
+            return trgt;
         }
 
         

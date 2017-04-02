@@ -19,7 +19,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             trgt.VCODE = src.sapVendorCode;
 
 
-            return output;
+            return trgt;
         }
     }
 }

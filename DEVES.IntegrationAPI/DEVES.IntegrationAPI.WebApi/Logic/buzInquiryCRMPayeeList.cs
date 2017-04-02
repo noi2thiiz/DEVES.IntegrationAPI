@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 
@@ -10,6 +11,7 @@ using DEVES.IntegrationAPI.Model.EWI;
 using DEVES.IntegrationAPI.Model.CLS;
 using DEVES.IntegrationAPI.Model.APAR;
 using DEVES.IntegrationAPI.Model.SAP;
+using DEVES.IntegrationAPI.Model.MASTER;
 using DEVES.IntegrationAPI.Model.InquiryCRMPayeeList;
 using DEVES.IntegrationAPI.Model.InquiryClientMaster;
 using DEVES.IntegrationAPI.WebApi.Templates;
@@ -27,18 +29,18 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             crmInqPayeeOut.transactionId = Guid.NewGuid().ToString();
             try
             {
+                Console.WriteLine(input.ToString());
 
                 InquiryCRMPayeeListInputModel inqCrmPayeeListIn = JsonConvert.DeserializeObject<InquiryCRMPayeeListInputModel>(input.ToString());
 
-                //inqCrmPayeeListIn.roleCode == "G"
+                #region IF inqCrmPayeeListIn.roleCode == "G" -> APAR.InquiryAPARPayeeList
                 if (inqCrmPayeeListIn.roleCode.ToUpper() == ENUM_CLIENT_ROLE.G.ToString())
                 {
                     InquiryAPARPayeeListInputModel inqAPARIn = (InquiryAPARPayeeListInputModel)DataModelFactory.GetModel(typeof(InquiryAPARPayeeListInputModel));
                     inqAPARIn = (InquiryAPARPayeeListInputModel)TransformerFactory.TransformModel(inqCrmPayeeListIn, inqAPARIn);
 
-                    //InquiryAPARPayeeContentOutputModel inqAPAROut = CallDevesServiceProxy<InquiryAPARPayeeModel, InquiryAPARPayeeContentOutputModel>(CommonConstant.ewiEndpointKeyClaimRegistration, inqAPARIn);
                     InquiryAPARPayeeContentModel inqAPAROut = CallDevesServiceProxy<InquiryAPARPayeeOutputModel, InquiryAPARPayeeContentModel>(CommonConstant.ewiEndpointKeyAPARInquiryPayeeList, inqAPARIn);
-                    if (inqAPAROut != null)
+                    if (inqAPAROut != null && inqAPAROut.aparPayeeListCollection != null)
                     {
                         if (inqAPAROut.aparPayeeListCollection.Count > 0)
                         {
@@ -47,22 +49,43 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         }
                     }
                 }
-                // inqCrmPayeeListIn.roleCode == {A,S,R,H}
+                #endregion inqCrmPayeeListIn.roleCode == "G" -> APAR.InquiryAPARPayeeList
+
+                #region IF inqCrmPayeeListIn.roleCode == {A,S,R,H} -> Master.InquiryMasterASRH
                 else
                 {
                     // Search in MASTER: MOTOR_InquiryMasterASRH()
-                }
+                    InquiryMasterASRHDataInputModel inqASRHIn = (InquiryMasterASRHDataInputModel)DataModelFactory.GetModel(typeof(InquiryMasterASRHDataInputModel));
+                    inqASRHIn = (InquiryMasterASRHDataInputModel)TransformerFactory.TransformModel(inqCrmPayeeListIn, inqASRHIn);
+                    InquiryMasterASRHContentModel inqASRHOut = CallDevesServiceProxy<InquiryMasterASRHOutputModel, InquiryMasterASRHContentModel>(CommonConstant.ewiEndpointKeyMOTORInquiryMasterASRH, inqASRHIn);
 
+                    if (inqASRHOut != null && inqASRHOut.ASRHListCollection != null)
+                    {
+                        if (inqASRHOut.ASRHListCollection.Count > 0)
+                        {
+                            crmInqPayeeOut = (CRMInquiryPayeeContentOutputModel)TransformerFactory.TransformModel(inqASRHOut, crmInqPayeeOut);
+                            bFoundIn_APAR_or_Master = true;
+                        }
+                    }
+                }
+                #endregion inqCrmPayeeListIn.roleCode == {A,S,R,H} -> Master.InquiryMasterASRH
+
+                #region Search in Cleansing(CLS) then search in Polisy400
                 if (!bFoundIn_APAR_or_Master)
                 {
-                    // Search in [CLS: CLS_InquiryPersonalClient or CLS_InquiryCorporateClient ] & Polisy400: COMP_InquiryClientMaster
-                    buzCrmInquiryClientMaster searchCleansing = new buzCrmInquiryClientMaster();
-                    BaseContentJsonProxyOutputModel contentSearchCleansing = (BaseContentJsonProxyOutputModel)searchCleansing.Execute(input);
+                    /*
+                        // Search in [CLS: CLS_InquiryPersonalClient or CLS_InquiryCorporateClient ] & Polisy400: COMP_InquiryClientMaster
+                        buzCrmInquiryClientMaster searchCleansing = new buzCrmInquiryClientMaster();
+                        BaseContentJsonProxyOutputModel contentSearchCleansing = (BaseContentJsonProxyOutputModel)searchCleansing.Execute(input);
 
-                    //Merge crmInqPayeeOut with contentSearchCleansing
+                        //Merge crmInqPayeeOut with contentSearchCleansing
+
+                    */
+
                 }
-
-                //Search In SAP: SAP_InquiryVendor()
+                #endregion Search in Cleansing(CLS) then search in Polisy400
+                
+                #region Search In SAP: SAP_InquiryVendor()
                 SAPInquiryVendorInputModel inqSAPVendorIn = (SAPInquiryVendorInputModel)DataModelFactory.GetModel(typeof(SAPInquiryVendorInputModel));
                 inqSAPVendorIn = (SAPInquiryVendorInputModel)TransformerFactory.TransformModel(inqCrmPayeeListIn, inqSAPVendorIn);
 
@@ -72,18 +95,25 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 {
                     crmInqPayeeOut = (CRMInquiryPayeeContentOutputModel) TransformerFactory.TransformModel(inqSAPVendorContentOut, crmInqPayeeOut);
                 }
-                crmInqPayeeOut.code = CONST_CODE_SUCCESS;
-                crmInqPayeeOut.message = "SUCCESS";
+                #endregion Search In SAP: SAP_InquiryVendor()
 
+                crmInqPayeeOut.code = CONST_CODE_SUCCESS;
+                
+                crmInqPayeeOut.message = "SUCCESS";
             }
             catch (Exception e)
             {
                 crmInqPayeeOut.code = CONST_CODE_FAILED;
                 crmInqPayeeOut.message = e.Message;
                 crmInqPayeeOut.description = e.StackTrace;
-            }
 
+            }
+            crmInqPayeeOut.transactionId = TransactionId;
+            crmInqPayeeOut.transactionDateTime = DateTime.Now;
             return crmInqPayeeOut;
         }
+
+        public string TransactionId { get; set; }
+     
     }
 }
