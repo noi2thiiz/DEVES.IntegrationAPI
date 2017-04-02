@@ -55,7 +55,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     RegClientPersonalDataOutputModel_Pass dataOutPass = new RegClientPersonalDataOutputModel_Pass();
                     dataOutPass.cleansingId = regClientPersonalInput.generalHeader.cleansingId;
                     dataOutPass.polisyClientId = regClientPersonalInput.generalHeader.polisyClientId;
-                    dataOutPass.crmClientId = "";
+                    dataOutPass.crmClientId = crmContentOutput.data;
                     regClientPersonOutput.data.Add(dataOutPass);
                 }
 

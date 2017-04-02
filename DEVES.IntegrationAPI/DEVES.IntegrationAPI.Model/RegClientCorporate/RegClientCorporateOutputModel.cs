@@ -8,7 +8,7 @@ namespace DEVES.IntegrationAPI.Model.RegClientCorporate
 {
     public class RegClientCorporateOutputModel : BaseContentJsonProxyOutputModel
     {
-        public List<RegClientCorporateDataOutputModel_Pass> data { set; get; }
+        public string data { set; get; }
     }
 
     public class RegClientCorporateOutputModel_Pass
