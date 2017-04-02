@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DEVES.IntegrationAPI.Model.EWI;
 using Newtonsoft.Json;
 
 namespace DEVES.IntegrationAPI.Model.RegClientPersonal
 {
-    public class CRMRegClientPersonalOutputModel : BaseContentJsonProxyOutputModel
+    public class CRMRegClientPersonalOutputModel : BaseEWIResponseModel
     {
         public List<CRMRegClientPersonalOutputDataModel> data { set; get; }
     }
-
     public class CRMRegClientPersonalOutputDataModel : BaseDataModel
     {
         public string cleansingId { get; set; }

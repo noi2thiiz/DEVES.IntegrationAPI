@@ -5,7 +5,7 @@ using DEVES.IntegrationAPI.WebApi.Templates;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
-    public class TranformCLSCreatePersonalClientOutputModel_to_RegClientPersonalInputModelModel : BaseTransformer
+    public class TranformCLSCreatePersonalClientOutputModel_to_RegClientPersonalInputModel : BaseTransformer
     {
         public override BaseDataModel TransformModel(BaseDataModel input, BaseDataModel output)
         {
@@ -16,7 +16,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             {
 
                 if (string.IsNullOrEmpty(src.data.cleansingId)) trgt.generalHeader.cleansingId = src.data.cleansingId;
-              
+                
 
             }
             
