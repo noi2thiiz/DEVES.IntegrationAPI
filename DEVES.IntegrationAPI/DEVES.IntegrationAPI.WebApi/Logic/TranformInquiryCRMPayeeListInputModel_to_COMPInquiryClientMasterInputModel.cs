@@ -19,8 +19,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             trgt.idcard= src.taxNo;
             trgt.branchCode= src.taxBranchCode;
-            
-            //trgt.backDay =
+
+            trgt.backDay = 3;
 
             // src.sapVendorCode;
             // src.requester;
