@@ -19,8 +19,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             CRMInquiryPayeeContentOutputModel crmInqPayeeOut = new CRMInquiryPayeeContentOutputModel();
             crmInqPayeeOut.data = new List<InquiryCrmPayeeListDataModel>();
-            crmInqPayeeOut.transactionId = TransactionId;
-            crmInqPayeeOut.transactionDateTime = DateTime.Now;
+           
             try
             {
                 Console.WriteLine(input.ToString());
@@ -127,7 +126,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 crmInqPayeeOut.description = e.StackTrace;
 
             }
-           
+            crmInqPayeeOut.transactionId = TransactionId;
+            crmInqPayeeOut.transactionDateTime = DateTime.Now;
+
             return crmInqPayeeOut;
         }
 
