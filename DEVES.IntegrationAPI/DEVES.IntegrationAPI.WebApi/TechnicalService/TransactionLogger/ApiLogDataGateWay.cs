@@ -18,6 +18,7 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
                     string saveStaff = @"INSERT into
                                             transactionLog (
                                             [Controller],
+                                            Activity,
                                             TransactionID,
                                             [User],
                                             Machine,
@@ -29,7 +30,7 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
                                             RequestRouteTemplate,RequestRouteData,RequestHeaders,RequestTimestamp,
                                             ResponseContentType,ResponseContentBody,ResponseStatusCode,ResponseHeaders,ResponseTimestamp)
                                             VALUES (@Controller,
-                                                    @TransactionID,@User,@Machine,@RequestIpAddress,
+                                                    @TransactionID,@Activity,@User,@Machine,@RequestIpAddress,
                                                     @RequestContentType,
                                                     @RequestContentBody,@RequestUri,@RequestMethod,
                                                     @RequestRouteTemplate,@RequestRouteData,@RequestHeaders,@RequestTimestamp,
@@ -47,6 +48,7 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
                         querySaveStaff.Parameters.Add("@Controller", SqlDbType.NVarChar,100).Value =apiLogEntry.Controller;
 
                         querySaveStaff.Parameters.Add("@TransactionID",SqlDbType.NVarChar,100).Value=apiLogEntry.TransactionID;
+                        querySaveStaff.Parameters.Add("@Activity",SqlDbType.NVarChar,100).Value=apiLogEntry.Activity;
 
 
 

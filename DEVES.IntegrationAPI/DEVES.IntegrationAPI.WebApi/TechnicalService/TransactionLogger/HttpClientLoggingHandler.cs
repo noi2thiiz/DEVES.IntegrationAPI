@@ -8,47 +8,29 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using System.Web.Http.Dispatcher;
-using System.Web.Http.Routing;
 using DEVES.IntegrationAPI.WebApi.Templates;
+using Microsoft.Xrm.Sdk;
 using Newtonsoft.Json;
 
 namespace DEVES.IntegrationAPI.WebApi.TechnicalService
 {
-    public class ApiLogHandler : DelegatingHandler
+    public class HttpClientLoggingHandler : DelegatingHandler
     {
-        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
-            CancellationToken cancellationToken)
+        public HttpClientLoggingHandler(HttpMessageHandler innerHandler)
+            : base(innerHandler)
         {
-            // Gen TransactionID
-            var transactionId = Guid.NewGuid().ToString();
-            request.Properties["TransactionID"] = transactionId;
-
-            return await ProcessLog(request, cancellationToken, transactionId);
         }
 
+        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        {
+            var transactionId = GettransactionId(request);
+            return await ProcessLog(request, cancellationToken, transactionId);
+        }
         private async Task<HttpResponseMessage> ProcessLog(HttpRequestMessage request, CancellationToken cancellationToken, string transactionId)
         {
             var apiLogEntry = CreateApiLogEntryWithRequestData(request);
             apiLogEntry.TransactionID = transactionId;
-
-
-            // get  controllerSelector
             apiLogEntry.Controller = "";
-            try
-            {
-                var config = GlobalConfiguration.Configuration;
-                var controllerSelector = new DefaultHttpControllerSelector(config);
-
-                // descriptor here will contain information about the controller to which the request will be routed. If it's null (i.e. controller not found), it will throw an exception
-                var descriptor = controllerSelector.SelectController(request);
-                apiLogEntry.Controller = "" + descriptor.ControllerName;
-                Console.WriteLine("controllerSelector : " + apiLogEntry.Controller);
-            }
-            catch (Exception e)
-            {
-                // continue
-            }
-
 
             if (request.Content != null)
             {
@@ -80,7 +62,33 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
                 }, cancellationToken);
         }
 
-        private ApiLogEntry CreateApiLogEntryWithRequestData(HttpRequestMessage request)
+        private string GettransactionId(HttpRequestMessage request)
+        {
+            var transactionId = "";
+            try
+            {
+                if (string.IsNullOrEmpty(request.Properties["TransactionID"].ToString()))
+                {
+                    transactionId =  request.Properties["TransactionID"].ToString();
+                }
+                else
+                {
+                     transactionId = Guid.NewGuid().ToString();
+                     request.Properties["TransactionID"] = transactionId;
+                }
+
+            }
+            catch (Exception e)
+            {
+                transactionId = Guid.NewGuid().ToString();
+                request.Properties["TransactionID"] = transactionId;
+            }
+
+            return transactionId;
+
+        }
+
+        private ApiLogEntry CreateApiLogEntryWithRequestData( HttpRequestMessage request)
         {
             var requestRouteData = "";
             var routeTemplate = "";
@@ -98,7 +106,7 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
             return new ApiLogEntry
             {
                 Application = "xrmAPI",
-                Activity = "provide",
+                Activity = "consume",
                 User = context.User.Identity.Name,
                 Machine = Environment.MachineName,
                 RequestContentType = context.Request.ContentType,
@@ -108,14 +116,11 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
                 RequestMethod = request.Method.Method,
                 RequestHeaders = SerializeHeaders(request.Headers),
                 RequestTimestamp = DateTime.Now,
-                RequestUri = request.RequestUri.ToString()
+                RequestUri = request.RequestUri.ToString(),
+
             };
         }
 
-        private string SerializeRouteData(IHttpRouteData routeData)
-        {
-            return JsonConvert.SerializeObject(routeData, Formatting.Indented);
-        }
 
         private string SerializeHeaders(HttpHeaders headers)
         {

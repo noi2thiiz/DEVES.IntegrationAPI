@@ -16,7 +16,7 @@ using System.Reflection;
 
 using System.Configuration;
 using System.ServiceModel.Description;
-
+using DEVES.IntegrationAPI.WebApi.TechnicalService;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Client;
@@ -108,7 +108,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
 
             string jsonReqModel = JsonConvert.SerializeObject(reqModel, Formatting.Indented, new EWIDatetimeConverter());
 
-            HttpClient client = new HttpClient();
+            HttpClient client = new HttpClient(); ;
 
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));

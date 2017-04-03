@@ -5,6 +5,8 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
     public class ApiLogEntry
     {
         public string TransactionID{ get; set; }
+        public string Activity{ get; set; }
+
         public long ApiLogEntryId { get; set; }             // The (database) ID for the API log entry.
         public string Application { get; set; }             // The application that made the request.
         public string User { get; set; }                    // The user that made the request.

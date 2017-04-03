@@ -15,6 +15,8 @@ namespace DEVES.IntegrationAPI.WebApi
         public static void Register(HttpConfiguration config)
         {
             GlobalConfiguration.Configuration.MessageHandlers.Add(new ApiLogHandler());
+         
+            
             // Web API configuration and services
             // Configure Web API to use only bearer token authentication.
             config.SuppressDefaultHostAuthentication();
