@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using DEVES.IntegrationAPI.Model;
 using DEVES.IntegrationAPI.Model.CLS;
 using DEVES.IntegrationAPI.Model.APAR;
@@ -17,8 +18,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             bool bFoundIn_APAR_or_Master = false;
 
             CRMInquiryPayeeContentOutputModel crmInqPayeeOut = new CRMInquiryPayeeContentOutputModel();
+            crmInqPayeeOut.data = new List<InquiryCrmPayeeListDataModel>();
+            crmInqPayeeOut.transactionId = TransactionId;
             crmInqPayeeOut.transactionDateTime = DateTime.Now;
-            crmInqPayeeOut.transactionId = Guid.NewGuid().ToString();
             try
             {
                 Console.WriteLine(input.ToString());
@@ -125,8 +127,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 crmInqPayeeOut.description = e.StackTrace;
 
             }
-            crmInqPayeeOut.transactionId = TransactionId;
-            crmInqPayeeOut.transactionDateTime = DateTime.Now;
+           
             return crmInqPayeeOut;
         }
 

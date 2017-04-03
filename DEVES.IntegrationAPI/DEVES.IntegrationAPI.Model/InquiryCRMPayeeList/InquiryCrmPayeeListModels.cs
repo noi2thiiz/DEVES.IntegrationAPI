@@ -25,6 +25,7 @@ namespace DEVES.IntegrationAPI.Model.InquiryCRMPayeeList
     {
         [JsonProperty(Order = 20)]
         public List<InquiryCrmPayeeListDataModel> data { set; get; }
+
     }
 
     public class InquiryCrmPayeeListDataModel : BaseDataModel
