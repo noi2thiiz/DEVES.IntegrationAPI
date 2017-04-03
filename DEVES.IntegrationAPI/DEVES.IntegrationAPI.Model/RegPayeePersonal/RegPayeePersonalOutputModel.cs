@@ -6,9 +6,16 @@ using System.Threading.Tasks;
 
 namespace DEVES.IntegrationAPI.Model.RegPayeePersonal
 {
-    class RegPayeePersonalOutputModel
+    public class RegPayeePersonalContentOutputModel : BaseContentJsonProxyOutputModel
+    {
+        List<RegPayeePersonalDataOutputModel> data { set; get; }
+    }
+
+
+    public abstract class RegPayeePersonalDataOutputModel : BaseDataModel
     {
     }
+
 
     public class RegPayeePersonalOutputModel_Pass
     {
@@ -20,7 +27,7 @@ namespace DEVES.IntegrationAPI.Model.RegPayeePersonal
         public List<RegPayeePersonalDataOutputModel_Pass> data { get; set; }
     }
 
-    public class RegPayeePersonalDataOutputModel_Pass
+    public class RegPayeePersonalDataOutputModel_Pass: RegPayeePersonalDataOutputModel
     {
         public string polisyClientId { get; set; }
         public string sapVendorCode { get; set; }
@@ -48,7 +55,7 @@ namespace DEVES.IntegrationAPI.Model.RegPayeePersonal
         public List<RegPayeePersonalDataOutputModel_Fail> data { get; set; }
     }
 
-    public class RegPayeePersonalDataOutputModel_Fail
+    public class RegPayeePersonalDataOutputModel_Fail: RegPayeePersonalDataOutputModel
     {
         public string fieldErrors { get; set; }
         public string message { get; set; }

@@ -6,21 +6,27 @@ using System.Threading.Tasks;
 
 namespace DEVES.IntegrationAPI.Model.RegPayeeCorporate
 {
-    class RegPayeeCorporateOutputModel
+    public class RegPayeeCorporateContentOutputModel: BaseContentJsonProxyOutputModel
+    {
+        public List<RegPayeeCorporateDataOutputModel> data { set; get; }
+    }
+
+
+    public abstract class RegPayeeCorporateDataOutputModel : BaseDataModel
     {
     }
 
-    public class RegPayeeCorporateOutputModel_Pass
-    {
-        public string code { get; set; }
-        public string message { get; set; }
-        public string description { get; set; }
-        public string transactionId { get; set; }
-        public string transactionDateTime { get; set; }
-        public List<RegPayeeCorporateDataOutputModel_Pass> data { get; set; }
-    }
+    //public class RegPayeeCorporateOutputModel_Pass
+    //{
+    //    public string code { get; set; }
+    //    public string message { get; set; }
+    //    public string description { get; set; }
+    //    public string transactionId { get; set; }
+    //    public string transactionDateTime { get; set; }
+    //    public List<RegPayeeCorporateDataOutputModel_Pass> data { get; set; }
+    //}
 
-    public class RegPayeeCorporateDataOutputModel_Pass
+    public class RegPayeeCorporateDataOutputModel_Pass: RegPayeeCorporateDataOutputModel
     {
         public string polisyClientId { get; set; }
         public string sapVendorCode { get; set; }
@@ -30,17 +36,17 @@ namespace DEVES.IntegrationAPI.Model.RegPayeeCorporate
         public string corporateBranch { get; set; }
     }
 
-    public class RegPayeeCorporateOutputModel_Fail
-    {
-        public string code { get; set; }
-        public string message { get; set; }
-        public string description { get; set; }
-        public string transactionId { get; set; }
-        public string transactionDateTime { get; set; }
-        public List<RegPayeeCorporateDataOutputModel_Fail> data { get; set; }
-    }
+    //public class RegPayeeCorporateOutputModel_Fail
+    //{
+    //    public string code { get; set; }
+    //    public string message { get; set; }
+    //    public string description { get; set; }
+    //    public string transactionId { get; set; }
+    //    public string transactionDateTime { get; set; }
+    //    public List<RegPayeeCorporateDataOutputModel_Fail> data { get; set; }
+    //}
 
-    public class RegPayeeCorporateDataOutputModel_Fail
+    public class RegPayeeCorporateDataOutputModel_Fail: RegPayeeCorporateDataOutputModel
     {
         public string fieldErrors { get; set; }
         public string message { get; set; }

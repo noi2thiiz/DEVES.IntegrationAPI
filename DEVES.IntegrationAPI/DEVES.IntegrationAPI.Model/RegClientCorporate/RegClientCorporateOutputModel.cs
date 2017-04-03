@@ -18,20 +18,20 @@ namespace DEVES.IntegrationAPI.Model.RegClientCorporate
 
 
 
-    public class RegClientCorporateOutputModel : BaseContentJsonProxyOutputModel
-    {
-        public string data { set; get; }
-    }
+    //public class RegClientCorporateOutputModel : BaseContentJsonProxyOutputModel
+    //{
+    //    public string data { set; get; }
+    //}
 
-    public class RegClientCorporateOutputModel_Pass
-    {
-        public string code { get; set; }
-        public string message { get; set; }
-        public string description { get; set; }
-        public string transactionId { get; set; }
-        public string transactionDateTime { get; set; }
-        public List<RegClientCorporateDataOutputModel_Pass> data { get; set; }
-    }
+    //public class RegClientCorporateOutputModel_Pass
+    //{
+    //    public string code { get; set; }
+    //    public string message { get; set; }
+    //    public string description { get; set; }
+    //    public string transactionId { get; set; }
+    //    public string transactionDateTime { get; set; }
+    //    public List<RegClientCorporateDataOutputModel_Pass> data { get; set; }
+    //}
 
     public class RegClientCorporateDataOutputModel_Pass : RegClientCorporateDataOutputModel
     {
@@ -43,15 +43,15 @@ namespace DEVES.IntegrationAPI.Model.RegClientCorporate
         public string corporateBranch { get; set; }
     }
 
-    public class RegClientCorporateOutputModel_Fail 
-    {
-        public string code { get; set; }
-        public string message { get; set; }
-        public string description { get; set; }
-        public string transactionId { get; set; }
-        public string transactionDateTime { get; set; }
-        public List<RegClientCorporateDataOutputModel_Fail> data { get; set; }
-    }
+    //public class RegClientCorporateOutputModel_Fail 
+    //{
+    //    public string code { get; set; }
+    //    public string message { get; set; }
+    //    public string description { get; set; }
+    //    public string transactionId { get; set; }
+    //    public string transactionDateTime { get; set; }
+    //    public List<RegClientCorporateDataOutputModel_Fail> data { get; set; }
+    //}
 
     public class RegClientCorporateDataOutputModel_Fail : RegClientCorporateDataOutputModel
     {

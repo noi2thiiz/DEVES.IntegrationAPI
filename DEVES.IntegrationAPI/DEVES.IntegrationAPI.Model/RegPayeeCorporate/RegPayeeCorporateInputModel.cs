@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Newtonsoft.Json;
+
 namespace DEVES.IntegrationAPI.Model.RegPayeeCorporate
 {
-    public class RegPayeeCorporateInputModel
+    public class RegPayeeCorporateInputModel:BaseDataModel
     {
         public GeneralHeaderModel generalHeader { get; set; }
         public ProfileHeaderModel profileHeader { get; set; }
@@ -15,7 +17,7 @@ namespace DEVES.IntegrationAPI.Model.RegPayeeCorporate
         public SapVendorInfoModel sapVendorInfo { get; set; }
     }
 
-    public class GeneralHeaderModel
+    public class GeneralHeaderModel : BaseDataModel
     {
         public string roleCode { get; set; }
         public string cleansingId { get; set; }
@@ -24,7 +26,7 @@ namespace DEVES.IntegrationAPI.Model.RegPayeeCorporate
         public string clientAdditionalExistFlag { get; set; }
     }
 
-    public class ProfileHeaderModel
+    public class ProfileHeaderModel : BaseDataModel
     {
         public string corporateName1 { get; set; }
         public string corporateName2 { get; set; }
@@ -40,7 +42,7 @@ namespace DEVES.IntegrationAPI.Model.RegPayeeCorporate
         public string vipStatus { get; set; }
     }
 
-    public class ContactHeaderModel
+    public class ContactHeaderModel : BaseDataModel
     {
         public string telephone1 { get; set; }
         public string telephone1Ext { get; set; }
@@ -55,7 +57,7 @@ namespace DEVES.IntegrationAPI.Model.RegPayeeCorporate
         public string facebook { get; set; }
     }
 
-    public class AddressHeaderModel
+    public class AddressHeaderModel : BaseDataModel
     {
         public string address1 { get; set; }
         public string address2 { get; set; }
@@ -70,14 +72,17 @@ namespace DEVES.IntegrationAPI.Model.RegPayeeCorporate
         public string longtitude { get; set; }
     }
 
-    public class SapVendorInfoModel
+    public class SapVendorInfoModel : BaseDataModel
     {
         public string sapVendorGroupCode { get; set; }
         public BankInfoModel bankInfo { get; set; }
         public WithHoldingTaxInfoModel withHoldingTaxInfo { get; set; }
+
+        [JsonIgnore]
+        public string sapVendorCode { get; set; }
     }
 
-    public class BankInfoModel
+    public class BankInfoModel : BaseDataModel
     {
         public string bankCountryCode { get; set; }
         public string bankCode { get; set; }
@@ -87,7 +92,7 @@ namespace DEVES.IntegrationAPI.Model.RegPayeeCorporate
         public string paymentMethods { get; set; }
     }
 
-    public class WithHoldingTaxInfoModel
+    public class WithHoldingTaxInfoModel : BaseDataModel
     {
         public string whtTaxCode { get; set; }
         public string receiptType { get; set; }
