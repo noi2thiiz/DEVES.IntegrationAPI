@@ -67,39 +67,39 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 #region Search in Cleansing(CLS) then search in Polisy400
                 if (!bFoundIn_APAR_or_Master)
                 {
-                    foreach(InquiryCrmPayeeListDataModel data in crmInqPayeeOut.data )
+                    /*
+                foreach(InquiryCrmPayeeListDataModel data in crmInqPayeeOut.data )
+                {
+
+
+                    List<string> crmData = SearchCrmContactClientId(data.cleansingId);
+                    if (crmData != null && crmData.Count == 1)
                     {
-
-                        /*
-
-                        List<string> crmData = SearchCrmContactClientId(data.cleansingId);
-                        if (crmData != null && crmData.Count == 1)
-                        {
-                            data.generalHeader.crmClientId = crmData.First();
-                        }
-                        else
-                        {
-                            #region Call COMP_Inquiry through ServiceProxy
-                            COMPInquiryClientMasterInputModel compInqClientInput = new COMPInquiryClientMasterInputModel();
-                            compInqClientInput = (COMPInquiryClientMasterInputModel)TransformerFactory.TransformModel(contentModel, compInqClientInput);
-
-                            //+ Call CLS_InquiryCLSPersonalClient through ServiceProxy
-                            EWIResCOMPInquiryClientMasterContentModel retCOMPInqClient = CallDevesServiceProxy<COMPInquiryClientMasterOutputModel, EWIResCOMPInquiryClientMasterContentModel>
-                                                                                                    (CommonConstant.ewiEndpointKeyCOMPInquiryClient, compInqClientInput);
-
-                            //Found in Polisy400
-                            if (retCOMPInqClient.clientListCollection != null)
-                            {
-                                crmInqContent = (CRMInquiryClientContentOutputModel)TransformerFactory.TransformModel(retCOMPInqClient, crmInqContent);
-                            }
-
-
-                            #endregion Call COMP_Inquiry through ServiceProxy
-                        }
-
-
-                        */
+                        data.generalHeader.crmClientId = crmData.First();
                     }
+                    else
+                    {
+                        #region Call COMP_Inquiry through ServiceProxy
+                        COMPInquiryClientMasterInputModel compInqClientInput = new COMPInquiryClientMasterInputModel();
+                        compInqClientInput = (COMPInquiryClientMasterInputModel)TransformerFactory.TransformModel(contentModel, compInqClientInput);
+
+                        //+ Call CLS_InquiryCLSPersonalClient through ServiceProxy
+                        EWIResCOMPInquiryClientMasterContentModel retCOMPInqClient = CallDevesServiceProxy<COMPInquiryClientMasterOutputModel, EWIResCOMPInquiryClientMasterContentModel>
+                                                                                                (CommonConstant.ewiEndpointKeyCOMPInquiryClient, compInqClientInput);
+
+                        //Found in Polisy400
+                        if (retCOMPInqClient.clientListCollection != null)
+                        {
+                            crmInqContent = (CRMInquiryClientContentOutputModel)TransformerFactory.TransformModel(retCOMPInqClient, crmInqContent);
+                        }
+
+
+                        #endregion Call COMP_Inquiry through ServiceProxy
+                    }
+
+
+                }
+                    */
 
                 }
                 #endregion Search in Cleansing(CLS) then search in Polisy400
