@@ -114,6 +114,22 @@ namespace DEVES.IntegrationAPI.Model
             }
 
             #endregion CLIENTUpdateCorporateClientAndAdditionalInfoInputModel
+
+            #region CLSCreateCorporateClientInputModel
+            else if (t == typeof(CLS.CLSCreateCorporateClientInputModel))
+            {
+                var modelContent = new CLS.CLSCreateCorporateClientInputModel();
+                o = modelContent;
+            }
+            #endregion CLSCreateCorporateClientInputModel
+            #region CLIENTCreateCorporateClientAndAdditionalInfoInputModel
+            else if (t == typeof(CLIENTCreateCorporateClientAndAdditionalInfoInputModel))
+            {
+                var modelContent = new CLIENTCreateCorporateClientAndAdditionalInfoInputModel();
+                o = modelContent;
+            }
+
+            #endregion CLIENTCreateCorporateClientAndAdditionalInfoInputModel
             else
             {
                 throw new NotImplementedException("GetModel(T) for type<T>:" + t.Name);

@@ -92,6 +92,66 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             #endregion API:InquiryCRMPayeeListInputModel
 
 
+
+            else if (inputType == typeof(Model.Polisy400.CLIENTCreateCorporateClientAndAdditionalInfoContentModel))
+            {
+                if (outputType == typeof(Model.RegClientCorporate.RegClientCorporateInputModel))
+                {
+                    t = new TranformCLIENTCreateCorporateClientAndAdditionalInfoContentModel_to_RegClientCorporateInputModel();
+                }
+                else if (outputType == typeof(Model.RegClientPersonal.RegClientPersonalInputModel))
+                {
+                    t = new TranformCLIENTCreatePersonalClientAndAdditionalInfoOutputModel_to_RegClientPersonalInputModel();
+                }
+            }
+
+            else if (inputType == typeof(Model.CLS.CLSCreateCorporateClientContentOutputModel) && outputType == typeof(Model.RegClientCorporate.RegClientCorporateInputModel))
+            {
+                t = new TranformCLSCreateCorporateClientContentOutputModel_to_RegClientCorporateInputModel();
+            }
+            else if (inputType == typeof(Model.CLS.CLSCreatePersonalClientContentOutputModel) && outputType == typeof(Model.RegClientPersonal.RegClientPersonalInputModel))
+            {
+                t = new TranformCLSCreatePersonalClientOutputModel_to_RegClientPersonalInputModel();
+            }
+            else if (inputType == typeof(Model.RegClientPersonal.CRMRegClientPersonalOutputModel) && outputType == typeof(Model.RegClientPersonal.CRMRegClientPersonalOutputModel))
+            {
+                t = new TranformCRMRegClientPersonalOutputModel_to_CRMRegClientPersonalOutputModel();
+            }
+            else if (inputType == typeof(Model.Polisy400.EWIResCOMPInquiryClientMasterContentModel) && outputType == typeof(Model.Polisy400.CLIENTUpdateCorporateClientAndAdditionalInfoInputModel))
+            {
+                t = new TranformEWIResCOMPInquiryClientMasterContentModel_to_CLIENTUpdateCorporateClientAndAdditionalInfoInputModel();
+            }
+            else if (inputType == typeof(Model.RegClientPersonal.RegClientPersonalInputModel))
+            {
+                if (outputType == typeof(Model.Polisy400.CLIENTCreatePersonalClientAndAdditionalInfoInputModel))
+                {
+                    t = new TranformRegClientPersonalInputModel_to_CLIENTCreatePersonalClientAndAdditionalInfoInputModel();
+                }
+                if (outputType == typeof(Model.CLS.CLSCreatePersonalClientInputModel))
+                {
+                    t = new TranformRegClientPersonalInputModel_to_CLSCreatePersonalClientInputModel();
+                }
+            }
+            else if (inputType == typeof(Model.RegClientCorporate.RegClientCorporateInputModel))
+            {
+                if (outputType == typeof(Model.Polisy400.CLIENTCreateCorporateClientAndAdditionalInfoContentModel))
+                {
+                    t = new TranformRegClientCorporateInputModel_to_CLIENTUpdateCorporateClientAndAdditionalInfoInputModel();
+                }
+                else if (outputType == typeof(Model.Polisy400.CLIENTCreateCorporateClientAndAdditionalInfoInputModel))
+                {
+                    t = new TranformRegClientCorporateInputModel_to_CLIENTCreateCorporateClientAndAdditionalInfoInputModel();
+                }
+                else if (outputType == typeof(Model.CLS.CLSCreateCorporateClientInputModel))
+                {
+                    t = new TranformRegClientCorporateInputModel_to_CLSCreateCorporateClientInputModel();
+                }
+                else if (outputType == typeof(Model.Polisy400.COMPInquiryClientMasterInputModel))
+                {
+                    t = new TranformRegClientCorporateInputModel_to_COMPInquiryClientMasterInputModel();
+                }
+            }
+            
             return t;
         }
     }
