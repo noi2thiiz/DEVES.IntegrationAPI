@@ -56,6 +56,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     dataOutPass.cleansingId = regClientPersonalInput.generalHeader.cleansingId;
                     dataOutPass.polisyClientId = regClientPersonalInput.generalHeader.polisyClientId;
                     dataOutPass.crmClientId = crmContentOutput.crmClientId;
+                    dataOutPass.personalName = regClientPersonalInput.profileInfo.personalName;
+                    dataOutPass.personalSurname = regClientPersonalInput.profileInfo.personalSurname;
                     regClientPersonOutput.data.Add(dataOutPass);
                 }
                 else
