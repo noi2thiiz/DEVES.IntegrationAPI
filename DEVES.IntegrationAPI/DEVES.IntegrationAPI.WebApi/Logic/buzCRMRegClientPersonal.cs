@@ -70,11 +70,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 regClientPersonOutput.code = CONST_CODE_FAILED;
                 regClientPersonOutput.message = e.Message;
                 regClientPersonOutput.description = e.StackTrace;
-                regClientPersonOutput.transactionDateTime = DateTime.Now;
-                regClientPersonOutput.transactionId = TransactionId;
+
                 RegClientPersonalDataOutputModel_Fail dataOutFail = new RegClientPersonalDataOutputModel_Fail();
                 regClientPersonOutput.data.Add(dataOutFail);
             }
+
+            regClientPersonOutput.transactionDateTime = DateTime.Now;
+            regClientPersonOutput.transactionId = TransactionId;
 
             return regClientPersonOutput;
 

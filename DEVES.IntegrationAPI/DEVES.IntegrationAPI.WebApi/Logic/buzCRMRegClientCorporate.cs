@@ -95,12 +95,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 regClientCorporateOutput.code = CONST_CODE_FAILED;
                 regClientCorporateOutput.message = e.Message;
                 regClientCorporateOutput.description = e.StackTrace;
-                regClientCorporateOutput.transactionDateTime = DateTime.Now;
-                regClientCorporateOutput.transactionId = TransactionId;
+
                 RegClientCorporateDataOutputModel_Fail dataOutFail = new RegClientCorporateDataOutputModel_Fail();
                 regClientCorporateOutput.data.Add(dataOutFail);
             }
-
+            regClientCorporateOutput.transactionDateTime = DateTime.Now;
+            regClientCorporateOutput.transactionId = TransactionId;
             return regClientCorporateOutput;
 
         }
