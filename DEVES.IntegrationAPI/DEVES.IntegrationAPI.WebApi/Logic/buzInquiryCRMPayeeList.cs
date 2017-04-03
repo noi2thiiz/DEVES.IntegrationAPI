@@ -8,6 +8,7 @@ using DEVES.IntegrationAPI.Model.Polisy400;
 using DEVES.IntegrationAPI.Model.MASTER;
 using DEVES.IntegrationAPI.Model.InquiryCRMPayeeList;
 using DEVES.IntegrationAPI.WebApi.Templates;
+using System.Linq;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
@@ -66,21 +67,55 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 #region Search in Cleansing(CLS) then search in Polisy400
                 if (!bFoundIn_APAR_or_Master)
                 {
-                    /*
-                foreach(InquiryCrmPayeeListDataModel data in crmInqPayeeOut.data )
-                {
+                    bool bFound_Cleansing = false;
 
-
-                    List<string> crmData = SearchCrmContactClientId(data.cleansingId);
-                    if (crmData != null && crmData.Count == 1)
+                    switch (inqCrmPayeeListIn.clientType.ToUpper())
                     {
-                        data.generalHeader.crmClientId = crmData.First();
+                        case "P":
+                            #region Search Client from Cleansing CLS_InquiryCLSPersonalClient
+                            CLSInquiryPersonalClientInputModel clsPersonalInput = new CLSInquiryPersonalClientInputModel();
+                            clsPersonalInput = (CLSInquiryPersonalClientInputModel)TransformerFactory.TransformModel(inqCrmPayeeListIn, clsPersonalInput);
+
+                            //++ Call CLS_InquiryCLSPersonalClient through ServiceProxy
+                            CLSInquiryPersonalClientContentOutputModel retCLSInqPersClient = CallDevesServiceProxy<EWIResCLSInquiryPersonalClient, CLSInquiryPersonalClientContentOutputModel>
+                                                                                                    (CommonConstant.ewiEndpointKeyCLSInquiryPersonalClient, clsPersonalInput);
+
+                            //++ If Found records in Cleansing(CLS) then pour the data from Cleansing to contentOutputModel
+                            if ((retCLSInqPersClient.success | IsOutputSuccess(retCLSInqPersClient)) & (retCLSInqPersClient.data.Count > 0))
+                            {
+                                bFound_Cleansing = true;
+                                crmInqPayeeOut = (CRMInquiryPayeeContentOutputModel)TransformerFactory.TransformModel(retCLSInqPersClient, crmInqPayeeOut);
+                            }
+                            #endregion Search Client from Cleansing
+                            break;
+
+                        case "C":
+                            #region Call CLS_InquiryCLSCorporateClient through ServiceProxy
+                            CLSInquiryCorporateClientInputModel clsCorpInput = new CLSInquiryCorporateClientInputModel();
+                            clsCorpInput = (CLSInquiryCorporateClientInputModel)TransformerFactory.TransformModel(inqCrmPayeeListIn, clsCorpInput);
+
+                            CLSInquiryCorporateClientContentOutputModel retCLSInqCorpClient = (CLSInquiryCorporateClientContentOutputModel)CallDevesJsonProxy<EWIResCLSInquiryCorporateClient>
+                                                                                                    (CommonConstant.ewiEndpointKeyCLSInquiryCorporateClient, clsCorpInput);
+
+                            //+ If Success then pour the data from Cleansing to contentOutputModel
+                            if ((retCLSInqCorpClient.success | IsOutputSuccess(retCLSInqCorpClient)) & (retCLSInqCorpClient.data.Count > 0))
+                            {
+                                bFound_Cleansing = true;
+                                crmInqPayeeOut = (CRMInquiryPayeeContentOutputModel)TransformerFactory.TransformModel(retCLSInqCorpClient, crmInqPayeeOut);
+                            }
+                            #endregion Call CLS_InquiryCLSCorporateClient through ServiceProxy
+                            break;
+                                                    
+                        default:
+
+                            break;
                     }
-                    else
+
+                    if (!bFound_Cleansing)
                     {
                         #region Call COMP_Inquiry through ServiceProxy
                         COMPInquiryClientMasterInputModel compInqClientInput = new COMPInquiryClientMasterInputModel();
-                        compInqClientInput = (COMPInquiryClientMasterInputModel)TransformerFactory.TransformModel(contentModel, compInqClientInput);
+                        compInqClientInput = (COMPInquiryClientMasterInputModel)TransformerFactory.TransformModel(inqCrmPayeeListIn, compInqClientInput);
 
                         //+ Call CLS_InquiryCLSPersonalClient through ServiceProxy
                         EWIResCOMPInquiryClientMasterContentModel retCOMPInqClient = CallDevesServiceProxy<COMPInquiryClientMasterOutputModel, EWIResCOMPInquiryClientMasterContentModel>
@@ -89,17 +124,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         //Found in Polisy400
                         if (retCOMPInqClient.clientListCollection != null)
                         {
-                            crmInqContent = (CRMInquiryClientContentOutputModel)TransformerFactory.TransformModel(retCOMPInqClient, crmInqContent);
+                            crmInqPayeeOut = (CRMInquiryPayeeContentOutputModel)TransformerFactory.TransformModel(retCOMPInqClient, crmInqPayeeOut);
                         }
 
 
                         #endregion Call COMP_Inquiry through ServiceProxy
                     }
-
-
-                }
-                    */
-
                 }
                 #endregion Search in Cleansing(CLS) then search in Polisy400
 
@@ -124,7 +154,6 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 crmInqPayeeOut.code = CONST_CODE_FAILED;
                 crmInqPayeeOut.message = e.Message;
                 crmInqPayeeOut.description = e.StackTrace;
-
             }
             crmInqPayeeOut.transactionId = TransactionId;
             crmInqPayeeOut.transactionDateTime = DateTime.Now;

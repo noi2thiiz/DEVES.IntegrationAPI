@@ -18,7 +18,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 {
     public class buzCrmInquiryCorporateClientMaster : BaseCommand
     {
-        const string ewiEndpointKeyCLSInquiryCorporateClient = "EWI_ENDPOINT_CLSInquiryCorporateClient";
+        //const string ewiEndpointKeyCLSInquiryCorporateClient = "EWI_ENDPOINT_CLSInquiryCorporateClient";
 
         public override BaseDataModel Execute(object input)
         {
@@ -39,7 +39,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                     string uid = "CRMClaim";
                     CLSInquiryCorporateClientContentOutputModel retCLSInqCorpClient = (CLSInquiryCorporateClientContentOutputModel)CallDevesJsonProxy<EWIResCLSInquiryCorporateClient>
-                                                                                            (ewiEndpointKeyCLSInquiryCorporateClient, clsCorpInput, uid);
+                                                                                            (CommonConstant.ewiEndpointKeyCLSInquiryCorporateClient, clsCorpInput, uid);
 
                     //+ If Success then pour the data from Cleansing to contentOutputModel
 

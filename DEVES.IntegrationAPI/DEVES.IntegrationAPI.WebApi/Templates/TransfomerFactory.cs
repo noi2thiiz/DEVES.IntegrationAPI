@@ -62,15 +62,15 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             {
                 if (outputType == typeof(Model.SAP.SAPInquiryVendorInputModel))
                 {
-                    t = new TransformCRMInquiryCRMPayeeListInputModel_to_SAPInquiryVendorInputModel();
+                    t = new TransformInquiryCRMPayeeListInputModel_to_SAPInquiryVendorInputModel();
                 }
                 else if (outputType == typeof(Model.MASTER.InquiryMasterASRHDataInputModel))
                 {
-                    t = new TransformCRMInquiryCRMPayeeListInputModel_to_InquiryMasterASRHDataInputModel();
+                    t = new TransformInquiryCRMPayeeListInputModel_to_InquiryMasterASRHDataInputModel ();
                 }
                 else if (outputType == typeof(Model.APAR.InquiryAPARPayeeListInputModel))
                 {
-                    t = new TransformCRMInquiryCRMPayeeListInputModel_to_APARInquiryAPARPayeeListInputModel();
+                    t = new TransformInquiryCRMPayeeListInputModel_to_InquiryAPARPayeeListInputModel ();
                 }
             }
             else if (outputType == typeof(CRMInquiryPayeeContentOutputModel))

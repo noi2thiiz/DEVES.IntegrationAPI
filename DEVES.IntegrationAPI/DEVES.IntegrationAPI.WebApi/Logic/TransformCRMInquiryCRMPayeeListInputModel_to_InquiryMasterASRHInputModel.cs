@@ -5,7 +5,7 @@ using DEVES.IntegrationAPI.WebApi.Templates;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
-    public class TransformCRMInquiryCRMPayeeListInputModel_to_InquiryMasterASRHDataInputModel: BaseTransformer
+    public class TransformInquiryCRMPayeeListInputModel_to_InquiryMasterASRHDataInputModel : BaseTransformer
     {
 
         public override BaseDataModel TransformModel(BaseDataModel input, BaseDataModel output)
