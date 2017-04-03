@@ -11,15 +11,26 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
         {
             try
             {
-                var configurationString = WebConfigurationManager.AppSettings["CRM_CUSTOMAPP_DB"];
+                var configurationString = "";
+                if (System.Environment.MachineName == "8121-CRM-QA"
+                    || System.Environment.MachineName == "DESKTOP-Q30CAGJ"
+                    || System.Environment.MachineName == "DESKTOP-4188VJJ")
+                {
+                    configurationString = WebConfigurationManager.AppSettings["CRM_CUSTOMAPP_DB_SERVER"];
+                }
+                else
+                {
+                    configurationString = WebConfigurationManager.AppSettings["CRM_CUSTOMAPP_DB"];
+                }
+
                // var configurationString = CrmConfigurationSettings.AppSettings.Get("settings.CRM_CUSTOM_DB");
                 using(SqlConnection openCon=new SqlConnection(configurationString))
                 {
                     string saveStaff = @"INSERT into
                                             transactionLog (
                                             [Controller],
-                                            Activity,
-                                            TransactionID,
+                                            [Activity],
+                                            [TransactionID],
                                             [User],
                                             Machine,
                                             RequestIpAddress,
@@ -30,7 +41,8 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
                                             RequestRouteTemplate,RequestRouteData,RequestHeaders,RequestTimestamp,
                                             ResponseContentType,ResponseContentBody,ResponseStatusCode,ResponseHeaders,ResponseTimestamp)
                                             VALUES (@Controller,
-                                                    @TransactionID,@Activity,@User,@Machine,@RequestIpAddress,
+                                                    @Activity,
+                                                    @TransactionID,@User,@Machine,@RequestIpAddress,
                                                     @RequestContentType,
                                                     @RequestContentBody,@RequestUri,@RequestMethod,
                                                     @RequestRouteTemplate,@RequestRouteData,@RequestHeaders,@RequestTimestamp,
@@ -45,10 +57,10 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
 
                         querySaveStaff.Connection=openCon;
 
-                        querySaveStaff.Parameters.Add("@Controller", SqlDbType.NVarChar,100).Value =apiLogEntry.Controller;
+                        querySaveStaff.Parameters.Add("@Controller", SqlDbType.NVarChar).Value =apiLogEntry.Controller;
+                        querySaveStaff.Parameters.Add("@Activity",SqlDbType.NVarChar).Value=apiLogEntry.Activity;
+                        querySaveStaff.Parameters.Add("@TransactionID",SqlDbType.NVarChar).Value=apiLogEntry.TransactionID;
 
-                        querySaveStaff.Parameters.Add("@TransactionID",SqlDbType.NVarChar,100).Value=apiLogEntry.TransactionID;
-                        querySaveStaff.Parameters.Add("@Activity",SqlDbType.NVarChar,100).Value=apiLogEntry.Activity;
 
 
 
@@ -74,18 +86,19 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
 
 
 
-                        Console.WriteLine("SAVE: transactionLog" );
+
 
 
                         openCon.Open();
                         var result = querySaveStaff.ExecuteReader();
-
+                        Console.WriteLine("SAVE: transactionLog" );
                     }
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                Console.WriteLine("CANNOT SAVE: transactionLog" );
+
                 
             }
 

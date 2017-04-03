@@ -65,6 +65,7 @@
     <Compile Include="CtiVoiceRecordApiTests.cs" />
     <Compile Include="InquiryCRMPayeeListTests.cs" />
     <Compile Include="RegClaimRequestFromClaimDiApiTests.cs" />
+    <Compile Include="RegClientPersonalTests.cs" />
     <Compile Include="SmsApiTests.cs" />
     <Compile Include="StringDatetimeFilterTests.cs" />
     <Compile Include="Tests.cs" />

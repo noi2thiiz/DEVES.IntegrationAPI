@@ -13,7 +13,7 @@ namespace xUnitTestApi
     {
         public InquiryCRMPayeeListTests(ITestOutputHelper output) : base(output)
         {
-            this._endPoint = "http://localhost:50076/api/InquiryCRMPayeeList";
+            this._endPoint = "http://localhost:5001/api/InquiryCRMPayeeList";
             this._modelRequestSchemaFileName = "RegClaimRequestFromClaimDiRequestModel_Input_Schema.json";
             this._exampleValidInputs.Add(@"{
                                              'clientType' : 'P',
