@@ -23,7 +23,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             trgt.cltType = "C";
             trgt.asrType = src.generalHeader.roleCode;
             trgt.clntnum = src.generalHeader.polisyClientId;
-            trgt.backDay = 3;
+            trgt.backDay = "30";
 
             return trgt;
 
