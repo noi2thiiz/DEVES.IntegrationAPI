@@ -20,7 +20,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             CRMInquiryPayeeContentOutputModel crmInqPayeeOut = new CRMInquiryPayeeContentOutputModel();
             crmInqPayeeOut.data = new List<InquiryCrmPayeeListDataModel>();
-           
+            
             try
             {
                 Console.WriteLine(input.ToString());
