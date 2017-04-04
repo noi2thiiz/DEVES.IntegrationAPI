@@ -9,7 +9,7 @@ using System.Web;
 using System.Web.Http;
 using DEVES.IntegrationAPI.WebApi.Services.Core.Exceptions;
 using ExtensionMethods;
-
+using System.Collections;
 
 namespace DEVES.IntegrationAPI.WebApi.Services.Core.Controllers
 {
@@ -74,19 +74,44 @@ namespace DEVES.IntegrationAPI.WebApi.Services.Core.Controllers
             }
         }
 
-        protected IHttpActionResult _processRequest<T>(object model)
-            where T : new()
+        protected IHttpActionResult ProcessRequest<COMMAND,OUTPUT>(object model)
+            where COMMAND : new() 
+            where OUTPUT : class
 
         {
-            return _processRequest<T>("Excecute", model);
+            return _processRequest<COMMAND, OUTPUT>("Execute", model);
         }
 
-        protected IHttpActionResult _processRequest<T>(string methodName, object model)
-            where T : new()
+        protected IHttpActionResult _processRequest<T_COMMAND, T_OUTPUT>(string methodName, object model)
+            where T_COMMAND : new()
+            where T_OUTPUT : class
 
         {
+            IServiceResult output;
             try
             {
+                Type typeOutputContent = typeof(T_OUTPUT);
+                object outputContent = Activator.CreateInstance(typeOutputContent);
+              
+               
+               // Type typeOutputContentData = dataProp.PropertyType;
+                if (typeof(IEnumerable).IsAssignableFrom(typeOutputContent))
+                {
+                    output = new ServiceResult<dynamic>();
+                   
+                }
+                else
+                {
+                    output = new ServiceResultSingleData<dynamic>();
+
+                }
+
+                output.setHeaderProperty("transactionDateTime", GetCurrentDateTime());
+                output.setHeaderProperty("transactionId", GetTransactionId());
+
+
+
+
                 object[] methodArgs = new object[1];
                 methodArgs[0] = model;
 
@@ -94,29 +119,29 @@ namespace DEVES.IntegrationAPI.WebApi.Services.Core.Controllers
                 _validateModel(model);
 
 
-                var manager = new T();
-
-                // MethodInfo method = typeof(T).GetMethod(methodName);
-                Type type = typeof(T);
+                var manager = new T_COMMAND();
+                Type type = typeof(T_COMMAND);
                 object instance = Activator.CreateInstance(type);
                 MethodInfo method = type.GetMethod(methodName);
-                IServiceResult result = (IServiceResult) method.Invoke(instance, methodArgs);
-
-
+                var outputContentInstance = (T_OUTPUT) method.Invoke(instance, methodArgs);
+                PropertyInfo dataProp = typeOutputContent.GetProperty("data");
+                var outputContentData = dataProp.GetValue(outputContentInstance);
+               
+                output.AddBodyData(outputContentData);
                 //  IServiceResult result = (IServiceResult)method.Invoke(manager, new [model]);
-                return _SuccessResponse(result);
+                return SuccessResponse(output);
             }
 
-            catch (DEVES.IntegrationAPI.WebApi.Services.Core.Exceptions.RemoteServiceErrorException e)
+            catch (RemoteServiceErrorException e)
             {
                 //Console.WriteLine("RemoteServiceErrorException");
-                return _RemoteFailResponse(e.Result);
+                return CreatedResponse(e.Result);
             }
 
             catch (ServiceFailException e)
             {
                 //Console.WriteLine("ServiceFailException");
-                return _FailResponse(e.Result);
+                return CreatedResponse(e.Result);
             }
 
             catch (System.Net.WebException e)
@@ -129,7 +154,7 @@ namespace DEVES.IntegrationAPI.WebApi.Services.Core.Controllers
                 r.setHeaderProperty("code", response.StatusCode.ToString());
                 r.setHeaderProperty("message", "Web Service error");
                 r.setHeaderProperty("description", response.StatusDescription);
-                return _WebServiceErrorResponse(r);
+                return CreatedResponse(r);
             }
 
             catch (System.Reflection.TargetInvocationException e)
@@ -142,7 +167,7 @@ namespace DEVES.IntegrationAPI.WebApi.Services.Core.Controllers
                     ServiceFailException ex = (ServiceFailException) e.InnerException;
                     //Console.WriteLine(ex.StackTrace);
 
-                    return _RemoteFailResponse(ex.Result);
+                    return CreatedResponse(ex.Result);
                 }
                 else if (e.InnerException != null && e.InnerException.GetType().ToString() ==
                          "DEVES.IntegrationAPI.WebApi.Services.Core.Exceptions.RemoteServiceErrorException")
@@ -150,7 +175,7 @@ namespace DEVES.IntegrationAPI.WebApi.Services.Core.Controllers
                     ServiceFailException ex = (ServiceFailException) e.InnerException;
                     //Console.WriteLine(ex.StackTrace);
 
-                    return _RemoteFailResponse(ex.Result);
+                    return CreatedResponse(ex.Result);
                 }
             }
             catch (Exception e)
@@ -165,6 +190,8 @@ namespace DEVES.IntegrationAPI.WebApi.Services.Core.Controllers
                 //Console.WriteLine(r);
                 r.setHeaderProperty("code", "500");
                 r.setHeaderProperty("message", "Internal error occurred");
+                r.setHeaderProperty("transactionDateTime", GetCurrentDateTime());
+                r.setHeaderProperty("transactionId", GetTransactionId());
 
 
                 var s = new StackTrace(e);
@@ -179,61 +206,32 @@ namespace DEVES.IntegrationAPI.WebApi.Services.Core.Controllers
             }
 
             ServiceFailResult x = new ServiceFailResult();
-            return _InternalServerError(x);
+            return CreatedResponse(x);
         }
 
-        protected IHttpActionResult _SuccessResponse(IServiceResult model)
+        protected IHttpActionResult SuccessResponse(dynamic output)
         {
 
-            // model.setHeaderProperty("code","200");
-            // model.setHeaderProperty("message","Success");
-            //model.setHeaderProperty("description","The server successfully processed the request");
-            //model.setHeaderProperty("transactionDateTime",_getCurrentDateTime());
-            // model.setHeaderProperty("transactionId",_getTransactionId());
+            output.setHeaderProperty("code","200");
+            output.setHeaderProperty("message","Success");
+            output.setHeaderProperty("description","The server successfully processed the request");
+            output.setHeaderProperty("transactionDateTime", GetCurrentDateTime());
+            output.setHeaderProperty("transactionId", GetTransactionId());
 
-            return new OkResult<Object>(model, this);
+
+            return new OkResult<Object>(output, this);
         }
 
-        protected IHttpActionResult _CreatedResponse(IServiceResult model)
+        protected IHttpActionResult CreatedResponse(dynamic output)
         {
 
-            // model.setHeaderProperty("code","200");
-            // model.setHeaderProperty("message","Success");
-            // model.setHeaderProperty("description","Created");
-            // model.setHeaderProperty("transactionDateTime",_getCurrentDateTime());
-            //  model.setHeaderProperty("transactionId",_getTransactionId());
+          
+            output.setHeaderProperty("transactionDateTime", GetCurrentDateTime());
+            output.setHeaderProperty("transactionId", GetTransactionId());
 
-            return new OkResult<Object>(model, this);
+
+            return new OkResult<Object>(output, this);
         }
 
-        protected IHttpActionResult _FailResponse(IServiceResult model)
-        {
-            // model.setHeaderProperty("transactionDateTime",_getCurrentDateTime());
-            // model.setHeaderProperty("transactionId",_getTransactionId());
-            return new BadRequestResult<Object>(model, this);
-        }
-
-        protected IHttpActionResult _WebServiceErrorResponse(IServiceResult model)
-        {
-            // model.setHeaderProperty("transactionDateTime",_getCurrentDateTime());
-            // model.setHeaderProperty("transactionId",_getTransactionId());
-            return new ErrorResult<Object>(model, this);
-        }
-
-        protected IHttpActionResult _InternalServerError(IServiceResult model)
-        {
-            // model.setHeaderProperty("transactionDateTime",_getCurrentDateTime());
-            // model.setHeaderProperty("transactionId",_getTransactionId());
-            return new ErrorResult<Object>(model, this);
-        }
-
-        protected IHttpActionResult _RemoteFailResponse(IServiceResult model)
-        {
-            // model.setHeaderProperty("transactionDateTime",_getCurrentDateTime());
-            // model.setHeaderProperty("transactionId",_getTransactionId());
-
-
-            return new ErrorResult<Object>(model, this);
-        }
     }
 }

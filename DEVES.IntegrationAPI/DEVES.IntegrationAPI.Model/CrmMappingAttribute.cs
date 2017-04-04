@@ -22,7 +22,7 @@ namespace DEVES.IntegrationAPI.Model
 
     }
 
-    public abstract class BaseContentJsonProxyOutputModel : BaseDataModel
+    public abstract class BaseContentJsonProxyOutputModel : BaseDataModel , IServiceOutput
     {
         [JsonProperty(Order = 11)]
         public string code { get; set; }

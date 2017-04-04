@@ -8,12 +8,14 @@ using DEVES.IntegrationAPI.WebApi.Templates;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
-    public class BuzRegClaimRequestFromRVPCommand: BaseCommand
+    public class BuzRegClaimRequestFromRVPCommand
     {
 
-        public override BaseDataModel Execute(object input)
+        public CrmregClaimRequestFromRVPContentOutputModel Execute(object input)
         {
-            CrmRegClaimRequestFromRVPDataOutputModel output = new CrmRegClaimRequestFromRVPDataOutputModel();
+            CrmregClaimRequestFromRVPContentOutputModel outputContent = new CrmregClaimRequestFromRVPContentOutputModel();
+            outputContent.data = new CrmRegClaimRequestFromRVPDataOutputModel();
+            outputContent.data.claimNotiNo = "12";
 
             // ตรวจสอบ  Policy และ PolicyAditional ถ้ามีมากกว่า 1 รายการ ให้ return error
             if (!isValidPolicyAndPolicyAditional())
@@ -26,7 +28,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             var result = clientDataGateway.fetchAll();
             if (result.Count > 1)
             {
-                    throw new Exception("The above query returns multiple  result sets");
+                    //throw new Exception("The above query returns multiple  result sets");
             }
 
             if (result.Count == 0)
@@ -37,14 +39,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 }
                 catch (Exception e)
                 {
-                    throw new Exception("Error On Create Client");
+                    //throw new Exception("Error On Create Client");
                 }
             }
 
-
-
-
-            return output;
+            return outputContent;
         }
 
         protected bool isValidPolicyAndPolicyAditional()

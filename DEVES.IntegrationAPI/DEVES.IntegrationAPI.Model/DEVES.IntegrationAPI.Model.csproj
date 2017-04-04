@@ -114,6 +114,7 @@
     <Compile Include="InquiryCRMPayeeList\InquiryCRMPayeeListOutputModel.cs" />
     <Compile Include="InquiryPolicyMotorList\InquiryPolicyMotorListInputModel.cs" />
     <Compile Include="InquiryPolicyMotorList\InquiryPolicyMotorListOutputModel.cs" />
+    <Compile Include="IServiceOutput.cs" />
     <Compile Include="MASTER\InquiryMasterASRHDataModel.cs" />
     <Compile Include="Polisy400\CLIENT_CreateCorporateClientAndAdditionalInfoModels.cs" />
     <Compile Include="Polisy400\CLIENT_CreatePersonalClientAndAdditionalInfoModels.cs" />

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DEVES.IntegrationAPI.Model;
+using System;
 
 namespace DEVES.IntegrationAPI.WebApi.Services.Core.Exceptions
 {

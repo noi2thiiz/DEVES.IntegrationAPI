@@ -7,6 +7,8 @@ using Microsoft.Owin.Security.OAuth;
 using Newtonsoft.Json.Serialization;
 using System.Web.Http.Cors;
 using DEVES.IntegrationAPI.WebApi.TechnicalService;
+using DEVES.IntegrationAPI.WebApi.Services.Core.Attributes;
+using System.Web.ModelBinding;
 
 namespace DEVES.IntegrationAPI.WebApi
 {
@@ -34,6 +36,12 @@ namespace DEVES.IntegrationAPI.WebApi
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+
+
+
+            
+
+            DataAnnotationsModelValidatorProvider.RegisterAdapter(typeof(StringDateTimeAttribute), typeof(RegularExpressionAttributeAdapter));
 
             //config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new EWIDatetimeConverter());
 

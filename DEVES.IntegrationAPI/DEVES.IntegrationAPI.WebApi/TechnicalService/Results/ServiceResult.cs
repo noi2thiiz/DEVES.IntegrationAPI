@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using DEVES.IntegrationAPI.WebApi.Services.TechnicalService;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using DEVES.IntegrationAPI.Model;
 
 namespace DEVES.IntegrationAPI.WebApi.Services
 {
@@ -29,7 +30,7 @@ namespace DEVES.IntegrationAPI.WebApi.Services
 
     }
 public class ServiceResultHeaderOnly : IServiceResult
-{
+    {
     public string code { get; set; }
     public string message { get; set; }
     public string description { get; set; }
@@ -117,9 +118,17 @@ public class ServiceResultHeaderOnly : IServiceResult
             pi.SetValue(this, value, null);
         }
 
-        public void AddBodyData(object data)
+        public void AddBodyData(dynamic data)
         {
-            this.data.Add((MODEL_DATA_TYPE) data);
+            this.data = (List<MODEL_DATA_TYPE>)data;
+        }
+        public void AddBodyData(List<MODEL_DATA_TYPE> data)
+        {
+            foreach (var item in data)
+            {
+                this.data.Add((MODEL_DATA_TYPE)item);
+            }
+           
         }
 
 
@@ -190,7 +199,7 @@ public class ServiceResultHeaderOnly : IServiceResult
             pi.SetValue(this, value, null);
         }
 
-        public void AddBodyData(object data)
+        public void AddBodyData(dynamic data)
         {
             this.data = ((MODEL_DATA_TYPE) data);
         }

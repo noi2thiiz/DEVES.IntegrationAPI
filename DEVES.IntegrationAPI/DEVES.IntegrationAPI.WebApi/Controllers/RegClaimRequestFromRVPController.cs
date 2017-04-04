@@ -14,7 +14,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         {
             try
             {
-                return _processRequest<BuzRegClaimRequestFromRVPCommand>(model);
+                return ProcessRequest<BuzRegClaimRequestFromRVPCommand, CrmregClaimRequestFromRVPContentOutputModel>(model);
             }
             catch (Exception e)
             {

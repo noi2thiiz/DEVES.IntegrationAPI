@@ -34,7 +34,7 @@ namespace DEVES.IntegrationAPI.WebApi.Services
         //void AddHeader(ServiceResultHeader header);
         void setHeaderProperty(string key, string value);
 
-        void AddBodyData(object data);
+        void AddBodyData(dynamic data);
 
         RESTClientResult GetResponse();
         void SetResponse(RESTClientResult response);
