@@ -8,12 +8,14 @@ namespace DEVES.IntegrationAPI.Model.CLS
 {
     public class CLSInquiryCorporateClientInputModel: BaseDataModel
     {
-        public String clientId { set; get; }
+        public string clientId { set; get; }
         public string roleCode { set; get; }
         
-        public String corporateFullName { set; get; }
-        public String taxNo { set; get; }
-        public String telephone { set; get; }
-        public String emailAddress { set; get; }
+        public string corporateFullName { set; get; }
+        public string taxNo { set; get; }
+        public string telephone { set; get; }
+        public string emailAddress { set; get; }
+
+        public string backDay { set; get; }
     }
 }

@@ -14,6 +14,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
     {
         public override BaseDataModel TransformModel(BaseDataModel input, BaseDataModel output)
         {
+
+            Console.WriteLine("  process:TransformCOMPInquiryClientMasterContentOutputModel_to_CrmInquiryClientMasterContentOut");
             /*
              * ToDo:    Correct the case that there are many records input
              *          1. Loop through the input, 
@@ -24,6 +26,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             EWIResCOMPInquiryClientMasterContentModel srcContent = (EWIResCOMPInquiryClientMasterContentModel)input;
             CRMInquiryClientContentOutputModel trgtContent = (CRMInquiryClientContentOutputModel)output;
 
+            Console.WriteLine(" >>>>>>>>>>>>>>>>>>>>>>srcContent>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+            Console.WriteLine(srcContent.ToJson());
+            Console.WriteLine("   >>>>>>>>>>>>>>>>>>trgtContent>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+
+            Console.WriteLine(trgtContent.ToJson());
             if (srcContent.clientListCollection != null)
             {
                 foreach (COMPInquiryClientMasterContentClientListModel src in srcContent.clientListCollection)

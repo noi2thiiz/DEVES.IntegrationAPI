@@ -87,7 +87,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             {
                 output.fullName = input.NAME1 + " " +input.NAME2;
             }
-      
+
             // dataItrm.fullName = "";
             output.street1 = input.STREET1;
             output.street2 = input.STREET2;

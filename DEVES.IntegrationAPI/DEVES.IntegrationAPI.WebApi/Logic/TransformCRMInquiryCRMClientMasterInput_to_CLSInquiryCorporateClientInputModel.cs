@@ -20,8 +20,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             trgt.clientId = src.conditionDetail.polisyClientId;
             trgt.corporateFullName = src.conditionDetail.clientFullname;
             trgt.taxNo = src.conditionDetail.idCard;
-            trgt.telephone = "";
+            trgt.telephone = ""; 
             trgt.emailAddress = "";
+            trgt.backDay = "30";
 
             return output;
         }

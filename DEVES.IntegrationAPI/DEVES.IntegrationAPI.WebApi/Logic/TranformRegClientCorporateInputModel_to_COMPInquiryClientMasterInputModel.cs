@@ -13,7 +13,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             RegClientCorporateInputModel src = (RegClientCorporateInputModel)input;
             COMPInquiryClientMasterInputModel trgt = (COMPInquiryClientMasterInputModel)output;
 
-
+            
 
             if (src == null)
             {
