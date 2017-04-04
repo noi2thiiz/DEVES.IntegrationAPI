@@ -126,6 +126,9 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="PresentationFramework" />
+    <Reference Include="Swashbuckle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cd1bb07a5ac7c7bc, processorArchitecture=MSIL">
+      <HintPath>..\packages\Swashbuckle.Core.5.5.3\lib\net40\Swashbuckle.Core.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Activities" />
     <Reference Include="System.Activities.Presentation" />
@@ -206,6 +209,9 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebActivatorEx.2.0\lib\net40\WebActivatorEx.dll</HintPath>
+    </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
@@ -271,6 +277,7 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccidentPrilimSurveyorReportController.cs" />
     <Compile Include="Controllers\AssignedSurveyorController.cs" />
@@ -283,7 +290,6 @@
     <Compile Include="Controllers\InquiryCRMPayeeListController.cs" />
     <Compile Include="Controllers\InquiryPolicyMotorListClientController.cs" />
     <Compile Include="Controllers\RegClaimRequestFromRVPController.cs" />
-    <Compile Include="Controllers\RegClaimRequestFromRVPController_OLD.cs" />
     <Compile Include="Controllers\RegClientCorporateController.cs" />
     <Compile Include="Controllers\RegClientPersonalController.cs" />
     <Compile Include="Controllers\RegPayeeCorporateController.cs" />
@@ -291,7 +297,6 @@
     <Compile Include="Controllers\RequestSurveyorController.cs" />
     <Compile Include="Controllers\TestModelController.cs" />
     <Compile Include="Controllers\TEST_CLSInquiryClientPersonalController.cs" />
-    <Compile Include="Controllers\TEST_RegClaimRequestFromRVPController.cs" />
     <Compile Include="Controllers\UpdateClaimInfoController.cs" />
     <Compile Include="Controllers\UpdateClaimNoController.cs" />
     <Compile Include="Controllers\UpdateCompliantStatusController.cs" />
@@ -367,6 +372,7 @@
     <Compile Include="Startup.cs" />
     <Compile Include="TechnicalService\Attributes\NullOrEmpty.cs" />
     <Compile Include="TechnicalService\Attributes\StringDateTime.cs" />
+    <Compile Include="TechnicalService\Config\XrmConfigurationSettings.cs" />
     <Compile Include="TechnicalService\Controller\BaseApiController.cs" />
     <Compile Include="TechnicalService\Converters\BooleanJsonConverter.cs" />
     <Compile Include="TechnicalService\Converters\CustomDateConverter.cs" />

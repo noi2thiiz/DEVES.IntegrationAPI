@@ -2,16 +2,10 @@
 using System.IO;
 using System.Net;
 using System.Text;
-using System.Web.Services.Description;
 using DEVES.IntegrationAPI.WebApi.Services.Core.Exceptions;
-using DEVES.IntegrationAPI.WebApi.Services.Sms;
 using ExtensionMethods;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Swashbuckle.SwaggerUi;
-using TestApi;
-using Xunit;
-using Xunit.Abstractions;
 
 namespace DEVES.IntegrationAPI.WebApi.Services.TechnicalService
 {
@@ -237,78 +231,5 @@ namespace DEVES.IntegrationAPI.WebApi.Services.TechnicalService
             }
         }
     }
-
-    public class RESTClientTests:ControllerIntegrationTests
-    {
-        public RESTClientTests(ITestOutputHelper output) : base(output)
-        {
-        }
-
-
-
-        /// <summary>
-        /// ทดสอบกรณีปกติ service return responce http status code = 200
-        /// </summary>
-        [Fact]
-        public async void Should_Return_Success_Response()
-        {
-            RESTClient client = new RESTClient("http://localhost:5001/api/test/Format");
-            var responce  = client.Execute(@"{'datetime': '2017-03-19 00:13:00'}");
-
-            Assert.NotNull(responce);
-            Assert.NotEmpty(responce.content);
-            output.WriteLine(responce.ToJSON());
-
-        }
-
-        /// <summary>
-        /// ทดสอบ กรณีที่ติดต่อ server ไม่ได้ จะต้อง Throw CannotConnetServiceException
-        /// </summary>
-        [Fact]
-        public async void Should_Throw_CannotConnetServiceException()
-        {
-            Assert.Throws<CannotConnetServiceException>(()=>
-            {
-                RESTClient client = new RESTClient("http://ddddds44423.com");
-                var responce  = client.Execute("{'x':'x'}");
-
-                ServiceResultHeaderOnly result = new ServiceResultHeaderOnly();
-                result.SetResponse(responce);
-
-            });
-
-        }
-
-        /// <summary>
-        /// ทดสอบ กรณีที่ remote server return 404 Bad Request
-        /// </summary>
-        [Fact]
-        public async void Should_Throw_RemoteServiceInternalServerErrorException()
-        {
-            Assert.Throws<RemoteServiceInternalServerErrorException>(()=>
-            {
-                RESTClient client = new RESTClient("http://localhost:5001/api/test/TestInternalServerError");
-                var responce  = client.Execute(@"{'datetime': 'XXXXX'}");
-
-
-            });
-
-        }
-
-        /// <summary>
-        /// ทดสอบ กรณีที่ remote server return 404 Bad Request
-        /// </summary>
-        [Fact]
-        public async void Should_Throw_RemoteServiceBadRequestErrorException()
-        {
-            Assert.Throws<RemoteServiceBadRequestErrorException>(()=>
-            {
-                RESTClient client = new RESTClient("http://localhost:5001/api/test/Format");
-                var responce  = client.Execute(@"{'datetime': 'XXXXX'}");
-
-
-            });
-
-        }
-    }
+    
 }
