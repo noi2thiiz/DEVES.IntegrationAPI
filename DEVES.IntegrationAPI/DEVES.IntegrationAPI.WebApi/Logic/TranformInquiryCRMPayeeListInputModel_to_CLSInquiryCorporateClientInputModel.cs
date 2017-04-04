@@ -12,13 +12,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             InquiryCRMPayeeListInputModel src = (InquiryCRMPayeeListInputModel)input;
             CLSInquiryCorporateClientInputModel trgt = (CLSInquiryCorporateClientInputModel)output;
 
-            trgt.clientId = src.polisyClientId;
-            trgt.roleCode = src.roleCode;
+            trgt.clientId = ""+src.polisyClientId;
+            trgt.roleCode = ""+src.roleCode;
 
-            trgt.corporateFullName = src.fullname;
-            trgt.taxNo = src.taxNo;
-            // trgt.telephone;
-            //trgt.emailAddress;
+            trgt.corporateFullName = ""+src.fullname;
+            trgt.taxNo = ""+src.taxNo;
+            trgt.backDay = "30";
+             trgt.telephone = "";
+            trgt.emailAddress= "";
 
             return trgt;
         

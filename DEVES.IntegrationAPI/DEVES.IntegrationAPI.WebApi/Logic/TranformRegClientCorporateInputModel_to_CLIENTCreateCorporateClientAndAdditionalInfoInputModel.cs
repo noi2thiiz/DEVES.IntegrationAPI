@@ -44,7 +44,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 {
                     // to 20160303
                     CultureInfo usaCulture = new CultureInfo("en-US");
-                    var dateString = src.profileHeader.dateInCorporate.ToString("yyyyMMdd", usaCulture);
+                    var dateString = src.profileHeader.dateInCorporate.ToString("ddMMyyy", usaCulture);
                     trgt.dateInCorporate = dateString;
                 }
 
