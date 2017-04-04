@@ -17,6 +17,19 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             InquiryAPARPayeeContentModel srcContent = (InquiryAPARPayeeContentModel) input;
             CRMInquiryPayeeContentOutputModel trgtContent = (CRMInquiryPayeeContentOutputModel) output;
 
+            Console.WriteLine("===========InquiryAPARPayeeContentModel Tranform output==========");
+            Console.WriteLine("===========Tranform==========");
+            Console.WriteLine("===========Tranform==========");
+
+            Console.WriteLine(srcContent.ToJson());
+
+
+            Console.WriteLine("===========CRMInquiryPayeeContentOutputModel Tranform output==========");
+            Console.WriteLine("===========Tranform==========");
+            Console.WriteLine("===========Tranform==========");
+            Console.WriteLine(trgtContent.ToJson());
+
+
             trgtContent.data = new List<InquiryCrmPayeeListDataModel>();
 
 
