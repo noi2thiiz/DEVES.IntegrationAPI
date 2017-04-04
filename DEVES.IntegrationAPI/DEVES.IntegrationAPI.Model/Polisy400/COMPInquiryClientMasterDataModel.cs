@@ -34,7 +34,7 @@ namespace DEVES.IntegrationAPI.Model.Polisy400
         public String idcard { set; get; }
         public String branchCode { set; get; }
 
-        public int? backDay { set; get; }
+        public string backDay { set; get; }
     }
 
     public class COMPInquiryClientMasterOutputModel : BaseEWIResponseModel
