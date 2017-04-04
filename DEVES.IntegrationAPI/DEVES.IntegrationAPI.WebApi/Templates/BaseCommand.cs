@@ -109,8 +109,8 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                 //user & password must be switch to get from calling k.Ton's API rather than fixed values.
                 username = "sysdynamic",
                 password = "REZOJUNtN04=",
-                uid = "cleansing",
-                gid = "cleansing",
+                uid = "DevesClaim",
+                gid = "DevesClaim",
                 token = GetLatestToken(),
                 content = JSON
             };
