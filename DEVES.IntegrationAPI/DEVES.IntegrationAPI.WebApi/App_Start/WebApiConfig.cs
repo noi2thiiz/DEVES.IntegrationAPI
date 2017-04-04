@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Web.Http;
+﻿using System.Web.Http;
 using Microsoft.Owin.Security.OAuth;
-using Newtonsoft.Json.Serialization;
 using System.Web.Http.Cors;
 using DEVES.IntegrationAPI.WebApi.TechnicalService;
-using DEVES.IntegrationAPI.WebApi.Services.Core.Attributes;
 using System.Web.ModelBinding;
+using DEVES.IntegrationAPI.WebApi.Core.Attributes;
 
 namespace DEVES.IntegrationAPI.WebApi
 {
