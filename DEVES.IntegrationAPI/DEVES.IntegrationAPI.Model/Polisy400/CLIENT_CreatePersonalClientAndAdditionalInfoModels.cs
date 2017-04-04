@@ -11,6 +11,11 @@ namespace DEVES.IntegrationAPI.Model.Polisy400
 {
     public class CLIENTCreatePersonalClientAndAdditionalInfoInputModel : BaseDataModel
     {
+        public CLIENTCreatePersonalClientAndAdditionalInfoInputModel()
+        {
+            DateTimeCustomFormat = CONST_FORMAT_DATE_POLISY400;
+        }
+
         //"username": "sysdynamic",
         //public string username { get; set; }
         ////"password": "REZOJUNtN04=",

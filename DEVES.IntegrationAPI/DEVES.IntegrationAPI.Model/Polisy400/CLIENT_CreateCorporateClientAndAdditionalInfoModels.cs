@@ -11,6 +11,11 @@ namespace DEVES.IntegrationAPI.Model.Polisy400
 {
     public class CLIENTCreateCorporateClientAndAdditionalInfoInputModel : BaseDataModel
     {
+        public CLIENTCreateCorporateClientAndAdditionalInfoInputModel()
+        {
+            DateTimeCustomFormat = CONST_FORMAT_DATE_POLISY400;
+        }
+
         //"telephones2": "0811111111",
         public string telephone2 { get; set; }
 

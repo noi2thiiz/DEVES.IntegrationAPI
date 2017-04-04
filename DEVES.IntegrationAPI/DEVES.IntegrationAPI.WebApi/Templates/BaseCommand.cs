@@ -63,8 +63,8 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                 //user & password must be switch to get from calling k.Ton's API rather than fixed values.
                 username = "sysdynamic",
                 password = "REZOJUNtN04=",
-                uid = "cleansing",
-                gid = "cleansing",
+                uid = "DevesClaim",
+                gid = "DevesClaim",
                 token = GetLatestToken(),
                 content = JSON
             };
@@ -114,8 +114,8 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                 token = GetLatestToken(),
                 content = JSON
             };
-
-            string jsonReqModel = JsonConvert.SerializeObject(reqModel, Formatting.Indented, new EWIDatetimeConverter());
+            
+            string jsonReqModel = JsonConvert.SerializeObject(reqModel, Formatting.Indented, new EWIDatetimeConverter(JSON.DateTimeCustomFormat));
 
             HttpClient client = new HttpClient(); ;
 
