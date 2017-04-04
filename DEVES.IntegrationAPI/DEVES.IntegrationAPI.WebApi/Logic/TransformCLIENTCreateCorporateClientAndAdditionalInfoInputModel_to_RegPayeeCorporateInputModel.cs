@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using DEVES.IntegrationAPI.Model;
+﻿using DEVES.IntegrationAPI.Model;
 using DEVES.IntegrationAPI.WebApi.Templates;
-using RPS = DEVES.IntegrationAPI.Model.RPS;
 using DEVES.IntegrationAPI.Model.Polisy400;
 using DEVES.IntegrationAPI.Model.RegPayeeCorporate;
 
@@ -22,11 +17,23 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             if (trgt.generalHeader == null)
             {
-                trgt.generalHeader = new RegPayeeCorporateInputModel();
+                trgt.generalHeader = new GeneralHeaderModel();
             }
-                    trgt.profileHeader = new RegPayeeCorporateInputModel();
-                    trgt.contentHeader = new RegPayeeCorporateInputModel();
-                    trgt.addressHeader = new RegPayeeCorporateInputModel();
+            if (trgt.profileHeader == null)
+            {
+                trgt.profileHeader = new ProfileHeaderModel();
+            }
+            if (trgt.contactHeader == null)
+            {
+                trgt.contactHeader = new ContactHeaderModel();
+            }
+            if (trgt.addressHeader == null)
+            {
+                trgt.addressHeader = new AddressHeaderModel();
+            }
+                   
+                    
+                   
                     
                     //generalHeader 
 
@@ -66,14 +73,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     trgt.addressHeader.postalCode = src.postCode;
                     trgt.addressHeader.country = src.country;
                     trgt.addressHeader.latitude = src.latitude;
-                    trgt.addressHeader.longtitude = src.longtituge;
-
-                    //src.data 
-
-                  //  trgt.data.policyClientId = src.clientID;
-
+                    trgt.addressHeader.longtitude = src.longtitude;
+            
                
 
+            
 
             return trgt;
         }
