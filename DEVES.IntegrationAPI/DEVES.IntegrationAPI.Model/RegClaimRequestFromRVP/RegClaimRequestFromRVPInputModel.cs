@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DEVES.IntegrationAPI.Model.RegClaimRequestFromRVP
 {
-    public class RegClaimRequestFromRVPInputModel
+    public class RegClaimRequestFromRVPInputModelX
     {
         public string rvpCliamNo { get; set; }
         public PolicyInfoModel policyInfo { get; set; }
