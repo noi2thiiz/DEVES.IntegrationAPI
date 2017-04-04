@@ -4,6 +4,9 @@ using System.Linq;
 using System.Web;
 using DEVES.IntegrationAPI.Model;
 using DEVES.IntegrationAPI.WebApi.Templates;
+using System.Globalization;
+using DEVES.IntegrationAPI.Model.RegPayeeCorporate;
+using DEVES.IntegrationAPI.Model.Polisy400;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
@@ -63,11 +66,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 trgt.postCode = src.addressHeader.postalCode;
                 trgt.country = src.addressHeader.country;
                 trgt.latitude = src.addressHeader.latitude;
-                trgt.longtituge = src.addressHeader.longtitude;
-            }
-            if (src.data != null)
-            {
-                trgt.clientID = src.data.policyClientId;
+                trgt.longtitude = src.addressHeader.longtitude;
             }
             
 

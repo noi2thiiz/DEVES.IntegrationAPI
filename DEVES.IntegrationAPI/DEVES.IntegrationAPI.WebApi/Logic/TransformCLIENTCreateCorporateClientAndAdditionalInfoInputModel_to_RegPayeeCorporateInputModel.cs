@@ -5,6 +5,8 @@ using System.Web;
 using DEVES.IntegrationAPI.Model;
 using DEVES.IntegrationAPI.WebApi.Templates;
 using RPS = DEVES.IntegrationAPI.Model.RPS;
+using DEVES.IntegrationAPI.Model.Polisy400;
+using DEVES.IntegrationAPI.Model.RegPayeeCorporate;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
@@ -12,20 +14,20 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
     {
         public override BaseDataModel TransformModel(BaseDataModel input, BaseDataModel output)
         {
-            CLIENTCreateCorporateClientAndAdditionalInfoInputModel srccontect = (CLIENTCreateCorporateClientAndAdditionalInfoInputModel)input;
-            RegPayeeCorporateInputModel trgtcontent = (RegPayeeCorporateInputModel)output;
+            CLIENTCreateCorporateClientAndAdditionalInfoInputModel src = (CLIENTCreateCorporateClientAndAdditionalInfoInputModel)input;
+            RegPayeeCorporateInputModel trgt = (RegPayeeCorporateInputModel)output;
 
 
-            if (src.data != null)
-                foreach (RPS.CLIENTCreateCorporateClientAndAdditionalInfoInputModel src in srccontect.data)
-                {
 
-                    RegPayeeCorporateInputModel trgt = new RegPayeeCorporateInputModel();
-                    trgt.generalHeader = new RegPayeeCorporateInputModel(); 
+
+            if (trgt.generalHeader == null)
+            {
+                trgt.generalHeader = new RegPayeeCorporateInputModel();
+            }
                     trgt.profileHeader = new RegPayeeCorporateInputModel();
                     trgt.contentHeader = new RegPayeeCorporateInputModel();
                     trgt.addressHeader = new RegPayeeCorporateInputModel();
-                    trgt.data = new RegPayeeCorporateInputModel(); 
+                    
                     //generalHeader 
 
                     trgt.generalHeader.cleansingId = src.cleansingId;
@@ -68,11 +70,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                     //src.data 
 
-                    trgt.data.policyClientId = src.clientID;
+                  //  trgt.data.policyClientId = src.clientID;
 
-                    trgtContent.data.Add(trgt);
-                }
-            
+               
 
 
             return trgt;
