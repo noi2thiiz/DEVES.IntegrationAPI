@@ -83,6 +83,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             output.title = input.TITLE;
             output.name1 = input.NAME1;
             output.name2 = input.NAME2;
+            if (string.IsNullOrEmpty(output.fullName ))
+            {
+                output.fullName = input.NAME1 + " " +input.NAME2;
+            }
+      
             // dataItrm.fullName = "";
             output.street1 = input.STREET1;
             output.street2 = input.STREET2;

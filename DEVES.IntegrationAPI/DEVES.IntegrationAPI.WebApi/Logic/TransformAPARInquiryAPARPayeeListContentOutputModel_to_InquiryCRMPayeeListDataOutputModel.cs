@@ -52,7 +52,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                             faxNo = aparPayeeList.faxNo,
 
-                            taxBranchCode = aparPayeeList.taxBranchCode
+                            taxBranchCode = aparPayeeList.taxBranchCode,
+                            fullName =  aparPayeeList.fullName
                         });
                     }
                 }

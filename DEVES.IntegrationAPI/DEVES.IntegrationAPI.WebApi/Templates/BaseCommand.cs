@@ -86,7 +86,16 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             HttpResponseMessage response = client.SendAsync(request).Result;
             response.EnsureSuccessStatusCode();
 
+            Console.WriteLine("==========jsonReqModel========");
+            Console.WriteLine(jsonReqModel.ToJson());
+
+
+
             T1 ewiRes = response.Content.ReadAsAsync<T1>().Result;
+
+            Console.WriteLine("==========response========");
+            Console.WriteLine(ewiRes.ToJson());
+
             BaseContentJsonProxyOutputModel output =  (BaseContentJsonProxyOutputModel)typeof(T1).GetProperty("content").GetValue(ewiRes);
             return output;
         }
