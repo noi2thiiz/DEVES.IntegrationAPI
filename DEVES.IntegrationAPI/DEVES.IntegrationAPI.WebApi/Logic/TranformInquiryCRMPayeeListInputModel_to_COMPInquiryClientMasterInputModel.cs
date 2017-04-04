@@ -12,15 +12,16 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             InquiryCRMPayeeListInputModel src = (InquiryCRMPayeeListInputModel)input;
             COMPInquiryClientMasterInputModel trgt = (COMPInquiryClientMasterInputModel)output;
 
-            trgt.cltType = src.clientType;
-            trgt.asrType = src.roleCode;
-            trgt.clntnum = src.polisyClientId;
-            trgt.fullName = src.fullname;
+            trgt.cltType = ""+src.clientType;
+            trgt.asrType = ""+src.roleCode;
+            trgt.clntnum =""+ src.polisyClientId;
+            trgt.fullName = ""+src.fullname;
 
-            trgt.idcard= src.taxNo;
-            trgt.branchCode= src.taxBranchCode;
+            trgt.idcard= ""+src.taxNo;
+            trgt.branchCode= ""+src.taxBranchCode;
 
-            trgt.backDay = 3;
+            trgt.backDay = "30";
+
 
             // src.sapVendorCode;
             // src.requester;

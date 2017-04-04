@@ -11,6 +11,7 @@ using System.Configuration;
 using Microsoft.Xrm.Tooling.Connector;
 using System.Collections.Generic;
 using Microsoft.Xrm.Sdk;
+using System.Linq;
 
 namespace DEVES.IntegrationAPI.WebApi.Controllers
 {
@@ -229,37 +230,58 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             try
             {
                 var connection = new CrmServiceClient(ConfigurationManager.ConnectionStrings["CRM_DEVES"].ConnectionString);
-
-                //OrganizationServiceProxy _serviceProxy;
-                //private Guid _accountId;
                 _serviceProxy = connection.OrganizationServiceProxy;
                 ServiceContext svcContext = new ServiceContext(_serviceProxy);
-                
+
+                var query = from c in svcContext.IncidentSet
+                            where c.pfc_claim_noti_number == content.claimNotiNo
+                            select c;
+
+                Incident incident = query.FirstOrDefault<Incident>();
+                // Incident GUID
+                _accountId = new Guid(incident.IncidentId.ToString());
+                // Motor Accident GUID
+                Guid _motorId = new Guid();
+
+                Incident retrievedIncident = (Incident)_serviceProxy.Retrieve(Incident.EntityLogicalName, _accountId, new Microsoft.Xrm.Sdk.Query.ColumnSet(true));
+
+
+                // Incident
                 try
                 {
                     
-                    // Incident (Case)
-                    Incident incident = new Incident();
-                    /*
-                    incident.pfc_accident_legal_result = new OptionSetValue(Int32.Parse(convertOptionSet(Incident.EntityLogicalName, "", content.eventDetailInfo.accidentLegalResult)));
-                    incident.pfc_police_station = content.eventDetailInfo.policeStation;
-                    incident.pfc_police_record_id = content.eventDetailInfo.policeRecordId;
-                    incident.pfc_police_record_date = Convert.ToDateTime(content.eventDetailInfo.policeRecordDate);
-                    incident.pfc_police_bail_flag = convertBool(content.eventDetailInfo.policeBailFlag);
-                    incident.pfc_num_of_tow_truck = new OptionSetValue(Int32.Parse(convertOptionSet(Incident.EntityLogicalName, "", content.eventDetailInfo.numOfTowTruck.ToString())));
-                    incident.pfc_num_of_accident_injuries = new OptionSetValue(Int32.Parse(convertOptionSet(Incident.EntityLogicalName, "", content.eventDetailInfo.numOfAccidentInjury.ToString())));
-                    incident.pfc_num_of_death = new OptionSetValue(Int32.Parse(convertOptionSet(Incident.EntityLogicalName, "", content.eventDetailInfo.numOfDeath.ToString())));
-                    incident.pfc_excess_fee = content.eventDetailInfo.excessFee;
-                    incident.pfc_deductable_fee = content.eventDetailInfo.deductibleFee;
-                    incident.pfc_accident_prilim_surveyor_report_date = content.reportAccidentResultDate;
-                    */
-                    // _serviceProxy.Create(incident);
+                    retrievedIncident.pfc_accident_legal_result = new OptionSetValue(Int32.Parse(convertOptionSet(Incident.EntityLogicalName, "", content.eventDetailInfo.accidentLegalResult)));
+                    retrievedIncident.pfc_police_station = content.eventDetailInfo.policeStation;
+                    retrievedIncident.pfc_police_record_id = content.eventDetailInfo.policeRecordId;
+                    retrievedIncident.pfc_police_record_date = Convert.ToDateTime(content.eventDetailInfo.policeRecordDate);
+                    retrievedIncident.pfc_police_bail_flag = convertBool(content.eventDetailInfo.policeBailFlag);
+                    retrievedIncident.pfc_num_of_tow_truck = new OptionSetValue(Int32.Parse(convertOptionSet(Incident.EntityLogicalName, "", content.eventDetailInfo.numOfTowTruck.ToString())));
+                    retrievedIncident.pfc_num_of_accident_injuries = new OptionSetValue(Int32.Parse(convertOptionSet(Incident.EntityLogicalName, "", content.eventDetailInfo.numOfAccidentInjury.ToString())));
+                    retrievedIncident.pfc_num_of_death = new OptionSetValue(Int32.Parse(convertOptionSet(Incident.EntityLogicalName, "", content.eventDetailInfo.numOfDeath.ToString())));
+                    retrievedIncident.pfc_excess_fee = content.eventDetailInfo.excessFee;
+                    retrievedIncident.pfc_deductable_fee = content.eventDetailInfo.deductibleFee;
+                    retrievedIncident.pfc_accident_prilim_surveyor_report_date = content.reportAccidentResultDate;
+                    
+                    _serviceProxy.Update(retrievedIncident);
+                }
+                catch(Exception e)
+                {
+                    output.code = "501";
+                    output.message = "False";
+                    output.description = "Update Entity Incident PROBLEM";
+                    output.transactionId = "";
+                    output.transactionDateTime = DateTime.Now.ToString();
+                    output.data.message = null;
 
-                    // Motor Accident 
+                    return output;
+                }
+
+                // Motor Accident 
+                try
+                {
                     pfc_motor_accident motorAccident = new pfc_motor_accident();
-                    /*
-                    //motorAccident.pfc_motor_accident_name = ""; // ให้เป็นไปตาม Logic. ของหน้า Motor Accident Parties
-                    //motorAccident.pfc_parent_caseId = ""; //ให้ผูกกับ Case ด้านบน ??
+
+                    motorAccident.pfc_parent_caseId = new Microsoft.Xrm.Sdk.EntityReference(Incident.EntityLogicalName, _accountId);
                     motorAccident.pfc_activity_date = Convert.ToDateTime(content.eventDetailInfo.accidentOn);
                     //motorAccident.pfc_event_code = ""; // ให้เป็นไปตาม Logic. ของหน้า Motor Accident
                     motorAccident.pfc_ref_isurvey_eventid = content.eventId;
@@ -275,97 +297,160 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                     motorAccident.pfc_ref_isurvey_isdeleted = convertBool(content.eventDetailInfo.iSurveyIsDeleted);
                     motorAccident.pfc_ref_isurvey_isdeleted_date = Convert.ToDateTime(content.eventDetailInfo.iSurveyIsDeletedDate);
                     motorAccident.pfc_motor_accident_parties_sum = content.eventDetailInfo.numOfAccidentParty;
-                    */
-                    // _serviceProxy.Create(motorAccident);
 
-                    // Motor Accident Parties   
-                    pfc_motor_accident_parties motorAccidentParties = new pfc_motor_accident_parties();
-                    //motorAccidentParties.pfc_ref_isurvey_partiesid
-                    //motorAccidentParties.pfc_ref_isurvey_eventid
-                    //motorAccidentParties.pfc_ref_isurvey_eventitem
-                    //motorAccidentParties.pfc_parties_fullname
-                    //motorAccidentParties.pfc_parties_type // ไม่มี field นี้
-                    //motorAccidentParties.pfc_licence_province
-                    //motorAccidentParties.pfc_licence_no
-                    //motorAccidentParties.pfc_brand
-                    //motorAccidentParties.pfc_model
-                    //motorAccidentParties.pfc_color
-                    //motorAccidentParties.pfc_phoneno
-                    //motorAccidentParties.pfc_insurance_name
-                    //motorAccidentParties.pfc_policyno
-                    //motorAccidentParties.pfc_policy_type
-                    //motorAccidentParties.pfc_ref_isurvey_created_date
-                    //motorAccidentParties.pfc_ref_isurvey_modified_date
-                    //motorAccidentParties.pfc_ref_isurvey_isdeleted
-                    //_serviceProxy.Create(MotorAccidentParties);
+                    Guid motorId = _serviceProxy.Create(motorAccident);
 
-                    // Motor Accident Part
-                    pfc_motor_accident_parts motorAccidentPart = new pfc_motor_accident_parts();
-                    //motorAccidentPart.pfc_ref_isurvey_eventid
-                    //motorAccidentPart.pfc_ref_isurvey_item
-                    //motorAccidentPart.pfc_ref_isurvey_detailid
-                    //motorAccidentPart.pfc_detail
-                    //motorAccidentPart.pfc_damage_levels
-                    //motorAccidentPart.pfc_is_repair
-                    //motorAccidentPart.pfc_remark
-                    //motorAccidentPart.pfc_ref_isurvey_created_date
-                    //motorAccidentPart.pfc_ref_isurvey_modified_date
-                    //motorAccidentPart.pfc_ref_isurvey_isdeleted
-                    //motorAccidentPart.pfc_ref_isurvey_isdeleted_date
-                    //motorAccidentPart.pfc_motor_accident_event_code // ให้เป็นไปตาม Logic. ของหน้า Motor Accident Parts
-                    //motorAccidentPart.pfc_motor_accident_event_sequence // ให้เป็นไปตาม Logic. ของหน้า Motor Accident Parts
-                    //motorAccidentPart.pfc_motor_accident_parties_parts_name // ให้เป็นไปตาม Logic. ของหน้า Motor Accident Parties Parts
-                    //motorAccidentPart.pfc_motor_accident_partiesId // ให้ผูกกับ Motor Accident Parties ด้านบน
-                    //_serviceProxy.Create(motorAccidentParty);
+                    // getting GUID of motorAccident and store in "_motorId" variable
+                    _motorId = motorId;
+                }
+                catch (Exception e)
+                {
+                    output.code = "501";
+                    output.message = "False";
+                    output.description = "Create Entity Motor Accident PROBLEM";
+                    output.transactionId = "";
+                    output.transactionDateTime = DateTime.Now.ToString();
+                    output.data.message = null;
 
-                    // Motor Accident Parties Part
-                    pfc_motor_accident_parties_parts motorAccidentPartiesPart = new pfc_motor_accident_parties_parts();
-                    var accPartiesPart = new List<ClaimDetailPartiesInfoModel>();
-                    int cntApp = 0;
-                    /*
-                    foreach(var val in content.claimDetailPartiesInfo)
+                    return output;
+                }
+
+                // Motor Accident Parties  
+                try
+                {
+                    List<PartiesInfoModel> party = content.partiesInfo;
+
+                    foreach (PartiesInfoModel a in party)
                     {
-                        motorAccidentPartiesPart.pfc_ref_isurvey_partiesid += content.claimDetailPartiesInfo[cntApp].claimDetailPartiesPartiesId;
+                        pfc_motor_accident_parties motorAccidentParties = new pfc_motor_accident_parties();
+                        motorAccidentParties.pfc_parent_motor_accidentId = new EntityReference(pfc_motor_accident_parties.EntityLogicalName, _motorId);
+
+                        motorAccidentParties.pfc_ref_isurvey_partiesid = a.partiesId;
+                        motorAccidentParties.pfc_ref_isurvey_eventid = a.partiesEventId;
+                        motorAccidentParties.pfc_ref_isurvey_eventitem = a.partiesEventItem;
+                        motorAccidentParties.pfc_parties_fullname = a.partiesFullname;
+                        motorAccidentParties.pfc_parties_type = new OptionSetValue(Int32.Parse(convertOptionSet(pfc_motor_accident_parties.EntityLogicalName, "", a.partiesType.ToString()))); // ไม่มี field นี้
+                        motorAccidentParties.pfc_licence_province = a.partiesCarPlateProv;
+                        motorAccidentParties.pfc_licence_no = a.partiesCarPlateNo;
+                        motorAccidentParties.pfc_brand = a.partiesCarBrand;
+                        motorAccidentParties.pfc_model = a.partiesCarModels;
+                        motorAccidentParties.pfc_color = a.partiesCarColor;
+                        motorAccidentParties.pfc_phoneno = a.partiesPartyPhone;
+                        motorAccidentParties.pfc_insurance_name = a.partiesInsuranceCompany;
+                        motorAccidentParties.pfc_policyno = a.partiesPolicyNumber;
+                        motorAccidentParties.pfc_policy_type = a.partiesPolicyType;
+                        motorAccidentParties.pfc_ref_isurvey_created_date = Convert.ToDateTime(a.partiesCreatedDate);
+                        motorAccidentParties.pfc_ref_isurvey_modified_date = Convert.ToDateTime(a.partiesModifiedDate);
+                        motorAccidentParties.pfc_ref_isurvey_isdeleted = convertBool(a.partiesIsDeleted);
+                        motorAccidentParties.pfc_ref_isurvey_isdeleted_date = Convert.ToDateTime(a.partiesIsDeletedDate);
+
+                        _serviceProxy.Create(motorAccidentParties);
+
+                        // (Motor Accident Part) get "pfc_ref_isurvey_partiesid"
+                        string partyId = motorAccidentParties.pfc_ref_isurvey_partiesid;
+                        // Motor Accident Parties Part
+                        try
+                        {
+                            List<ClaimDetailPartiesInfoModel> partiesPart = content.claimDetailPartiesInfo;
+
+                            foreach (ClaimDetailPartiesInfoModel data in partiesPart)
+                            {
+                                if (data.claimDetailPartiesPartiesId == partyId)
+                                {
+                                    pfc_motor_accident_parties_parts motorAccidentPartiesPart = new pfc_motor_accident_parties_parts();
+
+                                    motorAccidentPartiesPart.pfc_ref_isurvey_partiesid = data.claimDetailPartiesPartiesId;
+                                    motorAccidentPartiesPart.pfc_ref_isurvey_item = data.claimDetailPartiesItem;
+                                    motorAccidentPartiesPart.pfc_ref_isurvey_detailid = data.claimDetailPartiesDetailId;
+                                    motorAccidentPartiesPart.pfc_detail = data.claimDetailPartiesDetail;
+                                    motorAccidentPartiesPart.pfc_damage_levels = new OptionSetValue(Int32.Parse(convertClaimDetailLevels(data.claimDetailPartiesLevels)));
+                                    motorAccidentPartiesPart.pfc_is_repair = convertBool(data.claimDetailPartieslIsRepair);
+                                    motorAccidentPartiesPart.pfc_remark = data.claimDetailPartiesRemark;
+                                    motorAccidentPartiesPart.pfc_ref_isurvey_created_date = Convert.ToDateTime(data.claimDetailPartiesCreatedDate);
+                                    motorAccidentPartiesPart.pfc_ref_isurvey_modified_date = Convert.ToDateTime(data.claimDetailPartiesModifiedDate);
+                                    motorAccidentPartiesPart.pfc_ref_isurvey_isdeleted = convertBool(data.claimDetailPartiesIsDeleted);
+                                    motorAccidentPartiesPart.pfc_ref_isurvey_isdeleted_date = Convert.ToDateTime(data.claimDetailPartiesIsDeletedDate);
+                                    //motorAccidentPartiesPart.pfc_motor_accident_event_code // ให้เป็นไปตาม Logic. ของหน้า Motor Accident Parties Parts
+                                    //motorAccidentPartiesPart.pfc_motor_accident_event_sequence // ให้เป็นไปตาม Logic. ของหน้า Motor Accident Parties Parts
+                                    //motorAccidentPartiesPart.pfc_motor_accident_parties_sequence // ให้เป็นไปตาม Logic. ของหน้า Motor Accident Parties Parts
+                                    _serviceProxy.Create(motorAccidentPartiesPart);
+                                }
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            output.code = "501";
+                            output.message = "False";
+                            output.description = "Create Entity (Case/Motor) PROBLEM";
+                            output.transactionId = "";
+                            output.transactionDateTime = DateTime.Now.ToString();
+                            output.data.message = null;
+
+                            return output;
+                        }
+
                     }
-                    */
-                    //content.claimDetailPartiesInfo
-                    //motorAccidentPartiesPart.pfc_ref_isurvey_partiesid
-                    //motorAccidentPartiesPart.pfc_ref_isurvey_item
-                    //motorAccidentPartiesPart.pfc_ref_isurvey_detailid
-                    //motorAccidentPartiesPart.pfc_detail
-                    //motorAccidentPartiesPart.pfc_damage_levels
-                    //motorAccidentPartiesPart.pfc_is_repair
-                    //motorAccidentPartiesPart.pfc_remark
-                    //motorAccidentPartiesPart.pfc_ref_isurvey_created_date
-                    //motorAccidentPartiesPart.pfc_ref_isurvey_modified_date
-                    //motorAccidentPartiesPart.pfc_ref_isurvey_isdeleted
-                    //motorAccidentPartiesPart.pfc_ref_isurvey_isdeleted_date
-                    //motorAccidentPartiesPart.pfc_motor_accident_event_code // ให้เป็นไปตาม Logic. ของหน้า Motor Accident Parties Parts
-                    //motorAccidentPartiesPart.pfc_motor_accident_event_sequence // ให้เป็นไปตาม Logic. ของหน้า Motor Accident Parties Parts
-                    //motorAccidentPartiesPart.pfc_motor_accident_parties_sequence // ให้เป็นไปตาม Logic. ของหน้า Motor Accident Parties Parts
-                    //_serviceProxy.Create(motorAccidentPartiesPart);
+                }
+                catch (Exception e)
+                {
+                    output.code = "501";
+                    output.message = "False";
+                    output.description = "Create Entity Motor Accident Parties PROBLEM";
+                    output.transactionId = "";
+                    output.transactionDateTime = DateTime.Now.ToString();
+                    output.data.message = null;
+
+                    return output;
+                }
+
+                // Motor Accident Part
+                try
+                {
+                    List<ClaimDetailInfoModel> parts = content.claimDetailInfo;
+
+                    foreach(ClaimDetailInfoModel a in parts)
+                    {
+                        pfc_motor_accident_parts motorAccidentPart = new pfc_motor_accident_parts();
+
+                        motorAccidentPart.pfc_motor_accidentId = new EntityReference(pfc_motor_accident_parts.EntityLogicalName, _motorId);
+                        motorAccidentPart.pfc_ref_isurvey_eventid = a.claimDetailEventId;
+                        motorAccidentPart.pfc_ref_isurvey_item = a.claimDetailItem;
+                        motorAccidentPart.pfc_ref_isurvey_detailid = a.claimDetailDetailid;
+                        motorAccidentPart.pfc_detail = a.claimDetailDetail;
+                        motorAccidentPart.pfc_damage_levels = new OptionSetValue(Int32.Parse(convertClaimDetailLevels(a.claimDetailLevels)));
+                        motorAccidentPart.pfc_is_repair = convertBool(a.claimDetailIsRepair);
+                        motorAccidentPart.pfc_remark = a.claimDetailRemark;
+                        motorAccidentPart.pfc_ref_isurvey_created_date = Convert.ToDateTime(a.claimDetailCreatedDate);
+                        motorAccidentPart.pfc_ref_isurvey_modified_date = Convert.ToDateTime(a.claimDetailModifiedDate);
+                        motorAccidentPart.pfc_ref_isurvey_isdeleted = convertBool(a.claimDetailIsDeleted);
+                        motorAccidentPart.pfc_ref_isurvey_isdeleted_date = Convert.ToDateTime(a.claimDetailIsDeletedDate);
+
+                        _serviceProxy.Create(motorAccidentPart);
+
+                    }
 
                 }
                 catch (Exception e)
                 {
                     output.code = "501";
                     output.message = "False";
-                    output.description = "Create Entity (Case/Motor) PROBLEM";
+                    output.description = "Create Entity Motor Accident Part PROBLEM";
                     output.transactionId = "";
                     output.transactionDateTime = DateTime.Now.ToString();
-                    output.data = null;
+                    output.data.message = null;
 
                     return output;
                 }
+                
 
                 //TODO: Do something
                 output.code = "200";
                 output.message = "Success";
                 output.description = "AccidentPrilimSurveyorReportOutput is done!";
-                output.transactionId = "Ticket ID: " + content.ticketNo + ", Claim Noti No: " + content.claimNotiNo;
+                output.transactionId = Request.Properties["TransactionID"].ToString();
                 output.transactionDateTime = DateTime.Now.ToString();
                 output.data = AccidentPrilimSurveyorReportOutput;
-                output.data.message = "";
+                output.data.message = "Ticket ID: " + content.ticketNo + ", Claim Noti No: " + content.claimNotiNo;
 
             }
             catch (System.ServiceModel.FaultException e)
@@ -375,13 +460,13 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 output.description = "CRM PROBLEM";
                 output.transactionId = "";
                 output.transactionDateTime = DateTime.Now.ToString();
-                output.data = null;
+                output.data.message = null;
 
                 return output;
             }
             catch (Exception e)
             {
-                var errorMessage = e.GetType().FullName + ": " + e.Message + Environment.NewLine;
+                var errorMessage = e.GetType().FullName + ": " + null + Environment.NewLine;
                 errorMessage += "StackTrace: " + e.StackTrace;
 
                 if (e.InnerException != null)
@@ -397,7 +482,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 output.description = "ไม่พบ claimNotiNo";
                 output.transactionId = "Claim Noti No: null";
                 output.transactionDateTime = DateTime.Now.ToString();
-                output.data = null;
+                output.data.message = null;
             }
 
             return output;
@@ -428,6 +513,30 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             {
                 return false;
             }
+        }
+
+        private string convertClaimDetailLevels(string value)
+        {
+            string valOption = null;
+
+            if (value.Equals("S"))
+            {
+                valOption = "100000000";
+            }
+            else if (value.Equals("M"))
+            {
+                valOption = "100000001";
+            }
+            else if (value.Equals("H"))
+            {
+                valOption = "100000002";
+            }
+            else if (value.Equals("X"))
+            {
+                valOption = "100000003";
+            }
+
+            return valOption;
         }
 
     }

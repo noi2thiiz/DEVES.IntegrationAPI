@@ -11,18 +11,23 @@ namespace DEVES.IntegrationAPI.Model.Polisy400
 {
     public class CLIENTCreatePersonalClientAndAdditionalInfoInputModel : BaseDataModel
     {
+        public CLIENTCreatePersonalClientAndAdditionalInfoInputModel()
+        {
+            DateTimeCustomFormat = CONST_FORMAT_DATE_POLISY400;
+        }
+
         //"username": "sysdynamic",
-        public string username { get; set; }
-        //"password": "REZOJUNtN04=",
-        public string password { get; set; }
-        //"gid": "CRMClaim",
-        public string gid { get; set; }
-        //"uid": "CRMClaim",
-        public string uid { get; set; }
-        // "token": "",
-        public string token { get; set; }
-        // "content": {
-        public string content { get; set; }
+        //public string username { get; set; }
+        ////"password": "REZOJUNtN04=",
+        //public string password { get; set; }
+        ////"gid": "CRMClaim",
+        //public string gid { get; set; }
+        ////"uid": "CRMClaim",
+        //public string uid { get; set; }
+        //// "token": "",
+        //public string token { get; set; }
+        //// "content": {
+        //public string content { get; set; }
         // "telephone1": "0public 29999999",
         public string telephone1 { get; set; }
         //"telephone2": "029999999",

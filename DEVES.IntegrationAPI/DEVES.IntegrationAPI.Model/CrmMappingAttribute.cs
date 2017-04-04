@@ -10,7 +10,12 @@ namespace DEVES.IntegrationAPI.Model
 {
 
     public abstract class BaseDataModel
-    { }
+    {
+        [JsonIgnore]
+        internal const string CONST_FORMAT_DATE_POLISY400 = "ddMMyyyy";
+        [JsonIgnore]
+        public string DateTimeCustomFormat = "yyyy-MM-dd HH:mm:ss";
+    }
 
     public abstract class BaseContentJsonServiceOutputModel : BaseDataModel
     {
@@ -43,6 +48,12 @@ namespace DEVES.IntegrationAPI.Model
         srcCrm,
         srcSQL,
         srcEWI        
+    }
+
+    [System.AttributeUsage(System.AttributeTargets.Class) ]
+    public class JSONFormatDateTimeAttribute : System.Attribute
+    {
+        public string format = "yyyy-MM-dd hh:mm:ss";
     }
 
     [System.AttributeUsage(System.AttributeTargets.Field |

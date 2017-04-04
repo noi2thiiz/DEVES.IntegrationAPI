@@ -329,8 +329,8 @@ namespace DEVES.IntegrationAPI.Model.ClaimRegistration
         [CrmMapping(FieldName = "pfc_cus_client_number", Source = ENUMDataSource.srcCrm)]
         public String insuredClientId { set; get; }
         [CrmMapping(FieldName = "insuredFullName", Source = ENUMDataSource.srcSQL)]
-        [CrmMapping(FieldName = "pfc_customerIdName", Source = ENUMDataSource.srcCrm)]
-        public String insuredFullName { set; get; }
+        [CrmMapping(FieldName = "pfc_customerId", Source = ENUMDataSource.srcCrm)]
+        public String insuredFullName { set; get; } // pfc_agent_fullname
         [CrmMapping(FieldName = "insuredMobile", Source = ENUMDataSource.srcSQL)]
         [CrmMapping(FieldName = "0", Source = ENUMDataSource.srcCrm)]
         public String insuredMobile { set; get; }

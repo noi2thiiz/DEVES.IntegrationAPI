@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using DEVES.IntegrationAPI.Model;
 using DEVES.IntegrationAPI.Model.InquiryCRMPayeeList;
 using DEVES.IntegrationAPI.Model.SAP;
@@ -12,11 +13,19 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
        
         public override BaseDataModel TransformModel(BaseDataModel input, BaseDataModel output)
         {
+            Console.WriteLine(" process : TransformSAPInquiryVendorOutputModel_to_InquiryCRMPayeeListDataOutputModel");
             EWIResSAPInquiryVendorContentModel srcContent = (EWIResSAPInquiryVendorContentModel) input;
             CRMInquiryPayeeContentOutputModel trgtContent = (CRMInquiryPayeeContentOutputModel) output;
 
+            Console.WriteLine(" >>>>>>>>>>>>>>>>>>>>>>>>>>>srcContent>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+            Console.WriteLine(srcContent.ToJson());
+            Console.WriteLine(" >>>>>>>>>>>>>>>>>>>>>>>>trgtContent>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+            Console.WriteLine(trgtContent.ToJson());
+            Console.WriteLine(" >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+
             CRMInquiryPayeeContentOutputModel outputContent = new CRMInquiryPayeeContentOutputModel();
             outputContent.data = new List<InquiryCrmPayeeListDataModel>();
+
             _tmpSAPInquiryVendorContentModel = new Dictionary<string, SAPInquiryVendorContentVendorInfoModel>();
            
             foreach (var vendorInfo in srcContent.VendorInfo)
@@ -46,6 +55,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     outputContent.data.Add(TransformDataModel(_srcContentData, dataItrm));
                     _tmpSAPInquiryVendorContentModel.Remove(dataItrm.polisyClientId);
                 }
+                else
+                {
+                    outputContent.data.Add(dataItrm);
+                }
                
             }
             foreach (var vendorItrm in _tmpSAPInquiryVendorContentModel)
@@ -70,6 +83,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             output.title = input.TITLE;
             output.name1 = input.NAME1;
             output.name2 = input.NAME2;
+            if (string.IsNullOrEmpty(output.fullName ))
+            {
+                output.fullName = input.NAME1 + " " +input.NAME2;
+            }
+
             // dataItrm.fullName = "";
             output.street1 = input.STREET1;
             output.street2 = input.STREET2;

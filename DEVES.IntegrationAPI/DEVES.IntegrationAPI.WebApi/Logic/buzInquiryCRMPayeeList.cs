@@ -20,7 +20,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             CRMInquiryPayeeContentOutputModel crmInqPayeeOut = new CRMInquiryPayeeContentOutputModel();
             crmInqPayeeOut.data = new List<InquiryCrmPayeeListDataModel>();
-           
+            
             try
             {
                 Console.WriteLine(input.ToString());
@@ -34,15 +34,22 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     inqAPARIn = (InquiryAPARPayeeListInputModel)TransformerFactory.TransformModel(inqCrmPayeeListIn, inqAPARIn);
 
                     InquiryAPARPayeeContentModel inqAPAROut = CallDevesServiceProxy<InquiryAPARPayeeOutputModel, InquiryAPARPayeeContentModel>(CommonConstant.ewiEndpointKeyAPARInquiryPayeeList, inqAPARIn);
+
                     if (inqAPAROut != null && inqAPAROut.aparPayeeListCollection != null)
                     {
                         if (inqAPAROut.aparPayeeListCollection.Count > 0)
                         {
+
                             crmInqPayeeOut = (CRMInquiryPayeeContentOutputModel)TransformerFactory.TransformModel(inqAPAROut, crmInqPayeeOut);
                             bFoundIn_APAR_or_Master = true;
                         }
                     }
+
+
+
                 }
+
+
                 #endregion inqCrmPayeeListIn.roleCode == "G" -> APAR.InquiryAPARPayeeList
 
                 #region IF inqCrmPayeeListIn.roleCode == {A,S,R,H} -> Master.InquiryMasterASRH
@@ -61,6 +68,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                             bFoundIn_APAR_or_Master = true;
                         }
                     }
+
+
+                    Console.WriteLine(crmInqPayeeOut.ToJson());
                 }
                 #endregion inqCrmPayeeListIn.roleCode == {A,S,R,H} -> Master.InquiryMasterASRH
 
@@ -95,16 +105,23 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                             CLSInquiryCorporateClientInputModel clsCorpInput = new CLSInquiryCorporateClientInputModel();
                             clsCorpInput = (CLSInquiryCorporateClientInputModel)TransformerFactory.TransformModel(inqCrmPayeeListIn, clsCorpInput);
 
+
                             CLSInquiryCorporateClientContentOutputModel retCLSInqCorpClient = (CLSInquiryCorporateClientContentOutputModel)CallDevesJsonProxy<EWIResCLSInquiryCorporateClient>
                                                                                                     (CommonConstant.ewiEndpointKeyCLSInquiryCorporateClient, clsCorpInput);
 
-                            //+ If Success then pour the data from Cleansing to contentOutputModel
-                            if ((retCLSInqCorpClient.success | IsOutputSuccess(retCLSInqCorpClient)) & (retCLSInqCorpClient.data.Count ==1))
+                             //+ If Success then pour the data from Cleansing to contentOutputModel
+
+                            if (retCLSInqCorpClient?.data != null)
                             {
-                                bFound_Cleansing = true;
-                                //crmInqPayeeOut = (CRMInquiryPayeeContentOutputModel)TransformerFactory.TransformModel(retCLSInqCorpClient, crmInqPayeeOut);
-                                inqCrmPayeeListIn.polisyClientId = retCLSInqCorpClient.data[0].clntnum;
+
+                                if ((retCLSInqCorpClient.success | IsOutputSuccess(retCLSInqCorpClient)) & (retCLSInqCorpClient.data.Count ==1))
+                                {
+                                    bFound_Cleansing = true;
+                                    //crmInqPayeeOut = (CRMInquiryPayeeContentOutputModel)TransformerFactory.TransformModel(retCLSInqCorpClient, crmInqPayeeOut);
+                                    inqCrmPayeeListIn.polisyClientId = retCLSInqCorpClient.data[0].clntnum;
+                                }
                             }
+
                             #endregion Call CLS_InquiryCLSCorporateClient through ServiceProxy
                             break;
                                                     
@@ -124,7 +141,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                                                                                                 (CommonConstant.ewiEndpointKeyCOMPInquiryClient, compInqClientInput);
 
                         //Found in Polisy400
-                        if (retCOMPInqClient.clientListCollection != null)
+                        if (retCOMPInqClient?.clientListCollection != null)
                         {
                             crmInqPayeeOut = (CRMInquiryPayeeContentOutputModel)TransformerFactory.TransformModel(retCOMPInqClient, crmInqPayeeOut);
                         }
@@ -141,10 +158,16 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                 //InquiryAPARPayeeContentOutputModel inqAPAROut = CallDevesServiceProxy<InquiryAPARPayeeModel, InquiryAPARPayeeContentOutputModel>(CommonConstant.ewiEndpointKeyClaimRegistration, inqAPARIn);
                 EWIResSAPInquiryVendorContentModel inqSAPVendorContentOut = CallDevesServiceProxy<SAPInquiryVendorOutputModel , EWIResSAPInquiryVendorContentModel>(CommonConstant.ewiEndpointKeySAPInquiryVendor, inqSAPVendorIn);
+
+
+
+
                 if (inqSAPVendorContentOut != null)
                 {
                     crmInqPayeeOut = (CRMInquiryPayeeContentOutputModel) TransformerFactory.TransformModel(inqSAPVendorContentOut, crmInqPayeeOut);
                 }
+
+
                 #endregion Search In SAP: SAP_InquiryVendor()
 
                 crmInqPayeeOut.code = CONST_CODE_SUCCESS;

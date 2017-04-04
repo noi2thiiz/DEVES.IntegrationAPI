@@ -57,19 +57,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     {
                         
                         // generalHeader
-                        // contentModel.generalHeader.roleCode; 
-                        // account, contact
-                        contact.pfc_cleansing_cusormer_profile_code = contentModel.generalHeader.cleansingId;
                         account.pfc_cleansing_cusormer_profile_code = contentModel.generalHeader.cleansingId;
-                        // account, contact
-                        contact.pfc_polisy_client_id = contentModel.generalHeader.polisyClientId;
                         account.pfc_polisy_client_id = contentModel.generalHeader.polisyClientId;
-                        // account, contact
-                        contact.pfc_crm_person_id = contentModel.generalHeader.crmClientId;
-                        account.AccountNumber = contentModel.generalHeader.crmClientId;
+                        // account.AccountNumber = contentModel.generalHeader.crmClientId;
 
                         // profileHeader
-
                         //contentModel.profileHeader.corporateName1;
                         //contentModel.profileHeader.corporateName2;
                         account.Name = contentModel.profileHeader.corporateName1 + " " + contentModel.profileHeader.corporateName2;
@@ -81,31 +73,22 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         // contentModel.profileHeader.econActivity;
                         // contentModel.profileHeader.countryOrigin;
                         // contentModel.profileHeader.language; // account, contact
-                        // contact
                         // contentModel.profileHeader.riskLevel; // contact
                         bool isVIP = false;
                         if (contentModel.profileHeader.vipStatus.Equals("Y"))
                         {
                             isVIP = true;
                         }
-                        contact.pfc_customer_vip = isVIP; // bool
+                        account.pfc_customer_vip = isVIP; // bool
 
                         // contactHeader 
-                        // account, contact
-                        contact.Telephone1 = contentModel.contactHeader.telephone1 + '#' + contentModel.contactHeader.telephone1Ext;
-                        contact.Telephone2 = contentModel.contactHeader.telephone2 + '#' + contentModel.contactHeader.telephone2Ext;
-                        contact.Telephone3 = contentModel.contactHeader.telephone3 + '#' + contentModel.contactHeader.telephone3Ext;
-                        // account, contact
-                        contact.pfc_moblie_phone1 = contentModel.contactHeader.mobilePhone;
+
+                        account.Telephone1 = contentModel.contactHeader.telephone1 + '#' + contentModel.contactHeader.telephone1Ext;
+                        account.Telephone2 = contentModel.contactHeader.telephone2 + '#' + contentModel.contactHeader.telephone2Ext;
+                        account.Telephone3 = contentModel.contactHeader.telephone3 + '#' + contentModel.contactHeader.telephone3Ext;
                         account.pfc_moblie_phone1 = contentModel.contactHeader.mobilePhone;
-                        // account, contact
-                        contact.EMailAddress1 = contentModel.contactHeader.emailAddress;
                         account.EMailAddress1 = contentModel.contactHeader.emailAddress;
-                        // account, contact
-                        contact.pfc_line_id = contentModel.contactHeader.lineID;
                         account.pfc_line_id = contentModel.contactHeader.lineID;
-                        // account, contact
-                        contact.pfc_facebook = contentModel.contactHeader.facebook;
                         account.pfc_facebook = contentModel.contactHeader.facebook;
 
                         /*
@@ -172,7 +155,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                 }
                
-                List<string> crmIdOutput = SearchCrmContactClientId(data.generalHeader.cleansingId);
+                List<string> crmIdOutput = SearchCrmAccountClientId(data.generalHeader.cleansingId);
 
                 dataOutput.crmClientId = crmIdOutput[0]; // generate from crm
                 // dataOutput.data = "Waiting for generating algorithm";

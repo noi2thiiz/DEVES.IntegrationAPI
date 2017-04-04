@@ -10,12 +10,21 @@ namespace DEVES.IntegrationAPI.WebApi
 {
     public class EWIDatetimeConverter: DateTimeConverterBase
     {
+        string DateTimeCustomFormat;
+        public EWIDatetimeConverter()
+        {
+            DateTimeCustomFormat = "yyyy-MM-dd hh:mm:ss";
+        }
 
+        public EWIDatetimeConverter(string customFormat)
+        {
+            DateTimeCustomFormat = customFormat;
+        }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             CultureInfo enUS = new CultureInfo("en-US");
-            writer.WriteValue(((DateTime)value).ToString("yyyy-MM-dd HH:mm:ss", enUS));
+            writer.WriteValue(((DateTime)value).ToString(DateTimeCustomFormat, enUS));
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)

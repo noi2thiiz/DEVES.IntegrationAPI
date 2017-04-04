@@ -46,7 +46,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 //idDriving String	20	O หมายเลขบัตรใบขับขี่
                 trgt.driverlicense = src.profileInfo.idDriving;
                 //birthDate String	20	O วันเดือนปีเกิด
-                trgt.birthDate = src.profileInfo.birthDate;
+
                 //natioanality String	3	O Nationality
                 trgt.natioanality = src.profileInfo.nationality;
                 //language String	1	O ภาษา

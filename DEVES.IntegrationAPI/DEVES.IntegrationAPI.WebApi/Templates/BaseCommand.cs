@@ -63,8 +63,8 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                 //user & password must be switch to get from calling k.Ton's API rather than fixed values.
                 username = "sysdynamic",
                 password = "REZOJUNtN04=",
-                uid = "cleansing",
-                gid = "cleansing",
+                uid = "DevesClaim",
+                gid = "DevesClaim",
                 token = GetLatestToken(),
                 content = JSON
             };
@@ -86,7 +86,16 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             HttpResponseMessage response = client.SendAsync(request).Result;
             response.EnsureSuccessStatusCode();
 
+            Console.WriteLine("==========jsonReqModel========");
+            Console.WriteLine(jsonReqModel.ToJson());
+
+
+
             T1 ewiRes = response.Content.ReadAsAsync<T1>().Result;
+
+            Console.WriteLine("==========response========");
+            Console.WriteLine(ewiRes.ToJson());
+
             BaseContentJsonProxyOutputModel output =  (BaseContentJsonProxyOutputModel)typeof(T1).GetProperty("content").GetValue(ewiRes);
             return output;
         }
@@ -100,13 +109,13 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                 //user & password must be switch to get from calling k.Ton's API rather than fixed values.
                 username = "sysdynamic",
                 password = "REZOJUNtN04=",
-                uid = "cleansing",
-                gid = "cleansing",
+                uid = "DevesClaim",
+                gid = "DevesClaim",
                 token = GetLatestToken(),
                 content = JSON
             };
-
-            string jsonReqModel = JsonConvert.SerializeObject(reqModel, Formatting.Indented, new EWIDatetimeConverter());
+            
+            string jsonReqModel = JsonConvert.SerializeObject(reqModel, Formatting.Indented, new EWIDatetimeConverter(JSON.DateTimeCustomFormat));
 
             HttpClient client = new HttpClient(); ;
 

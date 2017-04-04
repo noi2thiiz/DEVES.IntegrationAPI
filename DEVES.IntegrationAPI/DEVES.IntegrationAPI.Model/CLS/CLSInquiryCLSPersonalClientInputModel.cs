@@ -15,5 +15,7 @@ namespace DEVES.IntegrationAPI.Model.CLS
         public String idCitizen { set; get; }
         public String telephone { set; get; }
         public String emailAddress { set; get; }
+
+        public string backDay { set; get; }
     }
 }

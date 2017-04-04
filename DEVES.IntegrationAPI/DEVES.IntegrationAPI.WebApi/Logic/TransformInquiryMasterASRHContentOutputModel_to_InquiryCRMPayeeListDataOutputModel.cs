@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using DEVES.IntegrationAPI.Model;
 using DEVES.IntegrationAPI.Model.APAR;
 using DEVES.IntegrationAPI.Model.InquiryCRMPayeeList;
@@ -15,7 +16,21 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             InquiryMasterASRHContentModel srcContent = (InquiryMasterASRHContentModel) input;
             CRMInquiryPayeeContentOutputModel trgtContent = (CRMInquiryPayeeContentOutputModel) output;
 
+
+            Console.WriteLine("===========InquiryMasterASRHContentModel Tranform output==========");
+            Console.WriteLine("===========Tranform==========");
+            Console.WriteLine("===========Tranform==========");
+
+            Console.WriteLine(srcContent.ToJson());
+
+
+            Console.WriteLine("===========CRMInquiryPayeeContentOutputModel Tranform output==========");
+            Console.WriteLine("===========Tranform==========");
+            Console.WriteLine("===========Tranform==========");
+            Console.WriteLine(trgtContent.ToJson());
+
             trgtContent.data = new List<InquiryCrmPayeeListDataModel>();
+
 
 
             foreach (var ASRHListCollection in srcContent.ASRHListCollection)
