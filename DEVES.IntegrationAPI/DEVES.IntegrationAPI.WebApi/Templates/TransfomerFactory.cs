@@ -66,11 +66,23 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                 }
                 else if (outputType == typeof(Model.MASTER.InquiryMasterASRHDataInputModel))
                 {
-                    t = new TransformInquiryCRMPayeeListInputModel_to_InquiryMasterASRHDataInputModel ();
+                    t = new TransformInquiryCRMPayeeListInputModel_to_InquiryMasterASRHDataInputModel();
                 }
                 else if (outputType == typeof(Model.APAR.InquiryAPARPayeeListInputModel))
                 {
-                    t = new TransformInquiryCRMPayeeListInputModel_to_InquiryAPARPayeeListInputModel ();
+                    t = new TransformInquiryCRMPayeeListInputModel_to_InquiryAPARPayeeListInputModel();
+                }
+                else if (outputType == typeof(Model.CLS.CLSInquiryCorporateClientInputModel))
+                {
+                    t = new TranformInquiryCRMPayeeListInputModel_to_CLSInquiryCorporateClientInputModel();
+                }
+                else if (outputType == typeof(Model.CLS.CLSInquiryPersonalClientInputModel))
+                {
+                    t = new TransformInquiryCRMPayeeListInputModel_to_CLSInquiryPersonalClientInputModel();
+                }
+                else if (outputType == typeof(Model.Polisy400.COMPInquiryClientMasterInputModel))
+                {
+                    t = new TranformInquiryCRMPayeeListInputModel_to_COMPInquiryClientMasterInputModel();
                 }
             }
             else if (outputType == typeof(CRMInquiryPayeeContentOutputModel))

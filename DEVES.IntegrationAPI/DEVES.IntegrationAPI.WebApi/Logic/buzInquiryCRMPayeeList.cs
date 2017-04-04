@@ -81,10 +81,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                                                                                                     (CommonConstant.ewiEndpointKeyCLSInquiryPersonalClient, clsPersonalInput);
 
                             //++ If Found records in Cleansing(CLS) then pour the data from Cleansing to contentOutputModel
-                            if ((retCLSInqPersClient.success | IsOutputSuccess(retCLSInqPersClient)) & (retCLSInqPersClient.data.Count > 0))
+                            if ((retCLSInqPersClient.success | IsOutputSuccess(retCLSInqPersClient)) & (retCLSInqPersClient.data.Count == 1))
                             {
                                 bFound_Cleansing = true;
-                                crmInqPayeeOut = (CRMInquiryPayeeContentOutputModel)TransformerFactory.TransformModel(retCLSInqPersClient, crmInqPayeeOut);
+                                //crmInqPayeeOut = (CRMInquiryPayeeContentOutputModel)TransformerFactory.TransformModel(retCLSInqPersClient, crmInqPayeeOut);
+                                inqCrmPayeeListIn.polisyClientId = retCLSInqPersClient.data[0].clntnum;
                             }
                             #endregion Search Client from Cleansing
                             break;
@@ -98,10 +99,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                                                                                                     (CommonConstant.ewiEndpointKeyCLSInquiryCorporateClient, clsCorpInput);
 
                             //+ If Success then pour the data from Cleansing to contentOutputModel
-                            if ((retCLSInqCorpClient.success | IsOutputSuccess(retCLSInqCorpClient)) & (retCLSInqCorpClient.data.Count > 0))
+                            if ((retCLSInqCorpClient.success | IsOutputSuccess(retCLSInqCorpClient)) & (retCLSInqCorpClient.data.Count ==1))
                             {
                                 bFound_Cleansing = true;
-                                crmInqPayeeOut = (CRMInquiryPayeeContentOutputModel)TransformerFactory.TransformModel(retCLSInqCorpClient, crmInqPayeeOut);
+                                //crmInqPayeeOut = (CRMInquiryPayeeContentOutputModel)TransformerFactory.TransformModel(retCLSInqCorpClient, crmInqPayeeOut);
+                                inqCrmPayeeListIn.polisyClientId = retCLSInqCorpClient.data[0].clntnum;
                             }
                             #endregion Call CLS_InquiryCLSCorporateClient through ServiceProxy
                             break;
