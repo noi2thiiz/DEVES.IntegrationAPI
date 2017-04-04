@@ -22,7 +22,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             trgt.taxBranchCode  =  src.taxBranchCode;
             trgt.emcsCode = src.emcsCode;
 
-            return output;
+            return trgt;
         }
 
     }

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using DEVES.IntegrationAPI.Model;
 using DEVES.IntegrationAPI.WebApi.Templates;
+using DEVES.IntegrationAPI.Model.RegClientCorporate;
+using DEVES.IntegrationAPI.Model.Polisy400;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
@@ -20,7 +22,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             {
                 return trgt;
             }
-
+            /*
             if (src.generalHeader != null)
             {
 
@@ -89,7 +91,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 trgt.longtitude = src.addressHeader.longtitude;
 
             }
-
+            */
             return trgt;
 
         }

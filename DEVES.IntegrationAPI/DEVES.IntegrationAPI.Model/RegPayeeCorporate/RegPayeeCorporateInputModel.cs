@@ -33,7 +33,7 @@ namespace DEVES.IntegrationAPI.Model.RegPayeeCorporate
         public string contactPerson { get; set; }
         public string idRegCorp { get; set; }
         public string idTax { get; set; }
-        public string dateInCorporate { get; set; }
+        public DateTime dateInCorporate { get; set; }
         public string corporateBranch { get; set; }
         public string econActivity { get; set; }
         public string countryOrigin { get; set; }

@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using DEVES.IntegrationAPI.Model;
+﻿using DEVES.IntegrationAPI.Model;
 using DEVES.IntegrationAPI.WebApi.Templates;
+using DEVES.IntegrationAPI.Model.Polisy400;
+using DEVES.IntegrationAPI.Model.RegPayeePersonal;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
@@ -11,7 +9,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
     {
         public override BaseDataModel TransformModel(BaseDataModel input, BaseDataModel output)
         {
-            throw new NotImplementedException();
+            CLIENTCreatePersonalClientAndAdditionalInfoInputModel src = (CLIENTCreatePersonalClientAndAdditionalInfoInputModel)input;
+            RegPayeePersonalInputModel trgt = (RegPayeePersonalInputModel)output;
+
+            return trgt;
         }
     }
 }

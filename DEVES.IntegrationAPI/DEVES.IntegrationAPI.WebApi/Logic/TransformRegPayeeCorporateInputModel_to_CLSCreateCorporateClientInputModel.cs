@@ -21,6 +21,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             {
                 return trgt;
             }
+            /*
 
             if (src.generalHeader != null)
             {
@@ -73,14 +74,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 trgt.latitude = src.addressHeader.latitude;
                 trgt.longtitude = src.addressHeader.longtitude;
             }
-            if (src.data != null)
-            {
-                trgt.clientId = src.data.policyClientId;
-                trgt.corporateName1 = src.addressHeader.corparateName1;
-                trgt.corporateName2 = src.addressHeader.corporateName2;
-
-            }
-
+            
+    */
             return trgt;
         }
     }

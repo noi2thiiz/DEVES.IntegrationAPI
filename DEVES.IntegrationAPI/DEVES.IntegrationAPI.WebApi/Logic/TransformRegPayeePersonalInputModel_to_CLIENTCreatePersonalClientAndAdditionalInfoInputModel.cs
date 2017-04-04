@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using DEVES.IntegrationAPI.Model;
 using DEVES.IntegrationAPI.WebApi.Templates;
+using DEVES.IntegrationAPI.Model.RegPayeePersonal;
+using DEVES.IntegrationAPI.Model.Polisy400;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
@@ -11,8 +13,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
     {
         public override BaseDataModel TransformModel(BaseDataModel input, BaseDataModel output)
         {
-            RegClientCorporateInputModel src = (RegClientCorporateInputModel)input;
-            CLIENTCreateCorporateClientAndAdditionalInfoInputModel trgt = (CLIENTCreateCorporateClientAndAdditionalInfoInputModel)output;
+            RegPayeePersonalInputModel src = (RegPayeePersonalInputModel)input;
+            CLIENTCreatePersonalClientAndAdditionalInfoInputModel trgt = (CLIENTCreatePersonalClientAndAdditionalInfoInputModel)output;
 
 
 
@@ -20,7 +22,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             {
                 return trgt;
             }
-
+            /*
             if (src.generalHeader != null)
             {
                 trgt.cleansingId = src.generalHeader.cleansingId;
@@ -68,7 +70,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 trgt.latitude = src.addressInfo.latitude;
                 trgt.longtituge = src.addressInfo.longtitude;
             }
-
+            */
             return trgt;
         }
 

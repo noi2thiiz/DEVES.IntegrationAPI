@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using DEVES.IntegrationAPI.Model;
 using DEVES.IntegrationAPI.WebApi.Templates;
+using DEVES.IntegrationAPI.Model.RegPayeeCorporate;
+using DEVES.IntegrationAPI.Model.SAP;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
@@ -18,7 +20,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             {
                 return trgt;
             }
-
+            /*
             if (src.generalHeader != null)
             {
                 trgt.VCODE = src.generalHeader.policyClientId;
@@ -59,7 +61,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 trgt.WHTCODE = src.withHoldingTaxInfo.whtTaxCode;
                 trgt.RECPTYPE = src.withHoldingTaxInfo.receiptType;
             }
-
+            */
             return trgt;
         }
     }
