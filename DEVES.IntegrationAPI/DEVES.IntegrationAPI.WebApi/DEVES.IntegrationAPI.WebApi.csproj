@@ -310,6 +310,7 @@
     <Compile Include="Logic\buzCRMRegClientCorporate.cs" />
     <Compile Include="Logic\buzCRMRegClientPersonal.cs" />
     <Compile Include="Logic\buzCRMRegPayeeCorporate.cs" />
+    <Compile Include="Logic\buzCRMRegPayeePersonal.cs" />
     <Compile Include="Logic\buzInquiryCRMPayeeList.cs" />
     <Compile Include="Logic\CommonConstant.cs" />
     <Compile Include="Logic\TranformCLIENTCreateCorporateClientAndAdditionalInfoContentModel_to_RegClientCorporateInputModel.cs" />

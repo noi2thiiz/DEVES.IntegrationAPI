@@ -8,7 +8,7 @@ namespace DEVES.IntegrationAPI.Model.RegPayeePersonal
 {
     public class RegPayeePersonalContentOutputModel : BaseContentJsonProxyOutputModel
     {
-        List<RegPayeePersonalDataOutputModel> data { set; get; }
+        public List<RegPayeePersonalDataOutputModel> data { set; get; }
     }
 
 
