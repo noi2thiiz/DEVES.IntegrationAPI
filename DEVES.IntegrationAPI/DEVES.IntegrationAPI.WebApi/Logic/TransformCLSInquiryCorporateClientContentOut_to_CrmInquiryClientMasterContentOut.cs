@@ -45,18 +45,21 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     trgt.contactInfo.contactNumber = src.cls_display_phone;
                     trgt.contactInfo.emailAddress = src.email_1;
 
-                    Model.CLS.CLSAddressListsCollectionModel addrInfo = src.addressListsCollection.First<Model.CLS.CLSAddressListsCollectionModel>();
-                    trgt.addressInfo.address = string.Join(CONST_CONCAT, addrInfo.address_1
+                    var addrInfo = src.addressListsCollection.FirstOrDefault<Model.CLS.CLSAddressListsCollectionModel>();
+                    if (addrInfo != null)
+                    {
+                        trgt.addressInfo.address = string.Join(CONST_CONCAT, addrInfo.address_1
                                                                 , addrInfo.address_2
                                                                 , addrInfo.address_3
                                                                 , addrInfo.sub_district_display
                                                                 , addrInfo.district_display
                                                                 , addrInfo.province_display
                                                                 , addrInfo.postal_code);
-                    trgt.addressInfo.countryText = addrInfo.cls_ctrycode_text;
-                    trgt.addressInfo.addressTypeText = addrInfo.address_type_code;
-                    trgt.addressInfo.latitude = addrInfo.lattitude;
-                    trgt.addressInfo.longtitude = addrInfo.longtitude;
+                        trgt.addressInfo.countryText = addrInfo.cls_ctrycode_text;
+                        trgt.addressInfo.addressTypeText = addrInfo.address_type_code;
+                        trgt.addressInfo.latitude = addrInfo.lattitude;
+                        trgt.addressInfo.longtitude = addrInfo.longtitude;
+                    }
 
                     trgtContent.data.Add(trgt);
                 }
