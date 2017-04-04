@@ -24,7 +24,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             trgt.emailAddress = "";
             trgt.backDay = "30";
 
-            return output;
+            return trgt;
         }
     }
 }

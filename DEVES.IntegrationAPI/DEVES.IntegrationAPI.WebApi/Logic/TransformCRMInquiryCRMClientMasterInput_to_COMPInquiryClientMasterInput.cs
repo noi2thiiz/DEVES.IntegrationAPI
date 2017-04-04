@@ -24,7 +24,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             trgt.branchCode = src.conditionDetail.corporateBranch;
             trgt.backDay = "30";
 
-            return output;
+            return trgt;
         }
     }
 }

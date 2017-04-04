@@ -62,71 +62,42 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         
                         // generalHeader
                         // contentModel.generalHeader.roleCode; 
-                        // account, contact
                         contact.pfc_cleansing_cusormer_profile_code = contentModel.generalHeader.cleansingId;
-                        account.pfc_cleansing_cusormer_profile_code = contentModel.generalHeader.cleansingId;
-                        // account, contact
                         contact.pfc_polisy_client_id = contentModel.generalHeader.polisyClientId;
-                        account.pfc_polisy_client_id = contentModel.generalHeader.polisyClientId;
-                        // account, contact
                         contact.pfc_crm_person_id = contentModel.generalHeader.crmClientId;
-                        account.AccountNumber = contentModel.generalHeader.crmClientId;
+                        // account.AccountNumber = contentModel.generalHeader.crmClientId;
 
                         // profileInfo
-                        // account, contact
                         contact.Salutation = contentModel.profileInfo.salutation;
-                        account.pfc_saluation = contentModel.profileInfo.salutation;
-                        // contact
                         contact.FirstName = contentModel.profileInfo.personalName;
                         contact.LastName = contentModel.profileInfo.personalSurname;
                         // contentModel.profileInfo.sex;
-                        // contact
                         contact.pfc_citizen_id = contentModel.profileInfo.idCitizen;
-                        // contact
                         contact.pfc_passport_id = contentModel.profileInfo.idPassport;
-                        // contact
                         contact.pfc_alien_id = contentModel.profileInfo.idAlien;
-                        // contact
                         contact.pfc_driver_license = contentModel.profileInfo.idDriving;
-                        // contact
                         contact.pfc_date_of_birth = Convert.ToDateTime(contentModel.profileInfo.birthDate);
-                        // account, contact
                         contact.pfc_polisy_nationality_code = contentModel.profileInfo.nationality;
-                        account.pfc_polisy_nationality_code = contentModel.profileInfo.nationality;
-                        // account, contact
-                        // account.pfc_language = contentModel.profileInfo.language; // optionset
                         // contact.pfc_language = contentModel.profileInfo.language; // optionset
-                        // contact
                         // contact.FamilyStatusCode = contentModel.profileInfo.married; // optionset
                         // contentModel.profileInfo.occupation;
-                        // contact
                         // contact.pfc_client_legal_status = contentModel.profileInfo.riskLevel; // optionset
-                        // contact
                         bool isVIP = false;
                         if(contentModel.profileInfo.vipStatus.Equals("Y"))
                         {
                             isVIP = true;
                         }
                         contact.pfc_customer_vip = isVIP; // bool
-                        // contentModel.profileInfo.remark;
+                                                          // contentModel.profileInfo.remark;
 
                         // contactInfo 
-                        // account, contact
                         contact.Telephone1 = contentModel.contactInfo.telephone1 + '#' + contentModel.contactInfo.telephone1Ext;
                         contact.Telephone2 = contentModel.contactInfo.telephone2 + '#' + contentModel.contactInfo.telephone2Ext;
                         contact.Telephone3 = contentModel.contactInfo.telephone3 + '#' + contentModel.contactInfo.telephone3Ext;
-                        // account, contact
                         contact.pfc_moblie_phone1 = contentModel.contactInfo.mobilePhone;
-                        account.pfc_moblie_phone1 = contentModel.contactInfo.mobilePhone;
-                        // account, contact
                         contact.EMailAddress1 = contentModel.contactInfo.emailAddress;
-                        account.EMailAddress1 = contentModel.contactInfo.emailAddress;
-                        // account, contact
                         contact.pfc_line_id = contentModel.contactInfo.lineID;
-                        account.pfc_line_id = contentModel.contactInfo.lineID;
-                        // account, contact
                         contact.pfc_facebook = contentModel.contactInfo.facebook;
-                        account.pfc_facebook = contentModel.contactInfo.facebook;
 
 
                         // addressInfo
