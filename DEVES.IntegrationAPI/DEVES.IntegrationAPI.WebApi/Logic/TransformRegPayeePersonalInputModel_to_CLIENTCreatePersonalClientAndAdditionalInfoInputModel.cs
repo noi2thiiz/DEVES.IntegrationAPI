@@ -6,6 +6,7 @@ using DEVES.IntegrationAPI.Model;
 using DEVES.IntegrationAPI.WebApi.Templates;
 using DEVES.IntegrationAPI.Model.RegPayeePersonal;
 using DEVES.IntegrationAPI.Model.Polisy400;
+using System.Globalization;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
@@ -22,7 +23,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             {
                 return trgt;
             }
-            /*
+            
             if (src.generalHeader != null)
             {
                 trgt.cleansingId = src.generalHeader.cleansingId;
@@ -32,7 +33,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 trgt.salutation = src.profileInfo.salutation;
                 trgt.personalName = src.profileInfo.personalName;
                 trgt.personalSurname = src.profileInfo.personalSurname;
-                trgt.sex = src.profileinfo.sex;
+                trgt.sex = src.profileInfo.sex;
                 trgt.idCard = src.profileInfo.idCitizen;
                 trgt.passportId = src.profileInfo.idPassport;
                 trgt.alientId = src.profileInfo.idAlien;
@@ -68,9 +69,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 trgt.country = src.addressInfo.country;
                 trgt.busRes = src.addressInfo.addressType;
                 trgt.latitude = src.addressInfo.latitude;
-                trgt.longtituge = src.addressInfo.longtitude;
+                trgt.longtitude = src.addressInfo.longtitude;
             }
-            */
+            
             return trgt;
         }
 

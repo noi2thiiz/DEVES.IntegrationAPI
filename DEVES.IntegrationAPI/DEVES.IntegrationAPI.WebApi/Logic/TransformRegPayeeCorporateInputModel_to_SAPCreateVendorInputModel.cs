@@ -20,48 +20,47 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             {
                 return trgt;
             }
-            /*
+            
             if (src.generalHeader != null)
             {
-                trgt.VCODE = src.generalHeader.policyClientId;
+                trgt.VCODE = src.generalHeader.polisyClientId;
             }
             if (src.profileHeader != null)
             {
-                trgt.TITLE = src.profileInfo.salutation;
-                trgt.NAME1 = src.profileInfo.personalName;
-                trgt.NAME2 = src.profileInfo.personalSurname;
-                trgt.TAX3 = src.profileInfo.idCitizen;
-                trgt.TAX4 = src.progileInfo.corporateBranch;
+                trgt.NAME1 = src.profileHeader.corporateName1;
+                trgt.NAME2 = src.profileHeader.corporateName2;
+                trgt.TAX3 = src.profileHeader.idTax;
+                trgt.TAX4 = src.profileHeader.corporateBranch;
             }
 
             if (src.addressHeader != null)
             {
-                trgt.STREET1 = src.addressInfo.address1;
-                trgt.STREET2 = src.addressInfo.address3;
-                trgt.DISTRICT = src.addressInfo.subDistrictCode;
-                trgt.CITY = src.addressInfo.provinceCode;
-                trgt.POSTCODE = src.addressInfo.postalCode;
-                trgt.COUNTRY = src.addressInfo.country;
+                trgt.STREET1 = src.addressHeader.address1;
+                trgt.STREET2 = src.addressHeader.address3;
+                trgt.DISTRICT = src.addressHeader.subDistrictCode;
+                trgt.CITY = src.addressHeader.provinceCode;
+                trgt.POSTCODE = src.addressHeader.postalCode;
+                trgt.COUNTRY = src.addressHeader.country;
             }
             if (src.sapVendorInfo != null)
             {
                 trgt.VGROUP = src.sapVendorInfo.sapVendorGroupCode;
             }
-            if (src.bankInfo != null)
+            if (src.sapVendorInfo != null && src.sapVendorInfo.bankInfo != null)
             {
-                trgt.CITY = src.bankInfo.BankCountryCode;
-                trgt.BANKCODE = src.bankInfo.bankCode;
-                trgt.BANKBRANCH = src.bankInfo.bankBranchCode;
-                trgt.BANKACC = src.bankInfo.bankAccount;
-                trgt.ACCTHOLDER = src.bankInfo.accountHolder;
-                trgt.PAYMETHOD = src.bankInfo.paymentMethods;
+                trgt.CITY = src.sapVendorInfo.bankInfo.bankCountryCode;
+                trgt.BANKCODE = src.sapVendorInfo.bankInfo.bankCode;
+                trgt.BANKBRANCH = src.sapVendorInfo.bankInfo.bankBranchCode;
+                trgt.BANKACC = src.sapVendorInfo.bankInfo.bankAccount;
+                trgt.ACCTHOLDER = src.sapVendorInfo.bankInfo.accountHolder;
+                trgt.PAYMETHOD = src.sapVendorInfo.bankInfo.paymentMethods;
             }
-            if (src.withHoldingTaxInfo != null)
+            if (src.sapVendorInfo != null && src.sapVendorInfo.withHoldingTaxInfo != null)
             {
-                trgt.WHTCODE = src.withHoldingTaxInfo.whtTaxCode;
-                trgt.RECPTYPE = src.withHoldingTaxInfo.receiptType;
+                trgt.WHTCODE = src.sapVendorInfo.withHoldingTaxInfo.whtTaxCode;
+                trgt.RECPTYPE = src.sapVendorInfo.withHoldingTaxInfo.receiptType;
             }
-            */
+            
             return trgt;
         }
     }

@@ -4,8 +4,9 @@ using System.Linq;
 using System.Web;
 using DEVES.IntegrationAPI.Model;
 using DEVES.IntegrationAPI.WebApi.Templates;
-using DEVES.IntegrationAPI.Model.RegClientCorporate;
-using DEVES.IntegrationAPI.Model.Polisy400;
+using DEVES.IntegrationAPI.Model.RegPayeePersonal;
+using DEVES.IntegrationAPI.Model.CLS;
+using System.Globalization;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
@@ -13,8 +14,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
     {
         public override BaseDataModel TransformModel(BaseDataModel input, BaseDataModel output)
         {
-            RegClientCorporateInputModel src = (RegClientCorporateInputModel)input;
-            CLIENTCreateCorporateClientAndAdditionalInfoInputModel trgt = (CLIENTCreateCorporateClientAndAdditionalInfoInputModel)output;
+            RegPayeePersonalInputModel src = (RegPayeePersonalInputModel)input;
+            CLSCreatePersonalClientInputModel trgt = (CLSCreatePersonalClientInputModel)output;
 
 
 
@@ -22,76 +23,72 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             {
                 return trgt;
             }
-            /*
+            
             if (src.generalHeader != null)
             {
 
-                trgt.roldCode = src.generalHeader.roleCode;
-                trgt.clientId = src.generalHeader.policyClientId;
+                trgt.roleCode = src.generalHeader.roleCode;
+                trgt.clientId = src.generalHeader.polisyClientId;
                 trgt.crmPersonId = src.generalHeader.crmClientId;
 
             }
 
-            if (src.profileHeader != null)
+            if (src.profileInfo != null)
             {
 
-                trgt.corporateName1 = src.profileHeader.corporateName1;
-                trgt.corporateName2 = src.profileHeader.corporateName2;
-                trgt.contactPerson = src.profileHeader.contactPerson;
-                trgt.idRegCorp = src.profileHeader.idRegCorp;
-                trgt.idTax = src.profileHeader.idTax;
-
-                {
-                    // to 20160303
-                    CultureInfo usaCulture = new CultureInfo("en-US");
-                    var dateString = src.profileHeader.dateInCorporate.ToString("yyyyMMdd", usaCulture);
-                    trgt.dateInCorporate = dateString;
-                }
-
-                trgt.corporateStaffNo = src.profileHeader.corporateBranch;
-                trgt.econActivity = src.profileHeader.econActivity;
-                trgt.language = src.profileHeader.language;
-                trgt.vipStatus = src.profileHeader.vipStatus;
-
+                trgt.salutation = src.profileInfo.salutation;
+                trgt.personalName = src.profileInfo.personalName;
+                trgt.personalSurname = src.profileInfo.personalSurname;
+                trgt.sex = src.profileInfo.sex;
+                trgt.idCitizen = src.profileInfo.idCitizen;
+                trgt.idPassport = src.profileInfo.idPassport;
+                trgt.idAlien = src.profileInfo.idAlien;
+                trgt.idDriving = src.profileInfo.idDriving;
+                trgt.birthDate = src.profileInfo.birthDate;
+                trgt.natioanality = src.profileInfo.nationality;
+                trgt.language = src.profileInfo.language;
+                trgt.married = src.profileInfo.married;
+                trgt.occupation = src.profileInfo.occupation;
+                trgt.vipStatus = src.profileInfo.vipStatus;
 
             }
-            if (src.contactHeader != null)
+            if (src.contactInfo != null)
             {
-                trgt.telephone1 = src.contactHeader.telephone1;
-                trgt.telephone1Ext = src.contactHeader.telephone1Ext;
-                trgt.telephone2 = src.contactHeader.telephone2;
-                trgt.telephone2Ext = src.contactHeader.telephone2Ext;
-                trgt.telNo = src.contactHeader.telephone3;
-                testc.telNoExt = src.contactHeader.telephone3Ext;
+                trgt.telephone1 = src.contactInfo.telephone1;
+                trgt.telephone1Ext = src.contactInfo.telephone1Ext;
+                trgt.telephone2 = src.contactInfo.telephone2;
+                trgt.telephone2Ext = src.contactInfo.telephone2Ext;
+                trgt.telNo = src.contactInfo.telephone3;
+                trgt.telNoExt = src.contactInfo.telephone3Ext;
 
-                trgt.mobilePhone = src.contactHeader.mobilePhone;
-                trgt.fax = src.contactHeader.fax;
-                trgt.emailAddress = src.contactHeader.emailAddress;
-                trgt.lineID = src.contactHeader.lineID;
-                trgt.facebook = src.contactHeader.facebook;
+                trgt.mobilePhone = src.contactInfo.mobilePhone;
+                trgt.fax = src.contactInfo.fax;
+                trgt.emailAddress = src.contactInfo.emailAddress;
+                trgt.lineID = src.contactInfo.lineID;
+                trgt.facebook = src.contactInfo.facebook;
 
 
             }
 
-            if (src.addressHeader != null)
+            if (src.addressInfo != null)
             {
-                trgt.address1 = src.addressHeader.address1;
-                trgt.address2 = src.addressHeader.address2;
-                trgt.address3 = src.addressHeader.address3;
-                trgt.subDistrictCode = src.addressHeader.subDistrictCode;
-                trgt.districtCode = src.addressHeader.districtCode;
+                trgt.address1 = src.addressInfo.address1;
+                trgt.address2 = src.addressInfo.address2;
+                trgt.address3 = src.addressInfo.address3;
+                trgt.subDistrictCode = src.addressInfo.subDistrictCode;
+                trgt.districtCode = src.addressInfo.districtCode;
 
-                trgt.provinceCode = src.addressHeader.provinceCode;
-                trgt.postalCode = src.addressHeader.postalCode;
-                trgt.country = src.addressHeader.country;
+                trgt.provinceCode = src.addressInfo.provinceCode;
+                trgt.postalCode = src.addressInfo.postalCode;
+                trgt.country = src.addressInfo.country;
 
-                trgt.addressType = src.addressHeader.addressType;
+                trgt.addressType = src.addressInfo.addressType;
 
-                trgt.latitude = src.addressHeader.latitude;
-                trgt.longtitude = src.addressHeader.longtitude;
+                trgt.latitude = src.addressInfo.latitude;
+                trgt.longtitude = src.addressInfo.longtitude;
 
             }
-            */
+            
             return trgt;
 
         }

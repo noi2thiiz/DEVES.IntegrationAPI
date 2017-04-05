@@ -331,6 +331,7 @@
     <Compile Include="Logic\TransformCLIENTCreateCorporateClientAndAdditionalInfoInputModel_to_RegPayeeCorporateInputModel.cs" />
     <Compile Include="Logic\TransformCLIENTCreatePersonalClientAndAdditionalInfoInputModel_to_RegPayeePersonalInputModel.cs" />
     <Compile Include="Logic\TransformCLSCreateCorporateClientInputModel_to_RegPayeeCorporateInputModel.cs" />
+    <Compile Include="Logic\TransformCLSCreatePersonalClientInputModel.cs" />
     <Compile Include="Logic\TransformCLSCreatePersonalClientInputModel_to_RegPayeePersonalInputModel.cs" />
     <Compile Include="Logic\TransformCLSInquiryCorporateClientContentOut_to_CrmInquiryClientMasterContentOut.cs" />
     <Compile Include="Logic\TransformCLSInquiryPersonalClientContentOut_to_CrmInquiryClientMasterContentOut.cs" />

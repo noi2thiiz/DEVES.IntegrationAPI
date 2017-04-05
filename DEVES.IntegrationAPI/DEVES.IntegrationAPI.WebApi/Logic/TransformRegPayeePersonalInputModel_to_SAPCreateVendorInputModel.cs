@@ -23,7 +23,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             if (src.generalHeader != null)
             {
-               // trgt.VCODE = src.generalHeader.policyClientId;
+                trgt.VCODE = src.generalHeader.polisyClientId;
             }
             if (src.profileInfo != null)
             {
@@ -51,21 +51,21 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             {
                 trgt.VGROUP = src.sapVendorInfo.sapVendorGroupCode;
             }
-            /*
-            if (src.bankInfo != null)
+            
+            if (src.sapVendorInfo != null && src.sapVendorInfo.bankInfo != null)
             {
-                trgt.CITY = src.bankInfo.BankCountryCode;
-                trgt.BANKCODE = src.bankInfo.bankCode;
-                trgt.BANKBRANCH = src.bankInfo.bankBranchCode;
-                trgt.ACCTHOLDER = src.bankInfo.accountHolder;
-                trgt.PAYMETHOD = src.bankInfo.paymentMethods;
+                trgt.CITY = src.sapVendorInfo.bankInfo.bankCountryCode;
+                trgt.BANKCODE = src.sapVendorInfo.bankInfo.bankCode;
+                trgt.BANKBRANCH = src.sapVendorInfo.bankInfo.bankBranchCode;
+                trgt.ACCTHOLDER = src.sapVendorInfo.bankInfo.accountHolder;
+                trgt.PAYMETHOD = src.sapVendorInfo.bankInfo.paymentMethods;
             }
-            if (src.withHoldingTaxInfo != null)
+            if (src.sapVendorInfo != null && src.sapVendorInfo.withHoldingTaxInfo != null)
             {
-                trgt.WHTCODE = src.withHoldingTaxInfo.whtTaxCode;
-                trgt.RECPTYPE = src.withHoldingTaxInfo.receiptType;
+                trgt.WHTCODE = src.sapVendorInfo.withHoldingTaxInfo.whtTaxCode;
+                trgt.RECPTYPE = src.sapVendorInfo.withHoldingTaxInfo.receiptType;
             }
-      */
+      
             return trgt;
         }
     }
