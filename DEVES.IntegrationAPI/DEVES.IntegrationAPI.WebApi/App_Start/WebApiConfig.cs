@@ -35,7 +35,7 @@ namespace DEVES.IntegrationAPI.WebApi
                 defaults: new { id = RouteParameter.Optional }
             );
 
-            //config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new EWIDatetimeConverter());
+            config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new EWIDatetimeConverter());
 
         }
     }

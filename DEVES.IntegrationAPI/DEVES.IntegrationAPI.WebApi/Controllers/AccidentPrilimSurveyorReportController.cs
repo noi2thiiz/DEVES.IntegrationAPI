@@ -245,7 +245,17 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
 
                 Incident retrievedIncident = (Incident)_serviceProxy.Retrieve(Incident.EntityLogicalName, _accountId, new Microsoft.Xrm.Sdk.Query.ColumnSet(true));
 
+                if(!retrievedIncident.pfc_isurvey_status.ToString().Equals("100000040"))
+                {
+                    output.code = "500";
+                    output.message = "False";
+                    output.description = "iSurvey Status ไม่ใช่อยู่ในสถานะถึงที่เกิดเหตุ (100000040)";
+                    output.transactionId = "";
+                    output.transactionDateTime = DateTime.Now.ToString();
+                    output.data.message = null;
 
+                    return output;
+                }
                 // Incident
                 try
                 {
@@ -261,7 +271,11 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                     retrievedIncident.pfc_excess_fee = content.eventDetailInfo.excessFee;
                     retrievedIncident.pfc_deductable_fee = content.eventDetailInfo.deductibleFee;
                     retrievedIncident.pfc_accident_prilim_surveyor_report_date = content.reportAccidentResultDate;
-                    
+                    retrievedIncident.pfc_isurvey_status = new OptionSetValue(Int32.Parse("100000070"));
+                    retrievedIncident.pfc_isurvey_status_on = DateTime.Now;
+                    retrievedIncident.pfc_motor_accident_sum = 1;
+
+
                     _serviceProxy.Update(retrievedIncident);
                 }
                 catch(Exception e)
@@ -280,13 +294,14 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 try
                 {
                     pfc_motor_accident motorAccident = new pfc_motor_accident();
-
+                    motorAccident.pfc_motor_accident_name = "เหตุการณ์ที่ 1";
                     motorAccident.pfc_parent_caseId = new Microsoft.Xrm.Sdk.EntityReference(Incident.EntityLogicalName, _accountId);
                     motorAccident.pfc_activity_date = Convert.ToDateTime(content.eventDetailInfo.accidentOn);
-                    //motorAccident.pfc_event_code = ""; // ให้เป็นไปตาม Logic. ของหน้า Motor Accident
+                    motorAccident.pfc_event_code = content.eventId; // ให้เป็นไปตาม Logic. ของหน้า Motor Accident
+                    motorAccident.pfc_event_sequence = 1;
                     motorAccident.pfc_ref_isurvey_eventid = content.eventId;
                     motorAccident.pfc_accident_event_detail = content.eventDetailInfo.accidentNatureDesc;
-                    // motorAccident.pfc_more_document; // ไม่มี moreDocument
+                    //motorAccident.pfc_more_document; // ไม่มี moreDocument
                     motorAccident.pfc_accident_latitude = content.eventDetailInfo.accidentLatitude;
                     motorAccident.pfc_accident_Longitude = content.eventDetailInfo.accidentLongitude;
                     motorAccident.pfc_accident_location = content.eventDetailInfo.accidentPlace;
@@ -325,9 +340,20 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                         pfc_motor_accident_parties motorAccidentParties = new pfc_motor_accident_parties();
                         motorAccidentParties.pfc_parent_motor_accidentId = new EntityReference(pfc_motor_accident_parties.EntityLogicalName, _motorId);
 
+                        motorAccidentParties.pfc_motor_accident_parties_name = a.partiesFullname;
                         motorAccidentParties.pfc_ref_isurvey_partiesid = a.partiesId;
                         motorAccidentParties.pfc_ref_isurvey_eventid = a.partiesEventId;
                         motorAccidentParties.pfc_ref_isurvey_eventitem = a.partiesEventItem;
+                        motorAccidentParties.pfc_event_code = content.eventId;
+                        motorAccidentParties.pfc_event_sequence = 1;
+                        if(motorAccidentParties.pfc_parties_sequence <= 1 || motorAccidentParties.pfc_parties_sequence == null)
+                        {
+                            motorAccidentParties.pfc_parties_sequence = 1;
+                        }
+                        else
+                        {
+                            motorAccidentParties.pfc_parties_sequence += 1;
+                        }
                         motorAccidentParties.pfc_parties_fullname = a.partiesFullname;
                         motorAccidentParties.pfc_parties_type = new OptionSetValue(Int32.Parse(convertOptionSet(pfc_motor_accident_parties.EntityLogicalName, "", a.partiesType.ToString()))); // ไม่มี field นี้
                         motorAccidentParties.pfc_licence_province = a.partiesCarPlateProv;
@@ -344,7 +370,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                         motorAccidentParties.pfc_ref_isurvey_isdeleted = convertBool(a.partiesIsDeleted);
                         motorAccidentParties.pfc_ref_isurvey_isdeleted_date = Convert.ToDateTime(a.partiesIsDeletedDate);
 
-                        _serviceProxy.Create(motorAccidentParties);
+                        Guid partiesID = _serviceProxy.Create(motorAccidentParties);
 
                         // (Motor Accident Part) get "pfc_ref_isurvey_partiesid"
                         string partyId = motorAccidentParties.pfc_ref_isurvey_partiesid;
@@ -358,7 +384,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                                 if (data.claimDetailPartiesPartiesId == partyId)
                                 {
                                     pfc_motor_accident_parties_parts motorAccidentPartiesPart = new pfc_motor_accident_parties_parts();
-
+                                    motorAccidentPartiesPart.pfc_motor_accident_partiesId = new EntityReference(pfc_motor_accident_parties_parts.EntityLogicalName, partiesID);
                                     motorAccidentPartiesPart.pfc_ref_isurvey_partiesid = data.claimDetailPartiesPartiesId;
                                     motorAccidentPartiesPart.pfc_ref_isurvey_item = data.claimDetailPartiesItem;
                                     motorAccidentPartiesPart.pfc_ref_isurvey_detailid = data.claimDetailPartiesDetailId;
@@ -403,7 +429,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                     return output;
                 }
 
-                // Motor Accident Part
+                // Motor Accident Part (ผูกกับ parties)
                 try
                 {
                     List<ClaimDetailInfoModel> parts = content.claimDetailInfo;
@@ -413,6 +439,8 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                         pfc_motor_accident_parts motorAccidentPart = new pfc_motor_accident_parts();
 
                         motorAccidentPart.pfc_motor_accidentId = new EntityReference(pfc_motor_accident_parts.EntityLogicalName, _motorId);
+                        motorAccidentPart.pfc_motor_accident_parts_name = motorAccidentPart.pfc_detail;
+
                         motorAccidentPart.pfc_ref_isurvey_eventid = a.claimDetailEventId;
                         motorAccidentPart.pfc_ref_isurvey_item = a.claimDetailItem;
                         motorAccidentPart.pfc_ref_isurvey_detailid = a.claimDetailDetailid;
@@ -424,6 +452,10 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                         motorAccidentPart.pfc_ref_isurvey_modified_date = Convert.ToDateTime(a.claimDetailModifiedDate);
                         motorAccidentPart.pfc_ref_isurvey_isdeleted = convertBool(a.claimDetailIsDeleted);
                         motorAccidentPart.pfc_ref_isurvey_isdeleted_date = Convert.ToDateTime(a.claimDetailIsDeletedDate);
+                        motorAccidentPart.pfc_motor_accident_event_code = content.eventId;
+                        motorAccidentPart.pfc_motor_accident_event_sequence = 1;
+                        //motorAccidentPart.pfc_motor_accident_parties_parts_name = motorAccidentPart.pfc_detail;
+                        // motorAccidentPart
 
                         _serviceProxy.Create(motorAccidentPart);
 

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Newtonsoft.Json;
+
 namespace DEVES.IntegrationAPI.Model.RegPayeePersonal
 {
     public class RegPayeePersonalInputModel : BaseDataModel
@@ -78,6 +80,9 @@ namespace DEVES.IntegrationAPI.Model.RegPayeePersonal
         public string sapVendorGroupCode { get; set; }
         public BankInfoModel bankInfo { get; set; }
         public WithHoldingTaxInfoModel withHoldingTaxInfo { get; set; }
+
+        [JsonIgnore]
+        public string sapVendorCode { set; get; }
     }
 
     public class BankInfoModel : BaseDataModel

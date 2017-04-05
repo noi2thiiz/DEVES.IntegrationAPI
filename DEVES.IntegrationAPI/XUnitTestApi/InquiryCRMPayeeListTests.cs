@@ -36,15 +36,15 @@ namespace xUnitTestApi
             string lertId = (rnd.Next(1, 999999)).ToString();  // 1 <= month < 13
 
             string dataJson = @"{
-                                             'clientType' : 'P',
-                                             'roleCode' : 'G',
-                                             'polisyClientId' : '',
-                                             'sapVendorCode' : '15125039',
-                                             'fullname' : 'ออโต้ การาจา',
-                                             'taxNo' : '',
-                                             'taxBranchCode' : '',
-                                             'requester' : 'MOTORCLAIM',
-                                             'emcsCode' : ''
+                                   'clientType' : 'P',
+                                   'roleCode' : 'G',
+                                   'polisyClientId' : '',
+                                   'sapVendorCode' : '15125039',
+                                   'fullname' : 'ออโต้ การาจา',
+                                   'taxNo' : '',
+                                   'taxBranchCode' : '',
+                                   'requester' : 'MOTORCLAIM',
+                                   'emcsCode' : ''
                                             }";
 
 
@@ -53,22 +53,93 @@ namespace xUnitTestApi
         }
 
         [Fact]
+        public async void Should_Success_When_GIve_Valid_Input_In_Path_APAR()
+        {
+            Random rnd = new Random();
+            string lertId = (rnd.Next(1, 999999)).ToString();  // 1 <= month < 13
+
+            string dataJson = @"{
+                                 'clientType' : 'P',
+                                 'roleCode' : 'G',
+                                 'polisyClientId' : '',
+                                 'sapVendorCode' : '',
+                                 'fullname' : 'ชาญชัย',
+                                 'taxNo' : '',
+                                 'taxBranchCode' : '',
+                                 'requester' : 'MOTORCLAIM',
+                                 'emcsCode' : ''
+                               }";
+
+
+
+            AssertSuccessPostRequest(_endPoint, dataJson);
+        }
+
+        [Fact]
+        public async void Should_Success_When_GIve_Valid_Input_In_Path_ASHR()
+        {
+            Random rnd = new Random();
+            string lertId = (rnd.Next(1, 999999)).ToString();  // 1 <= month < 13
+
+            string dataJson = @"{
+                                 'clientType' : 'C',
+                                 'roleCode' : 'R',
+                                 'polisyClientId' : '',
+                                 'sapVendorCode' : '',
+                                 'fullname' : 'บริการ',
+                                 'taxNo' : '',
+                                 'taxBranchCode' : '',
+                                 'requester' : 'MOTORCLAIM',
+                                 'emcsCode' : ''
+                                }";
+
+
+
+            AssertSuccessPostRequest(_endPoint, dataJson);
+        }
+
+        [Fact]
+        public async void Should_Success_When_GIve_Notfound_Search()
+        {
+            Random rnd = new Random();
+            string lertId = (rnd.Next(1, 999999)).ToString();  // 1 <= month < 13
+
+            string dataJson = @"{
+            'clientType' : 'C',
+            'roleCode' : 'H',
+            'polisyClientId' : '',
+            'sapVendorCode' : '',
+            'fullname' : 'กฏหมาย',
+            'taxNo' : '',
+            'taxBranchCode' : '',
+            'requester' : 'MOTORCLAIM',
+            'emcsCode' : ''
+        }";
+
+
+
+            AssertSuccessPostRequest(_endPoint, dataJson);
+        }
+
+
+
+        [Fact]
         public async void Should_Success_When_GIve_Valid_Input_In_Path_A()
         {
             Random rnd = new Random();
             string lertId = (rnd.Next(1, 999999)).ToString();  // 1 <= month < 13
 
             string dataJson = @"{
-                                             'clientType' : 'C',
-                                             'roleCode' : 'A',
-                                             'polisyClientId' : '',
-                                             'sapVendorCode' : '15125039',
-                                             'fullname' : 'ออโต้ การาจา',
-                                             'taxNo' : '',
-                                             'taxBranchCode' : '',
-                                             'requester' : 'MOTORCLAIM',
-                                             'emcsCode' : ''
-                                            }";
+                                   'clientType' : 'C',
+                                   'roleCode' : 'A',
+                                   'polisyClientId' : '',
+                                   'sapVendorCode' : '15125039',
+                                   'fullname' : 'ออโต้ การาจา',
+                                   'taxNo' : '',
+                                   'taxBranchCode' : '',
+                                   'requester' : 'MOTORCLAIM',
+                                   'emcsCode' : ''
+                                 }";
 
 
 

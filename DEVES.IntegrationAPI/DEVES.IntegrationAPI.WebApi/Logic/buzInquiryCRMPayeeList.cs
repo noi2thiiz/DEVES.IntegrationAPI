@@ -137,7 +137,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         compInqClientInput = (COMPInquiryClientMasterInputModel)TransformerFactory.TransformModel(inqCrmPayeeListIn, compInqClientInput);
 
                         //+ Call CLS_InquiryCLSPersonalClient through ServiceProxy
-                        EWIResCOMPInquiryClientMasterContentModel retCOMPInqClient = CallDevesServiceProxy<COMPInquiryClientMasterOutputModel, EWIResCOMPInquiryClientMasterContentModel>
+                        var retCOMPInqClient = CallDevesServiceProxy<COMPInquiryClientMasterOutputModel, EWIResCOMPInquiryClientMasterContentModel>
                                                                                                 (CommonConstant.ewiEndpointKeyCOMPInquiryClient, compInqClientInput);
 
                         //Found in Polisy400

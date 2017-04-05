@@ -117,7 +117,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             
             string jsonReqModel = JsonConvert.SerializeObject(reqModel, Formatting.Indented, new EWIDatetimeConverter(JSON.DateTimeCustomFormat));
 
-            HttpClient client = new HttpClient(); ;
+            HttpClient client = new HttpClient(); 
 
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
