@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace DEVES.IntegrationAPI.WebApi.Core
+namespace DEVES.IntegrationAPI.WebApi.Core.DataAdepter
 {
     public class RESTClientResult
     {

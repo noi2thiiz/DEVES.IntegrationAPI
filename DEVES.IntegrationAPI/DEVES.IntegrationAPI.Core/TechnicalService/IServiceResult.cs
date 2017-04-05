@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using System.Web.Http.ModelBinding;
 using DEVES.IntegrationAPI.WebApi.Core.FieldErrorsParser;
 using Newtonsoft.Json;
+using DEVES.IntegrationAPI.WebApi.Core.DataAdepter;
 
 namespace DEVES.IntegrationAPI.WebApi.Core
 {

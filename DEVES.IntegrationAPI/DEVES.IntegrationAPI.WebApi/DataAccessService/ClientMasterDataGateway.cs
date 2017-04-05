@@ -1,8 +1,5 @@
 ﻿using System.Collections.Generic;
-using DEVES.IntegrationAPI.WebApi.DataAccessService;
-using Microsoft.Crm.Sdk.Messages;
-
-namespace DEVES.IntegrationAPI.WebApi.Logic
+namespace DEVES.IntegrationAPI.WebApi.DataAccessService
 {
     public class ClientMasterDataGateway
     {

@@ -2,23 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DEVES.IntegrationAPI.WebApi.Core
+namespace DEVES.IntegrationAPI.WebApi
 {
-    public class XrmConfigurationSettings
+    public class CrmConfigurationSettings
     {
-        private static readonly XrmConfigurationSettings Instant = new XrmConfigurationSettings();
+        private static readonly CrmConfigurationSettings Instant = new CrmConfigurationSettings();
 
         // Explicit static constructor to tell C# compiler
         // not to mark type as beforefieldinit
-        static XrmConfigurationSettings()
+        static CrmConfigurationSettings()
         {
         }
 
-        public static XrmConfigurationSettings AppConfig
+        public static CrmConfigurationSettings AppConfig
         {
             get { return Instant; }
         }
-        public static XrmConfigurationSettings AppSettings
+        public static CrmConfigurationSettings AppSettings
         {
             get { return Instant; }
         }
@@ -28,7 +28,7 @@ namespace DEVES.IntegrationAPI.WebApi.Core
         public Dictionary<string, dynamic> config { get; set; }
 
 
-        private XrmConfigurationSettings()
+        private CrmConfigurationSettings()
         {
             var proxy = "https://crmappdev.deves.co.th/proxy/xml.ashx?";
 

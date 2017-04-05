@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using DEVES.IntegrationAPI.WebApi.Core.DataAdepter;
 
 namespace DEVES.IntegrationAPI.WebApi.Core
 {

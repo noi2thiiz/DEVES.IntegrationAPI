@@ -6,6 +6,11 @@ namespace DEVES.IntegrationAPI.WebApi.Core.DataAdepter
 {
     public class StoreDataReader
     {
+        public string ConnectionString { get; set; }
+        public StoreDataReader(string connectionString)
+        {
+            this.ConnectionString = connectionString;
+        }
 
         public DbResult Execute(DbRequest req){
 
@@ -70,9 +75,9 @@ namespace DEVES.IntegrationAPI.WebApi.Core.DataAdepter
 
         }
 
-        public static SqlDataReader executeProcedure(string commandName,Dictionary<string, object> paras)
+        public  SqlDataReader executeProcedure(string commandName,Dictionary<string, object> paras)
         {
-            var _connectionString = XrmConfigurationSettings.AppSettings.Get("CRMDB");
+            var _connectionString = ConnectionString;
             SqlConnection conn = new SqlConnection(_connectionString);
             conn.Open();
             SqlCommand comm = conn.CreateCommand();

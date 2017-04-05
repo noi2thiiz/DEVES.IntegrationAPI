@@ -302,7 +302,9 @@
     <Compile Include="Controllers\UpdateCompliantStatusController.cs" />
     <Compile Include="Controllers\UpdateSurveyStatusController.cs" />
     <Compile Include="DataAccessService\ClientMasterDataGateway.cs" />
+    <Compile Include="DataAccessService\CrmSdkTableGateWay.cs" />
     <Compile Include="DataAccessService\DataResult.cs" />
+    <Compile Include="DataAccessService\IDataGateWay.cs" />
     <Compile Include="DEVES_XRM.cs" />
     <Compile Include="EWIDatetimeConverter.cs" />
     <Compile Include="Global.asax.cs">
@@ -370,6 +372,7 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="TechnicalService\Config\CrmConfigurationSettings.cs" />
     <Compile Include="TechnicalService\TransactionLogger\ApiLogDataGateWay.cs" />
     <Compile Include="TechnicalService\TransactionLogger\ApiLogEntry.cs" />
     <Compile Include="TechnicalService\TransactionLogger\ApiLogHandler.cs" />

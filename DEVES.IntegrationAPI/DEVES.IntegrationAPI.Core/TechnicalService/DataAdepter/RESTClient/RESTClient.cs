@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using DEVES.IntegrationAPI.WebApi.Core.ExtensionMethods;
 
-namespace DEVES.IntegrationAPI.WebApi.Core.TechnicalService
+namespace DEVES.IntegrationAPI.WebApi.Core.DataAdepter
 {
     public class RESTClient
     {

@@ -79,7 +79,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TechnicalService\Attributes\NullOrEmpty.cs" />
     <Compile Include="TechnicalService\Attributes\StringDateTime.cs" />
-    <Compile Include="TechnicalService\Config\XrmConfigurationSettings.cs" />
     <Compile Include="TechnicalService\Controller\BaseApiController.cs" />
     <Compile Include="TechnicalService\Converters\BooleanJsonConverter.cs" />
     <Compile Include="TechnicalService\Converters\CustomDateConverter.cs" />

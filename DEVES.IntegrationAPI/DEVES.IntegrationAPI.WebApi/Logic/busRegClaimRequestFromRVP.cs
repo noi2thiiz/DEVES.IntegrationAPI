@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Web.UI;
-using DEVES.IntegrationAPI.Model;
-using DEVES.IntegrationAPI.Model.ClaimRegistration;
 using DEVES.IntegrationAPI.Model.RegClaimRequestFromRVP;
-using DEVES.IntegrationAPI.WebApi.TechnicalService;
-using DEVES.IntegrationAPI.WebApi.Templates;
-
+using DEVES.IntegrationAPI.WebApi.DataAccessService;
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
     public class BuzRegClaimRequestFromRVPCommand
@@ -14,8 +9,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         public CrmregClaimRequestFromRVPContentOutputModel Execute(object input)
         {
             CrmregClaimRequestFromRVPContentOutputModel outputContent = new CrmregClaimRequestFromRVPContentOutputModel();
-            outputContent.data = new CrmRegClaimRequestFromRVPDataOutputModel();
-            outputContent.data.claimNotiNo = "12";
+            outputContent.data = new CrmRegClaimRequestFromRVPDataOutputModel()
+            {
+                claimNotiNo = "",
+                ticketNo=""
+            };
+
+
 
             // ตรวจสอบ  Policy และ PolicyAditional ถ้ามีมากกว่า 1 รายการ ให้ return error
             if (!isValidPolicyAndPolicyAditional())
