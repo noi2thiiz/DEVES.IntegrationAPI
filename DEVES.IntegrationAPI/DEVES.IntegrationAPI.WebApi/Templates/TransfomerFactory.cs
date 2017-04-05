@@ -111,10 +111,10 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                 {
                     t = new TranformCLIENTCreateCorporateClientAndAdditionalInfoContentModel_to_RegClientCorporateInputModel();
                 }
-                else if (outputType == typeof(Model.RegClientPersonal.RegClientPersonalInputModel))
-                {
-                    t = new TranformCLIENTCreatePersonalClientAndAdditionalInfoOutputModel_to_RegClientPersonalInputModel();
-                }
+            }
+            else if (inputType == typeof(Model.Polisy400.CLIENTCreatePersonalClientAndAdditionalInfoContentModel) && (outputType == typeof(Model.RegClientPersonal.RegClientPersonalInputModel)))
+            {
+                t = new TranformCLIENTCreatePersonalClientAndAdditionalInfoOutputModel_to_RegClientPersonalInputModel();
             }
 
             else if (inputType == typeof(Model.CLS.CLSCreateCorporateClientContentOutputModel) && outputType == typeof(Model.RegClientCorporate.RegClientCorporateInputModel))
