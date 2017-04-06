@@ -14,7 +14,7 @@ namespace DEVES.IntegrationAPI.Model.AccidentPrilimSurveyorReport
         public string eventId { get; set; }
         public string caseOwnerCode { get; set; }
         public string caseOwnerFullName { get; set; }
-        public DateTime reportAccidentResultDate { get; set; }
+        public string reportAccidentResultDate { get; set; }
         public EventDetailInfoModel eventDetailInfo { get; set; }
         public List<PartiesInfoModel> partiesInfo { get; set; }
         public List<ClaimDetailInfoModel> claimDetailInfo { get; set; }

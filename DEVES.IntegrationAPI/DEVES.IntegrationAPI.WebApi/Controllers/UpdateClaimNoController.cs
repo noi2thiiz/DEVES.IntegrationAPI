@@ -232,12 +232,24 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 _serviceProxy = connection.OrganizationServiceProxy;
                 ServiceContext svcContext = new ServiceContext(_serviceProxy);
 
+                var queryCase = from c in svcContext.IncidentSet
+                            where c.TicketNumber == content.ticketNo
+                            select c;
+
+                Incident getGuidIncident = queryCase.FirstOrDefault<Incident>();
+                // Incident GUID
+                _accountId = new Guid(getGuidIncident.IncidentId.ToString());
+
+                Guid claimId = new Guid();
                 // Create
                 try
                 {
-                    Incident incident = new Incident();
-                    incident.pfc_claim_number = content.claimNo;
-                    //incident.pfc_claim_zre
+                    pfc_claim claim = new pfc_claim();
+                    claim.pfc_claim_number = content.claimNo;
+                    claim.pfc_zrepclmno = content.claimNotiNo;
+                    claim.pfc_ref_caseId = new Microsoft.Xrm.Sdk.EntityReference(pfc_claim.EntityLogicalName, _accountId);
+
+                    claimId = _serviceProxy.Create(claim);
                 }
                 catch (Exception e)
                 {
@@ -253,9 +265,11 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 // Update
                 try
                 {
+                    
                     var query = from c in svcContext.IncidentSet
                                 where c.TicketNumber == content.ticketNo && c.pfc_claim_noti_number == content.claimNotiNo
                                 select c;
+
                     Incident incident = query.FirstOrDefault<Incident>();
 
                     _accountId = new Guid(incident.IncidentId.ToString());
@@ -270,16 +284,15 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                     retrievedIncident.pfc_locus_claim_id = content.claimId; 
                     retrievedIncident.pfc_locus_claim_status_code = content.claimStatusCode;
                     retrievedIncident.pfc_locus_claim_status_desc = content.claimStatusDesc;
+                    retrievedIncident.pfc_locus_claim_status_on = DateTime.Now;
 
                     _serviceProxy.Update(retrievedIncident);
-
-                    
 
                 }
                 catch (Exception e)
                 {
                     output.code = "501";
-                    output.message = "Update data PROBLEM";
+                    output.message = "(Update data PROBLEM) or (query ticketNo and claimNotiNo and get null value)";
                     output.description = e.ToString();
                     output.transactionId = "";
                     output.transactionDateTime = DateTime.Now.ToString();
@@ -328,8 +341,8 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
 
                 output.code = "400";
                 output.message = "False";
-                output.description = "ไม่พบ claimNotiNo";
-                output.transactionId = "Claim Noti No: null";
+                output.description = "ไม่พบ ticketNo";
+                output.transactionId = "Ticket Number: null";
                 output.transactionDateTime = DateTime.Now.ToString();
                 output.data = null;
 
