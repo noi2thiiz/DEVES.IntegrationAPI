@@ -11,7 +11,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
     {
         private Dictionary<string, SAPInquiryVendorContentVendorInfoModel> _tmpSAPInquiryVendorContentModel;
        
-        public override BaseDataModel TransformModel(BaseDataModel input, BaseDataModel output)
+        public BaseDataModel TransformModel2(BaseDataModel input, BaseDataModel output)
         {
             Console.WriteLine(" process : TransformSAPInquiryVendorOutputModel_to_InquiryCRMPayeeListDataOutputModel");
             EWIResSAPInquiryVendorContentModel srcContent = (EWIResSAPInquiryVendorContentModel) input;
@@ -27,7 +27,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             outputContent.data = new List<InquiryCrmPayeeListDataModel>();
 
             _tmpSAPInquiryVendorContentModel = new Dictionary<string, SAPInquiryVendorContentVendorInfoModel>();
-           
+            
             foreach (var vendorInfo in srcContent.VendorInfo)
             {
                 if (vendorInfo.PREVACC != null)
@@ -154,6 +154,30 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             bankInfoModel output)
         {
             return output;
+        }
+
+        public override BaseDataModel TransformModel(BaseDataModel input, BaseDataModel output)
+        {
+            Console.WriteLine(" process : TransformSAPInquiryVendorOutputModel_to_InquiryCRMPayeeListDataOutputModel");
+            EWIResSAPInquiryVendorContentModel srcContent = (EWIResSAPInquiryVendorContentModel)input;
+            CRMInquiryPayeeContentOutputModel outputContent;
+            if (output != null)
+            {
+                outputContent = (CRMInquiryPayeeContentOutputModel)output;
+                if (outputContent.data == null)
+                    outputContent.data = new List<InquiryCrmPayeeListDataModel>();
+            }
+            else
+            {
+                outputContent = new CRMInquiryPayeeContentOutputModel();
+                outputContent.data = new List<InquiryCrmPayeeListDataModel>();
+            }
+
+            foreach (var vendorInfo in srcContent.VendorInfo)
+            {
+                outputContent.data.Add(TransformDataModel(vendorInfo, new InquiryCrmPayeeListDataModel()));
+            }
+            return outputContent;
         }
     }
 }

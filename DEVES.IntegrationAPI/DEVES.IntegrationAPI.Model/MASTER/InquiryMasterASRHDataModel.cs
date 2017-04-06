@@ -38,7 +38,7 @@ namespace DEVES.IntegrationAPI.Model.MASTER
         public List<InquiryMasterASRHContentASRHListCollectionDataModel> ASRHListCollection { set; get; }
     }
 
-    public class InquiryMasterASRHContentASRHListCollectionDataModel
+    public class InquiryMasterASRHContentASRHListCollectionDataModel :BaseDataModel
     {
         public InquiryMasterASRHListModel ASRHList { set; get; }
     }

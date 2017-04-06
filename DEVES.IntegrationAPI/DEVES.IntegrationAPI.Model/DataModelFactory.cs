@@ -17,7 +17,11 @@ namespace DEVES.IntegrationAPI.Model
         R,
         H
     }
-
+    public enum ENUM_CLIENT_TYPE
+    {
+        P,
+        C
+    }
 
     public static class DataModelFactory
     {

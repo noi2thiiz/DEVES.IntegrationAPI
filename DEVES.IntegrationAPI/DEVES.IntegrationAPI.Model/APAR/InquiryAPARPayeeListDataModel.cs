@@ -38,7 +38,7 @@ namespace DEVES.IntegrationAPI.Model.APAR
 
 
 
-    public class InquiryAPARPayeeContentAparPayeeListCollectionDataModel
+    public class InquiryAPARPayeeContentAparPayeeListCollectionDataModel:BaseDataModel
     {
         public InquiryAPARPayeeListModel aparPayeeList { set; get; }
     }

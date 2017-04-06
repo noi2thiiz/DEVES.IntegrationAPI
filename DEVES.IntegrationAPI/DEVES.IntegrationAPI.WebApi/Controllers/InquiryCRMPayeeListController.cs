@@ -23,7 +23,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         {
             Console.WriteLine(value.ToJson());
             buzInquiryCRMPayeeList cmd = new buzInquiryCRMPayeeList();
-            cmd.TransactionId = Request.Properties["TransactionID"].ToString();
+            cmd.TransactionId = Guid.NewGuid().ToString(); // Request.Properties["TransactionID"].ToString();
            
             var content = cmd.Execute(cmd.DeserializeJson<InquiryCRMPayeeListInputModel>(value.ToString()));
            

@@ -13,12 +13,26 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             InquiryCRMPayeeListInputModel src = (InquiryCRMPayeeListInputModel) input;
             SAPInquiryVendorInputModel trgt = (SAPInquiryVendorInputModel) output;
 
-            trgt.PREVACC = src.polisyClientId;
-            trgt.TAX3 = src.taxNo;
-            trgt.TAX4 = src.taxBranchCode;
-            trgt.VCODE = src.sapVendorCode;
-
-
+            trgt.VCODE = "";
+            trgt.PREVACC = "";
+            trgt.TAX3 = "";
+            trgt.TAX4 = "";
+            switch (src.SearchConditionType)
+            {
+                case ENUM_SAP_SearchConditionType.sapVendorCode:
+                    trgt.VCODE = src.sapVendorCode;
+                    break;
+                case ENUM_SAP_SearchConditionType.polisyClientId:
+                    trgt.PREVACC = src.polisyClientId;
+                    break;
+                case ENUM_SAP_SearchConditionType.taxNo:
+                    trgt.TAX3 = src.taxNo;
+                    trgt.TAX4 = src.taxBranchCode;
+                    break;
+                default:
+                    break;
+            }
+            
             return trgt;
         }
     }

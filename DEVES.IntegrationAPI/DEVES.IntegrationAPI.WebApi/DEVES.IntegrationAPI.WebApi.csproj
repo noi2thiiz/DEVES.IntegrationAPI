@@ -332,9 +332,13 @@
     <Compile Include="Logic\TransformCLIENTCreateCorporateClientAndAdditionalInfoInputModel_to_RegPayeeCorporateInputModel.cs" />
     <Compile Include="Logic\TransformCLIENTCreatePersonalClientAndAdditionalInfoInputModel_to_RegPayeePersonalInputModel.cs" />
     <Compile Include="Logic\TransformCLSCreateCorporateClientInputModel_to_RegPayeeCorporateInputModel.cs" />
+    <Compile Include="Logic\TransformCLSCreatePersonalClientInputModel.cs" />
     <Compile Include="Logic\TransformCLSCreatePersonalClientInputModel_to_RegPayeePersonalInputModel.cs" />
     <Compile Include="Logic\TransformCLSInquiryCorporateClientContentOut_to_CrmInquiryClientMasterContentOut.cs" />
+    <Compile Include="Logic\transformCLSInquiryCorporateClientOutputModel_to_InquiryCRMPayeeListInputModel.cs" />
+    <Compile Include="Logic\transformCLSInquiryPersonalClientOutputModel_to_InquiryCRMPayeeListInputModel.cs" />
     <Compile Include="Logic\TransformCLSInquiryPersonalClientContentOut_to_CrmInquiryClientMasterContentOut.cs" />
+    <Compile Include="Logic\transformCOMPInquiryClientMasterContentClientListModel_to_InquiryCRMPayeeListInputModel.cs" />
     <Compile Include="Logic\TransformCOMPInquiryClientMasterContentOutputModel_to_CrmInquiryClientMasterContentOut.cs" />
     <Compile Include="Logic\TransformCRMInquiryCRMClientMasterInput_to_CLSInquiryCLSPersonalClientInput.cs" />
     <Compile Include="Logic\TransformCRMInquiryCRMClientMasterInput_to_CLSInquiryCorporateClientInputModel.cs" />
@@ -342,6 +346,8 @@
     <Compile Include="Logic\TransformCRMInquiryCRMPayeeListInputModel_to_APARInquiryAPARPayeeListInputModel.cs" />
     <Compile Include="Logic\TransformCRMInquiryCRMPayeeListInputModel_to_InquiryMasterASRHInputModel.cs" />
     <Compile Include="Logic\TransformCRMInquiryCRMPayeeListInputModel_to_SAPInquiryVendorInputModel.cs" />
+    <Compile Include="Logic\transformInquiryAPARPayeeContentAparPayeeListCollectionDataModel_to_InquiryCRMPayeeListInputModel.cs" />
+    <Compile Include="Logic\transformInquiryMasterASRHContentASRHListCollectionDataModel_to_InquiryCRMPayeeListInputModel.cs" />
     <Compile Include="Logic\TransformInquiryMasterASRHContentOutputModel_to_InquiryCRMPayeeListDataOutputModel.cs" />
     <Compile Include="Logic\TransformRegPayeeCorporateInputModel_to_CLIENTCreateCorporateClientAndAdditionalInfoInputModel.cs" />
     <Compile Include="Logic\TransformRegPayeeCorporateInputModel_to_CLSCreateCorporateClientInputModel.cs" />
