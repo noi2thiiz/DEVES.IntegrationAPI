@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using DEVES.IntegrationAPI.Model;
 using DEVES.IntegrationAPI.WebApi.Templates;
+using DEVES.IntegrationAPI.Model.RegPayeeCorporate;
+using DEVES.IntegrationAPI.Model.SAP;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
@@ -11,7 +13,29 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
     {
         public override BaseDataModel TransformModel(BaseDataModel input, BaseDataModel output)
         {
-            throw new NotImplementedException();
+
+            // =====Dont Finish ======
+
+            RegPayeeCorporateInputModel src = (RegPayeeCorporateInputModel)input;
+            SAPInquiryVendorInputModel trgt = (SAPInquiryVendorInputModel)output;
+
+            if (src == null)
+            {
+                return trgt;
+            }
+
+            if (src.generalHeader != null)
+            {
+                trgt.PREVACC = src.generalHeader.polisyClientId;
+                trgt.VCODE = src.generalHeader.cleansingId;
+            }
+
+           
+
+            // =====Dont Finish ======
+
+
+            return trgt; 
         }
     }
 }
