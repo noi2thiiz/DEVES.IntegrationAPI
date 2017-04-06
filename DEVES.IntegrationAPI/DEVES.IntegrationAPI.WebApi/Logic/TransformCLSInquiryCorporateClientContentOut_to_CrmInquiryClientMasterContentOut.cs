@@ -36,7 +36,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     trgt.profileInfo.fullName = src.cls_full_name;
                     trgt.profileInfo.salutationText = src.salutl;
                     trgt.profileInfo.sex = src.cls_sex;
-                    trgt.profileInfo.idTax = src.cls_citizen_id_new;
+                    trgt.profileInfo.idTax = src.cls_tax_no_new;
                     trgt.profileInfo.occupationText = src.cls_occpcode;
 
                     trgt.contactInfo.telephone1 = src.cltphone01;

@@ -27,7 +27,7 @@ namespace DEVES.IntegrationAPI.Model.CLS
         public String cleansing_id { set; get; }
         public String clntnum { set; get; }
         public String secuityno { set; get; }
-        public String cls_citizen_id_new { set; get; }
+        public String cls_tax_no_new { set; get; }
         public String lgivname { set; get; }
         public String lsurname { set; get; }
         public String cls_full_name { set; get; }

@@ -6,6 +6,10 @@ using System.Web;
 using DEVES.IntegrationAPI.WebApi.Logic;
 //using DEVES.IntegrationAPI.Model.InquiryClientMaster;
 using DEVES.IntegrationAPI.Model;
+using DEVES.IntegrationAPI.Model.MASTER;
+using DEVES.IntegrationAPI.Model.APAR;
+using DEVES.IntegrationAPI.Model.CLS;
+using DEVES.IntegrationAPI.Model.Polisy400 ;
 using DEVES.IntegrationAPI.Model.InquiryCRMPayeeList;
 
 namespace DEVES.IntegrationAPI.WebApi.Templates
@@ -163,7 +167,29 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                     t = new TranformRegClientCorporateInputModel_to_COMPInquiryClientMasterInputModel();
                 }
             }
+
+            else if (inputType == typeof(InquiryMasterASRHContentASRHListCollectionDataModel) && outputType == typeof(InquiryCRMPayeeListInputModel))
+            {
+                t = new transformInquiryMasterASRHContentASRHListCollectionDataModel_to_InquiryCRMPayeeListInputModel();
+            }
+            else if (inputType == typeof(InquiryAPARPayeeContentAparPayeeListCollectionDataModel) && outputType == typeof(InquiryCRMPayeeListInputModel))
+            {
+                t = new transformInquiryAPARPayeeContentAparPayeeListCollectionDataModel_to_InquiryCRMPayeeListInputModel();
+            }
+            else if (inputType == typeof(CLSInquiryPersonalClientOutputModel) && outputType == typeof(InquiryCRMPayeeListInputModel))
+            {
+                t = new transformCLSInquiryPersonalClientOutputModel_to_InquiryCRMPayeeListInputModel();
+            }
+            else if (inputType == typeof(CLSInquiryCorporateClientOutputModel) && outputType == typeof(InquiryCRMPayeeListInputModel))
+            {
+                t = new transformCLSInquiryCorporateClientOutputModel_to_InquiryCRMPayeeListInputModel();
+            }
+            else if (inputType == typeof(COMPInquiryClientMasterContentClientListModel) && outputType == typeof(InquiryCRMPayeeListInputModel))
+            {
+                t = new transformCOMPInquiryClientMasterContentClientListModel_to_InquiryCRMPayeeListInputModel();
+            }
             
+
             return t;
         }
     }
