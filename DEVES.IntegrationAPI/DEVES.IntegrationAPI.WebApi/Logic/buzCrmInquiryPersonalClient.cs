@@ -82,7 +82,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         }
 
                     }
-                    catch (Exception e)
+                    catch (Exception )
                     {
                         throw;
                     }

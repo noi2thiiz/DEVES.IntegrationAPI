@@ -12,5 +12,9 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService
             Count = data.Count;
             Data = data;
         }
+
+        public DataResult()
+        {
+        }
     }
 }

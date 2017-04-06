@@ -300,7 +300,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 output.data = UpdateClaimNoOutput;
             }
 
-            catch (System.ServiceModel.FaultException e)
+            catch (System.ServiceModel.FaultException )
             {
                 output.code = "500";
                 output.message = "False";

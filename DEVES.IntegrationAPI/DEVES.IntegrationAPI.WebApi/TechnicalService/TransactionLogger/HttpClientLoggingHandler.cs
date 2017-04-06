@@ -78,7 +78,7 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
                 }
 
             }
-            catch (Exception e)
+            catch (Exception )
             {
                 transactionId = Guid.NewGuid().ToString();
                 request.Properties["TransactionID"] = transactionId;
@@ -99,7 +99,7 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
             {
                 requestRouteData = routeData.ToJson();
             }
-            catch (Exception e)
+            catch (Exception )
             {
             }
 

@@ -19,7 +19,7 @@ namespace DEVES.IntegrationAPI.WebApi.Core
                 }
                 return source;
             }
-            catch (NoNullAllowedException e)
+            catch (NoNullAllowedException )
             {
                 return source;
             }

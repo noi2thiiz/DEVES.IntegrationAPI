@@ -273,7 +273,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                     
                     
                 }
-                catch (Exception e)
+                catch (Exception )
                 {
                     output.code = "501";
                     output.message = "False";
@@ -299,7 +299,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 // string strSql = string.Format(output.data.message, content.claimNotiNo, content.surveyType, content.surveyorCode, content.surveyorName);
             }
             
-            catch (System.ServiceModel.FaultException e)
+            catch (System.ServiceModel.FaultException )
             {
                 output.code = "500";
                 output.message = "False";

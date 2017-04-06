@@ -264,7 +264,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                     
                     _serviceProxy.Update(retrievedIncident);
                 }
-                catch(Exception e)
+                catch(Exception )
                 {
                     output.code = "501";
                     output.message = "False";
@@ -303,7 +303,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                     // getting GUID of motorAccident and store in "_motorId" variable
                     _motorId = motorId;
                 }
-                catch (Exception e)
+                catch (Exception )
                 {
                     output.code = "501";
                     output.message = "False";
@@ -377,7 +377,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                                 }
                             }
                         }
-                        catch (Exception e)
+                        catch (Exception )
                         {
                             output.code = "501";
                             output.message = "False";
@@ -391,7 +391,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
 
                     }
                 }
-                catch (Exception e)
+                catch (Exception )
                 {
                     output.code = "501";
                     output.message = "False";
@@ -430,7 +430,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                     }
 
                 }
-                catch (Exception e)
+                catch (Exception )
                 {
                     output.code = "501";
                     output.message = "False";
@@ -453,7 +453,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 output.data.message = "Ticket ID: " + content.ticketNo + ", Claim Noti No: " + content.claimNotiNo;
 
             }
-            catch (System.ServiceModel.FaultException e)
+            catch (System.ServiceModel.FaultException )
             {
                 output.code = "500";
                 output.message = "False";

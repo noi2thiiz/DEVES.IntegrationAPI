@@ -10,7 +10,7 @@ namespace DEVES.IntegrationAPI.WebApi.Core
     public class CustomDateConverter : IsoDateTimeConverter
     {
 
-        private const string DateTimeFormat = "yyyy-MM-dd HH:mm:ss";
+        public string DateTimeFormat = "yyyy-MM-dd HH:mm:ss";
 
         public CustomDateConverter()
         {

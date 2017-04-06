@@ -42,7 +42,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             {
                 d= (DateTime)dt.Rows[0][a];
             }
-            catch(Exception e) {
+            catch(Exception ) {
             }
             return d;
         }

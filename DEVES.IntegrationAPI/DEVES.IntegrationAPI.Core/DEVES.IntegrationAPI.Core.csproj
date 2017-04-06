@@ -99,6 +99,7 @@
     <Compile Include="TechnicalService\Exceptions\RemoteServiceInternalServerErrorException.cs" />
     <Compile Include="TechnicalService\Exceptions\ServiceFailException.cs" />
     <Compile Include="TechnicalService\Exceptions\WebServiceException.cs" />
+    <Compile Include="TechnicalService\ExtensionMethods\DictionaryHelper.cs" />
     <Compile Include="TechnicalService\ExtensionMethods\ToJson.cs" />
     <Compile Include="TechnicalService\Helpers\Util.cs" />
     <Compile Include="TechnicalService\IServiceRequestAble.cs" />

@@ -63,7 +63,7 @@ namespace DEVES.IntegrationAPI.WebApi.Core.DataAdepter
                     length = response.ContentLength;
                 }
             }
-            catch (WebException ex)
+            catch (WebException)
             {
                 // Log exception and throw as for GET example above
             }
@@ -78,7 +78,7 @@ namespace DEVES.IntegrationAPI.WebApi.Core.DataAdepter
             try
             {
                 HttpWebResponse httpResponse = null;
-                string responseText = null;
+               // string responseText = null;
 
 
                 var httpWebRequest = (HttpWebRequest) WebRequest.Create(baseAddress);
@@ -140,7 +140,7 @@ namespace DEVES.IntegrationAPI.WebApi.Core.DataAdepter
                 {
                     Console.WriteLine(e);
                     Console.WriteLine("cannot connet to remote serve");
-                    var msg = "cannot connet to remote serve";
+                   // var msg = "cannot connet to remote serve";
                     throw new CannotConnetServiceException();
                 }
 
@@ -187,7 +187,7 @@ namespace DEVES.IntegrationAPI.WebApi.Core.DataAdepter
                     }
 
                 }
-                catch (NullReferenceException ex)
+                catch (NullReferenceException)
                 {
                     dataResult.statusCode = HttpStatusCode.InternalServerError;
                     dataResult.response = httpResponse;

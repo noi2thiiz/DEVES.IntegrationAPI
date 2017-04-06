@@ -14,7 +14,7 @@ namespace DEVES.IntegrationAPI.WebApi.Core.Controllers
 {
     public abstract class BaseApiController : ApiController
     {
-        public HttpRequestMessage Request => (HttpRequestMessage) HttpContext.Current.Items["MS_HttpRequestMessage"];
+        public new HttpRequestMessage Request => (HttpRequestMessage)HttpContext.Current.Items["MS_HttpRequestMessage"];
 
         protected string GetCurrentDateTime()
         {

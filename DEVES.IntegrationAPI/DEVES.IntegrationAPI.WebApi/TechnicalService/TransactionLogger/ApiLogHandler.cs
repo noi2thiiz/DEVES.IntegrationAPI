@@ -44,7 +44,7 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
                 apiLogEntry.Controller = "" + descriptor.ControllerName;
                 Console.WriteLine("controllerSelector : " + apiLogEntry.Controller);
             }
-            catch (Exception e)
+            catch (Exception )
             {
                 // continue
             }
@@ -91,7 +91,7 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
             {
                 requestRouteData = routeData.ToJson();
             }
-            catch (Exception e)
+            catch (Exception )
             {
             }
 

@@ -45,7 +45,7 @@ namespace DEVES.IntegrationAPI.Model.RegClaimRequestFromRVP
     public class ClaimInformModel
     {
         public string informerOn { get; set; }
-        public string accidentOn { get; set; }
+        public DateTime accidentOn { get; set; }
         public string accidentDescCode { get; set; }
         public string accidentDesc { get; set; }
         public int numOfExpectInjury { get; set; }

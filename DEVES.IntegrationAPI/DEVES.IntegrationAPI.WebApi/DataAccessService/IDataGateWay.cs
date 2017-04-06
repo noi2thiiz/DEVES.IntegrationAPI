@@ -1,4 +1,4 @@
-﻿namespace DEVES.IntegrationAPI.WebApi.Services.DataGateWay
+﻿namespace DEVES.IntegrationAPI.WebApi.DataAccessService
 {
     public interface IDataGateWay
     {

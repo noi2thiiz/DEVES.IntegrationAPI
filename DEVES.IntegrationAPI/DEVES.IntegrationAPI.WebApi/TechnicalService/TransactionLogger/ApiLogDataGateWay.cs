@@ -95,7 +95,7 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
                     }
                 }
             }
-            catch (Exception e)
+            catch (Exception )
             {
                 Console.WriteLine("CANNOT SAVE: transactionLog" );
 
