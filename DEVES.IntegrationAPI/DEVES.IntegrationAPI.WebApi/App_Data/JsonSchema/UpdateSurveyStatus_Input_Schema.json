@@ -10,7 +10,7 @@
     "claimNotiNo": {
       "type": "string",
       "minLength": 1,
-      "maxLength": 15,
+      "maxLength": 15
     },
     "iSurveyStatus": {
       "type": "string",

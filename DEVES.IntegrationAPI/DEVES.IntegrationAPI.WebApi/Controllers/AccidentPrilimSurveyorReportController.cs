@@ -244,7 +244,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 Guid _motorId = new Guid();
 
                 Incident retrievedIncident = (Incident)_serviceProxy.Retrieve(Incident.EntityLogicalName, _accountId, new Microsoft.Xrm.Sdk.Query.ColumnSet(true));
-
+                /*
                 if(!retrievedIncident.pfc_isurvey_status.ToString().Equals("100000040"))
                 {
                     output.code = "500";
@@ -252,10 +252,13 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                     output.description = "iSurvey Status ไม่ใช่อยู่ในสถานะถึงที่เกิดเหตุ (100000040)";
                     output.transactionId = "";
                     output.transactionDateTime = DateTime.Now.ToString();
+
+                    output.data = new AccidentPrilimSurveyorReportDataOutputModel_Pass();
                     output.data.message = null;
 
                     return output;
                 }
+                */
                 // Incident
                 try
                 {
@@ -270,7 +273,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                     retrievedIncident.pfc_num_of_death = new OptionSetValue(Int32.Parse(convertOptionSet(Incident.EntityLogicalName, "", content.eventDetailInfo.numOfDeath.ToString())));
                     retrievedIncident.pfc_excess_fee = content.eventDetailInfo.excessFee;
                     retrievedIncident.pfc_deductable_fee = content.eventDetailInfo.deductibleFee;
-                    retrievedIncident.pfc_accident_prilim_surveyor_report_date = content.reportAccidentResultDate;
+                    retrievedIncident.pfc_accident_prilim_surveyor_report_date = Convert.ToDateTime(content.reportAccidentResultDate);
                     retrievedIncident.pfc_isurvey_status = new OptionSetValue(Int32.Parse("100000070"));
                     retrievedIncident.pfc_isurvey_status_on = DateTime.Now;
                     retrievedIncident.pfc_motor_accident_sum = 1;
@@ -285,7 +288,8 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                     output.description = "Update Entity Incident PROBLEM";
                     output.transactionId = "";
                     output.transactionDateTime = DateTime.Now.ToString();
-                    output.data.message = null;
+                    output.data = new AccidentPrilimSurveyorReportDataOutputModel_Pass();
+                    output.data.message = e.StackTrace;
 
                     return output;
                 }
@@ -325,7 +329,8 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                     output.description = "Create Entity Motor Accident PROBLEM";
                     output.transactionId = "";
                     output.transactionDateTime = DateTime.Now.ToString();
-                    output.data.message = null;
+                    output.data = new AccidentPrilimSurveyorReportDataOutputModel_Pass();
+                    output.data.message = e.StackTrace;
 
                     return output;
                 }
@@ -346,7 +351,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                         motorAccidentParties.pfc_ref_isurvey_eventitem = a.partiesEventItem;
                         motorAccidentParties.pfc_event_code = content.eventId;
                         motorAccidentParties.pfc_event_sequence = 1;
-                        if(motorAccidentParties.pfc_parties_sequence <= 1 || motorAccidentParties.pfc_parties_sequence == null)
+                        if(motorAccidentParties.pfc_parties_sequence < 1 || motorAccidentParties.pfc_parties_sequence == null)
                         {
                             motorAccidentParties.pfc_parties_sequence = 1;
                         }
@@ -355,7 +360,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                             motorAccidentParties.pfc_parties_sequence += 1;
                         }
                         motorAccidentParties.pfc_parties_fullname = a.partiesFullname;
-                        motorAccidentParties.pfc_parties_type = new OptionSetValue(Int32.Parse(convertOptionSet(pfc_motor_accident_parties.EntityLogicalName, "", a.partiesType.ToString()))); // ไม่มี field นี้
+                        motorAccidentParties.pfc_parties_type = new OptionSetValue(Int32.Parse(a.partiesType.ToString())); // ไม่มี field นี้
                         motorAccidentParties.pfc_licence_province = a.partiesCarPlateProv;
                         motorAccidentParties.pfc_licence_no = a.partiesCarPlateNo;
                         motorAccidentParties.pfc_brand = a.partiesCarBrand;
@@ -385,6 +390,8 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                                 {
                                     pfc_motor_accident_parties_parts motorAccidentPartiesPart = new pfc_motor_accident_parties_parts();
                                     motorAccidentPartiesPart.pfc_motor_accident_partiesId = new EntityReference(pfc_motor_accident_parties_parts.EntityLogicalName, partiesID);
+
+                                    motorAccidentPartiesPart.pfc_motor_accident_parties_parts_name = data.claimDetailPartiesDetail; // motorAccidentPartiesPart.pfc_detail;
                                     motorAccidentPartiesPart.pfc_ref_isurvey_partiesid = data.claimDetailPartiesPartiesId;
                                     motorAccidentPartiesPart.pfc_ref_isurvey_item = data.claimDetailPartiesItem;
                                     motorAccidentPartiesPart.pfc_ref_isurvey_detailid = data.claimDetailPartiesDetailId;
@@ -396,9 +403,17 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                                     motorAccidentPartiesPart.pfc_ref_isurvey_modified_date = Convert.ToDateTime(data.claimDetailPartiesModifiedDate);
                                     motorAccidentPartiesPart.pfc_ref_isurvey_isdeleted = convertBool(data.claimDetailPartiesIsDeleted);
                                     motorAccidentPartiesPart.pfc_ref_isurvey_isdeleted_date = Convert.ToDateTime(data.claimDetailPartiesIsDeletedDate);
-                                    //motorAccidentPartiesPart.pfc_motor_accident_event_code // ให้เป็นไปตาม Logic. ของหน้า Motor Accident Parties Parts
-                                    //motorAccidentPartiesPart.pfc_motor_accident_event_sequence // ให้เป็นไปตาม Logic. ของหน้า Motor Accident Parties Parts
-                                    //motorAccidentPartiesPart.pfc_motor_accident_parties_sequence // ให้เป็นไปตาม Logic. ของหน้า Motor Accident Parties Parts
+                                    motorAccidentPartiesPart.pfc_motor_accident_event_code = content.eventId; 
+                                    motorAccidentPartiesPart.pfc_motor_accident_event_sequence = 1;
+                                    if(motorAccidentPartiesPart.pfc_motor_accident_parties_sequence < 1 || motorAccidentPartiesPart.pfc_motor_accident_parties_sequence == null)
+                                    {
+                                        motorAccidentPartiesPart.pfc_motor_accident_parties_sequence = 1;
+                                    } 
+                                    else
+                                    {
+                                        motorAccidentPartiesPart.pfc_motor_accident_parties_sequence += 1;
+                                    }
+                                        
                                     _serviceProxy.Create(motorAccidentPartiesPart);
                                 }
                             }
@@ -410,7 +425,8 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                             output.description = "Create Entity (Case/Motor) PROBLEM";
                             output.transactionId = "";
                             output.transactionDateTime = DateTime.Now.ToString();
-                            output.data.message = null;
+                            output.data = new AccidentPrilimSurveyorReportDataOutputModel_Pass();
+                            output.data.message = e.StackTrace;
 
                             return output;
                         }
@@ -424,7 +440,8 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                     output.description = "Create Entity Motor Accident Parties PROBLEM";
                     output.transactionId = "";
                     output.transactionDateTime = DateTime.Now.ToString();
-                    output.data.message = null;
+                    output.data = new AccidentPrilimSurveyorReportDataOutputModel_Pass();
+                    output.data.message = e.StackTrace;
 
                     return output;
                 }
@@ -439,7 +456,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                         pfc_motor_accident_parts motorAccidentPart = new pfc_motor_accident_parts();
 
                         motorAccidentPart.pfc_motor_accidentId = new EntityReference(pfc_motor_accident_parts.EntityLogicalName, _motorId);
-                        motorAccidentPart.pfc_motor_accident_parts_name = motorAccidentPart.pfc_detail;
+                        motorAccidentPart.pfc_motor_accident_parts_name = a.claimDetailDetail; // motorAccidentPart.pfc_detail;
 
                         motorAccidentPart.pfc_ref_isurvey_eventid = a.claimDetailEventId;
                         motorAccidentPart.pfc_ref_isurvey_item = a.claimDetailItem;
@@ -454,8 +471,6 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                         motorAccidentPart.pfc_ref_isurvey_isdeleted_date = Convert.ToDateTime(a.claimDetailIsDeletedDate);
                         motorAccidentPart.pfc_motor_accident_event_code = content.eventId;
                         motorAccidentPart.pfc_motor_accident_event_sequence = 1;
-                        //motorAccidentPart.pfc_motor_accident_parties_parts_name = motorAccidentPart.pfc_detail;
-                        // motorAccidentPart
 
                         _serviceProxy.Create(motorAccidentPart);
 
@@ -469,7 +484,8 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                     output.description = "Create Entity Motor Accident Part PROBLEM";
                     output.transactionId = "";
                     output.transactionDateTime = DateTime.Now.ToString();
-                    output.data.message = null;
+                    output.data = new AccidentPrilimSurveyorReportDataOutputModel_Pass();
+                    output.data.message = e.StackTrace;
 
                     return output;
                 }
@@ -492,7 +508,8 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 output.description = "CRM PROBLEM";
                 output.transactionId = "";
                 output.transactionDateTime = DateTime.Now.ToString();
-                output.data.message = null;
+                output.data = new AccidentPrilimSurveyorReportDataOutputModel_Pass();
+                output.data.message = e.StackTrace;
 
                 return output;
             }
@@ -514,7 +531,8 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 output.description = "ไม่พบ claimNotiNo";
                 output.transactionId = "Claim Noti No: null";
                 output.transactionDateTime = DateTime.Now.ToString();
-                output.data.message = null;
+                output.data = new AccidentPrilimSurveyorReportDataOutputModel_Pass();
+                output.data.message = e.StackTrace;
             }
 
             return output;

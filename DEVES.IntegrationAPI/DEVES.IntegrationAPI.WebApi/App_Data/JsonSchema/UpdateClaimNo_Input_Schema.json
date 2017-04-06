@@ -14,10 +14,12 @@
     },
     "claimNo": {
       "type": "string",
+      "minLength": 1,
       "maxLength": 8
     },
     "claimId": {
       "type": "string",
+      "minLength": 1,
       "maxLength": 20
     },
     "claimStatusCode": {
@@ -34,6 +36,8 @@
   "required": [
     "ticketNo",
     "claimNotiNo",
+    "claimNo",
+    "claimId",
     "claimStatusCode",
     "claimStatusDesc"
   ]
