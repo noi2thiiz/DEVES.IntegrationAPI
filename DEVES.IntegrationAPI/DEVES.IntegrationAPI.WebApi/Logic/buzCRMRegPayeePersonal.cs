@@ -18,12 +18,15 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
         public override BaseDataModel Execute(object input)
         {
-
             RegPayeePersonalContentOutputModel regPayeePersonalOutput = new RegPayeePersonalContentOutputModel();
             regPayeePersonalOutput.data = new List<RegPayeePersonalDataOutputModel>();
-            RegPayeePersonalDataOutputModel_Pass outputPass = new RegPayeePersonalDataOutputModel_Pass();
+            regPayeePersonalOutput.code = CONST_CODE_SUCCESS;
+            regPayeePersonalOutput.message = "SUCCESS";
+            regPayeePersonalOutput.transactionDateTime = DateTime.Now;
+            regPayeePersonalOutput.transactionId = TransactionId;
             try
             {
+                RegPayeePersonalDataOutputModel_Pass outputPass = new RegPayeePersonalDataOutputModel_Pass();
                 RegPayeePersonalInputModel regPayeePersonalInput = (RegPayeePersonalInputModel)input;
 
                 if (string.IsNullOrEmpty(regPayeePersonalInput?.generalHeader?.polisyClientId))
@@ -66,8 +69,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 }
 
                 #region Search Payee in SAP
-                BaseDataModel SAPInqVendorIn = DataModelFactory.GetModel(typeof(Model.SAP.SAPInquiryVendorInputModel));
-                SAPInqVendorIn = TransformerFactory.TransformModel(regPayeePersonalInput, SAPInqVendorIn);
+                Model.SAP.SAPInquiryVendorInputModel SAPInqVendorIn = (Model.SAP.SAPInquiryVendorInputModel)DataModelFactory.GetModel(typeof(Model.SAP.SAPInquiryVendorInputModel));
+                //SAPInqVendorIn = TransformerFactory.TransformModel(regPayeePersonalInput, SAPInqVendorIn);
+
+                SAPInqVendorIn.TAX3 = regPayeePersonalInput.profileInfo.idCitizen??"";
+                SAPInqVendorIn.TAX4 = "";
+                SAPInqVendorIn.PREVACC = regPayeePersonalInput.sapVendorInfo.sapVendorCode ?? "";
+                SAPInqVendorIn.VCODE = regPayeePersonalInput.generalHeader.polisyClientId ?? "";
+
                 var SAPInqVendorContentOut = CallDevesServiceProxy<Model.SAP.SAPInquiryVendorOutputModel, Model.SAP.SAPInquiryVendorContentVendorInfoModel>(CommonConstant.ewiEndpointKeySAPInquiryVendor, SAPInqVendorIn);
                 #endregion Search Payee in SAP
 
@@ -77,8 +86,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     #region Create Payee in SAP
                     BaseDataModel SAPCreateVendorIn = DataModelFactory.GetModel(typeof(Model.SAP.SAPCreateVendorInputModel));
                     SAPCreateVendorIn = TransformerFactory.TransformModel(regPayeePersonalInput, SAPCreateVendorIn);
+
                     var SAPCreateVendorContentOut = CallDevesServiceProxy<Model.SAP.SAPCreateVendorOutputModel, Model.SAP.SAPCreateVendorContentOutputModel>(CommonConstant.ewiEndpointKeySAPCreateVendor, SAPCreateVendorIn);
-                    regPayeePersonalInput.sapVendorInfo.sapVendorCode = SAPCreateVendorContentOut.VCODE;
+
+                    regPayeePersonalInput.sapVendorInfo.sapVendorCode = SAPCreateVendorContentOut?.VCODE;
+                    outputPass.sapVendorCode = SAPCreateVendorContentOut?.VCODE;
+
                     #endregion Create Payee in SAP
 
                     #region Create payee in CRM
@@ -87,17 +100,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                     if (crmContentOutput.code == CONST_CODE_SUCCESS)
                     {
-                        regPayeePersonalOutput.code = CONST_CODE_SUCCESS;
-                        regPayeePersonalOutput.message = "SUCCESS";
-                        RegPayeePersonalDataOutputModel_Pass dataOutPass = new RegPayeePersonalDataOutputModel_Pass();
-                        dataOutPass.polisyClientId = regPayeePersonalInput.generalHeader.polisyClientId;
-                        dataOutPass.sapVendorCode = regPayeePersonalInput.sapVendorInfo.sapVendorCode;
-                        dataOutPass.sapVendorGroupCode = regPayeePersonalInput.sapVendorInfo.sapVendorGroupCode;
-                        dataOutPass.personalName = regPayeePersonalInput.profileInfo.personalName;
-                        dataOutPass.personalSurname = regPayeePersonalInput.profileInfo.personalSurname;
-                        //dataOutPass.corporateBranch = regPayeePersonalInput.profileInfo.corporateBranch;
-
-                        regPayeePersonalOutput.data.Add(dataOutPass);
+                        //RegPayeePersonalDataOutputModel_Pass dataOutPass = new RegPayeePersonalDataOutputModel_Pass();
+                        //dataOutPass.polisyClientId = regPayeePersonalInput.generalHeader.polisyClientId;
+                        //dataOutPass.sapVendorCode = regPayeePersonalInput.sapVendorInfo.sapVendorCode;
+                        //dataOutPass.sapVendorGroupCode = regPayeePersonalInput.sapVendorInfo.sapVendorGroupCode;
+                        //dataOutPass.personalName = regPayeePersonalInput.profileInfo.personalName;
+                        //dataOutPass.personalSurname = regPayeePersonalInput.profileInfo.personalSurname;
+                        ////dataOutPass.corporateBranch = regPayeePersonalInput.profileInfo.corporateBranch;
+                        //regPayeePersonalOutput.data.Add(dataOutPass);
                     }
                     else
                     {
@@ -109,9 +119,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 }
                 else
                 {
-                    regPayeePersonalInput.sapVendorInfo.sapVendorCode = SAPInqVendorContentOut.VCODE;
+                    //regPayeePersonalInput.sapVendorInfo.sapVendorCode = SAPInqVendorContentOut.VCODE;
+                    outputPass.sapVendorCode = SAPInqVendorContentOut?.VCODE;
+                    outputPass.sapVendorGroupCode = SAPInqVendorContentOut?.VGROUP;
                 }
-
+                regPayeePersonalOutput.data.Add(outputPass);
             }
             catch (Exception e)
             {
@@ -122,8 +134,6 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 RegPayeePersonalDataOutputModel_Fail dataOutFail = new RegPayeePersonalDataOutputModel_Fail();
                 regPayeePersonalOutput.data.Add(dataOutFail);
             }
-            regPayeePersonalOutput.transactionDateTime = DateTime.Now;
-            regPayeePersonalOutput.transactionId = TransactionId;
             return regPayeePersonalOutput;
 
         }

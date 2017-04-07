@@ -8,6 +8,8 @@ using System.Net.Http;
 using System.Web;
 using System.Web.Http;
 
+using DEVES.IntegrationAPI.WebApi.Logic;
+
 namespace DEVES.IntegrationAPI.WebApi.Controllers
 {
     public class RegPayeePersonalController : ApiController
@@ -16,7 +18,21 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         private string _logImportantMessage;
         private readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(RegPayeePersonalController));
 
+
         public object Post([FromBody]object value)
+        {
+            //var data = File.ReadAllText(HttpContext.Current.Server.MapPath("~/App_Data/TEST_Response_RegPayeeCorporate.json"));
+            //var contentOutput = JsonConvert.DeserializeObject(data);
+            //return Request.CreateResponse(contentOutput);
+
+            buzCRMRegPayeePersonal cmdCrmRegPayee = new buzCRMRegPayeePersonal();
+            //cmdCrmRegPayee.TransactionId = Request.Properties["TransactionID"].ToString();
+            var contentOutput = cmdCrmRegPayee.Execute(cmdCrmRegPayee.DeserializeJson<RegPayeePersonalInputModel>(value.ToString()));
+            return Request.CreateResponse(contentOutput);
+
+        }
+
+        private object xost([FromBody]object value)
         {
 
             _log.InfoFormat("IP ADDRESS: {0}, HttpMethod: POST", CommonHelper.GetIpAddress());

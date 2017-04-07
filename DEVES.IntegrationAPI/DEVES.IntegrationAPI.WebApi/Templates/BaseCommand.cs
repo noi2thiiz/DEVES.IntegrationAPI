@@ -380,7 +380,16 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                 cmdSQL.Parameters.Add(param2);
 
                 cnnSQL.Open();
-                return (string)cmdSQL.ExecuteScalar();
+
+                var ret = cmdSQL.ExecuteScalar();
+                if (ret != null && DBNull.Value != ret)
+                {
+                    return (string)ret;
+                }
+                else
+                {
+                    return string.Empty;
+                }
             }
         }
 
