@@ -20,7 +20,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         public object Post([FromBody]object value)
         {
             buzCRMRegClientPersonal cmdCrmRegClientPersonal = new buzCRMRegClientPersonal();
-            cmdCrmRegClientPersonal.TransactionId = Request.Properties["TransactionID"].ToString();
+            // cmdCrmRegClientPersonal.TransactionId = Request.Properties["TransactionID"].ToString();
             var content = cmdCrmRegClientPersonal.Execute(cmdCrmRegClientPersonal.DeserializeJson<RegClientPersonalInputModel>( value.ToString()) );
             return Request.CreateResponse(content);
         }

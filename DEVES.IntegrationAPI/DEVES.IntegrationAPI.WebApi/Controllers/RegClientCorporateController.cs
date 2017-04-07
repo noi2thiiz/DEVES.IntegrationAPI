@@ -18,7 +18,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         {
             // var data = File.ReadAllText(HttpContext.Current.Server.MapPath("~/App_Data/TEST_Response_RegClientCorporate.json"));
             buzCRMRegClientCorporate cmdCrmRegClientCorporate = new buzCRMRegClientCorporate();
-            cmdCrmRegClientCorporate.TransactionId = Request.Properties["TransactionID"].ToString();
+            // cmdCrmRegClientCorporate.TransactionId = Request.Properties["TransactionID"].ToString();
             var contentOutput = cmdCrmRegClientCorporate.Execute(cmdCrmRegClientCorporate.DeserializeJson<RegClientCorporateInputModel>(value.ToString()));
             return Request.CreateResponse(contentOutput);
         }

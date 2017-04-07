@@ -495,7 +495,8 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 output.code = "200";
                 output.message = "Success";
                 output.description = "AccidentPrilimSurveyorReportOutput is done!";
-                output.transactionId = Request.Properties["TransactionID"].ToString();
+                output.transactionId = "";
+                //output.transactionId = Request.Properties["TransactionID"].ToString();
                 output.transactionDateTime = DateTime.Now.ToString();
                 output.data = AccidentPrilimSurveyorReportOutput;
                 output.data.message = "Ticket ID: " + content.ticketNo + ", Claim Noti No: " + content.claimNotiNo;
