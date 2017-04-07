@@ -24,5 +24,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
         public const string sqlcmd_Get_RegClaimInfo = "sp_CustomApp_RegClaimInfo_Incident";
 
+
+        public const string CONST_SYSTEM_POLISY400 = "POLISY400";
+        public const string CONST_SYSTEM_CRM = "CRM";
+        public const string CONST_SYSTEM_CLS = "CLS";
+        public const string CONST_SYSTEM_SAP = "SAP";
+        public const string CONST_SYSTEM_MASTER_ASRH = "MASTER_ASRH";
+        public const string CONST_SYSTEM_APAR= "APAR";
     }
 }

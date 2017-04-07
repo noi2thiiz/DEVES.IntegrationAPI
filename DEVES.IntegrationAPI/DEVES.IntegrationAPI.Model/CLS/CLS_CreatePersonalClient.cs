@@ -111,6 +111,9 @@ namespace DEVES.IntegrationAPI.Model.CLS
     {
         //"cleansingId": "C2017-003324212",
         public string cleansingId { get; set; }
+
+        public string clientId { get; set; }
+
         //"salutation": "0028",
         public string salutation { get; set; }
         //"roleCode": "G",

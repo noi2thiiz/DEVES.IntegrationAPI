@@ -30,6 +30,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 	                4.4) ถ้าไม่เจอเลย ก็จบ คือ ไม่เจอ
 	                4.5) แต่ถ้าเจอแล้วไม่เจอใน SAP เลยก็จบ
             */
+
+            int iRecordsLimit = int.Parse( GetAppConfigurationSetting("SearchRecordsLimit").ToString());
+
             bool bFoundIn_APAR_or_Master = false;
             List<InquiryCRMPayeeListInputModel> listSAPSearchCondition = new List<InquiryCRMPayeeListInputModel>();
 
@@ -61,6 +64,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                             if (inqAPAROut?.aparPayeeListCollection != null && inqAPAROut.aparPayeeListCollection.Count > 0 )
                             {
+                                if (inqAPAROut.aparPayeeListCollection.Count + listSAPSearchCondition.Count + tmpListSAPSearchCondition.Count  > iRecordsLimit)
+                                {
+                                    throw new TooManySearchResultsException(CommonConstant.CONST_SYSTEM_APAR, iRecordsLimit);
+                                }
                                 //if (inqAPAROut.aparPayeeListCollection.Count > 0)
                                 //{
                                 //    crmInqPayeeOut = (CRMInquiryPayeeContentOutputModel)TransformerFactory.TransformModel(inqAPAROut, crmInqPayeeOut);
@@ -101,6 +108,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                             if (inqASRHOut?.ASRHListCollection?.Count > 0)
                             {
+                                if (inqASRHOut.ASRHListCollection.Count + listSAPSearchCondition.Count + tmpListSAPSearchCondition.Count > iRecordsLimit)
+                                {
+                                    throw new TooManySearchResultsException(CommonConstant.CONST_SYSTEM_MASTER_ASRH, iRecordsLimit);
+                                }
                                 BaseTransformer transformer = TransformerFactory.GetTransformer(typeof(InquiryMasterASRHContentASRHListCollectionDataModel), typeof(InquiryCRMPayeeListInputModel));
                                 foreach (InquiryMasterASRHContentASRHListCollectionDataModel asrh in inqASRHOut.ASRHListCollection)
                                 {
@@ -151,6 +162,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                                     //if (retCLSInqPersClient?.data != null && (retCLSInqPersClient.success | IsOutputSuccess(retCLSInqPersClient)) && retCLSInqPersClient.data.Count > 0)
                                     if ( retCLSInqPersClient?.data?.Count > 0)
                                     {
+                                        if (retCLSInqPersClient.data.Count + listSAPSearchCondition.Count + tmpListSAPSearchCondition.Count > iRecordsLimit)
+                                        {
+                                            throw new TooManySearchResultsException(CommonConstant.CONST_SYSTEM_CLS, iRecordsLimit);
+                                        }
                                         //bFound_Cleansing = true;
                                         //crmInqPayeeOut = (CRMInquiryPayeeContentOutputModel)TransformerFactory.TransformModel(retCLSInqPersClient, crmInqPayeeOut);
                                         //inqCrmPayeeListIn.polisyClientId = retCLSInqPersClient.data[0].clntnum;
@@ -194,6 +209,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                                     //if (retCLSInqCorpClient?.data != null && (retCLSInqCorpClient.success | IsOutputSuccess(retCLSInqCorpClient)) && retCLSInqCorpClient.data.Count > 0)
                                     if (retCLSInqCorpClient?.data?.Count>0)
                                     {
+                                        if (retCLSInqCorpClient.data.Count + listSAPSearchCondition.Count + tmpListSAPSearchCondition.Count > iRecordsLimit)
+                                        {
+                                            throw new TooManySearchResultsException(CommonConstant.CONST_SYSTEM_CLS, iRecordsLimit);
+                                        }
                                         BaseTransformer transformer = TransformerFactory.GetTransformer(typeof(CLSInquiryCorporateClientOutputModel), typeof(InquiryCRMPayeeListInputModel));
                                         foreach (var clsData in retCLSInqCorpClient.data)
                                         {
@@ -245,6 +264,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                                 //Found in Polisy400
                                 if (retCOMPInqClient?.clientListCollection?.Count > 0 )
                                 {
+                                    if (retCOMPInqClient.clientListCollection.Count + listSAPSearchCondition.Count + tmpListSAPSearchCondition.Count > iRecordsLimit)
+                                    {
+                                        throw new TooManySearchResultsException(CommonConstant.CONST_SYSTEM_POLISY400, iRecordsLimit);
+                                    }
+
                                     //crmInqPayeeOut = (CRMInquiryPayeeContentOutputModel)TransformerFactory.TransformModel(retCOMPInqClient, crmInqPayeeOut);
 
                                     BaseTransformer transformer = TransformerFactory.GetTransformer(typeof(COMPInquiryClientMasterContentClientListModel), typeof(InquiryCRMPayeeListInputModel));
@@ -289,6 +313,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                         if (inqSAPVendorContentOut?.VendorInfo != null)
                         {
+                            if (inqSAPVendorContentOut.VendorInfo.Count + listSAPSearchCondition.Count  > iRecordsLimit)
+                            {
+                                throw new TooManySearchResultsException(CommonConstant.CONST_SYSTEM_SAP, iRecordsLimit);
+                            }
                             CRMInquiryPayeeContentOutputModel tmpCrmInqPayeeOut = (CRMInquiryPayeeContentOutputModel)TransformerFactory.TransformModel(inqSAPVendorContentOut, crmInqPayeeOut);
                             foreach (InquiryCrmPayeeListDataModel data in tmpCrmInqPayeeOut.data)
                             {

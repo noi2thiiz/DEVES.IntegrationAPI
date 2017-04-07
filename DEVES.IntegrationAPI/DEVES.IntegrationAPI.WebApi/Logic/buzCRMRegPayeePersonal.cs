@@ -21,69 +21,97 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             RegPayeePersonalContentOutputModel regPayeePersonalOutput = new RegPayeePersonalContentOutputModel();
             regPayeePersonalOutput.data = new List<RegPayeePersonalDataOutputModel>();
+            RegPayeePersonalDataOutputModel_Pass outputPass = new RegPayeePersonalDataOutputModel_Pass();
             try
             {
-
                 RegPayeePersonalInputModel regPayeePersonalInput = (RegPayeePersonalInputModel)input;
 
-                if (string.IsNullOrEmpty(regPayeePersonalInput.generalHeader.cleansingId))
+                if (string.IsNullOrEmpty(regPayeePersonalInput?.generalHeader?.polisyClientId))
                 {
-                    BaseDataModel clsCreatePersonalIn = DataModelFactory.GetModel(typeof(CLSCreatePersonalClientInputModel));
-                    clsCreatePersonalIn = TransformerFactory.TransformModel(regPayeePersonalInput, clsCreatePersonalIn);
-                    CLSCreatePersonalClientContentOutputModel clsCreatePayeeContent = CallDevesServiceProxy<CLSCreatePersonalClientOutputModel, CLSCreatePersonalClientContentOutputModel>
-                                                                                        (CommonConstant.ewiEndpointKeyCLSCreatePersonalClient, clsCreatePersonalIn);
-                    regPayeePersonalInput = (RegPayeePersonalInputModel)TransformerFactory.TransformModel(clsCreatePayeeContent, regPayeePersonalInput);
+                    if (string.IsNullOrEmpty(regPayeePersonalInput?.generalHeader?.cleansingId))
+                    {
+                        #region Create Payee in Cleansing
+                        BaseDataModel clsCreatePersonalIn = DataModelFactory.GetModel(typeof(CLSCreatePersonalClientInputModel));
+                        clsCreatePersonalIn = TransformerFactory.TransformModel(regPayeePersonalInput, clsCreatePersonalIn);
+                        CLSCreatePersonalClientContentOutputModel clsCreatePayeeContent = CallDevesServiceProxy<CLSCreatePersonalClientOutputModel, CLSCreatePersonalClientContentOutputModel>
+                                                                                            (CommonConstant.ewiEndpointKeyCLSCreatePersonalClient, clsCreatePersonalIn);
+                        //regPayeePersonalInput = (RegPayeePersonalInputModel)TransformerFactory.TransformModel(clsCreatePayeeContent, regPayeePersonalInput);
+                        if (clsCreatePayeeContent?.code == CONST_CODE_SUCCESS)
+                        {
+                            regPayeePersonalInput.generalHeader.cleansingId = clsCreatePayeeContent.data?.cleansingId ?? "";
 
-                }
+                            outputPass.polisyClientId = clsCreatePayeeContent.data?.clientId;
+                            outputPass.personalName = clsCreatePayeeContent.data?.personalName;
+                            outputPass.personalSurname = clsCreatePayeeContent.data?.personalSurname;
+                        }
+                        #endregion Create Payee in Cleansing
+                    }
 
-                if (string.IsNullOrEmpty(regPayeePersonalInput.generalHeader.polisyClientId))
-                {
+                    #region Create Payee in Polisy400
                     BaseDataModel polCreatePersonalIn = DataModelFactory.GetModel(typeof(CLIENTCreatePersonalClientAndAdditionalInfoInputModel));
                     polCreatePersonalIn = TransformerFactory.TransformModel(regPayeePersonalInput, polCreatePersonalIn);
                     CLIENTCreatePersonalClientAndAdditionalInfoContentModel polCreatePayeeContent = CallDevesServiceProxy<CLIENTCreatePersonalClientAndAdditionalInfoOutputModel
                                                                                                         , CLIENTCreatePersonalClientAndAdditionalInfoContentModel>
                                                                                                         (CommonConstant.ewiEndpointKeyCLIENTCreatePersonalClient, polCreatePersonalIn);
-                    regPayeePersonalInput = (RegPayeePersonalInputModel)TransformerFactory.TransformModel(polCreatePayeeContent, regPayeePersonalInput);
+                    //regPayeePersonalInput = (RegPayeePersonalInputModel)TransformerFactory.TransformModel(polCreatePayeeContent, regPayeePersonalInput);
+
+                    if (polCreatePayeeContent != null)
+                    {
+                        regPayeePersonalInput.generalHeader.polisyClientId = polCreatePayeeContent.clientID; 
+
+                        outputPass.polisyClientId = polCreatePayeeContent.clientID;
+                    }
+                             
+                    #endregion Create Payee in Polisy400
                 }
 
+                #region Search Payee in SAP
                 BaseDataModel SAPInqVendorIn = DataModelFactory.GetModel(typeof(Model.SAP.SAPInquiryVendorInputModel));
                 SAPInqVendorIn = TransformerFactory.TransformModel(regPayeePersonalInput, SAPInqVendorIn);
                 var SAPInqVendorContentOut = CallDevesServiceProxy<Model.SAP.SAPInquiryVendorOutputModel, Model.SAP.SAPInquiryVendorContentVendorInfoModel>(CommonConstant.ewiEndpointKeySAPInquiryVendor, SAPInqVendorIn);
-                if (SAPInqVendorContentOut != null && !string.IsNullOrEmpty(SAPInqVendorContentOut.VCODE))
+                #endregion Search Payee in SAP
+
+
+                if (string.IsNullOrEmpty(SAPInqVendorContentOut?.VCODE))
                 {
-                    regPayeePersonalInput.sapVendorInfo.sapVendorCode = SAPInqVendorContentOut.VCODE;
-                }
-                else
-                {
+                    #region Create Payee in SAP
                     BaseDataModel SAPCreateVendorIn = DataModelFactory.GetModel(typeof(Model.SAP.SAPCreateVendorInputModel));
                     SAPCreateVendorIn = TransformerFactory.TransformModel(regPayeePersonalInput, SAPCreateVendorIn);
                     var SAPCreateVendorContentOut = CallDevesServiceProxy<Model.SAP.SAPCreateVendorOutputModel, Model.SAP.SAPCreateVendorContentOutputModel>(CommonConstant.ewiEndpointKeySAPCreateVendor, SAPCreateVendorIn);
                     regPayeePersonalInput.sapVendorInfo.sapVendorCode = SAPCreateVendorContentOut.VCODE;
-                }
+                    #endregion Create Payee in SAP
 
-                buzCreateCrmClientPersonal cmdCreateCrmPayee = new buzCreateCrmClientPersonal();
-                CreateCrmPersonInfoOutputModel crmContentOutput = (CreateCrmPersonInfoOutputModel)cmdCreateCrmPayee.Execute(regPayeePersonalInput);
 
-                if (crmContentOutput.code == CONST_CODE_SUCCESS)
-                {
-                    regPayeePersonalOutput.code = CONST_CODE_SUCCESS;
-                    regPayeePersonalOutput.message = "SUCCESS";
-                    RegPayeePersonalDataOutputModel_Pass dataOutPass = new RegPayeePersonalDataOutputModel_Pass();
-                    dataOutPass.polisyClientId = regPayeePersonalInput.generalHeader.polisyClientId;
-                    dataOutPass.sapVendorCode = regPayeePersonalInput.sapVendorInfo.sapVendorCode;
-                    dataOutPass.sapVendorGroupCode = regPayeePersonalInput.sapVendorInfo.sapVendorGroupCode;
-                    dataOutPass.personalName = regPayeePersonalInput.profileInfo.personalName;
-                    dataOutPass.personalSurname = regPayeePersonalInput.profileInfo.personalSurname;
-                    //dataOutPass.corporateBranch = regPayeePersonalInput.profileInfo.corporateBranch;
 
-                    regPayeePersonalOutput.data.Add(dataOutPass);
+                    buzCreateCrmClientPersonal cmdCreateCrmPayee = new buzCreateCrmClientPersonal();
+                    CreateCrmPersonInfoOutputModel crmContentOutput = (CreateCrmPersonInfoOutputModel)cmdCreateCrmPayee.Execute(regPayeePersonalInput);
+
+                    if (crmContentOutput.code == CONST_CODE_SUCCESS)
+                    {
+                        regPayeePersonalOutput.code = CONST_CODE_SUCCESS;
+                        regPayeePersonalOutput.message = "SUCCESS";
+                        RegPayeePersonalDataOutputModel_Pass dataOutPass = new RegPayeePersonalDataOutputModel_Pass();
+                        dataOutPass.polisyClientId = regPayeePersonalInput.generalHeader.polisyClientId;
+                        dataOutPass.sapVendorCode = regPayeePersonalInput.sapVendorInfo.sapVendorCode;
+                        dataOutPass.sapVendorGroupCode = regPayeePersonalInput.sapVendorInfo.sapVendorGroupCode;
+                        dataOutPass.personalName = regPayeePersonalInput.profileInfo.personalName;
+                        dataOutPass.personalSurname = regPayeePersonalInput.profileInfo.personalSurname;
+                        //dataOutPass.corporateBranch = regPayeePersonalInput.profileInfo.corporateBranch;
+
+                        regPayeePersonalOutput.data.Add(dataOutPass);
+                    }
+                    else
+                    {
+                        regPayeePersonalOutput.code = CONST_CODE_FAILED;
+                        regPayeePersonalOutput.message = crmContentOutput.message;
+                        regPayeePersonalOutput.description = crmContentOutput.description;
+                    }
                 }
                 else
                 {
-                    regPayeePersonalOutput.code = CONST_CODE_FAILED;
-                    regPayeePersonalOutput.message = crmContentOutput.message;
-                    regPayeePersonalOutput.description = crmContentOutput.description;
+                    regPayeePersonalInput.sapVendorInfo.sapVendorCode = SAPInqVendorContentOut.VCODE;
                 }
+
             }
             catch (Exception e)
             {
