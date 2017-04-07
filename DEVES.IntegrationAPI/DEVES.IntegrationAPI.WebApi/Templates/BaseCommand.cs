@@ -226,7 +226,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             {
 
                 SqlCommand cmdSQL = new SqlCommand(storedProcName, cnnSQL);
-                cmdSQL.CommandTimeout = 600;
+                cmdSQL.CommandTimeout = 60;
                 cmdSQL.CommandType = CommandType.StoredProcedure ;
                 foreach (CommandParameter p in listParams)
                 {

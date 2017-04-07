@@ -301,9 +301,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                 if (FilterAndValidateSAPSearchConditions(ref listSAPSearchCondition))
                 {
-
+                    i = 0;
                     #region Search In SAP: SAP_InquiryVendor()
-                    while ( listSAPSearchCondition.Count>0 && crmInqPayeeOut.data.Count <=20)
+                    while ( listSAPSearchCondition.Count > 0 && crmInqPayeeOut.data.Count <=20)
                     {
                         InquiryCRMPayeeListInputModel searchCond = listSAPSearchCondition[0];
                         SAPInquiryVendorInputModel inqSAPVendorIn = (SAPInquiryVendorInputModel)DataModelFactory.GetModel(typeof(SAPInquiryVendorInputModel));
@@ -330,6 +330,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                             }
                             crmInqPayeeOut.data.AddRange(tmpCrmInqPayeeOut.data);
                         }
+                        listSAPSearchCondition.RemoveAt(0);
                     }
 
 

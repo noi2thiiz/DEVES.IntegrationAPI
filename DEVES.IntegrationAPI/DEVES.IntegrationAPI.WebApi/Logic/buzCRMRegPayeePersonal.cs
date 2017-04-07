@@ -81,8 +81,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     regPayeePersonalInput.sapVendorInfo.sapVendorCode = SAPCreateVendorContentOut.VCODE;
                     #endregion Create Payee in SAP
 
-
-
+                    #region Create payee in CRM
                     buzCreateCrmClientPersonal cmdCreateCrmPayee = new buzCreateCrmClientPersonal();
                     CreateCrmPersonInfoOutputModel crmContentOutput = (CreateCrmPersonInfoOutputModel)cmdCreateCrmPayee.Execute(regPayeePersonalInput);
 
@@ -106,6 +105,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         regPayeePersonalOutput.message = crmContentOutput.message;
                         regPayeePersonalOutput.description = crmContentOutput.description;
                     }
+                    #endregion Create payee in CRM
                 }
                 else
                 {
