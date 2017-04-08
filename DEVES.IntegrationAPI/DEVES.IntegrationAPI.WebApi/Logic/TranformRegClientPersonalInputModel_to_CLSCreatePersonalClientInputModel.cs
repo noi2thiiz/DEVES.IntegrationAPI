@@ -24,9 +24,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             {
                 trgt.roleCode = src.generalHeader.roleCode;
                 //clientId String	8	O
-                trgt.clientId = src.generalHeader.crmClientId;
+                trgt.clientId = src.generalHeader.polisyClientId;
                 //crmPersonId String	20	O
-                trgt.crmPersonId = null;
+                trgt.crmPersonId = src.generalHeader.crmClientId;
                 
             }
 

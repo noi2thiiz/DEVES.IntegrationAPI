@@ -14,6 +14,7 @@ namespace DEVES.IntegrationAPI.Model.CLS
         //crmPersonId String	20	O
         public string crmPersonId { get; set; }
 
+        public string isPayee { get; set; }
         //salutation  String	8	M คำนำหน้าชื่อ
         public string salutation { get; set; }
         //personalName String	60	M ชื่อ

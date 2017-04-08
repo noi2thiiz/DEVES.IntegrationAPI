@@ -64,8 +64,18 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             {
                 trgt.WHTCODE = src.sapVendorInfo.withHoldingTaxInfo.whtTaxCode;
                 trgt.RECPTYPE = src.sapVendorInfo.withHoldingTaxInfo.receiptType;
+
+                trgt.WHTCTRY = "TH";                
             }
-      
+
+            trgt.COMPANY = "";
+            trgt.SEARCH = "";
+            trgt.TAX1 = "";
+            trgt.TAX2 = "";
+            trgt.TAX4 = "";
+            trgt.CTRY = "TH";
+            trgt.BANKACC = "";
+
             return trgt;
         }
     }

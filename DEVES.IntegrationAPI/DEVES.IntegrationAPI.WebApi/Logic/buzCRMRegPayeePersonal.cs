@@ -77,15 +77,17 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 SAPInqVendorIn.PREVACC = regPayeePersonalInput.sapVendorInfo.sapVendorCode ?? "";
                 SAPInqVendorIn.VCODE = regPayeePersonalInput.generalHeader.polisyClientId ?? "";
 
-                var SAPInqVendorContentOut = CallDevesServiceProxy<Model.SAP.SAPInquiryVendorOutputModel, Model.SAP.SAPInquiryVendorContentVendorInfoModel>(CommonConstant.ewiEndpointKeySAPInquiryVendor, SAPInqVendorIn);
+                var SAPInqVendorContentOut = CallDevesServiceProxy<Model.SAP.SAPInquiryVendorOutputModel, Model.SAP.EWIResSAPInquiryVendorContentModel>(CommonConstant.ewiEndpointKeySAPInquiryVendor, SAPInqVendorIn);
                 #endregion Search Payee in SAP
 
+                var sapInfo = SAPInqVendorContentOut?.VendorInfo?.FirstOrDefault();
 
-                if (string.IsNullOrEmpty(SAPInqVendorContentOut?.VCODE))
+                if (string.IsNullOrEmpty(sapInfo?.VCODE))
                 {
                     #region Create Payee in SAP
-                    BaseDataModel SAPCreateVendorIn = DataModelFactory.GetModel(typeof(Model.SAP.SAPCreateVendorInputModel));
-                    SAPCreateVendorIn = TransformerFactory.TransformModel(regPayeePersonalInput, SAPCreateVendorIn);
+                    //BaseDataModel SAPCreateVendorIn = DataModelFactory.GetModel(typeof(Model.SAP.SAPCreateVendorInputModel));
+                    Model.SAP.SAPCreateVendorInputModel SAPCreateVendorIn = new Model.SAP.SAPCreateVendorInputModel();
+                    SAPCreateVendorIn = (Model.SAP.SAPCreateVendorInputModel)TransformerFactory.TransformModel(regPayeePersonalInput, SAPCreateVendorIn);
 
                     var SAPCreateVendorContentOut = CallDevesServiceProxy<Model.SAP.SAPCreateVendorOutputModel, Model.SAP.SAPCreateVendorContentOutputModel>(CommonConstant.ewiEndpointKeySAPCreateVendor, SAPCreateVendorIn);
 
@@ -95,7 +97,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     #endregion Create Payee in SAP
 
                     #region Create payee in CRM
-                    buzCreateCrmClientPersonal cmdCreateCrmPayee = new buzCreateCrmClientPersonal();
+                    buzCreateCrmPayeePersonal cmdCreateCrmPayee = new buzCreateCrmPayeePersonal();
                     CreateCrmPersonInfoOutputModel crmContentOutput = (CreateCrmPersonInfoOutputModel)cmdCreateCrmPayee.Execute(regPayeePersonalInput);
 
                     if (crmContentOutput.code == CONST_CODE_SUCCESS)
@@ -120,8 +122,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 else
                 {
                     //regPayeePersonalInput.sapVendorInfo.sapVendorCode = SAPInqVendorContentOut.VCODE;
-                    outputPass.sapVendorCode = SAPInqVendorContentOut?.VCODE;
-                    outputPass.sapVendorGroupCode = SAPInqVendorContentOut?.VGROUP;
+                    outputPass.sapVendorCode = sapInfo?.VCODE;
+                    outputPass.sapVendorGroupCode = sapInfo?.VGROUP;
                 }
                 regPayeePersonalOutput.data.Add(outputPass);
             }
