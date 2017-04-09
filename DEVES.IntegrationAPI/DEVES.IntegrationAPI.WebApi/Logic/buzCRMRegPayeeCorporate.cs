@@ -23,6 +23,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             regPayeeCorporateOutput.data = new List<RegPayeeCorporateDataOutputModel>();
             regPayeeCorporateOutput.code = CONST_CODE_SUCCESS;
             regPayeeCorporateOutput.message = "SUCCESS";
+            regPayeeCorporateOutput.description = "";
             regPayeeCorporateOutput.transactionDateTime = DateTime.Now;
             regPayeeCorporateOutput.transactionId = TransactionId;
             try
@@ -109,7 +110,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         //dataOutPass.sapVendorGroupCode = regPayeeCorporateInput.sapVendorInfo.sapVendorGroupCode;
                         //dataOutPass.personalName = regPayeeCorporateInput.profileInfo.personalName;
                         //dataOutPass.personalSurname = regPayeeCorporateInput.profileInfo.personalSurname;
-                        ////dataOutPass.corporateBranch = regPayeeCorporateInput.profileInfo.corporateBranch;
+                        outputPass.corporateBranch = regPayeeCorporateInput.profileHeader.corporateBranch;
+                        outputPass.sapVendorGroupCode = regPayeeCorporateInput.sapVendorInfo.sapVendorGroupCode;
                         //regPayeeCorporateOutput.data.Add(dataOutPass);
                     }
                     else
