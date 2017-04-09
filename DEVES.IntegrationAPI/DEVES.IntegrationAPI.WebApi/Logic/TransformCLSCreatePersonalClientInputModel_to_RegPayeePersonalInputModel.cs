@@ -43,7 +43,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             trgt.generalHeader.roleCode = src.roleCode;
             trgt.generalHeader.polisyClientId = src.clientId;
-            trgt.generalHeader.crmClientId = src.crmPersonId;
+            trgt.generalHeader.crmPersonId = src.crmPersonId;
 
             //====profileInfo====
 

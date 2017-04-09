@@ -5,9 +5,16 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Newtonsoft.Json;
-
 namespace DEVES.IntegrationAPI.Model.RegPayeePersonal
 {
+    //public class RegPersonalInputModel : BaseDataModel
+    //{
+    //    public GeneralHeaderModel generalHeader { get; set; }
+    //    public ProfileInfoModel profileInfo { get; set; }
+    //    public ContactInfoModel contactInfo { get; set; }
+    //    public AddressInfoModel addressInfo { get; set; }
+    //}
+
     public class RegPayeePersonalInputModel : BaseDataModel
     {
         public GeneralHeaderModel generalHeader { get; set; }
@@ -22,7 +29,9 @@ namespace DEVES.IntegrationAPI.Model.RegPayeePersonal
         public string roleCode { get; set; }
         public string cleansingId { get; set; }
         public string polisyClientId { get; set; }
-        public string crmClientId { get; set; }
+        public string crmPersonId { get; set; }
+
+        public string clientAdditionalExistFlag { get; set; }
     }
 
     public class ProfileInfoModel : BaseDataModel

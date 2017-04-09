@@ -226,7 +226,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             {
 
                 SqlCommand cmdSQL = new SqlCommand(storedProcName, cnnSQL);
-                cmdSQL.CommandTimeout = 600;
+                cmdSQL.CommandTimeout = 60;
                 cmdSQL.CommandType = CommandType.StoredProcedure ;
                 foreach (CommandParameter p in listParams)
                 {
@@ -380,7 +380,16 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                 cmdSQL.Parameters.Add(param2);
 
                 cnnSQL.Open();
-                return (string)cmdSQL.ExecuteScalar();
+
+                var ret = cmdSQL.ExecuteScalar();
+                if (ret != null && DBNull.Value != ret)
+                {
+                    return (string)ret;
+                }
+                else
+                {
+                    return string.Empty;
+                }
             }
         }
 

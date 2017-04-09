@@ -29,8 +29,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                 trgt.roleCode = src.generalHeader.roleCode;
                 trgt.clientId = src.generalHeader.polisyClientId;
-                trgt.crmPersonId = src.generalHeader.crmClientId;
-
+                trgt.crmPersonId = src.generalHeader.crmPersonId;
             }
 
             if (src.profileInfo != null)
@@ -88,7 +87,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 trgt.longtitude = src.addressInfo.longtitude;
 
             }
-            
+
+            trgt.isPayee = "Y";
             return trgt;
 
         }
