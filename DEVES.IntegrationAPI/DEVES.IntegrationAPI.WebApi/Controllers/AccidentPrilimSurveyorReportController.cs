@@ -271,8 +271,9 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                     retrievedIncident.pfc_num_of_tow_truck = new OptionSetValue(Int32.Parse(convertOptionSet(Incident.EntityLogicalName, "", content.eventDetailInfo.numOfTowTruck.ToString())));
                     retrievedIncident.pfc_num_of_accident_injuries = new OptionSetValue(Int32.Parse(convertOptionSet(Incident.EntityLogicalName, "", content.eventDetailInfo.numOfAccidentInjury.ToString())));
                     retrievedIncident.pfc_num_of_death = new OptionSetValue(Int32.Parse(convertOptionSet(Incident.EntityLogicalName, "", content.eventDetailInfo.numOfDeath.ToString())));
-                    retrievedIncident.pfc_excess_fee = content.eventDetailInfo.excessFee;
-                    retrievedIncident.pfc_deductable_fee = content.eventDetailInfo.deductibleFee;
+                    retrievedIncident.pfc_excess_fee = (decimal)content.eventDetailInfo.excessFee;
+                    retrievedIncident.pfc_deductable_fee = (decimal)content.eventDetailInfo.deductibleFee;
+                    // retrievedIncident.pfc_deductable_fee = content.eventDetailInfo.fee;
                     retrievedIncident.pfc_accident_prilim_surveyor_report_date = Convert.ToDateTime(content.reportAccidentResultDate);
                     retrievedIncident.pfc_isurvey_status = new OptionSetValue(Int32.Parse("100000070"));
                     retrievedIncident.pfc_isurvey_status_on = DateTime.Now;

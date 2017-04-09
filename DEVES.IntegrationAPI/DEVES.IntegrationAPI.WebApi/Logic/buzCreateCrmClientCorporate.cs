@@ -128,9 +128,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                             ReturnResponses = true
                         };
 
-                        CreateRequest createClaimReq = new CreateRequest() { Target = contact };
-                        tranReq.Requests.Add(createClaimReq);
-                        createClaimReq = new CreateRequest() { Target = account };
+                        CreateRequest createClaimReq = new CreateRequest() { Target = account };
                         tranReq.Requests.Add(createClaimReq);
                         ExecuteTransactionResponse tranRes = (ExecuteTransactionResponse)crmSvc.Execute(tranReq);
 
