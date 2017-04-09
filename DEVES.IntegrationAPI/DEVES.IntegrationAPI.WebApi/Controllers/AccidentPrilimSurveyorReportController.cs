@@ -244,8 +244,8 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 Guid _motorId = new Guid();
 
                 Incident retrievedIncident = (Incident)_serviceProxy.Retrieve(Incident.EntityLogicalName, _accountId, new Microsoft.Xrm.Sdk.Query.ColumnSet(true));
-                /*
-                if(!retrievedIncident.pfc_isurvey_status.ToString().Equals("100000040"))
+
+                if (!retrievedIncident.pfc_isurvey_status.Value.ToString().Equals("100000040"))
                 {
                     output.code = "500";
                     output.message = "False";
@@ -258,7 +258,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
 
                     return output;
                 }
-                */
+                
                 // Incident
                 try
                 {

@@ -62,18 +62,16 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         // account.AccountNumber = contentModel.generalHeader.crmClientId;
 
                         // profileHeader
-                        //contentModel.profileHeader.corporateName1;
-                        //contentModel.profileHeader.corporateName2;
                         account.Name = contentModel.profileHeader.corporateName1 + " " + contentModel.profileHeader.corporateName2;
-                        // contentModel.profileHeader.contactPerson; 
+                        account.pfc_contact_personal = contentModel.profileHeader.contactPerson; 
                         account.pfc_register_no = contentModel.profileHeader.idRegCorp; // contentModel.profileHeader.idRegCorp;
                         account.pfc_tax_no = contentModel.profileHeader.idTax; // contentModel.profileHeader.idTax;
-                        // contentModel.profileHeader.dateInCorporate;
+                        account.pfc_date_of_birth = contentModel.profileHeader.dateInCorporate;
                         account.pfc_tac_branch = contentModel.profileHeader.corporateBranch; // contentModel.profileHeader.corporateBranch;
-                        // contentModel.profileHeader.econActivity;
-                        // contentModel.profileHeader.countryOrigin;
-                        // contentModel.profileHeader.language; // account, contact
-                        // contentModel.profileHeader.riskLevel; // contact
+                        account.pfc_economic_type = new OptionSetValue(Int32.Parse(OptionsetConvertor(contentModel.profileHeader.econActivity)));
+                        account.pfc_polisy_nationality_code = contentModel.profileHeader.countryOrigin;
+                        account.pfc_language = new OptionSetValue(Int32.Parse(OptionsetConvertor(contentModel.profileHeader.language))); // account, contact
+                        account.pfc_AMLO_flag = new OptionSetValue(Int32.Parse(OptionsetConvertor(contentModel.profileHeader.riskLevel))); // contact
                         bool isVIP = false;
                         if (contentModel.profileHeader.vipStatus.Equals("Y"))
                         {
@@ -182,6 +180,20 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
         }
 
+        public string OptionsetConvertor(string val)
+        {
+            string opVal = "";
 
+            if (val.Length == 1)
+            {
+                opVal = "10000000" + val;
+            }
+            else
+            {
+                opVal = "1000000" + val;
+            }
+
+            return opVal;
+        }
     }
 }

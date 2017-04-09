@@ -53,7 +53,6 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                     Contact contact = new Contact();
                     Account account = new Account();
-                    // Address address = new Address();
                     crmSvc.EnableProxyTypes();
 
                     //Create Client Additional Records
@@ -61,27 +60,25 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     {
                         
                         // generalHeader
-                        // contentModel.generalHeader.roleCode; 
                         contact.pfc_cleansing_cusormer_profile_code = contentModel.generalHeader.cleansingId;
                         contact.pfc_polisy_client_id = contentModel.generalHeader.polisyClientId;
                         contact.pfc_crm_person_id = contentModel.generalHeader.crmClientId;
-                        // account.AccountNumber = contentModel.generalHeader.crmClientId;
 
                         // profileInfo
                         contact.Salutation = contentModel.profileInfo.salutation;
                         contact.FirstName = contentModel.profileInfo.personalName;
                         contact.LastName = contentModel.profileInfo.personalSurname;
-                        // contentModel.profileInfo.sex;
+                        contact.GenderCode = new OptionSetValue(Int32.Parse(contentModel.profileInfo.sex));
                         contact.pfc_citizen_id = contentModel.profileInfo.idCitizen;
                         contact.pfc_passport_id = contentModel.profileInfo.idPassport;
                         contact.pfc_alien_id = contentModel.profileInfo.idAlien;
                         contact.pfc_driver_license = contentModel.profileInfo.idDriving;
                         contact.pfc_date_of_birth = Convert.ToDateTime(contentModel.profileInfo.birthDate);
                         contact.pfc_polisy_nationality_code = contentModel.profileInfo.nationality;
-                        // contact.pfc_language = contentModel.profileInfo.language; // optionset
-                        // contact.FamilyStatusCode = contentModel.profileInfo.married; // optionset
-                        // contentModel.profileInfo.occupation;
-                        // contact.pfc_client_legal_status = contentModel.profileInfo.riskLevel; // optionset
+                        contact.pfc_language = new OptionSetValue(Int32.Parse(OptionsetConvertor(contentModel.profileInfo.language))); // optionset
+                        contact.FamilyStatusCode = new OptionSetValue(Int32.Parse(OptionsetConvertor(contentModel.profileInfo.married))); // optionset
+                        // contact.pfc_occupation = contentModel.profileInfo.occupation;
+                        contact.pfc_client_legal_status = new OptionSetValue(Int32.Parse(OptionsetConvertor(contentModel.profileInfo.riskLevel))); // optionset
                         bool isVIP = false;
                         if(contentModel.profileInfo.vipStatus.Equals("Y"))
                         {
@@ -91,31 +88,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                                                           // contentModel.profileInfo.remark;
 
                         // contactInfo 
-                        contact.Telephone1 = contentModel.contactInfo.telephone1 + '#' + contentModel.contactInfo.telephone1Ext;
-                        contact.Telephone2 = contentModel.contactInfo.telephone2 + '#' + contentModel.contactInfo.telephone2Ext;
-                        contact.Telephone3 = contentModel.contactInfo.telephone3 + '#' + contentModel.contactInfo.telephone3Ext;
+                        contact.Telephone1 = TelephoneConvertor(contentModel.contactInfo.telephone1, contentModel.contactInfo.telephone1Ext);
+                        contact.Telephone2 = TelephoneConvertor(contentModel.contactInfo.telephone2, contentModel.contactInfo.telephone2Ext);
+                        contact.Telephone3 = TelephoneConvertor(contentModel.contactInfo.telephone3, contentModel.contactInfo.telephone3Ext);
                         contact.pfc_moblie_phone1 = contentModel.contactInfo.mobilePhone;
                         contact.EMailAddress1 = contentModel.contactInfo.emailAddress;
                         contact.pfc_line_id = contentModel.contactInfo.lineID;
                         contact.pfc_facebook = contentModel.contactInfo.facebook;
 
-
-                        // addressInfo
-                        /*
-                        contentModel.addressInfo.address1;
-                        contentModel.addressInfo.address2;
-                        contentModel.addressInfo.address3;
-                        contentModel.addressInfo.subDistrictCode;
-                        contentModel.addressInfo.districtCode;
-                        contentModel.addressInfo.provinceCode;
-                        contentModel.addressInfo.postalCode;
-                        contentModel.addressInfo.country;
-                        contentModel.addressInfo.addressType;
-                        contentModel.addressInfo.latitude;
-                        contentModel.addressInfo.longtitude;
-
-                        
-                    */
                         ExecuteTransactionRequest tranReq = new ExecuteTransactionRequest()
                         {
                             Requests = new OrganizationRequestCollection(),
@@ -174,6 +154,37 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             
         }
 
+        public string TelephoneConvertor(string tel, string ext)
+        {
+            string telNum = "";
+
+            if(ext == null || ext.Equals(""))
+            {
+                telNum = tel;
+            }
+            else
+            {
+                telNum = tel + " # " + ext;
+            }
+
+            return telNum;
+        }
+
+        public string OptionsetConvertor(string val)
+        {
+            string opVal = "";
+
+            if (val.Length == 1)
+            {
+                opVal = "10000000" + val;
+            }
+            else
+            {
+                opVal = "1000000" + val;
+            }
+
+            return opVal;
+        }
 
     }
 }
