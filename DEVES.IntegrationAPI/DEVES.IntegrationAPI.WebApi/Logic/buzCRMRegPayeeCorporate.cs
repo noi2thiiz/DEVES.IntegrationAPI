@@ -99,7 +99,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                     #region Create payee in CRM
                     buzCreateCrmPayeeCorporate cmdCreateCrmPayee = new buzCreateCrmPayeeCorporate();
-                    CreateCrmPersonInfoOutputModel crmContentOutput = (CreateCrmPersonInfoOutputModel)cmdCreateCrmPayee.Execute(regPayeeCorporateInput);
+                    CreateCrmCorporateInfoOutputModel crmContentOutput = (CreateCrmCorporateInfoOutputModel)cmdCreateCrmPayee.Execute(regPayeeCorporateInput);
 
                     if (crmContentOutput.code == CONST_CODE_SUCCESS)
                     {
