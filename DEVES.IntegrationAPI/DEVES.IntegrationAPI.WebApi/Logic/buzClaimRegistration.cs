@@ -42,6 +42,33 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             LocusClaimRegistrationDataOutputModel locusClaimRegOutput = new LocusClaimRegistrationDataOutputModel(ret.data);
         
             
+            if(locusClaimRegOutput.claimNo == null || locusClaimRegOutput.claimId == null)
+            {
+                //+ Response
+                ClaimRegistrationContentOutputModel contentOutputFail = new ClaimRegistrationContentOutputModel();
+                contentOutputFail.data = new List<ClaimRegistrationOutputModel>();
+                ClaimRegistrationOutputModel outputFail = new ClaimRegistrationOutputModel();
+                outputFail.claimID = locusClaimRegOutput.claimId;
+                outputFail.claimNo = locusClaimRegOutput.claimNo;
+                outputFail.errorMessage = "";
+
+                if (locusClaimRegOutput.claimNo == null || locusClaimRegOutput.claimId == null)
+                {
+                    outputFail.errorMessage = "claimNo and claimId are null";
+                }
+                else if (locusClaimRegOutput.claimNo == null)
+                {
+                    outputFail.errorMessage = "claimNo is null";
+                } 
+                else if (locusClaimRegOutput.claimId == null)
+                {
+                    outputFail.errorMessage = "claimId is null";
+                }
+                
+                contentOutputFail.data.Add(outputFail);
+                return contentOutputFail;
+            }
+
             //+ Update CRM
             using (OrganizationServiceProxy crmSvc = GetCrmServiceProxy())
             {

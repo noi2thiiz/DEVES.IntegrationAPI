@@ -170,11 +170,13 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             // iSurveyOutput.eventid = ewiRes.content.ToString();
             if(ewiRes.content.ToString().Equals("{}"))
             {
-                iSurveyOutput.eventid = ewiRes.responseMessage.ToString();
+                iSurveyOutput.eventid = ewiRes.content.ToString();
+                iSurveyOutput.errorMessage = ewiRes.responseMessage.ToString();
             }
             else
             {
                 iSurveyOutput.eventid = ewiRes.content.ToString();
+                iSurveyOutput.errorMessage = null;
             }
             return iSurveyOutput;
             /*
@@ -241,6 +243,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 iSurveyOutput = RequestSurveyorOniSurvey(content.incidentId, content.currentUserId);
                 // ISurvey_RequestSurveyorContentDataOutputModel regOutputData = new ISurvey_RequestSurveyorContentDataOutputModel(iSurveyOutput.eventid);
                 output.eventID = iSurveyOutput.eventid;
+                output.errorMessage = iSurveyOutput.errorMessage;
                 //locusClaimRegOutput = RequestSurveyorOniSurvey("CAS201702-00003", "G001");
                 //output.EventID = "EventID";
 
