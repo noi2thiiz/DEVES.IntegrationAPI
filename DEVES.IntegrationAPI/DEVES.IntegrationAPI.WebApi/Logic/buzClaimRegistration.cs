@@ -119,6 +119,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             ClaimRegistrationOutputModel output = new ClaimRegistrationOutputModel();
             output.claimID = locusClaimRegOutput.claimId;
             output.claimNo = locusClaimRegOutput.claimNo;
+            output.errorMessage = null;
             contentOutput.data.Add(output);
             return contentOutput;
         }
