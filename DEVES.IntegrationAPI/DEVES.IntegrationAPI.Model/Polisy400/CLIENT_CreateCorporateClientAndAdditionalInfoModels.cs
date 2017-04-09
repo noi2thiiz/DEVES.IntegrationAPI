@@ -30,7 +30,7 @@ namespace DEVES.IntegrationAPI.Model.Polisy400
         public string address3 { get; set; }
         public string specialIndicator { get; set; }
         //"add  public string xxx { get; set; }ress3": "แขวงกรุงทัย",
-        public string ress3 { get; set; }
+        //public string ress3 { get; set; }
         //"capital": "กรุงเทพมหานคร",
         public string capital { get; set; }
         //"hospitalFlag": "",
@@ -78,7 +78,7 @@ namespace DEVES.IntegrationAPI.Model.Polisy400
         //"corporateName1": "Case 1 Corporate JSON",
         public string corporateName1 { get; set; }
         //"dateInCorporate": "20160303",
-        public string dateInCorporate { get; set; }
+        public DateTime dateInCorporate { get; set; }
         //"mailing": "isaidyouknowme@hotmail.com",
         public string mailing { get; set; }
         //"riskLevel": "R1",

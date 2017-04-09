@@ -32,7 +32,7 @@ namespace DEVES.IntegrationAPI.Model.CLS
         //"idRegCorp": "82368262",
         public string idRegCorp { get; set; }
         //"taxNo": "001122334456",
-        public string taxNo { get; set; }
+        //public string taxNo { get; set; }
         //"dateInCorporate": "2017-06-02 00:00:00",
         public DateTime dateInCorporate { get; set; }
 
@@ -119,6 +119,9 @@ namespace DEVES.IntegrationAPI.Model.CLS
     {
         //"cleansingId": "C2017-003324220",
         public string cleansingId { set; get; }
+
+        public string clientId { set; get; }
+
         //"roleCode": "G",
         public string roleCode { set; get; }
         //"corporateName1": "Prime Factor",
@@ -148,7 +151,7 @@ namespace DEVES.IntegrationAPI.Model.CLS
         // "idDriving": "",
         public string idDriving { set; get; }
         // "birthDate": "",
-        public DateTime birthDate { set; get; }
+        //public DateTime birthDate { set; get; }
         // "natioanality": "",
         public string natioanality { set; get; }
         // "language": "E",

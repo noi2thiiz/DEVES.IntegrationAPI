@@ -6,7 +6,7 @@ using DEVES.IntegrationAPI.Model;
 using DEVES.IntegrationAPI.WebApi.Templates;
 using System.Globalization;
 using DEVES.IntegrationAPI.Model.RegPayeeCorporate;
-using DEVES.IntegrationAPI.Model.Polisy400;
+using DEVES.IntegrationAPI.Model.CLS;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
@@ -15,19 +15,19 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         public override BaseDataModel TransformModel(BaseDataModel input, BaseDataModel output)
         {
             RegPayeeCorporateInputModel src = (RegPayeeCorporateInputModel)input;
-            CLIENTCreateCorporateClientAndAdditionalInfoInputModel trgt = (CLIENTCreateCorporateClientAndAdditionalInfoInputModel)output;
+            CLSCreateCorporateClientInputModel trgt = (CLSCreateCorporateClientInputModel)output;
 
             if (src == null)
             {
                 return trgt;
             }
-            /*
 
             if (src.generalHeader != null)
             {
                 trgt.roleCode = src.generalHeader.roleCode;
-                trgt.clientId = src.generalHeader.policyClientId;
+                trgt.clientId = src.generalHeader.polisyClientId;
                 trgt.crmPersonId = src.generalHeader.crmClientId;
+                trgt.cleansingId = src.generalHeader.cleansingId;
             }
             if (src.profileHeader != null)
             {
@@ -36,14 +36,16 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 trgt.contactPerson = src.profileHeader.contactPerson;
                 trgt.idRegCorp = src.profileHeader.idRegCorp;
                 trgt.idTax = src.profileHeader.idTax;
-                {
-                    CultureInfo usaCulture = new CultureInfo("en-US");
-                    var dateString = src.profileHeader.dateInCorporate.ToString("yyyyMMdd", usaCulture);
-                    trgt.dateInCorporate = dateString;
-                }
+                //{
+                //    CultureInfo usaCulture = new CultureInfo("en-US");
+                //    var dateString = src.profileHeader.dateInCorporate.ToString("yyyyMMdd", usaCulture);
+                //    trgt.dateInCorporate = dateString;
+                //}
+                trgt.dateInCorporate = src.profileHeader.dateInCorporate;
                 trgt.corporateStaffNo = src.profileHeader.corporateBranch;
+                trgt.corporateBranch = src.profileHeader.corporateBranch;
                 trgt.econActivity = src.profileHeader.econActivity;
-                trgt.langauge = src.profileHeader.language;
+                trgt.language = src.profileHeader.language;
                 trgt.vipStatus = src.profileHeader.vipStatus;
 
             }
@@ -68,14 +70,18 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 trgt.address3 = src.addressHeader.address3;
                 trgt.subDistrictCode = src.addressHeader.subDistrictCode;
                 trgt.districtCode = src.addressHeader.districtCode;
-                trgt.provinecCode = src.addressHeader.postalCode;
+                trgt.provinceCode = src.addressHeader.provinceCode;
+                trgt.postalCode = src.addressHeader.postalCode;
                 trgt.country = src.addressHeader.country;
                 trgt.addressType = src.addressHeader.addressType;
                 trgt.latitude = src.addressHeader.latitude;
-                trgt.longtitude = src.addressHeader.longtitude;
+                trgt.longigude = src.addressHeader.longtitude;
             }
-            
-    */
+            trgt.isPayee = "Y";
+            trgt.OregNum = "";
+            trgt.DelistFlag = "";
+            trgt.BlackListFlag = "";
+            trgt.TerminateDate = CommonConstant.GetDevesAPINullDate();
             return trgt;
         }
     }

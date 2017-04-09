@@ -107,6 +107,26 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
 
             #endregion API:InquiryCRMPayeeListInputModel
 
+            else if (inputType == typeof(Model.RegPayeeCorporate.RegPayeeCorporateInputModel))
+            {
+                if (outputType == typeof(Model.CLS.CLSCreateCorporateClientInputModel))
+                {
+                    t = new TransformRegPayeeCorporateInputModel_to_CLSCreateCorporateClientInputModel();
+                }
+                else if (outputType == typeof(Model.Polisy400.CLIENTCreateCorporateClientAndAdditionalInfoInputModel))
+                {
+                    t = new TransformRegPayeeCorporateInputModel_to_CLIENTCreateCorporateClientAndAdditionalInfoInputModel();
+                }
+                else if (outputType == typeof(Model.SAP.SAPCreateVendorInputModel))
+                {
+                    t = new TransformRegPayeeCorporateInputModel_to_SAPCreateVendorInputModel();
+                }
+                else if (outputType == typeof(Model.SAP.SAPInquiryVendorInputModel))
+                {
+                    t = new TransformRegPayeeCorporateInputModel_to_SAPInquiryVendorInputModel();
+                }
+            }
+
             else if (inputType == typeof(Model.RegPayeePersonal.RegPayeePersonalInputModel))
             {
                 if (outputType == typeof(Model.CLS.CLSCreatePersonalClientInputModel))

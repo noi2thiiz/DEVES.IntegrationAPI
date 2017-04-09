@@ -30,7 +30,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 trgt.NAME1 = src.profileHeader.corporateName1;
                 trgt.NAME2 = src.profileHeader.corporateName2;
                 trgt.TAX3 = src.profileHeader.idTax;
-                trgt.TAX4 = src.profileHeader.corporateBranch;
+                trgt.TAX4 = src.profileHeader.corporateBranch??"";
             }
 
             if (src.addressHeader != null)
@@ -49,7 +49,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             if (src.sapVendorInfo != null && src.sapVendorInfo.bankInfo != null)
             {
                 trgt.CITY = src.sapVendorInfo.bankInfo.bankCountryCode;
-                trgt.BANKCODE = src.sapVendorInfo.bankInfo.bankCode;
+                trgt.BANKCODE = src.sapVendorInfo.bankInfo.bankCode??"";
                 trgt.BANKBRANCH = src.sapVendorInfo.bankInfo.bankBranchCode;
                 trgt.BANKACC = src.sapVendorInfo.bankInfo.bankAccount;
                 trgt.ACCTHOLDER = src.sapVendorInfo.bankInfo.accountHolder;
@@ -60,7 +60,23 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 trgt.WHTCODE = src.sapVendorInfo.withHoldingTaxInfo.whtTaxCode;
                 trgt.RECPTYPE = src.sapVendorInfo.withHoldingTaxInfo.receiptType;
             }
-            
+            if (src.contactHeader != null )
+            {
+                trgt.TEL1 = src.contactHeader.telephone1;
+                trgt.TEL2 = src.contactHeader.telephone2;
+                trgt.FAX = src.contactHeader.fax;
+            }
+
+            trgt.COMPANY = "2020";
+            trgt.SEARCH = src.profileHeader.corporateName1;
+            trgt.TAX1 = "";
+            trgt.TAX2 = "";
+            trgt.CTRY = "TH";
+            trgt.BANKACC = "";
+
+            trgt.TITLE = "";
+            trgt.WHTCTRY = "TH";
+
             return trgt;
         }
     }
