@@ -244,8 +244,8 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 Guid _motorId = new Guid();
 
                 Incident retrievedIncident = (Incident)_serviceProxy.Retrieve(Incident.EntityLogicalName, _accountId, new Microsoft.Xrm.Sdk.Query.ColumnSet(true));
-                /*
-                if(!retrievedIncident.pfc_isurvey_status.ToString().Equals("100000040"))
+
+                if (!retrievedIncident.pfc_isurvey_status.Value.ToString().Equals("100000040"))
                 {
                     output.code = "500";
                     output.message = "False";
@@ -258,7 +258,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
 
                     return output;
                 }
-                */
+                
                 // Incident
                 try
                 {
@@ -271,8 +271,9 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                     retrievedIncident.pfc_num_of_tow_truck = new OptionSetValue(Int32.Parse(convertOptionSet(Incident.EntityLogicalName, "", content.eventDetailInfo.numOfTowTruck.ToString())));
                     retrievedIncident.pfc_num_of_accident_injuries = new OptionSetValue(Int32.Parse(convertOptionSet(Incident.EntityLogicalName, "", content.eventDetailInfo.numOfAccidentInjury.ToString())));
                     retrievedIncident.pfc_num_of_death = new OptionSetValue(Int32.Parse(convertOptionSet(Incident.EntityLogicalName, "", content.eventDetailInfo.numOfDeath.ToString())));
-                    retrievedIncident.pfc_excess_fee = content.eventDetailInfo.excessFee;
-                    retrievedIncident.pfc_deductable_fee = content.eventDetailInfo.deductibleFee;
+                    retrievedIncident.pfc_excess_fee = (decimal)content.eventDetailInfo.excessFee;
+                    retrievedIncident.pfc_deductable_fee = (decimal)content.eventDetailInfo.deductibleFee;
+                    // retrievedIncident.pfc_deductable_fee = content.eventDetailInfo.fee;
                     retrievedIncident.pfc_accident_prilim_surveyor_report_date = Convert.ToDateTime(content.reportAccidentResultDate);
                     retrievedIncident.pfc_isurvey_status = new OptionSetValue(Int32.Parse("100000070"));
                     retrievedIncident.pfc_isurvey_status_on = DateTime.Now;

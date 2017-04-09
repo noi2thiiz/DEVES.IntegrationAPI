@@ -167,7 +167,15 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             EWIResponse_ReqSur ewiRes = response.Content.ReadAsAsync<EWIResponse_ReqSur>().Result;
             // EWIResponseContent_ReqSur iSurveyOutput = (EWIResponseContent_ReqSur)ewiRes.content;
             EWIResponseContent_ReqSur iSurveyOutput = new EWIResponseContent_ReqSur();
-            iSurveyOutput.eventid = ewiRes.content.ToString();
+            // iSurveyOutput.eventid = ewiRes.content.ToString();
+            if(ewiRes.content.ToString().Equals("{}"))
+            {
+                iSurveyOutput.eventid = ewiRes.responseMessage.ToString();
+            }
+            else
+            {
+                iSurveyOutput.eventid = ewiRes.content.ToString();
+            }
             return iSurveyOutput;
             /*
             ISurvey_RequestSurveyorDataOutputModel iSurveyOutput = response.Content.ReadAsAsync<ISurvey_RequestSurveyorDataOutputModel>().Result;
