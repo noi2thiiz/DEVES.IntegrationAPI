@@ -17,6 +17,8 @@ namespace DEVES.IntegrationAPI.Model.ClaimRegistration
 
         [CrmMapping( FieldName = "claimNo" , Source = ENUMDataSource.srcEWI )]
         public string claimNo { get; set; }
+
+        public string errorMessage { get; set; }
     }
 
     public class LocusClaimRegistrationDataOutputModel: BaseDataModel

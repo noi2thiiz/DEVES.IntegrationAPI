@@ -143,6 +143,7 @@ namespace DEVES.IntegrationAPI.Model.EWI
     public class EWIResponseContent_ReqSur
     {
         public string eventid { get; set; }
+        public string errorMessage { get; set; }
     }
 
 

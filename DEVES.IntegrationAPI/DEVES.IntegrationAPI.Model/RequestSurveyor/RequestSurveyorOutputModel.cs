@@ -21,6 +21,7 @@ namespace DEVES.IntegrationAPI.Model.RequestSurveyor
     public class RequestSurveyorDataOutputModel
     {
         public string eventID { get; set; }
+        public string errorMessage { get; set; }
     }
 
     /*
