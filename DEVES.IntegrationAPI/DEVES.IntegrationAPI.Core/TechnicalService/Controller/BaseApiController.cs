@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Http;
 using DEVES.IntegrationAPI.WebApi.Core.Exceptions;
 using System.Collections;
+using DEVES.IntegrationAPI.Core.TechnicalService.Exceptions;
 
 namespace DEVES.IntegrationAPI.WebApi.Core.Controllers
 {
@@ -155,7 +156,19 @@ namespace DEVES.IntegrationAPI.WebApi.Core.Controllers
                 r.setHeaderProperty("description", response.StatusDescription);
                 return CreatedResponse(r);
             }
+            catch (BuzInValidBusinessConditionException e)
+            {
+                //Console.WriteLine("WebException");
+                var errorMessage = e.ErrorMessage;
+                //Console.WriteLine(response.StatusCode + " " + response.StatusDescription);
 
+                var r = new ServiceFailResult();
+                r.setHeaderProperty("code", errorMessage.code);
+                r.setHeaderProperty("message", errorMessage.message);
+                r.setHeaderProperty("description", errorMessage.description);
+                return CreatedResponse(r);
+            }
+           
             catch (System.Reflection.TargetInvocationException e)
             {
                 //Console.WriteLine("catch System.Reflection.TargetInvocationException ");
@@ -177,6 +190,7 @@ namespace DEVES.IntegrationAPI.WebApi.Core.Controllers
                     return CreatedResponse(ex.Result);
                 }
             }
+          
             catch (Exception e)
             {
                 //Console.WriteLine(" catch (Exception e)");

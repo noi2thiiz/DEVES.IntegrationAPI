@@ -6,8 +6,15 @@ using System.Web;
 
 namespace DEVES.IntegrationAPI.WebApi.DataAccessService.XrmEntity
 {
-    public class PfcMotorAccidentParties
+    public class PfcMotorAccidentParties:Entity
     {
+        public PfcMotorAccidentParties()
+        {
+        }
+            public PfcMotorAccidentParties(Guid motorAccidentGuid)
+        {
+            pfc_parent_motor_accidentid = new EntityReference("pfc_motor_accident", motorAccidentGuid);
+        }
 
         //pfc_motor_accident_parties_name Parties Name single line of text(200)
         public string pfc_motor_accident_parties_name { get; set; }
@@ -22,13 +29,13 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.XrmEntity
         public string pfc_event_code { get; set; }
 
         //pfc_event_sequence ลำดับการเกิดเหตุ    whole number
-        public string pfc_event_sequence { get; set; }
+        public int pfc_event_sequence { get; set; } = 0;
 
         //pfc_parties_sequence ลำดับคู่กรณี    whole number
-        public string pfc_parties_sequence { get; set; }
+        public int pfc_parties_sequence { get; set; }
 
         //pfc_parent_motor_accidentId Parent Motor Accident   LookUp
-        public EntityReference pfc_parent_motor_accidentId { get; set; } = new EntityReference("pfc_motor_accident"); 
+        public EntityReference pfc_parent_motor_accidentid { get; set; } = new EntityReference("pfc_motor_accident"); 
         //pfc_parties_fullname    ชื่อคู่กรณี single line of text(100)
         public string pfc_parties_fullname { get; set; }
         //pfc_parties_type ประเภทคู่กรณี   Option Set

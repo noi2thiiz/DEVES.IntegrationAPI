@@ -22,9 +22,12 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.Tests
 
             var customeGuid = new Guid("b55765f1-c4a4-e611-80ca-0050568d1874");//account
             var informerGuid = new Guid("B55765F1-C4A4-E611-80CA-0050568D1874");//contract
-            var driverGuid = new Guid("B55765F1-C4A4-E611-80CA-0050568D1874");//contract
+
+             var driverGuid = new Guid("b55765f1-c4a4-e611-80ca-0050568d1874");//account
+
+            var polisyGuid = new Guid("0EA8FB62-6DB7-E611-80CA-0050568D1874");//contract
             //e3c8d35e-aeb6-e611-80ca-0050568d1874 Does Not Exist
-            var incidentEntity = new IncidentEntity(policyAdditionalIdGuid, customeGuid, informerGuid, driverGuid);
+            var incidentEntity = new IncidentEntity(policyAdditionalIdGuid, customeGuid, informerGuid, driverGuid, polisyGuid);
             incidentEntity.caseorigincode = null;
             incidentEntity.pfc_case_vip = false;
             incidentEntity.pfc_policy_additional_number = "C7121677"; /* "policyNo" */

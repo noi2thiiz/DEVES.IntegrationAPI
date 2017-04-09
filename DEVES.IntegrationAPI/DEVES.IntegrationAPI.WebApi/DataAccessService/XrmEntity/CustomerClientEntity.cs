@@ -7,14 +7,14 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.XrmEntity
 {
     public class CustomerClientEntity
     {
-        public string ContactId { get; set; }
+        public Guid ContactId { get; set; }
         public object DefaultPriceLevelId { get; set; }
         public int CustomerSizeCode { get; set; }
         public int CustomerTypeCode { get; set; }
         public int PreferredContactMethodCode { get; set; }
         public int LeadSourceCode { get; set; }
         public object OriginatingLeadId { get; set; }
-        public string OwningBusinessUnit { get; set; }
+        public Guid OwningBusinessUnit { get; set; }
         public object PaymentTermsCode { get; set; }
         public int ShippingMethodCode { get; set; }
         public bool ParticipatesInWorkflow { get; set; }
@@ -64,9 +64,9 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.XrmEntity
         public object CreditLimit { get; set; }
         public string CreatedOn { get; set; }
         public bool CreditOnHold { get; set; }
-        public string CreatedBy { get; set; }
+        public Guid CreatedBy { get; set; }
         public string ModifiedOn { get; set; }
-        public string ModifiedBy { get; set; }
+        public Guid ModifiedBy { get; set; }
         public object NumberOfChildren { get; set; }
         public object ChildrensNames { get; set; }
         public string VersionNumber { get; set; }
@@ -92,7 +92,7 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.XrmEntity
         public object SubscriptionId { get; set; }
         public object PreferredEquipmentId { get; set; }
         public object LastUsedInCampaign { get; set; }
-        public string TransactionCurrencyId { get; set; }
+        public Guid TransactionCurrencyId { get; set; }
         public object OverriddenCreatedOn { get; set; }
         public int ExchangeRate { get; set; }
         public object ImportSequenceNumber { get; set; }
@@ -103,7 +103,7 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.XrmEntity
         public object Aging60_Base { get; set; }
         public object Aging90_Base { get; set; }
         public object Aging30_Base { get; set; }
-        public string OwnerId { get; set; }
+        public Guid OwnerId { get; set; }
         public object CreatedOnBehalfBy { get; set; }
         public bool IsAutoCreate { get; set; }
         public object ModifiedOnBehalfBy { get; set; }
@@ -113,7 +113,7 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.XrmEntity
         public int OwnerIdType { get; set; }
         public object ParentCustomerIdYomiName { get; set; }
         public object ProcessId { get; set; }
-        public string EntityImageId { get; set; }
+        public Guid EntityImageId { get; set; }
         public object StageId { get; set; }
         public object Business2 { get; set; }
         public object Company { get; set; }

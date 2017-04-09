@@ -14,6 +14,8 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService
         {
             EntityName = "incident";
         }
+
+       
     }
 
    

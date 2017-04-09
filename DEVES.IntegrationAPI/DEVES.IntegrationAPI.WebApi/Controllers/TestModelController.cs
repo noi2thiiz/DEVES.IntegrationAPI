@@ -28,11 +28,15 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             var model = new InquiryMasterASRHOutputModel();
             var content = new InquiryMasterASRHContentModel();
 
-            InquiryMasterASRHContentASRHListCollectionDataModel data = new InquiryMasterASRHContentASRHListCollectionDataModel();
-            data.ASRHList = new InquiryMasterASRHListModel();
-            content.ASRHListCollection = new List<InquiryMasterASRHContentASRHListCollectionDataModel>();
-            content.ASRHListCollection.Add(data);
-            content.ASRHListCollection.Add(data);
+            InquiryMasterASRHContentASRHListCollectionDataModel data = new InquiryMasterASRHContentASRHListCollectionDataModel()
+            {
+                ASRHList = new InquiryMasterASRHListModel()
+            };
+            content.ASRHListCollection = new List<InquiryMasterASRHContentASRHListCollectionDataModel>
+            {
+                data,
+                data
+            };
             //content.ASRHListCollection.Add(collection);
             //  content.ASRHListCollection.Add(collection);
             model.content = content;
@@ -44,11 +48,15 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         [Route("InquiryAPARPayeeOutputModel")]
         public IHttpActionResult InquiryAPARPayeeOutputModel()
         {
-            var model = new InquiryAPARPayeeOutputModel();
-            model.content = new InquiryAPARPayeeContentModel();
+            var model = new InquiryAPARPayeeOutputModel()
+            {
+                content = new InquiryAPARPayeeContentModel()
+            };
             model.content.aparPayeeListCollection = new List<InquiryAPARPayeeContentAparPayeeListCollectionDataModel>();
-            var colData = new InquiryAPARPayeeContentAparPayeeListCollectionDataModel();
-            colData.aparPayeeList = new InquiryAPARPayeeListModel();
+            var colData = new InquiryAPARPayeeContentAparPayeeListCollectionDataModel()
+            {
+                aparPayeeList = new InquiryAPARPayeeListModel()
+            };
             model.content.aparPayeeListCollection.Add(colData);
             model.content.aparPayeeListCollection.Add(colData);
 
@@ -59,11 +67,15 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         [Route("COMPInquiryClientMasterOutputModel")]
         public IHttpActionResult COMPInquiryClientMasterOutputModel()
         {
-            var model = new COMPInquiryClientMasterOutputModel();
-            model.content = new EWIResCOMPInquiryClientMasterContentModel();
+            var model = new COMPInquiryClientMasterOutputModel()
+            {
+                content = new EWIResCOMPInquiryClientMasterContentModel()
+            };
             model.content.clientListCollection = new List<COMPInquiryClientMasterContentClientListModel>();
-            var colData = new COMPInquiryClientMasterContentClientListModel();
-            colData.clientList = new COMPInquiryClientMasterClientModel();
+            var colData = new COMPInquiryClientMasterContentClientListModel()
+            {
+                clientList = new COMPInquiryClientMasterClientModel()
+            };
             model.content.clientListCollection.Add(colData);
             model.content.clientListCollection.Add(colData);
 
@@ -75,11 +87,15 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         [Route("SAPInquiryVendorOutputModel")]
         public IHttpActionResult SAPInquiryVendorOutputModel()
         {
-            var model = new EWIResSAPInquiryVendorContentModel();
-            model.Status = new SAPInquiryVendorContentStatusModel();
-            model.VendorInfo = new List<SAPInquiryVendorContentVendorInfoModel>();
-            var colData = new SAPInquiryVendorContentVendorInfoModel();
-            colData.BankInfo = new List<SAPInquiryVendorBankInfoModel>();
+            var model = new EWIResSAPInquiryVendorContentModel()
+            {
+                Status = new SAPInquiryVendorContentStatusModel(),
+                VendorInfo = new List<SAPInquiryVendorContentVendorInfoModel>()
+            };
+            var colData = new SAPInquiryVendorContentVendorInfoModel()
+            {
+                BankInfo = new List<SAPInquiryVendorBankInfoModel>()
+            };
             colData.BankInfo.Add( new SAPInquiryVendorBankInfoModel());
             model.VendorInfo.Add(colData);
 
@@ -91,9 +107,10 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         [Route("CRMInquiryPayeeContentOutputModel")]
         public IHttpActionResult CRMInquiryPayeeContentOutputModel()
         {
-            var model = new CRMInquiryPayeeContentOutputModel();
-            model.data = new List<InquiryCrmPayeeListDataModel>();
-
+            var model = new CRMInquiryPayeeContentOutputModel()
+            {
+                data = new List<InquiryCrmPayeeListDataModel>()
+            };
             model.data.Add(new InquiryCrmPayeeListDataModel());
 
 
@@ -106,18 +123,19 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         [Route("SAPMap")]
         public IHttpActionResult SAPMap()
         {
-            var model2 = getCRMInquiryPayeeContentOutputModel();
-            var model1 = getSAPInquiryVendorOutputModel();
+            var model2 = GetCRMInquiryPayeeContentOutputModel();
+            var model1 = GetSAPInquiryVendorOutputModel();
             var t = new TransformSAPInquiryVendorOutputModel_to_InquiryCRMPayeeListDataOutputModel();
             var output = t.TransformModel(model1, model2);
             return Ok(output);
         }
 
-        public CRMInquiryPayeeContentOutputModel getCRMInquiryPayeeContentOutputModel()
+        public CRMInquiryPayeeContentOutputModel GetCRMInquiryPayeeContentOutputModel()
         {
-            var model = new CRMInquiryPayeeContentOutputModel();
-            model.data = new List<InquiryCrmPayeeListDataModel>();
-
+            var model = new CRMInquiryPayeeContentOutputModel()
+            {
+                data = new List<InquiryCrmPayeeListDataModel>()
+            };
             model.data.Add(new InquiryCrmPayeeListDataModel
             {
                 polisyClientId= "77777",name1 = "CRM_NAME_7777",name2 = ""
@@ -130,11 +148,13 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             return model;
         }
 
-        public EWIResSAPInquiryVendorContentModel getSAPInquiryVendorOutputModel()
+        public EWIResSAPInquiryVendorContentModel GetSAPInquiryVendorOutputModel()
         {
-            var model = new EWIResSAPInquiryVendorContentModel();
-            model.Status = new SAPInquiryVendorContentStatusModel();
-            model.VendorInfo = new List<SAPInquiryVendorContentVendorInfoModel>();
+            var model = new EWIResSAPInquiryVendorContentModel()
+            {
+                Status = new SAPInquiryVendorContentStatusModel(),
+                VendorInfo = new List<SAPInquiryVendorContentVendorInfoModel>()
+            };
             var colData = new SAPInquiryVendorContentVendorInfoModel
             {
                 PREVACC = "77777",
@@ -153,12 +173,14 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 NAME1 = "NAME_99999",
                 NAME2 = "zzzzzzzzzzzzzz"
             };
-            colData.BankInfo = new List<SAPInquiryVendorBankInfoModel>();
-            colData.BankInfo.Add( new SAPInquiryVendorBankInfoModel
+            colData.BankInfo = new List<SAPInquiryVendorBankInfoModel>
             {
-                ACCTHOLDER = "xxxx",
-                BANKBRANCH = "ccc"
-            });
+                new SAPInquiryVendorBankInfoModel
+                {
+                    ACCTHOLDER = "xxxx",
+                    BANKBRANCH = "ccc"
+                }
+            };
             model.VendorInfo.Add(colData);
             model.VendorInfo.Add(colData2);
             model.VendorInfo.Add(colData3);
@@ -172,21 +194,24 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         [Route("InquiryAPARPayeeContentModel")]
         public IHttpActionResult InquiryAPARPayeeContentModel()
         {
-            var model = getInquiryAPARPayeeContentModel();
+            var model = GetInquiryAPARPayeeContentModel();
 
 
             return Ok(model);
         }
 
-        public InquiryAPARPayeeContentModel getInquiryAPARPayeeContentModel()
+        public InquiryAPARPayeeContentModel GetInquiryAPARPayeeContentModel()
         {
-            var model = new InquiryAPARPayeeContentModel();
-            model.aparPayeeListCollection = new List<InquiryAPARPayeeContentAparPayeeListCollectionDataModel>();
-
-            model.aparPayeeListCollection.Add(new InquiryAPARPayeeContentAparPayeeListCollectionDataModel
+            var model = new InquiryAPARPayeeContentModel()
             {
-                aparPayeeList = new InquiryAPARPayeeListModel()
-            });
+                aparPayeeListCollection = new List<InquiryAPARPayeeContentAparPayeeListCollectionDataModel>
+            {
+                new InquiryAPARPayeeContentAparPayeeListCollectionDataModel
+                {
+                    aparPayeeList = new InquiryAPARPayeeListModel()
+                }
+            }
+            };
             return model;
         }
 
@@ -194,8 +219,10 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         [Route("CLSCreatePersonalClientOutputModel")]
         public IHttpActionResult CLSCreatePersonalClientOutputModel()
         {
-            var model = new CLSCreatePersonalClientOutputModel();
-            model.content = new CLSCreatePersonalClientContentOutputModel();
+            var model = new CLSCreatePersonalClientOutputModel()
+            {
+                content = new CLSCreatePersonalClientContentOutputModel()
+            };
             model.content.data = new CLSCreatePersonalClientDataOutputModel();
 
 
@@ -206,10 +233,10 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         [Route("CLIENTCreatePersonalClientAndAdditionalInfoOutputModel")]
         public IHttpActionResult CLIENTCreatePersonalClientAndAdditionalInfoOutputModel()
         {
-            var model = new CLIENTCreatePersonalClientAndAdditionalInfoOutputModel();
-            model.content = new CLIENTCreatePersonalClientAndAdditionalInfoContentModel();
-           
-
+            var model = new CLIENTCreatePersonalClientAndAdditionalInfoOutputModel()
+            {
+                content = new CLIENTCreatePersonalClientAndAdditionalInfoContentModel()
+            };
             return Ok(model);
         }
 
@@ -217,10 +244,10 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         [Route("CLIENTCreateCorporateClientAndAdditionalInfoOutputModel")]
         public IHttpActionResult CLIENTCreateCorporateClientAndAdditionalInfoOutputModel()
         {
-            var model = new CLIENTCreateCorporateClientAndAdditionalInfoOutputModel();
-            model.content = new CLIENTCreateCorporateClientAndAdditionalInfoContentModel();
-
-
+            var model = new CLIENTCreateCorporateClientAndAdditionalInfoOutputModel()
+            {
+                content = new CLIENTCreateCorporateClientAndAdditionalInfoContentModel()
+            };
             return Ok(model);
         }
 
@@ -228,10 +255,10 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         [Route("CLIENTUpdateCorporateClientAndAdditionalInfoOutputModel")]
         public IHttpActionResult CLIENTUpdateCorporateClientAndAdditionalInfoOutputModel()
         {
-            var model = new CLIENTUpdateCorporateClientAndAdditionalInfoOutputModel();
-            model.content = new CLIENTUpdateCorporateClientAndAdditionalInfoContentModel();
-
-
+            var model = new CLIENTUpdateCorporateClientAndAdditionalInfoOutputModel()
+            {
+                content = new CLIENTUpdateCorporateClientAndAdditionalInfoContentModel()
+            };
             return Ok(model);
         }
 
@@ -252,8 +279,10 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         [Route("TranformRegClientPersonalInputModel_to_CLIENTCreatePersonalClientAndAdditionalInfoInputModel")]
         public IHttpActionResult TranformRegClientPersonalInputModel_to_CLIENTCreatePersonalClientAndAdditionalInfoInputModel()
         {
-            var src = new RegClientPersonalInputModel();
-            src.profileInfo = new ProfileInfoModel();
+            var src = new RegClientPersonalInputModel()
+            {
+                profileInfo = new ProfileInfoModel()
+            };
             src.profileInfo.idDriving = "1111";
             var trgt = new CLIENTCreatePersonalClientAndAdditionalInfoInputModel();
             
@@ -266,7 +295,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
 
         [HttpGet]
         [Route("findPolicyMotor")]
-        public IHttpActionResult findPolicyMotor()
+        public IHttpActionResult FindPolicyMotor()
         {
             CRMPolicyMotorDataGateWay policyDataGateway = new CRMPolicyMotorDataGateWay();
             var reqPolicy = new DataRequest();
@@ -280,7 +309,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         }
         [HttpGet]
         [Route("findCustomerClient")]
-        public IHttpActionResult findCustomerClient()
+        public IHttpActionResult FindCustomerClient()
         {
             var clientDb = new ClientMasterDataGateway();
             var req= new DataRequest();
@@ -294,7 +323,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
 
        [HttpGet]
         [Route("createIncident")]
-        public IHttpActionResult createIncident()
+        public IHttpActionResult CreateIncident()
         {
             // B55765F1 - C4A4 - E611 - 80CA - 0050568D1874
             //Account With Id = b55765f1-c4a4-e611-80ca-0050568d1874 Does Not Exist //ACCOUNT
@@ -303,23 +332,27 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             var customeGuid = new Guid("b55765f1-c4a4-e611-80ca-0050568d1874");//account
             var informerGuid = new Guid("B55765F1-C4A4-E611-80CA-0050568D1874");//contract
             var driverGuid = new Guid("B55765F1-C4A4-E611-80CA-0050568D1874");//contract
+            var policyGuid = new Guid("B55765F1-C4A4-E611-80CA-0050568D1874");//contract
             //e3c8d35e-aeb6-e611-80ca-0050568d1874 Does Not Exist
-            var incidentEntity = new IncidentEntity(policyAdditionalIdGuid, customeGuid, informerGuid, driverGuid);
-            incidentEntity.caseorigincode = null;
-            incidentEntity.pfc_case_vip = false;
-            incidentEntity.pfc_policy_additional_number = "C7121677"; /* "policyNo" */
-            /*(policyAdditional.pfc_policy_vip) (Policy.pfc_policy_mc_nmc) */
-            incidentEntity.pfc_policy_vip = false; // Default 0 ;
-            incidentEntity.pfc_policy_mc_nmc = null; //Default(Unassign)
-            //(policyAdditional.pfc_reg_num)
-            //(policyAdditional.pfc_reg_num_prov)
-            incidentEntity.pfc_current_reg_num = ""; //api.currentCarRegisterNo
-            incidentEntity.pfc_current_reg_num_prov = "";//api.currentCarRegisterProv
-            incidentEntity.casetypecode = new OptionSetValue(2); //fix: 2 ( Service Request )
-            incidentEntity.pfc_source_data = new OptionSetValue(100000002);
-            incidentEntity.pfc_customer_vip = false; //default 
-            //account/contact.pfc_customer_sensitive_level
-            incidentEntity.pfc_customer_sensitive = new OptionSetValue(100000000); ; //Low: 100,000,000, Medium:100,000,001, High:100,000,002
+            var incidentEntity = new IncidentEntity(policyAdditionalIdGuid, customeGuid, informerGuid, driverGuid, policyGuid)
+            {
+                caseorigincode = null,
+                pfc_case_vip = false,
+                pfc_policy_additional_number = "C7121677", /* "policyNo" */
+                                                           /*(policyAdditional.pfc_policy_vip) (Policy.pfc_policy_mc_nmc) */
+                pfc_policy_vip = false, // Default 0 ;
+                pfc_policy_mc_nmc = null, //Default(Unassign)
+                                          //(policyAdditional.pfc_reg_num)
+                                          //(policyAdditional.pfc_reg_num_prov)
+                pfc_current_reg_num = "", //api.currentCarRegisterNo
+                pfc_current_reg_num_prov = "",//api.currentCarRegisterProv
+                casetypecode = new OptionSetValue(2), //fix: 2 ( Service Request )
+                pfc_source_data = new OptionSetValue(100000002),
+                pfc_customer_vip = false, //default 
+                                          //account/contact.pfc_customer_sensitive_level
+                pfc_customer_sensitive = new OptionSetValue(100000000)
+            };
+            ; //Low: 100,000,000, Medium:100,000,001, High:100,000,002
             incidentEntity.pfc_customer_privilege = null;
 
 
@@ -330,11 +363,13 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         }
         [HttpGet]
         [Route("sendVoiceRecord")]
-        public IHttpActionResult sendVoiceRecord()
+        public IHttpActionResult SendVoiceRecord()
         {
             VoiceRecordDataGateWay db = new VoiceRecordDataGateWay();
-            VoiceRecordRequestModel model = new VoiceRecordRequestModel();
-            model.callednumber = "99999";
+            VoiceRecordRequestModel model = new VoiceRecordRequestModel()
+            {
+                callednumber = "99999"
+            };
             model.callednumber = "8888";
             model.callType = "in";
             model.url = "http://test.co.th";

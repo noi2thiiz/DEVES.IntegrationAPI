@@ -302,6 +302,14 @@
     <Compile Include="DataAccessService\ClientMasterDataGateway.cs" />
     <Compile Include="DataAccessService\CRMPolicyMotorDataGateWay.cs" />
     <Compile Include="DataAccessService\CrmSdkTableGateWay.cs" />
+    <Compile Include="DataAccessService\DataGateway\SpQueryDistrictDataGateWay.cs" />
+    <Compile Include="DataAccessService\DataGateway\SpQueryProvinceDataGateWay.cs" />
+    <Compile Include="DataAccessService\DataRepository\DistrictRepository.cs" />
+    <Compile Include="DataAccessService\DataRepository\ProvinceRepository.cs" />
+    <Compile Include="DataAccessService\PfcMotorAccidentPartiesDataGateWay.cs" />
+    <Compile Include="DataAccessService\SpGetUserForRVPDataGateway.cs" />
+    <Compile Include="DataAccessService\SpReqMotorClaimNotiNoDataGateway.cs" />
+    <Compile Include="DataAccessService\SpGetInformerForRVPDataGateway.cs" />
     <Compile Include="DataAccessService\XrmEntity\CustomerClientEntity.cs" />
     <Compile Include="DataAccessService\DataRequest.cs" />
     <Compile Include="DataAccessService\DataResult.cs" />
@@ -382,6 +390,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="TechnicalService\Config\CrmConfigurationSettings.cs" />
+    <Compile Include="TechnicalService\Memory\MemoryManager.cs" />
     <Compile Include="TechnicalService\TransactionLogger\ApiLogDataGateWay.cs" />
     <Compile Include="TechnicalService\TransactionLogger\ApiLogEntry.cs" />
     <Compile Include="TechnicalService\TransactionLogger\ApiLogHandler.cs" />
@@ -460,6 +469,7 @@
     <Content Include="Service References\Application Insights\ConnectedService.json" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="DataAccessService\Finder\" />
     <Folder Include="Providers\" />
   </ItemGroup>
   <ItemGroup>

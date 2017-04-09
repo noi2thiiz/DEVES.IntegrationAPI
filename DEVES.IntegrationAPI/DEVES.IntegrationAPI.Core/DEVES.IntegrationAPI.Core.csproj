@@ -89,7 +89,9 @@
     <Compile Include="TechnicalService\DataAdepter\RESTClient\RESTClient.cs" />
     <Compile Include="TechnicalService\DataAdepter\RESTClient\RESTClientResult.cs" />
     <Compile Include="TechnicalService\EnumExtensions.cs" />
+    <Compile Include="TechnicalService\Exceptions\BuzInternalErrorException.cs" />
     <Compile Include="TechnicalService\Exceptions\CannotConnetServiceException.cs" />
+    <Compile Include="TechnicalService\Exceptions\InValidBusinessConditionException.cs" />
     <Compile Include="TechnicalService\Exceptions\InvalidModelException.cs" />
     <Compile Include="TechnicalService\Exceptions\NotEmptyModelException.cs" />
     <Compile Include="TechnicalService\Exceptions\NotFoundResponseException.cs" />
@@ -104,6 +106,7 @@
     <Compile Include="TechnicalService\Helpers\Util.cs" />
     <Compile Include="TechnicalService\IServiceRequestAble.cs" />
     <Compile Include="TechnicalService\IServiceResult.cs" />
+    <Compile Include="TechnicalService\Models\ErrorMessage.cs" />
     <Compile Include="TechnicalService\RegularExpression.cs" />
     <Compile Include="TechnicalService\Results\BadRequestResult.cs" />
     <Compile Include="TechnicalService\Results\ErrorResult.cs" />
@@ -133,6 +136,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="TechnicalService\Exceptions\NewFolder1\" />
     <Folder Include="TechnicalService\Filters\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Web.Http;
 using DEVES.IntegrationAPI.Model.RegClaimRequestFromRVP;
-using DEVES.IntegrationAPI.WebApi.Logic;
 using DEVES.IntegrationAPI.WebApi.Core.Controllers;
+using DEVES.IntegrationAPI.WebApi.Logic.RVP;
 
 namespace DEVES.IntegrationAPI.WebApi.Controllers
 {

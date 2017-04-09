@@ -106,6 +106,7 @@
     <Compile Include="EWI\Enum.cs" />
     <Compile Include="EWI\EWIResponse.cs" />
     <Compile Include="EWI\EWIRequest.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="InquiryClientMaster\CRMInquiryClientMasterOutputModel.cs" />
     <Compile Include="InquiryClientMaster\InquiryClientMasterInputModel.cs" />
     <Compile Include="InquiryClientMaster\InquiryClientMasterOutputModel.cs" />
@@ -126,7 +127,6 @@
     <Compile Include="RegClaimRequestFromClaimDi\RegClaimRequestFromClaimDiInputModel.cs" />
     <Compile Include="RegClaimRequestFromClaimDi\RegClaimRequestFromClaimDiOutputModel.cs" />
     <Compile Include="RegClaimRequestFromRVP\RegClaimRequestFromRVPDataModel.cs" />
-    <Compile Include="RegClaimRequestFromRVP\RegClaimRequestFromRVPInputModel.cs" />
     <Compile Include="RegClaimRequestFromRVP\RegClaimRequestFromRVPOutputModel.cs" />
     <Compile Include="RegClaimRequestFromRVP\TEST_RegClaimRequestFromRVPOutputModel.cs" />
     <Compile Include="RegClientCorporate\RegClientCorporateInputModel.cs" />

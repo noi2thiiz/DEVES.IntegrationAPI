@@ -8,19 +8,23 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.XrmEntity
 {
     public class IncidentEntity:Entity
     {
+       // public string pfc_ref_isurvey_total_event { get; set; }
+
         public IncidentEntity()
         {
 
         }
 
-            public IncidentEntity(Guid policyAdditionalId, Guid accountGuid, Guid informerGuid, Guid driverGuid)
+            public IncidentEntity(Guid policyAdditionalId, Guid accountGuid, Guid informerGuid, Guid driverGuid,Guid policyGuid)
         {
              pfc_policy_additionalid = new EntityReference("pfc_policy_additional", policyAdditionalId);
-         //    pfc_policy_additionalId = new EntityReference("pfc_category", new Guid("1DCB2B21-0AAB-E611-80CA-0050568D1874"));
+            //    pfc_policy_additionalId = new EntityReference("pfc_category", new Guid("1DCB2B21-0AAB-E611-80CA-0050568D1874"));
 
+           
              customerid = new EntityReference("contact", accountGuid);
              pfc_informer_name = new EntityReference("contact", informerGuid);
              pfc_driver_name = new EntityReference("contact", driverGuid);
+            pfc_policyid = new EntityReference("pfc_polycy", policyGuid);
             //customerid //contact // account //B55765F1-C4A4-E611-80CA-0050568D1874
             //pfc_informer_name //pfc_driver_client_name account
             //pfc_driver_client_name
@@ -97,17 +101,37 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.XrmEntity
         // pfc_notification_date วันเวลาที่รับแจ้ง   datetime
         public DateTime pfc_notification_date { get; set; }
         // pfc_accident_on วันเวลาที่เกิดเหตุ datetime
-        public string pfc_accident_on { get; set; }
+        public DateTime pfc_accident_on { get; set; }
         // pfc_accident_desc_code รหัสลักษณะการเกิดเหตุ   single line of text(100)
         public string pfc_accident_desc_code { get; set; }
         // pfc_accident_desc รายละเอียดกลักษณะการเกิดเหตุ    Multiple Line of text(2000)
         public string pfc_accident_desc { get; set; }
         // pfc_num_of_expect_injuries จำนวนผู้บาดเจ็บ(คาดการณ์)   Option set
         public OptionSetValue pfc_num_of_expect_injuries { get; set; }
-
-
-
-
-
+        public OptionSetValue pfc_num_of_death { get;  set; }
+        public OptionSetValue pfc_accident_legal_result { get;  set; }
+        public string pfc_police_station { get;  set; }
+        public string pfc_police_record_id { get;  set; }
+        public DateTime pfc_police_record_date { get;  set; }
+        public bool pfc_police_bail_flag { get;  set; }
+        public string pfc_driver_mobile { get;  set; }
+        public string pfc_driver_client_number { get;  set; }
+        public OptionSetValue pfc_relation_cutomer_accident_party { get;  set; }
+        public string pfc_accident_place { get;  set; }
+        public string pfc_accident_latitude { get;  set; }
+        public string pfc_accident_longitude { get;  set; }
+        public OptionSetValue pfc_claim_type { get;  set; }
+        public OptionSetValue pfc_send_out_surveyor { get;  set; }
+        public OptionSetValue pfc_isurvey_status { get; set; }
+        public string pfc_accident_province { get;  set; }
+        public string pfc_accident_district { get;  set; }
+        public OptionSetValue pfc_num_of_accident_injuries { get; set; }
+        public decimal pfc_excess_fee { get;  set; }
+        public decimal pfc_deductable_fee { get;  set; }
+        public int pfc_motor_accident_sum { get; set; }
+        //public bool pfc_legal_case_flag { get;  set; }
+        // public int pfc_excess_fee { get;  set; }
+        //  public int pfc_deductable_fee { get;  set; }
+        //public DateTime reportAccidentResultDate { get;  set; }
     }
 }

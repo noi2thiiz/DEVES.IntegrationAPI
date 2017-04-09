@@ -8,7 +8,11 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.XrmEntity
 {
     public class PfcMortorAccident:Entity
     {
-        public PfcMortorAccident(Guid motorAccidentGuid)
+        public PfcMortorAccident()
+        {
+
+        }
+            public PfcMortorAccident(Guid motorAccidentGuid)
         {
 
             pfc_parent_caseid = new EntityReference("incident", motorAccidentGuid);
@@ -45,7 +49,7 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.XrmEntity
         public string pfc_accident_latitude { get; set; }
         //กรณี Outsource ให้ Default จาก Incident.pfc_accident_latitude"
         //pfc_accident_Longitude Longitude  ที่เกิดเหตุบนแผนที่ single line of text(20) "กรณี Inhouse มาจาก eventdetail.accidentLocation
-        public string pfc_accident_Longitude { get; set; }
+        public string pfc_accident_longitude { get; set; }
         //กรณี Outsource ให้ Default จาก Incident.pfc_accident_longitude"
         //pfc_accident_location สถานที่เกิดเหตุ Multiple Line of text (2000)    "กรณี Inhouse มาจาก eventdetail.accidentLocation
         public string pfc_accident_location { get; set; }

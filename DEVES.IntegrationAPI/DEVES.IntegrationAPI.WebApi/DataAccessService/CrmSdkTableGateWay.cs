@@ -89,6 +89,10 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService
                                     int v = Int32.Parse(value.ToString());
                                     BindedEntity[propertyName] = v;
                                     break;
+                                case "System.Decimal":
+                                    decimal d = Decimal.Parse(value.ToString());
+                                    BindedEntity[propertyName] = d;
+                                    break;
                                 case "System.Enum":
                                     BindedEntity[propertyName] = value.ToString();
                                     break;
@@ -96,8 +100,21 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService
                                     BindedEntity[propertyName] = value;
                                     break;
                                 case "System.DateTime":
-                                    //var myDate = Convert.ToDateTime(value);
-                                    //BindedEntity[propertyName] = myDate;
+                                    try
+                                    {
+                                        var myDate = (DateTime)value; // Convert.ToDateTime(value);
+                                        PersianCalendar persianCalendar = new PersianCalendar();
+                                        if (persianCalendar.GetYear(myDate) >= 1753)
+                                        {
+                                            BindedEntity[propertyName] = myDate;
+                                        }
+                                       
+                                    }
+                                    catch (Exception)
+                                    {
+                                        Console.WriteLine("Can not Convert "+ propertyName);
+                                    }
+                                   
                                     break;
 
                                 case "Microsoft.Xrm.Sdk.OptionSetValue":

@@ -6,8 +6,13 @@ using System.Web;
 namespace DEVES.IntegrationAPI.WebApi.DataAccessService.XrmEntity
 {
     public class CRMPolicyMotorEntity
-    {
-        public string crmPolicyDetailId { get; set; }
+    {/**
+            Cannot Convert policyIssueDatetype: System.DateTime to: System.String
+            Cannot Convert policyEffectiveDatetype: System.DateTime to: System.String
+            Cannot Convert policyExpiryDatetype: System.DateTime to: System.String
+            Cannot Convert policyDeducttype: System.Decimal to: System.Int32
+    */
+        public Guid crmPolicyDetailId { get; set; }
         public string crmPolicyDetailCode { get; set; }
         public string policyNo { get; set; }
         public string renewalNo { get; set; }
@@ -17,7 +22,7 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.XrmEntity
         public bool policyVip { get; set; }
         public string policyAdditionalName { get; set; }
         public object MCM_SEQ { get; set; }
-        public string policyId { get; set; }
+        public Guid policyId { get; set; }
         public int policyMcNmc { get; set; }
         public string policySeqNo { get; set; }
         public object endorseNo { get; set; }
@@ -47,5 +52,11 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.XrmEntity
         public string insuredClientType { get; set; }
         public string insuredFullName { get; set; }
         public string policyStatus { get; set; }
+
+        public DateTime policyIssueDatetype { get; set; }
+        public DateTime policyEffectiveDatetype { get; set; }
+        public DateTime policyExpiryDatetype { get; set; }
+        public DateTime policyDeducttype { get; set; }
+
     }
 }
