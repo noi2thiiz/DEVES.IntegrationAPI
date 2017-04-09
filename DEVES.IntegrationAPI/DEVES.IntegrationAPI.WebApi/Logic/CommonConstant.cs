@@ -31,5 +31,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         public const string CONST_SYSTEM_SAP = "SAP";
         public const string CONST_SYSTEM_MASTER_ASRH = "MASTER_ASRH";
         public const string CONST_SYSTEM_APAR= "APAR";
+
+        public static DateTime GetDevesAPINullDate()
+        {
+            return new DateTime(1900, 01, 01);
+        }
     }
 }

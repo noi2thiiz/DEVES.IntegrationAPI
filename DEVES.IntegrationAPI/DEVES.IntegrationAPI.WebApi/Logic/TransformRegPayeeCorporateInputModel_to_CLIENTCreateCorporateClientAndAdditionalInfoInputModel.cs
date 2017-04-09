@@ -25,6 +25,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             if (src.generalHeader != null)
             {
                 trgt.cleansingId = src.generalHeader.cleansingId;
+                trgt.assessorFlag = src.generalHeader.roleCode == "A" ? "Y" : "N";
+                trgt.solicitorFlag = src.generalHeader.roleCode == "S" ? "Y" : "N";
+                trgt.repairerFlag = src.generalHeader.roleCode == "R" ? "Y" : "N";
+                trgt.hospitalFlag = src.generalHeader.roleCode == "H" ? "Y" : "N";
             }
             if (src.profileHeader != null)
             {
@@ -33,11 +37,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 trgt.remark = src.profileHeader.contactPerson;
                 trgt.idCard = src.profileHeader.idRegCorp;
                 trgt.taxId = src.profileHeader.idTax;
-                {
-                    CultureInfo usaCulture = new CultureInfo("en-US");
-                    var dateString = src.profileHeader.dateInCorporate.ToString("yyyyMMdd", usaCulture);
-                    trgt.dateInCorporate = dateString;
-                }
+                //{
+                //    CultureInfo usaCulture = new CultureInfo("en-US");
+                //    var dateString = src.profileHeader.dateInCorporate.ToString("yyyyMMdd", usaCulture);
+                //    trgt.dateInCorporate = dateString;
+                //}
+                trgt.dateInCorporate = src.profileHeader.dateInCorporate;
                 trgt.corporateStaffNo = src.profileHeader.corporateBranch;
                 trgt.econActivity = src.profileHeader.econActivity;
                 trgt.countryOrigin = src.profileHeader.countryOrigin;
@@ -53,6 +58,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 trgt.telex = src.contactHeader.telephone3;
                 trgt.telegram = src.contactHeader.mobilePhone;
                 trgt.facsimile = src.contactHeader.fax;
+                trgt.emailAddress = src.contactHeader.emailAddress;
                 trgt.lineId = src.contactHeader.lineID;
                 trgt.facebook = src.contactHeader.facebook;
             }
@@ -68,7 +74,32 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 trgt.latitude = src.addressHeader.latitude;
                 trgt.longtitude = src.addressHeader.longtitude;
             }
-            
+
+            trgt.fao = "";
+            trgt.clientStatus = "";
+            trgt.sTax = "";
+            trgt.capital = "";
+            trgt.mailing = "";
+            trgt.directMail = "";
+            trgt.taxInNumber = "";
+            trgt.specialIndicator = "";
+
+            trgt.passportId = "";
+            trgt.alientId = "";
+            trgt.driverlicense = "";
+
+            trgt.solicitorBlackListFlag = "";
+            trgt.solicitorDelistFlag = "";
+            trgt.repairerTerminateDate = "";
+            trgt.solicitorTerminateDate = CommonConstant.GetDevesAPINullDate();
+            trgt.assessorTerminateDate = CommonConstant.GetDevesAPINullDate();
+            trgt.solicitorOregNum = "";
+            trgt.assessorDelistFlag = "";
+            trgt.assessorOregNum = "";
+            trgt.repairerOregNum = "";
+            trgt.rerDelistFlag = "";
+            trgt.assessorBlackListFlag = "";
+            trgt.repairerBlackListFlag = "";
 
             return trgt;
         }

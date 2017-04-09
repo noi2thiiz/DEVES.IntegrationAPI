@@ -5,6 +5,7 @@ using System.Web;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System.Globalization;
+using DEVES.IntegrationAPI.WebApi.Logic;
 
 namespace DEVES.IntegrationAPI.WebApi
 {
@@ -29,7 +30,15 @@ namespace DEVES.IntegrationAPI.WebApi
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            return DateTime.Parse(reader.Value.ToString());
+            string stringDate = reader.Value.ToString();
+            if (string.IsNullOrEmpty(stringDate))
+            {
+                return CommonConstant.GetDevesAPINullDate();
+            }
+            else
+            {
+                return DateTime.Parse(reader.Value.ToString());
+            }
         }
     }
 }

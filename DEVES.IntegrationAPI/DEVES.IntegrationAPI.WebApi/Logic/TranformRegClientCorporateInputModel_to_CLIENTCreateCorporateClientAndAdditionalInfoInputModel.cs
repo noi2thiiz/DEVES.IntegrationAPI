@@ -25,10 +25,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             {
 
                 trgt.cleansingId = src.generalHeader.cleansingId;
-                trgt.assessorFlag = src.generalHeader.assessorFlag;
-                trgt.solicitorFlag = src.generalHeader.solicitorFlag;
-                trgt.repairerFlag = src.generalHeader.repairerFlag;
-                trgt.hospitalFlag = src.generalHeader.hospitalFlag;
+                trgt.assessorFlag = src.generalHeader.roleCode == "A" ? "Y" : "N";
+                trgt.solicitorFlag = src.generalHeader.roleCode == "S" ? "Y" : "N";
+                trgt.repairerFlag = src.generalHeader.roleCode == "R" ? "Y" : "N";
+                trgt.hospitalFlag = src.generalHeader.roleCode == "H" ? "Y" : "N";
 
             }
 
@@ -41,12 +41,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 trgt.idCard = src.profileHeader.idRegCorp;
                 trgt.taxId = src.profileHeader.idTax;
                
-                {
-                    // to 20160303
-                    CultureInfo usaCulture = new CultureInfo("en-US");
-                    var dateString = src.profileHeader.dateInCorporate.ToString("ddMMyyy", usaCulture);
-                    trgt.dateInCorporate = dateString;
-                }
+                //{
+                //    // to 20160303
+                //    CultureInfo usaCulture = new CultureInfo("en-US");
+                //    var dateString = src.profileHeader.dateInCorporate.ToString("ddMMyyy", usaCulture);
+                //    trgt.dateInCorporate = dateString;
+                //}
+                trgt.dateInCorporate = src.profileHeader.dateInCorporate;
 
                 trgt.corporateStaffNo = src.profileHeader.corporateBranch;
                 trgt.econActivity = src.profileHeader.econActivity;
@@ -54,7 +55,6 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 trgt.language = src.profileHeader.language;
                 trgt.riskLevel = src.profileHeader.riskLevel;
                 trgt.vipStatus = src.profileHeader.vipStatus;
-
 
             }
             if (src.contactHeader != null)
@@ -89,6 +89,22 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 trgt.longtitude = src.addressHeader.longtitude;
 
             }
+
+            trgt.fao = "";
+            trgt.clientStatus = "";
+            trgt.sTax = "";
+            trgt.capital = "";
+            trgt.mailing = "";
+            trgt.directMail = "";
+            trgt.taxInNumber = "";
+            trgt.specialIndicator = "";
+
+            trgt.passportId = "";
+            trgt.alientId = "";
+            trgt.driverlicense = "";
+
+
+
 
             return trgt;
 
