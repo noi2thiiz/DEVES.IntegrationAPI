@@ -583,6 +583,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.RVP
             {
                 //spec 1: มาจากการ Concast CaseType+Case ตาม Business บนหน้าจอ "มาจากการ Concast CaseType+Cate ตาม Business บนหน้าจอ"
                 title = $"{catName} {subCatName} คุณ {apiInput.policyInfo.insuredFullName}",
+                description = apiInput.claimInform.accidentDesc,
 
                 //Fix
                 caseorigincode = new OptionSetValue(100000002),

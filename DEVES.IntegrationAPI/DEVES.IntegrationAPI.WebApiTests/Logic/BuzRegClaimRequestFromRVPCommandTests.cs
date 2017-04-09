@@ -262,7 +262,17 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
                     policeStation= "สน. พระนคร",
                     policeBailFlag="Y",
                     policeRecordDate = DateTime.Now,
-                    policeRecordId="4444"
+                    policeRecordId="4444",
+
+                    caseOwnerCode= "sasipa.b",
+                    caseOwnerFullName= "ษษิภา บัวใหญ่",
+
+                    informByCrmId =  "sasipa.b",
+                    informByCrmName = "ษษิภา บัวใหญ่",
+
+                    submitByCrmId =  "sasipa.b",
+                    submitByCrmName= "ษษิภา บัวใหญ่"
+
                 },
                 policyDriverInfo = new PolicyDriverInfoModel
                 {
@@ -513,8 +523,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
             attributes.AddColumn("pfc_excess_fee");
             attributes.AddColumn("pfc_deductable_fee");
             attributes.AddColumn("pfc_motor_accident_sum");
+           // attributes.AddColumn("description");
             
-
 
             // attributes.AddColumn("pfc_motor_accident_parties_sum");
             // attributes.AddColumn("pfc_accident_event_detail");
@@ -588,7 +598,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
 
 
             //     "accidentNatureDesc": "ผมขับรถมาตามปรกติ บนถนนหลวง หมายเลข 226 สุรินทร์-ศรีสะเกษ ผมมองกระจกหลังเห็นรถกระบะ DMAX แซงรถคันหลังมาเรื่อยๆ ผมมองกระจกหลังเห็นกระบะ",
-           // Assert.AreEqual("ผมขับรถมาตามปรกติ บนถนนหลวง หมายเลข 226 สุรินทร์-ศรีสะเกษ ผมมองกระจกหลังเห็นรถกระบะ DMAX แซงรถคันหลังมาเรื่อยๆ ผมมองกระจกหลังเห็นกระบะ", entity["pfc_accident_event_detail"], " error on pfc_accident_event_detail");
+           // Assert.AreEqual(apiInput.claimInform.accidentDesc, entity["description"], " error on description");
             //     "policeStation": "สน. พระนคร",
             Assert.AreEqual("สน. พระนคร", entity["pfc_police_station"], " error on pfc_police_station");
 
@@ -757,7 +767,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
             Assert.IsNotNull(result.data.ticketNo);
             Assert.IsNotNull(result.data.claimNotiNo);
 
-           // Assert.AreEqual(apiInput.ToJSON(), "");
+          //  Assert.AreEqual(apiInput.ToJSON(), "");
         }
 
         [TestMethod()]
