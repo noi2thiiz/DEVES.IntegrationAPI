@@ -22,7 +22,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             //return Request.CreateResponse(contentOutput);
 
             buzCRMRegPayeeCorporate cmdCrmRegPayeeCorporate = new buzCRMRegPayeeCorporate();
-            cmdCrmRegPayeeCorporate.TransactionId = Request.Properties["TransactionID"].ToString();
+            // cmdCrmRegPayeeCorporate.TransactionId = Request.Properties["TransactionID"].ToString();
             var contentOutput = cmdCrmRegPayeeCorporate.Execute(cmdCrmRegPayeeCorporate.DeserializeJson<RegPayeeCorporateInputModel>(value.ToString()));
             return Request.CreateResponse(contentOutput);
 

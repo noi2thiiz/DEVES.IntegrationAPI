@@ -245,7 +245,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
 
                 Incident retrievedIncident = (Incident)_serviceProxy.Retrieve(Incident.EntityLogicalName, _accountId, new Microsoft.Xrm.Sdk.Query.ColumnSet(true));
 
-                if (!retrievedIncident.pfc_isurvey_status.Value.ToString().Equals("100000040"))
+                if (retrievedIncident.pfc_isurvey_status.Value < 100000040)
                 {
                     output.code = "500";
                     output.message = "False";
