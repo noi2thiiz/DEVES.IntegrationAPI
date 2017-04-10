@@ -277,8 +277,28 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService
             return attributes;
                
         }
-      
-    public ENTITY_TYPE TranformEntity(Entity entity)
+        public ColumnSet GetColumnSetByAttributes()
+        {
+            var attributes = new ColumnSet(new string[] { });
+
+            Dictionary<string, string> _dict = new Dictionary<string, string>();
+
+            PropertyInfo[] props = typeof(ENTITY_TYPE).GetProperties();
+            foreach (PropertyInfo pi in props)
+            {
+                var attr = pi.GetCustomAttribute<XrmAttributeMappingAttribute>();
+               
+                if (null != attr)
+                {
+                    var xrmFieldName = attr.FieldName;
+                    attributes.AddColumn(xrmFieldName);
+                }
+            }
+
+            return attributes;
+
+        }
+        public ENTITY_TYPE TranformEntity(Entity entity)
         {
 
             var obj =  (ENTITY_TYPE)Activator.CreateInstance(typeof(ENTITY_TYPE));
@@ -293,7 +313,10 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService
                 {
                     try
                     {
-                        pi.SetValue(obj, entity[piName], null);
+                        
+                            pi.SetValue(obj, entity[piName], null);
+                        
+                        
                     }
                     catch (Exception e)
                     {
@@ -303,6 +326,51 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService
                   
                 }
   
+            }
+
+            return obj;
+
+        }
+        public ENTITY_TYPE TranformEntityWithAttribute(Entity entity)
+        {
+
+            var obj = (ENTITY_TYPE)Activator.CreateInstance(typeof(ENTITY_TYPE));
+            // PropertyInfo prop = obj.GetType().GetProperty("Name", BindingFlags.Public | BindingFlags.Instance);
+
+
+            var attributes = new ColumnSet(new string[] { });
+            foreach (PropertyInfo pi in typeof(ENTITY_TYPE).GetProperties())
+            {
+                string piName = pi.Name.ToLower();
+                if (null != pi && pi.CanWrite && !IgnoreAttributes.Contains(piName))
+                {
+                    try
+                    {
+                        var attr = pi.GetCustomAttribute<XrmAttributeMappingAttribute>();
+                        var xrmFieldName = attr.FieldName;
+                        if (null != attr)
+                        {
+                            if (attr.FieldKey == EntityFieldKey.PK)
+                            {
+                                pi.SetValue(obj, new Guid(entity.Id.ToString()), null);
+                            }
+                            else
+                            {
+                                pi.SetValue(obj, entity[xrmFieldName], null);
+                            }
+                           
+                        }
+                        
+
+                    }
+                    catch (Exception e)
+                    {
+                        // throw new Exception(e.Message + "===>" + piName);
+                        Console.WriteLine(e.Message + "===>" + piName);
+                    }
+
+                }
+
             }
 
             return obj;
@@ -336,6 +404,29 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService
             var _p = getOrganizationServiceProxy();
             var entity = _p.Retrieve(EntityName, guid, attributes);
             return entity;
+        }
+    }
+    public enum EntityFieldKey
+    {
+        NM,PK,FK,
+    }
+
+    public class XrmAttributeMappingAttribute : Attribute
+    {
+        public string FieldName;
+        public EntityFieldKey FieldKey;
+       
+
+        public XrmAttributeMappingAttribute(string fieldName)
+        {
+            this.FieldName = fieldName;
+            this.FieldKey = EntityFieldKey.NM; // PK,FK,NULL
+        }
+
+        public XrmAttributeMappingAttribute(string fieldName, EntityFieldKey fieldKey)
+        {
+            this.FieldName = fieldName;
+            this.FieldKey = fieldKey;
         }
     }
 }

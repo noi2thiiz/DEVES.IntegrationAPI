@@ -300,8 +300,10 @@
     <Compile Include="Controllers\UpdateCompliantStatusController.cs" />
     <Compile Include="Controllers\UpdateSurveyStatusController.cs" />
     <Compile Include="DataAccessService\ClientMasterDataGateway.cs" />
+    <Compile Include="DataAccessService\CrmOwnerAccountDataGateWay.cs" />
     <Compile Include="DataAccessService\CRMPolicyMotorDataGateWay.cs" />
     <Compile Include="DataAccessService\CrmSdkTableGateWay.cs" />
+    <Compile Include="DataAccessService\DataGateway\CorperateDataGateWay.cs" />
     <Compile Include="DataAccessService\DataGateway\SpQueryDistrictDataGateWay.cs" />
     <Compile Include="DataAccessService\DataGateway\SpQueryProvinceDataGateWay.cs" />
     <Compile Include="DataAccessService\DataRepository\DistrictRepository.cs" />
@@ -327,6 +329,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Logic\busRegClaimRequestFromRVP.cs" />
     <Compile Include="Logic\buzClaimRegistration.cs" />
     <Compile Include="Logic\buzCreateCrmClientCorporate.cs" />

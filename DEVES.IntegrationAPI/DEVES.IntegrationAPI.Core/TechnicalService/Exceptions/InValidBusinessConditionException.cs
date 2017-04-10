@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DEVES.IntegrationAPI.Core.TechnicalService.Exceptions
 {
-    [Serializable]
+    //[Serializable]
     public class BuzInValidBusinessConditionException : Exception
     {
         public ErrorMessage ErrorMessage { get; set; }

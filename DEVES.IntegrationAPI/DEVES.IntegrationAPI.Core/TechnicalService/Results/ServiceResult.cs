@@ -162,15 +162,15 @@ public class ServiceResultHeaderOnly : IServiceResult
         public string transactionDateTime { get; set; }
         [JsonProperty(Order = 6)]
         public MODEL_DATA_TYPE data { get; set; }
-        [JsonProperty(Order = 7)]
-        public DebugInfo _debugInfo  { get; set; }
+       // [JsonProperty(Order = 7)]
+       // private DebugInfo _debugInfo  { get; set; }
 
 
         public ServiceResultSingleData()
         {
             // Header = new ServiceResultHeader();
             data = new MODEL_DATA_TYPE();
-            _debugInfo = new DebugInfo();
+            //_debugInfo = new DebugInfo();
         }
 
         //public ServiceResultHeader Header { get; set; }
@@ -180,14 +180,14 @@ public class ServiceResultHeaderOnly : IServiceResult
 
         public void AddRequest(dynamic request)
         {
-            this._debugInfo.request = request;
+           // this._debugInfo.request = request;
         }
 
         private dynamic _content { get; set; }
 
         public void AddContent(string dataContent)
         {
-            this._debugInfo.responseContentString = dataContent;
+           // this._debugInfo.responseContentString = dataContent;
         }
 
 

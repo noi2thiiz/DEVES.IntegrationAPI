@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace DEVES.IntegrationAPI.Core.TechnicalService.Exceptions
 {
-    [Serializable]
+    //[Serializable]
     public class BuzInternalErrorException : Exception
     {
-        private ErrorMessage errorMessage;
+        public ErrorMessage ErrorMessage;
 
         public BuzInternalErrorException()
         {
@@ -19,7 +19,7 @@ namespace DEVES.IntegrationAPI.Core.TechnicalService.Exceptions
 
         public BuzInternalErrorException(ErrorMessage errorMessage)
         {
-            this.errorMessage = errorMessage;
+            this.ErrorMessage = errorMessage;
         }
 
         public BuzInternalErrorException(string message) : base(message)

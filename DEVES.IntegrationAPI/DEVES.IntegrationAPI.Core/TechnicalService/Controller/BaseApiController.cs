@@ -131,7 +131,34 @@ namespace DEVES.IntegrationAPI.WebApi.Core.Controllers
                 //  IServiceResult result = (IServiceResult)method.Invoke(manager, new [model]);
                 return SuccessResponse(output);
             }
+            catch (DEVES.IntegrationAPI.Core.TechnicalService.Exceptions.BuzInValidBusinessConditionException e)
+            {
+                //Console.WriteLine("WebException");
+                var errorMessage = e.ErrorMessage;
+                //Console.WriteLine(response.StatusCode + " " + response.StatusDescription);
 
+                var r = new ServiceFailResult();
+                r.setHeaderProperty("code", errorMessage.code);
+                r.setHeaderProperty("message", errorMessage.message);
+                r.setHeaderProperty("description",  errorMessage.description.ToString());
+               
+                return CreatedResponse(r);
+            }
+            catch (DEVES.IntegrationAPI.Core.TechnicalService.Exceptions.BuzInternalErrorException e)
+            {
+                //Console.WriteLine("WebException");
+                var errorMessage = e.ErrorMessage;
+                //Console.WriteLine(response.StatusCode + " " + response.StatusDescription);
+
+                var r = new ServiceFailResult();
+                r.setHeaderProperty("code", errorMessage.code);
+                r.setHeaderProperty("message", errorMessage.message);
+
+                r.setHeaderProperty("description", errorMessage.description.ToString());
+             
+                return CreatedResponse(r);
+            }
+            
             catch (RemoteServiceErrorException e)
             {
                 //Console.WriteLine("RemoteServiceErrorException");
@@ -141,6 +168,8 @@ namespace DEVES.IntegrationAPI.WebApi.Core.Controllers
             catch (ServiceFailException e)
             {
                 //Console.WriteLine("ServiceFailException");
+                
+               
                 return CreatedResponse(e.Result);
             }
 
@@ -154,20 +183,11 @@ namespace DEVES.IntegrationAPI.WebApi.Core.Controllers
                 r.setHeaderProperty("code", response.StatusCode.ToString());
                 r.setHeaderProperty("message", "Web Service error");
                 r.setHeaderProperty("description", response.StatusDescription);
-                return CreatedResponse(r);
-            }
-            catch (BuzInValidBusinessConditionException e)
-            {
-                //Console.WriteLine("WebException");
-                var errorMessage = e.ErrorMessage;
-                //Console.WriteLine(response.StatusCode + " " + response.StatusDescription);
 
-                var r = new ServiceFailResult();
-                r.setHeaderProperty("code", errorMessage.code);
-                r.setHeaderProperty("message", errorMessage.message);
-                r.setHeaderProperty("description", errorMessage.description);
+              
                 return CreatedResponse(r);
             }
+            
            
             catch (System.Reflection.TargetInvocationException e)
             {
@@ -182,12 +202,34 @@ namespace DEVES.IntegrationAPI.WebApi.Core.Controllers
                     return CreatedResponse(ex.Result);
                 }
                 else if (e.InnerException != null && e.InnerException.GetType().ToString() ==
-                         "DEVES.IntegrationAPI.WebApi.Services.Core.Exceptions.RemoteServiceErrorException")
+                         "DEVES.IntegrationAPI.Core.TechnicalService.Exceptions.BuzInternalErrorException")
                 {
-                    ServiceFailException ex = (ServiceFailException) e.InnerException;
-                    //Console.WriteLine(ex.StackTrace);
+                    BuzInternalErrorException ex = (BuzInternalErrorException) e.InnerException;
+                    var errorMessage = ex.ErrorMessage;
+                    //Console.WriteLine(response.StatusCode + " " + response.StatusDescription);
 
-                    return CreatedResponse(ex.Result);
+                    var r = new ServiceFailResult();
+                    r.setHeaderProperty("code", errorMessage.code);
+                    r.setHeaderProperty("message", errorMessage.message);
+                    r.setHeaderProperty("description",  errorMessage.description.ToString());
+             
+
+                    return CreatedResponse(r);
+                }
+                else if (e.InnerException != null && e.InnerException.GetType().ToString() ==
+                         "DEVES.IntegrationAPI.Core.TechnicalService.Exceptions.BuzInValidBusinessConditionException")
+                {
+                    BuzInValidBusinessConditionException ex = (BuzInValidBusinessConditionException)e.InnerException;
+                    var errorMessage = ex.ErrorMessage;
+                    //Console.WriteLine(response.StatusCode + " " + response.StatusDescription);
+
+                    var r = new ServiceFailResult();
+                    r.setHeaderProperty("code", errorMessage.code);
+                    r.setHeaderProperty("message", errorMessage.message);
+                    r.setHeaderProperty("description", errorMessage.description.ToString());
+
+
+                    return CreatedResponse(r);
                 }
             }
           
@@ -227,7 +269,7 @@ namespace DEVES.IntegrationAPI.WebApi.Core.Controllers
 
             output.setHeaderProperty("code","200");
             output.setHeaderProperty("message","Success");
-            output.setHeaderProperty("description","The server successfully processed the request");
+            output.setHeaderProperty("description", "SuccessResponse:The server successfully processed the request");
             output.setHeaderProperty("transactionDateTime", GetCurrentDateTime());
             output.setHeaderProperty("transactionId", GetTransactionId());
 
@@ -238,7 +280,15 @@ namespace DEVES.IntegrationAPI.WebApi.Core.Controllers
         protected IHttpActionResult CreatedResponse(dynamic output)
         {
 
-          
+            if (((IServiceResult)output).code == null)
+            {
+                output.setHeaderProperty("code", "500");
+                output.setHeaderProperty("message", "Internal error occurred");
+                output.setHeaderProperty("description", "Unhandled error!!");
+            }
+            
+           
+           
             output.setHeaderProperty("transactionDateTime", GetCurrentDateTime());
             output.setHeaderProperty("transactionId", GetTransactionId());
 

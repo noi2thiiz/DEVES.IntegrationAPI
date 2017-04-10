@@ -83,11 +83,15 @@
     <Compile Include="TechnicalService\Converters\BooleanJsonConverter.cs" />
     <Compile Include="TechnicalService\Converters\CustomDateConverter.cs" />
     <Compile Include="TechnicalService\Converters\XrmDateTimeConvertor.cs" />
+    <Compile Include="TechnicalService\DataAdepter\CrmDataAdepter\CrmDataAdepter.cs" />
+    <Compile Include="TechnicalService\DataAdepter\IDataAdapter.cs" />
+    <Compile Include="TechnicalService\DataGateWay\BaseDataGateWay.cs" />
     <Compile Include="TechnicalService\DataAdepter\DbClient\DbRequest.cs" />
     <Compile Include="TechnicalService\DataAdepter\DbClient\DbResult.cs" />
     <Compile Include="TechnicalService\DataAdepter\DbClient\StoreDataReader.cs" />
     <Compile Include="TechnicalService\DataAdepter\RESTClient\RESTClient.cs" />
     <Compile Include="TechnicalService\DataAdepter\RESTClient\RESTClientResult.cs" />
+    <Compile Include="TechnicalService\DataGateWay\IDataGateWay.cs" />
     <Compile Include="TechnicalService\EnumExtensions.cs" />
     <Compile Include="TechnicalService\Exceptions\BuzInternalErrorException.cs" />
     <Compile Include="TechnicalService\Exceptions\CannotConnetServiceException.cs" />

@@ -70,7 +70,9 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="DataAccessService\CrmOwnerAccountDataGateWayTests.cs" />
     <Compile Include="DataAccessService\CRMPolicyMotorDataGateWayTests.cs" />
+    <Compile Include="DataAccessService\DataGateway\CorperateDataGateWayTests.cs" />
     <Compile Include="DataAccessService\DataRepository\DistrictRepositoryTests.cs" />
     <Compile Include="DataAccessService\DataRepository\ProvinceRepositoryTests.cs" />
     <Compile Include="DataAccessService\PfcIncidentDataGateWayTests.cs" />
@@ -81,6 +83,7 @@
     <Compile Include="DataAccessService\VoiceRecordDataGateWayTests.cs" />
     <Compile Include="Logic\BuzRegClaimRequestFromRVPCommandTests.cs" />
     <Compile Include="Logic\RVPClientFinderTests.cs" />
+    <Compile Include="Logic\RVPInformerFinderTests.cs" />
     <Compile Include="Logic\RVPPolicyAditionalFinderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -54,7 +54,8 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.DataRepository
                 }
                 else
                 {
-                    throw new Exception("Informer Not Found!!");
+                    
+                    throw new Exception("Province Not Found!!");
                 }
                 Console.WriteLine(ProvinceList.ToJSON());
             }
@@ -62,6 +63,8 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.DataRepository
         }
         public ProvinceEntity Find(string provinceCode)
         {
+           
+
             Console.WriteLine(" Search :" + provinceCode);
             if (ProvinceList.ContainsKey(provinceCode))
             {
@@ -77,6 +80,12 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.DataRepository
             }
             else
             {
+                return new ProvinceEntity
+                {
+                    Id = new Guid(),
+                    ProvinceCode = "00",
+                    ProvinceName = $"ไม่พบข้อมูล ({provinceCode})"
+                };
                 Console.WriteLine("Not found"+ provinceCode);
                 return null;
             }

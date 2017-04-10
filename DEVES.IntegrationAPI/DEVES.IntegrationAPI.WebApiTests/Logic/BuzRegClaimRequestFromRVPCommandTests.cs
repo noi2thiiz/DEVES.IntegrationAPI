@@ -13,6 +13,7 @@ using Microsoft.Xrm.Sdk;
 using DEVES.IntegrationAPI.WebApi.Core.ExtensionMethods;
 using DEVES.IntegrationAPI.WebApi.Logic.RVP;
 using DEVES.IntegrationAPI.Core.TechnicalService.Exceptions;
+using DEVES.IntegrationAPI.WebApi.DataAccessService.DataGateway;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
 {
@@ -808,10 +809,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
         {
             var cmd = new BuzRegClaimRequestFromRVPCommand();
 
-            Dictionary<string, dynamic> informer =cmd.GetInformerInfo();
-            Assert.IsTrue(informer.ContainsKey("pfc_polisy_client_id"));
-            Assert.AreEqual("10077508", informer["pfc_polisy_client_id"]);
-            Assert.AreEqual(new Guid("81CBAA5F-AEB6-E611-80CA-0050568D1874"), informer["AccountId"]);
+            CorperateEntity informer = cmd.GetInformerInfo();
+          //  Assert.IsTrue(informer.ContainsKey("pfc_polisy_client_id"));
+           // Assert.AreEqual("10077508", informer.PolisyClientId);
+            Assert.AreEqual("บริษัททดสอบเจริญ15 รุ่งเรือง รุ่งเรือง", informer.Name);
+            //   Assert.AreEqual(new Guid("81CBAA5F-AEB6-E611-80CA-0050568D1874"), informer["AccountId"]);
             // Assert.AreEqual()
         }
     }

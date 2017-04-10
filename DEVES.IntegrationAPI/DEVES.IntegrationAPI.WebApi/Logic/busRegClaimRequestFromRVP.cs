@@ -10,6 +10,7 @@ using System.Runtime.Serialization;
 using DEVES.IntegrationAPI.Core.TechnicalService.Exceptions;
 using DEVES.IntegrationAPI.Core.ExtensionMethods;
 using DEVES.IntegrationAPI.WebApi.DataAccessService.DataRepository;
+using DEVES.IntegrationAPI.WebApi.DataAccessService.DataGateway;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic.RVP
 {
@@ -22,37 +23,37 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.RVP
         {
             { "RvpRefCode_Duplicate",new ErrorMessage{  httpStatus="500",code ="ERROR-RVP010",
                                                 fieldError ="rvpRefCode",
-                                                message ="Duplicate rvpRefCode,The request have been rejected",
-                                                description ="A rvpRefCode from this request already exists in CRM"} },
+                                                message ="Duplicate rvpRefCode.",
+                                                description ="เลขเคลมของ RVP ซ้ำ"} },
 
             { "Policy_NotFound",new ErrorMessage{  httpStatus="500",code ="ERROR-RVP021",
                                                 fieldError ="policyInfo.policyNo",
-                                                message ="Policy not found,The request have been rejected",
-                                                description ="The policy number not found"} },
+                                                message ="The PolicyNo not found.",
+                                                description ="ไม่พบเลขกรมธรรม์"} },
 
             { "Policy_MultipleFound",new ErrorMessage{  httpStatus="500", code="ERROR-RVP022",
                                                 fieldError ="policyInfo.policyNo",
-                                                message ="Duplicate policy,The request have been rejected",
-                                                description ="The system not allow multiple policy number searches on multiple customer."} },
+                                                message ="Multiple policyNo are found.",
+                                                description ="พบเลขกรมธรรม์มากกว่า 1 รายการ"} },
 
             {"InsuredClient_NotFound",new ErrorMessage{  httpStatus="500", code="ERROR-RVP031",
                                                 fieldError ="policyInfo.insuredClientType,policyInfo.insuredClientId",
-                                                message ="The request have been rejected",
-                                                description ="The request found  multiple Insured Client"} },
+                                                message ="The Insured Client not found",
+                                                description ="ไม่พบเจ้าของกรมธรรม์"} },
             {"InsuredClient_MultipleFound",new ErrorMessage{  httpStatus="500", code="ERROR-RVP031",
                                                 fieldError ="policyInfo.insuredClientType,policyInfo.insuredClientId",
-                                                message ="The request have been rejected",
-                                                description ="The request found  multiple Insured Client"} },
+                                                message ="Multiple Insured Client are found.",
+                                                description ="พบเจ้าของกรมธรรม์มากกว่า 1 รายการ"} },
 
             {"DriverClient_NotFound",new ErrorMessage{  httpStatus="500", code="ERROR-RVP041",
                                                 fieldError ="policyDriverInfo.driverClientId",
-                                                message ="The request have been rejected",
-                                                description ="The reques found multiple driver."} },
+                                                message ="The DriverClient not found",
+                                                description ="ไม่พบข้อมูลผู้ขับขี่"} },
 
             { "DriverClient_MultipleFound",new ErrorMessage{  httpStatus="500", code="ERROR-RVP041",
                                                 fieldError ="policyDriverInfo.driverClientId",
-                                                message ="The request have been rejected",
-                                                description ="The reques found multiple driver."} },
+                                                message ="Multiple Driver Client are found.",
+                                                description ="พบข้อมูลผู้ขับขี่มากกว่า 1 รายการ"} },
 
             { "CanNotCreateIncident",new ErrorMessage{  httpStatus="500", code="ERROR-RVP041",
                                                 fieldError ="policyDriverInfo.driverClientId",
@@ -61,8 +62,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.RVP
 
             { "CannotCreateMotorAccident",new ErrorMessage{  httpStatus="500", code="ERROR-RVP041",
                                                 fieldError ="policyDriverInfo.driverClientId",
-                                                message ="The request have been rejected",
+                                                message ="Incomplete Request",
                                                 description ="Cannot Create IncidentEntity"} },
+
+            { "CaseOwnerCode_NotFound",new ErrorMessage{  httpStatus="500", code="ERROR-RVP050",
+                                                fieldError ="policyDriverInfo.driverClientId",
+                                                message ="The CaseOwner not found.",
+                                                description ="ไม่พบข้อมูลรหัส AD ของผู้นำเข้าข้อมูลสำรวจภัยเบื้องต้น (CaseOwnerCode ต้องเป็น AD Account ที่ลงทะเบียนเป็นผู้ใช้งานระบบ CRM)"} }
 
 
         };
@@ -81,8 +87,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.RVP
                 data = new CrmRegClaimRequestFromRVPDataOutputModel()
                 {
                     claimNotiNo = "",
-                    ticketNo = "",
-                    incidentGuid = ""
+                    ticketNo = ""
                 }
             };
 
@@ -144,6 +149,27 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.RVP
 
             // var informerEntity = FindClient("clientType", "clientId");
 
+
+            //condition #5
+            // validat owner
+            //หาว่า owner ที่ส่งมามีตัวตนหรือไม่ ถ้าไม่ส่งอะไรมาจะใช้ default
+           
+            if ( string.IsNullOrEmpty(apiInput.claimInform.caseOwnerCode))
+            {
+                apiInput.claimInform.caseOwnerCode = "sasipa.b";
+            }
+            if (apiInput.claimInform.caseOwnerCode.Substring(0,3).ToUpper() != "DVS")
+            {
+                apiInput.claimInform.caseOwnerCode = $"DVS\\{ apiInput.claimInform.caseOwnerCode}";
+            }
+
+            CrmOwnerAccountDataGateWay db = new CrmOwnerAccountDataGateWay();
+            var crmOwnerEntity = db.FindByDomainName(apiInput.claimInform.caseOwnerCode);
+            if (null == crmOwnerEntity )
+            {
+                throw new BuzInValidBusinessConditionException(RVPResponseInfo["CaseOwnerCode_NotFound"]);
+            }
+
             #endregion
 
             #region precess
@@ -152,7 +178,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.RVP
             // step #7
             // Insert Incident
             // Get incident.incidentId
-            var incidentGuid = RVPCreateIncidentCommand.Execute(apiInput, resultPolicy, resultClient, resultClient, resultDriverClient);
+            var incidentGuid = RVPCreateIncidentCommand.Execute(apiInput, resultPolicy, resultClient, resultClient, resultDriverClient, crmOwnerEntity);
 
             // step #8
             // Insert pfc_motor_accident (pfc_parent_caseId = incident.incidentId) 
@@ -188,7 +214,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.RVP
             var IncidentEntity2 = IncidentDataGateWay.Find(incidentGuid);
             outputContent.data.claimNotiNo = IncidentEntity2.pfc_claim_noti_number;
             outputContent.data.ticketNo = IncidentEntity2.ticketnumber;
-            outputContent.data.incidentGuid = incidentGuid.ToString();
+       
 
             #endregion;
 
@@ -202,9 +228,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.RVP
 
         public Guid CreateIncident(CRMregClaimRequestFromRVPInputModel apiInput, CRMPolicyMotorEntity policyEntity, CustomerClientEntity customerClientEntity, CustomerClientEntity informerEntity, CustomerClientEntity driverEntity)
         {
-            return RVPCreateIncidentCommand.Execute(apiInput, policyEntity, customerClientEntity, informerEntity, driverEntity);
+            return (Guid)RVPCreateIncidentCommand.Execute(apiInput, policyEntity, customerClientEntity, informerEntity, driverEntity);
         }
-        public Dictionary<string, dynamic> GetInformerInfo()
+        public CorperateEntity GetInformerInfo()
         {
             return RVPInformerFinder.Find();
         }
@@ -420,33 +446,35 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.RVP
             return apiInput;
         }
     }
-    internal static class RVPInformerFinder
+    public static class RVPInformerFinder
     {
-        private static Dictionary<string, dynamic> InformerInfo;
-        public static Dictionary<string, dynamic> Find()
+        private static CorperateEntity InformerInfo;
+        public static CorperateEntity Find()
         {
 
 
             if (null == InformerInfo)
             {
-                InformerInfo = new Dictionary<string, dynamic>();
+                InformerInfo = new CorperateEntity();
 
 
-                if (MemoryManager.Memory.ContainsKey("RVP_INFOMER"))
+                if (MemoryManager.Memory.ContainsKey("RVP_INFOMER_COPERRATE"))
                 {
-                    InformerInfo = (Dictionary<string, dynamic>)MemoryManager.Memory.GetItem("RVP_INFOMER");
+                    InformerInfo = (CorperateEntity)MemoryManager.Memory.GetItem("RVP_INFOMER_COPERRATE");
                 }
                 else
                 {
-                    SpGetInformerForRVPDataGateway dg = new SpGetInformerForRVPDataGateway();
-                    var result = dg.Excecute();
-                    if (result.Count > 0)
+                    // SpGetInformerForRVPDataGateway dg = new SpGetInformerForRVPDataGateway();
+                    CorperateDataGateWay db = new CorperateDataGateWay();
+                    var result = db.GetDefault();
+                   
+                    if (null != result)
                     {
-                        InformerInfo = (Dictionary<string, dynamic>)result.Data[0];
+                        InformerInfo = result;
                     }
                     else
                     {
-                        throw new Exception("Informer Not Found!!");
+                        throw new Exception("Informer Not Found !-!");
                     }
 
                 }
@@ -464,7 +492,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.RVP
 
         public static CustomerClientEntity Find(string clientType, string clientId)
         {
-
+            return MockRVPData.GetMockCustomerClient();
             ClientMasterDataGateway clientMasterDataGateway = new ClientMasterDataGateway();
             var reqClient = new DataRequest();
             reqClient.AddParam("clientType", clientType); // Policy Owner Client Type , 
@@ -510,7 +538,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.RVP
                     }
                     else
                     {
-                        throw new Exception("Informer Not Found!!");
+                        throw new Exception("Owner Not Found !!");
                     }
 
                 }
@@ -548,7 +576,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.RVP
     }
     internal static class RVPCreateIncidentCommand
     {
-        public static Guid Execute(CRMregClaimRequestFromRVPInputModel apiInput, CRMPolicyMotorEntity policyAdditionalEntity, CustomerClientEntity customerClientEntity, CustomerClientEntity informerEntity, CustomerClientEntity driverEntity)
+        public static Guid Execute(CRMregClaimRequestFromRVPInputModel apiInput, CRMPolicyMotorEntity policyAdditionalEntity, CustomerClientEntity customerClientEntity, CustomerClientEntity informerEntity, CustomerClientEntity driverEntity, UserAccountEntity crmOwnerEntity)
         {
             if (null == apiInput.claimInform)
             {
@@ -558,8 +586,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.RVP
             var catName = "สินไหม (Motor)";
             var subCatName = "แจ้งอุบัติเหตุรถยนต์(ผ่าน บ.กลาง)";
 
-            //var informerInfo = RVPInformerFinder.Find();
-            var informerGuid = new Guid("b55765f1-c4a4-e611-80ca-0050568d1874");// informerInfo["AccountId"];
+           
+            var informerGuid = RVPInformerFinder.Find().Id; // new Guid("b55765f1-c4a4-e611-80ca-0050568d1874");// informerInfo["AccountId"];
 
             var driverGuid = driverEntity.ContactId;
             var policyAdditionalIdGuid = policyAdditionalEntity.crmPolicyDetailId;// new Guid();
@@ -639,7 +667,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.RVP
 
                 /*spec : (policyAdditional.pfc_policy_vip) (Policy.pfc_policy_mc_nmc) */
                 pfc_accident_province = pfcAccidentProvince,
-                pfc_accident_district = pfcAccidentDistrict
+                pfc_accident_district = pfcAccidentDistrict,
+
+                ownerid= new EntityReference("systemuser", crmOwnerEntity.Id) 
             };
 
 
@@ -820,6 +850,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.RVP
             return guid;
         }
 
+        public static object Execute(CRMregClaimRequestFromRVPInputModel apiInput, CRMPolicyMotorEntity policyAdditionalEntity, CustomerClientEntity customerClientEntity, CustomerClientEntity informerEntity, CustomerClientEntity driverClient)
+        {
+            CrmOwnerAccountDataGateWay db = new CrmOwnerAccountDataGateWay();
+            var crmOwnerEntity = db.GetDefault();
+            return Execute(apiInput, policyAdditionalEntity, customerClientEntity, informerEntity, driverClient, crmOwnerEntity);
+        }
     }
 
     internal static class RVPMortorAccidentFinder

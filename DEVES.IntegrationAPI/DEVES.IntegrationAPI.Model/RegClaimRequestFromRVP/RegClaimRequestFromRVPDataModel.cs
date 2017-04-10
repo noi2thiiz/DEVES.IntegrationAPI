@@ -32,7 +32,7 @@ namespace DEVES.IntegrationAPI.Model.RegClaimRequestFromRVP
     {
         public string ticketNo { get; set; }
         public string claimNotiNo { get; set; }
-        public string incidentGuid { get; set; }
+
     }
 
     public class PolicyInfoModel

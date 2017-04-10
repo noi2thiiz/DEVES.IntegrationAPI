@@ -22,7 +22,7 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.XrmEntity
 
            
              customerid = new EntityReference("contact", accountGuid);
-             pfc_informer_name = new EntityReference("contact", informerGuid);
+             pfc_informer_name = new EntityReference("account", informerGuid);
              pfc_driver_name = new EntityReference("contact", driverGuid);
             pfc_policyid = new EntityReference("pfc_polycy", policyGuid);
             //customerid //contact // account //B55765F1-C4A4-E611-80CA-0050568D1874
@@ -129,6 +129,7 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.XrmEntity
         public decimal pfc_excess_fee { get;  set; }
         public decimal pfc_deductable_fee { get;  set; }
         public int pfc_motor_accident_sum { get; set; }
+        public EntityReference ownerid { get;  set; }
         //public bool pfc_legal_case_flag { get;  set; }
         // public int pfc_excess_fee { get;  set; }
         //  public int pfc_deductable_fee { get;  set; }

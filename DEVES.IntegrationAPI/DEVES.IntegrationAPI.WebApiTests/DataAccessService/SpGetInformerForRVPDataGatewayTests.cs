@@ -18,7 +18,8 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.Tests
             var result = dg.Excecute();
            var  InformerInfo = (Dictionary<string, dynamic>)result.Data[0];
             Assert.AreEqual(1, result.Count);
-            Assert.AreEqual("10077508", InformerInfo["pfc_polisy_client_id"]); 
+           // Assert.AreEqual("10077508", InformerInfo["pfc_polisy_client_id"]);
+            Assert.AreEqual("10077508", InformerInfo["pfc_polisy_client_id"]);
         }
     }
 }

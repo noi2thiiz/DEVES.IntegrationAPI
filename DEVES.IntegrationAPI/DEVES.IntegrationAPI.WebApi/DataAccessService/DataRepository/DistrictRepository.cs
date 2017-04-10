@@ -49,7 +49,7 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.DataRepository
                 }
                 else
                 {
-                    throw new Exception("Informer Not Found!!");
+                        throw new Exception("District Not Found!!");
                 }
                 //Console.WriteLine(DistrictList.ToJSON());
             }
@@ -57,6 +57,8 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.DataRepository
         }
         public DistrictEntity Find(string DistrictCode)
         {
+            
+
             Console.WriteLine(" Search :" + DistrictCode);
             if (DistrictList.ContainsKey(DistrictCode))
             {
@@ -73,7 +75,15 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.DataRepository
             else
             {
                 Console.WriteLine("Not found" + DistrictCode);
-                return null;
+
+                return new DistrictEntity
+                {
+
+                    DistrictCode = "0000",
+                    DistrictName = $"ไม่พบข้อมูล ({DistrictCode}) "
+
+                };
+               // return null;
             }
 
 
