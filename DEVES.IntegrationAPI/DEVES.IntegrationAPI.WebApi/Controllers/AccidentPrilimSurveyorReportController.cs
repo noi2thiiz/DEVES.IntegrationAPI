@@ -245,11 +245,11 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
 
                 Incident retrievedIncident = (Incident)_serviceProxy.Retrieve(Incident.EntityLogicalName, _accountId, new Microsoft.Xrm.Sdk.Query.ColumnSet(true));
 
-                if (retrievedIncident.pfc_isurvey_status.Value < 100000040)
+                if (retrievedIncident.pfc_isurvey_status.Value < 100000070)
                 {
                     output.code = "500";
                     output.message = "False";
-                    output.description = "iSurvey Status ไม่ใช่อยู่ในสถานะถึงที่เกิดเหตุ (100000040)";
+                    output.description = "iSurvey Status ไม่ใด้อยู่ในสถานะเสร็จสมบูรณ์";
                     output.transactionId = "";
                     output.transactionDateTime = DateTime.Now.ToString();
 
