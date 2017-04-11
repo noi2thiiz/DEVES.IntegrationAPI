@@ -1,0 +1,72 @@
+{
+  "settings": {
+    "TESTCONFIG": "BBBB",
+    "CRMDB": "Data Source=192.168.8.122;Initial Catalog=CRM_CUSTOM_APP;Persist Security Info=True;User ID=CRMDevelop;Password=Develop%D",
+    "CRM_CUSTOM_DB": "Data Source=DESKTOP-Q30CAGJ;Initial Catalog=CRM_CUSTOM_APP;Persist Security Info=True;User ID=sa;Password=patiwat",
+    "CRMSDK": "Url=https://crmdev.deves.co.th/CRMDEV; domain=dvs; Username=crmtest1@dvs.ins; Password=crm#01"
+  },
+  'serviceProxy': {
+    'endPoint': 'https://192.168.3.194/ServiceProxy',
+    'username': 'fff',
+    'password': 'fd',
+    'systems': {
+      'CRM': {
+        'uidType': 'ad'
+      },
+      'Polisy400': {
+        'uidType': 'ad'
+      },
+      'Cleansing': {
+        'uidType': 'ad'
+      },
+      'SAP': {
+        'uidType': 'ad'
+      },
+      'ISurvey': {
+        'uidType': 'ad'
+      },
+      'Locus': {
+        'uidType': 'ad'
+      }
+    }
+  },
+  'connections': {
+    'CRMDB': {
+      'host': '192.168.8.121',
+      'port': '1433',
+      'schema': 'CRM_DDB',
+      'user': 'sa',
+      'password': '123456'
+    },
+    'CRM_CUSTOM_DB': {
+      'host': 'DESKTOP-Q30CAGJ',
+      'port': '1433',
+      'schema': 'CRM_CUSTOM_APP',
+      'user': 'sa',
+      'password': 'patiwat'
+    }
+  },
+  'serviceEnpoints': {
+    'SMS': {
+      'endPoint': 'https://192.168.3.194/ServiceProxy/Common/jsonservice/COMP_SendSMS',
+      'token': ''
+    },
+    'ctiMackCall': {
+      'endPoint': 'https://10.10.0.22:8443/webdialer/services/WebdialerSoapService',
+      'token': ''
+    },
+    'markLertAsDone': {
+      'endPoint': 'http://ilerturest.cloudapp.net/v1/thirdparty/lert/finish'
+    }
+  },
+  'clients': {
+    'xrmApi': {
+      'name': 'xrmApi',
+      'endPoint': 'http://xxxxx'
+    },
+    'crmCustomApp': {
+      'name': 'crmCustomApp',
+      'endPoint': 'http://ssss'
+    }
+  }
+}

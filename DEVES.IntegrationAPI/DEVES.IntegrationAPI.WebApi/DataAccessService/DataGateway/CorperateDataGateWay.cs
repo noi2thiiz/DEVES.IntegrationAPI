@@ -35,7 +35,7 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.DataGateway
 
         public CorperateEntity GetDefault()
         {
-            return FindByPolisyClientId("10077508");//10077508 16960851
+            return FindByPolisyClientId("16960851");//10077508 16960851 //10077508
 
         }
 

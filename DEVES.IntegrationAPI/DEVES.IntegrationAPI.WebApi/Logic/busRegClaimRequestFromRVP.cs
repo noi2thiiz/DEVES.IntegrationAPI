@@ -11,6 +11,7 @@ using DEVES.IntegrationAPI.Core.TechnicalService.Exceptions;
 using DEVES.IntegrationAPI.Core.ExtensionMethods;
 using DEVES.IntegrationAPI.WebApi.DataAccessService.DataRepository;
 using DEVES.IntegrationAPI.WebApi.DataAccessService.DataGateway;
+using DEVES.IntegrationAPI.WebApi.DataAccessService.Helper;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic.RVP
 {
@@ -230,10 +231,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.RVP
         {
             return (Guid)RVPCreateIncidentCommand.Execute(apiInput, policyEntity, customerClientEntity, informerEntity, driverEntity);
         }
-        public CorperateEntity GetInformerInfo()
-        {
-            return RVPInformerFinder.Find();
-        }
+        
     }
 
 
@@ -446,43 +444,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.RVP
             return apiInput;
         }
     }
-    public static class RVPInformerFinder
-    {
-        private static CorperateEntity InformerInfo;
-        public static CorperateEntity Find()
-        {
-
-
-            if (null == InformerInfo)
-            {
-                InformerInfo = new CorperateEntity();
-
-
-                if (MemoryManager.Memory.ContainsKey("RVP_INFOMER_COPERRATE"))
-                {
-                    InformerInfo = (CorperateEntity)MemoryManager.Memory.GetItem("RVP_INFOMER_COPERRATE");
-                }
-                else
-                {
-                    // SpGetInformerForRVPDataGateway dg = new SpGetInformerForRVPDataGateway();
-                    CorperateDataGateWay db = new CorperateDataGateWay();
-                    var result = db.GetDefault();
-                   
-                    if (null != result)
-                    {
-                        InformerInfo = result;
-                    }
-                    else
-                    {
-                        throw new Exception("Informer Not Found !-!");
-                    }
-
-                }
-
-            }
-            return InformerInfo;
-        }
-    }
+   
     public static class RVPClientFinder
     {
         public static void Clear()
@@ -492,7 +454,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.RVP
 
         public static CustomerClientEntity Find(string clientType, string clientId)
         {
-            return MockRVPData.GetMockCustomerClient();
+          
             ClientMasterDataGateway clientMasterDataGateway = new ClientMasterDataGateway();
             var reqClient = new DataRequest();
             reqClient.AddParam("clientType", clientType); // Policy Owner Client Type , 
@@ -505,7 +467,19 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.RVP
             }
             else
             {
-                return ((Dictionary<string, dynamic>)result.Data[0]).ToType<CustomerClientEntity>();
+                var row =  ((Dictionary<string, dynamic>)result.Data[0]); //.ToType<CustomerClientEntity>();
+
+                return new CustomerClientEntity
+                {
+                    ContactId = row["ContactId"],
+                    pfc_customer_privilege_level = row["pfc_customer_privilege_level"],
+                    pfc_customer_sensitive_level = row["pfc_customer_sensitive_level"],
+                    pfc_customer_vip  = row["pfc_customer_vip"],
+                    pfc_source_data = row["pfc_source_data"],
+                    pfc_crm_person_id = row["pfc_crm_person_id"],
+                    pfc_cleansing_cusormer_profile_code = row["pfc_cleansing_cusormer_profile_code"]
+
+                };
                 // return  (CustomerClientEntity)result.Data[0];
                 //return MockRVPData.GetMockCustomerClient();
             }
@@ -576,18 +550,22 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.RVP
     }
     internal static class RVPCreateIncidentCommand
     {
-        public static Guid Execute(CRMregClaimRequestFromRVPInputModel apiInput, CRMPolicyMotorEntity policyAdditionalEntity, CustomerClientEntity customerClientEntity, CustomerClientEntity informerEntity, CustomerClientEntity driverEntity, UserAccountEntity crmOwnerEntity)
+        public static Guid Execute(CRMregClaimRequestFromRVPInputModel apiInput, CRMPolicyMotorEntity 
+            policyAdditionalEntity, CustomerClientEntity customerClientEntity,
+            CustomerClientEntity informerEntity, CustomerClientEntity driverEntity, UserAccountEntity crmOwnerEntity)
         {
             if (null == apiInput.claimInform)
             {
                 apiInput.claimInform = new ClaimInformModel();
             }
+            var caseCategoryForRVP = EnvironmentDataService.Instance.GetCaseCategoryForRVP();
+            var caseSubCategoryForRVP = EnvironmentDataService.Instance.GetCaseSubCategoryForRVP();
 
-            var catName = "สินไหม (Motor)";
-            var subCatName = "แจ้งอุบัติเหตุรถยนต์(ผ่าน บ.กลาง)";
+            var catName = caseCategoryForRVP.Name;
+            var subCatName = caseSubCategoryForRVP.Name;
 
            
-            var informerGuid = RVPInformerFinder.Find().Id; // new Guid("b55765f1-c4a4-e611-80ca-0050568d1874");// informerInfo["AccountId"];
+            var informerGuid = EnvironmentDataService.Instance.GetInformerForRVP().Id; // new Guid("b55765f1-c4a4-e611-80ca-0050568d1874");// informerInfo["AccountId"];
 
             var driverGuid = driverEntity.ContactId;
             var policyAdditionalIdGuid = policyAdditionalEntity.crmPolicyDetailId;// new Guid();
@@ -596,7 +574,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.RVP
 
             var policyGuid = policyAdditionalEntity.policyId; //new Guid();
 
-            var customeGuid = customerClientEntity.ContactId;
+            var insuredClientGuid = customerClientEntity.ContactId;
+            var insuredClientType = apiInput.policyInfo.insuredClientType;
+
 
             //หา ชื่อจังหวัด และ อำเภอ
             // apiInput.claimInform.accidentProvn = "10";
@@ -607,7 +587,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.RVP
             var pfcAccidentProvince = ProvinceRepository.Instance.Find(apiInput.claimInform.accidentProvn).ProvinceName;
             var pfcAccidentDistrict = DistrictRepository.Instance.Find(apiInput.claimInform.accidentDist).DistrictName;
 
-            var incidentEntity = new IncidentEntity(policyAdditionalIdGuid, customeGuid, informerGuid, driverGuid, policyGuid)
+            var incidentEntity = new IncidentEntity(informerGuid, policyAdditionalEntity, customerClientEntity, insuredClientType, driverEntity, crmOwnerEntity)
             {
                 //spec 1: มาจากการ Concast CaseType+Case ตาม Business บนหน้าจอ "มาจากการ Concast CaseType+Cate ตาม Business บนหน้าจอ"
                 title = $"{catName} {subCatName} คุณ {apiInput.policyInfo.insuredFullName}",
@@ -681,12 +661,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.RVP
 
 
             //spec : (สินไหม (Motor))ต้องหา CategoryCode ในการ Mapping ห้าม Hardcode โดยใช้ GUID เด็ดขาด
-            incidentEntity.pfc_categoryid = new EntityReference("pfc_category", new Guid("1DCB2B21-0AAB-E611-80CA-0050568D1874"));
+            incidentEntity.pfc_categoryid = new EntityReference("pfc_category", caseCategoryForRVP.Id);
             //[CRMDEV_MSCRM].[dbo].[pfc_categoryBase]:[pfc_category_code] =02010201 ,[pfc_category_name] = สินไหม (Motor)
 
 
             //fix: (แจ้งอุบัติเหตุรถยนต์ (ผ่าน บ.กลาง))ต้องหา Sub CategoryCode ในการ Mapping ห้าม Hardcode โดยใช้ GUID เด็ดขาด
-            incidentEntity.pfc_sub_categoryid = new EntityReference("pfc_sub_category", new Guid("92D632D8-29AB-E611-80CA-0050568D1874"));
+            incidentEntity.pfc_sub_categoryid = new EntityReference("pfc_sub_category", caseSubCategoryForRVP.Id);
             //[CRMDEV_MSCRM].[dbo].[pfc_sub_categoryBase]:  [pfc_sub_category_code]=0201-013 [pfc_sub_category_name]=แจ้งอุบัติเหตุรถยนต์(ผ่าน บ.กลาง)
 
 

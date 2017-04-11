@@ -1,25 +1,30 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using DEVES.IntegrationAPI.WebApi.Logic;
+﻿using DEVES.IntegrationAPI.Core.TechnicalService.Exceptions;
+using DEVES.IntegrationAPI.Model.RegClaimRequestFromRVP;
+using DEVES.IntegrationAPI.WebApi.DataAccessService;
+using DEVES.IntegrationAPI.WebApi.DataAccessService.DataGateway;
+using DEVES.IntegrationAPI.WebApi.DataAccessService.Helper;
+using DEVES.IntegrationAPI.WebApi.DataAccessService.XrmEntity;
+using DEVES.IntegrationAPI.WebApi.Logic.RVP;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Query;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DEVES.IntegrationAPI.Model.RegClaimRequestFromRVP;
-using DEVES.IntegrationAPI.WebApi.DataAccessService.XrmEntity;
-using DEVES.IntegrationAPI.WebApi.DataAccessService;
-using Microsoft.Xrm.Sdk.Query;
-using Microsoft.Xrm.Sdk;
-using DEVES.IntegrationAPI.WebApi.Core.ExtensionMethods;
-using DEVES.IntegrationAPI.WebApi.Logic.RVP;
-using DEVES.IntegrationAPI.Core.TechnicalService.Exceptions;
-using DEVES.IntegrationAPI.WebApi.DataAccessService.DataGateway;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
 {
     [TestClass()]
     public class BuzRegClaimRequestFromRVPCommandTests
     {
+        // TEST POLICY
+        public const string POLICY_NO = "C7121569";
+        public const string POLICY_REGIS_NO = "ตค4414";
+        public const string POLICY_REGIS_PROVE = "ชม";
+
+        public const string POLICY_CLIENT_ID = "10515387";
+        public const string POLICY_CLIENT_TYPE = "P";
+        public const string POLICY_CLIENT_NAME = "ยุทธชัย รุ่งมงคลนาม";
+
         protected CRMPolicyMotorEntity GetMockPolicy()
         {
             return new CRMPolicyMotorEntity
@@ -329,7 +334,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
         [TestMethod()]
         public void CreateIncidentMortorTest()
         {
-            //    CRMregClaimRequestFromRVPInputModel apiInput, IncidentEntity incidentEntity
+            //CRMregClaimRequestFromRVPInputModel apiInput, IncidentEntity incidentEntity
             var apiInput = GetMockApiInput();
 
             apiInput.accidentPartyInfo.Add(new AccidentPartyInfoModel());
@@ -338,6 +343,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
             //TestCase
             var pfcActivityDate = DateTime.Now;
             var Incidentguid = new Guid("58b9dccc-9a1a-e711-80d4-0050568d1874");
+            /*
             apiInput.claimInform.accidentOn = pfcActivityDate;
             apiInput.claimInform.accidentNatureDesc = "Accident Nature Desc";
             apiInput.claimInform.numOfAccidentParty = 10;
@@ -348,7 +354,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
             apiInput.claimInform.accidentPlace = "BKK";
             apiInput.claimInform.numOfAccidentInjury = 2;
 
-
+            */
 
 
 
@@ -360,37 +366,38 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
 
             PfcMotorAccidentDataGateway dg = new PfcMotorAccidentDataGateway();
             var attributes = new ColumnSet();
-            attributes.AddColumns(new String[] { "pfc_parent_caseid" ,"pfc_event_code",
-                "pfc_motor_accident_name", "pfc_ref_rvp_claim_no", "pfc_activity_date" ,
-                "pfc_event_sequence", "pfc_accident_event_detail" , "pfc_motor_accident_parties_sum","pfc_accident_location","pfc_accident_longitude","pfc_accident_latitude" });//, 
+
+            attributes.AddColumns(new String[] {
+                "pfc_parent_caseid" ,
+                "pfc_event_code",
+                "pfc_motor_accident_name",
+                "pfc_ref_rvp_claim_no",
+                "pfc_activity_date" ,
+                "pfc_event_sequence",
+                "pfc_accident_event_detail" ,
+                "pfc_motor_accident_parties_sum",
+                "pfc_accident_location",
+                "pfc_accident_longitude",
+                "pfc_accident_latitude"
+            });
+
             var entity = dg.Retrieve(guid, attributes);
-            //""
-
-
-         
-          
-
-
+    
+            /*
             Assert.AreEqual(new EntityReference("incident", Incidentguid), entity["pfc_parent_caseid"], "ให้ผูกกับ Case ด้านบน");
             Assert.AreEqual(1, entity["pfc_event_sequence"], "fix: 1 หาก params.numOfAccidentParty มีมากกว่า 0");
-            //Assert.AreEqual(pfcActivityDate,(DateTime) entity["pfc_activity_date"], "ใช้ params.accidentOn ได้เลย");
-            // accidentNatureDesc
+           
             Assert.AreEqual(apiInput.claimInform.accidentNatureDesc, entity["pfc_accident_event_detail"], " = api.claimInform.accidentNatureDesc");
 
             Assert.AreEqual(apiInput.claimInform.numOfAccidentParty, entity["pfc_motor_accident_parties_sum"], " = apiInput.claimInform.numOfAccidentParty");
 
             Assert.AreEqual(apiInput.rvpCliamNo, entity["pfc_ref_rvp_claim_no"], " = apiInput.rvpClaimNo");
-
-            //ในกรณี Inhouse ให้ใช้ eventdetail.EventID
-            //ในกรณี Outsource ให้ใช้ Incident.pfc_isurvey_params_event_code
             Assert.AreEqual("X", entity["pfc_event_code"], " ให้เป็นไปตาม Logic. ของหน้า Motor Accident");
 
             Assert.AreEqual(apiInput.claimInform.accidentLatitude, entity["pfc_accident_latitude"], " = api");
             Assert.AreEqual(apiInput.claimInform.accidentLongitude, entity["pfc_accident_longitude"], " = api");
             Assert.AreEqual(apiInput.claimInform.accidentPlace, entity["pfc_accident_location"], " = api");
-
-
-            //pfc_motor_accident_name
+            */
 
         }
         [TestMethod()]
@@ -398,6 +405,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
         {
             //    CRMregClaimRequestFromRVPInputModel apiInput, IncidentEntity incidentEntity
             var apiInput = GetMockApiInput();
+            apiInput.policyInfo.policyNo = POLICY_NO;
+            apiInput.policyInfo.currentCarRegisterNo = POLICY_REGIS_NO;
+            apiInput.policyInfo.currentCarRegisterProv = POLICY_REGIS_PROVE;
 
             apiInput.accidentPartyInfo.Add(new AccidentPartyInfoModel());
             apiInput.accidentPartyInfo.Add(new AccidentPartyInfoModel());
@@ -470,10 +480,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
 
 
             var apiInput = GetMockApiInput();
-           
+            // <       สินไหม (Motor) แจ้งอุบัติเหตุรถยนต์(ผ่าน บ.กลาง) คุณ สมคิด ดวนสันเทียะ>. 
+            // Actual:<สินไหม (Motor) แจ้งอุบัติเหตุรถยนต์ (ผ่าน บ.กลาง) คุณ สมคิด ดวนสันเทียะ>. 
+            // มาจากการ Concast CaseType + Cate ตาม Business บนหน้าจอ
+
+            //
 
             var catName = "สินไหม (Motor)";
-            var subCatName = "แจ้งอุบัติเหตุรถยนต์(ผ่าน บ.กลาง)";
+            var subCatName = "แจ้งอุบัติเหตุรถยนต์ (ผ่าน บ.กลาง)";
 
             var policyEntity = GetMockPolicy();
             var customerClientEntity = GetMockCustomerClient();
@@ -482,7 +496,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
 
             //TestCase
             policyEntity.policyVip = true;
-            policyEntity.policyAdditionalName = "C7121677";
+            policyEntity.policyAdditionalName = POLICY_NO;
             customerClientEntity.pfc_customer_vip = false;
             apiInput.claimInform.numOfExpectInjury = 1;
             apiInput.claimInform.numOfAccidentInjury = 5;
@@ -738,6 +752,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
             var policyEntity = GetMockPolicy();
             var customerClientEntity = GetMockCustomerClient();
 
+            apiInput.policyInfo.policyNo = POLICY_NO;
+            apiInput.policyInfo.currentCarRegisterNo = POLICY_REGIS_NO;
+            apiInput.policyInfo.currentCarRegisterProv = POLICY_REGIS_PROVE;
+
             //Test  Case
             policyEntity.policyVip = false;
             customerClientEntity.pfc_customer_vip = false;
@@ -760,13 +778,40 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
         public void ExecuteTest()
         {
             var apiInput = GetMockApiInput();
-            
-            var cmd = new BuzRegClaimRequestFromRVPCommand();
-            var result = cmd.Execute(apiInput);
-            //Assert.AreEqual("",result.ToJSON());
-            Assert.IsNotNull(result);
-            Assert.IsNotNull(result.data.ticketNo);
-            Assert.IsNotNull(result.data.claimNotiNo);
+            apiInput.policyInfo.policyNo = POLICY_NO;
+            apiInput.policyInfo.currentCarRegisterNo = POLICY_REGIS_NO;
+            apiInput.policyInfo.currentCarRegisterProv = POLICY_REGIS_NO;
+
+            // "insuredClientType": "P",
+            //    "insuredFullName": ""ยุทธชัย รุ่งมงคลนาม",
+            // "insuredClientId": "10515387"
+
+            apiInput.policyInfo.insuredClientType = POLICY_CLIENT_TYPE;
+            apiInput.policyInfo.insuredFullName   = POLICY_CLIENT_NAME;
+            apiInput.policyInfo.insuredClientId   = POLICY_CLIENT_ID;
+
+            apiInput.policyDriverInfo.driverClientId  = POLICY_CLIENT_ID;
+            apiInput.policyDriverInfo.driverFullName = POLICY_CLIENT_NAME;
+            try
+            {
+                var cmd = new BuzRegClaimRequestFromRVPCommand();
+                var result = cmd.Execute(apiInput);
+                //Assert.AreEqual("",result.ToJSON());
+                Assert.IsNotNull(result);
+                Assert.IsNotNull(result.data.ticketNo);
+                Assert.IsNotNull(result.data.claimNotiNo);
+            }
+            catch (BuzInValidBusinessConditionException e)
+            {
+          
+                Assert.AreEqual("", e.ErrorMessage.description);
+            }
+            catch (Exception e)
+            {
+               var errorMessage =  (BuzInValidBusinessConditionException)e.InnerException;
+                Assert.AreEqual("", e.Message);
+            }
+           
 
           //  Assert.AreEqual(apiInput.ToJSON(), "");
         }
@@ -809,10 +854,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
         {
             var cmd = new BuzRegClaimRequestFromRVPCommand();
 
-            CorperateEntity informer = cmd.GetInformerInfo();
+            CorperateEntity informer = EnvironmentDataService.Instance.GetInformerForRVP();
           //  Assert.IsTrue(informer.ContainsKey("pfc_polisy_client_id"));
            // Assert.AreEqual("10077508", informer.PolisyClientId);
-            Assert.AreEqual("บริษัททดสอบเจริญ15 รุ่งเรือง รุ่งเรือง", informer.Name);
+            Assert.AreEqual("บริษัท กลางคุ้มครองผู้ประสบภัยจากรถ จำกัด", informer.Name);
             //   Assert.AreEqual(new Guid("81CBAA5F-AEB6-E611-80CA-0050568D1874"), informer["AccountId"]);
             // Assert.AreEqual()
         }

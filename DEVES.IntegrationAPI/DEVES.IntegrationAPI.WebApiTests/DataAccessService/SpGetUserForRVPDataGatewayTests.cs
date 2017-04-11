@@ -18,7 +18,7 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.Tests
             var result = dg.Excecute();
             var InformerInfo = (Dictionary<string, dynamic>)result.Data[0];
             Assert.AreEqual(1, result.Count);
-            Assert.AreEqual("DVS\\sasipa.b", InformerInfo["DomainName"]);
+            Assert.AreEqual("DVS\\sasipa.b", InformerInfo["DomainName"]);//DVS\\crmtest1
         }
     }
 }

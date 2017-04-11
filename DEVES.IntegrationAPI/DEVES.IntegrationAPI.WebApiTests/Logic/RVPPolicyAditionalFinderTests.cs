@@ -15,7 +15,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.RVP.Tests
         public void FindTest()
         {
 
-                var result = RVPPolicyAditionalFinder.Find("2010034076831","", "ตม4533","กท");
+                var result = RVPPolicyAditionalFinder.Find("2010034076831", "", "ตม4533", "");
                 Assert.IsNotNull(result);
                 Assert.AreEqual(new Guid("3BFCB0A4-DCB6-E611-80CA-0050568D1874"), result.crmPolicyDetailId);
         }

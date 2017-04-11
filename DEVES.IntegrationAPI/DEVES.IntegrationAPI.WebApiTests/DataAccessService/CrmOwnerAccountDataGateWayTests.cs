@@ -20,7 +20,7 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.Tests
             Assert.IsNotNull(result);
           //  Assert.AreEqual("", result.ToJSON());
             Assert.AreEqual("ษษิภา บัวใหญ่", result.FullName);
-            Assert.AreEqual(new Guid("15b4b411-9e1b-e711-80d4-0050568d1874"), result.Id);
+            //Assert.AreEqual(new Guid("15b4b411-9e1b-e711-80d4-0050568d1874"), result.Id);
           
         }
     }

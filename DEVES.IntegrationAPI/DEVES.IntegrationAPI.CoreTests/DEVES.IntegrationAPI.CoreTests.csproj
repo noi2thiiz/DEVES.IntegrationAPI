@@ -68,6 +68,10 @@
       <Project>{FA3FFF57-1EF3-4143-BA73-0233A653B435}</Project>
       <Name>DEVES.IntegrationAPI.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DEVES.IntegrationAPI.WebApi\DEVES.IntegrationAPI.WebApi.csproj">
+      <Project>{9E53BD0D-3233-4320-8445-C575920EB7E6}</Project>
+      <Name>DEVES.IntegrationAPI.WebApi</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

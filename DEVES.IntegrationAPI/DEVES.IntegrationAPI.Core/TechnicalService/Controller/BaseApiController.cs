@@ -279,12 +279,12 @@ namespace DEVES.IntegrationAPI.WebApi.Core.Controllers
 
         protected IHttpActionResult CreatedResponse(dynamic output)
         {
-
-            if (((IServiceResult)output).code == null)
+            var result = (IServiceResult)output;
+            if (result.code == null)
             {
                 output.setHeaderProperty("code", "500");
                 output.setHeaderProperty("message", "Internal error occurred");
-                output.setHeaderProperty("description", "Unhandled error!!");
+                output.setHeaderProperty("description", result.message +","+ result.description);
             }
             
            

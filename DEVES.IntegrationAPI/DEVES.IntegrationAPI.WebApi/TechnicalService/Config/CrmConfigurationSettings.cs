@@ -59,9 +59,9 @@ namespace DEVES.IntegrationAPI.WebApi
             this.config.Add("SMSServiceEnpoint", SMSServiceEnpoint);
 
             this.config.Add("LERTFinishEndpoint", LERTFinishEndpoint);
-
-            this.config.Add("CRMSDK", "AuthType=AD;Url=https://crmdev.deves.co.th/CRMDEV; domain=dvs; Username=crmtest1@dvs.ins; Password=crm#01");
-            this.config.Add("CRMDB", "Data Source=192.168.8.122;Initial Catalog=CRMDEV_MSCRM;Persist Security Info=True;User ID=CRMDevelop;Password=Develop%D");
+            //this.config.Add("CRMSDK", "AuthType=AD;Url=https://crmdev.deves.co.th/CRMDEV; domain=dvs; Username=crmtest1@dvs.ins; Password=crm#01");
+            this.config.Add("CRMSDK", "AuthType=AD;Url=https://crmqa.deves.co.th/CRMQA; domain=dvs; Username=crmtest1@dvs.ins; Password=crm#01");
+            this.config.Add("CRMDB", "Data Source=192.168.8.121;Initial Catalog=CRMQA_MSCRM;Persist Security Info=True;User ID=CRMDevelop;Password=Develop%D");
            // this.config.Add("CRMDB", "Data Source=DESKTOP-Q30CAGJ;Initial Catalog=CRMDEV_MSCRM;Persist Security Info=True;User ID=sa;Password=patiwat");
 
         }

@@ -9,18 +9,22 @@ using DEVES.IntegrationAPI.WebApi.Core.ExtensionMethods;
 
 namespace DEVES.IntegrationAPI.WebApi.DataAccessService.Tests
 {
+   
     [TestClass()]
     public class CRMPolicyMotorDataGateWayTests
     {
+        public const string POLICY_NO = "C7121569";
+        public const string POLICY_REGIS_NO = "ตค4414";
+        public const string POLICY_REGIS_PROVE = "ชม";
         [TestMethod()]
         public void FetchAllTest()
         {
             CRMPolicyMotorDataGateWay policyDataGateway = new CRMPolicyMotorDataGateWay();
             var reqPolicy = new DataRequest();
-            reqPolicy.AddParam("policyNo", "2010034076831");
+            reqPolicy.AddParam("policyNo", POLICY_NO);
             reqPolicy.AddParam("chassisNo", "");
-            reqPolicy.AddParam("carRegisNo", "ตม4533");
-            reqPolicy.AddParam("carRegisProve", "");
+            reqPolicy.AddParam("carRegisNo", POLICY_REGIS_NO);
+            reqPolicy.AddParam("carRegisProve", POLICY_REGIS_PROVE);
             var result = policyDataGateway.FetchAll(reqPolicy);
 
             Assert.IsNotNull(result);
@@ -32,17 +36,16 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.Tests
         {
             CRMPolicyMotorDataGateWay policyDataGateway = new CRMPolicyMotorDataGateWay();
             var reqPolicy = new DataRequest();
-            reqPolicy.AddParam("policyNo", "2010034076831");
+            reqPolicy.AddParam("policyNo", "xxxx");
             reqPolicy.AddParam("chassisNo", "");
-            reqPolicy.AddParam("carRegisNo", "ตม4533XXX");
-            reqPolicy.AddParam("carRegisProve", "");
+            reqPolicy.AddParam("carRegisNo", POLICY_REGIS_NO);
+            reqPolicy.AddParam("carRegisProve", POLICY_REGIS_PROVE);
             var result = policyDataGateway.FetchAll(reqPolicy);
 
             Assert.IsNotNull(result);
             Assert.AreEqual(result.Count, 0);
 
-            var data = result.Data[0];
-            Assert.IsNotNull(data);
+        
         }
 
         [TestMethod()]
@@ -50,20 +53,16 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.Tests
         {
             CRMPolicyMotorDataGateWay policyDataGateway = new CRMPolicyMotorDataGateWay();
             var reqPolicy = new DataRequest();
-            reqPolicy.AddParam("policyNo", "2010034076831");
+            reqPolicy.AddParam("policyNo", POLICY_NO);
             reqPolicy.AddParam("chassisNo", "");
-            reqPolicy.AddParam("carRegisNo", "ตม4533");
-            reqPolicy.AddParam("carRegisProve", "");
+            reqPolicy.AddParam("carRegisNo", POLICY_REGIS_NO);
+            reqPolicy.AddParam("carRegisProve", POLICY_REGIS_PROVE);
             var result = policyDataGateway.FetchAll(reqPolicy);
 
-            Assert.Fail();
+            Assert.IsNotNull(result);
 
         }
 
-        [TestMethod()]
-        public void FetchAllTest1()
-        {
-            Assert.Fail();
-        }
+     
     }
 }

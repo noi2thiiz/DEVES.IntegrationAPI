@@ -16,7 +16,7 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService
             this.EntityName = "pfc_sub_category";
         }
 
-        public CaseSubCategoryEntity FindByPolisyClientId(string categoryCode)
+        public CaseSubCategoryEntity FindByCode(string subCategoryCode)
         {
 
 
@@ -27,7 +27,7 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService
             {
                 ColumnSet = GetColumnSetByAttributes()
             };
-            query.Criteria.AddCondition("pfc_sub_category_code", ConditionOperator.Equal, categoryCode);
+            query.Criteria.AddCondition("pfc_sub_category_code", ConditionOperator.Equal, subCategoryCode);
 
             EntityCollection result = _p.RetrieveMultiple(query);
             var item = TranformEntityWithAttribute(result[0]);
@@ -35,16 +35,16 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService
             return item;
         }
 
-        public CaseSubCategoryEntity GetDefault()
+        public CaseSubCategoryEntity GetDefaultForRVP()
         {
-            return FindByPolisyClientId("10077508");//10077508 16960851
+            return FindByCode("0201-013");//10077508 16960851
 
         }
     }
 
     public class CaseSubCategoryEntity
     {
-        [XrmAttributeMapping("pfc_sub_categoryId", EntityFieldKey.PK)]
+        [XrmAttributeMapping("pfc_sub_categoryid", EntityFieldKey.PK)]
         public Guid Id { get; set; }
   
         [XrmAttributeMapping("pfc_sub_category_code")]

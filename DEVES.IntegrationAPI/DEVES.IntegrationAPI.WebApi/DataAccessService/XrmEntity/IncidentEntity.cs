@@ -1,4 +1,5 @@
-﻿using Microsoft.Xrm.Sdk;
+﻿using DEVES.IntegrationAPI.WebApi.DataAccessService.Helper;
+using Microsoft.Xrm.Sdk;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,17 +21,68 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.XrmEntity
              pfc_policy_additionalid = new EntityReference("pfc_policy_additional", policyAdditionalId);
             //    pfc_policy_additionalId = new EntityReference("pfc_category", new Guid("1DCB2B21-0AAB-E611-80CA-0050568D1874"));
 
-           
-             customerid = new EntityReference("contact", accountGuid);
-             pfc_informer_name = new EntityReference("account", informerGuid);
-             pfc_driver_name = new EntityReference("contact", driverGuid);
+            //insularun Client ID 16575164	P
+            //Error on Create:Account With Id = b55765f1-c4a4-e611-80ca-0050568d1874 
+            
+           // {// contact
+              //  customerid = new EntityReference("account", accountGuid);//contact
+           // }
+            //else
+            //{
+                //customerid = new EntityReference("contact", accountGuid);//contact
+                                                                         // }
+           // Console.WriteLine("accountGuid = " + accountGuid.ToString())
+                //  Console.WriteLine("accountGuid = " + accountGuid.ToString());
+            customerid = new EntityReference("contact", new Guid("C25FF182-941B-E711-80D0-0050568D615F"));//contact
+            pfc_informer_name = new EntityReference("account",informerGuid);
+             pfc_driver_name = new EntityReference("contact", new Guid("C25FF182-941B-E711-80D0-0050568D615F"));
             pfc_policyid = new EntityReference("pfc_polycy", policyGuid);
             //customerid //contact // account //B55765F1-C4A4-E611-80CA-0050568D1874
             //pfc_informer_name //pfc_driver_client_name account
             //pfc_driver_client_name
 
         }
+
+        public IncidentEntity(Guid informerGuid,CRMPolicyMotorEntity policyAdditionalEntity, 
+            CustomerClientEntity insuredClientEntity, string insuredClientType,
+            CustomerClientEntity  driverEntity,
+            UserAccountEntity userRvp)
+        {
         
+            var driverGuid = driverEntity.ContactId;
+            var policyAdditionalIdGuid = policyAdditionalEntity.crmPolicyDetailId;// new Guid();
+            var policyGuid = policyAdditionalEntity.policyId; //new Guid();
+            var insuredClientGuid = insuredClientEntity.ContactId;
+
+           
+                if (insuredClientType == "P")
+                {
+                    customerid = new EntityReference("contact", insuredClientGuid);
+                    customerid = new EntityReference("contact", new Guid("C25FF182-941B-E711-80D0-0050568D615F"));//contact
+                }
+                else if (insuredClientType == "C")
+                {
+                    customerid = new EntityReference("account", insuredClientGuid);
+
+                }
+                else
+                {
+                    throw new Exception("Insured Client Type out of range");
+                }
+            
+                
+
+            
+            pfc_informer_name = new EntityReference("account", informerGuid);
+
+            pfc_driver_name = new EntityReference("contact", new Guid("C25FF182-941B-E711-80D0-0050568D615F"));
+
+            pfc_policyid = new EntityReference("pfc_polycy", policyGuid);
+        }
+
+
+
+
 
         public EntityReference customerid { get; set; }
         public EntityReference pfc_informer_name { get; set; }

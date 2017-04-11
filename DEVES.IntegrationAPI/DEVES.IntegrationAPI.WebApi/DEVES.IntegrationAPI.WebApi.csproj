@@ -304,10 +304,16 @@
     <Compile Include="DataAccessService\CRMPolicyMotorDataGateWay.cs" />
     <Compile Include="DataAccessService\CrmSdkTableGateWay.cs" />
     <Compile Include="DataAccessService\DataGateway\CorperateDataGateWay.cs" />
+    <Compile Include="DataAccessService\DataGateway\DevesCrmDataAdepter.cs" />
+    <Compile Include="DataAccessService\DataGateway\PfcCategoryDataGateWay.cs" />
+    <Compile Include="DataAccessService\DataGateway\PfcPolicyDataGateWay.cs" />
+    <Compile Include="DataAccessService\DataGateway\PfcSubCategoryDataGateWay.cs" />
     <Compile Include="DataAccessService\DataGateway\SpQueryDistrictDataGateWay.cs" />
     <Compile Include="DataAccessService\DataGateway\SpQueryProvinceDataGateWay.cs" />
     <Compile Include="DataAccessService\DataRepository\DistrictRepository.cs" />
     <Compile Include="DataAccessService\DataRepository\ProvinceRepository.cs" />
+    <Compile Include="DataAccessService\Helper\EnvironmentDataManager.cs" />
+    <Compile Include="DataAccessService\Helper\MemoryStorage.cs" />
     <Compile Include="DataAccessService\PfcMotorAccidentPartiesDataGateWay.cs" />
     <Compile Include="DataAccessService\SpGetUserForRVPDataGateway.cs" />
     <Compile Include="DataAccessService\SpReqMotorClaimNotiNoDataGateway.cs" />

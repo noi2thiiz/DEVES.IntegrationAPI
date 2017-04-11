@@ -1,11 +1,13 @@
-﻿using System;
+﻿using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Query;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
 namespace DEVES.IntegrationAPI.WebApi.DataAccessService
 {
-    public class PfcCategoryDataGateWay : BaseCrmSdkTableGateWay<CaseSubCategoryEntity>
+    public class PfcCategoryDataGateWay : BaseCrmSdkTableGateWay<CaseCategoryEntity>
     {
         public PfcCategoryDataGateWay()
         {
@@ -14,22 +16,35 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService
             this.EntityName = "pfc_category";
         }
 
-        public CaseCategoryEntity FindByCode(string SubCategoryCode)
+        public CaseCategoryEntity FindByCode(string categoryCode)
         {
-            try
+
+
+            var _p = getOrganizationServiceProxy();
+            var columnSet = this.GetColumnSet();
+
+            QueryExpression query = new QueryExpression(EntityName)
             {
-                return null;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+                ColumnSet = GetColumnSetByAttributes()
+            };
+            query.Criteria.AddCondition("pfc_category_code", ConditionOperator.Equal, categoryCode);
+
+            EntityCollection result = _p.RetrieveMultiple(query);
+            var item = TranformEntityWithAttribute(result[0]);
+            item.Id = result[0].Id;
+            return item;
+        }
+
+        public CaseCategoryEntity GetDefaultForRVP()
+        {
+            return FindByCode("0201");//10077508 16960851
+
         }
     }
 
     public class CaseCategoryEntity
     {
-        [XrmAttributeMapping("pfc_calltypeId", EntityFieldKey.PK)]
+        [XrmAttributeMapping("pfc_calltypeid", EntityFieldKey.PK)]
         public Guid Id { get; set; }
 
         [XrmAttributeMapping("pfc_category_code")]
@@ -38,7 +53,7 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService
         [XrmAttributeMapping("pfc_category_name")]
         public string Name { get; set; }
 
-        [XrmAttributeMapping("pfc_calltypeId")]
+        [XrmAttributeMapping("pfc_calltypeid")]
         public string CallTypeId { get; set; }
 
         [XrmAttributeMapping("statuscode")]

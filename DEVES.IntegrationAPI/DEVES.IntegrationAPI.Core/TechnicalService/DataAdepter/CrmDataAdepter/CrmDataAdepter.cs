@@ -7,8 +7,13 @@ using DEVES.IntegrationAPI.WebApi.Core.DataAdepter;
 
 namespace DEVES.IntegrationAPI.Core.DataAdepter
 {
-    class CrmDataAdepter : IDataAdapter
+    public class CrmDataAdepter : IDataAdapter
     {
+        protected string ConnectionString;
+        protected string EntityName;
+
+  
+
         public DbResult FetchAll(DbRequest req)
         {
             throw new NotImplementedException();

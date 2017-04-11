@@ -74,9 +74,13 @@ namespace DEVES.IntegrationAPI.Model.RegClaimRequestFromRVP
         [Required]
         public string currentCarRegisterNo { get; set; }
         public string currentCarRegisterProv { get; set; }
+        [StringLength(20)]
         public string insuredCleansingId { get; set; }
+        [StringLength(2)]
         public string insuredClientType { get; set; }
+        [StringLength(120)]
         public string insuredFullName { get; set; }
+        [StringLength(10)]
         public string insuredClientId { get; set; }
     }
 
@@ -87,7 +91,9 @@ namespace DEVES.IntegrationAPI.Model.RegClaimRequestFromRVP
         public string driverFullName { get; set; }
         [Required]
         public string driverClientId { get; set; }
+        [StringLength(20)]
         public string driverMobile { get; set; }
+        [StringLength(20)]
         public string driverPhoneNo { get; set; }
     }
 
@@ -98,43 +104,63 @@ namespace DEVES.IntegrationAPI.Model.RegClaimRequestFromRVP
         [Required]
         public DateTime accidentOn { get; set; }
         [Required]
+        [StringLength(100)]
         public string accidentDescCode { get; set; }
+        [StringLength(1000)]
         public string accidentDesc { get; set; }
         [Required]
         public int numOfExpectInjury { get; set; }
+        [StringLength(20)]
         public string accidentLatitude { get; set; }
+        [StringLength(20)]
         public string accidentLongitude { get; set; }
+        [StringLength(2000)]
         public string accidentPlace { get; set; }
+        [StringLength(2)]
         public string accidentProvn { get; set; }
+        [StringLength(4)]
         public string accidentDist { get; set; }
         [Required]
+        [StringLength(1)]
         public string claimType { get; set; }
         [Required]
+        [StringLength(2)]
         public string sendOutSurveyorCode { get; set; }
         public DateTime reportAccidentResultDate { get; set; }
         [Required]
+        [StringLength(20)]
         public string caseOwnerCode { get; set; }
         [Required]
+        [StringLength(250)]
         public string caseOwnerFullName { get; set; }
         [Required]
+        [StringLength(20)]
         public string informByCrmId { get; set; }
         [Required]
+        [StringLength(200)]
         public string informByCrmName { get; set; }
         [Required]
+        [StringLength(20)]
         public string submitByCrmId { get; set; }
         [Required]
+        [StringLength(200)]
         public string submitByCrmName { get; set; }
         [Required]
+        [StringLength(1)]
         public string accidentLegalResult { get; set; }
         [Required]
         public int numOfAccidentInjury { get; set; }
         public int numOfDeath { get; set; }
         public decimal excessFee { get; set; }
         public decimal deductibleFee { get; set; }
+        [StringLength(2000)]
         public string accidentNatureDesc { get; set; }
+        [StringLength(200)]
         public string policeStation { get; set; }
+        [StringLength(200)]
         public string policeRecordId { get; set; }
         public DateTime policeRecordDate { get; set; }
+        [StringLength(1)]
         public string policeBailFlag { get; set; }
         [Required]
         public int numOfAccidentParty { get; set; }
@@ -143,12 +169,19 @@ namespace DEVES.IntegrationAPI.Model.RegClaimRequestFromRVP
     public class AccidentPartyInfoModel
     {
         public int rvpAccidentPartySeq { get; set; }
+        [StringLength(200)]
         public string accidentPartyFullname { get; set; }
+        [StringLength(50)]
         public string accidentPartyPhone { get; set; }
+        [StringLength(50)]
         public string accidentPartyCarPlateNo { get; set; }
+        [StringLength(50)]
         public string accidentPartyCarPlateProv { get; set; }
+        [StringLength(200)]
         public string accidentPartyInsuranceCompany { get; set; }
+        [StringLength(20)]
         public string accidentPartyPolicyNumber { get; set; }
+        [StringLength(20)]
         public string accidentPartyPolicyType { get; set; }
 
     }

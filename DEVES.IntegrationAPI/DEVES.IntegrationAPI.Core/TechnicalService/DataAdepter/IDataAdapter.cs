@@ -7,7 +7,7 @@ using DEVES.IntegrationAPI.WebApi.Core.DataAdepter;
 
 namespace DEVES.IntegrationAPI.Core.DataAdepter
 {
-    interface IDataAdapter
+    public interface IDataAdapter
     {
         DbResult FetchRow(DbRequest req);
         DbResult FetchAll(DbRequest req);

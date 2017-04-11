@@ -8,30 +8,36 @@ using System.Threading.Tasks;
 
 namespace DEVES.IntegrationAPI.Core.DataGateWay
 {
-    class BaseDataGateWay: IDataGateWay
+    public class BaseDataGateWay: IDataGateWay
     {
-        IDataAdapter DataAdepter;
-        public BaseDataGateWay(IDataAdapter dataAdepter)
+        private DEVES.IntegrationAPI.Core.DataAdepter.IDataAdapter dataAdepter;
+
+        public DEVES.IntegrationAPI.Core.DataAdepter.IDataAdapter GetDataAdepter()
         {
-            DataAdepter = dataAdepter;
+            return dataAdepter;
+        }
+
+        public void SetDataAdepter(DEVES.IntegrationAPI.Core.DataAdepter.IDataAdapter value)
+        {
+            dataAdepter = value;
         }
 
         public DbResult FetchAll(DbRequest req)
         {
 
-            return DataAdepter.FetchRow(req);
+            return GetDataAdepter().FetchRow(req);
         }
 
         public DbResult FetchRow(DbRequest req)
         {
 
-            return DataAdepter.FetchRow(req);
+            return GetDataAdepter().FetchRow(req);
         }
 
         public DbResult Find(string id)
         {
 
-            return DataAdepter.Find(id);
+            return GetDataAdepter().Find(id);
         }
 
     }
