@@ -36,11 +36,63 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             listParam.Add(new CommandParameter("CurrentUserId", contentModel.CurrentUserId ));
             FillModelUsingSQL(ref inputData, CommonConstant.sqlcmd_Get_RegClaimInfo, listParam);
 
+            // Convert BaseDataModel tobe LocusInput and fix some variable (in case of "claimType = "O" <เตลมแห้ง>)
+            data = (LocusClaimRegistrationInputModel)inputData;
+            // transform some data that is required from polisy400
+            if (data.claimHeader.informByCrmId == null)
+            {
+                data.claimHeader.informByCrmId = data.claimHeader.submitByCrmId;
+            }
+            if (data.claimHeader.informByCrmName == null)
+            {
+                data.claimHeader.informByCrmName = data.claimHeader.submitByCrmName;
+            }
+            if (data.claimInform.informerOn == null)
+            {
+                data.claimInform.informerOn = DateTime.Now;
+            }
+            if (data.claimAssignSurv.surveyTeam == null)
+            {
+                data.claimAssignSurv.surveyTeam = "TEAM0099";
+            }
+            /**
+             * Force value if informerClientId, driverClientId, insuredClientId to be "88888888"
+             
+            data.claimInform.informerClientId = "88888888";
+            data.claimInform.driverClientId = "88888888";
+            data.claimInform.insuredClientId = "88888888";
+            **/
+            /*
+            if (data.claimAssignSurv.surveyorClientNumber == null)
+            {
+                data.claimAssignSurv.surveyorClientNumber = "16960747";
+            }
+            if (data.claimAssignSurv.surveyorName == null)
+            {
+                data.claimAssignSurv.surveyorName = "พนักงานเทเวศออกตรวจ";
+            }
+            */
+            inputData = data;
+
             //+ Call Locus_RegisterClaim through ServiceProxy
             string uid = GetDomainName(contentModel.CurrentUserId);
             Model.EWI.EWIResponseContent ret = (Model.EWI.EWIResponseContent)CallDevesJsonProxy<Model.EWI.EWIResponse>(CommonConstant.ewiEndpointKeyLOCUSClaimRegistration, inputData, uid);
+            if(ret.data == null)
+            {
+                //+ Response
+                ClaimRegistrationContentOutputModel contentOutputFail = new ClaimRegistrationContentOutputModel();
+                contentOutputFail.data = new List<ClaimRegistrationOutputModel>();
+                ClaimRegistrationOutputModel outputFail = new ClaimRegistrationOutputModel();
+                outputFail.claimID = null;
+                outputFail.claimNo = null;
+                outputFail.errorMessage = ret.message;
+                contentOutputFail.data.Add(outputFail);
+
+                return contentOutputFail;
+            }
+
             LocusClaimRegistrationDataOutputModel locusClaimRegOutput = new LocusClaimRegistrationDataOutputModel(ret.data);
-        
+            
             
             if(locusClaimRegOutput.claimNo == null || locusClaimRegOutput.claimId == null)
             {
@@ -50,8 +102,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 ClaimRegistrationOutputModel outputFail = new ClaimRegistrationOutputModel();
                 outputFail.claimID = locusClaimRegOutput.claimId;
                 outputFail.claimNo = locusClaimRegOutput.claimNo;
-                outputFail.errorMessage = "";
+                outputFail.errorMessage = ret.message;
 
+                /*
                 if (locusClaimRegOutput.claimNo == null || locusClaimRegOutput.claimId == null)
                 {
                     outputFail.errorMessage = "claimNo and claimId are null";
@@ -64,7 +117,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 {
                     outputFail.errorMessage = "claimId is null";
                 }
-                
+                */
+
                 contentOutputFail.data.Add(outputFail);
                 return contentOutputFail;
             }
