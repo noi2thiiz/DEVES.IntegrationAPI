@@ -68,16 +68,38 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         contact.Salutation = contentModel.profileInfo.salutation;
                         contact.FirstName = contentModel.profileInfo.personalName;
                         contact.LastName = contentModel.profileInfo.personalSurname;
-                        contact.GenderCode = new OptionSetValue(Int32.Parse(contentModel.profileInfo.sex));
+                        switch (contentModel.profileInfo.sex.ToUpper())
+                        {
+                            case "M": contact.GenderCode = new OptionSetValue(1) ; break;
+                            case "F": contact.GenderCode = new OptionSetValue(2) ; break;
+                            case "U": contact.GenderCode = new OptionSetValue(100000000) ; break;
+                        }
+                        //contact.GenderCode = new OptionSetValue(Int32.Parse(contentModel.profileInfo.sex));
+                        
                         contact.pfc_citizen_id = contentModel.profileInfo.idCitizen;
                         contact.pfc_passport_id = contentModel.profileInfo.idPassport;
                         contact.pfc_alien_id = contentModel.profileInfo.idAlien;
                         contact.pfc_driver_license = contentModel.profileInfo.idDriving;
                         contact.pfc_date_of_birth = Convert.ToDateTime(contentModel.profileInfo.birthDate);
                         contact.pfc_polisy_nationality_code = contentModel.profileInfo.nationality;
-                        contact.pfc_language = new OptionSetValue(Int32.Parse(OptionsetConvertor(contentModel.profileInfo.language))); // optionset
-                        contact.FamilyStatusCode = new OptionSetValue(Int32.Parse(OptionsetConvertor(contentModel.profileInfo.married))); // optionset
+                        switch (contentModel.profileInfo.language.ToUpper())
+                        {
+                            case "T": contact.pfc_language = new OptionSetValue(100000003) ; break;
+                            case "E": contact.pfc_language = new OptionSetValue(100000001) ; break;
+                            case "J": contact.pfc_language = new OptionSetValue(100000002); break;
+                        }
+                        //contact.pfc_language = new OptionSetValue(Int32.Parse(OptionsetConvertor(contentModel.profileInfo.language))); // optionset
+
+                        switch (contentModel.profileInfo.married.ToUpper())
+                        {
+                            case "S": contact.FamilyStatusCode = new OptionSetValue(1); break;
+                            case "M": contact.FamilyStatusCode = new OptionSetValue(2); break;
+                            case "D": contact.FamilyStatusCode = new OptionSetValue(3); break;
+                            case "W": contact.FamilyStatusCode = new OptionSetValue(4); break;
+                        }
+                        //contact.FamilyStatusCode = new OptionSetValue(Int32.Parse(OptionsetConvertor(contentModel.profileInfo.married))); // optionset
                         // contact.pfc_occupation = contentModel.profileInfo.occupation;
+
                         contact.pfc_client_legal_status = new OptionSetValue(Int32.Parse(OptionsetConvertor(contentModel.profileInfo.riskLevel))); // optionset
                         bool isVIP = false;
                         if(contentModel.profileInfo.vipStatus.Equals("Y"))

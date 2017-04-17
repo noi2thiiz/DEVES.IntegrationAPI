@@ -9,11 +9,38 @@ using DEVES.IntegrationAPI.Model.RegClientPersonal;
 using DEVES.IntegrationAPI.Model.SAP;
 using DEVES.IntegrationAPI.WebApi.Logic;
 
+using System.Configuration;
+using System.Linq;
+using Microsoft.Crm.Sdk.Messages;
+using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Client;
+using Microsoft.Xrm.Sdk.Query;
+using Microsoft.Xrm.Tooling.Connector;
+
 namespace DEVES.IntegrationAPI.WebApi.Controllers
 {
     [RoutePrefix("api/test-model")]
     public class TestModelController:ApiController
     {
+
+        [HttpGet]
+        [Route("Contact")]
+        public IHttpActionResult GetContact( string name)
+        {
+            using (var connection = new CrmServiceClient(ConfigurationManager.ConnectionStrings["CRM_DEVES"].ConnectionString))
+            {
+                using (var serviceProxy = connection.OrganizationServiceProxy)
+                {
+                    serviceProxy.EnableProxyTypes();
+                    ServiceContext sc = new ServiceContext(serviceProxy);
+
+                    var account = (from a in sc.AccountSet
+                                   where a.Name.Contains(name)
+                                   select new Account { Name = a.Name }).FirstOrDefault();
+                    return Ok(account);
+                }
+            }
+        }
 
         [HttpGet]
         [Route("InquiryMasterASRHOutputModel")]

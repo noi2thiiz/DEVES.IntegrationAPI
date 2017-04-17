@@ -48,7 +48,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             }
             if (src.sapVendorInfo != null && src.sapVendorInfo.bankInfo != null)
             {
-                trgt.CITY = src.sapVendorInfo.bankInfo.bankCountryCode;
+                trgt.CTRY = src.sapVendorInfo.bankInfo.bankCountryCode;
                 trgt.BANKCODE = src.sapVendorInfo.bankInfo.bankCode??"";
                 trgt.BANKBRANCH = src.sapVendorInfo.bankInfo.bankBranchCode;
                 trgt.BANKACC = src.sapVendorInfo.bankInfo.bankAccount;
@@ -71,8 +71,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             trgt.SEARCH = src.profileHeader.corporateName1;
             trgt.TAX1 = "";
             trgt.TAX2 = "";
-            trgt.CTRY = "TH";
-            trgt.BANKACC = "";
+            //trgt.CTRY = "TH";
 
             trgt.TITLE = "";
             trgt.WHTCTRY = "TH";

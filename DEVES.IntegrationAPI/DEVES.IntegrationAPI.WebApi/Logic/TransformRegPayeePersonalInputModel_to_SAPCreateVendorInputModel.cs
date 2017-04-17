@@ -31,6 +31,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 trgt.NAME1 = src.profileInfo.personalName;
                 trgt.NAME2 = src.profileInfo.personalSurname;
                 trgt.TAX3 = src.profileInfo.idCitizen;
+                trgt.SEARCH = src.profileInfo.personalName;
             }
             if (src.contactInfo != null)
             {
@@ -54,7 +55,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             
             if (src.sapVendorInfo != null && src.sapVendorInfo.bankInfo != null)
             {
-                trgt.CITY = src.sapVendorInfo.bankInfo.bankCountryCode;
+                trgt.CTRY = src.sapVendorInfo.bankInfo.bankCountryCode;
                 trgt.BANKCODE = src.sapVendorInfo.bankInfo.bankCode;
                 trgt.BANKBRANCH = src.sapVendorInfo.bankInfo.bankBranchCode;
                 trgt.ACCTHOLDER = src.sapVendorInfo.bankInfo.accountHolder;
@@ -69,11 +70,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             }
 
             trgt.COMPANY = "";
-            trgt.SEARCH = "";
             trgt.TAX1 = "";
             trgt.TAX2 = "";
             trgt.TAX4 = "";
-            trgt.CTRY = "TH";
+            //trgt.CTRY = "TH";
             trgt.BANKACC = "";
 
             return trgt;

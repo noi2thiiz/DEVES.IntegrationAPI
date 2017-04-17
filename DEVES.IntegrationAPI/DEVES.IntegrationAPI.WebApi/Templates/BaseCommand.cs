@@ -414,57 +414,59 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
 
         internal List<string> SearchCrmContactClientId(string cleansingId)
         {
-            List<string> lstCrmClientId = new List<string>();
-            List<CommandParameter> lstParam = new List<CommandParameter>();
-            lstParam.Add(new CommandParameter("clientType", "P"));
-            lstParam.Add(new CommandParameter("cleansingId", cleansingId));
-
-            DataTable dt = CallSQLStoredProc("sp_CustomApp_GetCrmClientid_byCleansingId" ,  lstParam);
-            foreach (DataRow row in dt.Rows)
+            // For performance, until we found the way to cache the ServiceProxy, we prefer SQL rather than Crm
+             
+            using (OrganizationServiceProxy sp = GetCrmServiceProxy())
             {
-                lstCrmClientId.Add(row[0].ToString());
+                ServiceContext sc = new ServiceContext(sp);
+                var q = from contacts in sc.ContactSet
+                        where contacts.pfc_cleansing_cusormer_profile_code == cleansingId && contacts.StateCode == ContactState.Active
+                        select contacts.pfc_crm_person_id;
+                List<string> lstCrmClientId = q.ToList<string>();
+                return lstCrmClientId;
             }
-            return lstCrmClientId;
+            
 
-            /* For performance, until we found the way to cache the ServiceProxy, we prefer SQL rather than Crm
-             * 
-            //using (OrganizationServiceProxy sp = GetCrmServiceProxy())
+
+            //List<string> lstCrmClientId = new List<string>();
+            //List<CommandParameter> lstParam = new List<CommandParameter>();
+            //lstParam.Add(new CommandParameter("clientType", "P"));
+            //lstParam.Add(new CommandParameter("cleansingId", cleansingId));
+
+            //DataTable dt = CallSQLStoredProc("sp_CustomApp_GetCrmClientid_byCleansingId" ,  lstParam);
+            //foreach (DataRow row in dt.Rows)
             //{
-            //    ServiceContext sc = new ServiceContext(sp);
-            //    var q = from contacts in sc.ContactSet
-            //            where contacts.pfc_cleansing_cusormer_profile_code == cleansingId && contacts.StateCode == ContactState.Active
-            //            select contacts.pfc_crm_person_id;
-            //    List<string> lstCrmClientId = q.ToList<string>();
-            //    return lstCrmClientId;
+            //    lstCrmClientId.Add(row[0].ToString());
             //}
-            */
+            //return lstCrmClientId;
+
         }
         internal List<string> SearchCrmAccountClientId(string cleansingId)
         {
-            List<string> lstCrmClientId = new List<string>();
-            List<CommandParameter> lstParam = new List<CommandParameter>();
-            lstParam.Add(new CommandParameter("clientType", "C"));
-            lstParam.Add(new CommandParameter("cleansingId", cleansingId));
+            //List<string> lstCrmClientId = new List<string>();
+            //List<CommandParameter> lstParam = new List<CommandParameter>();
+            //lstParam.Add(new CommandParameter("clientType", "C"));
+            //lstParam.Add(new CommandParameter("cleansingId", cleansingId));
 
-            DataTable dt = CallSQLStoredProc("sp_CustomApp_GetCrmClientid_byCleansingId", lstParam);
-            foreach (DataRow row in dt.Rows)
-            {
-                lstCrmClientId.Add(row[0].ToString());
-            }
-            return lstCrmClientId;
-
-            /* For performance, until we found the way to cache the ServiceProxy, we prefer SQL rather than Crm
-             * 
-            //using (OrganizationServiceProxy sp = GetCrmServiceProxy())
+            //DataTable dt = CallSQLStoredProc("sp_CustomApp_GetCrmClientid_byCleansingId", lstParam);
+            //foreach (DataRow row in dt.Rows)
             //{
-            //    ServiceContext sc = new ServiceContext(sp);
-            //    var q = from accounts in sc.AccountSet
-            //            where accounts.pfc_cleansing_cusormer_profile_code == cleansingId && accounts.StateCode == AccountState.Active
-            //            select accounts.AccountNumber; 
-            //    List<string> lstCrmClientId = q.ToList<string>();
-            //    return lstCrmClientId;
+            //    lstCrmClientId.Add(row[0].ToString());
             //}
-            */
+            //return lstCrmClientId;
+
+            // For performance, until we found the way to cache the ServiceProxy, we prefer SQL rather than Crm
+              
+            using (OrganizationServiceProxy sp = GetCrmServiceProxy())
+            {
+                ServiceContext sc = new ServiceContext(sp);
+                var q = from accounts in sc.AccountSet
+                        where accounts.pfc_cleansing_cusormer_profile_code == cleansingId && accounts.StateCode == AccountState.Active
+                        select accounts.AccountNumber; 
+                List<string> lstCrmClientId = q.ToList<string>();
+                return lstCrmClientId;
+            }
+            
         }
 
 
