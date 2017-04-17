@@ -73,14 +73,26 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             rsModel.driverTel = isStringNull("DriverTel");
             rsModel.currentVehicleLicense = isStringNull("current_VehicleLicence");
             rsModel.currentProvince = isStringNull("current_Province");
-            rsModel.eventDate = isStringNull("EventDate");
-            rsModel.activityDate = isStringNull("ActivityDate");
+            rsModel.eventDate = Convert.ToDateTime(isStringNull("EventDate"));
+            rsModel.activityDate = Convert.ToDateTime(isStringNull("ActivityDate"));
             rsModel.eventDetail = isStringNull("EventDetail");
             rsModel.isCasualty = isStringNull("isCasualty");
+            if (rsModel.isCasualty.Equals(""))
+            {
+                rsModel.isCasualty = "0";
+            }
             rsModel.eventLocation = isStringNull("EventLocation");
             rsModel.accidentLocation = isStringNull("accidentLocation");
             rsModel.accidentLat = isStringNull("accidentLat");
+            if(rsModel.accidentLat.Equals(""))
+            {
+                rsModel.accidentLat = "0";
+            }
             rsModel.accidentLng = isStringNull("accidentLng");
+            if(rsModel.accidentLng.Equals(""))
+            {
+                rsModel.accidentLng = "0";
+            }
             rsModel.ISVIP = isStringNull("IsVIP");
             rsModel.remark = isStringNull("Remark");
             rsModel.claimTypeID = isStringNull("ClameTypeID");
@@ -89,7 +101,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             rsModel.appointLat = isStringNull("appointLat");
             rsModel.appointLong = isStringNull("appointLong");
             rsModel.appointLocation = isStringNull("appointLocation");
-            rsModel.appointDate = isStringNull("appointDate");
+            rsModel.appointDate = Convert.ToDateTime(isStringNull("appointDate"));
             rsModel.appointName = isStringNull("appointName");
             rsModel.appointPhone = isStringNull("appointPhone");
             rsModel.contractName = isStringNull("contractName");

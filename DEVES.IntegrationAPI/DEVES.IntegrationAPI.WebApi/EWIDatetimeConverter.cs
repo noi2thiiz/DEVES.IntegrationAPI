@@ -14,7 +14,7 @@ namespace DEVES.IntegrationAPI.WebApi
         string DateTimeCustomFormat;
         public EWIDatetimeConverter()
         {
-            DateTimeCustomFormat = "yyyy-MM-dd hh:mm:ss";
+            DateTimeCustomFormat = "yyyy-MM-dd HH:mm:ss";
         }
 
         public EWIDatetimeConverter(string customFormat)

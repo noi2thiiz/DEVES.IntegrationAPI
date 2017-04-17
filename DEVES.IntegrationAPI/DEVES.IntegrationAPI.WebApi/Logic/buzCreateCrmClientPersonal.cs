@@ -52,7 +52,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 {
 
                     Contact contact = new Contact();
-                    Account account = new Account();
+                    // Account account = new Account();
                     crmSvc.EnableProxyTypes();
 
                     //Create Client Additional Records
@@ -68,7 +68,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         contact.Salutation = contentModel.profileInfo.salutation;
                         contact.FirstName = contentModel.profileInfo.personalName;
                         contact.LastName = contentModel.profileInfo.personalSurname;
-                        contact.GenderCode = new OptionSetValue(Int32.Parse(contentModel.profileInfo.sex));
+                        if(SexConvertor(contentModel.profileInfo.sex).Equals(""))
+                        {
+                            contact.GenderCode = new OptionSetValue();
+                        }
+                        else
+                        {
+                            contact.GenderCode = new OptionSetValue(Int32.Parse(SexConvertor(contentModel.profileInfo.sex)));
+                        }
                         contact.pfc_citizen_id = contentModel.profileInfo.idCitizen;
                         contact.pfc_passport_id = contentModel.profileInfo.idPassport;
                         contact.pfc_alien_id = contentModel.profileInfo.idAlien;
@@ -152,6 +159,26 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 return dataOutput;
             }
             
+        }
+
+        public string SexConvertor(string sex)
+        {
+            string sexC = "";
+
+            if(sex.Equals("M"))
+            {
+                sexC = "1"; 
+            }
+            else if (sex.Equals("F"))
+            {
+                sexC = "2";
+            }
+            else if (sex.Equals("U"))
+            {
+                sexC = "";
+            }
+
+            return sexC;
         }
 
         public string TelephoneConvertor(string tel, string ext)
