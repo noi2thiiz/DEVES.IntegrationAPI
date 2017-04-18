@@ -31,8 +31,17 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     clsCreatePersonIn = TransformerFactory.TransformModel(regClientPersonalInput, clsCreatePersonIn);
                     CLSCreatePersonalClientContentOutputModel clsCreateClientContent = CallDevesServiceProxy<CLSCreatePersonalClientOutputModel, CLSCreatePersonalClientContentOutputModel>
                                                                                         (CommonConstant.ewiEndpointKeyCLSCreatePersonalClient, clsCreatePersonIn);
-                    regClientPersonalInput = (RegClientPersonalInputModel)TransformerFactory.TransformModel(clsCreateClientContent, regClientPersonalInput);
-
+                    if (clsCreateClientContent.code == CONST_CODE_SUCCESS)
+                    {
+                        regClientPersonalInput = (RegClientPersonalInputModel)TransformerFactory.TransformModel(clsCreateClientContent, regClientPersonalInput);
+                    }
+                    else
+                    {
+                        regClientPersonOutput.code = clsCreateClientContent.code;
+                        regClientPersonOutput.message = clsCreateClientContent.message;
+                        regClientPersonOutput.description = clsCreateClientContent.description;
+                        return regClientPersonOutput;
+                    }
                 }
 
                 if (string.IsNullOrEmpty(regClientPersonalInput.generalHeader.polisyClientId))

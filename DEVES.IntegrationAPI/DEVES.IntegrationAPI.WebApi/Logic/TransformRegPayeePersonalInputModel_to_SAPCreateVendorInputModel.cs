@@ -27,7 +27,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             }
             if (src.profileInfo != null)
             {
-                trgt.TITLE = src.profileInfo.salutation;
+                trgt.TITLE = buzMasterSalutation.Instant.SalutationList.FirstOrDefault( t => t.titlePolisy == src.profileInfo.salutation).titleSAP ?? "";
                 trgt.NAME1 = src.profileInfo.personalName;
                 trgt.NAME2 = src.profileInfo.personalSurname;
                 trgt.TAX3 = src.profileInfo.idCitizen;
@@ -46,7 +46,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 trgt.DISTRICT = src.addressInfo.subDistrictCode;
                 trgt.CITY = src.addressInfo.provinceCode;
                 trgt.POSTCODE = src.addressInfo.postalCode;
-                trgt.COUNTRY = src.addressInfo.country;
+                trgt.COUNTRY = buzMasterCountry.Instant.CountryList.FirstOrDefault( c => c.ctryPolisy== src.addressInfo.country).ctrySAP??"";
             }
             if (src.sapVendorInfo != null)
             {
@@ -60,6 +60,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 trgt.BANKBRANCH = src.sapVendorInfo.bankInfo.bankBranchCode;
                 trgt.ACCTHOLDER = src.sapVendorInfo.bankInfo.accountHolder;
                 trgt.PAYMETHOD = src.sapVendorInfo.bankInfo.paymentMethods;
+                trgt.BANKACC = src.sapVendorInfo.bankInfo.bankAccount;
             }
             if (src.sapVendorInfo != null && src.sapVendorInfo.withHoldingTaxInfo != null)
             {
@@ -69,12 +70,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 trgt.WHTCTRY = "TH";                
             }
 
-            trgt.COMPANY = "";
+            trgt.COMPANY = "2020";
             trgt.TAX1 = "";
             trgt.TAX2 = "";
             trgt.TAX4 = "";
             //trgt.CTRY = "TH";
-            trgt.BANKACC = "";
 
             return trgt;
         }

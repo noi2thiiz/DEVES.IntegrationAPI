@@ -40,7 +40,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 trgt.DISTRICT = src.addressHeader.subDistrictCode;
                 trgt.CITY = src.addressHeader.provinceCode;
                 trgt.POSTCODE = src.addressHeader.postalCode;
-                trgt.COUNTRY = src.addressHeader.country;
+                trgt.COUNTRY = buzMasterCountry.Instant.CountryList.FirstOrDefault(x => x.ctryPolisy == src.addressHeader.country)?.ctrySAP ?? "";
             }
             if (src.sapVendorInfo != null)
             {
@@ -48,7 +48,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             }
             if (src.sapVendorInfo != null && src.sapVendorInfo.bankInfo != null)
             {
-                trgt.CTRY = src.sapVendorInfo.bankInfo.bankCountryCode;
+                trgt.CTRY = src.sapVendorInfo.bankInfo.bankCountryCode??"TH";
                 trgt.BANKCODE = src.sapVendorInfo.bankInfo.bankCode??"";
                 trgt.BANKBRANCH = src.sapVendorInfo.bankInfo.bankBranchCode;
                 trgt.BANKACC = src.sapVendorInfo.bankInfo.bankAccount;

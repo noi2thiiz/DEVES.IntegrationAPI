@@ -93,6 +93,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                     regPayeePersonalInput.sapVendorInfo.sapVendorCode = SAPCreateVendorContentOut?.VCODE;
                     outputPass.sapVendorCode = SAPCreateVendorContentOut?.VCODE;
+                    outputPass.sapVendorGroupCode = sapInfo?.VGROUP;
 
                     #endregion Create Payee in SAP
 

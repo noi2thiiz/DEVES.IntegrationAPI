@@ -45,7 +45,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 trgt.dateInCorporate = src.profileHeader.dateInCorporate;
                 trgt.corporateStaffNo = src.profileHeader.corporateBranch;
                 trgt.econActivity = src.profileHeader.econActivity;
-                trgt.countryOrigin = src.profileHeader.countryOrigin;
+
+                trgt.countryOrigin = src.profileHeader.countryOrigin ?? ""; // buzCountry.Instant.CountryList.FirstOrDefault(x => x.Code == src.profileHeader.countryOrigin)?.ctryPolisy??"";
+
                 trgt.language = src.profileHeader.language;
                 trgt.riskLevel = src.profileHeader.riskLevel;
                 trgt.vipStatus = src.profileHeader.vipStatus;
@@ -70,7 +72,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 trgt.address4 = src.addressHeader.subDistrictCode;
                 trgt.address5 = src.addressHeader.provinceCode;
                 trgt.postCode = src.addressHeader.postalCode;
-                trgt.country = src.addressHeader.country;
+
+                trgt.country = src.addressHeader.country ?? ""; // buzCountry.Instant.CountryList.FirstOrDefault( x => x.Code == src.addressHeader.country)?.ctryPolisy ?? "";
+
                 trgt.latitude = src.addressHeader.latitude;
                 trgt.longtitude = src.addressHeader.longtitude;
             }

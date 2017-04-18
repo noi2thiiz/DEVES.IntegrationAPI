@@ -3,10 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
+using System.Configuration;
+
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
     public static class CommonConstant
     {
+        public static string CRMConnectionStr = ConfigurationManager.ConnectionStrings["CRM_DEVES"].ConnectionString;
+
         public const string ewiEndpointKeyAPARInquiryPayeeList = "EWI_ENDPOINT_APARInquiryPayeeList";
         public const string ewiEndpointKeyCLSInquiryPersonalClient = "EWI_ENDPOINT_CLSInquiryPersonalClient";
         public const string ewiEndpointKeyCOMPInquiryClient = "EWI_ENDPOINT_COMPInquiryClientMaster";

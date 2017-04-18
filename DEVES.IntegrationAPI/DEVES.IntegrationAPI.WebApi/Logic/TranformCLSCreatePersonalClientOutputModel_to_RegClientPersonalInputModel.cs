@@ -14,10 +14,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             if (src.data != null)
             {
-
-                if (string.IsNullOrEmpty(src.data.cleansingId)) trgt.generalHeader.cleansingId = src.data.cleansingId;
-                
-
+                if (!string.IsNullOrEmpty(src.data.cleansingId))
+                {
+                    trgt.generalHeader.cleansingId = src.data.cleansingId;
+                }
             }
             
             return trgt;
