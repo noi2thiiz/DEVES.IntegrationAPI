@@ -52,7 +52,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 {
 
                     Contact contact = new Contact();
-                    Account account = new Account();
+
                     crmSvc.EnableProxyTypes();
 
                     //Create Client Additional Records
