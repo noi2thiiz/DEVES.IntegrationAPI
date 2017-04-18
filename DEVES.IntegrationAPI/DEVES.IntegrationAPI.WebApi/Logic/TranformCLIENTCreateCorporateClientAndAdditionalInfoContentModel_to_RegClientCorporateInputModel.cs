@@ -13,7 +13,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             CLIENTCreateCorporateClientAndAdditionalInfoContentModel src = (CLIENTCreateCorporateClientAndAdditionalInfoContentModel)input;
             RegClientCorporateInputModel trgt = (RegClientCorporateInputModel)output;
 
-            if (string.IsNullOrEmpty(src.clientID)) trgt.generalHeader.polisyClientId = src.clientID;
+            if (!string.IsNullOrEmpty(src.clientID)) trgt.generalHeader.polisyClientId = src.clientID;
 
             return trgt;
 

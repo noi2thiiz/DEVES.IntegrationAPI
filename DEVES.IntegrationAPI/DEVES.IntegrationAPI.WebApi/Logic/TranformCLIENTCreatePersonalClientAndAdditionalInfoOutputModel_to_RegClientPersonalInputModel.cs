@@ -15,7 +15,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             if (src != null)
 
             {
-                if (string.IsNullOrEmpty(src.clientID)) trgt.generalHeader.polisyClientId = src.clientID;
+                if (!string.IsNullOrEmpty(src.clientID)) trgt.generalHeader.polisyClientId = src.clientID;
 
                 /* dont found filed to map
                 {
