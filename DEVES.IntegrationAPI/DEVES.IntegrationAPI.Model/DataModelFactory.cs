@@ -107,6 +107,8 @@ namespace DEVES.IntegrationAPI.Model
             else if (t == typeof(CLIENTCreatePersonalClientAndAdditionalInfoInputModel))
             {
                 var modelContent = new CLIENTCreatePersonalClientAndAdditionalInfoInputModel();
+                modelContent.personalName = "";
+                modelContent.nameFormat = "";
                 o = modelContent;
             }
             #endregion CLIENTCreatePersonalClientAndAdditionalInfoInputModel

@@ -14,7 +14,7 @@ namespace DEVES.IntegrationAPI.WebApi
     {
         public static void Register(HttpConfiguration config)
         {
-            //GlobalConfiguration.Configuration.MessageHandlers.Add(new ApiLogHandler());
+            GlobalConfiguration.Configuration.MessageHandlers.Add(new ApiLogHandler());
          
             
             // Web API configuration and services
