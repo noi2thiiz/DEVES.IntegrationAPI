@@ -100,7 +100,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         //contact.FamilyStatusCode = new OptionSetValue(Int32.Parse(OptionsetConvertor(contentModel.profileInfo.married))); // optionset
                         // contact.pfc_occupation = contentModel.profileInfo.occupation;
 
-                        contact.pfc_client_legal_status = new OptionSetValue(Int32.Parse(OptionsetConvertor(contentModel.profileInfo.riskLevel))); // optionset
+                        switch (contentModel.profileInfo.riskLevel.ToUpper())
+                        {
+                            case "A": contact.pfc_AMLO_flag = new OptionSetValue(100000001); break;
+                            case "B": contact.pfc_AMLO_flag = new OptionSetValue(100000002); break;
+                            case "U": contact.pfc_AMLO_flag = new OptionSetValue(100000012); break;
+                        }
+                        
                         bool isVIP = false;
                         if(contentModel.profileInfo.vipStatus.Equals("Y"))
                         {

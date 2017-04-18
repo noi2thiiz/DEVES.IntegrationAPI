@@ -54,6 +54,22 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             }
         }
 
+        public DateTime isDateTimeNull(string a)
+        {
+            string datetime = "";
+
+            if(a.Equals(""))
+            {
+                datetime = "01/01/1900 0:00:00 AM";
+            }
+            else
+            {
+                datetime = a.ToString();
+            }
+
+            return Convert.ToDateTime(datetime);
+        }
+
         private RequestSurveyorInputModel Mapping(string incidentId, string currentUserId)
         {
             dt = new System.Data.DataTable();
@@ -73,8 +89,8 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             rsModel.driverTel = isStringNull("DriverTel");
             rsModel.currentVehicleLicense = isStringNull("current_VehicleLicence");
             rsModel.currentProvince = isStringNull("current_Province");
-            rsModel.eventDate = Convert.ToDateTime(isStringNull("EventDate"));
-            rsModel.activityDate = Convert.ToDateTime(isStringNull("ActivityDate"));
+            rsModel.eventDate = isDateTimeNull(isStringNull("EventDate"));
+            rsModel.activityDate = isDateTimeNull(isStringNull("ActivityDate"));
             rsModel.eventDetail = isStringNull("EventDetail");
             rsModel.isCasualty = isStringNull("isCasualty");
             if (rsModel.isCasualty.Equals(""))
@@ -101,7 +117,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             rsModel.appointLat = isStringNull("appointLat");
             rsModel.appointLong = isStringNull("appointLong");
             rsModel.appointLocation = isStringNull("appointLocation");
-            rsModel.appointDate = Convert.ToDateTime(isStringNull("appointDate"));
+            rsModel.appointDate = isDateTimeNull(isStringNull("appointDate"));
             rsModel.appointName = isStringNull("appointName");
             rsModel.appointPhone = isStringNull("appointPhone");
             rsModel.contractName = isStringNull("contractName");
