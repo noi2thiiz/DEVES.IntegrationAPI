@@ -40,7 +40,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         regClientPersonOutput.code = clsCreateClientContent.code;
                         regClientPersonOutput.message = clsCreateClientContent.message;
                         regClientPersonOutput.description = clsCreateClientContent.description;
-                        return regClientPersonOutput;
+                        //return regClientPersonOutput;
                     }
                 }
 
