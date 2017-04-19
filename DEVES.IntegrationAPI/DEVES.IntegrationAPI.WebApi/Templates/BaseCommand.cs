@@ -93,6 +93,16 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
 
             T1 ewiRes = response.Content.ReadAsAsync<T1>().Result;
 
+            /*
+            ApiLogDataGateWay.Create(
+                new ApiLogEntry
+                {
+                    ResponseContentBody = ewiRes.ToJson(),
+                    RequestContentBody = request.ToJson(),
+                    RequestUri = EWIendpoint
+                });
+            */
+
             Console.WriteLine("==========response========");
             Console.WriteLine(ewiRes.ToJson());
 
@@ -137,6 +147,15 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             response.EnsureSuccessStatusCode();
             
             T1 ewiRes = response.Content.ReadAsAsync<T1>().Result;
+
+            /*
+            ApiLogDataGateWay.Create(
+                new ApiLogEntry {
+                    ResponseContentBody = ewiRes.ToJson(),
+                    RequestContentBody = request.ToJson(),
+                    RequestUri = EWIendpoint
+                    });
+            */
 
             Console.WriteLine("==========response========");
             Console.WriteLine(ewiRes.ToJson());

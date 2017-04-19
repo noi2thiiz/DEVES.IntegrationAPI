@@ -44,11 +44,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     }
                 }
 
+                CLIENTCreatePersonalClientAndAdditionalInfoContentModel polCreateClientContent = new CLIENTCreatePersonalClientAndAdditionalInfoContentModel();
                 if (string.IsNullOrEmpty(regClientPersonalInput.generalHeader.polisyClientId))
                 {
                     BaseDataModel polCreatePersonIn = DataModelFactory.GetModel(typeof(CLIENTCreatePersonalClientAndAdditionalInfoInputModel));
                     polCreatePersonIn = TransformerFactory.TransformModel(regClientPersonalInput, polCreatePersonIn);
-                    CLIENTCreatePersonalClientAndAdditionalInfoContentModel polCreateClientContent = CallDevesServiceProxy<CLIENTCreatePersonalClientAndAdditionalInfoOutputModel
+                    polCreateClientContent = CallDevesServiceProxy<CLIENTCreatePersonalClientAndAdditionalInfoOutputModel
                                                                                                         , CLIENTCreatePersonalClientAndAdditionalInfoContentModel>
                                                                                                         (CommonConstant.ewiEndpointKeyCLIENTCreatePersonalClient, polCreatePersonIn);
                     regClientPersonalInput = (RegClientPersonalInputModel)TransformerFactory.TransformModel(polCreateClientContent, regClientPersonalInput);
@@ -63,7 +64,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     regClientPersonOutput.message = "SUCCESS";
                     RegClientPersonalDataOutputModel_Pass dataOutPass = new RegClientPersonalDataOutputModel_Pass();
                     dataOutPass.cleansingId = regClientPersonalInput.generalHeader.cleansingId;
-                    dataOutPass.polisyClientId = regClientPersonalInput.generalHeader.polisyClientId;
+                    //dataOutPass.polisyClientId = regClientPersonalInput.generalHeader.polisyClientId;
+                    dataOutPass.polisyClientId = polCreateClientContent.clientID;
                     dataOutPass.crmClientId = crmContentOutput.crmClientId;
                     dataOutPass.personalName = regClientPersonalInput.profileInfo.personalName;
                     dataOutPass.personalSurname = regClientPersonalInput.profileInfo.personalSurname;
