@@ -58,8 +58,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     trgt.profileInfo.idDriving = src.clientList.driverlicense;
                     trgt.profileInfo.idTax = src.clientList.taxId;
                     trgt.profileInfo.corporateBranch = src.clientList.corporateStaffNo;
-                    trgt.profileInfo.dateOfBirth = src.clientList.dateOfBirth;
-                    trgt.profileInfo.dateOfDeath = src.clientList.dateOfDeath;
+                    trgt.profileInfo.dateOfBirth = src.clientList.dateOfBirthDate;
+                    trgt.profileInfo.dateOfDeath = src.clientList.dateOfDeathDate;
                     trgt.profileInfo.natioanalityText = src.clientList.natioanalityText;
                     trgt.profileInfo.marriedText = src.clientList.marriedText;
                     trgt.profileInfo.occupationText = src.clientList.occupationText;

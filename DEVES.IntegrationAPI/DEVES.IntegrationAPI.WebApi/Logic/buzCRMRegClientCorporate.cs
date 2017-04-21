@@ -19,6 +19,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         {
             RegClientCorporateContentOutputModel regClientCorporateOutput = new RegClientCorporateContentOutputModel();
             regClientCorporateOutput.data = new List<RegClientCorporateDataOutputModel>();
+            regClientCorporateOutput.transactionDateTime = DateTime.Now;
+            regClientCorporateOutput.transactionId = TransactionId;
+            regClientCorporateOutput.code = CONST_CODE_SUCCESS;
+
             try
             {
 
@@ -34,7 +38,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                 }
 
-                if (string.IsNullOrEmpty(regClientCorporateInput.generalHeader.polisyClientId))
+                if (string.IsNullOrEmpty(regClientCorporateInput.generalHeader.polisyClientId) && !string.IsNullOrEmpty(regClientCorporateInput.generalHeader.cleansingId) )
                 {
                     BaseDataModel polCreateCorporateIn = DataModelFactory.GetModel(typeof(CLIENTCreateCorporateClientAndAdditionalInfoInputModel));
                     polCreateCorporateIn = TransformerFactory.TransformModel(regClientCorporateInput, polCreateCorporateIn);
@@ -44,15 +48,15 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     regClientCorporateInput = (RegClientCorporateInputModel)TransformerFactory.TransformModel(polCreateClientContent, regClientCorporateInput);
                 }
 
-                if(regClientCorporateInput.generalHeader.assessorFlag == "Y" 
-                    || regClientCorporateInput.generalHeader.solicitorFlag == "Y" 
-                    || regClientCorporateInput.generalHeader.repairerFlag == "Y" 
-                    || regClientCorporateInput.generalHeader.hospitalFlag == "Y" )
+                if( !string.IsNullOrEmpty(regClientCorporateInput.generalHeader.polisyClientId) 
+                    && (regClientCorporateInput.generalHeader.assessorFlag == "Y" 
+                        || regClientCorporateInput.generalHeader.solicitorFlag == "Y" 
+                        || regClientCorporateInput.generalHeader.repairerFlag == "Y" 
+                        || regClientCorporateInput.generalHeader.hospitalFlag == "Y" ))
                 {
                     COMPInquiryClientMasterInputModel compInqClientInput = new COMPInquiryClientMasterInputModel();
                     compInqClientInput = (COMPInquiryClientMasterInputModel)TransformerFactory.TransformModel(regClientCorporateInput, compInqClientInput);
 
-                    //+ Call CLS_InquiryCLSPersonalClient through ServiceProxy
                     EWIResCOMPInquiryClientMasterContentModel retCOMPInqClient = CallDevesServiceProxy<COMPInquiryClientMasterOutputModel, EWIResCOMPInquiryClientMasterContentModel>
                                                                                             (CommonConstant.ewiEndpointKeyCOMPInquiryClient, compInqClientInput);
 
@@ -68,30 +72,31 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         
                         //CLIENTUpdateCorporateClientAndAdditionalInfoContentModel updateClientPolisy400Out = CallDevesServiceProxy<CLIENTUpdateCorporateClientAndAdditionalInfoOutputModel, CLIENTUpdateCorporateClientAndAdditionalInfoContentModel>(CommonConstant.ewiEndpointKeyCLIENTUpdateCorporateClient, updateClientPolisy400In);
                     }
-                }
 
-                buzCreateCrmClientCorporate cmdCreateCrmClient = new buzCreateCrmClientCorporate();
-                CreateCrmCorporateInfoOutputModel crmContentOutput = (CreateCrmCorporateInfoOutputModel)cmdCreateCrmClient.Execute(regClientCorporateInput);
+                    buzCreateCrmClientCorporate cmdCreateCrmClient = new buzCreateCrmClientCorporate();
+                    CreateCrmCorporateInfoOutputModel crmContentOutput = (CreateCrmCorporateInfoOutputModel)cmdCreateCrmClient.Execute(regClientCorporateInput);
 
-                if (crmContentOutput.code == CONST_CODE_SUCCESS)
-                {
-                    regClientCorporateOutput.code = CONST_CODE_SUCCESS;
-                    regClientCorporateOutput.message = "SUCCESS";
-                    RegClientCorporateDataOutputModel_Pass dataOutPass = new RegClientCorporateDataOutputModel_Pass();
-                    dataOutPass.cleansingId = regClientCorporateInput.generalHeader.cleansingId;
-                    dataOutPass.polisyClientId = regClientCorporateInput.generalHeader.polisyClientId;
-                    dataOutPass.crmClientId = crmContentOutput.crmClientId;
-                    dataOutPass.corporateName1 = regClientCorporateInput.profileHeader.corporateName1;
-                    dataOutPass.corporateName2 = regClientCorporateInput.profileHeader.corporateName2;
-                    dataOutPass.corporateBranch = regClientCorporateInput.profileHeader.corporateBranch;
+                    if (crmContentOutput.code == CONST_CODE_SUCCESS)
+                    {
+                        regClientCorporateOutput.code = CONST_CODE_SUCCESS;
+                        regClientCorporateOutput.message = "SUCCESS";
+                        RegClientCorporateDataOutputModel_Pass dataOutPass = new RegClientCorporateDataOutputModel_Pass();
+                        dataOutPass.cleansingId = regClientCorporateInput.generalHeader.cleansingId;
+                        dataOutPass.polisyClientId = regClientCorporateInput.generalHeader.polisyClientId;
+                        dataOutPass.crmClientId = crmContentOutput.crmClientId;
+                        dataOutPass.corporateName1 = regClientCorporateInput.profileHeader.corporateName1;
+                        dataOutPass.corporateName2 = regClientCorporateInput.profileHeader.corporateName2;
+                        dataOutPass.corporateBranch = regClientCorporateInput.profileHeader.corporateBranch;
 
-                    regClientCorporateOutput.data.Add(dataOutPass);
-                }
-                else
-                {
-                    regClientCorporateOutput.code = CONST_CODE_FAILED;
-                    regClientCorporateOutput.message = crmContentOutput.message;
-                    regClientCorporateOutput.description = crmContentOutput.description;
+                        regClientCorporateOutput.data.Add(dataOutPass);
+                    }
+                    else
+                    {
+                        regClientCorporateOutput.code = CONST_CODE_FAILED;
+                        regClientCorporateOutput.message = crmContentOutput.message;
+                        regClientCorporateOutput.description = crmContentOutput.description;
+                    }
+
                 }
             }
             catch (Exception e)
@@ -103,8 +108,6 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 RegClientCorporateDataOutputModel_Fail dataOutFail = new RegClientCorporateDataOutputModel_Fail();
                 regClientCorporateOutput.data.Add(dataOutFail);
             }
-            regClientCorporateOutput.transactionDateTime = DateTime.Now;
-            regClientCorporateOutput.transactionId = TransactionId;
             return regClientCorporateOutput;
 
         }
