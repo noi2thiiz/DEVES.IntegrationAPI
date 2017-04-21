@@ -104,7 +104,18 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 //country String	3	O ที่อยู่ -> ประเทศ
                 trgt.country = src.addressInfo.country;
                 //addressType String	1	O
-                trgt.busRes = src.addressInfo.addressType;
+                // trgt.busRes = src.addressInfo.addressType;
+                switch (src.addressInfo.addressType)
+                {
+                    case "01": trgt.busRes = "P"; break;
+                    case "02": trgt.busRes = "P"; break;
+                    case "03": trgt.busRes = "P"; break;
+                    case "04": trgt.busRes = "B"; break;
+                    case "05": trgt.busRes = "R"; break;
+                    case "06": trgt.busRes = "P"; break;
+                    case "07": trgt.busRes = "P"; break;
+                    default: trgt.busRes = ""; break;
+                }
                 //latitude    String	20	O
                 trgt.latitude = src.addressInfo.latitude;
                 //longtitude  String	20	O

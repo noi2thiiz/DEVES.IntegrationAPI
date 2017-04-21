@@ -326,8 +326,8 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
 
                 output.code = "400";
                 output.message = "False";
-                output.description = "ไม่พบ claimNotiNo";
-                output.transactionId = "Claim Noti No: null";
+                output.description = errorMessage.ToString();
+                output.transactionId = "";
                 output.transactionDateTime = DateTime.Now.ToString();
                 output.data = null;
             }

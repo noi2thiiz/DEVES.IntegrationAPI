@@ -22,7 +22,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             trgt.taxNo = src.conditionDetail.idCard;
             trgt.telephone = ""; 
             trgt.emailAddress = "";
-            trgt.backDay = "30";
+            trgt.backDay = "7";
 
             return trgt;
         }

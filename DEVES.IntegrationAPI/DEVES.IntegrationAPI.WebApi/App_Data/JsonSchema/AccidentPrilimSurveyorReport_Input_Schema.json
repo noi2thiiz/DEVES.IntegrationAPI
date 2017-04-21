@@ -135,7 +135,6 @@
         },
         "iSurveyIsDeletedDate": {
           "type": "string",
-          "minLength": 1,
           "maxLength": 20
         },
         "numOfAccidentParty": {
@@ -152,7 +151,6 @@
         "iSurveyCreatedDate",
         "iSurveyModifiedDate",
         "iSurveyIsDeleted",
-        "iSurveyIsDeletedDate",
         "numOfAccidentParty"
       ]
     },
@@ -241,7 +239,6 @@
         },
         "partiesIsDeletedDate": {
           "type": "string",
-          "minLength": 1,
           "maxLength": 20
         }
       },
@@ -250,8 +247,7 @@
         "partiesType",
         "partiesCreatedDate",
         "partiesModifiedDate",
-        "partiesIsDeleted",
-        "partiesIsDeletedDate"
+        "partiesIsDeleted"
       ]
     },
 
@@ -320,15 +316,13 @@
         },
         "claimDetailIsDeletedDate": {
           "type": "string",
-          "minLength": 1,
           "maxLength": 20
         }
       },
       "required": [
         "claimDetailCreatedDate",
         "claimDetailModifiedDate",
-        "claimDetailIsDeleted",
-        "claimDetailIsDeletedDate"
+        "claimDetailIsDeleted"
       ]
     },
 
@@ -396,15 +390,13 @@
         },
         "claimDetailPartiesIsDeletedDate": {
           "type": "string",
-          "minLength": 1,
           "maxLength": 20
         }
       },
       "required": [
         "claimDetailPartiesCreatedDate",
         "claimDetailPartiesModifiedDate",
-        "claimDetailPartiesIsDeleted",
-        "claimDetailPartiesIsDeletedDate"
+        "claimDetailPartiesIsDeleted"
       ]
     }
 

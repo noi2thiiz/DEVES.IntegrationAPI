@@ -79,7 +79,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 trgt.address1 = src.addressHeader.address1;
                 trgt.address2 = src.addressHeader.address2;
                 trgt.address3 = src.addressHeader.address3;
-                trgt.address4 = src.addressHeader.subDistrictCode;
+                trgt.address4 = src.addressHeader.districtCode + " " + src.addressHeader.subDistrictCode;
 
                 trgt.address5 = src.addressHeader.provinceCode;
                 trgt.postCode = src.addressHeader.postalCode;
