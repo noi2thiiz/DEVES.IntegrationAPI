@@ -78,8 +78,44 @@ namespace DEVES.IntegrationAPI.Model.Polisy400
         public string driverlicense { set; get; }
         public string taxId { set; get; }
         public string corporateStaffNo { set; get; }
-        public DateTime? dateOfBirth { set; get; }
-        public DateTime? dateOfDeath { set; get; }
+
+        public string dateOfBirth { set; get; }
+        [JsonIgnore]
+        public DateTime? dateOfBirthDate
+        {
+            get
+            {
+                DateTime? dtBirthDate = null;
+                if (dateOfBirth.Length == 8 && dateOfBirth != CONST_DATE_NULL_POLISY400)
+                {
+                    int iYear = int.Parse(dateOfBirth.Substring(0, 4));
+                    if (iYear > 1900)
+                    {
+                        dtBirthDate = new DateTime(int.Parse(dateOfBirth.Substring(0, 4)), int.Parse(dateOfBirth.Substring(4, 2)), int.Parse(dateOfBirth.Substring(6, 2)));
+                    }
+                }
+                return dtBirthDate;
+            }
+        }
+
+        public string dateOfDeath { set; get; }
+        [JsonIgnore]
+        public DateTime? dateOfDeathDate
+        {
+            get {
+                DateTime? dtDeathDate = null;
+                if (dateOfDeath.Length == 8 && dateOfDeath != CONST_DATE_NULL_POLISY400 )
+                {
+                    int iYear = int.Parse(dateOfDeath.Substring(0, 4));
+                    if(iYear > 1900)
+                    {
+                        dtDeathDate = new DateTime(iYear, int.Parse(dateOfDeath.Substring(4, 2)), int.Parse(dateOfDeath.Substring(6, 2)));
+                    }
+                }
+                return dtDeathDate;
+            }
+        }
+
         public string natioanalityText { set; get; }
         public string marriedText { set; get; }
         public string occupationText { set; get; }

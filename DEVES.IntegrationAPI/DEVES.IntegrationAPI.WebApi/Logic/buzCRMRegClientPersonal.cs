@@ -20,6 +20,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         {
             RegClientPersonalContentOutputModel regClientPersonOutput = new RegClientPersonalContentOutputModel();
             regClientPersonOutput.data = new List<RegClientPersonalDataOutputModel>();
+            regClientPersonOutput.transactionDateTime = DateTime.Now;
+            regClientPersonOutput.transactionId = TransactionId;
+            regClientPersonOutput.code = CONST_CODE_SUCCESS;
             try
             {
 
@@ -40,42 +43,60 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         regClientPersonOutput.code = clsCreateClientContent.code;
                         regClientPersonOutput.message = clsCreateClientContent.message;
                         regClientPersonOutput.description = clsCreateClientContent.description;
-                        //return regClientPersonOutput;
+                        //return regClientPersonOutput;o
                     }
                 }
 
-                CLIENTCreatePersonalClientAndAdditionalInfoContentModel polCreateClientContent = new CLIENTCreatePersonalClientAndAdditionalInfoContentModel();
-                if (string.IsNullOrEmpty(regClientPersonalInput.generalHeader.polisyClientId))
+                if (regClientPersonOutput.code == CONST_CODE_SUCCESS)
                 {
-                    BaseDataModel polCreatePersonIn = DataModelFactory.GetModel(typeof(CLIENTCreatePersonalClientAndAdditionalInfoInputModel));
-                    polCreatePersonIn = TransformerFactory.TransformModel(regClientPersonalInput, polCreatePersonIn);
-                    polCreateClientContent = CallDevesServiceProxy<CLIENTCreatePersonalClientAndAdditionalInfoOutputModel
-                                                                                                        , CLIENTCreatePersonalClientAndAdditionalInfoContentModel>
-                                                                                                        (CommonConstant.ewiEndpointKeyCLIENTCreatePersonalClient, polCreatePersonIn);
-                    regClientPersonalInput = (RegClientPersonalInputModel)TransformerFactory.TransformModel(polCreateClientContent, regClientPersonalInput);
-                }
 
-                buzCreateCrmClientPersonal cmdCreateCrmClient = new buzCreateCrmClientPersonal();
-                CreateCrmPersonInfoOutputModel crmContentOutput = (CreateCrmPersonInfoOutputModel)cmdCreateCrmClient.Execute(regClientPersonalInput);
+                    CLIENTCreatePersonalClientAndAdditionalInfoContentModel polCreateClientContent = new CLIENTCreatePersonalClientAndAdditionalInfoContentModel();
+                    if (string.IsNullOrEmpty(regClientPersonalInput.generalHeader.polisyClientId))
+                    {
+                        BaseDataModel polCreatePersonIn = DataModelFactory.GetModel(typeof(CLIENTCreatePersonalClientAndAdditionalInfoInputModel));
+                        polCreatePersonIn = TransformerFactory.TransformModel(regClientPersonalInput, polCreatePersonIn);
+                        polCreateClientContent = CallDevesServiceProxy<CLIENTCreatePersonalClientAndAdditionalInfoOutputModel
+                                                                                                            , CLIENTCreatePersonalClientAndAdditionalInfoContentModel>
+                                                                                                            (CommonConstant.ewiEndpointKeyCLIENTCreatePersonalClient, polCreatePersonIn);
 
-                if (crmContentOutput.code == CONST_CODE_SUCCESS)
-                {
-                    regClientPersonOutput.code = CONST_CODE_SUCCESS;
-                    regClientPersonOutput.message = "SUCCESS";
-                    RegClientPersonalDataOutputModel_Pass dataOutPass = new RegClientPersonalDataOutputModel_Pass();
-                    dataOutPass.cleansingId = regClientPersonalInput.generalHeader.cleansingId;
-                    //dataOutPass.polisyClientId = regClientPersonalInput.generalHeader.polisyClientId;
-                    dataOutPass.polisyClientId = polCreateClientContent.clientID;
-                    dataOutPass.crmClientId = crmContentOutput.crmClientId;
-                    dataOutPass.personalName = regClientPersonalInput.profileInfo.personalName;
-                    dataOutPass.personalSurname = regClientPersonalInput.profileInfo.personalSurname;
-                    regClientPersonOutput.data.Add(dataOutPass);
-                }
-                else
-                {
-                    regClientPersonOutput.code = CONST_CODE_FAILED;
-                    regClientPersonOutput.message = crmContentOutput.message;
-                    regClientPersonOutput.description = crmContentOutput.description;
+                        if (string.IsNullOrEmpty(polCreateClientContent?.clientID))
+                        {
+                            regClientPersonOutput.code = CONST_CODE_FAILED;
+                            regClientPersonOutput.message = "Cannot create Client in Polisy400.";
+                            regClientPersonOutput.description = "";
+                        }
+                        else
+                        {
+                            regClientPersonalInput = (RegClientPersonalInputModel)TransformerFactory.TransformModel(polCreateClientContent, regClientPersonalInput);
+                        }
+                    }
+
+
+                    if (regClientPersonOutput.code == CONST_CODE_SUCCESS)
+                    {
+                        buzCreateCrmClientPersonal cmdCreateCrmClient = new buzCreateCrmClientPersonal();
+                        CreateCrmPersonInfoOutputModel crmContentOutput = (CreateCrmPersonInfoOutputModel)cmdCreateCrmClient.Execute(regClientPersonalInput);
+
+                        if (crmContentOutput.code == CONST_CODE_SUCCESS)
+                        {
+                            regClientPersonOutput.code = CONST_CODE_SUCCESS;
+                            regClientPersonOutput.message = "SUCCESS";
+                            RegClientPersonalDataOutputModel_Pass dataOutPass = new RegClientPersonalDataOutputModel_Pass();
+                            dataOutPass.cleansingId = regClientPersonalInput.generalHeader.cleansingId;
+                            //dataOutPass.polisyClientId = regClientPersonalInput.generalHeader.polisyClientId;
+                            dataOutPass.polisyClientId = polCreateClientContent.clientID;
+                            dataOutPass.crmClientId = crmContentOutput.crmClientId;
+                            dataOutPass.personalName = regClientPersonalInput.profileInfo.personalName;
+                            dataOutPass.personalSurname = regClientPersonalInput.profileInfo.personalSurname;
+                            regClientPersonOutput.data.Add(dataOutPass);
+                        }
+                        else
+                        {
+                            regClientPersonOutput.code = CONST_CODE_FAILED;
+                            regClientPersonOutput.message = crmContentOutput.message;
+                            regClientPersonOutput.description = crmContentOutput.description;
+                        }
+                    }
                 }
             }
             catch (Exception e)
@@ -88,8 +109,6 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 regClientPersonOutput.data.Add(dataOutFail);
             }
 
-            regClientPersonOutput.transactionDateTime = DateTime.Now;
-            regClientPersonOutput.transactionId = TransactionId;
 
             return regClientPersonOutput;
 

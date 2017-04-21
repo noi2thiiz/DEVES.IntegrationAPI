@@ -11,6 +11,8 @@ namespace DEVES.IntegrationAPI.Model
 
     public abstract class BaseDataModel
     {
+        public const string CONST_DATE_NULL_POLISY400 = "99999999";
+
         [JsonIgnore]
         internal const string CONST_FORMAT_DATE_POLISY400 = "ddMMyyyy";
         [JsonIgnore]
