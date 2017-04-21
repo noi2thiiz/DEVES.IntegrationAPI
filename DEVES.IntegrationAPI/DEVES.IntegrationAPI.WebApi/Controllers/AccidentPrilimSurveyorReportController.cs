@@ -266,7 +266,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                     retrievedIncident.pfc_accident_legal_result = new OptionSetValue(Int32.Parse(convertOptionSet(Incident.EntityLogicalName, "", content.eventDetailInfo.accidentLegalResult)));
                     retrievedIncident.pfc_police_station = content.eventDetailInfo.policeStation;
                     retrievedIncident.pfc_police_record_id = content.eventDetailInfo.policeRecordId;
-                    retrievedIncident.pfc_police_record_date = Convert.ToDateTime(content.eventDetailInfo.policeRecordDate);
+                    retrievedIncident.pfc_police_record_date = convertDateTime(content.eventDetailInfo.policeRecordDate);
                     retrievedIncident.pfc_police_bail_flag = convertBool(content.eventDetailInfo.policeBailFlag);
                     retrievedIncident.pfc_num_of_tow_truck = new OptionSetValue(Int32.Parse(convertOptionSet(Incident.EntityLogicalName, "", content.eventDetailInfo.numOfTowTruck.ToString())));
                     retrievedIncident.pfc_num_of_accident_injuries = new OptionSetValue(Int32.Parse(convertOptionSet(Incident.EntityLogicalName, "", content.eventDetailInfo.numOfAccidentInjury.ToString())));
@@ -274,7 +274,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                     retrievedIncident.pfc_excess_fee = (decimal)content.eventDetailInfo.excessFee;
                     retrievedIncident.pfc_deductable_fee = (decimal)content.eventDetailInfo.deductibleFee;
                     // retrievedIncident.pfc_deductable_fee = content.eventDetailInfo.fee;
-                    retrievedIncident.pfc_accident_prilim_surveyor_report_date = Convert.ToDateTime(content.reportAccidentResultDate);
+                    retrievedIncident.pfc_accident_prilim_surveyor_report_date = convertDateTime(content.reportAccidentResultDate);
                     retrievedIncident.pfc_isurvey_status = new OptionSetValue(Int32.Parse("100000070"));
                     retrievedIncident.pfc_isurvey_status_on = DateTime.Now;
                     retrievedIncident.pfc_motor_accident_sum = 1;
@@ -301,7 +301,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                     pfc_motor_accident motorAccident = new pfc_motor_accident();
                     motorAccident.pfc_motor_accident_name = "เหตุการณ์ที่ 1";
                     motorAccident.pfc_parent_caseId = new Microsoft.Xrm.Sdk.EntityReference(Incident.EntityLogicalName, _accountId);
-                    motorAccident.pfc_activity_date = Convert.ToDateTime(content.eventDetailInfo.accidentOn);
+                    motorAccident.pfc_activity_date = convertDateTime(content.eventDetailInfo.accidentOn);
                     motorAccident.pfc_event_code = content.eventId; // ให้เป็นไปตาม Logic. ของหน้า Motor Accident
                     motorAccident.pfc_event_sequence = 1;
                     motorAccident.pfc_ref_isurvey_eventid = content.eventId;
@@ -312,10 +312,10 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                     motorAccident.pfc_accident_location = content.eventDetailInfo.accidentPlace;
                     motorAccident.pfc_accident_remark = content.eventDetailInfo.accidentRemark;
                     motorAccident.pfc_ref_isurvey_total_event = content.eventDetailInfo.totalEvent;
-                    motorAccident.pfc_ref_isurvey_created_date = Convert.ToDateTime(content.eventDetailInfo.iSurveyCreatedDate);
-                    motorAccident.pfc_ref_isurvey_modified_date = Convert.ToDateTime(content.eventDetailInfo.iSurveyModifiedDate);
+                    motorAccident.pfc_ref_isurvey_created_date = convertDateTime(content.eventDetailInfo.iSurveyCreatedDate);
+                    motorAccident.pfc_ref_isurvey_modified_date = convertDateTime(content.eventDetailInfo.iSurveyModifiedDate);
                     motorAccident.pfc_ref_isurvey_isdeleted = convertBool(content.eventDetailInfo.iSurveyIsDeleted);
-                    motorAccident.pfc_ref_isurvey_isdeleted_date = Convert.ToDateTime(content.eventDetailInfo.iSurveyIsDeletedDate);
+                    motorAccident.pfc_ref_isurvey_isdeleted_date = convertDateTime(content.eventDetailInfo.iSurveyIsDeletedDate);
                     motorAccident.pfc_motor_accident_parties_sum = content.eventDetailInfo.numOfAccidentParty;
 
                     Guid motorId = _serviceProxy.Create(motorAccident);
@@ -371,10 +371,10 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                         motorAccidentParties.pfc_insurance_name = a.partiesInsuranceCompany;
                         motorAccidentParties.pfc_policyno = a.partiesPolicyNumber;
                         motorAccidentParties.pfc_policy_type = a.partiesPolicyType;
-                        motorAccidentParties.pfc_ref_isurvey_created_date = Convert.ToDateTime(a.partiesCreatedDate);
-                        motorAccidentParties.pfc_ref_isurvey_modified_date = Convert.ToDateTime(a.partiesModifiedDate);
+                        motorAccidentParties.pfc_ref_isurvey_created_date = convertDateTime(a.partiesCreatedDate);
+                        motorAccidentParties.pfc_ref_isurvey_modified_date = convertDateTime(a.partiesModifiedDate);
                         motorAccidentParties.pfc_ref_isurvey_isdeleted = convertBool(a.partiesIsDeleted);
-                        motorAccidentParties.pfc_ref_isurvey_isdeleted_date = Convert.ToDateTime(a.partiesIsDeletedDate);
+                        motorAccidentParties.pfc_ref_isurvey_isdeleted_date = convertDateTime(a.partiesIsDeletedDate);
 
                         Guid partiesID = _serviceProxy.Create(motorAccidentParties);
 
@@ -400,10 +400,10 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                                     motorAccidentPartiesPart.pfc_damage_levels = new OptionSetValue(Int32.Parse(convertClaimDetailLevels(data.claimDetailPartiesLevels)));
                                     motorAccidentPartiesPart.pfc_is_repair = convertBool(data.claimDetailPartieslIsRepair);
                                     motorAccidentPartiesPart.pfc_remark = data.claimDetailPartiesRemark;
-                                    motorAccidentPartiesPart.pfc_ref_isurvey_created_date = Convert.ToDateTime(data.claimDetailPartiesCreatedDate);
-                                    motorAccidentPartiesPart.pfc_ref_isurvey_modified_date = Convert.ToDateTime(data.claimDetailPartiesModifiedDate);
+                                    motorAccidentPartiesPart.pfc_ref_isurvey_created_date = convertDateTime(data.claimDetailPartiesCreatedDate);
+                                    motorAccidentPartiesPart.pfc_ref_isurvey_modified_date = convertDateTime(data.claimDetailPartiesModifiedDate);
                                     motorAccidentPartiesPart.pfc_ref_isurvey_isdeleted = convertBool(data.claimDetailPartiesIsDeleted);
-                                    motorAccidentPartiesPart.pfc_ref_isurvey_isdeleted_date = Convert.ToDateTime(data.claimDetailPartiesIsDeletedDate);
+                                    motorAccidentPartiesPart.pfc_ref_isurvey_isdeleted_date = convertDateTime(data.claimDetailPartiesIsDeletedDate);
                                     motorAccidentPartiesPart.pfc_motor_accident_event_code = content.eventId; 
                                     motorAccidentPartiesPart.pfc_motor_accident_event_sequence = 1;
                                     if(motorAccidentPartiesPart.pfc_motor_accident_parties_sequence < 1 || motorAccidentPartiesPart.pfc_motor_accident_parties_sequence == null)
@@ -466,10 +466,10 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                         motorAccidentPart.pfc_damage_levels = new OptionSetValue(Int32.Parse(convertClaimDetailLevels(a.claimDetailLevels)));
                         motorAccidentPart.pfc_is_repair = convertBool(a.claimDetailIsRepair);
                         motorAccidentPart.pfc_remark = a.claimDetailRemark;
-                        motorAccidentPart.pfc_ref_isurvey_created_date = Convert.ToDateTime(a.claimDetailCreatedDate);
-                        motorAccidentPart.pfc_ref_isurvey_modified_date = Convert.ToDateTime(a.claimDetailModifiedDate);
+                        motorAccidentPart.pfc_ref_isurvey_created_date = convertDateTime(a.claimDetailCreatedDate);
+                        motorAccidentPart.pfc_ref_isurvey_modified_date = convertDateTime(a.claimDetailModifiedDate);
                         motorAccidentPart.pfc_ref_isurvey_isdeleted = convertBool(a.claimDetailIsDeleted);
-                        motorAccidentPart.pfc_ref_isurvey_isdeleted_date = Convert.ToDateTime(a.claimDetailIsDeletedDate);
+                        motorAccidentPart.pfc_ref_isurvey_isdeleted_date = convertDateTime(a.claimDetailIsDeletedDate);
                         motorAccidentPart.pfc_motor_accident_event_code = content.eventId;
                         motorAccidentPart.pfc_motor_accident_event_sequence = 1;
 
@@ -589,6 +589,29 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             }
 
             return valOption;
+        }
+
+        private DateTime convertDateTime(string dt)
+        {
+            DateTime datetime = new DateTime();
+
+            if (dt == null)
+            {
+                // do nothing (ไม่อัพเดต)
+            }
+            else if (dt != null)
+            {
+                if (Convert.ToDateTime(dt).Year < 1900)
+                {
+                    // do nothing (ไม่อัพเดต)
+                }
+                else
+                {
+                    datetime = Convert.ToDateTime(dt);
+                }
+            }
+
+            return datetime;
         }
 
     }

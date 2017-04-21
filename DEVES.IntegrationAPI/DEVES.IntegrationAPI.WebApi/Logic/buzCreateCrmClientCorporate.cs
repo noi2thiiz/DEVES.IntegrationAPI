@@ -47,7 +47,6 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 using (OrganizationServiceProxy crmSvc = GetCrmServiceProxy())
                 {
 
-                    Contact contact = new Contact();
                     Account account = new Account();
                     // Address address = new Address();
                     crmSvc.EnableProxyTypes();
@@ -70,8 +69,23 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         account.pfc_tac_branch = contentModel.profileHeader.corporateBranch; // contentModel.profileHeader.corporateBranch;
                         account.pfc_economic_type = new OptionSetValue(Int32.Parse(OptionsetConvertor(contentModel.profileHeader.econActivity)));
                         account.pfc_polisy_nationality_code = contentModel.profileHeader.countryOrigin;
-                        account.pfc_language = new OptionSetValue(Int32.Parse(OptionsetConvertor(contentModel.profileHeader.language))); // account, contact
-                        account.pfc_AMLO_flag = new OptionSetValue(Int32.Parse(OptionsetConvertor(contentModel.profileHeader.riskLevel))); // contact
+                        switch (contentModel.profileHeader.language)
+                        {
+                            case "392": account.pfc_language = new OptionSetValue(100000002); break; // JP
+                            case "764": account.pfc_language = new OptionSetValue(100000003); break; // TH
+                            case "862": account.pfc_language = new OptionSetValue(100000001); break; // ENG
+                            case "840": account.pfc_language = new OptionSetValue(100000001); break; // ENG
+                            default: account.pfc_language = new OptionSetValue(100000004); break;
+                        }
+
+                        switch (contentModel.profileHeader.riskLevel)
+                        {
+                            case "A": account.pfc_AMLO_flag = new OptionSetValue(100000001); break; // A
+                            case "B": account.pfc_AMLO_flag = new OptionSetValue(100000002); break; // B
+                            case "U": account.pfc_AMLO_flag = new OptionSetValue(100000012); break; // U
+                        }
+
+                        // contact
                         bool isVIP = false;
                         if (contentModel.profileHeader.vipStatus.Equals("Y"))
                         {
@@ -81,44 +95,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                         // contactHeader 
 
-                        account.Telephone1 = contentModel.contactHeader.telephone1 + '#' + contentModel.contactHeader.telephone1Ext;
-                        account.Telephone2 = contentModel.contactHeader.telephone2 + '#' + contentModel.contactHeader.telephone2Ext;
-                        account.Telephone3 = contentModel.contactHeader.telephone3 + '#' + contentModel.contactHeader.telephone3Ext;
+                        account.Telephone1 = TelephoneConvertor(contentModel.contactHeader.telephone1, contentModel.contactHeader.telephone1Ext);
+                        account.Telephone2 = TelephoneConvertor(contentModel.contactHeader.telephone2, contentModel.contactHeader.telephone2Ext);
+                        account.Telephone3 = TelephoneConvertor(contentModel.contactHeader.telephone3, contentModel.contactHeader.telephone3Ext);
                         account.pfc_moblie_phone1 = contentModel.contactHeader.mobilePhone;
                         account.EMailAddress1 = contentModel.contactHeader.emailAddress;
                         account.pfc_line_id = contentModel.contactHeader.lineID;
                         account.pfc_facebook = contentModel.contactHeader.facebook;
 
-                        /*
-                        // addressHeader
-                        contentModel.addressHeader.address1;
-                        contentModel.addressHeader.address2;
-                        contentModel.addressHeader.address3;
-                        contentModel.addressHeader.subDistrictCode;
-                        contentModel.addressHeader.districtCode;
-                        contentModel.addressHeader.provinceCode;
-                        contentModel.addressHeader.postalCode;
-                        contentModel.addressHeader.country;
-                        contentModel.addressHeader.addressType;
-                        contentModel.addressHeader.latitude;
-                        contentModel.addressHeader.longtitude;
-                        */
-
-                        /*
-                        // asrhHeader
-                        contentModel.asrhHeader.assessorOregNum;
-                        contentModel.asrhHeader.assessorDelistFlag;
-                        contentModel.asrhHeader.assessorBlackListFlag;
-                        contentModel.asrhHeader.assessorTerminateDate;
-                        contentModel.asrhHeader.solicitorOregNum;
-                        contentModel.asrhHeader.solicitorDelistFlag;
-                        contentModel.asrhHeader.solicitorBlackListFlag;
-                        contentModel.asrhHeader.solicitorTerminateDate;
-                        contentModel.asrhHeader.repairerOregNum;
-                        contentModel.asrhHeader.repairerDelistFlag;
-                        contentModel.asrhHeader.repairerBlackListFlag;
-                        contentModel.asrhHeader.repairerTerminateDate;
-                        */
 
                         ExecuteTransactionRequest tranReq = new ExecuteTransactionRequest()
                         {
@@ -180,6 +164,22 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
         }
 
+        public string TelephoneConvertor(string tel, string ext)
+        {
+            string telNum = "";
+
+            if (ext == null || ext.Equals(""))
+            {
+                telNum = tel;
+            }
+            else
+            {
+                telNum = tel + " # " + ext;
+            }
+
+            return telNum;
+        }
+
         public string OptionsetConvertor(string val)
         {
             string opVal = "";
@@ -188,9 +188,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             {
                 opVal = "10000000" + val;
             }
-            else
+            else if (val.Length == 2)
             {
                 opVal = "1000000" + val;
+            }
+            else
+            {
+                opVal = "100000" + val;
             }
 
             return opVal;

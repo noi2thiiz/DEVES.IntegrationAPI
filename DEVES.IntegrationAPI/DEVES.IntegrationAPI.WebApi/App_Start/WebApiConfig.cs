@@ -37,8 +37,8 @@ namespace DEVES.IntegrationAPI.WebApi
 
             config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new EWIDatetimeConverter());
 
-            Logic.buzMasterCountry oCountry = Logic.buzMasterCountry.Instant;
-            Logic.buzMasterSalutation oSalutation = Logic.buzMasterSalutation.Instant;
+            // Logic.buzMasterCountry oCountry = Logic.buzMasterCountry.Instant;
+            // Logic.buzMasterSalutation oSalutation = Logic.buzMasterSalutation.Instant;
 
         }
     }
