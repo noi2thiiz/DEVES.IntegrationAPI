@@ -23,14 +23,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     cmd = new buzCrmInquiryPersonalClientMaster();
                     break;
                 case "C":
-                    if (contentModel.conditionHeader.roleCode == "G")
-                    {
-                        cmd = new buzCrmInquiryCorporateClientMaster();
-                    }
-                    else // A, S, R, H
-                    {
-                        throw new NotImplementedException("CrmInquiryClientMaster for A,S,R,H");
-                    }
+                    cmd = new buzCrmInquiryCorporateClientMaster();
                     break;
                 default:
                     break;
