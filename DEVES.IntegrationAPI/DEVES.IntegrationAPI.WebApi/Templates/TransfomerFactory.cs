@@ -36,10 +36,15 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                 else if (outputType == typeof(Model.CLS.CLSInquiryCorporateClientInputModel))
                 {
                     t = new TransformCRMInquiryCRMClientMasterInput_to_CLSInquiryCorporateClientInputModel();
+
                 }
                 else if (outputType == typeof(Model.Polisy400.COMPInquiryClientMasterInputModel))
                 {
                     t = new TransformCRMInquiryCRMClientMasterInput_to_COMPInquiryClientMasterInput();
+                }
+                else if (outputType == typeof(InquiryMasterASRHDataInputModel))
+                {
+                    t = new TransformCRMInquiryCRMClientMasterInput_to_InquiryMasterASRHDataInputModel();
                 }
 
             }
@@ -49,15 +54,18 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                 {
                     t = new TransformCLSInquiryPersonalClientContentOut_to_CrmInquiryClientMasterContentOut();
                 }
-                else if (inputType == typeof(Model.Polisy400.EWIResCOMPInquiryClientMasterContentModel))
+                else if (inputType == typeof(Model.Polisy400.EWIResCOMPInquiryClientMasterContentModel) )
                 {
                     t = new TransformCOMPInquiryClientMasterContentOutputModel_to_CrmInquiryClientMasterContentOut();
                 }
-                else if (inputType == typeof(Model.CLS.CLSInquiryCorporateClientContentOutputModel))
+                else if ( inputType == typeof(Model.CLS.CLSInquiryCorporateClientContentOutputModel) )
                 {
                     t = new TransformCLSInquiryCorporateClientContentOut_to_CrmInquiryClientMasterContentOut();
                 }
-
+                else if ( inputType == typeof(InquiryMasterASRHContentModel) )
+                {
+                    t = new TransformInquiryMasterASRHContentModel_to_CRMInquiryClientContentOutputModel();
+                }
             }
             #endregion API:InquiryClientMaster
 

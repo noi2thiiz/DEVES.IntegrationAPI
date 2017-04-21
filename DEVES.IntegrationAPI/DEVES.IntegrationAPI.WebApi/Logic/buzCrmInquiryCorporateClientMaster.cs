@@ -82,7 +82,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         {
                             crmInqContent = (CRMInquiryClientContentOutputModel)TransformerFactory.TransformModel(inqASRHOut, crmInqContent);
                             bFoundIn_APAR_or_Master = true;
+                            
                         }
+
+                        
                     }
                     #endregion inqCrmPayeeListIn.roleCode == {A,S,R,H} -> Master.InquiryMasterASRH
                 }
