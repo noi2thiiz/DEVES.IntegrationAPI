@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using Newtonsoft.Json;
 using DEVES.IntegrationAPI.Model.EWI;
+using System.Globalization;
 
 namespace DEVES.IntegrationAPI.Model.Polisy400
 {
@@ -78,7 +79,23 @@ namespace DEVES.IntegrationAPI.Model.Polisy400
         //"corporateName1": "Case 1 Corporate JSON",
         public string corporateName1 { get; set; }
         //"dateInCorporate": "20160303",
-        public DateTime dateInCorporate { get; set; }
+
+        [JsonIgnore]
+        public DateTime? dateInCorporateDate { get; set; }
+        public string dateInCorporate {
+            get
+            {
+                if (dateInCorporateDate == null)
+                {
+                    return ""; // CONST_DATE_NULL_POLISY400;
+                }
+                else
+                {
+                    CultureInfo enUS = new CultureInfo("en-US");
+                    return dateInCorporateDate.Value.ToString(DateTimeCustomFormat, enUS);
+                }
+            }
+        }
         //"mailing": "isaidyouknowme@hotmail.com",
         public string mailing { get; set; }
         //"riskLevel": "R1",
@@ -92,11 +109,11 @@ namespace DEVES.IntegrationAPI.Model.Polisy400
         //"repairerFlag": "",
         public string repairerFlag { get; set; }
         //"assessorTerminateDate": "",
-        public DateTime assessorTerminateDate { get; set; }
+        public string assessorTerminateDate { get; set; }
         //"repairerOregNum": "",
         public string repairerOregNum { get; set; }
         //"repai rerDelistFlag": "",
-        public string rerDelistFlag { get; set; }
+        public string repairerDelistFlag { get; set; }
         //"countryOrigin": "N",
         public string countryOrigin { get; set; }
         //"lineId": "789410",
@@ -132,7 +149,7 @@ namespace DEVES.IntegrationAPI.Model.Polisy400
         //"assessorFlag": "",
         public string assessorFlag { get; set; }
         //"solicitorTerminateDate": ""
-        public DateTime solicitorTerminateDate { get; set; }
+        public string solicitorTerminateDate { get; set; }
     }
     public class CLIENTCreateCorporateClientAndAdditionalInfoOutputModel : BaseEWIResponseModel
     {

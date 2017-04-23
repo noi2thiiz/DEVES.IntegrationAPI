@@ -47,7 +47,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             trgt.profileHeader.contactPerson = src.contactPerson;
             trgt.profileHeader.idRegCorp = src.idRegCorp;
             trgt.profileHeader.idTax = src.idTax;
-            trgt.profileHeader.dateInCorporate = src.dateInCorporate;
+            //trgt.profileHeader.dateInCorporate = src.dateInCorporate;
             trgt.profileHeader.corporateBranch = src.corporateStaffNo;
             trgt.profileHeader.econActivity = src.econActivity;
             trgt.profileHeader.language = src.language;

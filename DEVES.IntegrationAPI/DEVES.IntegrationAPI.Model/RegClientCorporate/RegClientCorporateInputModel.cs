@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Newtonsoft.Json;
+using System.Globalization;
+
 namespace DEVES.IntegrationAPI.Model.RegClientCorporate
 {
     public class RegClientCorporateInputModel : BaseDataModel
@@ -36,7 +39,23 @@ namespace DEVES.IntegrationAPI.Model.RegClientCorporate
         public string contactPerson { get; set; }
         public string idRegCorp { get; set; }
         public string idTax { get; set; }
-        public DateTime dateInCorporate { get; set; }
+
+        [JsonIgnore]
+        public DateTime? dateInCorporate { get; set; }
+
+        //public string dateInCorporate {
+        //    get {
+        //        if (dateInCorporateDate == null)
+        //        {
+        //            return CONST_DATE_NULL_POLISY400;
+        //        }
+        //        else
+        //        {
+        //            CultureInfo enUS = new CultureInfo("en-US");
+        //            return dateInCorporateDate.Value.ToString( DateTimeCustomFormat, enUS);
+        //        }
+        //    }
+        //}
         public string corporateBranch { get; set; }
         public string econActivity { get; set; }
         public string countryOrigin { get; set; }

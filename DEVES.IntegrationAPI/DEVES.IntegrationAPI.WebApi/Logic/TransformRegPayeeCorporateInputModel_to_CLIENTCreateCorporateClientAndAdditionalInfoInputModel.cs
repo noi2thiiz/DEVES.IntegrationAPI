@@ -42,7 +42,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 //    var dateString = src.profileHeader.dateInCorporate.ToString("yyyyMMdd", usaCulture);
                 //    trgt.dateInCorporate = dateString;
                 //}
-                trgt.dateInCorporate = src.profileHeader.dateInCorporate;
+                trgt.dateInCorporateDate = src.profileHeader.dateInCorporate;
                 trgt.corporateStaffNo = src.profileHeader.corporateBranch;
                 trgt.econActivity = src.profileHeader.econActivity;
 
@@ -95,13 +95,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             trgt.solicitorBlackListFlag = "";
             trgt.solicitorDelistFlag = "";
             trgt.repairerTerminateDate = "";
-            trgt.solicitorTerminateDate = CommonConstant.GetDevesAPINullDate();
-            trgt.assessorTerminateDate = CommonConstant.GetDevesAPINullDate();
+            trgt.solicitorTerminateDate = "";
+            trgt.assessorTerminateDate = "";
             trgt.solicitorOregNum = "";
             trgt.assessorDelistFlag = "";
             trgt.assessorOregNum = "";
             trgt.repairerOregNum = "";
-            trgt.rerDelistFlag = "";
+            trgt.repairerDelistFlag = "";
             trgt.assessorBlackListFlag = "";
             trgt.repairerBlackListFlag = "";
 

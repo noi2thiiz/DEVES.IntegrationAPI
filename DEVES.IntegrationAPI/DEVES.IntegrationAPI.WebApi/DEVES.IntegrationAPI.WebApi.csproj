@@ -342,6 +342,7 @@
     <Compile Include="Logic\transformCLSInquiryCorporateClientOutputModel_to_InquiryCRMPayeeListInputModel.cs" />
     <Compile Include="Logic\transformCLSInquiryPersonalClientOutputModel_to_InquiryCRMPayeeListInputModel.cs" />
     <Compile Include="Logic\TransformCLSInquiryPersonalClientContentOut_to_CrmInquiryClientMasterContentOut.cs" />
+    <Compile Include="Logic\TransformCOMPInquiryClientMasterContentClientListModel_to_CLIENTUpdateCorporateClientAndAdditionalInfoInputModel.cs" />
     <Compile Include="Logic\transformCOMPInquiryClientMasterContentClientListModel_to_InquiryCRMPayeeListInputModel.cs" />
     <Compile Include="Logic\TransformCOMPInquiryClientMasterContentOutputModel_to_CrmInquiryClientMasterContentOut.cs" />
     <Compile Include="Logic\TransformCRMInquiryCRMClientMasterInput_to_CLSInquiryCLSPersonalClientInput.cs" />

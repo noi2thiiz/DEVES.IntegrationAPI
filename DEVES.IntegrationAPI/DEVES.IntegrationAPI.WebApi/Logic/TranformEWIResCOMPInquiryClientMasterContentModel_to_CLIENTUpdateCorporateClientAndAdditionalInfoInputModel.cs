@@ -24,7 +24,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                 trgt.telephones = data.telephone1;
                 //"telephones2": "0833333333",
-                trgt.telephones2 = data.telephone2;
+                trgt.telephone2 = data.telephone2;
             //"remark": "ทดสอบผ่าน Service Proxy Fulfill Create and Update Corporate",
                 trgt.remark = data.remark;
             //"address1": "43/21 ม.7",

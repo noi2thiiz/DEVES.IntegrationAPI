@@ -56,6 +56,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             trgt.econActivity = src.profileHeader.econActivity;
             trgt.language = src.profileHeader.language;
             trgt.vipStatus = src.profileHeader.vipStatus;
+            trgt.corporateStaffNo = src.profileHeader.corporateBranch;
 
             //contactHeader
             trgt.telephone1 = src.contactHeader.telephone1;
@@ -78,6 +79,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             trgt.subDistrictCode = src.addressHeader.subDistrictCode;
             trgt.districtCode = src.addressHeader.districtCode;
             trgt.provinceCode = src.addressHeader.provinceCode;
+            trgt.postalCode = src.addressHeader.postalCode;
+            trgt.country = src.addressHeader.country;
             trgt.addressType = src.addressHeader.addressType;
             trgt.latitude = src.addressHeader.latitude;
             trgt.longigude = src.addressHeader.longtitude;

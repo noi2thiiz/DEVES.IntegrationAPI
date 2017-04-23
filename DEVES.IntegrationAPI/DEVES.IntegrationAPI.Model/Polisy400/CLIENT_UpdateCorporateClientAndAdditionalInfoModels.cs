@@ -90,7 +90,7 @@ namespace DEVES.IntegrationAPI.Model.Polisy400
         public string telephones { get; set; }
 
         //"telephones2": "0833333333",
-        public string telephones2 { get; set; }
+        public string telephone2 { get; set; }
 
         //"repairerFlag": "Y",
         public string repairerFlag { get; set; }

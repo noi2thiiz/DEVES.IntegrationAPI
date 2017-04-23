@@ -28,76 +28,105 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                 RegClientCorporateInputModel regClientCorporateInput = (RegClientCorporateInputModel)input;
 
-                if (string.IsNullOrEmpty(regClientCorporateInput.generalHeader.cleansingId))
+                if(IsASRHValid (regClientCorporateInput) )
                 {
-                    BaseDataModel clsCreateCorporateIn = DataModelFactory.GetModel(typeof(CLSCreateCorporateClientInputModel));
-                    clsCreateCorporateIn = TransformerFactory.TransformModel(regClientCorporateInput, clsCreateCorporateIn);
-                    CLSCreateCorporateClientContentOutputModel clsCreateClientContent = CallDevesServiceProxy<CLSCreateCorporateClientOutputModel, CLSCreateCorporateClientContentOutputModel>
-                                                                                        (CommonConstant.ewiEndpointKeyCLSCreateCorporateClient, clsCreateCorporateIn);
-                    regClientCorporateInput = (RegClientCorporateInputModel)TransformerFactory.TransformModel(clsCreateClientContent, regClientCorporateInput);
-
-                }
-
-                if (string.IsNullOrEmpty(regClientCorporateInput.generalHeader.polisyClientId) && !string.IsNullOrEmpty(regClientCorporateInput.generalHeader.cleansingId) )
-                {
-                    BaseDataModel polCreateCorporateIn = DataModelFactory.GetModel(typeof(CLIENTCreateCorporateClientAndAdditionalInfoInputModel));
-                    polCreateCorporateIn = TransformerFactory.TransformModel(regClientCorporateInput, polCreateCorporateIn);
-                    CLIENTCreateCorporateClientAndAdditionalInfoContentModel polCreateClientContent = CallDevesServiceProxy<CLIENTCreateCorporateClientAndAdditionalInfoOutputModel
-                                                                                                        , CLIENTCreateCorporateClientAndAdditionalInfoContentModel>
-                                                                                                        (CommonConstant.ewiEndpointKeyCLIENTCreateCorporateClient, polCreateCorporateIn);
-                    regClientCorporateInput = (RegClientCorporateInputModel)TransformerFactory.TransformModel(polCreateClientContent, regClientCorporateInput);
-                }
-
-                if( !string.IsNullOrEmpty(regClientCorporateInput.generalHeader.polisyClientId) 
-                    && (regClientCorporateInput.generalHeader.assessorFlag == "Y" 
-                        || regClientCorporateInput.generalHeader.solicitorFlag == "Y" 
-                        || regClientCorporateInput.generalHeader.repairerFlag == "Y" 
-                        || regClientCorporateInput.generalHeader.hospitalFlag == "Y" ))
-                {
-                    COMPInquiryClientMasterInputModel compInqClientInput = new COMPInquiryClientMasterInputModel();
-                    compInqClientInput = (COMPInquiryClientMasterInputModel)TransformerFactory.TransformModel(regClientCorporateInput, compInqClientInput);
-
-                    EWIResCOMPInquiryClientMasterContentModel retCOMPInqClient = CallDevesServiceProxy<COMPInquiryClientMasterOutputModel, EWIResCOMPInquiryClientMasterContentModel>
-                                                                                            (CommonConstant.ewiEndpointKeyCOMPInquiryClient, compInqClientInput);
-
-                    //Found in Polisy400
-                    if (retCOMPInqClient.clientListCollection != null && retCOMPInqClient.clientListCollection.Count == 1)
+                    if (string.IsNullOrEmpty(regClientCorporateInput.generalHeader.cleansingId))
                     {
-                        COMPInquiryClientMasterContentClientListModel inqClientPolisy400Out = retCOMPInqClient.clientListCollection.First();
+                        BaseDataModel clsCreateCorporateIn = DataModelFactory.GetModel(typeof(CLSCreateCorporateClientInputModel));
+                        clsCreateCorporateIn = TransformerFactory.TransformModel(regClientCorporateInput, clsCreateCorporateIn);
+                        CLSCreateCorporateClientContentOutputModel clsCreateClientContent = CallDevesServiceProxy<CLSCreateCorporateClientOutputModel, CLSCreateCorporateClientContentOutputModel>
+                                                                                            (CommonConstant.ewiEndpointKeyCLSCreateCorporateClient, clsCreateCorporateIn);
+                        regClientCorporateInput = (RegClientCorporateInputModel)TransformerFactory.TransformModel(clsCreateClientContent, regClientCorporateInput);
 
-                        BaseDataModel updateClientPolisy400In = DataModelFactory.GetModel( typeof( CLIENTUpdateCorporateClientAndAdditionalInfoInputModel) );
-                        updateClientPolisy400In = TransformerFactory.TransformModel(inqClientPolisy400Out, updateClientPolisy400In);
-
-                        CallDevesServiceProxy<CLIENTUpdateCorporateClientAndAdditionalInfoOutputModel, CLIENTUpdateCorporateClientAndAdditionalInfoContentModel>(CommonConstant.ewiEndpointKeyCLIENTUpdateCorporateClient, updateClientPolisy400In);
-                        
-                        //CLIENTUpdateCorporateClientAndAdditionalInfoContentModel updateClientPolisy400Out = CallDevesServiceProxy<CLIENTUpdateCorporateClientAndAdditionalInfoOutputModel, CLIENTUpdateCorporateClientAndAdditionalInfoContentModel>(CommonConstant.ewiEndpointKeyCLIENTUpdateCorporateClient, updateClientPolisy400In);
                     }
 
-                    buzCreateCrmClientCorporate cmdCreateCrmClient = new buzCreateCrmClientCorporate();
-                    CreateCrmCorporateInfoOutputModel crmContentOutput = (CreateCrmCorporateInfoOutputModel)cmdCreateCrmClient.Execute(regClientCorporateInput);
-
-                    if (crmContentOutput.code == CONST_CODE_SUCCESS)
+                    if (string.IsNullOrEmpty(regClientCorporateInput.generalHeader.polisyClientId) && !string.IsNullOrEmpty(regClientCorporateInput.generalHeader.cleansingId) )
                     {
-                        regClientCorporateOutput.code = CONST_CODE_SUCCESS;
-                        regClientCorporateOutput.message = "SUCCESS";
-                        RegClientCorporateDataOutputModel_Pass dataOutPass = new RegClientCorporateDataOutputModel_Pass();
-                        dataOutPass.cleansingId = regClientCorporateInput.generalHeader.cleansingId;
-                        dataOutPass.polisyClientId = regClientCorporateInput.generalHeader.polisyClientId;
-                        dataOutPass.crmClientId = crmContentOutput.crmClientId;
-                        dataOutPass.corporateName1 = regClientCorporateInput.profileHeader.corporateName1;
-                        dataOutPass.corporateName2 = regClientCorporateInput.profileHeader.corporateName2;
-                        dataOutPass.corporateBranch = regClientCorporateInput.profileHeader.corporateBranch;
-
-                        regClientCorporateOutput.data.Add(dataOutPass);
-                    }
-                    else
-                    {
-                        regClientCorporateOutput.code = CONST_CODE_FAILED;
-                        regClientCorporateOutput.message = crmContentOutput.message;
-                        regClientCorporateOutput.description = crmContentOutput.description;
+                        BaseDataModel polCreateCorporateIn = DataModelFactory.GetModel(typeof(CLIENTCreateCorporateClientAndAdditionalInfoInputModel));
+                        polCreateCorporateIn = TransformerFactory.TransformModel(regClientCorporateInput, polCreateCorporateIn);
+                        CLIENTCreateCorporateClientAndAdditionalInfoContentModel polCreateClientContent = CallDevesServiceProxy<CLIENTCreateCorporateClientAndAdditionalInfoOutputModel
+                                                                                                            , CLIENTCreateCorporateClientAndAdditionalInfoContentModel>
+                                                                                                            (CommonConstant.ewiEndpointKeyCLIENTCreateCorporateClient, polCreateCorporateIn);
+                        regClientCorporateInput = (RegClientCorporateInputModel)TransformerFactory.TransformModel(polCreateClientContent, regClientCorporateInput);
                     }
 
+                    if( !string.IsNullOrEmpty(regClientCorporateInput.generalHeader.polisyClientId) )
+                    {
+                        if ((regClientCorporateInput.generalHeader.assessorFlag == "Y"
+                            || regClientCorporateInput.generalHeader.solicitorFlag == "Y"
+                            || regClientCorporateInput.generalHeader.repairerFlag == "Y"
+                            || regClientCorporateInput.generalHeader.hospitalFlag == "Y"))
+                        {
+                            try
+                            {
+                                COMPInquiryClientMasterInputModel compInqClientInput = new COMPInquiryClientMasterInputModel();
+                                compInqClientInput = (COMPInquiryClientMasterInputModel)TransformerFactory.TransformModel(regClientCorporateInput, compInqClientInput);
+
+                                EWIResCOMPInquiryClientMasterContentModel retCOMPInqClient = CallDevesServiceProxy<COMPInquiryClientMasterOutputModel, EWIResCOMPInquiryClientMasterContentModel>
+                                                                                                        (CommonConstant.ewiEndpointKeyCOMPInquiryClient, compInqClientInput);
+                                //Found in Polisy400
+                                if (retCOMPInqClient.clientListCollection != null && retCOMPInqClient.clientListCollection.Count == 1)
+                                {
+                                    COMPInquiryClientMasterContentClientListModel inqClientPolisy400Out = retCOMPInqClient.clientListCollection.First();
+
+                                    CLIENTUpdateCorporateClientAndAdditionalInfoInputModel updateClientPolisy400In = (CLIENTUpdateCorporateClientAndAdditionalInfoInputModel) DataModelFactory.GetModel(typeof(CLIENTUpdateCorporateClientAndAdditionalInfoInputModel));
+                                    updateClientPolisy400In = (CLIENTUpdateCorporateClientAndAdditionalInfoInputModel)TransformerFactory.TransformModel(inqClientPolisy400Out, updateClientPolisy400In);
+
+                                    updateClientPolisy400In.assessorFlag = string.IsNullOrEmpty(regClientCorporateInput.generalHeader.assessorFlag) ? updateClientPolisy400In.assessorFlag : regClientCorporateInput.generalHeader.assessorFlag;
+                                    updateClientPolisy400In.solicitorFlag = string.IsNullOrEmpty(regClientCorporateInput.generalHeader.solicitorFlag) ? updateClientPolisy400In.solicitorFlag : regClientCorporateInput.generalHeader.solicitorFlag;
+                                    updateClientPolisy400In.repairerFlag = string.IsNullOrEmpty(regClientCorporateInput.generalHeader.repairerFlag) ? updateClientPolisy400In.repairerFlag : regClientCorporateInput.generalHeader.repairerFlag;
+                                    updateClientPolisy400In.hospitalFlag = string.IsNullOrEmpty( regClientCorporateInput.generalHeader.hospitalFlag )? updateClientPolisy400In.hospitalFlag : regClientCorporateInput.generalHeader.hospitalFlag;
+
+                                    CallDevesServiceProxy<CLIENTUpdateCorporateClientAndAdditionalInfoOutputModel, CLIENTUpdateCorporateClientAndAdditionalInfoContentModel>(CommonConstant.ewiEndpointKeyCLIENTUpdateCorporateClient, updateClientPolisy400In);
+
+                                    //CLIENTUpdateCorporateClientAndAdditionalInfoContentModel updateClientPolisy400Out = CallDevesServiceProxy<CLIENTUpdateCorporateClientAndAdditionalInfoOutputModel, CLIENTUpdateCorporateClientAndAdditionalInfoContentModel>(CommonConstant.ewiEndpointKeyCLIENTUpdateCorporateClient, updateClientPolisy400In);
+                                }
+                            }
+                            catch (Exception e)
+                            {
+                                regClientCorporateOutput.code = CONST_CODE_FAILED;
+                                regClientCorporateOutput.message = e.Message;
+                                regClientCorporateOutput.description = e.StackTrace;
+
+                                RegClientCorporateDataOutputModel_Fail dataOutFail = new RegClientCorporateDataOutputModel_Fail();
+                                regClientCorporateOutput.data.Add(dataOutFail);
+
+                            }
+                        }
+
+                        buzCreateCrmClientCorporate cmdCreateCrmClient = new buzCreateCrmClientCorporate();
+                        CreateCrmCorporateInfoOutputModel crmContentOutput = (CreateCrmCorporateInfoOutputModel)cmdCreateCrmClient.Execute(regClientCorporateInput);
+
+                        if (crmContentOutput.code == CONST_CODE_SUCCESS)
+                        {
+                            regClientCorporateOutput.code = CONST_CODE_SUCCESS;
+                            regClientCorporateOutput.message = "SUCCESS";
+                            RegClientCorporateDataOutputModel_Pass dataOutPass = new RegClientCorporateDataOutputModel_Pass();
+                            dataOutPass.cleansingId = regClientCorporateInput.generalHeader.cleansingId;
+                            dataOutPass.polisyClientId = regClientCorporateInput.generalHeader.polisyClientId;
+                            dataOutPass.crmClientId = crmContentOutput.crmClientId;
+                            dataOutPass.corporateName1 = regClientCorporateInput.profileHeader.corporateName1;
+                            dataOutPass.corporateName2 = regClientCorporateInput.profileHeader.corporateName2;
+                            dataOutPass.corporateBranch = regClientCorporateInput.profileHeader.corporateBranch;
+
+                            regClientCorporateOutput.data.Add(dataOutPass);
+                        }
+                        else
+                        {
+                            regClientCorporateOutput.code = CONST_CODE_FAILED;
+                            regClientCorporateOutput.message = crmContentOutput.message;
+                            regClientCorporateOutput.description = crmContentOutput.description;
+                        }
+
+                    }
                 }
+                else
+                {
+                    regClientCorporateOutput.code = CONST_CODE_FAILED;
+                    regClientCorporateOutput.message = "There is some conflicts among the arguments";
+                    regClientCorporateOutput.description = "Look between roleCode and {assessorFlag ,solicitorFlag ,repairerFlag or hospitalFlag}";
+                }
+
             }
             catch (Exception e)
             {
@@ -110,6 +139,21 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             }
             return regClientCorporateOutput;
 
+        }
+
+        bool IsASRHValid(RegClientCorporateInputModel input)
+        {
+            bool validFlag = true;
+            if (
+                (input.generalHeader.roleCode == "A" && input.generalHeader.assessorFlag != "Y" ) ||
+                (input.generalHeader.roleCode == "S" && input.generalHeader.solicitorFlag != "Y" ) ||
+                (input.generalHeader.roleCode == "R" && input.generalHeader.repairerFlag != "Y" ) ||
+                (input.generalHeader.roleCode == "H" && input.generalHeader.hospitalFlag != "Y" )
+            )
+            {
+                validFlag = false;
+            }
+            return validFlag;
         }
     }
 }

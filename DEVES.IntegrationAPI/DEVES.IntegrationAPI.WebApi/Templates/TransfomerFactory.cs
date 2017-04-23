@@ -54,15 +54,15 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                 {
                     t = new TransformCLSInquiryPersonalClientContentOut_to_CrmInquiryClientMasterContentOut();
                 }
-                else if (inputType == typeof(Model.Polisy400.EWIResCOMPInquiryClientMasterContentModel) )
+                else if (inputType == typeof(Model.Polisy400.EWIResCOMPInquiryClientMasterContentModel))
                 {
                     t = new TransformCOMPInquiryClientMasterContentOutputModel_to_CrmInquiryClientMasterContentOut();
                 }
-                else if ( inputType == typeof(Model.CLS.CLSInquiryCorporateClientContentOutputModel) )
+                else if (inputType == typeof(Model.CLS.CLSInquiryCorporateClientContentOutputModel))
                 {
                     t = new TransformCLSInquiryCorporateClientContentOut_to_CrmInquiryClientMasterContentOut();
                 }
-                else if ( inputType == typeof(InquiryMasterASRHContentModel) )
+                else if (inputType == typeof(InquiryMasterASRHContentModel))
                 {
                     t = new TransformInquiryMasterASRHContentModel_to_CRMInquiryClientContentOutputModel();
                 }
@@ -218,6 +218,11 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                     t = new TranformRegClientCorporateInputModel_to_COMPInquiryClientMasterInputModel();
                 }
             }
+            else if ( inputType == typeof(COMPInquiryClientMasterContentClientListModel ) && outputType == typeof(CLIENTUpdateCorporateClientAndAdditionalInfoInputModel))
+            {
+                t = new TransformCOMPInquiryClientMasterContentClientListModel_to_CLIENTUpdateCorporateClientAndAdditionalInfoInputModel();
+            }
+
             #endregion RegClientCorp
 
             else if (inputType == typeof(InquiryMasterASRHContentASRHListCollectionDataModel) && outputType == typeof(InquiryCRMPayeeListInputModel))

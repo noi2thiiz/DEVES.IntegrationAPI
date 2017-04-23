@@ -34,7 +34,7 @@ namespace DEVES.IntegrationAPI.Model.CLS
         //"taxNo": "001122334456",
         //public string taxNo { get; set; }
         //"dateInCorporate": "2017-06-02 00:00:00",
-        public DateTime dateInCorporate { get; set; }
+        public DateTime? dateInCorporate { get; set; }
 
         public string corporateBranch { get; set; }
         public string idTax { get; set; }
@@ -98,7 +98,7 @@ namespace DEVES.IntegrationAPI.Model.CLS
         //"BlackListFlag": "",
         public string BlackListFlag { get; set; }
         //"TerminateDate": ""    
-        public DateTime TerminateDate { get; set; }
+        public DateTime? TerminateDate { get; set; }
     }
 
     public class CLSCreateCorporateClientOutputModel : BaseEWIResponseModel
@@ -213,7 +213,7 @@ namespace DEVES.IntegrationAPI.Model.CLS
         // "BlackListFlag": "",
         public string BlackListFlag { set; get; }
         // "TerminateDate": ""
-        public DateTime TerminateDate { set; get; }
+        public DateTime? TerminateDate { set; get; }
 
     }
 }

@@ -116,6 +116,8 @@ namespace DEVES.IntegrationAPI.Model.Polisy400
             }
         }
 
+        public string dateInCorporate { get; set; }
+
         public string natioanalityText { set; get; }
         public string marriedText { set; get; }
         public string occupationText { set; get; }
