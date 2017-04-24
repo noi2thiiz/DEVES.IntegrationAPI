@@ -77,6 +77,15 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                                     updateClientPolisy400In.repairerFlag = string.IsNullOrEmpty(regClientCorporateInput.generalHeader.repairerFlag) ? updateClientPolisy400In.repairerFlag : regClientCorporateInput.generalHeader.repairerFlag;
                                     updateClientPolisy400In.hospitalFlag = string.IsNullOrEmpty( regClientCorporateInput.generalHeader.hospitalFlag )? updateClientPolisy400In.hospitalFlag : regClientCorporateInput.generalHeader.hospitalFlag;
 
+                                    if (regClientCorporateInput.generalHeader.clientAdditionalExistFlag == "Y")
+                                    {
+                                        updateClientPolisy400In.checkFlag = "UPDATE";
+                                    }
+                                    else if(regClientCorporateInput.generalHeader.clientAdditionalExistFlag == "N")
+                                    {
+                                        updateClientPolisy400In.checkFlag = "CREATE";
+                                    }
+
                                     CallDevesServiceProxy<CLIENTUpdateCorporateClientAndAdditionalInfoOutputModel, CLIENTUpdateCorporateClientAndAdditionalInfoContentModel>(CommonConstant.ewiEndpointKeyCLIENTUpdateCorporateClient, updateClientPolisy400In);
 
                                     //CLIENTUpdateCorporateClientAndAdditionalInfoContentModel updateClientPolisy400Out = CallDevesServiceProxy<CLIENTUpdateCorporateClientAndAdditionalInfoOutputModel, CLIENTUpdateCorporateClientAndAdditionalInfoContentModel>(CommonConstant.ewiEndpointKeyCLIENTUpdateCorporateClient, updateClientPolisy400In);
@@ -90,7 +99,6 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                                 RegClientCorporateDataOutputModel_Fail dataOutFail = new RegClientCorporateDataOutputModel_Fail();
                                 regClientCorporateOutput.data.Add(dataOutFail);
-
                             }
                         }
 
