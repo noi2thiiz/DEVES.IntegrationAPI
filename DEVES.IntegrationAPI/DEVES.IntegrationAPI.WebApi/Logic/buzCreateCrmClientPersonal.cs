@@ -79,7 +79,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         contact.pfc_passport_id = contentModel.profileInfo.idPassport;
                         contact.pfc_alien_id = contentModel.profileInfo.idAlien;
                         contact.pfc_driver_license = contentModel.profileInfo.idDriving;
-                        contact.pfc_date_of_birth = Convert.ToDateTime(contentModel.profileInfo.birthDate);
+                        if(contentModel.profileInfo.birthDate != null)
+                        {
+                            contact.pfc_date_of_birth = contentModel.profileInfo.birthDate;
+                        }
                         contact.pfc_polisy_nationality_code = contentModel.profileInfo.nationality;
                         switch (contentModel.profileInfo.language.ToUpper())
                         {

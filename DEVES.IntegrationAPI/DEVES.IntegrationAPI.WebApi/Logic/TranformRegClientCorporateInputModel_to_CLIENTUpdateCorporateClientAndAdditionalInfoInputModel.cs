@@ -13,11 +13,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             RegClientCorporateInputModel src = (RegClientCorporateInputModel)input;
             CLIENTUpdateCorporateClientAndAdditionalInfoInputModel trgt = (CLIENTUpdateCorporateClientAndAdditionalInfoInputModel)output;
 
+
+
             trgt.assessorFlag =  src.generalHeader.assessorFlag;
             trgt.solicitorFlag = src.generalHeader.solicitorFlag;
             trgt.repairerFlag = src.generalHeader.repairerFlag;
-            trgt.hospitalFlag = src.generalHeader.hospitalFlag;
-            
+            trgt.hospitalFlag = src.generalHeader.hospitalFlag;            
        
             return trgt;
         }

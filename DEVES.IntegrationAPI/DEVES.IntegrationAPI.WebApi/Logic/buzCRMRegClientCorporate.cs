@@ -37,7 +37,6 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         CLSCreateCorporateClientContentOutputModel clsCreateClientContent = CallDevesServiceProxy<CLSCreateCorporateClientOutputModel, CLSCreateCorporateClientContentOutputModel>
                                                                                             (CommonConstant.ewiEndpointKeyCLSCreateCorporateClient, clsCreateCorporateIn);
                         regClientCorporateInput = (RegClientCorporateInputModel)TransformerFactory.TransformModel(clsCreateClientContent, regClientCorporateInput);
-
                     }
 
                     if (string.IsNullOrEmpty(regClientCorporateInput.generalHeader.polisyClientId) && !string.IsNullOrEmpty(regClientCorporateInput.generalHeader.cleansingId) )
@@ -70,21 +69,21 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                                     COMPInquiryClientMasterContentClientListModel inqClientPolisy400Out = retCOMPInqClient.clientListCollection.First();
 
                                     CLIENTUpdateCorporateClientAndAdditionalInfoInputModel updateClientPolisy400In = (CLIENTUpdateCorporateClientAndAdditionalInfoInputModel) DataModelFactory.GetModel(typeof(CLIENTUpdateCorporateClientAndAdditionalInfoInputModel));
-                                    updateClientPolisy400In = (CLIENTUpdateCorporateClientAndAdditionalInfoInputModel)TransformerFactory.TransformModel(inqClientPolisy400Out, updateClientPolisy400In);
 
+                                    if (inqClientPolisy400Out.clientList.additionalExistFlag == "Y")
+                                    {
+                                        updateClientPolisy400In = (CLIENTUpdateCorporateClientAndAdditionalInfoInputModel)TransformerFactory.TransformModel(inqClientPolisy400Out, updateClientPolisy400In);
+                                        updateClientPolisy400In.checkFlag = "UPDATE";
+                                    }
+                                    else if (inqClientPolisy400Out.clientList.additionalExistFlag == "N")
+                                    {
+                                        updateClientPolisy400In = (CLIENTUpdateCorporateClientAndAdditionalInfoInputModel)TransformerFactory.TransformModel(regClientCorporateInput, updateClientPolisy400In);
+                                        updateClientPolisy400In.checkFlag = "CREATE";
+                                    }
                                     updateClientPolisy400In.assessorFlag = string.IsNullOrEmpty(regClientCorporateInput.generalHeader.assessorFlag) ? updateClientPolisy400In.assessorFlag : regClientCorporateInput.generalHeader.assessorFlag;
                                     updateClientPolisy400In.solicitorFlag = string.IsNullOrEmpty(regClientCorporateInput.generalHeader.solicitorFlag) ? updateClientPolisy400In.solicitorFlag : regClientCorporateInput.generalHeader.solicitorFlag;
                                     updateClientPolisy400In.repairerFlag = string.IsNullOrEmpty(regClientCorporateInput.generalHeader.repairerFlag) ? updateClientPolisy400In.repairerFlag : regClientCorporateInput.generalHeader.repairerFlag;
-                                    updateClientPolisy400In.hospitalFlag = string.IsNullOrEmpty( regClientCorporateInput.generalHeader.hospitalFlag )? updateClientPolisy400In.hospitalFlag : regClientCorporateInput.generalHeader.hospitalFlag;
-
-                                    if (regClientCorporateInput.generalHeader.clientAdditionalExistFlag == "Y")
-                                    {
-                                        updateClientPolisy400In.checkFlag = "UPDATE";
-                                    }
-                                    else if(regClientCorporateInput.generalHeader.clientAdditionalExistFlag == "N")
-                                    {
-                                        updateClientPolisy400In.checkFlag = "CREATE";
-                                    }
+                                    updateClientPolisy400In.hospitalFlag = string.IsNullOrEmpty(regClientCorporateInput.generalHeader.hospitalFlag) ? updateClientPolisy400In.hospitalFlag : regClientCorporateInput.generalHeader.hospitalFlag;
 
                                     CallDevesServiceProxy<CLIENTUpdateCorporateClientAndAdditionalInfoOutputModel, CLIENTUpdateCorporateClientAndAdditionalInfoContentModel>(CommonConstant.ewiEndpointKeyCLIENTUpdateCorporateClient, updateClientPolisy400In);
 

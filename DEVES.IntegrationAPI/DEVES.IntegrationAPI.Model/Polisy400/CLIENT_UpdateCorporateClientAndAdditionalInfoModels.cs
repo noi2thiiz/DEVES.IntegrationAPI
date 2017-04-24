@@ -129,7 +129,7 @@ namespace DEVES.IntegrationAPI.Model.Polisy400
         //"solicitorFlag": "Y",
         public string solicitorFlag { get; set; }
         //"address4": "ประเทศไทย",
-        public string address4xxx { get; set; }
+        //public string address4xxx { get; set; }
         //"alientId": "-",
         public string alientId { get; set; }
         //"taxInNumber": "96",

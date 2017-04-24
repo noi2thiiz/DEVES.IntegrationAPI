@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using DEVES.IntegrationAPI.Model.EWI;
 using Newtonsoft.Json;
 
@@ -32,7 +33,20 @@ namespace DEVES.IntegrationAPI.Model.CLS
         //idDriving String	20	O หมายเลขบัตรใบขับขี่
         public string idDriving { get; set; }
         //birthDate String	20	O วันเดือนปีเกิด
-        public DateTime birthDate { get; set; }
+        public string birthDate {
+            get
+            {
+                string s = CONST_DATE_NULL_CLS; 
+                if (dtBirthDate != null)
+                {
+                    CultureInfo enUS = new CultureInfo("en-US");
+                    s = dtBirthDate.Value.ToString(DateTimeCustomFormat, enUS);
+                }
+                return s;
+            }
+        }
+        [JsonIgnore]
+        public DateTime? dtBirthDate { get; set; }
         //natioanality String	3	O Nationality
         public string natioanality { get; set; }
         //language String	1	O ภาษา

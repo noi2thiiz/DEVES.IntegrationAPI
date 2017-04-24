@@ -43,7 +43,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 trgt.idPassport = src.profileInfo.idPassport;
                 trgt.idAlien = src.profileInfo.idAlien;
                 trgt.idDriving = src.profileInfo.idDriving;
-                trgt.birthDate = src.profileInfo.birthDate;
+                trgt.dtBirthDate = src.profileInfo.birthDate;
                 trgt.natioanality = src.profileInfo.nationality;
                 trgt.language = src.profileInfo.language;
                 trgt.married = src.profileInfo.married;

@@ -1,4 +1,5 @@
 ﻿using System;
+using Newtonsoft.Json;
 
 namespace DEVES.IntegrationAPI.Model.RegClientPersonal
 {
@@ -29,7 +30,8 @@ namespace DEVES.IntegrationAPI.Model.RegClientPersonal
         public string idPassport { get; set; }
         public string idAlien { get; set; }
         public string idDriving { get; set; }
-        public DateTime birthDate { get; set; }
+        public DateTime? birthDate { get; set; }
+
         public string nationality { get; set; }
         public string language { get; set; }
         public string married { get; set; }

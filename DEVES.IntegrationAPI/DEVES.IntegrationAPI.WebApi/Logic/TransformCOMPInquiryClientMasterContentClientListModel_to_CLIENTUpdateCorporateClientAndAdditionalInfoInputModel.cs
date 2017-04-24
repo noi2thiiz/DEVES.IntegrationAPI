@@ -85,7 +85,6 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 trgt.alientId = src.alientId;
                 trgt.driverlicense = src.driverlicense;
 
-                trgt.checkFlag = "UPDATE";
                 trgt.clientNumber = src.clientNumber; 
             }
 

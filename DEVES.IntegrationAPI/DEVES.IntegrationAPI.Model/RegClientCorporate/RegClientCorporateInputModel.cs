@@ -39,8 +39,7 @@ namespace DEVES.IntegrationAPI.Model.RegClientCorporate
         public string contactPerson { get; set; }
         public string idRegCorp { get; set; }
         public string idTax { get; set; }
-
-        [JsonIgnore]
+        
         public DateTime? dateInCorporate { get; set; }
 
         //public string dateInCorporate {

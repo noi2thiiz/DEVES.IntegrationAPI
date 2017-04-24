@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using Newtonsoft.Json;
 using DEVES.IntegrationAPI.Model.EWI;
+using System.Globalization;
 
 namespace DEVES.IntegrationAPI.Model.Polisy400
 {
@@ -49,7 +50,21 @@ namespace DEVES.IntegrationAPI.Model.Polisy400
         //"facebook": "148976652",
         public string facebook { get; set; }
         // "birthDate": "",
-        public DateTime birthDate { get; set; }
+        
+        public string birthDate {
+            get
+            {
+                string s = "";
+                if (dtBirthDtate != null)
+                {
+                    CultureInfo enUS = new CultureInfo("en-US");
+                    s = dtBirthDtate.Value.ToString(DateTimeCustomFormat, enUS);
+                }
+                return s;
+            }
+        }
+        [JsonIgnore]
+        public DateTime? dtBirthDtate { get; set; }
         //"telNo": "0999999999",
         public string telNo { get; set; }
         //"natioanality": "T",
