@@ -11,9 +11,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         public override BaseDataModel TransformModel(BaseDataModel input, BaseDataModel output)
         {
             RegClientCorporateInputModel src = (RegClientCorporateInputModel)input;
-            COMPInquiryClientMasterInputModel trgt = (COMPInquiryClientMasterInputModel)output;
-
-            
+            COMPInquiryClientMasterInputModel trgt = (COMPInquiryClientMasterInputModel)output;            
 
             if (src == null)
             {
@@ -21,7 +19,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             }
 
             trgt.cltType = "C";
-            trgt.asrType = src.generalHeader.roleCode;
+            //trgt.asrType = src.generalHeader.roleCode;
             trgt.clntnum = src.generalHeader.polisyClientId;
             trgt.backDay = "30";
 
