@@ -41,12 +41,6 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 trgt.idCard = src.profileHeader.idRegCorp ?? "";
                 trgt.taxId = src.profileHeader.idTax ?? "";
                
-                //{
-                //    // to 20160303
-                //    CultureInfo usaCulture = new CultureInfo("en-US");
-                //    var dateString = src.profileHeader.dateInCorporate.ToString("ddMMyyy", usaCulture);
-                //    trgt.dateInCorporate = dateString;
-                //}
                 trgt.dateInCorporateDate = src.profileHeader.dateInCorporate;
 
                 trgt.corporateStaffNo = src.profileHeader.corporateBranch ?? "";

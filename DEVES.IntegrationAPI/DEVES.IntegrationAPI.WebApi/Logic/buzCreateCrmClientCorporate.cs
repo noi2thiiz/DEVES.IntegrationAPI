@@ -40,6 +40,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             List<string> crmData = SearchCrmAccountClientId(data.generalHeader.cleansingId);
 
             CreateCrmCorporateInfoOutputModel dataOutput = new CreateCrmCorporateInfoOutputModel();
+            dataOutput.transactionId = TransactionId;
+            dataOutput.transactionDateTime = DateTime.Now;
             // dataOutput.data = new List<RegClientCorporateDataOutputModel_Pass>();
 
             if (crmData.Count == 0) // Means List crmData is empty
@@ -137,30 +139,26 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                
                 List<string> crmIdOutput = SearchCrmAccountClientId(data.generalHeader.cleansingId);
 
-                dataOutput.crmClientId = crmIdOutput[0]; // generate from crm
-                // dataOutput.data = "Waiting for generating algorithm";
-                //dataOutput.data = contentModel.generalHeader.crmClientId;
-                dataOutput.code = "200";
-                dataOutput.transactionId = TransactionId;
-                dataOutput.transactionDateTime = DateTime.Now;
+                if(crmIdOutput != null && crmIdOutput.Count>0)
+                {
+                    dataOutput.crmClientId = crmIdOutput[0]; // generate from crm
+                                                             // dataOutput.data = "Waiting for generating algorithm";
+                                                             //dataOutput.data = contentModel.generalHeader.crmClientId;
+                    dataOutput.code = "200";
+                }
+                else
+                {
+                    dataOutput.code = "500";
+                    dataOutput.message = string.Format( "No account with cleansingId {0} found after create CRM account." , data.generalHeader.cleansingId) ;
+                }
                 return dataOutput;
             }
             else if (crmData.Count == 1) // Means List crmData has 1 data
             {
                 dataOutput.crmClientId = crmData[0];
-
-                dataOutput.code = "200";
-                dataOutput.transactionId = TransactionId;
-                dataOutput.transactionDateTime = DateTime.Now;
-                return dataOutput;
             }
-            else
-            {
-                dataOutput.code = "500";
-                dataOutput.transactionId = TransactionId;
-                dataOutput.transactionDateTime = DateTime.Now;
-                return dataOutput;
-            }
+            dataOutput.code = "200";
+            return dataOutput;
 
         }
 

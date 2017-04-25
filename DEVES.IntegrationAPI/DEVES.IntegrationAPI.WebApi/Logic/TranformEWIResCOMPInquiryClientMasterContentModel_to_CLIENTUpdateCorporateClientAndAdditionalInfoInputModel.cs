@@ -82,7 +82,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             //"corporateName1": "Case 2 Create and Update Corporate JSON",
                 trgt.corporateName1 = data.name1;
             //"dateInCorporate": "04042016",
-                trgt.dateInCorporate = null;
+                trgt.dateInCorporateDate = null;
             //"mailing": "isaidyouknowme@hotmail.com",
                 trgt.mailing = data.mailing;
             //"riskLevel": "R3",
