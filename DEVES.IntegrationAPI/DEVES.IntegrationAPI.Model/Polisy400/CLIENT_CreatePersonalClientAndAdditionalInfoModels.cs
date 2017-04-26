@@ -112,7 +112,7 @@ namespace DEVES.IntegrationAPI.Model.Polisy400
         //"birthPlace": "Th Hospital",
         public string birthPlace { get; set; }
         //"deathDate": "",
-        public DateTime deathDate { get; set; }
+        public string deathDate { get; set; }
         //"documentNo": "024567",
         public string documentNo { get; set; }
         // "oldIDNumber": "",

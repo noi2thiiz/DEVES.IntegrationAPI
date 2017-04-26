@@ -22,6 +22,7 @@ using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Client;
 using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Tooling.Connector;
+using System.Threading.Tasks;
 
 namespace DEVES.IntegrationAPI.WebApi.Templates
 {
@@ -31,7 +32,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
         internal const string CONST_CODE_FAILED = "500";
         internal const string CONST_DEFAULT_UID = "uid";
 
-        public string TransactionId { get; set; }
+        public string TransactionId { get; set; } = "";
 
         private OrganizationServiceProxy _serviceProxy;
         private IOrganizationService _service;
@@ -39,6 +40,29 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
         private Guid CurrentUserId { get; set; }
 
         private const string CONST_JSON_SCHEMA_FILE = "JSON_SCHEMA_{0}";
+
+        // variables after this line will be contained in LOG
+        private HttpClient client = new HttpClient();
+
+        private const string appName = "xrmAPI"; // Application
+        private const string activity = "consume"; // Activity
+        private string user = ""; // User
+        private string machineName = Environment.MachineName; // Machine
+        private string ip = ""; // RequestIpAddress;
+        private string reqContentType = ""; // RequestContentType = context.Request.ContentType;
+        private string jsonReqModel = ""; // RequestContentBody
+        private string uri = ""; // RequestUri
+        private string reqMethod = ""; // RequestMethod
+        private string routeTemplate = ""; // RequestRouteTemplate
+        private string requestRouteData = ""; // RequestRouteData
+        private string reqHeader = ""; // RequestHeaders
+        private DateTime reqTime = new DateTime(); // RequestTimestamp
+        private string resContentType = ""; // ResponseContentType
+        private string resBody = ""; // ResponseContentBody
+        private string resStatus = ""; // ResponseStatusCode
+        private string resHeader = ""; // ResponseHeaders
+        private DateTime resTime = new DateTime(); // ResponseTimestamp
+
 
         //This is like the Main() function. And need to be implemented.
         public abstract Model.BaseDataModel Execute(object input);
@@ -69,7 +93,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                 content = JSON
             };
 
-            string jsonReqModel = JsonConvert.SerializeObject(reqModel, Formatting.Indented, new EWIDatetimeConverter());
+            jsonReqModel = JsonConvert.SerializeObject(reqModel, Formatting.Indented, new EWIDatetimeConverter());
 
             HttpClient client = new HttpClient();
 
@@ -93,15 +117,15 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
 
             T1 ewiRes = response.Content.ReadAsAsync<T1>().Result;
 
+            LogAsync(request, response);
             /*
             ApiLogDataGateWay.Create(
-                new ApiLogEntry
-                {
+                new ApiLogEntry {
+                    RequestUri = EWIendpoint,
                     ResponseContentBody = ewiRes.ToJson(),
-                    RequestContentBody = request.ToJson(),
-                    RequestUri = EWIendpoint
+                    RequestContentBody = request.ToJson()
                 });
-            */
+                */
 
             Console.WriteLine("==========response========");
             Console.WriteLine(ewiRes.ToJson());
@@ -125,9 +149,9 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                 content = JSON
             };
             
-            string jsonReqModel = JsonConvert.SerializeObject(reqModel, Formatting.Indented, new EWIDatetimeConverter(JSON.DateTimeCustomFormat));
+            jsonReqModel = JsonConvert.SerializeObject(reqModel, Formatting.Indented, new EWIDatetimeConverter(JSON.DateTimeCustomFormat));
 
-            HttpClient client = new HttpClient(); 
+            client = new HttpClient(); 
 
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -135,6 +159,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
 
             // + ENDPOINT
             string EWIendpoint = GetEWIEndpoint(EWIendpointKey);
+            reqTime = DateTime.Now;
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, EWIendpoint);
             Console.WriteLine("==========jsonReqModel========");
             Console.WriteLine(jsonReqModel.ToJson());
@@ -144,18 +169,14 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             Console.WriteLine(request.ToJson());
             // เช็ค check reponse 
             HttpResponseMessage response = client.SendAsync(request).Result;
+            resTime = DateTime.Now;
             response.EnsureSuccessStatusCode();
             
             T1 ewiRes = response.Content.ReadAsAsync<T1>().Result;
+            //var jsonRes = JsonConvert.DeserializeObject<EWIResponse_ReqSur>(ewiRes);
+            resBody = ewiRes.ToJson();
 
-            /*
-            ApiLogDataGateWay.Create(
-                new ApiLogEntry {
-                    ResponseContentBody = ewiRes.ToJson(),
-                    RequestContentBody = request.ToJson(),
-                    RequestUri = EWIendpoint
-                    });
-            */
+            LogAsync(request, response);
 
             Console.WriteLine("==========response========");
             Console.WriteLine(ewiRes.ToJson());
@@ -170,6 +191,64 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
 
                 throw new Exception(String.Format("Error:{0}, Message:{1}", ewiRes.responseCode , ewiRes.responseMessage));
             }
+        }
+
+        protected async Task<ApiLogEntry> LogAsync(HttpRequestMessage req, HttpResponseMessage res)
+        {
+            
+            // Request
+            // var reqContext = ((HttpContextBase)req.Properties["MS_HttpContext"]);
+
+            // Map Request vaule to global Variables (Request)
+            //user = reqContext.User.Identity.Name;
+            //ip = reqContext.Request.UserHostAddress;
+            //reqContentType = reqContext.Request.ContentType;
+            uri = req.RequestUri.ToString();
+            reqMethod = req.Method.Method;
+            // routeTemplate = req.GetRouteData().Route.RouteTemplate;
+            reqHeader = req.Headers.ToString();
+
+            try
+            {
+                // requestRouteData = req.GetRouteData().ToJson();
+            }
+            catch (Exception e)
+            {
+                // do nothing
+            }
+            
+
+            // Map Request vaule to global Variables (Response)
+            resContentType = "";
+            // resBody = res.Content.Headers.ToString();
+            resStatus = res.StatusCode.ToString();
+            resHeader = res.Headers.ToString();
+
+            ApiLogDataGateWay.Create(new ApiLogEntry
+            {
+                Application = appName,
+                TransactionID = TransactionId,
+                Controller = "",
+                Activity = activity,
+                User = user,
+                Machine = machineName,
+                RequestIpAddress = ip,
+                RequestContentType = client.DefaultRequestHeaders.Accept.ToString(),
+                RequestContentBody = jsonReqModel,
+                RequestUri = uri,
+                RequestMethod = reqMethod,
+                RequestRouteTemplate = routeTemplate,
+                RequestRouteData = requestRouteData,
+                RequestHeaders = reqHeader,
+                RequestTimestamp = reqTime,
+                ResponseContentType = resContentType,
+                ResponseContentBody = resBody,
+                // ResponseStatusCode = resStatus,
+                ResponseHeaders = resHeader,
+                ResponseTimestamp = resTime
+            });
+            
+            return null;
         }
 
 

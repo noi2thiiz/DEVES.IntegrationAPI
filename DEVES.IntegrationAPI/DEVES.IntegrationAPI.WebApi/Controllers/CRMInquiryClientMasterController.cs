@@ -20,6 +20,18 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             //InquiryClientMasterInputModel contentModel = DeserializeJson<InquiryClientMasterInputModel>(input.ToString());
 
             buzCrmInquiryClientMaster inqClientCmd = new buzCrmInquiryClientMaster();
+
+            if(Request.Properties["TransactionID"] == null)
+            {
+                inqClientCmd.TransactionId = Guid.NewGuid().ToString();
+                Request.Properties["TransactionID"] = inqClientCmd.TransactionId;
+            }
+            else
+            {
+                inqClientCmd.TransactionId = Request.Properties["TransactionID"].ToString();
+            }
+             // Request.Properties["TransactionID"].ToString();
+
             var content = inqClientCmd.Execute(inqClientCmd.DeserializeJson<InquiryClientMasterInputModel>(value.ToString()));
             return Request.CreateResponse(content);
         }

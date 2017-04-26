@@ -45,7 +45,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 trgt.occupation = src.profileInfo.occupation;
                 trgt.riskLevel = src.profileInfo.riskLevel;
                 trgt.vipStatus = src.profileInfo.vipStatus;
-
+                trgt.deathDate = "";
             }
             if (src.contactInfo != null)
             {
