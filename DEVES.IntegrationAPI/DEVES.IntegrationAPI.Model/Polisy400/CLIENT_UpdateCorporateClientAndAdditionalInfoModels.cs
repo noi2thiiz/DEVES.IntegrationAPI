@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using System.Globalization;
 using Newtonsoft.Json;
 using DEVES.IntegrationAPI.Model.EWI;
 
@@ -16,6 +17,7 @@ namespace DEVES.IntegrationAPI.Model.Polisy400
         {
             DateTimeCustomFormat = CONST_FORMAT_DATE_POLISY400;
         }
+        string _dateInCorporate;
 
         //"remark": "ทดสอบผ่าน Service Proxy Fulfill Create and Update Corporate",
         public string remark { get; set; }
@@ -76,8 +78,30 @@ namespace DEVES.IntegrationAPI.Model.Polisy400
         public string corporateName2 { get; set; }
         //"corporateName1": "Case 2 Create and Update Corporate JSON",
         public string corporateName1 { get; set; }
-        //"dateInCorporate": "04042016",
-        public string dateInCorporate { get; set; }
+        [JsonIgnore]
+        public DateTime? dateInCorporateDate { get; set; }
+        public string dateInCorporate
+        {
+            set {
+                _dateInCorporate = value;
+            }
+            get
+            {
+                if(_dateInCorporate == null )
+                {
+                    if (dateInCorporateDate == null)
+                    {
+                        _dateInCorporate = ""; // CONST_DATE_NULL_POLISY400;
+                    }
+                    else
+                    {
+                        CultureInfo enUS = new CultureInfo("en-US");
+                        _dateInCorporate = dateInCorporateDate.Value.ToString(DateTimeCustomFormat, enUS);
+                    }
+                }
+                return _dateInCorporate;
+            }
+        }
         //"mailing": "isaidyouknowme@hotmail.com",
         public string mailing { get; set; }
         //"riskLevel": "R3",

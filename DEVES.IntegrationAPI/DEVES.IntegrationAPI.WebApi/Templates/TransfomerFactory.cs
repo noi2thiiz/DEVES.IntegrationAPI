@@ -201,7 +201,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             #region RegClientCorp
             else if (inputType == typeof(Model.RegClientCorporate.RegClientCorporateInputModel))
             {
-                if (outputType == typeof(Model.Polisy400.CLIENTCreateCorporateClientAndAdditionalInfoContentModel))
+                if (outputType == typeof(Model.Polisy400.CLIENTUpdateCorporateClientAndAdditionalInfoInputModel))
                 {
                     t = new TranformRegClientCorporateInputModel_to_CLIENTUpdateCorporateClientAndAdditionalInfoInputModel();
                 }
