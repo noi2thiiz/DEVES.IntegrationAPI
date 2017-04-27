@@ -173,6 +173,12 @@ namespace DEVES.IntegrationAPI.Model.InquiryCRMPayeeList
             name = "";
             message = "";
         }
+
+        public InquiryCRMPayeeListFieldErrors(string n, string m)
+        {
+            name = n;
+            message = m;
+        }
     }
 
 }

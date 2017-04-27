@@ -8,6 +8,10 @@
       "properties": {
         "roleCode": {
           "type": "string",
+          "enum": [
+            "G"
+          ],
+          "minLength": 1,
           "maxLength": 5
         },
         "cleansingId": {
@@ -24,6 +28,11 @@
         },
         "clientAdditionalExistFlag": {
           "type": "string",
+          "enum": [
+            "N",
+            "Y"
+          ],
+          "minLength": 1,
           "maxLength": 1
         }
       },
@@ -38,18 +47,22 @@
       "properties": {
         "salutation": {
           "type": "string",
-          "maxLength": 8
+          "minLength": 1,
+          "maxLength": 4
         },
         "personalName": {
           "type": "string",
+          "minLength": 1,
           "maxLength": 60
         },
         "personalSurname": {
           "type": "string",
+          "minLength": 1,
           "maxLength": 60
         },
         "sex": {
           "type": "string",
+          "minLength": 1,
           "maxLength": 1
         },
         "idCitizen": {
@@ -74,7 +87,7 @@
         },
         "nationality": {
           "type": "string",
-          "maxLength": 3
+          "maxLength": 5
         },
         "language": {
           "type": "string",
@@ -86,7 +99,7 @@
         },
         "occupation": {
           "type": "string",
-          "maxLength": 3
+          "maxLength": 5
         },
         "riskLevel": {
           "type": "string",
@@ -192,7 +205,7 @@
         },
         "country": {
           "type": "string",
-          "maxLength": 3
+          "maxLength": 5
         },
         "addressType": {
           "type": "string",

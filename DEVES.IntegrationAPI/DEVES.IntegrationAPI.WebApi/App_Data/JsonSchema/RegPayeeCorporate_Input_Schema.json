@@ -8,6 +8,14 @@
       "properties": {
         "roleCode": {
           "type": "string",
+          "enum": [
+            "G",
+            "A",
+            "S",
+            "R",
+            "H"
+          ],
+          "minLength": 1,
           "maxLength": 5
         },
         "cleansingId": {
@@ -24,22 +32,11 @@
         },
         "clientAdditionalExistFlag": {
           "type": "string",
-          "maxLength": 1
-        },
-        "assessorFlag": {
-          "type": "string",
-          "maxLength": 1
-        },
-        "solicitorFlag": {
-          "type": "string",
-          "maxLength": 1
-        },
-        "repairerFlag": {
-          "type": "string",
-          "maxLength": 1
-        },
-        "hospitalFlag": {
-          "type": "string",
+          "enum": [
+            "N",
+            "Y"
+          ],
+          "minLength": 1,
           "maxLength": 1
         }
       },
@@ -54,6 +51,7 @@
       "properties": {
         "corporateName1": {
           "type": "string",
+          "minLength": 1,
           "maxLength": 60
         },
         "corporateName2": {
@@ -78,6 +76,7 @@
         },
         "corporateBranch": {
           "type": "string",
+          "minLength": 1,
           "maxLength": 6
         },
         "econActivity": {
@@ -86,7 +85,7 @@
         },
         "countryOrigin": {
           "type": "string",
-          "maxLength": 3
+          "maxLength": 5
         },
         "language": {
           "type": "string",
@@ -162,6 +161,7 @@
       "properties": {
         "address1": {
           "type": "string",
+          "minLength": 1,
           "maxLength": 30
         },
         "address2": {
@@ -186,11 +186,13 @@
         },
         "postalCode": {
           "type": "string",
+          "minLength": 1,
           "maxLength": 10
         },
         "country": {
           "type": "string",
-          "maxLength": 3
+          "minLength": 1,
+          "maxLength": 5
         },
         "addressType": {
           "type": "string",
@@ -212,10 +214,55 @@
       "properties": {
         "sapVendorGroupCode": {
           "type": "string",
+          "minLength": 1,
           "maxLength": 4
         }
+        "bankInfo": {
+          "type": "object",
+          "properties": {
+            "bankCountryCode": {
+              "type": "string",
+              "maxLength": 3
+            },
+            "bankCode": {
+              "type": "string",
+              "maxLength": 4
+            },
+            "bankBranchCode": {
+              "type": "string",
+              "maxLength": 4
+            },
+            "bankAccount": {
+              "type": "string",
+              "maxLength": 18
+            },
+            "accountHolder": {
+              "type": "string",
+              "maxLength": 60
+            },
+            "paymentMethods": {
+              "type": "string",
+              "maxLength": 10
+            }
+          }
+        },
+        "withHoldingTaxInfo": {
+          "type": "object",
+          "properties": {
+            "whtTaxCode": {
+              "type": "string",
+              "maxLength": 2
+            },
+            "receiptType": {
+              "type": "string",
+              "maxLength": 2
+            }
+          }
+        }
       },
-        "required": [ "sapVendorGroupCode" ]      
+      "required": [
+        "sapVendorGroupCode" 
+      ]      
     }
   }
 }

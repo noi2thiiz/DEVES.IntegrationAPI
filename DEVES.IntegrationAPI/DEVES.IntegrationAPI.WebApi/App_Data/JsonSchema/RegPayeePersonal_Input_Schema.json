@@ -8,6 +8,9 @@
       "properties": {
         "roleCode": {
           "type": "string",
+          "enum": [
+            "G"
+          ],
           "maxLength": 5
         },
         "cleansingId": {
@@ -24,6 +27,11 @@
         },
         "clientAdditionalExistFlag": {
           "type": "string",
+          "enum": [
+            "N",
+            "Y"
+          ],
+          "minLength": 1,
           "maxLength": 1
         }
       },
@@ -38,22 +46,27 @@
       "properties": {
         "salutation": {
           "type": "string",
-          "maxLength": 8
+          "minLength": 1,
+          "maxLength": 4
         },
         "personalName": {
           "type": "string",
+          "minLength": 1,
           "maxLength": 60
         },
         "personalSurname": {
           "type": "string",
+          "minLength": 1,
           "maxLength": 60
         },
         "sex": {
           "type": "string",
+          "minLength": 1,
           "maxLength": 1
         },
         "idCitizen": {
           "type": "string",
+          "minLength": 1,
           "maxLength": 24
         },
         "idPassport": {
@@ -74,7 +87,7 @@
         },
         "nationality": {
           "type": "string",
-          "maxLength": 3
+          "maxLength": 5
         },
         "language": {
           "type": "string",
@@ -86,7 +99,7 @@
         },
         "occupation": {
           "type": "string",
-          "maxLength": 3
+          "maxLength": 5
         },
         "riskLevel": {
           "type": "string",
@@ -164,6 +177,7 @@
       "properties": {
         "address1": {
           "type": "string",
+          "minLength": 1,
           "maxLength": 30
         },
         "address2": {
@@ -188,11 +202,13 @@
         },
         "postalCode": {
           "type": "string",
+          "minLength": 1,
           "maxLength": 10
         },
         "country": {
           "type": "string",
-          "maxLength": 3
+          "minLength": 1,
+          "maxLength": 5
         },
         "addressType": {
           "type": "string",
@@ -206,7 +222,12 @@
           "type": "string",
           "maxLength": 20
         }
-      }
+      },
+      "required": [
+        "address1",
+        "postalCode",
+        "country"
+      ]
     },
 
     "sapVendorInfo": {
@@ -214,6 +235,7 @@
       "properties": {
         "sapVendorGroupCode": {
           "type": "string",
+          "minLength": 1,
           "maxLength": 4
         },
         "bankInfo": {
@@ -254,6 +276,7 @@
             },
             "receiptType": {
               "type": "string",
+              "minLength": 1,
               "maxLength": 2
             }
           }

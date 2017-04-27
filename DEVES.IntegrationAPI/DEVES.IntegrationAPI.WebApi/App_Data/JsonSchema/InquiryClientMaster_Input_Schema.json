@@ -8,10 +8,23 @@
       "properties": {
         "clientType": {
           "type": "string",
+          "enum": [
+            "P",
+            "C"
+          ],
+          "minLength": 1,
           "maxLength": 1
         },
         "roleCode": {
           "type": "string",
+          "enum": [
+            "G",
+            "A",
+            "S",
+            "R",
+            "H"
+          ],
+          "minLength": 1,
           "maxLength": 5
         }
       },

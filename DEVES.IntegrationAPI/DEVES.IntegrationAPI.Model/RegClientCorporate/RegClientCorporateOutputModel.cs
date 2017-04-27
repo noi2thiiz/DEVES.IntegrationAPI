@@ -43,20 +43,32 @@ namespace DEVES.IntegrationAPI.Model.RegClientCorporate
         public string corporateBranch { get; set; }
     }
 
-    //public class RegClientCorporateOutputModel_Fail 
-    //{
-    //    public string code { get; set; }
-    //    public string message { get; set; }
-    //    public string description { get; set; }
-    //    public string transactionId { get; set; }
-    //    public string transactionDateTime { get; set; }
-    //    public List<RegClientCorporateDataOutputModel_Fail> data { get; set; }
-    //}
+
+
+    public class RegClientCorporateOutputModel_Fail 
+    {
+        public string code { get; set; }
+        public string message { get; set; }
+        public string description { get; set; }
+        public string transactionId { get; set; }
+        public string transactionDateTime { get; set; }
+        public RegClientCorporateDataOutputModel_Fail data { get; set; }
+    }
 
     public class RegClientCorporateDataOutputModel_Fail : RegClientCorporateDataOutputModel
     {
-        public string fieldErrors { get; set; }
+        public List<RegClientCorporateFieldErrors> fieldErrors { get; set; }
+    }
+
+    public class RegClientCorporateFieldErrors
+    {
+        public string name { get; set; }
         public string message { get; set; }
-        public string data { get; set; }
+
+        public RegClientCorporateFieldErrors(string m, string n)
+        {
+            name = n;
+            message = m;
+        }
     }
 }

@@ -26,5 +26,6 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
         public string ResponseHeaders { get; set; } = "";       // The response headers.
         public DateTime? ResponseTimestamp { get; set; } = DateTime.Now;  // The response timestamp.
         public string Controller { get; set; } = "";
+        public string ServiceName { get; set; } = "";
     }
 }

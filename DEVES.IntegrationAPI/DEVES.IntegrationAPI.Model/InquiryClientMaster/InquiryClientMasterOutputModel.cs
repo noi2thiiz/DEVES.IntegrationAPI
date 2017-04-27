@@ -123,5 +123,11 @@ namespace DEVES.IntegrationAPI.Model.InquiryClientMaster
             name = "";
             message = "";
         }
+
+        public InquiryClientMasterListFieldErrors(string n, string m)
+        {
+            name = n;
+            message = m;
+        }
     }
 }

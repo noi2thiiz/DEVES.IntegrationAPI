@@ -67,14 +67,23 @@ namespace DEVES.IntegrationAPI.Model.RegClientPersonal
         [JsonProperty(Order = 5)]
         public string transactionDateTime { get; set; }
         [JsonProperty(Order = 6)]
-        public List<RegClientPersonalDataOutputModel_Fail> data { get; set; }
+        public RegClientPersonalDataOutputModel_Fail data { get; set; }
     }
 
     public class RegClientPersonalDataOutputModel_Fail: RegClientPersonalDataOutputModel
     {
-        public string fieldErrors { get; set; }
-        public string message { get; set; }
-        public string name { get; set; }
+        public List<RegClientPersonalFieldErrors> fieldErrors { get; set; }
+    }
 
+    public class RegClientPersonalFieldErrors
+    {
+        public string name { get; set; }
+        public string message { get; set; }
+
+        public RegClientPersonalFieldErrors(string m, string n)
+        {
+            name = n;
+            message = m;
+        }
     }
 }

@@ -8,6 +8,14 @@
       "properties": {
         "roleCode": {
           "type": "string",
+          "enum": [
+            "G",
+            "A",
+            "S",
+            "R",
+            "H"
+          ],
+          "minLength": 1,
           "maxLength": 5
         },
         "cleansingId": {
@@ -24,28 +32,57 @@
         },
         "clientAdditionalExistFlag": {
           "type": "string",
+          "enum": [
+            "N",
+            "Y"
+          ],
+          "minLength": 1,
           "maxLength": 1
         },
         "assessorFlag": {
           "type": "string",
+          "enum": [
+            "N",
+            "Y"
+          ],
+          "minLength": 1,
           "maxLength": 1
         },
         "solicitorFlag": {
           "type": "string",
+          "enum": [
+            "N",
+            "Y"
+          ],
+          "minLength": 1,
           "maxLength": 1
         },
         "repairerFlag": {
           "type": "string",
+          "enum": [
+            "N",
+            "Y"
+          ],
+          "minLength": 1,
           "maxLength": 1
         },
         "hospitalFlag": {
           "type": "string",
+          "enum": [
+            "N",
+            "Y"
+          ],
+          "minLength": 1,
           "maxLength": 1
         }
       },
       "required": [
         "roleCode",
-        "clientAdditionalExistFlag"
+        "clientAdditionalExistFlag",
+        "assessorFlag",
+        "solicitorFlag",
+        "repairerFlag",
+        "hospitalFlag"
       ]
     },
 
@@ -54,6 +91,7 @@
       "properties": {
         "corporateName1": {
           "type": "string",
+          "minLength": 1,
           "maxLength": 60
         },
         "corporateName2": {
@@ -78,6 +116,7 @@
         },
         "corporateBranch": {
           "type": "string",
+          "minLength": 1,
           "maxLength": 6
         },
         "econActivity": {
@@ -86,7 +125,7 @@
         },
         "countryOrigin": {
           "type": "string",
-          "maxLength": 3
+          "maxLength": 5
         },
         "language": {
           "type": "string",
@@ -190,7 +229,7 @@
         },
         "country": {
           "type": "string",
-          "maxLength": 3
+          "maxLength": 5
         },
         "addressType": {
           "type": "string",
@@ -203,6 +242,60 @@
         "longtitude": {
           "type": "string",
           "maxLength": 20
+        }
+      }
+    },
+
+    "asrhHeader": {
+      "type": "object",
+      "properties": {
+        "assessorOregNum": {
+          "type": "string",
+          "maxLength": 15
+        },
+        "assessorDelistFlag": {
+          "type": "string",
+          "maxLength": 1
+        },
+        "assessorBlackListFlag": {
+          "type": "string",
+          "maxLength": 1
+        },
+        "assessorTerminateDate": {
+          "type": "string",
+          "maxLength": 10
+        },
+        "solicitorOregNum": {
+          "type": "string",
+          "maxLength": 15
+        },
+        "solicitorDelistFlag": {
+          "type": "string",
+          "maxLength": 1
+        },
+        "solicitorBlackListFlag": {
+          "type": "string",
+          "maxLength": 1
+        },
+        "solicitorTerminateDate": {
+          "type": "string",
+          "maxLength": 10
+        },
+        "repairerOregNum": {
+          "type": "string",
+          "maxLength": 15
+        },
+        "repairerDelistFlag": {
+          "type": "string",
+          "maxLength": 1
+        },
+        "repairerBlackListFlag": {
+          "type": "string",
+          "maxLength": 1
+        },
+        "repairerTerminateDate": {
+          "type": "string",
+          "maxLength": 10
         }
       }
     }

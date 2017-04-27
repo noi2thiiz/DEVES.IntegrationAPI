@@ -52,14 +52,24 @@ namespace DEVES.IntegrationAPI.Model.RegPayeePersonal
         public string description { get; set; }
         public string transactionId { get; set; }
         public string transactionDateTime { get; set; }
-        public List<RegPayeePersonalDataOutputModel_Fail> data { get; set; }
+        public RegPayeePersonalDataOutputModel_Fail data { get; set; }
     }
 
     public class RegPayeePersonalDataOutputModel_Fail: RegPayeePersonalDataOutputModel
     {
-        public string fieldErrors { get; set; }
-        public string message { get; set; }
+        public List<RegPayeePersonalFieldErrors> fieldErrors { get; set; }
+    }
+
+    public class RegPayeePersonalFieldErrors
+    {
         public string name { get; set; }
+        public string message { get; set; }
+
+        public RegPayeePersonalFieldErrors(string n, string m)
+        {
+            name = n;
+            message = m;
+        }
     }
 
 }

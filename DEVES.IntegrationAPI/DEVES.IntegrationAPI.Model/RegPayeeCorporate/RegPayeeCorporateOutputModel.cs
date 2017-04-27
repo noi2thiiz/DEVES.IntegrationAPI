@@ -36,20 +36,34 @@ namespace DEVES.IntegrationAPI.Model.RegPayeeCorporate
         public string corporateBranch { get; set; }
     }
 
-    //public class RegPayeeCorporateOutputModel_Fail
-    //{
-    //    public string code { get; set; }
-    //    public string message { get; set; }
-    //    public string description { get; set; }
-    //    public string transactionId { get; set; }
-    //    public string transactionDateTime { get; set; }
-    //    public List<RegPayeeCorporateDataOutputModel_Fail> data { get; set; }
-    //}
+    public class RegPayeeCorporateOutputModel_Fail
+    {
+        public string code { get; set; }
+        public string message { get; set; }
+        public string description { get; set; }
+        public string transactionId { get; set; }
+        public string transactionDateTime { get; set; }
+        public RegPayeeCorporateDataOutputModel_Fail data { get; set; }
+    }
 
     public class RegPayeeCorporateDataOutputModel_Fail: RegPayeeCorporateDataOutputModel
     {
-        public string fieldErrors { get; set; }
+        public List<RegPayeeCorporateFieldErrors> fieldErrors { get; set; }
+
+        
+    }
+
+    public class RegPayeeCorporateFieldErrors
+    {
+        public string name { get; set; }
         public string message { get; set; }
-        public string data { get; set; }
+
+        public RegPayeeCorporateFieldErrors(string n, string m)
+        {
+            name = n;
+            message = m;
+        }
     }
 }
+
+

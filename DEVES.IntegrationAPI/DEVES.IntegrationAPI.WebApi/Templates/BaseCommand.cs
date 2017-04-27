@@ -45,6 +45,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
         private HttpClient client = new HttpClient();
 
         private const string appName = "xrmAPI"; // Application
+        private string serviceName = "";
         private const string activity = "consume"; // Activity
         private string user = ""; // User
         private string machineName = Environment.MachineName; // Machine
@@ -113,19 +114,12 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             Console.WriteLine("==========jsonReqModel========");
             Console.WriteLine(jsonReqModel.ToJson());
 
-
-
             T1 ewiRes = response.Content.ReadAsAsync<T1>().Result;
+            resBody = ewiRes.ToJson();
+            serviceName = ewiRes.ToString();
 
             LogAsync(request, response);
-            /*
-            ApiLogDataGateWay.Create(
-                new ApiLogEntry {
-                    RequestUri = EWIendpoint,
-                    ResponseContentBody = ewiRes.ToJson(),
-                    RequestContentBody = request.ToJson()
-                });
-                */
+
 
             Console.WriteLine("==========response========");
             Console.WriteLine(ewiRes.ToJson());
@@ -173,8 +167,8 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             response.EnsureSuccessStatusCode();
             
             T1 ewiRes = response.Content.ReadAsAsync<T1>().Result;
-            //var jsonRes = JsonConvert.DeserializeObject<EWIResponse_ReqSur>(ewiRes);
             resBody = ewiRes.ToJson();
+            serviceName = ewiRes.ToString();
 
             LogAsync(request, response);
 
@@ -229,6 +223,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                 Application = appName,
                 TransactionID = TransactionId,
                 Controller = "",
+                ServiceName = serviceName,
                 Activity = activity,
                 User = user,
                 Machine = machineName,
