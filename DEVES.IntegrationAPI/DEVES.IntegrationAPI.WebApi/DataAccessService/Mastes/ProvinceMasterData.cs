@@ -1,0 +1,32 @@
+﻿using System;
+
+namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
+{
+    public class ProvinceMasterData:InMemoryDataStorageBase<ProvinceEntity>
+    {
+
+        private static ProvinceMasterData _instance;
+        private ProvinceMasterData() { }
+
+        public static ProvinceMasterData Instance
+        {
+            get
+            {
+                if (_instance != null) return _instance;
+                _instance = new ProvinceMasterData();
+                _instance.Load("sp_Query_Province", "ProvinceCode");
+                return _instance;
+            }
+        }
+    }
+    public class ProvinceEntity
+    {
+        public Guid Id { get; set; }
+        public string ProvinceCode { get; set; }
+        public string ProvinceName { get; set; }
+        public string ProvinceNameEng { get; set; }
+        public int SortIndex { get; set; }
+
+    }
+
+}
