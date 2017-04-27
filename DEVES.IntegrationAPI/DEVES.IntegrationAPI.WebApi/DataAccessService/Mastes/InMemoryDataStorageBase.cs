@@ -22,19 +22,10 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
             DataList = new Dictionary<string, dynamic>();
             DataList2 = new Dictionary<string, dynamic>();
 
-            //if (System.Environment.MachineName == "DESKTOP-Q30CAGJ")
-            //{
-                //LoadMockData(storeName, fieldCodeName);
-                //return;;
-            //}
+            
 
             Console.WriteLine($"{storeName}/{fieldCodeName}");
          
-          //  DataList = new Dictionary<string, dynamic>();
-
-
-            //var conectionString = CrmConfigurationService.AppConfig.Get("CRMDB");
-          
             
             var reader = new StoreDataReader();
             var req = new DbRequest {StoreName = storeName};
@@ -44,10 +35,10 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
                 foreach (Dictionary<string, dynamic> item in result.Data)
                 {
                     // Console.WriteLine(item.ToJSON());
-                    Console.WriteLine(fieldCodeName +"="+ item[fieldCodeName]);
+                   
                     var code = (string) item[fieldCodeName];
                     if (string.IsNullOrEmpty(code)) continue;
-                    Console.WriteLine(code);
+                   
                     if (!DataList.ContainsKey(code))
                     {
                         DataList.Add(code.ToString(), item);
@@ -92,7 +83,7 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
             Console.WriteLine(guid);
             if (!DataList2.ContainsKey(guid))
             {
-                return new TEntityClass();
+                return default(TEntityClass);
             }
             var provinceRow = ((Dictionary<string, dynamic>) DataList2[guid]);
           
@@ -105,7 +96,7 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
             if (!DataList.ContainsKey(code))
             {
                 Console.WriteLine(" not Contains Key "+ code);
-                return new TEntityClass();
+                return default(TEntityClass);
             }
 
             var provinceRow = ((Dictionary<string, dynamic>) DataList[code]);
@@ -148,12 +139,11 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
         public  void LoadMockData(string fileName, string fieldCodeName)
         {
             
-
             var filepath = @"C:\Users\patiw\Source\RVP2\DEVES.IntegrationAPI.WebApi\App_Data\MockData\" + fileName+".csv";
             Console.WriteLine(filepath);
             var lines = LoadCsv(filepath);
-            int num_rows = lines.GetUpperBound(0) + 1;
-            int num_cols = lines.GetUpperBound(1) + 1;
+            int numRows = lines.GetUpperBound(0) + 1;
+            int numCols = lines.GetUpperBound(1) + 1;
             var props = typeof(TEntityClass).GetProperties();
             var propName = new List<string>();
             foreach (PropertyInfo pi in props)
@@ -161,7 +151,7 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
                 propName.Add(pi.Name);
             }
         
-            for (int i = 0; i < num_rows; i++)
+            for (int i = 0; i < numRows; i++)
             {
                 var id = lines[i,0];
                 if (!DataList2.ContainsKey(id))
@@ -170,7 +160,7 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
                    
                     var code = "";
                     var item = new Dictionary<string, dynamic>();
-                    for (var j = 0 ; j < num_cols; j++)
+                    for (var j = 0 ; j < numCols; j++)
                     {
                         var piName = propName[j];
                         

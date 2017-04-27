@@ -18,6 +18,13 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData.Tests
             Assert.AreEqual("00002", result.CountryCode);
         }
         [TestMethod()]
+        public void CountryMasterDataFindByCode_It_Shoud_Return_Null_Test()
+        {
+            var result = CountryMasterData.Instance.FindByCode("78943");
+            Assert.IsNull(result);
+          //  Assert.IsNull(result.CountryCode);
+        }
+        [TestMethod()]
         public void DistricMasterDataFindByCodeTest()
         {
             var result = DistricMasterData.Instance.FindByCode("1001");
