@@ -394,6 +394,7 @@
     <Compile Include="Templates\BaseCommand.cs" />
     <Compile Include="Templates\BaseTransformer.cs" />
     <Compile Include="Templates\EWIResponseWrapper.cs" />
+    <Compile Include="Templates\FieldValidationException.cs" />
     <Compile Include="Templates\ICommand.cs" />
     <Compile Include="Templates\JSONExtension.cs" />
     <Compile Include="Templates\NullCommand.cs" />

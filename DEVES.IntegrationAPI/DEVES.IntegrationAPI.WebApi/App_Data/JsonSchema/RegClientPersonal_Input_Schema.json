@@ -9,6 +9,7 @@
         "roleCode": {
           "type": "string",
           "enum": [
+            "P",
             "G"
           ],
           "minLength": 1,

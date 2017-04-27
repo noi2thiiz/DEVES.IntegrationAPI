@@ -10,7 +10,7 @@ using DEVES.IntegrationAPI.Model;
 using DEVES.IntegrationAPI.Model.RegClientPersonal;
 using DEVES.IntegrationAPI.Model.CLS;
 using DEVES.IntegrationAPI.Model.Polisy400;
-
+using DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
@@ -19,7 +19,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         public override BaseDataModel Execute(object input)
         {
             RegClientPersonalContentOutputModel regClientPersonOutput = new RegClientPersonalContentOutputModel();
-            regClientPersonOutput.data = new List<RegClientPersonalDataOutputModel>();
+            // regClientPersonOutput.data = new List<RegClientPersonalDataOutputModel>();
             regClientPersonOutput.transactionDateTime = DateTime.Now;
             regClientPersonOutput.transactionId = TransactionId;
             regClientPersonOutput.code = CONST_CODE_SUCCESS;
@@ -28,6 +28,48 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                 RegClientPersonalInputModel regClientPersonalInput = (RegClientPersonalInputModel)input;
 
+                // Validate Master Data before sending to other services
+                var master_salutation = PersonalTitleMasterData.Instance.FindByCode(regClientPersonalInput.profileInfo.salutation);
+                if (master_salutation == null)
+                {
+                    throw new FieldValidationException("profileInfo.salutation", "PersonalTitleMasterData is invalid");
+                }
+                else
+                {
+                    regClientPersonalInput.profileInfo.salutation = master_salutation.PolisyCode;
+                }
+
+                var master_nationality = NationalityMasterData.Instance.FindByCode(regClientPersonalInput.profileInfo.nationality);
+                if(master_nationality == null)
+                {
+                    throw new FieldValidationException("profileInfo.nationality", "NationalityMasterData is invalid");
+                }
+                else
+                {
+                    regClientPersonalInput.profileInfo.nationality = master_nationality.PolisyCode;
+                }
+
+                var master_occupation = OccupationMasterData.Instance.FindByCode(regClientPersonalInput.profileInfo.occupation);
+                if (master_occupation == null)
+                {
+                    throw new FieldValidationException("profileInfo.occupation", "OccupationMasterData is invalid");
+                }
+                else
+                {
+                    regClientPersonalInput.profileInfo.occupation = master_occupation.PolisyCode;
+                }
+
+                var master_country = CountryMasterData.Instance.FindByCode(regClientPersonalInput.addressInfo.country);
+                if (master_country == null)
+                {
+                    throw new FieldValidationException("addressInfo.country", "CountryMasterData is invalid");
+                }
+                else
+                {
+                    regClientPersonalInput.addressInfo.country = master_country.PolisyCode;
+                }
+
+                ///////////////////////////////////////////////////////////////////////////////////////////////////
                 if (string.IsNullOrEmpty(regClientPersonalInput.generalHeader.cleansingId))
                 {
                     BaseDataModel clsCreatePersonIn = DataModelFactory.GetModel(typeof(CLSCreatePersonalClientInputModel));
@@ -98,6 +140,20 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         }
                     }
                 }
+            }
+            catch (FieldValidationException e)
+            {
+                RegClientPersonalOutputModel_Fail regFail = new RegClientPersonalOutputModel_Fail();
+                regFail.code = CONST_CODE_FAILED;
+                regFail.message = e.Message;
+                regFail.description = e.StackTrace;
+                regFail.transactionId = TransactionId;
+                regFail.transactionDateTime = DateTime.Now.ToString();
+                regFail.data = new RegClientPersonalDataOutputModel_Fail();
+                regFail.data.fieldErrors = new List<RegClientPersonalFieldErrors>();
+                regFail.data.fieldErrors.Add(new RegClientPersonalFieldErrors(e.fieldError, e.message));
+
+                return regFail;
             }
             catch (Exception e)
             {

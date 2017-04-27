@@ -54,7 +54,7 @@ namespace DEVES.IntegrationAPI.Model.RegClientPersonal
         }
     }
 
-    public class RegClientPersonalOutputModel_Fail
+    public class RegClientPersonalOutputModel_Fail : BaseContentJsonProxyOutputModel
     {
         [JsonProperty(Order = 1)]
         public string code { get; set; }
@@ -80,7 +80,7 @@ namespace DEVES.IntegrationAPI.Model.RegClientPersonal
         public string name { get; set; }
         public string message { get; set; }
 
-        public RegClientPersonalFieldErrors(string m, string n)
+        public RegClientPersonalFieldErrors(string n, string m)
         {
             name = n;
             message = m;

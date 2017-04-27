@@ -30,7 +30,7 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string Code { get; set; }
-        public string Polisycode { get; set; }
+        public string PolisyCode { get; set; }
     }
 
     public enum PersonalTitleEntityFields
