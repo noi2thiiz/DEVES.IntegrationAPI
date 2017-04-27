@@ -69,8 +69,15 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData.Tests
             Assert.AreEqual("100104", result.SubDistrictCode);
         }
 
-      
+        [TestMethod()]
+        public void AddressTypeMasterDataFindByCodeTest()
+        {
+            var result = AddressTypeMasterData.Instance.FindByCode("01");
+            Assert.AreEqual("01", result.Code);
+        }
+
 
         
+
     }
 }

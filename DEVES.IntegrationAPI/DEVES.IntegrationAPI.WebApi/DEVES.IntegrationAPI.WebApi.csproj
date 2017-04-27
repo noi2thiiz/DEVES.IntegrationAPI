@@ -299,6 +299,7 @@
     <Compile Include="DataAccessService\DataAdapter\DbRequest.cs" />
     <Compile Include="DataAccessService\DataAdapter\DbResult.cs" />
     <Compile Include="DataAccessService\DataAdapter\StoreDataReader.cs" />
+    <Compile Include="DataAccessService\Mastes\AddressTypeMasterData.cs" />
     <Compile Include="DataAccessService\Mastes\CountryMasterData.cs" />
     <Compile Include="DataAccessService\Mastes\DistrictMasterData.cs" />
     <Compile Include="DataAccessService\Mastes\InMemoryDataStorageBase.cs" />
