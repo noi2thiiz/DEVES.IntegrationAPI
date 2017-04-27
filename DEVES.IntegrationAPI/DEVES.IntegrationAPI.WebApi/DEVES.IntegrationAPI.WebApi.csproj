@@ -296,6 +296,18 @@
     <Compile Include="Controllers\UpdateClaimNoController.cs" />
     <Compile Include="Controllers\UpdateCompliantStatusController.cs" />
     <Compile Include="Controllers\UpdateSurveyStatusController.cs" />
+    <Compile Include="DataAccessService\DataAdapter\DbRequest.cs" />
+    <Compile Include="DataAccessService\DataAdapter\DbResult.cs" />
+    <Compile Include="DataAccessService\DataAdapter\StoreDataReader.cs" />
+    <Compile Include="DataAccessService\Mastes\CountryMasterData.cs" />
+    <Compile Include="DataAccessService\Mastes\DistrictMasterData.cs" />
+    <Compile Include="DataAccessService\Mastes\InMemoryDataStorageBase.cs" />
+    <Compile Include="DataAccessService\Mastes\NationalityMasterData.cs" />
+    <Compile Include="DataAccessService\Mastes\OccupationMasterData.cs" />
+    <Compile Include="DataAccessService\Mastes\PersonalTitleMasterData.cs" />
+    <Compile Include="DataAccessService\Mastes\ProvinceMasterData.cs" />
+    <Compile Include="DataAccessService\Mastes\SubDistrictMasterData.cs" />
+    <Compile Include="DataAccessService\Mastes\TypeOfLostMasterData.cs" />
     <Compile Include="DEVES_XRM.cs" />
     <Compile Include="EWIDatetimeConverter.cs" />
     <Compile Include="Global.asax.cs">
@@ -453,6 +465,7 @@
     <Content Include="Scripts\_references.js" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="NewFolder1\" />
     <Folder Include="Providers\" />
   </ItemGroup>
   <ItemGroup>
