@@ -18,6 +18,20 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData.Tests
             Assert.AreEqual("00002", result.CountryCode);
         }
         [TestMethod()]
+        public void CountryMasterDataFindByFieldTest()
+        {
+            var result = CountryMasterData.Instance.FindByField("Code", "00002");
+            Assert.AreEqual("00002", result.CountryCode);
+        }
+        [TestMethod()]
+        public void CountryMasterDataFindByEnumFieldTest()
+        {
+            var result = CountryMasterData.Instance.FindByField(CountryEntityFields.CountryCode, "00002");
+            Assert.AreEqual("00002", result.CountryCode);
+        }
+
+
+        [TestMethod()]
         public void CountryMasterDataFindByCode_It_Shoud_Return_Null_Test()
         {
             var result = CountryMasterData.Instance.FindByCode("78943");

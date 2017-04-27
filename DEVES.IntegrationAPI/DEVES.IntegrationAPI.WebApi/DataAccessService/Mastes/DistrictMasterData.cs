@@ -2,7 +2,7 @@
 
 namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
 {
-    public class DistricMasterData: InMemoryDataStorageBase<DistrictEntity>
+    public class DistricMasterData: InMemoryDataStorageBase<DistrictEntity, DistrictEntityFields>
     {
         private static DistricMasterData _instance;
         private DistricMasterData() { }
@@ -26,5 +26,8 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
         public string DistrictName { get; set; }
         public string DistrictNameEng { get; set; }
       
+    }
+    public enum DistrictEntityFields{
+         Id,DistrictCode, DistrictName, DistrictNameEng
     }
 }

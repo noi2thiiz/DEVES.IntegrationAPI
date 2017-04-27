@@ -7,7 +7,7 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
 {
 
 
-    public class SubDistrictMasterData : InMemoryDataStorageBase<SubDistrictEntity>
+    public class SubDistrictMasterData : InMemoryDataStorageBase<SubDistrictEntity, SubDistrictEntityFields>
     {
         private static SubDistrictMasterData _instance;
 
@@ -40,6 +40,11 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
         public string PostalCode { get; set; }
 
 
+    }
+    public enum SubDistrictEntityFields
+    {
+
+        Id, SubDistrictName, SubDistrictCode, DistrictCode, ProvinceCode, PostalCode
     }
 }
 

@@ -5,7 +5,7 @@ using System.Web;
 
 namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
 {
-    public class OccupationMasterData : InMemoryDataStorageBase<OccupationEntity>
+    public class OccupationMasterData : InMemoryDataStorageBase<OccupationEntity, OccupationEntityFields>
     {
         private static OccupationMasterData _instance;
         private OccupationMasterData() { }
@@ -30,5 +30,9 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
         public string Polisycode { get; set; }
 
     }
-   
+
+    public enum OccupationEntityFields
+    {
+        Id, Name, Code, Polisycode
+    }
 }

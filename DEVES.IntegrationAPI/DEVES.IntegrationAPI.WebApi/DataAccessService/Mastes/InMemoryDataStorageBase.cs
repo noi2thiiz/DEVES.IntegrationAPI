@@ -2,32 +2,38 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
 using System.Web.Hosting;
 using DEVES.IntegrationAPI.WebApi.DataAccessService.DataAdapter;
 using Microsoft.Xrm.Sdk.Deployment;
 
 namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
 {
-    public class InMemoryDataStorageBase<TEntityClass>
+    public class InMemoryDataStorageBase<TEntityClass, TEntityFieldEnum>
         where TEntityClass : new()
+        where TEntityFieldEnum : struct, IComparable, IConvertible, IFormattable
 
     {
         protected Dictionary<string, dynamic> DataList { get; set; } 
         protected Dictionary<string, dynamic> DataList2 { get; set; }
 
+        protected StoreDataReader DataReader { get; set; }
+        protected string StoreName { get; set; }
+        protected string FieldCodeName { get; set; }
+
 
         protected void Load(string storeName, string fieldCodeName)
         {
+             StoreName = storeName;
+             FieldCodeName = fieldCodeName;
             if (null != DataList2) return;
+            DataReader = new StoreDataReader();
             DataList = new Dictionary<string, dynamic>();
             DataList2 = new Dictionary<string, dynamic>();
 
-            
+           
 
-            Console.WriteLine($"{storeName}/{fieldCodeName}");
-         
-            
-            var reader = new StoreDataReader();
+            var reader = DataReader;
             var req = new DbRequest {StoreName = storeName};
             var result = reader.Execute(req);
             if (result.Count > 0)
@@ -101,6 +107,44 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
 
             var provinceRow = ((Dictionary<string, dynamic>) DataList[code]);
             return Tranform(provinceRow);
+        }
+
+        public TEntityClass FindByField(TEntityFieldEnum fieldEnum, string fieldValue)
+        {
+            if (typeof(TEntityFieldEnum).IsEnum)
+            {
+               
+                return FindByField(fieldEnum.ToString() ,fieldValue);
+            }
+            else
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+
+        
+
+        }
+        public TEntityClass FindByField(string fieldName, string fieldValue)
+        {
+
+            var reader = DataReader;
+            var req = new DbRequest { StoreName = StoreName };
+            req.AddParam(fieldName.ToString(), fieldValue);
+            var result = reader.Execute(req);
+            if (result.Count == 1)
+            {
+                var item = ((Dictionary<string, dynamic>)result.Data[0]);
+
+                return Tranform(item);
+
+            }
+            else
+            {
+                return default(TEntityClass);
+            }
+
+
+
         }
 
         // Load a CSV file into an array of rows and columns.

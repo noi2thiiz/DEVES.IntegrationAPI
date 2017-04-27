@@ -5,7 +5,7 @@ using System.Web;
 
 namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
 {
-    public class CountryMasterData : InMemoryDataStorageBase<CountryEntity>
+    public class CountryMasterData : InMemoryDataStorageBase<CountryEntity, CountryEntityFields>
     {
         private static CountryMasterData _instance;
         private CountryMasterData() { }
@@ -24,11 +24,21 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
 
     public class CountryEntity
     {
+       
         public Guid Id { get; set; }
         public string CountryCode { get; set; }
         public string CountryName { get; set; }
         public string PolisyCode { get; set; }
         public string SapCode { get; set; }
 
+    }
+
+    public enum CountryEntityFields
+    {
+        Id,
+        CountryCode,
+        CountryName,
+        PolisyCode,
+        SapCode
     }
 }

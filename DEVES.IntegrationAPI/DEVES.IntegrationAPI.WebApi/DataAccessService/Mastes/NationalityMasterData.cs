@@ -6,7 +6,7 @@ using System.Web;
 namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
 {
    
-    public class NationalityMasterData : InMemoryDataStorageBase<NationalityEntity>
+    public class NationalityMasterData : InMemoryDataStorageBase<NationalityEntity, NationalityEntityFields>
     {
         private static NationalityMasterData _instance;
 
@@ -33,5 +33,10 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
         public string Name { get; set; }
         public string Code { get; set; }
         public string Polisycode { get; set; }
+    }
+
+    public enum NationalityEntityFields
+    {
+        Id, Name, Code, Polisycode
     }
 }

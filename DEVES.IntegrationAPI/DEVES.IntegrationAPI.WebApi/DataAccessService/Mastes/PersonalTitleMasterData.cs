@@ -5,7 +5,7 @@ using System.Web;
 
 namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
 {
-    public class PersonalTitleMasterData : InMemoryDataStorageBase<PersonalTitleEntity>
+    public class PersonalTitleMasterData : InMemoryDataStorageBase<PersonalTitleEntity, PersonalTitleEntityFields>
     {
         private static PersonalTitleMasterData _instance;
 
@@ -31,5 +31,10 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
         public string Name { get; set; }
         public string Code { get; set; }
         public string Polisycode { get; set; }
+    }
+
+    public enum PersonalTitleEntityFields
+    {
+        Id,Name,ContractDetail,Polisycode
     }
 }

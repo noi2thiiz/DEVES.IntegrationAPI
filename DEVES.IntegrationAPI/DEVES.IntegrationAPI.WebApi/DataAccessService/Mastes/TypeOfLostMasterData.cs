@@ -5,7 +5,7 @@ using System.Web;
 
 namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
 {
-    public class TypeOfLossMasterData : InMemoryDataStorageBase<TypeOfLostEntity>
+    public class TypeOfLossMasterData : InMemoryDataStorageBase<TypeOfLostEntity, TypeOfLostEntityFields>
     {
         private static TypeOfLossMasterData _instance;
 
@@ -38,5 +38,10 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
         public string PostalCode { get; set; }
 
 
+    }
+
+    public enum TypeOfLostEntityFields
+    {
+        Id, SubDistrictName, SubDistrictCode, DistrictCode, ProvinceCode, PostalCode
     }
 }

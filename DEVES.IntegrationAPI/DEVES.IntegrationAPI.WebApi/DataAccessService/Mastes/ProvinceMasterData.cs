@@ -2,7 +2,7 @@
 
 namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
 {
-    public class ProvinceMasterData:InMemoryDataStorageBase<ProvinceEntity>
+    public class ProvinceMasterData:InMemoryDataStorageBase<ProvinceEntity, ProvinceEntityFields>
     {
 
         private static ProvinceMasterData _instance;
@@ -27,6 +27,11 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
         public string ProvinceNameEng { get; set; }
         public int SortIndex { get; set; }
 
+    }
+
+    public enum ProvinceEntityFields
+    {
+        Id, ProvinceCode, ProvinceName, ProvinceNameEng, SortIndex
     }
 
 }
