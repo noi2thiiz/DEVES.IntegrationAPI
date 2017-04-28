@@ -45,7 +45,7 @@ namespace DEVES.IntegrationAPI.Model.RegPayeePersonal
         }
     }
 
-    public class RegPayeePersonalOutputModel_Fail
+    public class RegPayeePersonalOutputModel_Fail : BaseContentJsonProxyOutputModel
     {
         public string code { get; set; }
         public string message { get; set; }

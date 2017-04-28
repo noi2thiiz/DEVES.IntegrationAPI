@@ -116,7 +116,8 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
 
             T1 ewiRes = response.Content.ReadAsAsync<T1>().Result;
             resBody = ewiRes.ToJson();
-            serviceName = ewiRes.ToString();
+            string[] splitServiceName = ewiRes.ToString().Split('.');
+            serviceName = splitServiceName[splitServiceName.Length-1];
 
             LogAsync(request, response);
 
@@ -168,7 +169,8 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             
             T1 ewiRes = response.Content.ReadAsAsync<T1>().Result;
             resBody = ewiRes.ToJson();
-            serviceName = ewiRes.ToString();
+            string[] splitServiceName = ewiRes.ToString().Split('.');
+            serviceName = splitServiceName[splitServiceName.Length - 1];
 
             LogAsync(request, response);
 

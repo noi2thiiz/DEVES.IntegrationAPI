@@ -45,7 +45,7 @@ namespace DEVES.IntegrationAPI.Model.RegClientCorporate
 
 
 
-    public class RegClientCorporateOutputModel_Fail 
+    public class RegClientCorporateOutputModel_Fail : BaseContentJsonProxyOutputModel
     {
         public string code { get; set; }
         public string message { get; set; }

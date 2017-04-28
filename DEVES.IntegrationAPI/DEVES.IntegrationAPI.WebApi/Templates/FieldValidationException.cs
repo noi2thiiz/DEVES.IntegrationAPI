@@ -10,6 +10,10 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
         public string fieldError = "";
         public string message = "";
 
+        public FieldValidationException()
+        {
+        }
+
         public FieldValidationException(string fieldError, string message)
         {
             this.fieldError = fieldError;

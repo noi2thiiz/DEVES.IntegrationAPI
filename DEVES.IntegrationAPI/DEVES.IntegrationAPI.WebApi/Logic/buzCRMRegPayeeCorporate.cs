@@ -10,12 +10,14 @@ using DEVES.IntegrationAPI.WebApi;
 using DEVES.IntegrationAPI.Model.RegPayeeCorporate;
 using DEVES.IntegrationAPI.Model.CLS;
 using DEVES.IntegrationAPI.Model.Polisy400;
-
+using DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
     public class buzCRMRegPayeeCorporate : BaseCommand
     {
+
+        RegPayeeCorporateOutputModel_Fail regFail = new RegPayeeCorporateOutputModel_Fail();
 
         public override BaseDataModel Execute(object input)
         {
@@ -30,6 +32,39 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             {
                 RegPayeeCorporateDataOutputModel_Pass outputPass = new RegPayeeCorporateDataOutputModel_Pass();
                 RegPayeeCorporateInputModel regPayeeCorporateInput = (RegPayeeCorporateInputModel)input;
+
+                // Validate Master Data before sending to other services
+
+                regFail.data = new RegPayeeCorporateDataOutputModel_Fail();
+                regFail.data.fieldErrors = new List<RegPayeeCorporateFieldErrors>();
+
+                var master_countryorigin = NationalityMasterData.Instance.FindByCode(regPayeeCorporateInput.profileHeader.countryOrigin);
+                if (master_countryorigin == null)
+                {
+                    regFail.data.fieldErrors.Add(new RegPayeeCorporateFieldErrors("profileHeader.countryOrigin", "NationalityMasterData is invalid"));
+                }
+                else
+                {
+                    regPayeeCorporateInput.profileHeader.countryOrigin = master_countryorigin.PolisyCode;
+                }
+
+                var master_country = CountryMasterData.Instance.FindByCode(regPayeeCorporateInput.addressHeader.country);
+                if (master_country == null)
+                {
+                    regFail.data.fieldErrors.Add(new RegPayeeCorporateFieldErrors("addressHeader.country", "CountryMasterData is invalid"));
+                }
+                else
+                {
+                    regPayeeCorporateInput.addressHeader.country = master_country.PolisyCode;
+                }
+
+
+                if (regFail.data.fieldErrors.Count > 0)
+                {
+                    throw new FieldValidationException();
+                }
+
+                ///////////////////////////////////////////////////////////////////////////////////////////////////
 
                 if (string.IsNullOrEmpty(regPayeeCorporateInput?.generalHeader?.polisyClientId))
                 {
@@ -129,6 +164,17 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     outputPass.sapVendorGroupCode = sapInfo?.VGROUP;
                 }
                 regPayeeCorporateOutput.data.Add(outputPass);
+            }
+            catch (FieldValidationException e)
+            {
+
+                regFail.code = CONST_CODE_FAILED;
+                regFail.message = e.Message;
+                regFail.description = e.StackTrace;
+                regFail.transactionId = TransactionId;
+                regFail.transactionDateTime = DateTime.Now.ToString();
+
+                return regFail;
             }
             catch (Exception e)
             {

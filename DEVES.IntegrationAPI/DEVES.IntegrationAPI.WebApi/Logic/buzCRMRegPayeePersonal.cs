@@ -10,11 +10,14 @@ using DEVES.IntegrationAPI.WebApi;
 using DEVES.IntegrationAPI.Model.RegPayeePersonal;
 using DEVES.IntegrationAPI.Model.CLS;
 using DEVES.IntegrationAPI.Model.Polisy400;
+using DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
     public class buzCRMRegPayeePersonal: BaseCommand
     {
+
+        RegPayeePersonalOutputModel_Fail regFail = new RegPayeePersonalOutputModel_Fail();
 
         public override BaseDataModel Execute(object input)
         {
@@ -28,6 +31,57 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             {
                 RegPayeePersonalDataOutputModel_Pass outputPass = new RegPayeePersonalDataOutputModel_Pass();
                 RegPayeePersonalInputModel regPayeePersonalInput = (RegPayeePersonalInputModel)input;
+
+                // Validate Master Data before sending to other services
+                regFail.data = new RegPayeePersonalDataOutputModel_Fail();
+                regFail.data.fieldErrors = new List<RegPayeePersonalFieldErrors>();
+
+                var master_salutation = PersonalTitleMasterData.Instance.FindByCode(regPayeePersonalInput.profileInfo.salutation);
+                if (master_salutation == null)
+                {
+                    regFail.data.fieldErrors.Add(new RegPayeePersonalFieldErrors("profileInfo.salutation", "PersonalTitleMasterData is invalid"));
+                }
+                else
+                {
+                    regPayeePersonalInput.profileInfo.salutation = master_salutation.PolisyCode;
+                }
+
+                var master_nationality = NationalityMasterData.Instance.FindByCode(regPayeePersonalInput.profileInfo.nationality);
+                if (master_nationality == null)
+                {
+                    regFail.data.fieldErrors.Add(new RegPayeePersonalFieldErrors("profileInfo.nationality", "NationalityMasterData is invalid"));
+                }
+                else
+                {
+                    regPayeePersonalInput.profileInfo.nationality = master_nationality.PolisyCode;
+                }
+
+                var master_occupation = OccupationMasterData.Instance.FindByCode(regPayeePersonalInput.profileInfo.occupation);
+                if (master_occupation == null)
+                {
+                    regFail.data.fieldErrors.Add(new RegPayeePersonalFieldErrors("profileInfo.occupation", "OccupationMasterData is invalid"));
+                }
+                else
+                {
+                    regPayeePersonalInput.profileInfo.occupation = master_occupation.PolisyCode;
+                }
+
+                var master_country = CountryMasterData.Instance.FindByCode(regPayeePersonalInput.addressInfo.country);
+                if (master_country == null)
+                {
+                    regFail.data.fieldErrors.Add(new RegPayeePersonalFieldErrors("addressInfo.country", "CountryMasterData is invalid"));
+                }
+                else
+                {
+                    regPayeePersonalInput.addressInfo.country = master_country.PolisyCode;
+                }
+
+                if (regFail.data.fieldErrors.Count > 0)
+                {
+                    throw new FieldValidationException();
+                }
+
+                ///////////////////////////////////////////////////////////////////////////////////////////////////
 
                 if (string.IsNullOrEmpty(regPayeePersonalInput?.generalHeader?.polisyClientId))
                 {
@@ -128,6 +182,17 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     outputPass.sapVendorGroupCode = sapInfo?.VGROUP;
                 }
                 regPayeePersonalOutput.data.Add(outputPass);
+            }
+            catch (FieldValidationException e)
+            {
+
+                regFail.code = CONST_CODE_FAILED;
+                regFail.message = e.Message;
+                regFail.description = e.StackTrace;
+                regFail.transactionId = TransactionId;
+                regFail.transactionDateTime = DateTime.Now.ToString();
+
+                return regFail;
             }
             catch (Exception e)
             {

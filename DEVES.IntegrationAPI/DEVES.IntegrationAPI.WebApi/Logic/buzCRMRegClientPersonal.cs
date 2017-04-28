@@ -16,6 +16,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 {
     public class buzCRMRegClientPersonal : BaseCommand
     {
+
+        RegClientPersonalOutputModel_Fail regFail = new RegClientPersonalOutputModel_Fail();
+
+
         public override BaseDataModel Execute(object input)
         {
             RegClientPersonalContentOutputModel regClientPersonOutput = new RegClientPersonalContentOutputModel();
@@ -29,10 +33,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 RegClientPersonalInputModel regClientPersonalInput = (RegClientPersonalInputModel)input;
 
                 // Validate Master Data before sending to other services
+
+                regFail.data = new RegClientPersonalDataOutputModel_Fail();
+                regFail.data.fieldErrors = new List<RegClientPersonalFieldErrors>();
+
                 var master_salutation = PersonalTitleMasterData.Instance.FindByCode(regClientPersonalInput.profileInfo.salutation);
                 if (master_salutation == null)
                 {
-                    throw new FieldValidationException("profileInfo.salutation", "PersonalTitleMasterData is invalid");
+                    regFail.data.fieldErrors.Add(new RegClientPersonalFieldErrors("profileInfo.salutation", "PersonalTitleMasterData is invalid"));
                 }
                 else
                 {
@@ -42,7 +50,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 var master_nationality = NationalityMasterData.Instance.FindByCode(regClientPersonalInput.profileInfo.nationality);
                 if(master_nationality == null)
                 {
-                    throw new FieldValidationException("profileInfo.nationality", "NationalityMasterData is invalid");
+                    regFail.data.fieldErrors.Add(new RegClientPersonalFieldErrors("profileInfo.nationality", "NationalityMasterData is invalid"));
                 }
                 else
                 {
@@ -52,7 +60,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 var master_occupation = OccupationMasterData.Instance.FindByCode(regClientPersonalInput.profileInfo.occupation);
                 if (master_occupation == null)
                 {
-                    throw new FieldValidationException("profileInfo.occupation", "OccupationMasterData is invalid");
+                    regFail.data.fieldErrors.Add(new RegClientPersonalFieldErrors("profileInfo.occupation", "OccupationMasterData is invalid"));
                 }
                 else
                 {
@@ -62,11 +70,16 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 var master_country = CountryMasterData.Instance.FindByCode(regClientPersonalInput.addressInfo.country);
                 if (master_country == null)
                 {
-                    throw new FieldValidationException("addressInfo.country", "CountryMasterData is invalid");
+                    regFail.data.fieldErrors.Add(new RegClientPersonalFieldErrors("addressInfo.country", "CountryMasterData is invalid"));
                 }
                 else
                 {
                     regClientPersonalInput.addressInfo.country = master_country.PolisyCode;
+                }
+
+                if(regFail.data.fieldErrors.Count > 0)
+                {
+                    throw new FieldValidationException();
                 }
 
                 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -143,15 +156,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             }
             catch (FieldValidationException e)
             {
-                RegClientPersonalOutputModel_Fail regFail = new RegClientPersonalOutputModel_Fail();
+                
                 regFail.code = CONST_CODE_FAILED;
                 regFail.message = e.Message;
                 regFail.description = e.StackTrace;
                 regFail.transactionId = TransactionId;
                 regFail.transactionDateTime = DateTime.Now.ToString();
-                regFail.data = new RegClientPersonalDataOutputModel_Fail();
-                regFail.data.fieldErrors = new List<RegClientPersonalFieldErrors>();
-                regFail.data.fieldErrors.Add(new RegClientPersonalFieldErrors(e.fieldError, e.message));
 
                 return regFail;
             }

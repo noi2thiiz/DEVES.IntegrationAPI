@@ -36,7 +36,7 @@ namespace DEVES.IntegrationAPI.Model.RegPayeeCorporate
         public string corporateBranch { get; set; }
     }
 
-    public class RegPayeeCorporateOutputModel_Fail
+    public class RegPayeeCorporateOutputModel_Fail : BaseContentJsonProxyOutputModel
     {
         public string code { get; set; }
         public string message { get; set; }
