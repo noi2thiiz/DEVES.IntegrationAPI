@@ -90,18 +90,15 @@
         },
         "numOfTowTruck": {
           "type": "integer",
-          "minimum": 0,
-          "maximum": 20
+          "minimum": 0
         },
         "numOfAccidentInjury": {
           "type": "integer",
-          "minimum": 0,
-          "maximum": 20
+          "minimum": 0
         },
         "numOfDeath": {
           "type": "integer",
-          "minimum": 0,
-          "maximum": 20
+          "minimum": 0
         },
         "deductibleFee": {
           "type": "integer"

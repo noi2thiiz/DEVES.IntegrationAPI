@@ -37,7 +37,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 regFail.data = new RegClientCorporateDataOutputModel_Fail();
                 regFail.data.fieldErrors = new List<RegClientCorporateFieldErrors>();
 
-                var master_countryorigin = NationalityMasterData.Instance.FindByCode(regClientCorporateInput.profileHeader.countryOrigin);
+                var master_countryorigin = NationalityMasterData.Instance.FindByCode(regClientCorporateInput.profileHeader.countryOrigin, "00203");
                 if (master_countryorigin == null)
                 {
                     regFail.data.fieldErrors.Add(new RegClientCorporateFieldErrors("profileHeader.countryOrigin", "NationalityMasterData is invalid"));
@@ -47,7 +47,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     regClientCorporateInput.profileHeader.countryOrigin = master_countryorigin.PolisyCode;
                 }
 
-                var master_country = CountryMasterData.Instance.FindByCode(regClientCorporateInput.addressHeader.country);
+                var master_country = CountryMasterData.Instance.FindByCode(regClientCorporateInput.addressHeader.country, "00220");
                 if (master_country == null)
                 {
                     regFail.data.fieldErrors.Add(new RegClientCorporateFieldErrors("addressHeader.country", "CountryMasterData is invalid"));

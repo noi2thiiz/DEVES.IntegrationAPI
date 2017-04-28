@@ -46,7 +46,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     regPayeePersonalInput.profileInfo.salutation = master_salutation.PolisyCode;
                 }
 
-                var master_nationality = NationalityMasterData.Instance.FindByCode(regPayeePersonalInput.profileInfo.nationality);
+                var master_nationality = NationalityMasterData.Instance.FindByCode(regPayeePersonalInput.profileInfo.nationality, "00203");
                 if (master_nationality == null)
                 {
                     regFail.data.fieldErrors.Add(new RegPayeePersonalFieldErrors("profileInfo.nationality", "NationalityMasterData is invalid"));
@@ -56,7 +56,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     regPayeePersonalInput.profileInfo.nationality = master_nationality.PolisyCode;
                 }
 
-                var master_occupation = OccupationMasterData.Instance.FindByCode(regPayeePersonalInput.profileInfo.occupation);
+                var master_occupation = OccupationMasterData.Instance.FindByCode(regPayeePersonalInput.profileInfo.occupation, "00023");
                 if (master_occupation == null)
                 {
                     regFail.data.fieldErrors.Add(new RegPayeePersonalFieldErrors("profileInfo.occupation", "OccupationMasterData is invalid"));
@@ -66,7 +66,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     regPayeePersonalInput.profileInfo.occupation = master_occupation.PolisyCode;
                 }
 
-                var master_country = CountryMasterData.Instance.FindByCode(regPayeePersonalInput.addressInfo.country);
+                var master_country = CountryMasterData.Instance.FindByCode(regPayeePersonalInput.addressInfo.country, "00220");
                 if (master_country == null)
                 {
                     regFail.data.fieldErrors.Add(new RegPayeePersonalFieldErrors("addressInfo.country", "CountryMasterData is invalid"));

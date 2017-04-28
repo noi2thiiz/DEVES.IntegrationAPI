@@ -4,8 +4,9 @@ using System.Linq;
 using System.Web;
 using DEVES.IntegrationAPI.Model;
 using DEVES.IntegrationAPI.Model.InquiryClientMaster;
-using CLS=DEVES.IntegrationAPI.Model.CLS;
+using CLS = DEVES.IntegrationAPI.Model.CLS;
 using DEVES.IntegrationAPI.WebApi.Templates;
+using DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
@@ -39,10 +40,19 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     trgt.profileInfo.name1 = src.lgivname;
                     trgt.profileInfo.name2 = src.lsurname;
                     trgt.profileInfo.fullName = src.cls_full_name;
-                    trgt.profileInfo.salutationText = src.salutl;
-                    trgt.profileInfo.sex = src.cls_sex;
+
+                    var master_salutation = PersonalTitleMasterData.Instance.FindByPolisyCode(isNull(src.salutl));
+                    trgt.profileInfo.salutationText = master_salutation.Name;
+
+                    if (!src.cls_sex.Equals("M") || !src.cls_sex.Equals("F"))
+                    {
+                        trgt.profileInfo.sex = "U";
+                    }
+                    //trgt.profileInfo.sex = src.cls_sex;
                     trgt.profileInfo.idCard = src.cls_citizen_id_new;
-                    trgt.profileInfo.occupationText = src.cls_occpcode;
+
+                    var master_occupation = OccupationMasterData.Instance.FindByCode(isNull(src.cls_occpcode), "00023");
+                    trgt.profileInfo.occupationText = master_occupation.Name;
 
                     trgt.contactInfo.telephone1 = src.cltphone01;
                     trgt.contactInfo.telephone2 = src.cltphone02;
@@ -60,8 +70,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                                                                     , addrInfo.district_display
                                                                     , addrInfo.province_display
                                                                     , addrInfo.postal_code);
+                        
                         trgt.addressInfo.countryText = addrInfo.cls_ctrycode_text;
-                        trgt.addressInfo.addressTypeText = addrInfo.address_type_code;
+
+                        var master_addressType = AddressTypeMasterData.Instance.FindByCode(isNull(addrInfo.address_type_code), "01");
+                        trgt.addressInfo.addressTypeText = master_addressType.Name;
                         trgt.addressInfo.latitude = addrInfo.lattitude;
                         trgt.addressInfo.longtitude = addrInfo.longtitude;
                     }
@@ -75,5 +88,16 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             return trgtContent;
         }
+
+        public string isNull(string a)
+        {
+            if( a == null)
+            {
+                return "";
+            }
+            return a;
+        }
     }
+
+    
 }
