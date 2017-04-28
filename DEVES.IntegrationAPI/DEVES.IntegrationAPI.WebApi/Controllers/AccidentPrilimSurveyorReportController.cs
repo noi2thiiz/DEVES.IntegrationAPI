@@ -262,7 +262,19 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 // Incident
                 try
                 {
-                    
+                    if(content.eventDetailInfo.numOfTowTruck > 20)
+                    {
+                        content.eventDetailInfo.numOfTowTruck = 20;
+                    }
+                    if (content.eventDetailInfo.numOfAccidentInjury > 20)
+                    {
+                        content.eventDetailInfo.numOfAccidentInjury = 20;
+                    }
+                    if (content.eventDetailInfo.numOfDeath > 20)
+                    {
+                        content.eventDetailInfo.numOfDeath = 20;
+                    }
+
                     retrievedIncident.pfc_accident_legal_result = new OptionSetValue(Int32.Parse(convertOptionSet(Incident.EntityLogicalName, "", content.eventDetailInfo.accidentLegalResult)));
                     retrievedIncident.pfc_police_station = content.eventDetailInfo.policeStation;
                     retrievedIncident.pfc_police_record_id = content.eventDetailInfo.policeRecordId;

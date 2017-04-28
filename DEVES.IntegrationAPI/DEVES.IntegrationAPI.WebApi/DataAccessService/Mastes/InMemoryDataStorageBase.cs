@@ -98,15 +98,38 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
 
         public TEntityClass FindByCode(string code)
         {
-           
+
             if (!DataList.ContainsKey(code))
             {
-                Console.WriteLine(" not Contains Key "+ code);
+                Console.WriteLine(" not Contains Key " + code);
                 return default(TEntityClass);
             }
 
-            var provinceRow = ((Dictionary<string, dynamic>) DataList[code]);
+            var provinceRow = ((Dictionary<string, dynamic>)DataList[code]);
             return Tranform(provinceRow);
+        }
+
+        public TEntityClass FindByCode(string code, string defaulCode)
+        {
+            if(code == null || code.Equals(""))
+            {
+                code = defaulCode;
+            }
+            return FindByCode(code);
+        }
+
+        public TEntityClass FindByPolisyCode(string code)
+        {
+            return FindByField("PolisyCode", code);
+        }
+
+        public TEntityClass FindByPolisyCode(string code, string defaulCode)
+        {
+            if (code == null || code.Equals(""))
+            {
+                code = defaulCode;
+            }
+            return FindByPolisyCode(code);
         }
 
         public TEntityClass FindByField(TEntityFieldEnum fieldEnum, string fieldValue)
