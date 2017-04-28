@@ -10,8 +10,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
     public class TransformSAPInquiryVendorOutputModel_to_InquiryCRMPayeeListDataOutputModel : BaseTransformer
     {
         private Dictionary<string, SAPInquiryVendorContentVendorInfoModel> _tmpSAPInquiryVendorContentModel;
+        private Dictionary<string, InquiryCrmPayeeListDataModel> _tmpOutPutModel;
        
-        public BaseDataModel TransformModel2(BaseDataModel input, BaseDataModel output)
+        public override BaseDataModel TransformModel(BaseDataModel input, BaseDataModel output)
         {
             Console.WriteLine(" process : TransformSAPInquiryVendorOutputModel_to_InquiryCRMPayeeListDataOutputModel");
             EWIResSAPInquiryVendorContentModel srcContent = (EWIResSAPInquiryVendorContentModel) input;
@@ -27,13 +28,17 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             outputContent.data = new List<InquiryCrmPayeeListDataModel>();
 
             _tmpSAPInquiryVendorContentModel = new Dictionary<string, SAPInquiryVendorContentVendorInfoModel>();
+            _tmpOutPutModel = new Dictionary<string, InquiryCrmPayeeListDataModel>();
+
             
             foreach (var vendorInfo in srcContent.VendorInfo)
             {
                 if (vendorInfo.PREVACC != null)
                 {
+                    Console.WriteLine("vendorInfo.PREVACC>>>>>>>>>>>>>>>>>>>>>>>>"+vendorInfo.PREVACC);
                     _tmpSAPInquiryVendorContentModel.Add(vendorInfo.PREVACC, vendorInfo);
                 }
+
             }
             if (trgtContent == null)
             {
@@ -46,20 +51,36 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             foreach (var dataItrm in trgtContent.data)
             {
-                if (dataItrm.polisyClientId != null &&
-                    _tmpSAPInquiryVendorContentModel.ContainsKey(dataItrm.polisyClientId))
+                Console.WriteLine("polisyClientId>>>>>>>>>>>>>>>>>>>>>>>>"+dataItrm.polisyClientId);
+                if (string.IsNullOrEmpty(dataItrm.polisyClientId))
                 {
-                    var _srcContentData = _tmpSAPInquiryVendorContentModel[dataItrm.polisyClientId];
+                    if ( _tmpSAPInquiryVendorContentModel.ContainsKey(dataItrm.polisyClientId))
+                    {
+                        if (!_tmpOutPutModel.ContainsKey(dataItrm.polisyClientId))
+                        {
+                            var _srcContentData = _tmpSAPInquiryVendorContentModel[dataItrm.polisyClientId];
+                            var outputDataModel = TransformDataModel(_srcContentData, dataItrm);
+                            outputContent.data.Add(outputDataModel);
 
 
-                    outputContent.data.Add(TransformDataModel(_srcContentData, dataItrm));
+                        }
+
+                    }
+                    else
+                    {
+                        outputContent.data.Add(dataItrm);
+
+
+                    }
+                    _tmpOutPutModel.Add(dataItrm.polisyClientId,dataItrm);
                     _tmpSAPInquiryVendorContentModel.Remove(dataItrm.polisyClientId);
                 }
-                else
-                {
-                    outputContent.data.Add(dataItrm);
-                }
-               
+               // else
+                //{
+                   // outputContent.data.Add(dataItrm);
+                    //_tmpOutPutModel.Add(dataItrm.polisyClientId,dataItrm);
+                //}
+
             }
             foreach (var vendorItrm in _tmpSAPInquiryVendorContentModel)
             {
@@ -155,10 +176,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         {
             return output;
         }
+      /*
 
-        public override BaseDataModel TransformModel(BaseDataModel input, BaseDataModel output)
+        public override BaseDataModel TransformModel3(BaseDataModel input, BaseDataModel output)
         {
-            Console.WriteLine(" process : TransformSAPInquiryVendorOutputModel_to_InquiryCRMPayeeListDataOutputModel");
+            Console.WriteLine(" process :x TransformSAPInquiryVendorOutputModel_to_InquiryCRMPayeeListDataOutputModel");
             EWIResSAPInquiryVendorContentModel srcContent = (EWIResSAPInquiryVendorContentModel)input;
             CRMInquiryPayeeContentOutputModel outputContent;
             if (output != null)
@@ -179,5 +201,6 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             }
             return outputContent;
         }
+*/
     }
 }
