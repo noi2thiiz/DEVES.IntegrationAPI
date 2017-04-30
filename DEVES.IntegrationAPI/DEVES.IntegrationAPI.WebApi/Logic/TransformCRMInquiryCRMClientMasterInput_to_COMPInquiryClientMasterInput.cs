@@ -24,6 +24,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             trgt.branchCode = src.conditionDetail.corporateBranch;
             trgt.backDay = "7";
 
+            if (string.IsNullOrEmpty(trgt.fullName))
+            {
+                trgt.fullName = src.conditionDetail.clientName1 + " " + src.conditionDetail.clientName2;
+            }
+
             return trgt;
         }
     }

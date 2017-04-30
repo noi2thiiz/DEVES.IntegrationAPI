@@ -114,8 +114,8 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             HttpResponseMessage response = client.SendAsync(request).Result;
             response.EnsureSuccessStatusCode();
 
-            Console.WriteLine("==========jsonReqModel========");
-            Console.WriteLine(jsonReqModel.ToJson());
+           // Console.WriteLine("==========jsonReqModel========");
+            //Console.WriteLine(jsonReqModel.ToJson());
 
             T1 ewiRes = response.Content.ReadAsAsync<T1>().Result;
             resBody = ewiRes.ToJson();
@@ -125,8 +125,8 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             LogAsync(request, response);
 
 
-            Console.WriteLine("==========response========");
-            Console.WriteLine(ewiRes.ToJson());
+           // Console.WriteLine("==========response========");
+           // Console.WriteLine(ewiRes.ToJson());
 
             BaseContentJsonProxyOutputModel output =  (BaseContentJsonProxyOutputModel)typeof(T1).GetProperty("content").GetValue(ewiRes);
             return output;
@@ -159,12 +159,12 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             string EWIendpoint = GetEWIEndpoint(EWIendpointKey);
             reqTime = DateTime.Now;
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, EWIendpoint);
-            Console.WriteLine("==========jsonReqModel========");
-            Console.WriteLine(jsonReqModel.ToJson());
+           // Console.WriteLine("==========jsonReqModel========");
+            //Console.WriteLine(jsonReqModel.ToJson());
 
             request.Content = new StringContent(jsonReqModel, System.Text.Encoding.UTF8, "application/json");
-            Console.WriteLine("==========request========");
-            Console.WriteLine(request.ToJson());
+            //Console.WriteLine("==========request========");
+            //Console.WriteLine(request.ToJson());
             // เช็ค check reponse 
             HttpResponseMessage response = client.SendAsync(request).Result;
             resTime = DateTime.Now;
@@ -177,8 +177,8 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
 
             LogAsync(request, response);
 
-            Console.WriteLine("==========response========");
-            Console.WriteLine(ewiRes.ToJson());
+            //Console.WriteLine("==========response========");
+           // Console.WriteLine(ewiRes.ToJson());
             if (ewiRes.success)
             {
 
@@ -443,9 +443,9 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
 
         internal string GetAppConfigurationSetting(string key)
         {
-            Console.WriteLine("==================key=================");
-            Console.WriteLine(key);
-            Console.WriteLine("==================End Key=================");
+           // Console.WriteLine("==================key=================");
+           // Console.WriteLine(key);
+           // Console.WriteLine("==================End Key=================");
             return System.Configuration.ConfigurationManager.AppSettings[key].ToString();
         }
 

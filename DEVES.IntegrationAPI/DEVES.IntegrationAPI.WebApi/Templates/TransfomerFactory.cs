@@ -245,8 +245,8 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             {
                 t = new transformCOMPInquiryClientMasterContentClientListModel_to_InquiryCRMPayeeListInputModel();
             }
-            
-
+            //debug
+            Console.WriteLine("transform =  "+ t.GetType() );
             return t;
         }
     }

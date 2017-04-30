@@ -14,6 +14,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
         public override BaseDataModel TransformModel(BaseDataModel input, BaseDataModel output)
         {
+
             InquiryClientMasterInputModel src = (InquiryClientMasterInputModel)input;
             CLSInquiryPersonalClientInputModel trgt = (CLSInquiryPersonalClientInputModel)output;
 
@@ -24,6 +25,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             trgt.telephone = "";
             trgt.emailAddress = "";
             trgt.backDay = "7";
+
+            if (string.IsNullOrEmpty(trgt.personalFullName))
+            {
+                trgt.personalFullName = src.conditionDetail.clientName1 + " " + src.conditionDetail.clientName2;
+            }
 
             return trgt;
         }
