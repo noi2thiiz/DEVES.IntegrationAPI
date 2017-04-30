@@ -5,10 +5,10 @@ namespace DEVES.IntegrationAPI.Model.RegClientPersonal
 {
     public class RegClientPersonalInputModel : BaseDataModel
     {
-        public GeneralHeaderModel generalHeader { get; set; }
-        public ProfileInfoModel profileInfo { get; set; }
-        public ContactInfoModel contactInfo { get; set; }
-        public AddressInfoModel addressInfo { get; set; }
+        public GeneralHeaderModel generalHeader { get; set; } = new GeneralHeaderModel();
+        public ProfileInfoModel profileInfo { get; set; } = new ProfileInfoModel();
+        public ContactInfoModel contactInfo { get; set; } = new ContactInfoModel();
+        public AddressInfoModel addressInfo { get; set; } = new AddressInfoModel();
     }
 
     public class GeneralHeaderModel : BaseDataModel
