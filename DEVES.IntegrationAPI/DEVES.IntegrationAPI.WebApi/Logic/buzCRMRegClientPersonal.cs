@@ -143,6 +143,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                             dataOutPass.crmClientId = crmContentOutput.crmClientId;
                             dataOutPass.personalName = regClientPersonalInput.profileInfo.personalName;
                             dataOutPass.personalSurname = regClientPersonalInput.profileInfo.personalSurname;
+                            //Object reference not set to an instance of an object
+                            regClientPersonOutput.data = new List<RegClientPersonalDataOutputModel>();
                             regClientPersonOutput.data.Add(dataOutPass);
                         }
                         else
@@ -158,7 +160,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             {
                 
                 regFail.code = CONST_CODE_FAILED;
-                regFail.message = e.Message;
+                regFail.message = e.message;
                 regFail.description = e.StackTrace;
                 regFail.transactionId = TransactionId;
                 regFail.transactionDateTime = DateTime.Now.ToString();
@@ -172,6 +174,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 regClientPersonOutput.description = e.StackTrace;
 
                 RegClientPersonalDataOutputModel_Fail dataOutFail = new RegClientPersonalDataOutputModel_Fail();
+                //fix Object reference not set to an instance of an object.
+                regClientPersonOutput.data = new List<RegClientPersonalDataOutputModel>();
                 regClientPersonOutput.data.Add(dataOutFail);
             }
 
