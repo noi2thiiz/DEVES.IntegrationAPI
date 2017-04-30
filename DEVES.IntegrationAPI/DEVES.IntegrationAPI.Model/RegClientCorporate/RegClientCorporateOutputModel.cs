@@ -65,7 +65,7 @@ namespace DEVES.IntegrationAPI.Model.RegClientCorporate
         public string name { get; set; }
         public string message { get; set; }
 
-        public RegClientCorporateFieldErrors(string m, string n)
+        public RegClientCorporateFieldErrors(string n, string m)
         {
             name = n;
             message = m;

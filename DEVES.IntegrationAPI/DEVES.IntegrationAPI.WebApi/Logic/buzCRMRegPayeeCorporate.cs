@@ -17,7 +17,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
     public class buzCRMRegPayeeCorporate : BaseCommand
     {
 
-        RegPayeeCorporateOutputModel_Fail regFail = new RegPayeeCorporateOutputModel_Fail();
+        public RegPayeeCorporateOutputModel_Fail regFail { get; set; } = new RegPayeeCorporateOutputModel_Fail();
+
 
         public override BaseDataModel Execute(object input)
         {
@@ -38,13 +39,18 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 regFail.data = new RegPayeeCorporateDataOutputModel_Fail();
                 regFail.data.fieldErrors = new List<RegPayeeCorporateFieldErrors>();
 
-                var master_countryorigin = NationalityMasterData.Instance.FindByCode(regPayeeCorporateInput.profileHeader.countryOrigin, "00203");
+                var countryOrigin = regPayeeCorporateInput.profileHeader.countryOrigin;
+
+                var master_countryorigin = NationalityMasterData.Instance.FindByCode(countryOrigin, "00203");
+
                 if (master_countryorigin == null)
                 {
+                    Console.WriteLine("NationalityMasterData is invalid");
                     regFail.data.fieldErrors.Add(new RegPayeeCorporateFieldErrors("profileHeader.countryOrigin", "NationalityMasterData is invalid"));
                 }
                 else
                 {
+                    Console.WriteLine("NationalityMasterData  invalid");
                     regPayeeCorporateInput.profileHeader.countryOrigin = master_countryorigin.PolisyCode;
                 }
 
@@ -265,6 +271,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 regPayeeCorporateOutput.description = e.StackTrace;
 
                 RegPayeeCorporateDataOutputModel_Fail dataOutFail = new RegPayeeCorporateDataOutputModel_Fail();
+                // Object reference not set to an instance of an object.
+                regPayeeCorporateOutput.data = new List<RegPayeeCorporateDataOutputModel>();
                 regPayeeCorporateOutput.data.Add(dataOutFail);
             }
             regPayeeCorporateOutput.transactionDateTime = DateTime.Now;

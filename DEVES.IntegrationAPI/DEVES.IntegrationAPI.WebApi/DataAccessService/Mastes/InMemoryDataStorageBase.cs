@@ -101,7 +101,7 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
 
             if (!DataList.ContainsKey(code))
             {
-                Console.WriteLine(" not Contains Key " + code);
+              //  Console.WriteLine(" not Contains Key " + code);
                 return default(TEntityClass);
             }
 
@@ -111,7 +111,7 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
 
         public TEntityClass FindByCode(string code, string defaulCode)
         {
-            if(code == null || code.Equals(""))
+            if(string.IsNullOrEmpty(code))
             {
                 code = defaulCode;
             }

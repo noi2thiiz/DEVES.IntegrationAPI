@@ -31,6 +31,9 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
         internal const string CONST_CODE_SUCCESS = "200";
         internal const string CONST_CODE_FAILED = "500";
         internal const string CONST_DEFAULT_UID = "uid";
+        internal const string CONST_CODE_INVALID_INPUT = "400";
+        internal const string CONST_MESSAGE_INVALID_INPUT = "Invalid input(s)";
+
 
         public string TransactionId { get; set; } = "";
 

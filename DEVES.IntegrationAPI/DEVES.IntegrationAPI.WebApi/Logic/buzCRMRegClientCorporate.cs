@@ -17,7 +17,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
     public class buzCRMRegClientCorporate : BaseCommand
     {
 
-        RegClientCorporateOutputModel_Fail regFail = new RegClientCorporateOutputModel_Fail();
+        public RegClientCorporateOutputModel_Fail regFail { get; set; } = new RegClientCorporateOutputModel_Fail();
 
         public override BaseDataModel Execute(object input)
         {
@@ -33,33 +33,36 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 RegClientCorporateInputModel regClientCorporateInput = (RegClientCorporateInputModel)input;
 
                 // Validate Master Data before sending to other services
-
+                regFail  = new RegClientCorporateOutputModel_Fail();
                 regFail.data = new RegClientCorporateDataOutputModel_Fail();
                 regFail.data.fieldErrors = new List<RegClientCorporateFieldErrors>();
 
-                var master_countryorigin = NationalityMasterData.Instance.FindByCode(regClientCorporateInput.profileHeader.countryOrigin, "00203");
+
+
+               Console.WriteLine(regClientCorporateInput.profileHeader.countryOrigin);
+                NationalityEntity master_countryorigin = NationalityMasterData.Instance.FindByCode(regClientCorporateInput.profileHeader.countryOrigin, "00203");
+                Console.WriteLine(master_countryorigin.ToJson());
                 if (master_countryorigin == null)
                 {
-                    regFail.data.fieldErrors.Add(new RegClientCorporateFieldErrors("profileHeader.countryOrigin", "NationalityMasterData is invalid"));
+
+                      regFail.data.fieldErrors.Add( new RegClientCorporateFieldErrors("profileHeader.countryOrigin",
+                          "NationalityMasterData is invalid"));
+
                 }
                 else
                 {
+                    //Console.WriteLine("set countryOrigin ");
                     regClientCorporateInput.profileHeader.countryOrigin = master_countryorigin.PolisyCode;
                 }
 
-                var master_country = CountryMasterData.Instance.FindByCode(regClientCorporateInput.addressHeader.country, "00220");
-                if (master_country == null)
-                {
-                    regFail.data.fieldErrors.Add(new RegClientCorporateFieldErrors("addressHeader.country", "CountryMasterData is invalid"));
-                }
-                else
-                {
-                    regClientCorporateInput.addressHeader.country = master_country.PolisyCode;
-                }
+
+
+
 
 
                 if (regFail.data.fieldErrors.Count > 0)
                 {
+                    Console.WriteLine("regFail.data.fieldErrors.Count > 0");
                     throw new FieldValidationException();
                 }
 
@@ -174,9 +177,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             }
             catch (FieldValidationException e)
             {
-
-                regFail.code = CONST_CODE_FAILED;
-                regFail.message = e.Message;
+                Console.WriteLine("FieldValidationException");
+                regFail.code = CONST_CODE_INVALID_INPUT;
+                regFail.message = CONST_MESSAGE_INVALID_INPUT;
                 regFail.description = e.StackTrace;
                 regFail.transactionId = TransactionId;
                 regFail.transactionDateTime = DateTime.Now.ToString();
@@ -185,11 +188,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             }
             catch (Exception e)
             {
+                Console.WriteLine("Exception");
                 regClientCorporateOutput.code = CONST_CODE_FAILED;
                 regClientCorporateOutput.message = e.Message;
                 regClientCorporateOutput.description = e.StackTrace;
 
                 RegClientCorporateDataOutputModel_Fail dataOutFail = new RegClientCorporateDataOutputModel_Fail();
+                regClientCorporateOutput.data = new List<RegClientCorporateDataOutputModel>();
                 regClientCorporateOutput.data.Add(dataOutFail);
             }
             return regClientCorporateOutput;
