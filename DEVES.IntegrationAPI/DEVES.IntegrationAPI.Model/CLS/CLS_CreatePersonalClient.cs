@@ -122,6 +122,7 @@ namespace DEVES.IntegrationAPI.Model.CLS
         [JsonProperty(Order = 17)]
         public CLSCreatePersonalClientDataOutputModel data { set; get; }
     }
+
     public class CLSCreatePersonalClientDataOutputModel : BaseDataModel
     {
         //"cleansingId": "C2017-003324212",

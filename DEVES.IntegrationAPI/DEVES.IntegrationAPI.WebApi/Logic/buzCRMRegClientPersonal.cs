@@ -14,23 +14,40 @@ using DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
+
     public class buzCRMRegClientPersonal : BaseCommand
     {
 
         RegClientPersonalOutputModel_Fail regFail = new RegClientPersonalOutputModel_Fail();
-
+        protected CLSCreatePersonalClientContentOutputModel clsCreateClientContent { get; set; }
+        protected   RegClientPersonalContentOutputModel regClientPersonOutput  { get; set; }
+        protected  RegClientPersonalDataOutputModel_Pass regClientPersonDataOutput  { get; set; }
 
         public override BaseDataModel Execute(object input)
         {
-            RegClientPersonalContentOutputModel regClientPersonOutput = new RegClientPersonalContentOutputModel();
+            regClientPersonOutput = new RegClientPersonalContentOutputModel
+            {
+                transactionDateTime = DateTime.Now,
+                transactionId = TransactionId,
+                code = CONST_CODE_SUCCESS
+            };
+
+
             // regClientPersonOutput.data = new List<RegClientPersonalDataOutputModel>();
-            regClientPersonOutput.transactionDateTime = DateTime.Now;
-            regClientPersonOutput.transactionId = TransactionId;
-            regClientPersonOutput.code = CONST_CODE_SUCCESS;
+
+
             try
             {
 
                 RegClientPersonalInputModel regClientPersonalInput = (RegClientPersonalInputModel)input;
+                regClientPersonDataOutput = new RegClientPersonalDataOutputModel_Pass
+                {
+                    cleansingId = regClientPersonalInput.generalHeader.cleansingId,
+                    polisyClientId = regClientPersonalInput.generalHeader.polisyClientId,
+                    crmClientId = regClientPersonalInput.generalHeader.crmClientId,
+                    personalName = regClientPersonalInput.profileInfo.personalName,
+                    personalSurname = regClientPersonalInput.profileInfo.personalSurname
+                };
 
                 // Validate Master Data before sending to other services
 
@@ -85,25 +102,67 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 ///////////////////////////////////////////////////////////////////////////////////////////////////
                 if (string.IsNullOrEmpty(regClientPersonalInput.generalHeader.cleansingId))
                 {
-                    BaseDataModel clsCreatePersonIn = DataModelFactory.GetModel(typeof(CLSCreatePersonalClientInputModel));
+                    BaseDataModel clsCreatePersonIn =
+                        DataModelFactory.GetModel(typeof(CLSCreatePersonalClientInputModel));
                     clsCreatePersonIn = TransformerFactory.TransformModel(regClientPersonalInput, clsCreatePersonIn);
-                    CLSCreatePersonalClientContentOutputModel clsCreateClientContent = CallDevesServiceProxy<CLSCreatePersonalClientOutputModel, CLSCreatePersonalClientContentOutputModel>
-                                                                                        (CommonConstant.ewiEndpointKeyCLSCreatePersonalClient, clsCreatePersonIn);
+                     clsCreateClientContent =
+                        CallDevesServiceProxy<CLSCreatePersonalClientOutputModel,
+                                CLSCreatePersonalClientContentOutputModel>
+                            (CommonConstant.ewiEndpointKeyCLSCreatePersonalClient, clsCreatePersonIn);
                     if (clsCreateClientContent.code == CONST_CODE_SUCCESS)
                     {
-                        regClientPersonalInput = (RegClientPersonalInputModel)TransformerFactory.TransformModel(clsCreateClientContent, regClientPersonalInput);
+                        Console.WriteLine("102  : CLS-"+CONST_CODE_SUCCESS);
+                        if (clsCreateClientContent.data != null)
+                        {
+                            regClientPersonDataOutput.cleansingId = clsCreateClientContent.data.cleansingId;
+
+                            regClientPersonOutput.data = new List<RegClientPersonalDataOutputModel>();
+                            regClientPersonOutput.data.Add(regClientPersonDataOutput);
+
+                        }
+                        regClientPersonalInput =
+                            (RegClientPersonalInputModel) TransformerFactory.TransformModel(clsCreateClientContent,
+                                regClientPersonalInput);
                     }
-                    else
+                    else if (clsCreateClientContent.code == "CLS-1109")
                     {
+                        Console.WriteLine("108 : CLS-1109");
+
                         regClientPersonOutput.code = clsCreateClientContent.code;
                         regClientPersonOutput.message = clsCreateClientContent.message;
                         regClientPersonOutput.description = clsCreateClientContent.description;
+
+                        if (clsCreateClientContent.data != null)
+                        {
+                            regClientPersonDataOutput.cleansingId = clsCreateClientContent.data.cleansingId;
+
+                        }
+
+                    }
+                    else
+                    {
+                        Console.WriteLine("134 : CLS-"+clsCreateClientContent.code);
+                        regClientPersonOutput.code = clsCreateClientContent.code;
+                        regClientPersonOutput.message = clsCreateClientContent.message;
+                        regClientPersonOutput.description = clsCreateClientContent.description;
+
+
+
                         //return regClientPersonOutput;o
                     }
                 }
+                else
+                {
+                    //AdHoc  ถ้าระบุ  cleansingId ให้ถิแว่า success ไปก่น
+                    Console.WriteLine("regClientPersonOutput Is Existing ");
+                    regClientPersonOutput.code = CONST_CODE_SUCCESS;
+                }
+
 
                 if (regClientPersonOutput.code == CONST_CODE_SUCCESS)
                 {
+
+                    Console.WriteLine("Create:CLIENTCreatePersonalClientAndAdditionalInfo");
 
                     CLIENTCreatePersonalClientAndAdditionalInfoContentModel polCreateClientContent = new CLIENTCreatePersonalClientAndAdditionalInfoContentModel();
                     if (string.IsNullOrEmpty(regClientPersonalInput.generalHeader.polisyClientId))
@@ -119,9 +178,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                             regClientPersonOutput.code = CONST_CODE_FAILED;
                             regClientPersonOutput.message = "Cannot create Client in Polisy400.";
                             regClientPersonOutput.description = "";
+
+                            // แก้ตาม ที่ อาจารย์พรชัย บอก เพื่อให้เขาเอา เลข cleansingIdไปซ่อมข้อมูลได้
                         }
                         else
                         {
+                            regClientPersonDataOutput.polisyClientId = polCreateClientContent.clientID;
+
                             regClientPersonalInput = (RegClientPersonalInputModel)TransformerFactory.TransformModel(polCreateClientContent, regClientPersonalInput);
                         }
                     }
@@ -130,13 +193,16 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     if (regClientPersonOutput.code == CONST_CODE_SUCCESS)
                     {
                         buzCreateCrmClientPersonal cmdCreateCrmClient = new buzCreateCrmClientPersonal();
-                        CreateCrmPersonInfoOutputModel crmContentOutput = (CreateCrmPersonInfoOutputModel)cmdCreateCrmClient.Execute(regClientPersonalInput);
+                        CreateCrmPersonInfoOutputModel crmContentOutput =
+                            (CreateCrmPersonInfoOutputModel) cmdCreateCrmClient.Execute(regClientPersonalInput);
 
                         if (crmContentOutput.code == CONST_CODE_SUCCESS)
                         {
                             regClientPersonOutput.code = CONST_CODE_SUCCESS;
-                            regClientPersonOutput.message = "SUCCESS";
-                            RegClientPersonalDataOutputModel_Pass dataOutPass = new RegClientPersonalDataOutputModel_Pass();
+                            regClientPersonOutput.message = "Success";
+                            regClientPersonOutput.description = "Client registration complete";
+                            RegClientPersonalDataOutputModel_Pass dataOutPass =
+                                new RegClientPersonalDataOutputModel_Pass();
                             dataOutPass.cleansingId = regClientPersonalInput.generalHeader.cleansingId;
                             //dataOutPass.polisyClientId = regClientPersonalInput.generalHeader.polisyClientId;
                             dataOutPass.polisyClientId = polCreateClientContent.clientID;
@@ -150,10 +216,28 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         else
                         {
                             regClientPersonOutput.code = CONST_CODE_FAILED;
-                            regClientPersonOutput.message = crmContentOutput.message;
+                            regClientPersonOutput.message = "Cannot create Client in CRM.";
                             regClientPersonOutput.description = crmContentOutput.description;
+                            regClientPersonOutput.data = new List<RegClientPersonalDataOutputModel>();
+                            regClientPersonOutput.data.Add( regClientPersonDataOutput);
                         }
                     }
+                    else
+                    {
+                        regClientPersonOutput.code = CONST_CODE_FAILED;
+
+                    }
+                }
+                // All Error
+                // แก้ตาม ที่ อาจารย์พรชัย บอก เพื่อให้เขาเอา เลข cleansingIdไปซ่อมข้อมูลได้
+                if (regClientPersonOutput.code != CONST_CODE_SUCCESS)
+                {
+                    if (string.IsNullOrEmpty(regClientPersonOutput.message ))
+                    {
+                        regClientPersonOutput.message = "Failed client registration did not complete";
+                    }
+                    regClientPersonOutput.data = new List<RegClientPersonalDataOutputModel>();
+                    regClientPersonOutput.data.Add( regClientPersonDataOutput);
                 }
             }
             catch (FieldValidationException e)
@@ -169,6 +253,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             }
             catch (Exception e)
             {
+                //Console.WriteLine(e.ToString());
                 regClientPersonOutput.code = CONST_CODE_FAILED;
                 regClientPersonOutput.message = e.Message;
                 regClientPersonOutput.description = e.StackTrace;
