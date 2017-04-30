@@ -29,15 +29,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             // เตรียมข้อมูล (จาก input -> json)
             RegClientPersonalInputModel data = new RegClientPersonalInputModel();
-            data.generalHeader = new GeneralHeaderModel();
-            data.profileInfo = new ProfileInfoModel();
-            data.contactInfo = new ContactInfoModel();
-            data.addressInfo = new AddressInfoModel();
 
-            data.generalHeader = contentModel.generalHeader;
-            data.profileInfo = contentModel.profileInfo;
-            data.contactInfo = contentModel.contactInfo;
-            data.addressInfo = contentModel.addressInfo;
+            data.generalHeader = contentModel.generalHeader ?? new GeneralHeaderModel();
+            data.profileInfo = contentModel.profileInfo ?? new ProfileInfoModel();
+            data.contactInfo = contentModel.contactInfo ?? new ContactInfoModel();
+            data.addressInfo = contentModel.addressInfo ?? new AddressInfoModel();
 
             // Search ข้อมูลจาก cleansing มาเก็บภายใน List
             List<string> crmData = SearchCrmContactClientId(data.generalHeader.cleansingId);
@@ -58,6 +54,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     //Create Client Additional Records
                     if (contentModel.generalHeader.clientAdditionalExistFlag.Equals("N"))
                     {
+
+
                         
                         // generalHeader
                         contact.pfc_cleansing_cusormer_profile_code = contentModel.generalHeader.cleansingId;
@@ -68,47 +66,62 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         contact.Salutation = contentModel.profileInfo.salutation;
                         contact.FirstName = contentModel.profileInfo.personalName;
                         contact.LastName = contentModel.profileInfo.personalSurname;
+                        Console.WriteLine(contentModel.profileInfo.sex.ToUpper());
+                        if (contentModel.profileInfo.sex == null) contentModel.profileInfo.sex = "U";
                         switch (contentModel.profileInfo.sex.ToUpper())
                         {
                             case "M": contact.GenderCode = new OptionSetValue(1) ; break;
                             case "F": contact.GenderCode = new OptionSetValue(2) ; break;
                             case "U": contact.GenderCode = new OptionSetValue(100000000) ; break;
+
                         }
-                        
+
                         contact.pfc_citizen_id = contentModel.profileInfo.idCitizen;
                         contact.pfc_passport_id = contentModel.profileInfo.idPassport;
                         contact.pfc_alien_id = contentModel.profileInfo.idAlien;
                         contact.pfc_driver_license = contentModel.profileInfo.idDriving;
+
+
                         if(contentModel.profileInfo.birthDate != null)
                         {
+
                             contact.pfc_date_of_birth = contentModel.profileInfo.birthDate;
+
                         }
+
                         contact.pfc_polisy_nationality_code = contentModel.profileInfo.nationality;
+                        if (contentModel.profileInfo.language == null) contentModel.profileInfo.language = "";
                         switch (contentModel.profileInfo.language.ToUpper())
                         {
                             case "T": contact.pfc_language = new OptionSetValue(100000003) ; break;
                             case "E": contact.pfc_language = new OptionSetValue(100000001) ; break;
                             case "J": contact.pfc_language = new OptionSetValue(100000002); break;
+
                         }
 
+                        if (contentModel.profileInfo.married == null) contentModel.profileInfo.married = "";
                         switch (contentModel.profileInfo.married.ToUpper())
                         {
                             case "S": contact.FamilyStatusCode = new OptionSetValue(1); break;
                             case "M": contact.FamilyStatusCode = new OptionSetValue(2); break;
                             case "D": contact.FamilyStatusCode = new OptionSetValue(3); break;
                             case "W": contact.FamilyStatusCode = new OptionSetValue(4); break;
+
                         }
 
                         // contact.pfc_occupation = contentModel.profileInfo.occupation;
 
+                        if (contentModel.profileInfo.riskLevel == null) contentModel.profileInfo.riskLevel = "";
                         switch (contentModel.profileInfo.riskLevel.ToUpper())
                         {
                             case "A": contact.pfc_AMLO_flag = new OptionSetValue(100000001); break;
                             case "B": contact.pfc_AMLO_flag = new OptionSetValue(100000002); break;
                             case "U": contact.pfc_AMLO_flag = new OptionSetValue(100000012); break;
+
                         }
-                        
+
                         bool isVIP = false;
+                        if (contentModel.profileInfo.vipStatus == null) contentModel.profileInfo.vipStatus = "";
                         if(contentModel.profileInfo.vipStatus.Equals("Y"))
                         {
                             isVIP = true;
@@ -137,7 +150,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         
                     }
                     // Update Client Additional Records
-                    else if (contentModel.generalHeader.clientAdditionalExistFlag.Equals("Y"))
+
+                    else if ( string.IsNullOrEmpty(contentModel.generalHeader.clientAdditionalExistFlag)
+                              && contentModel.generalHeader.clientAdditionalExistFlag.Equals("Y"))
                     {
                         // logic for update
                         /*
@@ -160,7 +175,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 dataOutput.crmClientId = crmIdOutput[0]; // generate from crm
                 // dataOutput.data = "Waiting for generating algorithm";
                 //dataOutput.data = contentModel.generalHeader.crmClientId;
-                dataOutput.code = "200";
+                dataOutput.code =CONST_CODE_SUCCESS;
                 dataOutput.transactionId = TransactionId;
                 dataOutput.transactionDateTime = DateTime.Now;
                 return dataOutput;
@@ -168,14 +183,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             else if (crmData.Count == 1) // Means List crmData has 1 data
             {
                 dataOutput.crmClientId = crmData[0];
-                dataOutput.code = "200";
+                dataOutput.code = CONST_CODE_SUCCESS;
                 dataOutput.transactionId = TransactionId;
                 dataOutput.transactionDateTime = DateTime.Now;
                 return dataOutput;
             }
             else
             {
-                dataOutput.code = "500";
+                dataOutput.code =CONST_CODE_FAILED;
                 dataOutput.transactionId = TransactionId;
                 dataOutput.transactionDateTime = DateTime.Now;
                 return dataOutput;

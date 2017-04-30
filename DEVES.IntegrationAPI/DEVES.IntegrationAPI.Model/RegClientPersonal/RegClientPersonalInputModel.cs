@@ -25,7 +25,7 @@ namespace DEVES.IntegrationAPI.Model.RegClientPersonal
         public string salutation { get; set; }
         public string personalName { get; set; }
         public string personalSurname { get; set; }
-        public string sex { get; set; }
+        public string sex { get; set; } = "U";
         public string idCitizen { get; set; }
         public string idPassport { get; set; }
         public string idAlien { get; set; }
