@@ -26,11 +26,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             EWIResCOMPInquiryClientMasterContentModel srcContent = (EWIResCOMPInquiryClientMasterContentModel)input;
             CRMInquiryClientContentOutputModel trgtContent = (CRMInquiryClientContentOutputModel)output;
 
-            Console.WriteLine(" >>>>>>>>>>>>>>>>>>>>>>srcContent>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-            Console.WriteLine(srcContent.ToJson());
-            Console.WriteLine("   >>>>>>>>>>>>>>>>>>trgtContent>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+           // Console.WriteLine(" >>>>>>>>>>>>>>>>>>>>>>srcContent>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+           // Console.WriteLine(srcContent.ToJson());
+           // Console.WriteLine("   >>>>>>>>>>>>>>>>>>trgtContent>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 
-            Console.WriteLine(trgtContent.ToJson());
+            //Console.WriteLine(trgtContent.ToJson());
             if (srcContent.clientListCollection != null)
             {
                 foreach (COMPInquiryClientMasterContentClientListModel src in srcContent.clientListCollection)

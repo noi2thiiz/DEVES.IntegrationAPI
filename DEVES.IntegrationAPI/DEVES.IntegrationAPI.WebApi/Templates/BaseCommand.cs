@@ -512,6 +512,8 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
 
         internal List<string> SearchCrmContactClientId(string cleansingId)
         {
+
+            Console.WriteLine("SearchCrmContactClientId");
             // For performance, until we found the way to cache the ServiceProxy, we prefer SQL rather than Crm
              
             using (OrganizationServiceProxy sp = GetCrmServiceProxy())
@@ -521,6 +523,18 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                         where contacts.pfc_cleansing_cusormer_profile_code == cleansingId && contacts.StateCode == ContactState.Active
                         select contacts.pfc_crm_person_id;
                 List<string> lstCrmClientId = q.ToList<string>();
+
+
+                ApiLogDataGateWay.Create(new ApiLogEntry
+                {
+                    Application = "Crm",
+                    TransactionID = TransactionId,
+                    ServiceName = "SearchCrmContactClientId",
+                    Activity = "Query",
+                    RequestContentType = "cleansingId="+cleansingId,
+                    RequestContentBody = lstCrmClientId.ToJson()
+                });
+
                 return lstCrmClientId;
             }
             

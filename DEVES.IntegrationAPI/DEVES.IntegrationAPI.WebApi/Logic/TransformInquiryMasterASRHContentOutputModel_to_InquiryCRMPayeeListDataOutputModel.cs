@@ -17,17 +17,17 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             CRMInquiryPayeeContentOutputModel trgtContent = (CRMInquiryPayeeContentOutputModel) output;
 
 
-            Console.WriteLine("===========InquiryMasterASRHContentModel Tranform output==========");
-            Console.WriteLine("===========Tranform==========");
-            Console.WriteLine("===========Tranform==========");
+           // Console.WriteLine("===========InquiryMasterASRHContentModel Tranform output==========");
+           // Console.WriteLine("===========Tranform==========");
+           // Console.WriteLine("===========Tranform==========");
 
-            Console.WriteLine(srcContent.ToJson());
+           // Console.WriteLine(srcContent.ToJson());
 
 
-            Console.WriteLine("===========CRMInquiryPayeeContentOutputModel Tranform output==========");
-            Console.WriteLine("===========Tranform==========");
-            Console.WriteLine("===========Tranform==========");
-            Console.WriteLine(trgtContent.ToJson());
+            //Console.WriteLine("===========CRMInquiryPayeeContentOutputModel Tranform output==========");
+           // Console.WriteLine("===========Tranform==========");
+           // Console.WriteLine("===========Tranform==========");
+          //  Console.WriteLine(trgtContent.ToJson());
 
             trgtContent.data = new List<InquiryCrmPayeeListDataModel>();
 

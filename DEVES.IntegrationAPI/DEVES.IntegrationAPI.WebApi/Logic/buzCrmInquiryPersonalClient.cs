@@ -28,7 +28,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             try
             {
                 #region Search Client from Cleansing
-
+                Console.WriteLine("start Search Client from Cleansing ");
                 //++ Call CLS_InquiryCLSPersonalClient through ServiceProxy
                 InquiryClientMasterInputModel contentModel = (InquiryClientMasterInputModel)input;
                 CLSInquiryPersonalClientInputModel clsPersonalInput = new CLSInquiryPersonalClientInputModel();
@@ -41,10 +41,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 //++ If Found records in Cleansing(CLS) then pour the data from Cleansing to contentOutputModel
                 if (IsSearchFound(retCLSInqPersClient))
                 {
+                    Console.WriteLine("If Found records in Cleansing(CLS) ");
                     crmInqContent = (CRMInquiryClientContentOutputModel)TransformerFactory.TransformModel(retCLSInqPersClient, crmInqContent);
                     string crmClientId = "";
                     try
                     {
+                        Console.WriteLine("try SearchCrmContactClientId");
                         List<string> lstCrmClientId = SearchCrmContactClientId(retCLSInqPersClient.data.First().cleansing_id);
                         if (lstCrmClientId != null && lstCrmClientId.Count == 1)
                         {
@@ -61,6 +63,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 else //+ If not records found in Cleansing(CLS), then Search from Polisy400 
                 #region Search client from Polisy400
                 {
+
+                    Console.WriteLine("Search client from Polisy400");
                     try
                     {
                         COMPInquiryClientMasterInputModel compInqClientInput = new COMPInquiryClientMasterInputModel();

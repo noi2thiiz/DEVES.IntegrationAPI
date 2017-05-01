@@ -14,15 +14,15 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
        
         public override BaseDataModel TransformModel(BaseDataModel input, BaseDataModel output)
         {
-            Console.WriteLine(" process : TransformSAPInquiryVendorOutputModel_to_InquiryCRMPayeeListDataOutputModel");
+            //Console.WriteLine(" process : TransformSAPInquiryVendorOutputModel_to_InquiryCRMPayeeListDataOutputModel");
             EWIResSAPInquiryVendorContentModel srcContent = (EWIResSAPInquiryVendorContentModel) input;
             CRMInquiryPayeeContentOutputModel trgtContent = (CRMInquiryPayeeContentOutputModel) output;
 
-            Console.WriteLine(" >>>>>>>>>>>>>>>>>>>>>>>>>>>srcContent>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-            Console.WriteLine(srcContent.ToJson());
-            Console.WriteLine(" >>>>>>>>>>>>>>>>>>>>>>>>trgtContent>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-            Console.WriteLine(trgtContent.ToJson());
-            Console.WriteLine(" >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+            //Console.WriteLine(" >>>>>>>>>>>>>>>>>>>>>>>>>>>srcContent>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+            //Console.WriteLine(srcContent.ToJson());
+            //Console.WriteLine(" >>>>>>>>>>>>>>>>>>>>>>>>trgtContent>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+            //Console.WriteLine(trgtContent.ToJson());
+            //Console.WriteLine(" >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 
             CRMInquiryPayeeContentOutputModel outputContent = new CRMInquiryPayeeContentOutputModel();
             outputContent.data = new List<InquiryCrmPayeeListDataModel>();
@@ -35,7 +35,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             {
                 if (vendorInfo.PREVACC != null)
                 {
-                    Console.WriteLine("vendorInfo.PREVACC>>>>>>>>>>>>>>>>>>>>>>>>"+vendorInfo.PREVACC);
+                   // Console.WriteLine("vendorInfo.PREVACC>>>>>>>>>>>>>>>>>>>>>>>>"+vendorInfo.PREVACC);
                     _tmpSAPInquiryVendorContentModel.Add(vendorInfo.PREVACC, vendorInfo);
                 }
 
@@ -51,7 +51,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             foreach (var dataItrm in trgtContent.data)
             {
-                Console.WriteLine("polisyClientId>>>>>>>>>>>>>>>>>>>>>>>>"+dataItrm.polisyClientId);
+               // Console.WriteLine("polisyClientId>>>>>>>>>>>>>>>>>>>>>>>>"+dataItrm.polisyClientId);
                 if (string.IsNullOrEmpty(dataItrm.polisyClientId))
                 {
                     if ( _tmpSAPInquiryVendorContentModel.ContainsKey(dataItrm.polisyClientId))
