@@ -20,6 +20,7 @@ namespace DEVES.IntegrationAPI.Model.RegClientCorporate
 
     public class GeneralHeaderModel : BaseDataModel
     {
+
         public string roleCode { get; set; }
         public string cleansingId { get; set; }
         public string polisyClientId { get; set; }
@@ -29,6 +30,7 @@ namespace DEVES.IntegrationAPI.Model.RegClientCorporate
         public string solicitorFlag { get; set; }
         public string repairerFlag { get; set; }
         public string hospitalFlag { get; set; }
+        public string notCreatePolisyClientFlag { get; set; } = "N";
     }
 
 

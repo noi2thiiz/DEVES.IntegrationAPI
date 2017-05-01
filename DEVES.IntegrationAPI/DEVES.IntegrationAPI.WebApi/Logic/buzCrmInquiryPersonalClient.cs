@@ -11,11 +11,17 @@ using DEVES.IntegrationAPI.Model.CLS;
 using DEVES.IntegrationAPI.Model.Polisy400;
 using DEVES.IntegrationAPI.Model.InquiryClientMaster;
 using DEVES.IntegrationAPI.WebApi.Templates;
+using WebGrease.Css.Visitor;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
     public class buzCrmInquiryPersonalClientMaster : BaseCommand
     {
+        protected string nodePart = "nodePart:";
+        protected void AddNode(string node)
+        {
+            nodePart += node+",==>";
+        }
 
         public override BaseDataModel Execute(object input)
         {
@@ -25,8 +31,15 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             crmInqContent.transactionId = Guid.NewGuid().ToString();
             #endregion Prepare box for output 
 
+            AddNode("START");
             try
             {
+                #region Search client from CRM
+
+
+
+                #endregion
+
                 #region Search Client from Cleansing
                 Console.WriteLine("start Search Client from Cleansing ");
                 //++ Call CLS_InquiryCLSPersonalClient through ServiceProxy
@@ -39,8 +52,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                                                                                         (CommonConstant.ewiEndpointKeyCLSInquiryPersonalClient, clsPersonalInput);
 
                 //++ If Found records in Cleansing(CLS) then pour the data from Cleansing to contentOutputModel
+
                 if (IsSearchFound(retCLSInqPersClient))
-                {
+                {   AddNode("A (SearchFound)");
+
                     Console.WriteLine("If Found records in Cleansing(CLS) ");
                     crmInqContent = (CRMInquiryClientContentOutputModel)TransformerFactory.TransformModel(retCLSInqPersClient, crmInqContent);
                     string crmClientId = "";
@@ -50,6 +65,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         List<string> lstCrmClientId = SearchCrmContactClientId(retCLSInqPersClient.data.First().cleansing_id);
                         if (lstCrmClientId != null && lstCrmClientId.Count == 1)
                         {
+                            AddNode("A2 (lstCrmClientId != null)");
                             crmClientId = lstCrmClientId.First();
                         }
                     }
@@ -59,13 +75,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         data.generalHeader.crmClientId = crmClientId;
                         data.generalHeader.clientType = contentModel.conditionHeader.clientType;
                         data.generalHeader.roleCode = contentModel.conditionHeader.roleCode;
-                      
+
                     }
                 }
                 #endregion Search Client from Cleansing
                 else //+ If not records found in Cleansing(CLS), then Search from Polisy400 
                 #region Search client from Polisy400
-                {
+                { AddNode("B (Search client from Polisy400)");
 
                     Console.WriteLine("Search client from Polisy400");
                     try
@@ -79,7 +95,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                         //Found in Polisy400
                         if (retCOMPInqClient.clientListCollection != null) 
-                        {
+                        {    AddNode("B2 (ound in Polisy400)");
                             crmInqContent = (CRMInquiryClientContentOutputModel)TransformerFactory.TransformModel(retCOMPInqClient, crmInqContent);
                         }
                         //Not found in Polisy400
@@ -100,12 +116,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                 #region finishing output 
 
+                AddNode("END (finishing output )");
                 crmInqContent.code = CONST_CODE_SUCCESS;
                 crmInqContent.message = "SUCCESS";
                 #endregion finishing output 
             }
             catch (Exception e)
             {
+                AddNode("Exception (put error in the output )");
                 #region put error in the output
 
                 crmInqContent.code = CONST_CODE_FAILED;
@@ -113,12 +131,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 crmInqContent.description = e.StackTrace;
                 #endregion put error in the output
             }
+            AddNode("STOP (RETURN OUTPUT )");
+            Console.WriteLine(nodePart);
             return crmInqContent;
         }
 
         internal bool IsSearchFound(CLSInquiryPersonalClientContentOutputModel content)
         {
-            return ((content.success | IsOutputSuccess(content)) & (content.data.Count() > 0));
+            return ((content.success | IsOutputSuccess(content)) & (content.data.Any()));
         }
     }
 }

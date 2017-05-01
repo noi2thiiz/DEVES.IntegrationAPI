@@ -165,7 +165,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     Console.WriteLine("Create:CLIENTCreatePersonalClientAndAdditionalInfo");
 
                     CLIENTCreatePersonalClientAndAdditionalInfoContentModel polCreateClientContent = new CLIENTCreatePersonalClientAndAdditionalInfoContentModel();
-                    if (string.IsNullOrEmpty(regClientPersonalInput.generalHeader.polisyClientId))
+                    if (string.IsNullOrEmpty(regClientPersonalInput.generalHeader.polisyClientId)
+                        && regClientPersonalInput.generalHeader.notCreatePolisyClientFlag !="Y")
                     {
                         BaseDataModel polCreatePersonIn = DataModelFactory.GetModel(typeof(CLIENTCreatePersonalClientAndAdditionalInfoInputModel));
                         polCreatePersonIn = TransformerFactory.TransformModel(regClientPersonalInput, polCreatePersonIn);

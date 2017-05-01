@@ -49,7 +49,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     trgt.profileInfo.salutationText = master_salutation.Name;
 
 
-                    trgt.profileInfo.vipStatus = ((new[] {"M", "F","U"}).Contains(src.cls_sex.ToUpperIgnoreNull()))
+                    trgt.profileInfo.sex = ((new[] {"M", "F","U"}).Contains(src.cls_sex.ToUpperIgnoreNull()))
                         ? src.cls_sex.ToUpperIgnoreNull()
                         : "U";
 

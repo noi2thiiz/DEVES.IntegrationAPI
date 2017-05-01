@@ -24,6 +24,8 @@ namespace DEVES.IntegrationAPI.Model.RegPayeeCorporate
         public string polisyClientId { get; set; }
         public string crmClientId { get; set; }
         public string clientAdditionalExistFlag { get; set; }
+        //ถ้า = Y  ไม่ต้องไปสร้าง  Create Polisy  (จะส่งมาจากหน้าจอ CRM)
+        public string notCreatePolisyClientFlag { get; set; } = "N";
     }
 
     public class ProfileHeaderModel : BaseDataModel
