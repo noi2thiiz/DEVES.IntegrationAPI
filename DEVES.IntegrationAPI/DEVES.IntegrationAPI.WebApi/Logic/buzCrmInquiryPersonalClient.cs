@@ -57,6 +57,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     {
                         CRMInquiryClientOutputDataModel data = crmInqContent.data.First();
                         data.generalHeader.crmClientId = crmClientId;
+                        data.generalHeader.clientType = contentModel.conditionHeader.clientType;
+                        data.generalHeader.roleCode = contentModel.conditionHeader.roleCode;
+                      
                     }
                 }
                 #endregion Search Client from Cleansing

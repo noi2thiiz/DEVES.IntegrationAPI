@@ -7,6 +7,7 @@ using DEVES.IntegrationAPI.Model.InquiryClientMaster;
 using CLS = DEVES.IntegrationAPI.Model.CLS;
 using DEVES.IntegrationAPI.WebApi.Templates;
 using DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData;
+using DEVES.IntegrationAPI.Core.Helper;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
@@ -34,8 +35,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     trgt.generalHeader = new CRMInquiryClientGeneralHeaderModel();
                     trgt.profileInfo = new CRMInquiryClientProfileInfoModel();
 
+
                     trgt.generalHeader.cleansingId = src.cleansing_id;
                     trgt.generalHeader.polisyClientId = src.clntnum;
+                    trgt.generalHeader.sourceData = "CLS";
+
 
                     trgt.profileInfo.name1 = src.lgivname;
                     trgt.profileInfo.name2 = src.lsurname;
@@ -44,12 +48,19 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     var master_salutation = PersonalTitleMasterData.Instance.FindByPolisyCode(isNull(src.salutl));
                     trgt.profileInfo.salutationText = master_salutation.Name;
 
-                    if (!src.cls_sex.Equals("M") || !src.cls_sex.Equals("F"))
-                    {
-                        trgt.profileInfo.sex = "U";
-                    }
+
+                    trgt.profileInfo.vipStatus = ((new[] {"M", "F","U"}).Contains(src.cls_sex.ToUpperIgnoreNull()))
+                        ? src.cls_sex.ToUpperIgnoreNull()
+                        : "U";
+
                     //trgt.profileInfo.sex = src.cls_sex;
                     trgt.profileInfo.idCard = src.cls_citizen_id_new;
+
+                    trgt.profileInfo.vipStatus = ((new[] {"Y", "N"}).Contains(src.cls_vip))
+                        ? src.cls_vip.ToUpperIgnoreNull()
+                        : "N";
+
+
 
                     var master_occupation = OccupationMasterData.Instance.FindByCode(isNull(src.cls_occpcode), "00023");
                     trgt.profileInfo.occupationText = master_occupation.Name;

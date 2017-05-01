@@ -525,7 +525,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                 List<string> lstCrmClientId = q.ToList<string>();
 
 
-         
+
 
                 return lstCrmClientId;
             }
