@@ -525,15 +525,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                 List<string> lstCrmClientId = q.ToList<string>();
 
 
-                ApiLogDataGateWay.Create(new ApiLogEntry
-                {
-                    Application = "Crm",
-                    TransactionID = TransactionId,
-                    ServiceName = "SearchCrmContactClientId",
-                    Activity = "Query",
-                    RequestContentType = "cleansingId="+cleansingId,
-                    RequestContentBody = lstCrmClientId.ToJson()
-                });
+         
 
                 return lstCrmClientId;
             }
