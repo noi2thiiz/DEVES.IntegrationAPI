@@ -392,6 +392,7 @@
     <Compile Include="TechnicalService\TransactionLogger\ApiLogEntry.cs" />
     <Compile Include="TechnicalService\TransactionLogger\ApiLogHandler.cs" />
     <Compile Include="TechnicalService\TransactionLogger\HttpClientLoggingHandler.cs" />
+    <Compile Include="Templates\BaseApiController.cs" />
     <Compile Include="Templates\BaseCommand.cs" />
     <Compile Include="Templates\BaseTransformer.cs" />
     <Compile Include="Templates\EWIResponseWrapper.cs" />

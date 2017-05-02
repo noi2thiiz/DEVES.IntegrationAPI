@@ -98,13 +98,13 @@ namespace DEVES.IntegrationAPI.Model.InquiryClientMaster
         public string hospitalFlag { get; set; }
     }
 
-    public class InquiryClientMasterOutputModel_Fail
+    public class InquiryClientMasterOutputModel_Fail:BaseDataModel
     {
         public string code { get; set; }
         public string message { get; set; }
         public string description { get; set; }
         public string transactionId { get; set; }
-        public string transactionDateTime { get; set; }
+        public DateTime transactionDateTime { get; set; }
         public InquiryClientMasterDataOutputModel_Fail data { get; set; }
     }
 
