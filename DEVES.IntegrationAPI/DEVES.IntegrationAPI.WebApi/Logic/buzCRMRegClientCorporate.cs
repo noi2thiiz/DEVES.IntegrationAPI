@@ -45,8 +45,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 if (master_countryorigin == null)
                 {
 
+                    var message = MessageBuilder.Instance.GetInvalidMasterMessage("Country Origin",
+                        regClientCorporateInput.profileHeader.countryOrigin);
                       regFail.data.fieldErrors.Add( new RegClientCorporateFieldErrors("profileHeader.countryOrigin",
-                          "NationalityMasterData is invalid"));
+                          message));
 
                 }
                 else
@@ -216,11 +218,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             catch (FieldValidationException e)
             {
                 Console.WriteLine("FieldValidationException");
-                regFail.code = CONST_CODE_INVALID_INPUT;
-                regFail.message = CONST_MESSAGE_INVALID_INPUT;
-                regFail.description = e.StackTrace;
+                regFail.code = AppConst.CODE_INVALID_INPUT;
+                regFail.message = AppConst.MESSAGE_INVALID_INPUT;
+                regFail.description =AppConst.DESC_INVALID_INPUT;
                 regFail.transactionId = TransactionId;
-                regFail.transactionDateTime = DateTime.Now.ToString();
+                regFail.transactionDateTime = DateTime.Now;
 
                 return regFail;
             }

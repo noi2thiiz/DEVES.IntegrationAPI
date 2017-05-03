@@ -64,8 +64,9 @@ namespace DEVES.IntegrationAPI.Model.RegClientPersonal
         public string description { get; set; }
         [JsonProperty(Order = 4)]
         public string transactionId { get; set; }
+
         [JsonProperty(Order = 5)]
-        public string transactionDateTime { get; set; }
+        public DateTime transactionDateTime { get; set; } = DateTime.Now;
         [JsonProperty(Order = 6)]
         public RegClientPersonalDataOutputModel_Fail data { get; set; }
     }

@@ -57,7 +57,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 var master_salutation = PersonalTitleMasterData.Instance.FindByCode(regClientPersonalInput.profileInfo.salutation);
                 if (master_salutation == null)
                 {
-                    regFail.data.fieldErrors.Add(new RegClientPersonalFieldErrors("profileInfo.salutation", "PersonalTitleMasterData is invalid"));
+                    var errorMessage =
+                        MessageBuilder.Instance.GetInvalidMasterMessage("Salutation",
+                            regClientPersonalInput.profileInfo.salutation);
+                    regFail.data.fieldErrors.Add(new RegClientPersonalFieldErrors("profileInfo.salutation", errorMessage));
                 }
                 else
                 {
@@ -67,7 +70,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 var master_nationality = NationalityMasterData.Instance.FindByCode(regClientPersonalInput.profileInfo.nationality, "00203");
                 if(master_nationality == null)
                 {
-                    regFail.data.fieldErrors.Add(new RegClientPersonalFieldErrors("profileInfo.nationality", "NationalityMasterData is invalid"));
+                    var errorMessage =
+                        MessageBuilder.Instance.GetInvalidMasterMessage("Nationality",
+                            regClientPersonalInput.profileInfo.nationality);
+                    regFail.data.fieldErrors.Add(new RegClientPersonalFieldErrors("profileInfo.nationality", errorMessage));
                 }
                 else
                 {
@@ -77,7 +83,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 var master_occupation = OccupationMasterData.Instance.FindByCode(regClientPersonalInput.profileInfo.occupation, "00023");
                 if (master_occupation == null)
                 {
-                    regFail.data.fieldErrors.Add(new RegClientPersonalFieldErrors("profileInfo.occupation", "OccupationMasterData is invalid"));
+                    var errorMessage =
+                        MessageBuilder.Instance.GetInvalidMasterMessage("Occupation",
+                            regClientPersonalInput.profileInfo.occupation);
+                    regFail.data.fieldErrors.Add(new RegClientPersonalFieldErrors("profileInfo.occupation",errorMessage));
                 }
                 else
                 {
@@ -87,7 +96,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 var master_country = CountryMasterData.Instance.FindByCode(regClientPersonalInput.addressInfo.country, "00220");
                 if (master_country == null)
                 {
-                    regFail.data.fieldErrors.Add(new RegClientPersonalFieldErrors("addressInfo.country", "CountryMasterData is invalid"));
+                    var errorMessage =
+                        MessageBuilder.Instance.GetInvalidMasterMessage("Country",
+                            regClientPersonalInput.addressInfo.country);
+                    regFail.data.fieldErrors.Add(new RegClientPersonalFieldErrors("addressInfo.country", errorMessage));
                 }
                 else
                 {
@@ -191,16 +203,16 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     }
 
 
-                    if (regClientPersonOutput.code == CONST_CODE_SUCCESS)
+                    if (regClientPersonOutput.code == AppConst.CODE_SUCCESS)
                     {
                         buzCreateCrmClientPersonal cmdCreateCrmClient = new buzCreateCrmClientPersonal();
                         CreateCrmPersonInfoOutputModel crmContentOutput =
                             (CreateCrmPersonInfoOutputModel) cmdCreateCrmClient.Execute(regClientPersonalInput);
 
-                        if (crmContentOutput.code == CONST_CODE_SUCCESS)
+                        if (crmContentOutput.code == AppConst.CODE_SUCCESS)
                         {
-                            regClientPersonOutput.code = CONST_CODE_SUCCESS;
-                            regClientPersonOutput.message = "Success";
+                            regClientPersonOutput.code = AppConst.CODE_SUCCESS;
+                            regClientPersonOutput.message = AppConst.MESSAGE_SUCCESS;
                             regClientPersonOutput.description = "Client registration complete";
                             RegClientPersonalDataOutputModel_Pass dataOutPass =
                                 new RegClientPersonalDataOutputModel_Pass();
@@ -216,7 +228,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         }
                         else
                         {
-                            regClientPersonOutput.code = CONST_CODE_FAILED;
+                            regClientPersonOutput.code = AppConst.CODE_FAILED;
                             regClientPersonOutput.message = "Cannot create Client in CRM.";
                             regClientPersonOutput.description = crmContentOutput.description;
                             regClientPersonOutput.data = new List<RegClientPersonalDataOutputModel>();
@@ -225,13 +237,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     }
                     else
                     {
-                        regClientPersonOutput.code = CONST_CODE_FAILED;
+                        regClientPersonOutput.code = AppConst.CODE_FAILED;
 
                     }
                 }
                 // All Error
                 // แก้ตาม ที่ อาจารย์พรชัย บอก เพื่อให้เขาเอา เลข cleansingIdไปซ่อมข้อมูลได้
-                if (regClientPersonOutput.code != CONST_CODE_SUCCESS)
+                if (regClientPersonOutput.code !=AppConst.CODE_SUCCESS)
                 {
                     if (string.IsNullOrEmpty(regClientPersonOutput.message ))
                     {
@@ -244,19 +256,19 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             catch (FieldValidationException e)
             {
                 
-                regFail.code = CONST_CODE_FAILED;
-                regFail.message = e.message;
-                regFail.description = e.StackTrace;
+                regFail.code = AppConst.CODE_INVALID_INPUT;
+                regFail.message =AppConst.MESSAGE_INVALID_INPUT;
+                regFail.description = AppConst.DESC_INVALID_INPUT;
                 regFail.transactionId = TransactionId;
-                regFail.transactionDateTime = DateTime.Now.ToString();
+                regFail.transactionDateTime = DateTime.Now;
 
                 return regFail;
             }
             catch (Exception e)
             {
                 //Console.WriteLine(e.ToString());
-                regClientPersonOutput.code = CONST_CODE_FAILED;
-                regClientPersonOutput.message = e.Message;
+                regClientPersonOutput.code = AppConst.CODE_FAILED;
+                regClientPersonOutput.message = AppConst.MESSAGE_INTERNAL_ERROR;
                 regClientPersonOutput.description = e.StackTrace;
 
                 RegClientPersonalDataOutputModel_Fail dataOutFail = new RegClientPersonalDataOutputModel_Fail();

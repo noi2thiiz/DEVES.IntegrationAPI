@@ -395,6 +395,7 @@
     <Compile Include="Templates\BaseApiController.cs" />
     <Compile Include="Templates\BaseCommand.cs" />
     <Compile Include="Templates\BaseTransformer.cs" />
+    <Compile Include="Templates\AppConst.cs" />
     <Compile Include="Templates\EWIResponseWrapper.cs" />
     <Compile Include="Templates\FieldValidationException.cs" />
     <Compile Include="Templates\ICommand.cs" />

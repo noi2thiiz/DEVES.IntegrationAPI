@@ -11,10 +11,11 @@ using Newtonsoft.Json;
 using DEVES.IntegrationAPI.WebApi.Logic;
 using DEVES.IntegrationAPI.Model.RegPayeeCorporate;
 using DEVES.IntegrationAPI.Core.Helper;
+using DEVES.IntegrationAPI.WebApi.Templates;
 
 namespace DEVES.IntegrationAPI.WebApi.Controllers
 {
-    public class RegPayeeCorporateController : ApiController
+    public class RegPayeeCorporateController : BaseApiController
     {
         public object Post([FromBody]object value)
         {
@@ -23,6 +24,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             //return Request.CreateResponse(contentOutput);
 
             buzCRMRegPayeeCorporate cmdCrmRegPayeeCorporate = new buzCRMRegPayeeCorporate();
+            cmdCrmRegPayeeCorporate.TransactionId = GetTransactionId();
             //cmdCrmRegPayeeCorporate.TransactionId = Request.Properties["TransactionID"].ToString();
 
 
@@ -198,11 +200,11 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                     outputFail.data.fieldErrors.Add(new RegPayeeCorporateFieldErrors(fieldName, fieldMessage));
                 }
 
-                outputFail.code = "500";
-                outputFail.message = "Invalid Input(s)";
-                outputFail.description = "Some of your input is invalid. Please recheck again.";
-                outputFail.transactionId = Request.Properties["TransactionID"].ToString();
-                outputFail.transactionDateTime = DateTime.Now.ToString();
+                outputFail.code = AppConst.CODE_INVALID_INPUT;
+                outputFail.message = AppConst.MESSAGE_INVALID_INPUT;
+                outputFail.description = AppConst.DESC_INVALID_INPUT;
+                outputFail.transactionId = GetTransactionId();
+
 
                 return Request.CreateResponse<RegPayeeCorporateOutputModel_Fail>(outputFail);
             }

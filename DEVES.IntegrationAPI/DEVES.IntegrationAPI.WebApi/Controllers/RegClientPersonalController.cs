@@ -8,10 +8,11 @@ using System.Linq;
 using System.Net.Http;
 using System.Web;
 using System.Web.Http;
+using DEVES.IntegrationAPI.WebApi.Templates;
 
 namespace DEVES.IntegrationAPI.WebApi.Controllers
 {
-    public class RegClientPersonalController : ApiController
+    public class RegClientPersonalController : BaseApiController
     {
 
         private string _logImportantMessage;
@@ -20,7 +21,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         public object Post([FromBody]object value)
         {
             buzCRMRegClientPersonal cmdCrmRegClientPersonal = new buzCRMRegClientPersonal();
-            // cmdCrmRegClientPersonal.TransactionId = Request.Properties["TransactionID"].ToString();
+            cmdCrmRegClientPersonal.TransactionId = GetTransactionId();
 
             var contentText = value.ToString();
             var contentModel = JsonConvert.DeserializeObject<RegClientPersonalInputModel>(contentText);
@@ -30,6 +31,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
 
             if (JsonHelper.TryValidateJson(contentText, filePath, out outvalidate))
             {
+
                 var content = cmdCrmRegClientPersonal.Execute(cmdCrmRegClientPersonal.DeserializeJson<RegClientPersonalInputModel>(value.ToString()));
                 return Request.CreateResponse(content);
             }
@@ -194,11 +196,11 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                     outputFail.data.fieldErrors.Add(new RegClientPersonalFieldErrors(fieldName, fieldMessage));
                 }
 
-                outputFail.code = "500";
-                outputFail.message = "Invalid Input(s)";
-                outputFail.description = "Some of your input is invalid. Please recheck again.";
-                outputFail.transactionId = Request.Properties["TransactionID"].ToString();
-                outputFail.transactionDateTime = DateTime.Now.ToString();
+                outputFail.code = AppConst.CODE_INVALID_INPUT;
+                outputFail.message = AppConst.MESSAGE_INVALID_INPUT;
+                outputFail.description =AppConst.DESC_INVALID_INPUT;
+                outputFail.transactionId = GetTransactionId();
+                outputFail.transactionDateTime = DateTime.Now;
 
                 return Request.CreateResponse<RegClientPersonalOutputModel_Fail>(outputFail);
             }

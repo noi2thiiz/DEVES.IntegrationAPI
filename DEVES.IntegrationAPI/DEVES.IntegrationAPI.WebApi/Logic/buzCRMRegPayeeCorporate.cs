@@ -46,18 +46,25 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 if (master_countryorigin == null)
                 {
                     Console.WriteLine("NationalityMasterData is invalid");
-                    regFail.data.fieldErrors.Add(new RegPayeeCorporateFieldErrors("profileHeader.countryOrigin", "NationalityMasterData is invalid"));
+                    var message =
+                        MessageBuilder.Instance.GetInvalidMasterMessage("Country Origin",
+                            regPayeeCorporateInput.profileHeader.countryOrigin);
+                    regFail.data.fieldErrors.Add(new RegPayeeCorporateFieldErrors("profileHeader.countryOrigin", message));
                 }
                 else
                 {
                     Console.WriteLine("NationalityMasterData  invalid");
+
                     regPayeeCorporateInput.profileHeader.countryOrigin = master_countryorigin.PolisyCode;
                 }
 
                 var master_country = CountryMasterData.Instance.FindByCode(regPayeeCorporateInput.addressHeader.country, "00220");
                 if (master_country == null)
                 {
-                    regFail.data.fieldErrors.Add(new RegPayeeCorporateFieldErrors("addressHeader.country", "CountryMasterData is invalid"));
+                    var message =
+                        MessageBuilder.Instance.GetInvalidMasterMessage("Country",
+                            regPayeeCorporateInput.addressHeader.country);
+                    regFail.data.fieldErrors.Add(new RegPayeeCorporateFieldErrors("addressHeader.country", message));
                 }
                 else
                 {
@@ -178,7 +185,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 regFail.message = e.Message;
                 regFail.description = e.StackTrace;
                 regFail.transactionId = TransactionId;
-                regFail.transactionDateTime = DateTime.Now.ToString();
+                regFail.transactionDateTime = DateTime.Now;
 
                 return regFail;
             }
@@ -245,8 +252,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                 if (crmContentOutput.code == CONST_CODE_SUCCESS)
                 {
-                    regPayeeCorporateOutput.code = CONST_CODE_SUCCESS;
-                    regPayeeCorporateOutput.message = "SUCCESS";
+                    regPayeeCorporateOutput.code = AppConst.CODE_SUCCESS;
+                    regPayeeCorporateOutput.message = AppConst.MESSAGE_SUCCESS;
                     RegPayeeCorporateDataOutputModel_Pass dataOutPass = new RegPayeeCorporateDataOutputModel_Pass();
                     dataOutPass.polisyClientId = regPayeeCorporateInput.generalHeader.polisyClientId;
                     dataOutPass.sapVendorCode = regPayeeCorporateInput.sapVendorInfo.sapVendorCode;
@@ -259,15 +266,26 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 }
                 else
                 {
-                    regPayeeCorporateOutput.code = CONST_CODE_FAILED;
+                    regPayeeCorporateOutput.code = AppConst.CODE_FAILED;
                     regPayeeCorporateOutput.message = crmContentOutput.message;
                     regPayeeCorporateOutput.description = crmContentOutput.description;
                 }
             }
+            catch (FieldValidationException e)
+            {
+
+                regFail.code = AppConst.CODE_INVALID_INPUT;
+                regFail.message =AppConst.MESSAGE_INVALID_INPUT;
+                regFail.description = AppConst.DESC_INVALID_INPUT;
+                regFail.transactionId = TransactionId;
+                regFail.transactionDateTime = DateTime.Now;
+
+                return regFail;
+            }
             catch (Exception e)
             {
-                regPayeeCorporateOutput.code = CONST_CODE_FAILED;
-                regPayeeCorporateOutput.message = e.Message;
+                regPayeeCorporateOutput.code = AppConst.MESSAGE_INTERNAL_ERROR;
+                regPayeeCorporateOutput.message = AppConst.MESSAGE_INTERNAL_ERROR;
                 regPayeeCorporateOutput.description = e.StackTrace;
 
                 RegPayeeCorporateDataOutputModel_Fail dataOutFail = new RegPayeeCorporateDataOutputModel_Fail();

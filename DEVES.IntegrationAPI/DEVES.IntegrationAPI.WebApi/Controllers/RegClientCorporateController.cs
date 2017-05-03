@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using DEVES.IntegrationAPI.WebApi.Logic;
 using DEVES.IntegrationAPI.Model.RegClientCorporate;
 using DEVES.IntegrationAPI.Core.Helper;
+using DEVES.IntegrationAPI.WebApi.Templates;
 
 namespace DEVES.IntegrationAPI.WebApi.Controllers
 {
@@ -193,11 +194,11 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                     outputFail.data.fieldErrors.Add(new RegClientCorporateFieldErrors(fieldName, fieldMessage));
                 }
 
-                outputFail.code = "500";
-                outputFail.message = "Invalid Input(s)";
-                outputFail.description = "Some of your input is invalid. Please recheck again.";
+                outputFail.code = AppConst.CODE_INVALID_INPUT;
+                outputFail.message =AppConst.MESSAGE_INVALID_INPUT;
+                outputFail.description = AppConst.MESSAGE_INVALID_INPUT;
                 outputFail.transactionId = Request.Properties["TransactionID"].ToString();
-                outputFail.transactionDateTime = DateTime.Now.ToString();
+                outputFail.transactionDateTime = DateTime.Now;
 
                 return Request.CreateResponse<RegClientCorporateOutputModel_Fail>(outputFail);
             }

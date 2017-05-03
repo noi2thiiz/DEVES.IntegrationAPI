@@ -201,10 +201,10 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                     outputFail.data.fieldErrors.Add(new RegPayeePersonalFieldErrors(fieldName, fieldMessage));
                 }
 
-                outputFail.code = "500";
-                outputFail.message = "Invalid Input(s)";
-                outputFail.description = "Some of your input is invalid. Please recheck again.";
-                outputFail.transactionId = Request.Properties["TransactionID"].ToString();
+                outputFail.code = AppConst.CODE_INVALID_INPUT;
+                outputFail.message = AppConst.MESSAGE_INVALID_INPUT;
+                outputFail.description = AppConst.DESC_INVALID_INPUT;
+                outputFail.transactionId = GetTransactionId();
                 outputFail.transactionDateTime = DateTime.Now;
 
                 return Request.CreateResponse<RegPayeePersonalOutputModel_Fail>(outputFail);

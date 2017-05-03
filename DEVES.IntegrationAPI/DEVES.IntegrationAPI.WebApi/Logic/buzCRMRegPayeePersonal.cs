@@ -201,9 +201,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             catch (FieldValidationException e)
             {
 
-                regFail.code = CONST_CODE_INVALID_INPUT;
-                regFail.message = CONST_MESSAGE_INVALID_INPUT;
-                regFail.description = CONST_DESC_INVALID_INPUT;
+                regFail.code = AppConst.CODE_INVALID_INPUT;
+                regFail.message = AppConst.MESSAGE_INVALID_INPUT;
+                regFail.description = AppConst.DESC_INVALID_INPUT;
                 regFail.transactionId = TransactionId;
                 regFail.transactionDateTime = DateTime.Now;
 
@@ -211,8 +211,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             }
             catch (Exception e)
             {
-                regPayeePersonalOutput.code = CONST_CODE_FAILED;
-                regPayeePersonalOutput.message = CONST_MESSAGE_INTERNAL_ERROR;
+                regPayeePersonalOutput.code = AppConst.CODE_FAILED;
+                regPayeePersonalOutput.message = AppConst.MESSAGE_INTERNAL_ERROR;
                 regPayeePersonalOutput.description = e.StackTrace;
                 regPayeePersonalOutput.transactionId = TransactionId;
                 regPayeePersonalOutput.transactionDateTime= DateTime.Now;
