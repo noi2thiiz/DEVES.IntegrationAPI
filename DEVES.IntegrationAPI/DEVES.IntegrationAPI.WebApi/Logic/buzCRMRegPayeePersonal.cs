@@ -147,7 +147,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                     regPayeePersonalInput.sapVendorInfo.sapVendorCode = SAPCreateVendorContentOut?.VCODE;
                     outputPass.sapVendorCode = SAPCreateVendorContentOut?.VCODE;
-                    outputPass.sapVendorGroupCode = sapInfo?.VGROUP;
+                    outputPass.sapVendorGroupCode = regPayeePersonalInput?.sapVendorInfo?.sapVendorGroupCode;
 
 
                     #endregion Create Payee in SAP
@@ -161,7 +161,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         //RegPayeePersonalDataOutputModel_Pass dataOutPass = new RegPayeePersonalDataOutputModel_Pass();
                         //dataOutPass.polisyClientId = regPayeePersonalInput.generalHeader.polisyClientId;
                         //dataOutPass.sapVendorCode = regPayeePersonalInput.sapVendorInfo.sapVendorCode;
-                        //dataOutPass.sapVendorGroupCode = regPayeePersonalInput.sapVendorInfo.sapVendorGroupCode;
+
+
+                       //  dataOutPass.sapVendorGroupCode = regPayeePersonalInput.sapVendorInfo.sapVendorGroupCode;
                         //dataOutPass.personalName = regPayeePersonalInput.profileInfo.personalName;
                         //dataOutPass.personalSurname = regPayeePersonalInput.profileInfo.personalSurname;
                         ////dataOutPass.corporateBranch = regPayeePersonalInput.profileInfo.corporateBranch;
@@ -179,7 +181,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 {
                     //regPayeePersonalInput.sapVendorInfo.sapVendorCode = SAPInqVendorContentOut.VCODE;
                     outputPass.sapVendorCode = sapInfo?.VCODE;
-                    outputPass.sapVendorGroupCode = sapInfo?.VGROUP;
+                    outputPass.sapVendorGroupCode = regPayeePersonalInput?.sapVendorInfo?.sapVendorGroupCode;
+                    //sapInfo?.VGROUP ?? regPayeePersonalInput?.sapVendorInfo?.sapVendorGroupCode ?? "";
                 }
                 regPayeePersonalOutput.data.Add(outputPass);
             }
