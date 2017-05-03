@@ -230,7 +230,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     //sapInfo?.VGROUP ?? regPayeePersonalInput?.sapVendorInfo?.sapVendorGroupCode ?? "";
                 }
 
-                //@TODO adHoc fix if fullname in null
+                //@TODO adHoc if fullname in null
                 if (string.IsNullOrEmpty(outputPass.personalName))
                 {
                     outputPass.personalName = regPayeePersonalInput?.profileInfo.personalName;
@@ -250,7 +250,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                 if (!string.IsNullOrEmpty(e.fieldError))
                 {
-                    
+                    regFail.code = AppConst.CODE_FAILED;
                     regFail.data.fieldErrors.Add(new RegPayeePersonalFieldErrors(e.fieldError, e.fieldMessage));
                     regFail.description = e.fieldMessage;
                 }
