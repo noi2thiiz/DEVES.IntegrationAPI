@@ -214,6 +214,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 regPayeePersonalOutput.code = CONST_CODE_FAILED;
                 regPayeePersonalOutput.message = CONST_MESSAGE_INTERNAL_ERROR;
                 regPayeePersonalOutput.description = e.StackTrace;
+                regPayeePersonalOutput.transactionId = TransactionId;
+                regPayeePersonalOutput.transactionDateTime= DateTime.Now;
 
                 RegPayeePersonalDataOutputModel_Fail dataOutFail = new RegPayeePersonalDataOutputModel_Fail();
                 regPayeePersonalOutput.data.Add(dataOutFail);

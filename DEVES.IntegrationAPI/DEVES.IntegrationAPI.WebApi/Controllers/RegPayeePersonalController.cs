@@ -9,10 +9,11 @@ using System.Web;
 using System.Web.Http;
 
 using DEVES.IntegrationAPI.WebApi.Logic;
+using DEVES.IntegrationAPI.WebApi.Templates;
 
 namespace DEVES.IntegrationAPI.WebApi.Controllers
 {
-    public class RegPayeePersonalController : ApiController
+    public class RegPayeePersonalController : BaseApiController
     {
 
         private string _logImportantMessage;
@@ -26,7 +27,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             //return Request.CreateResponse(contentOutput);
 
             buzCRMRegPayeePersonal cmdCrmRegPayee = new buzCRMRegPayeePersonal();
-            //cmdCrmRegPayee.TransactionId = Request.Properties["TransactionID"].ToString();
+            cmdCrmRegPayee.TransactionId = GetTransactionId();
 
             var contentText = value.ToString();
             var contentModel = JsonConvert.DeserializeObject<RegPayeePersonalInputModel>(contentText);

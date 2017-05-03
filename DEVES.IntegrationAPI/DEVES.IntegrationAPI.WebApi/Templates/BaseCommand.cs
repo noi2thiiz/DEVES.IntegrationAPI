@@ -35,7 +35,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
         internal const string CONST_DEFAULT_UID = "uid";
         internal const string CONST_CODE_INVALID_INPUT = "400";
         internal const string CONST_MESSAGE_INVALID_INPUT = "Invalid input(s)";
-        internal const string CONST_DESC_INVALID_INPUT = "Some of your input is invalid. Please recheck again.";
+        internal const string CONST_DESC_INVALID_INPUT = "Some of your input is invalid. Please recheck again";
 
 
         public string TransactionId { get; set; } = "";
