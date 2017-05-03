@@ -29,10 +29,13 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
     public abstract class BaseCommand
     {
         internal const string CONST_CODE_SUCCESS = "200";
+        internal const string CONST_MESSAGE_SUCCESS = "SUCCESS";
         internal const string CONST_CODE_FAILED = "500";
+        internal const string CONST_MESSAGE_INTERNAL_ERROR = "An error has occurred";
         internal const string CONST_DEFAULT_UID = "uid";
         internal const string CONST_CODE_INVALID_INPUT = "400";
         internal const string CONST_MESSAGE_INVALID_INPUT = "Invalid input(s)";
+        internal const string CONST_DESC_INVALID_INPUT = "Some of your input is invalid. Please recheck again.";
 
 
         public string TransactionId { get; set; } = "";

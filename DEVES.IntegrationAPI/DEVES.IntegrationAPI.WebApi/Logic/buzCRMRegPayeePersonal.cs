@@ -24,7 +24,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             RegPayeePersonalContentOutputModel regPayeePersonalOutput = new RegPayeePersonalContentOutputModel();
             regPayeePersonalOutput.data = new List<RegPayeePersonalDataOutputModel>();
             regPayeePersonalOutput.code = CONST_CODE_SUCCESS;
-            regPayeePersonalOutput.message = "SUCCESS";
+            regPayeePersonalOutput.message = CONST_MESSAGE_SUCCESS;
             regPayeePersonalOutput.transactionDateTime = DateTime.Now;
             regPayeePersonalOutput.transactionId = TransactionId;
             try
@@ -39,7 +39,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 var master_salutation = PersonalTitleMasterData.Instance.FindByCode(regPayeePersonalInput.profileInfo.salutation);
                 if (master_salutation == null)
                 {
-                    regFail.data.fieldErrors.Add(new RegPayeePersonalFieldErrors("profileInfo.salutation", "PersonalTitleMasterData is invalid"));
+                    var message =
+                        MessageBuilder.Instance.GetInvalidMasterMessage("Salutation",
+                            regPayeePersonalInput.profileInfo.salutation);
+                    regFail.data.fieldErrors.Add(new RegPayeePersonalFieldErrors("profileInfo.salutation",message ));
                 }
                 else
                 {
@@ -49,7 +52,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 var master_nationality = NationalityMasterData.Instance.FindByCode(regPayeePersonalInput.profileInfo.nationality, "00203");
                 if (master_nationality == null)
                 {
-                    regFail.data.fieldErrors.Add(new RegPayeePersonalFieldErrors("profileInfo.nationality", "NationalityMasterData is invalid"));
+                    var message =
+                        MessageBuilder.Instance.GetInvalidMasterMessage("Nationality",
+                            regPayeePersonalInput.profileInfo.nationality);
+                    regFail.data.fieldErrors.Add(new RegPayeePersonalFieldErrors("profileInfo.nationality", message));
                 }
                 else
                 {
@@ -59,7 +65,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 var master_occupation = OccupationMasterData.Instance.FindByCode(regPayeePersonalInput.profileInfo.occupation, "00023");
                 if (master_occupation == null)
                 {
-                    regFail.data.fieldErrors.Add(new RegPayeePersonalFieldErrors("profileInfo.occupation", "OccupationMasterData is invalid"));
+                    var message =
+                        MessageBuilder.Instance.GetInvalidMasterMessage("Occupation",
+                            regPayeePersonalInput.profileInfo.occupation);
+                    regFail.data.fieldErrors.Add(new RegPayeePersonalFieldErrors("profileInfo.occupation", message));
                 }
                 else
                 {
@@ -69,7 +78,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 var master_country = CountryMasterData.Instance.FindByCode(regPayeePersonalInput.addressInfo.country, "00220");
                 if (master_country == null)
                 {
-                    regFail.data.fieldErrors.Add(new RegPayeePersonalFieldErrors("addressInfo.country", "CountryMasterData is invalid"));
+                    var message =
+                        MessageBuilder.Instance.GetInvalidMasterMessage("Country",
+                            regPayeePersonalInput.addressInfo.country);
+                    regFail.data.fieldErrors.Add(new RegPayeePersonalFieldErrors("addressInfo.country", message));
                 }
                 else
                 {
@@ -189,18 +201,18 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             catch (FieldValidationException e)
             {
 
-                regFail.code = CONST_CODE_FAILED;
-                regFail.message = e.Message;
-                regFail.description = e.StackTrace;
+                regFail.code = CONST_CODE_INVALID_INPUT;
+                regFail.message = CONST_MESSAGE_INVALID_INPUT;
+                regFail.description = CONST_DESC_INVALID_INPUT;
                 regFail.transactionId = TransactionId;
-                regFail.transactionDateTime = DateTime.Now.ToString();
+                regFail.transactionDateTime = DateTime.Now;
 
                 return regFail;
             }
             catch (Exception e)
             {
                 regPayeePersonalOutput.code = CONST_CODE_FAILED;
-                regPayeePersonalOutput.message = e.Message;
+                regPayeePersonalOutput.message = CONST_MESSAGE_INTERNAL_ERROR;
                 regPayeePersonalOutput.description = e.StackTrace;
 
                 RegPayeePersonalDataOutputModel_Fail dataOutFail = new RegPayeePersonalDataOutputModel_Fail();

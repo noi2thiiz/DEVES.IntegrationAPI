@@ -204,7 +204,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 outputFail.message = "Invalid Input(s)";
                 outputFail.description = "Some of your input is invalid. Please recheck again.";
                 outputFail.transactionId = Request.Properties["TransactionID"].ToString();
-                outputFail.transactionDateTime = DateTime.Now.ToString();
+                outputFail.transactionDateTime = DateTime.Now;
 
                 return Request.CreateResponse<RegPayeePersonalOutputModel_Fail>(outputFail);
             }

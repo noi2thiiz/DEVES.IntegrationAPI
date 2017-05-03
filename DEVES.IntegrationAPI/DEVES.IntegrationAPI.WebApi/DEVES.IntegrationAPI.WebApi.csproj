@@ -399,6 +399,7 @@
     <Compile Include="Templates\FieldValidationException.cs" />
     <Compile Include="Templates\ICommand.cs" />
     <Compile Include="Templates\JSONExtension.cs" />
+    <Compile Include="Templates\MessageBuilder.cs" />
     <Compile Include="Templates\NullCommand.cs" />
     <Compile Include="Templates\NullTransformer.cs" />
     <Compile Include="Templates\Parameter.cs" />
