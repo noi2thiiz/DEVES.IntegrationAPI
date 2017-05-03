@@ -66,8 +66,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             {
                 trgt.WHTCODE = src.sapVendorInfo.withHoldingTaxInfo.whtTaxCode;
                 trgt.RECPTYPE = src.sapVendorInfo.withHoldingTaxInfo.receiptType;
-
-                trgt.WHTCTRY = "TH";                
+                if (string.IsNullOrEmpty(trgt.WHTCODE) )
+                {
+                    trgt.WHTCTRY = "TH";
+                }
+                           
             }
 
             trgt.COMPANY = "2020";

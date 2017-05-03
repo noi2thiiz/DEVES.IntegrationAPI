@@ -153,14 +153,46 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 {
                     #region Create Payee in SAP
                     //BaseDataModel SAPCreateVendorIn = DataModelFactory.GetModel(typeof(Model.SAP.SAPCreateVendorInputModel));
-                    Model.SAP.SAPCreateVendorInputModel SAPCreateVendorIn = new Model.SAP.SAPCreateVendorInputModel();
-                    SAPCreateVendorIn = (Model.SAP.SAPCreateVendorInputModel)TransformerFactory.TransformModel(regPayeePersonalInput, SAPCreateVendorIn);
+                    try
+                    {
+                        Model.SAP.SAPCreateVendorInputModel SAPCreateVendorIn =
+                            new Model.SAP.SAPCreateVendorInputModel();
+                        SAPCreateVendorIn =
+                            (Model.SAP.SAPCreateVendorInputModel) TransformerFactory.TransformModel(
+                                regPayeePersonalInput, SAPCreateVendorIn);
 
-                    var SAPCreateVendorContentOut = CallDevesServiceProxy<Model.SAP.SAPCreateVendorOutputModel, Model.SAP.SAPCreateVendorContentOutputModel>(CommonConstant.ewiEndpointKeySAPCreateVendor, SAPCreateVendorIn);
+                        var SAPCreateVendorContentOut =
+                            CallDevesServiceProxy<Model.SAP.SAPCreateVendorOutputModel,
+                                Model.SAP.SAPCreateVendorContentOutputModel>(
+                                CommonConstant.ewiEndpointKeySAPCreateVendor, SAPCreateVendorIn);
 
-                    regPayeePersonalInput.sapVendorInfo.sapVendorCode = SAPCreateVendorContentOut?.VCODE;
-                    outputPass.sapVendorCode = SAPCreateVendorContentOut?.VCODE;
-                    outputPass.sapVendorGroupCode = regPayeePersonalInput?.sapVendorInfo?.sapVendorGroupCode;
+                        if (string.IsNullOrEmpty(SAPCreateVendorContentOut?.VCODE))
+                        {
+                            throw new Exception(SAPCreateVendorContentOut?.Message);
+                        }
+
+                        regPayeePersonalInput.sapVendorInfo.sapVendorCode = SAPCreateVendorContentOut?.VCODE;
+                        outputPass.sapVendorCode = SAPCreateVendorContentOut?.VCODE;
+                        outputPass.sapVendorGroupCode = regPayeePersonalInput?.sapVendorInfo?.sapVendorGroupCode;
+
+                    }
+                    catch (Exception e)
+                    {
+                        //Console.WriteLine("181"+e.Message);
+                        if (e.Message == "Please fill recipient type.")
+                        {
+                           
+                            throw new FieldValidationException("withHoldingTaxInfo.receiptType",
+                                "Please fill recipient type.", "Cannot create sap vendor");
+                        }
+                        else
+                        {
+                            throw;
+                        }
+
+                      
+                       
+                    }
 
 
                     #endregion Create Payee in SAP
@@ -197,16 +229,39 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     outputPass.sapVendorGroupCode = regPayeePersonalInput?.sapVendorInfo?.sapVendorGroupCode;
                     //sapInfo?.VGROUP ?? regPayeePersonalInput?.sapVendorInfo?.sapVendorGroupCode ?? "";
                 }
+
+                //@TODO adHoc fix if fullname in null
+                if (string.IsNullOrEmpty(outputPass.personalName))
+                {
+                    outputPass.personalName = regPayeePersonalInput?.profileInfo.personalName;
+                    outputPass.personalSurname = regPayeePersonalInput?.profileInfo.personalSurname;
+                }
+
                 regPayeePersonalOutput.data.Add(outputPass);
             }
             catch (FieldValidationException e)
             {
-
                 regFail.code = AppConst.CODE_INVALID_INPUT;
-                regFail.message = AppConst.MESSAGE_INVALID_INPUT;
+               
                 regFail.description = AppConst.DESC_INVALID_INPUT;
                 regFail.transactionId = TransactionId;
                 regFail.transactionDateTime = DateTime.Now;
+                regFail.message = AppConst.MESSAGE_INVALID_INPUT;
+
+                if (!string.IsNullOrEmpty(e.fieldError))
+                {
+                    
+                    regFail.data.fieldErrors.Add(new RegPayeePersonalFieldErrors(e.fieldError, e.fieldMessage));
+                    regFail.description = e.fieldMessage;
+                }
+                if (!string.IsNullOrEmpty(e.message))
+                {
+                    
+                    regFail.message =e.message;
+                    regFail.description = e.fieldMessage;
+                }
+                
+               
 
                 return regFail;
             }

@@ -2,21 +2,36 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Microsoft.Crm.Sdk.Messages;
 
 namespace DEVES.IntegrationAPI.WebApi.Templates
 {
     public class FieldValidationException : Exception
     {
-        public string fieldError = "";
-        public string message = "";
+        public string fieldError { get; set; } = "";
+    
+        public string message  {get; set; } = "";
+        public string fieldMessage { get; set; } = "";
 
         public FieldValidationException()
         {
         }
 
-        public FieldValidationException(string fieldError, string message)
+        public FieldValidationException(string message)
+        {
+            this.message = message;
+        }
+
+        public FieldValidationException(string fieldError, string fieldMessage)
         {
             this.fieldError = fieldError;
+            this.fieldMessage = fieldMessage;
+            this.message = fieldMessage;
+        }
+        public FieldValidationException(string fieldError, string fieldMessage,string message)
+        {
+            this.fieldError = fieldError;
+            this.fieldMessage = fieldMessage;
             this.message = message;
         }
     }
