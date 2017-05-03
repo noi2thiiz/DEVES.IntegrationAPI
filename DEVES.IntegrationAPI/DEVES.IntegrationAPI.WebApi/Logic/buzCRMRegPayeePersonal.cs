@@ -21,6 +21,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
         public override BaseDataModel Execute(object input)
         {
+            Console.WriteLine("24: START:RegPayeePersonal Execute");
             RegPayeePersonalContentOutputModel regPayeePersonalOutput = new RegPayeePersonalContentOutputModel();
             regPayeePersonalOutput.data = new List<RegPayeePersonalDataOutputModel>();
             regPayeePersonalOutput.code = CONST_CODE_SUCCESS;

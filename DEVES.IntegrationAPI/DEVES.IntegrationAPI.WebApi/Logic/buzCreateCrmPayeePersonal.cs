@@ -76,7 +76,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         contact.pfc_passport_id = contentModel.profileInfo.idPassport;
                         contact.pfc_alien_id = contentModel.profileInfo.idAlien;
                         contact.pfc_driver_license = contentModel.profileInfo.idDriving;
-                        contact.pfc_date_of_birth = Convert.ToDateTime(contentModel.profileInfo.birthDate);
+                        if (contentModel?.profileInfo?.birthDate != null)
+                        {
+                            contact.pfc_date_of_birth = Convert.ToDateTime(contentModel.profileInfo.birthDate);
+
+                        }
+
                         contact.pfc_polisy_nationality_code = contentModel.profileInfo.nationality;
                         // contact.pfc_language = contentModel.profileInfo.language; // optionset
                         // contact.FamilyStatusCode = contentModel.profileInfo.married; // optionset
@@ -130,7 +135,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         Entity newContact = crmSvc.Retrieve(Contact.EntityLogicalName, res.id, colSet);
 
                         dataOutput.crmClientId = newContact["pfc_crm_person_id"].ToString() ;
-                        dataOutput.code = "200";
+                        dataOutput.code =AppConst.CODE_SUCCESS;
                         dataOutput.transactionId = TransactionId;
                         dataOutput.transactionDateTime = DateTime.Now;
 
@@ -174,14 +179,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 else if (crmData.Count == 1) // Means List crmData has 1 data
                 {
                     dataOutput.crmClientId = crmData[0];
-                    dataOutput.code = "200";
+                    dataOutput.code = AppConst.CODE_SUCCESS;
                     dataOutput.transactionId = TransactionId;
                     dataOutput.transactionDateTime = DateTime.Now;
                     return dataOutput;
                 }
                 else
                 {
-                    dataOutput.code = "500";
+                    dataOutput.code = AppConst.CODE_FAILED;
                     dataOutput.transactionId = TransactionId;
                     dataOutput.transactionDateTime = DateTime.Now;
                     return dataOutput;

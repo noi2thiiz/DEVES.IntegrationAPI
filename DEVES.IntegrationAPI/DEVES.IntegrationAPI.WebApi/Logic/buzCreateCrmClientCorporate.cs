@@ -67,7 +67,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         account.pfc_contact_personal = contentModel.profileHeader.contactPerson; 
                         account.pfc_register_no = contentModel.profileHeader.idRegCorp; // contentModel.profileHeader.idRegCorp;
                         account.pfc_tax_no = contentModel.profileHeader.idTax; // contentModel.profileHeader.idTax;
-                        account.pfc_date_of_birth = contentModel.profileHeader.dateInCorporate;
+
+                        if (contentModel?.profileHeader?.dateInCorporate != null)
+                        {
+                            account.pfc_date_of_birth = contentModel.profileHeader.dateInCorporate;
+                        }
+
+
                         account.pfc_tac_branch = contentModel.profileHeader.corporateBranch; // contentModel.profileHeader.corporateBranch;
                         account.pfc_economic_type = new OptionSetValue(Int32.Parse(OptionsetConvertor(contentModel.profileHeader.econActivity)));
                         account.pfc_polisy_nationality_code = contentModel.profileHeader.countryOrigin;

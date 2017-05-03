@@ -82,7 +82,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         contact.pfc_driver_license = contentModel.profileInfo.idDriving;
 
 
-                        if(contentModel.profileInfo.birthDate != null)
+                        if(contentModel.profileInfo?.birthDate != null)
                         {
 
                             contact.pfc_date_of_birth = contentModel.profileInfo.birthDate;

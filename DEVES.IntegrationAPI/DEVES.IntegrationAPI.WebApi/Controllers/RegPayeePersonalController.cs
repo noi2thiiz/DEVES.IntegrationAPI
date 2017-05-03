@@ -22,6 +22,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
 
         public object Post([FromBody]object value)
         {
+            Console.WriteLine("25: START:RegPayeePersonal");
             //var data = File.ReadAllText(HttpContext.Current.Server.MapPath("~/App_Data/TEST_Response_RegPayeeCorporate.json"));
             //var contentOutput = JsonConvert.DeserializeObject(data);
             //return Request.CreateResponse(contentOutput);
