@@ -29,13 +29,19 @@ namespace DEVES.IntegrationAPI.Model
 
         public void AddFieldError(string fieldName, string fieldMessage)
         {
-            data.fieldErrors.Add(new OutputModelFailDataFieldErrors(fieldName, fieldMessage));
+            data.AddFieldError(fieldName, fieldMessage);
         }
     }
 
     public class OutputModelFailData : BaseDataModel
     {
         public List<OutputModelFailDataFieldErrors> fieldErrors { get; set; } = new List<OutputModelFailDataFieldErrors>();
+
+        public void AddFieldError(string fieldName, string fieldMessage)
+        {
+
+            fieldErrors.Add(new OutputModelFailDataFieldErrors(fieldName, fieldMessage));
+        }
     }
 
     public class OutputModelFailDataFieldErrors:BaseDataModel

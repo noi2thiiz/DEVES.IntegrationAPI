@@ -301,6 +301,10 @@
     <Compile Include="Controllers\UpdateSurveyStatusController.cs" />
     <Compile Include="DataAccessService\DataAdapter\DbRequest.cs" />
     <Compile Include="DataAccessService\DataAdapter\DbResult.cs" />
+    <Compile Include="DataAccessService\DataAdapter\IDataReader.cs" />
+    <Compile Include="DataAccessService\DataAdapter\RESTClient\RESTClient.cs" />
+    <Compile Include="DataAccessService\DataAdapter\RESTClient\RESTClientResult.cs" />
+    <Compile Include="DataAccessService\DataAdapter\RestDataReader.cs" />
     <Compile Include="DataAccessService\DataAdapter\StoreDataReader.cs" />
     <Compile Include="DataAccessService\Mastes\AddressTypeMasterData.cs" />
     <Compile Include="DataAccessService\Mastes\CountryMasterData.cs" />
@@ -399,6 +403,7 @@
     <Compile Include="Templates\BaseCommand.cs" />
     <Compile Include="Templates\BaseTransformer.cs" />
     <Compile Include="Templates\AppConst.cs" />
+    <Compile Include="Templates\BuzCommand.cs" />
     <Compile Include="Templates\EWIResponseWrapper.cs" />
     <Compile Include="Templates\FieldValidationException.cs" />
     <Compile Include="Templates\ICommand.cs" />

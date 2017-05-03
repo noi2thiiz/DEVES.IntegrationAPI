@@ -13,9 +13,9 @@ using System.Collections;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
-    public class buzInquiryCRMPayeeList : BaseCommand
+    public class buzInquiryCRMPayeeList : BuzCommand
     {
-        public override BaseDataModel Execute(object input)
+        public override BaseDataModel ExecuteInput(object input)
         {
             /*
                 1) sapVendorCode => ใช้ตัวเดียว ใหญ่สุด ถ้ามีเอาอันนี้ Search ใน SAPเลยไม่ต้องสนใจใคร
@@ -40,8 +40,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             crmInqPayeeOut.data = new List<InquiryCrmPayeeListDataModel>();
             crmInqPayeeOut.description = "";
 
-            try
-            {
+           
                 Console.WriteLine(input.ToString());
 
                 InquiryCRMPayeeListInputModel inqCrmPayeeListIn = (InquiryCRMPayeeListInputModel)input;
@@ -342,13 +341,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 }
                 crmInqPayeeOut.code = CONST_CODE_SUCCESS;                
                 crmInqPayeeOut.message = "SUCCESS";
-            }
-            catch (Exception e)
-            {
-                crmInqPayeeOut.code = CONST_CODE_FAILED;
-                crmInqPayeeOut.message = e.Message;
-                crmInqPayeeOut.description = e.StackTrace;
-            }
+           
             crmInqPayeeOut.transactionId = TransactionId;
             crmInqPayeeOut.transactionDateTime = DateTime.Now;
 

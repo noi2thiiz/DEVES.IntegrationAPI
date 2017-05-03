@@ -14,101 +14,117 @@ using DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
-    public class buzCRMRegPayeePersonal: BaseCommand
+    public class buzCRMRegPayeePersonal: BuzCommand
     {
 
-        RegPayeePersonalOutputModel_Fail regFail = new RegPayeePersonalOutputModel_Fail();
-
-        public override BaseDataModel Execute(object input)
+      
+        private RegPayeePersonalInputModel RegPayeePersonalInput { get; set; }
+        private RegPayeePersonalDataOutputModel_Pass outputPass { get; set; }= new RegPayeePersonalDataOutputModel_Pass();
+        public void TranFormInput(RegPayeePersonalInputModel regPayeePersonalInput)
         {
-            Console.WriteLine("24: START:RegPayeePersonal Execute");
-            RegPayeePersonalContentOutputModel regPayeePersonalOutput = new RegPayeePersonalContentOutputModel();
-            regPayeePersonalOutput.data = new List<RegPayeePersonalDataOutputModel>();
-            regPayeePersonalOutput.code = CONST_CODE_SUCCESS;
-            regPayeePersonalOutput.message = CONST_MESSAGE_SUCCESS;
-            regPayeePersonalOutput.transactionDateTime = DateTime.Now;
-            regPayeePersonalOutput.transactionId = TransactionId;
-            try
+
+            // Validate Master Data before sending to other services
+            var fieldErrorData = new OutputModelFailData();
+    
+
+            var masterSalutation = PersonalTitleMasterData.Instance.FindByCode(regPayeePersonalInput.profileInfo.salutation);
+            if (masterSalutation == null)
             {
-                RegPayeePersonalDataOutputModel_Pass outputPass = new RegPayeePersonalDataOutputModel_Pass();
-                RegPayeePersonalInputModel regPayeePersonalInput = (RegPayeePersonalInputModel)input;
+                var message =
+                    MessageBuilder.Instance.GetInvalidMasterMessage("Salutation",
+                        regPayeePersonalInput.profileInfo.salutation);
 
-                // Validate Master Data before sending to other services
-                regFail.data = new RegPayeePersonalDataOutputModel_Fail();
-                regFail.data.fieldErrors = new List<RegPayeePersonalFieldErrors>();
+                fieldErrorData.AddFieldError("profileInfo.salutation", message);
+            }
+            else
+            {
+                regPayeePersonalInput.profileInfo.salutation = masterSalutation.PolisyCode;
+            }
 
-                var master_salutation = PersonalTitleMasterData.Instance.FindByCode(regPayeePersonalInput.profileInfo.salutation);
-                if (master_salutation == null)
-                {
-                    var message =
-                        MessageBuilder.Instance.GetInvalidMasterMessage("Salutation",
-                            regPayeePersonalInput.profileInfo.salutation);
-                    regFail.data.fieldErrors.Add(new RegPayeePersonalFieldErrors("profileInfo.salutation",message ));
-                }
-                else
-                {
-                    regPayeePersonalInput.profileInfo.salutation = master_salutation.PolisyCode;
-                }
+            var masterNationality = NationalityMasterData.Instance.FindByCode(regPayeePersonalInput.profileInfo.nationality, "00203");
+            if (masterNationality == null)
+            {
+                var message =
+                    MessageBuilder.Instance.GetInvalidMasterMessage("Nationality",
+                        regPayeePersonalInput.profileInfo.nationality);
+              
+                fieldErrorData.AddFieldError("profileInfo.nationality", message);
+            }
+            else
+            {
+                regPayeePersonalInput.profileInfo.nationality = masterNationality.PolisyCode;
+            }
 
-                var master_nationality = NationalityMasterData.Instance.FindByCode(regPayeePersonalInput.profileInfo.nationality, "00203");
-                if (master_nationality == null)
-                {
-                    var message =
-                        MessageBuilder.Instance.GetInvalidMasterMessage("Nationality",
-                            regPayeePersonalInput.profileInfo.nationality);
-                    regFail.data.fieldErrors.Add(new RegPayeePersonalFieldErrors("profileInfo.nationality", message));
-                }
-                else
-                {
-                    regPayeePersonalInput.profileInfo.nationality = master_nationality.PolisyCode;
-                }
+            var masterOccupation = OccupationMasterData.Instance.FindByCode(regPayeePersonalInput.profileInfo.occupation, "00023");
+            if (masterOccupation == null)
+            {
+                var message =
+                    MessageBuilder.Instance.GetInvalidMasterMessage("Occupation",
+                        regPayeePersonalInput.profileInfo.occupation);
 
-                var master_occupation = OccupationMasterData.Instance.FindByCode(regPayeePersonalInput.profileInfo.occupation, "00023");
-                if (master_occupation == null)
-                {
-                    var message =
-                        MessageBuilder.Instance.GetInvalidMasterMessage("Occupation",
-                            regPayeePersonalInput.profileInfo.occupation);
-                    regFail.data.fieldErrors.Add(new RegPayeePersonalFieldErrors("profileInfo.occupation", message));
-                }
-                else
-                {
-                    regPayeePersonalInput.profileInfo.occupation = master_occupation.PolisyCode;
-                }
+                fieldErrorData.AddFieldError("profileInfo.occupation", message);
 
-                var master_country = CountryMasterData.Instance.FindByCode(regPayeePersonalInput.addressInfo.country, "00220");
-                if (master_country == null)
-                {
-                    var message =
-                        MessageBuilder.Instance.GetInvalidMasterMessage("Country",
-                            regPayeePersonalInput.addressInfo.country);
-                    regFail.data.fieldErrors.Add(new RegPayeePersonalFieldErrors("addressInfo.country", message));
-                }
-                else
-                {
-                    regPayeePersonalInput.addressInfo.country = master_country.PolisyCode;
-                }
+               
+            }
+            else
+            {
+                regPayeePersonalInput.profileInfo.occupation = masterOccupation.PolisyCode;
+            }
 
-                if (regFail.data.fieldErrors.Count > 0)
-                {
-                    throw new FieldValidationException();
-                }
+            var masterCountry = CountryMasterData.Instance.FindByCode(regPayeePersonalInput.addressInfo.country, "00220");
+            if (masterCountry == null)
+            {
+                var message =
+                    MessageBuilder.Instance.GetInvalidMasterMessage("Country",
+                        regPayeePersonalInput.addressInfo.country);
+                fieldErrorData.AddFieldError("addressInfo.country", message);
+               
+            }
+            else
+            {
+                regPayeePersonalInput.addressInfo.country = masterCountry.PolisyCode;
+            }
 
-                ///////////////////////////////////////////////////////////////////////////////////////////////////
+            if (fieldErrorData.fieldErrors.Any())
+            {
+                throw new FieldValidationException(fieldErrorData);
+            }
 
-                if (string.IsNullOrEmpty(regPayeePersonalInput?.generalHeader?.polisyClientId))
+      
+          
+        }
+        public override BaseDataModel ExecuteInput(object input)
+        {
+            RegPayeePersonalInput = (RegPayeePersonalInputModel)input;
+
+            var regPayeePersonalOutput =
+                new RegPayeePersonalContentOutputModel
                 {
-                    if (string.IsNullOrEmpty(regPayeePersonalInput?.generalHeader?.cleansingId))
+                    data = new List<RegPayeePersonalDataOutputModel>(),
+                    code = CONST_CODE_SUCCESS,
+                    message = CONST_MESSAGE_SUCCESS,
+                    transactionDateTime = DateTime.Now,
+                    transactionId = TransactionId
+                };
+
+
+
+            TranFormInput(RegPayeePersonalInput);
+
+
+            if (string.IsNullOrEmpty(RegPayeePersonalInput?.generalHeader?.polisyClientId))
+                {
+                    if (string.IsNullOrEmpty(RegPayeePersonalInput?.generalHeader?.cleansingId))
                     {
                         #region Create Payee in Cleansing
                         BaseDataModel clsCreatePersonalIn = DataModelFactory.GetModel(typeof(CLSCreatePersonalClientInputModel));
-                        clsCreatePersonalIn = TransformerFactory.TransformModel(regPayeePersonalInput, clsCreatePersonalIn);
+                        clsCreatePersonalIn = TransformerFactory.TransformModel(RegPayeePersonalInput, clsCreatePersonalIn);
                         CLSCreatePersonalClientContentOutputModel clsCreatePayeeContent = CallDevesServiceProxy<CLSCreatePersonalClientOutputModel, CLSCreatePersonalClientContentOutputModel>
                                                                                             (CommonConstant.ewiEndpointKeyCLSCreatePersonalClient, clsCreatePersonalIn);
                         //regPayeePersonalInput = (RegPayeePersonalInputModel)TransformerFactory.TransformModel(clsCreatePayeeContent, regPayeePersonalInput);
                         if (clsCreatePayeeContent?.code == CONST_CODE_SUCCESS)
                         {
-                            regPayeePersonalInput.generalHeader.cleansingId = clsCreatePayeeContent.data?.cleansingId ?? "";
+                            RegPayeePersonalInput.generalHeader.cleansingId = clsCreatePayeeContent.data?.cleansingId ?? "";
 
                             outputPass.polisyClientId = clsCreatePayeeContent.data?.clientId;
                             outputPass.personalName = clsCreatePayeeContent.data?.personalName;
@@ -119,7 +135,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                     #region Create Payee in Polisy400
                     BaseDataModel polCreatePersonalIn = DataModelFactory.GetModel(typeof(CLIENTCreatePersonalClientAndAdditionalInfoInputModel));
-                    polCreatePersonalIn = TransformerFactory.TransformModel(regPayeePersonalInput, polCreatePersonalIn);
+                    polCreatePersonalIn = TransformerFactory.TransformModel(RegPayeePersonalInput, polCreatePersonalIn);
                     CLIENTCreatePersonalClientAndAdditionalInfoContentModel polCreatePayeeContent = CallDevesServiceProxy<CLIENTCreatePersonalClientAndAdditionalInfoOutputModel
                                                                                                         , CLIENTCreatePersonalClientAndAdditionalInfoContentModel>
                                                                                                         (CommonConstant.ewiEndpointKeyCLIENTCreatePersonalClient, polCreatePersonalIn);
@@ -127,7 +143,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                     if (polCreatePayeeContent != null)
                     {
-                        regPayeePersonalInput.generalHeader.polisyClientId = polCreatePayeeContent.clientID; 
+                        RegPayeePersonalInput.generalHeader.polisyClientId = polCreatePayeeContent.clientID; 
 
                         outputPass.polisyClientId = polCreatePayeeContent.clientID;
                     }
@@ -139,10 +155,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 Model.SAP.SAPInquiryVendorInputModel SAPInqVendorIn = (Model.SAP.SAPInquiryVendorInputModel)DataModelFactory.GetModel(typeof(Model.SAP.SAPInquiryVendorInputModel));
                 //SAPInqVendorIn = TransformerFactory.TransformModel(regPayeePersonalInput, SAPInqVendorIn);
 
-                SAPInqVendorIn.TAX3 = regPayeePersonalInput.profileInfo.idCitizen??"";
+                SAPInqVendorIn.TAX3 = RegPayeePersonalInput.profileInfo.idCitizen??"";
                 SAPInqVendorIn.TAX4 = "";
-                SAPInqVendorIn.PREVACC = regPayeePersonalInput.sapVendorInfo.sapVendorCode ?? "";
-                SAPInqVendorIn.VCODE = regPayeePersonalInput.generalHeader.polisyClientId ?? "";
+                SAPInqVendorIn.PREVACC = RegPayeePersonalInput.sapVendorInfo.sapVendorCode ?? "";
+                SAPInqVendorIn.VCODE = RegPayeePersonalInput.generalHeader.polisyClientId ?? "";
 
                 var SAPInqVendorContentOut = CallDevesServiceProxy<Model.SAP.SAPInquiryVendorOutputModel, Model.SAP.EWIResSAPInquiryVendorContentModel>(CommonConstant.ewiEndpointKeySAPInquiryVendor, SAPInqVendorIn);
                 #endregion Search Payee in SAP
@@ -159,7 +175,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                             new Model.SAP.SAPCreateVendorInputModel();
                         SAPCreateVendorIn =
                             (Model.SAP.SAPCreateVendorInputModel) TransformerFactory.TransformModel(
-                                regPayeePersonalInput, SAPCreateVendorIn);
+                                RegPayeePersonalInput, SAPCreateVendorIn);
 
                         var SAPCreateVendorContentOut =
                             CallDevesServiceProxy<Model.SAP.SAPCreateVendorOutputModel,
@@ -171,15 +187,16 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                             throw new Exception(SAPCreateVendorContentOut?.Message);
                         }
 
-                        regPayeePersonalInput.sapVendorInfo.sapVendorCode = SAPCreateVendorContentOut?.VCODE;
+                        RegPayeePersonalInput.sapVendorInfo.sapVendorCode = SAPCreateVendorContentOut?.VCODE;
                         outputPass.sapVendorCode = SAPCreateVendorContentOut?.VCODE;
-                        outputPass.sapVendorGroupCode = regPayeePersonalInput?.sapVendorInfo?.sapVendorGroupCode;
+                        outputPass.sapVendorGroupCode = RegPayeePersonalInput?.sapVendorInfo?.sapVendorGroupCode;
 
                     }
                     catch (Exception e)
                     {
-                        //Console.WriteLine("181"+e.Message);
-                        if (e.Message == "Please fill recipient type.")
+                    //@TODO adHoc fix Please fill recipient type  มัน return success เลยถ้าไม่ได้ดักไว้ 
+                 
+                    if (e.Message == "Please fill recipient type.")
                         {
                            
                             throw new FieldValidationException("withHoldingTaxInfo.receiptType",
@@ -199,7 +216,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                     #region Create payee in CRM
                     buzCreateCrmPayeePersonal cmdCreateCrmPayee = new buzCreateCrmPayeePersonal();
-                    CreateCrmPersonInfoOutputModel crmContentOutput = (CreateCrmPersonInfoOutputModel)cmdCreateCrmPayee.Execute(regPayeePersonalInput);
+                    CreateCrmPersonInfoOutputModel crmContentOutput = (CreateCrmPersonInfoOutputModel)cmdCreateCrmPayee.Execute(RegPayeePersonalInput);
 
                     if (crmContentOutput.code == CONST_CODE_SUCCESS)
                     {
@@ -226,56 +243,20 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 {
                     //regPayeePersonalInput.sapVendorInfo.sapVendorCode = SAPInqVendorContentOut.VCODE;
                     outputPass.sapVendorCode = sapInfo?.VCODE;
-                    outputPass.sapVendorGroupCode = regPayeePersonalInput?.sapVendorInfo?.sapVendorGroupCode;
+                    outputPass.sapVendorGroupCode = RegPayeePersonalInput?.sapVendorInfo?.sapVendorGroupCode;
                     //sapInfo?.VGROUP ?? regPayeePersonalInput?.sapVendorInfo?.sapVendorGroupCode ?? "";
                 }
 
-                //@TODO adHoc if fullname in null
+                //@TODO adHoc fix if fullname in null
                 if (string.IsNullOrEmpty(outputPass.personalName))
                 {
-                    outputPass.personalName = regPayeePersonalInput?.profileInfo.personalName;
-                    outputPass.personalSurname = regPayeePersonalInput?.profileInfo.personalSurname;
+                    outputPass.personalName = RegPayeePersonalInput?.profileInfo.personalName;
+                    outputPass.personalSurname = RegPayeePersonalInput?.profileInfo.personalSurname;
                 }
 
                 regPayeePersonalOutput.data.Add(outputPass);
-            }
-            catch (FieldValidationException e)
-            {
-                regFail.code = AppConst.CODE_INVALID_INPUT;
-               
-                regFail.description = AppConst.DESC_INVALID_INPUT;
-                regFail.transactionId = TransactionId;
-                regFail.transactionDateTime = DateTime.Now;
-                regFail.message = AppConst.MESSAGE_INVALID_INPUT;
-
-                if (!string.IsNullOrEmpty(e.fieldError))
-                {
-                    regFail.code = AppConst.CODE_FAILED;
-                    regFail.data.fieldErrors.Add(new RegPayeePersonalFieldErrors(e.fieldError, e.fieldMessage));
-                    regFail.description = e.fieldMessage;
-                }
-                if (!string.IsNullOrEmpty(e.message))
-                {
-                    
-                    regFail.message =e.message;
-                    regFail.description = e.fieldMessage;
-                }
-                
-               
-
-                return regFail;
-            }
-            catch (Exception e)
-            {
-                regPayeePersonalOutput.code = AppConst.CODE_FAILED;
-                regPayeePersonalOutput.message = AppConst.MESSAGE_INTERNAL_ERROR;
-                regPayeePersonalOutput.description = e.StackTrace;
-                regPayeePersonalOutput.transactionId = TransactionId;
-                regPayeePersonalOutput.transactionDateTime= DateTime.Now;
-
-                RegPayeePersonalDataOutputModel_Fail dataOutFail = new RegPayeePersonalDataOutputModel_Fail();
-                regPayeePersonalOutput.data.Add(dataOutFail);
-            }
+            
+           
             return regPayeePersonalOutput;
 
         }

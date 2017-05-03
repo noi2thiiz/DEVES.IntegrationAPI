@@ -7,7 +7,7 @@ using System.Web;
 
 namespace DEVES.IntegrationAPI.WebApi.DataAccessService.DataAdapter
 {
-    public class StoreDataReader
+    public class StoreDataReader : IDataReader
     {
         public string ConnectionString { get; set; }
         public StoreDataReader(string connectionString)

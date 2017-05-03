@@ -16,8 +16,9 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
     {
         protected Dictionary<string, dynamic> DataList { get; set; } 
         protected Dictionary<string, dynamic> DataList2 { get; set; }
+        protected Dictionary<string, dynamic> DataList3 { get; set; }
 
-        protected StoreDataReader DataReader { get; set; }
+        protected IDataReader DataReader { get; set; }
         protected string StoreName { get; set; }
         protected string FieldCodeName { get; set; }
 
@@ -27,11 +28,12 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
              StoreName = storeName;
              FieldCodeName = fieldCodeName;
             if (null != DataList2) return;
-            DataReader = new StoreDataReader();
+            DataReader = new RestDataReader();
             DataList = new Dictionary<string, dynamic>();
             DataList2 = new Dictionary<string, dynamic>();
-
            
+
+
 
             var reader = DataReader;
             var req = new DbRequest {StoreName = storeName};
@@ -48,7 +50,12 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
                     if (!DataList.ContainsKey(code))
                     {
                         DataList.Add(code.ToString(), item);
+                        if (item["Id"] is string)
+                        {
+                            item["Id"] = new Guid(item["Id"]);
+                        }
                         DataList2.Add(((Guid)item["Id"]).ToString(), item);
+                        
                     }
                    
                 }
@@ -120,7 +127,18 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
 
         public TEntityClass FindByPolisyCode(string code)
         {
-            return FindByField("PolisyCode", code);
+            //@TO adHoc Load All Data
+            if (DataList3 != null) return DataList3[code];
+            DataList3 = new Dictionary<string, dynamic>();
+            foreach (var item in DataList)
+            {
+                   
+                if (!DataList3.ContainsKey(item.Value["PolisyCode"]))
+                {
+                    DataList3.Add(item.Value["PolisyCode"], item);
+                }
+            }
+            return DataList3[code];
         }
 
         public TEntityClass FindByPolisyCode(string code, string defaulCode)

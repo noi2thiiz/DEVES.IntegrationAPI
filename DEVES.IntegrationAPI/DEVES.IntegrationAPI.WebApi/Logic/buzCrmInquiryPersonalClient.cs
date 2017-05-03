@@ -15,7 +15,7 @@ using WebGrease.Css.Visitor;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
-    public class buzCrmInquiryPersonalClientMaster : BaseCommand
+    public class buzCrmInquiryPersonalClientMaster : BuzCommand
     {
         protected string nodePart = "nodePart:";
         protected void AddNode(string node)
@@ -23,7 +23,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             nodePart += node+",==>";
         }
 
-        public override BaseDataModel Execute(object input)
+        public override BaseDataModel ExecuteInput(object input)
         {
             #region Prepare box for output 
             CRMInquiryClientContentOutputModel crmInqContent = (CRMInquiryClientContentOutputModel)Model.DataModelFactory.GetModel(typeof(CRMInquiryClientContentOutputModel));
@@ -32,8 +32,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             #endregion Prepare box for output 
 
             AddNode("START");
-            try
-            {
+            
                 #region Search client from CRM
 
 
@@ -120,17 +119,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 crmInqContent.code = CONST_CODE_SUCCESS;
                 crmInqContent.message = "SUCCESS";
                 #endregion finishing output 
-            }
-            catch (Exception e)
-            {
-                AddNode("Exception (put error in the output )");
-                #region put error in the output
-
-                crmInqContent.code = CONST_CODE_FAILED;
-                crmInqContent.message = e.Message;
-                crmInqContent.description = e.StackTrace;
-                #endregion put error in the output
-            }
+            
             AddNode("STOP (RETURN OUTPUT )");
             Console.WriteLine(nodePart);
             return crmInqContent;

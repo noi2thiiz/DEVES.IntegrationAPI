@@ -18,7 +18,40 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
     {
 
         public RegClientCorporateOutputModel_Fail regFail { get; set; } = new RegClientCorporateOutputModel_Fail();
+        protected RegClientCorporateInputModel regClientCorporateInput { get; set; }
 
+        public void TranFormInput(RegClientCorporateInputModel regClientCorporateInput)
+        {
+            // Validate Master Data before sending to other services
+            var fieldErrorData = new OutputModelFailData();
+
+            var masterCountryorigin = NationalityMasterData.Instance.FindByCode(regClientCorporateInput.profileHeader.countryOrigin, "00203");
+         
+            if (masterCountryorigin == null)
+            {
+
+                var message = MessageBuilder.Instance.GetInvalidMasterMessage("Country Origin",
+                    regClientCorporateInput.profileHeader.countryOrigin);
+                fieldErrorData.AddFieldError("profileHeader.countryOrigin",message);
+
+            }
+            else
+            {
+                //Console.WriteLine("set countryOrigin ");
+                regClientCorporateInput.profileHeader.countryOrigin = masterCountryorigin.PolisyCode;
+            }
+
+
+
+
+
+
+            if (fieldErrorData.fieldErrors.Count > 0)
+            {
+           
+                throw new FieldValidationException(fieldErrorData);
+            }
+        }
         public override BaseDataModel Execute(object input)
         {
             RegClientCorporateContentOutputModel regClientCorporateOutput = new RegClientCorporateContentOutputModel();
@@ -27,46 +60,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             regClientCorporateOutput.transactionId = TransactionId;
             regClientCorporateOutput.code = CONST_CODE_SUCCESS;
 
-            try
-            {
+           
+                 regClientCorporateInput = (RegClientCorporateInputModel)input;
+                TranFormInput(regClientCorporateInput);
 
-                RegClientCorporateInputModel regClientCorporateInput = (RegClientCorporateInputModel)input;
-
-                // Validate Master Data before sending to other services
-                regFail  = new RegClientCorporateOutputModel_Fail();
-                regFail.data = new RegClientCorporateDataOutputModel_Fail();
-                regFail.data.fieldErrors = new List<RegClientCorporateFieldErrors>();
-
-
-
-               Console.WriteLine(regClientCorporateInput.profileHeader.countryOrigin);
-                NationalityEntity master_countryorigin = NationalityMasterData.Instance.FindByCode(regClientCorporateInput.profileHeader.countryOrigin, "00203");
-                Console.WriteLine(master_countryorigin.ToJson());
-                if (master_countryorigin == null)
-                {
-
-                    var message = MessageBuilder.Instance.GetInvalidMasterMessage("Country Origin",
-                        regClientCorporateInput.profileHeader.countryOrigin);
-                      regFail.data.fieldErrors.Add( new RegClientCorporateFieldErrors("profileHeader.countryOrigin",
-                          message));
-
-                }
-                else
-                {
-                    //Console.WriteLine("set countryOrigin ");
-                    regClientCorporateInput.profileHeader.countryOrigin = master_countryorigin.PolisyCode;
-                }
-
-
-
-
-
-
-                if (regFail.data.fieldErrors.Count > 0)
-                {
-                    Console.WriteLine("regFail.data.fieldErrors.Count > 0");
-                    throw new FieldValidationException();
-                }
+               
 
                 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -214,29 +212,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     regClientCorporateOutput.description = "Look between roleCode and {assessorFlag ,solicitorFlag ,repairerFlag or hospitalFlag}";
                 }
 
-            }
-            catch (FieldValidationException e)
-            {
-                Console.WriteLine("FieldValidationException");
-                regFail.code = AppConst.CODE_INVALID_INPUT;
-                regFail.message = AppConst.MESSAGE_INVALID_INPUT;
-                regFail.description =AppConst.DESC_INVALID_INPUT;
-                regFail.transactionId = TransactionId;
-                regFail.transactionDateTime = DateTime.Now;
-
-                return regFail;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Exception");
-                regClientCorporateOutput.code = CONST_CODE_FAILED;
-                regClientCorporateOutput.message = e.Message;
-                regClientCorporateOutput.description = e.StackTrace;
-
-                RegClientCorporateDataOutputModel_Fail dataOutFail = new RegClientCorporateDataOutputModel_Fail();
-                regClientCorporateOutput.data = new List<RegClientCorporateDataOutputModel>();
-                regClientCorporateOutput.data.Add(dataOutFail);
-            }
+           
             return regClientCorporateOutput;
 
         }
