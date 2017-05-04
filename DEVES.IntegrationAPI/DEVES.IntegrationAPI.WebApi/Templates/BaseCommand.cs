@@ -23,6 +23,7 @@ using Microsoft.Xrm.Sdk.Client;
 using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Tooling.Connector;
 using System.Threading.Tasks;
+using DEVES.IntegrationAPI.WebApi.TechnicalService.TransactionLogger;
 
 namespace DEVES.IntegrationAPI.WebApi.Templates
 {
@@ -226,7 +227,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             resStatus = res.StatusCode.ToString();
             resHeader = res.Headers.ToString();
 
-            ApiLogDataGateWay.Create(new ApiLogEntry
+           var apiLogEntry =new ApiLogEntry
             {
                 Application = appName,
                 TransactionID = TransactionId,
@@ -236,7 +237,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                 User = user,
                 Machine = machineName,
                 RequestIpAddress = ip,
-                RequestContentType = client.DefaultRequestHeaders.Accept.ToString(),
+                RequestContentType = client.DefaultRequestHeaders?.Accept.ToString(),
                 RequestContentBody = jsonReqModel,
                 RequestUri = uri,
                 RequestMethod = reqMethod,
@@ -249,8 +250,9 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                 // ResponseStatusCode = resStatus,
                 ResponseHeaders = resHeader,
                 ResponseTimestamp = resTime
-            });
-            
+            };
+            InMemoryLogData.Instance.AddLogEntry(apiLogEntry);
+
             return null;
         }
 

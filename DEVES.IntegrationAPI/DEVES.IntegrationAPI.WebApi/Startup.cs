@@ -13,6 +13,7 @@ namespace DEVES.IntegrationAPI.WebApi
         public void Configuration(IAppBuilder app)
         {
             ConfigureAuth(app);
+
         }
     }
 }

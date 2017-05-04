@@ -56,6 +56,7 @@
     <Compile Include="DataAccessService\Mastes\InMemoryDataStorageBaseTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TechnicalService\TransactionLogger\ApiLogDataGateWayTests.cs" />
+    <Compile Include="TechnicalService\TransactionLogger\JobTimerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DEVES.IntegrationAPI.WebApi\DEVES.IntegrationAPI.WebApi.csproj">

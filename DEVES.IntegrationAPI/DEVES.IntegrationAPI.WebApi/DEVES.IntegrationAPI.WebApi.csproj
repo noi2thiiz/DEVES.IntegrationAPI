@@ -209,6 +209,9 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="WebBackgrounder, Version=0.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebBackgrounder.0.2.0\lib\net40\WebBackgrounder.dll</HintPath>
+    </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
@@ -399,6 +402,8 @@
     <Compile Include="TechnicalService\TransactionLogger\ApiLogEntry.cs" />
     <Compile Include="TechnicalService\TransactionLogger\ApiLogHandler.cs" />
     <Compile Include="TechnicalService\TransactionLogger\HttpClientLoggingHandler.cs" />
+    <Compile Include="TechnicalService\TransactionLogger\InMemoryLogData.cs" />
+    <Compile Include="TechnicalService\TransactionLogger\LogJob.cs" />
     <Compile Include="Templates\BaseApiController.cs" />
     <Compile Include="Templates\BaseCommand.cs" />
     <Compile Include="Templates\BaseTransformer.cs" />

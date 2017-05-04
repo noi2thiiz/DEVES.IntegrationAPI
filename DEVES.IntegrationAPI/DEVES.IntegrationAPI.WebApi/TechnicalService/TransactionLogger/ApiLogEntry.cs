@@ -27,5 +27,7 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
         public DateTime? ResponseTimestamp { get; set; } = DateTime.Now;  // The response timestamp.
         public string Controller { get; set; } = "";
         public string ServiceName { get; set; } = "";
+
+        public bool IsPersisted { get; set; } = false;
     }
 }

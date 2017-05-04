@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using System.Web.Hosting;
 using DEVES.IntegrationAPI.WebApi.DataAccessService.DataAdapter;
+using DEVES.IntegrationAPI.WebApi.Templates;
 using Microsoft.Xrm.Sdk.Deployment;
 
 namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
@@ -25,11 +26,21 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
 
         protected void Load(string storeName, string fieldCodeName)
         {
+            Console.WriteLine("Load"+ storeName);
              StoreName = storeName;
              FieldCodeName = fieldCodeName;
             if (null != DataList2) return;
-           // DataReader = new RestDataReader();
-            DataReader = new StoreDataReader();
+            if (System.Environment.MachineName == AppConst.QA_SERVER_NAME)
+            {
+                DataReader = new StoreDataReader();
+            }
+            else
+            {
+               
+                DataReader = new RestDataReader();
+            }
+           
+           
             DataList = new Dictionary<string, dynamic>();
             DataList2 = new Dictionary<string, dynamic>();
            
@@ -94,7 +105,7 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
 
         public TEntityClass Find(string guid)
         {
-            Console.WriteLine(guid);
+          
             if (!DataList2.ContainsKey(guid))
             {
                 return default(TEntityClass);

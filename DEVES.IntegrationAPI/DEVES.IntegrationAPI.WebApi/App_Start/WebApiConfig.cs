@@ -7,6 +7,7 @@ using Microsoft.Owin.Security.OAuth;
 using Newtonsoft.Json.Serialization;
 using System.Web.Http.Cors;
 using DEVES.IntegrationAPI.WebApi.TechnicalService;
+using DEVES.IntegrationAPI.WebApi.TechnicalService.TransactionLogger;
 
 namespace DEVES.IntegrationAPI.WebApi
 {
@@ -15,8 +16,11 @@ namespace DEVES.IntegrationAPI.WebApi
         public static void Register(HttpConfiguration config)
         {
             GlobalConfiguration.Configuration.MessageHandlers.Add(new ApiLogHandler());
-         
-            
+
+            LogJobHandle.Start();
+
+
+
             // Web API configuration and services
             // Configure Web API to use only bearer token authentication.
             config.SuppressDefaultHostAuthentication();

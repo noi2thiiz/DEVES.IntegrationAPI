@@ -13,7 +13,7 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.DataAdapter
             var client = new  RESTClient("https://crmappqa.deves.co.th/internal-service/api/StoreService/crm/");
             var result = client.Execute(req);
             var dbResult = new DbResult();
-            Console.WriteLine(result.Content);
+          //  Console.WriteLine(result.Content);
             JavaScriptSerializer serializer1 = new JavaScriptSerializer();
             StoreOutput obje = serializer1.Deserialize<StoreOutput>(result.Content);
 

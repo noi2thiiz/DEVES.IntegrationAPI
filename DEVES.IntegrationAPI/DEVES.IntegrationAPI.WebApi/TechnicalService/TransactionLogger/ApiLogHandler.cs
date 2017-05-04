@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Http;
 using System.Web.Http.Dispatcher;
 using System.Web.Http.Routing;
+using DEVES.IntegrationAPI.WebApi.TechnicalService.TransactionLogger;
 using DEVES.IntegrationAPI.WebApi.Templates;
 using Newtonsoft.Json;
 
@@ -21,7 +22,15 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
         {
             // Gen TransactionID
             var transactionId = Guid.NewGuid().ToString();
-            request.Properties["TransactionID"] = transactionId;
+            if (!request.Properties.ContainsKey("TransactionID"))
+            {
+                request.Properties["TransactionID"] = transactionId;
+            }
+            else
+            {
+                transactionId = request.Properties["TransactionID"].ToString();
+            }
+           
 
             return await ProcessLog(request, cancellationToken, transactionId);
         }
@@ -66,15 +75,16 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
                     apiLogEntry.ResponseStatusCode = (int)response.StatusCode;
                     apiLogEntry.ResponseTimestamp = DateTime.Now;
 
-                    if (response.Content != null)
+                    if (response?.Content != null)
                     {
-                        apiLogEntry.ResponseContentBody = response.Content.ReadAsStringAsync().Result;
-                        apiLogEntry.ResponseContentType = response.Content.Headers.ContentType.MediaType;
-                        apiLogEntry.ResponseHeaders = SerializeHeaders(response.Content.Headers);
+                        apiLogEntry.ResponseContentBody = response.Content?.ReadAsStringAsync().Result;
+                        apiLogEntry.ResponseContentType = response.Content?.Headers.ContentType.MediaType;
+                        apiLogEntry.ResponseHeaders = SerializeHeaders(response?.Content?.Headers);
                     }
 
+                    InMemoryLogData.Instance.AddLogEntry(apiLogEntry);
 
-                    ApiLogDataGateWay.Create(apiLogEntry);
+                   // ApiLogDataGateWay.Create(apiLogEntry);
 
                     return response;
                 }, cancellationToken);
