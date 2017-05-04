@@ -19,14 +19,18 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
                 {
                     apiLogEntry.ServiceName = apiLogEntry.Controller;
                 }
+              
+
+                apiLogEntry.ServiceName = apiLogEntry.ServiceName.Replace("OutputModel", "");
+
                 if (System.Environment.MachineName == AppConst.QA_SERVER_NAME)
                 {
                    ExecuteSql(apiLogEntry);
                 }
                 else
                 {
-                    ExecuteSql(apiLogEntry);
-                    //CallWebService(apiLogEntry);
+                    //ExecuteSql(apiLogEntry);
+                    CallWebService(apiLogEntry);
                 }
 
 
