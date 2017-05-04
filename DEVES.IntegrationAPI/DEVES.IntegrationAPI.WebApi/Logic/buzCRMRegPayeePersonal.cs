@@ -20,10 +20,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
       
         private RegPayeePersonalInputModel RegPayeePersonalInput { get; set; }
         private RegPayeePersonalDataOutputModel_Pass outputPass { get; set; }= new RegPayeePersonalDataOutputModel_Pass();
+        
+        // Validate Master Data before sending to other services
         public void TranFormInput(RegPayeePersonalInputModel regPayeePersonalInput)
         {
 
-            // Validate Master Data before sending to other services
+           
             var fieldErrorData = new OutputModelFailData();
     
 
@@ -195,20 +197,15 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     catch (Exception e)
                     {
                     //@TODO adHoc fix Please fill recipient type  มัน return success เลยถ้าไม่ได้ดักไว้ 
-                 
-                    if (e.Message == "Please fill recipient type.")
+
+                        List<OutputModelFailDataFieldErrors> fieldError = MessageBuilder.Instance.ExtractSapCreateVendorFieldError<RegPayeePersonalInputModel>(e.Message);
+                        if (fieldError != null)
                         {
-                           
-                            throw new FieldValidationException("withHoldingTaxInfo.receiptType",
-                                "Please fill recipient type.", "Cannot create sap vendor");
-                        }
-                        else
-                        {
+                             throw new FieldValidationException(fieldError, "Cannot create sap vendor");
+
+                       }else{
                             throw;
                         }
-
-                      
-                       
                     }
 
 

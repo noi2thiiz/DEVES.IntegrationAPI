@@ -48,17 +48,28 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             }
             if (src.sapVendorInfo != null && src.sapVendorInfo.bankInfo != null)
             {
-                trgt.CTRY = src.sapVendorInfo.bankInfo.bankCountryCode??"TH";
+                trgt.CTRY = src.sapVendorInfo.bankInfo.bankCountryCode??"";
                 trgt.BANKCODE = src.sapVendorInfo.bankInfo.bankCode??"";
                 trgt.BANKBRANCH = src.sapVendorInfo.bankInfo.bankBranchCode;
                 trgt.BANKACC = src.sapVendorInfo.bankInfo.bankAccount;
                 trgt.ACCTHOLDER = src.sapVendorInfo.bankInfo.accountHolder;
                 trgt.PAYMETHOD = src.sapVendorInfo.bankInfo.paymentMethods;
+
+                if (string.IsNullOrEmpty(trgt.BANKCODE))
+                {
+                    trgt.CTRY = src.sapVendorInfo.bankInfo.bankCountryCode ?? "TH";
+                }
             }
             if (src.sapVendorInfo != null && src.sapVendorInfo.withHoldingTaxInfo != null)
             {
                 trgt.WHTCODE = src.sapVendorInfo.withHoldingTaxInfo.whtTaxCode;
                 trgt.RECPTYPE = src.sapVendorInfo.withHoldingTaxInfo.receiptType;
+               
+              
+                if (string.IsNullOrEmpty(trgt.RECPTYPE))
+                {
+                    trgt.RECPTYPE = AppConst.DEFAULT_CORPORATE_RECPTYPE; // default for corporate
+                }
             }
             if (src.contactHeader != null )
             {
@@ -67,14 +78,16 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 trgt.FAX = src.contactHeader.fax;
             }
 
-            trgt.COMPANY = "2020";
-            trgt.SEARCH = src.profileHeader.corporateName1;
+            trgt.COMPANY = AppConst.DEFAULT_CORPORATE_SAP_VENDOR_COMPANY; //fix TH
+            trgt.SEARCH = src.profileHeader.corporateName1 ;
             trgt.TAX1 = "";
             trgt.TAX2 = "";
             //trgt.CTRY = "TH";
-
-            trgt.TITLE = "";
+           
             trgt.WHTCTRY = "TH";
+            
+            trgt.TITLE = "";
+          
 
             return trgt;
         }

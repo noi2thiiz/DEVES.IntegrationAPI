@@ -11,6 +11,9 @@
         public const string MESSAGE_INVALID_INPUT = "Invalid input(s)";
         public const string DESC_INVALID_INPUT = "Some of your input is invalid. Please recheck again";
 
-
+        //Create Payee
+        public const string DEFAULT_CORPORATE_RECPTYPE = "53";//นิติบุคคล
+        public const string DEFAULT_PERSONAL_RECPTYPE = "03";//บุคคล
+        public const string DEFAULT_CORPORATE_SAP_VENDOR_COMPANY  = "2020";
     }
 }

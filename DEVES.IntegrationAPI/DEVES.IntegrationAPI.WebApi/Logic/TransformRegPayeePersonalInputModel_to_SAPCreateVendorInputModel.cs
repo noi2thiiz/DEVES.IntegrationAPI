@@ -70,7 +70,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 {
                     trgt.WHTCTRY = "TH";
                 }
-                           
+                if (string.IsNullOrEmpty(trgt.RECPTYPE))
+                {
+                    trgt.RECPTYPE = AppConst.DEFAULT_PERSONAL_RECPTYPE; // default 03 for personal
+                }
+
             }
 
             trgt.COMPANY = "2020";
