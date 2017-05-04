@@ -24,6 +24,28 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         // Validate Master Data before sending to other services
         public void TranFormInput(RegPayeePersonalInputModel regPayeePersonalInput)
         {
+            // ป้องกันปัญหา locus ส่ง json มาไม่ครบ
+            if (regPayeePersonalInput.addressInfo == null)
+            {
+                regPayeePersonalInput.addressInfo = new AddressInfoModel();
+            }
+            if (regPayeePersonalInput.contactInfo == null)
+            {
+                regPayeePersonalInput.contactInfo = new ContactInfoModel();
+            }
+            if (regPayeePersonalInput.generalHeader == null)
+            {
+                regPayeePersonalInput.generalHeader = new GeneralHeaderModel();
+            }
+            if (regPayeePersonalInput.profileInfo ==null)
+            {
+                regPayeePersonalInput.profileInfo = new ProfileInfoModel();
+            }
+            if (regPayeePersonalInput.sapVendorInfo == null)
+            {
+                regPayeePersonalInput.sapVendorInfo = new SapVendorInfoModel();
+            }
+
             Console.WriteLine("27");;
 
            

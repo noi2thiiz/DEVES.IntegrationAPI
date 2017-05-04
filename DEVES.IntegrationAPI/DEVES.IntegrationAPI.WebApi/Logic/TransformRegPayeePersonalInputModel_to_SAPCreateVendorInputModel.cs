@@ -23,29 +23,29 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             if (src.generalHeader != null)
             {
-                trgt.VCODE = src.generalHeader.polisyClientId;
+                trgt.VCODE = src.generalHeader.polisyClientId ?? "";
             }
             if (src.profileInfo != null)
             {
                 trgt.TITLE = buzMasterSalutation.Instant.SalutationList.FirstOrDefault( t => t.titlePolisy == src.profileInfo.salutation).titleSAP ?? "";
-                trgt.NAME1 = src.profileInfo.personalName;
-                trgt.NAME2 = src.profileInfo.personalSurname;
-                trgt.TAX3 = src.profileInfo.idCitizen;
-                trgt.SEARCH = src.profileInfo.personalName;
+                trgt.NAME1 = src.profileInfo.personalName ?? "";
+                trgt.NAME2 = src.profileInfo.personalSurname ?? "";
+                trgt.TAX3 = src.profileInfo.idCitizen ?? "";
+                trgt.SEARCH = src.profileInfo.personalName ?? "";
             }
             if (src.contactInfo != null)
             {
-                trgt.TEL1 = src.contactInfo.telephone1;
-                trgt.TEL2 = src.contactInfo.telephone2;
-                trgt.FAX = src.contactInfo.fax;
+                trgt.TEL1 = src.contactInfo.telephone1 ?? "";
+                trgt.TEL2 = src.contactInfo.telephone2 ?? "";
+                trgt.FAX = src.contactInfo.fax ?? "";
             }
             if (src.addressInfo != null)
             {
-                trgt.STREET1 = src.addressInfo.address1;
-                trgt.STREET2 = src.addressInfo.address3;
-                trgt.DISTRICT = src.addressInfo.subDistrictCode;
-                trgt.CITY = src.addressInfo.provinceCode;
-                trgt.POSTCODE = src.addressInfo.postalCode;
+                trgt.STREET1 = src.addressInfo.address1 ?? "";
+                trgt.STREET2 = src.addressInfo.address3 ?? "";
+                trgt.DISTRICT = src.addressInfo.subDistrictCode ?? "";
+                trgt.CITY = src.addressInfo.provinceCode ?? "";
+                trgt.POSTCODE = src.addressInfo.postalCode ?? "";
                 trgt.COUNTRY = buzMasterCountry.Instant.CountryList.FirstOrDefault( c => c.ctryPolisy== src.addressInfo.country).ctrySAP??"";
             }
             if (src.sapVendorInfo != null)
@@ -55,18 +55,18 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             
             if (src.sapVendorInfo != null && src.sapVendorInfo.bankInfo != null)
             {
-                trgt.CTRY = src.sapVendorInfo.bankInfo.bankCountryCode;
-                trgt.BANKCODE = src.sapVendorInfo.bankInfo.bankCode;
-                trgt.BANKBRANCH = src.sapVendorInfo.bankInfo.bankBranchCode;
-                trgt.ACCTHOLDER = src.sapVendorInfo.bankInfo.accountHolder;
-                trgt.PAYMETHOD = src.sapVendorInfo.bankInfo.paymentMethods;
-                trgt.BANKACC = src.sapVendorInfo.bankInfo.bankAccount;
+                trgt.CTRY = src.sapVendorInfo.bankInfo.bankCountryCode ?? "";
+                trgt.BANKCODE = src.sapVendorInfo.bankInfo.bankCode ?? "";
+                trgt.BANKBRANCH = src.sapVendorInfo.bankInfo.bankBranchCode ?? "";
+                trgt.ACCTHOLDER = src.sapVendorInfo.bankInfo.accountHolder ?? "";
+                trgt.PAYMETHOD = src.sapVendorInfo.bankInfo.paymentMethods ?? "";
+                trgt.BANKACC = src.sapVendorInfo.bankInfo.bankAccount ?? "";
                
             }
             if (src.sapVendorInfo != null && src.sapVendorInfo.withHoldingTaxInfo != null)
             {
-                trgt.WHTCODE = src.sapVendorInfo.withHoldingTaxInfo.whtTaxCode;
-                trgt.RECPTYPE = src.sapVendorInfo.withHoldingTaxInfo.receiptType;
+                trgt.WHTCODE = src.sapVendorInfo.withHoldingTaxInfo.whtTaxCode ?? "";
+                trgt.RECPTYPE = src.sapVendorInfo.withHoldingTaxInfo.receiptType ?? "";
               
             }
 
