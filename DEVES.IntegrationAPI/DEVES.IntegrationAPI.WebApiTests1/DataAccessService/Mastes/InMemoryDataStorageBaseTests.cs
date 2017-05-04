@@ -15,7 +15,7 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData.Tests
         public void CountryMasterDataFindByCodeTest()
         {
             var result = CountryMasterData.Instance.FindByCode("00002");
-            Assert.AreEqual("00002", result.CountryCode);
+            Assert.AreEqual("004", result.PolisyCode);
         }
         [TestMethod()]
         public void CountryMasterDataFindByFieldTest()

@@ -28,7 +28,8 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
              StoreName = storeName;
              FieldCodeName = fieldCodeName;
             if (null != DataList2) return;
-            DataReader = new RestDataReader();
+           // DataReader = new RestDataReader();
+            DataReader = new StoreDataReader();
             DataList = new Dictionary<string, dynamic>();
             DataList2 = new Dictionary<string, dynamic>();
            

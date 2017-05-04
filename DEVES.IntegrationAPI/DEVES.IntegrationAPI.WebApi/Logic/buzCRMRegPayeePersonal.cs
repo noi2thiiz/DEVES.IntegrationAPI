@@ -24,10 +24,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         // Validate Master Data before sending to other services
         public void TranFormInput(RegPayeePersonalInputModel regPayeePersonalInput)
         {
+            Console.WriteLine("27");;
 
            
             var fieldErrorData = new OutputModelFailData();
-    
+            Console.WriteLine("31"); ;
 
             var masterSalutation = PersonalTitleMasterData.Instance.FindByCode(regPayeePersonalInput.profileInfo.salutation);
             if (masterSalutation == null)
@@ -42,7 +43,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             {
                 regPayeePersonalInput.profileInfo.salutation = masterSalutation.PolisyCode;
             }
-
+            Console.WriteLine("46"); ;
             var masterNationality = NationalityMasterData.Instance.FindByCode(regPayeePersonalInput.profileInfo.nationality, "00203");
             if (masterNationality == null)
             {
@@ -56,7 +57,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             {
                 regPayeePersonalInput.profileInfo.nationality = masterNationality.PolisyCode;
             }
-
+            Console.WriteLine("60"); ;
             var masterOccupation = OccupationMasterData.Instance.FindByCode(regPayeePersonalInput.profileInfo.occupation, "00023");
             if (masterOccupation == null)
             {
@@ -72,7 +73,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             {
                 regPayeePersonalInput.profileInfo.occupation = masterOccupation.PolisyCode;
             }
-
+            Console.WriteLine("76"); ;
             var masterCountry = CountryMasterData.Instance.FindByCode(regPayeePersonalInput.addressInfo.country, "00220");
             if (masterCountry == null)
             {
@@ -86,6 +87,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             {
                 regPayeePersonalInput.addressInfo.country = masterCountry.PolisyCode;
             }
+            Console.WriteLine("90"); ;
 
             if (fieldErrorData.fieldErrors.Any())
             {

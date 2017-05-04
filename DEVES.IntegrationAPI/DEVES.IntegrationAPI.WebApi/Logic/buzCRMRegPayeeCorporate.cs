@@ -20,10 +20,27 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
         public void TranFormInput(RegPayeeCorporateInputModel regPayeePersonalInput)
         {
+            // ป้องกัน null reference จากการส่ง json มาไม่ครบ
+            if (regPayeeCorporateInput.profileHeader == null)
+            {
+                regPayeeCorporateInput.profileHeader = new ProfileHeaderModel();
+            }
+            if (regPayeeCorporateInput.addressHeader == null)
+            {
+                regPayeeCorporateInput.addressHeader = new AddressHeaderModel();
+            }
+            if (regPayeeCorporateInput.contactHeader == null)
+            {
+                regPayeeCorporateInput.contactHeader = new ContactHeaderModel();
+            }
+            if (regPayeeCorporateInput.sapVendorInfo == null)
+            {
+                regPayeeCorporateInput.sapVendorInfo = new SapVendorInfoModel();
+            }
             // Validate Master Data before sending to other services
             var fieldErrorData = new OutputModelFailData();
 
-            var countryOrigin = regPayeeCorporateInput.profileHeader.countryOrigin;
+            var countryOrigin = regPayeeCorporateInput?.profileHeader?.countryOrigin;
 
             var masterCountryorigin = NationalityMasterData.Instance.FindByCode(countryOrigin, "00203");
 
