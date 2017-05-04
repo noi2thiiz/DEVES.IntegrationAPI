@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using DEVES.IntegrationAPI.Model;
+using DEVES.IntegrationAPI.WebApi.Templates.Exceptions;
 
 namespace DEVES.IntegrationAPI.WebApi.Templates
 {
@@ -17,6 +18,27 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                 return ExecuteInput(input);
 
 
+            }
+            catch (BuzErrorException e)
+            {
+                if (e.OutputModel != null)
+                {
+                    return (BaseDataModel)e.OutputModel;
+                }
+
+                var regFail = new OutputGenericDataModel<object>
+                {
+                    code = AppConst.CODE_FAILED,
+                    message = e.Message?.Trim(),
+                    description = e.Description?.Trim(),
+                    
+                };
+                if (e.SourceData != null)
+                {
+                    regFail.data = e.SourceData;
+                }
+               
+                return regFail;
             }
             catch (FieldValidationException e)
             {

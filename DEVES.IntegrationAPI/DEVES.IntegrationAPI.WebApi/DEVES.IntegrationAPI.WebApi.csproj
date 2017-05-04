@@ -405,6 +405,7 @@
     <Compile Include="Templates\AppConst.cs" />
     <Compile Include="Templates\BuzCommand.cs" />
     <Compile Include="Templates\EWIResponseWrapper.cs" />
+    <Compile Include="Templates\Exceptions\BuzErrorException.cs" />
     <Compile Include="Templates\FieldValidationException.cs" />
     <Compile Include="Templates\ICommand.cs" />
     <Compile Include="Templates\JSONExtension.cs" />

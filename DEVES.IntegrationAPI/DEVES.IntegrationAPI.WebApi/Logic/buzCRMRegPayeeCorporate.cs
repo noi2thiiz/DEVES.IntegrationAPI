@@ -11,6 +11,7 @@ using DEVES.IntegrationAPI.Model.CLS;
 using DEVES.IntegrationAPI.Model.Polisy400;
 using DEVES.IntegrationAPI.Model.RegPayeePersonal;
 using DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData;
+using DEVES.IntegrationAPI.WebApi.Templates.Exceptions;
 using SapVendorInfoModel = DEVES.IntegrationAPI.Model.RegPayeeCorporate.SapVendorInfoModel;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
@@ -100,7 +101,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
 
             ///////////////////////////////////////////////////////////////////////////////////////////////////
-
+          
             if (string.IsNullOrEmpty(regPayeeCorporateInput?.generalHeader?.polisyClientId))
             {
                 if (string.IsNullOrEmpty(regPayeeCorporateInput?.generalHeader?.cleansingId))
@@ -124,6 +125,23 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         outputPass.polisyClientId = clsCreatePayeeContent.data?.clientId;
                         outputPass.corporateName1 = clsCreatePayeeContent.data?.corporateName1;
                         outputPass.corporateName2 = clsCreatePayeeContent.data?.corporateName2;
+                    }
+                    else
+                    {
+                        regPayeeCorporateOutput.code = AppConst.CODE_FAILED;
+                        regPayeeCorporateOutput.message = "Cannot create client in cleasing";
+                        regPayeeCorporateOutput.description = clsCreatePayeeContent?.message??"";
+                        outputPass.cleansingId = clsCreatePayeeContent?.data?.cleansingId ?? "";
+                        outputPass.polisyClientId = clsCreatePayeeContent?.data?.clientId??"";
+                        outputPass.corporateName1 = clsCreatePayeeContent?.data?.corporateName1??"";
+                        outputPass.corporateName2 = clsCreatePayeeContent?.data?.corporateName2??"";
+                        outputPass.corporateBranch = "";
+                        outputPass.sapVendorCode = "";
+                        outputPass.sapVendorGroupCode = "";
+                      
+
+                        regPayeeCorporateOutput.data.Add(outputPass);
+                        throw  new BuzErrorException(regPayeeCorporateOutput,"CLS");
                     }
 
                     #endregion Create Payee in Cleansing

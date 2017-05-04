@@ -28,6 +28,7 @@ namespace DEVES.IntegrationAPI.Model.RegPayeeCorporate
 
     public class RegPayeeCorporateDataOutputModel_Pass: RegPayeeCorporateDataOutputModel
     {
+        public string cleansingId { get; set; }
         public string polisyClientId { get; set; }
         public string sapVendorCode { get; set; }
         public string sapVendorGroupCode { get; set; }

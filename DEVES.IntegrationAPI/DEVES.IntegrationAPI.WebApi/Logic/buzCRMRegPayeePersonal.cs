@@ -11,6 +11,7 @@ using DEVES.IntegrationAPI.Model.RegPayeePersonal;
 using DEVES.IntegrationAPI.Model.CLS;
 using DEVES.IntegrationAPI.Model.Polisy400;
 using DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData;
+using DEVES.IntegrationAPI.WebApi.Templates.Exceptions;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
@@ -156,11 +157,28 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                             outputPass.personalName = clsCreatePayeeContent.data?.personalName;
                             outputPass.personalSurname = clsCreatePayeeContent.data?.personalSurname;
                         }
-                        #endregion Create Payee in Cleansing
-                    }
+                        else
+                        {
+                            regPayeePersonalOutput.code = AppConst.CODE_FAILED;
+                            regPayeePersonalOutput.message = "Cannot create client in cleasing";
+                            regPayeePersonalOutput.description = clsCreatePayeeContent?.message;
+                            outputPass.cleansingId = clsCreatePayeeContent?.data?.cleansingId ?? "";
+                            outputPass.polisyClientId = clsCreatePayeeContent?.data?.cleansingId ?? "";
+                            outputPass.personalName = clsCreatePayeeContent?.data?.personalName??"";
+                            outputPass.personalSurname = clsCreatePayeeContent?.data?.personalSurname??"";
+                            outputPass.sapVendorCode = "";
+                            outputPass.sapVendorGroupCode = "";
+                         
 
-                    #region Create Payee in Polisy400
-                    BaseDataModel polCreatePersonalIn = DataModelFactory.GetModel(typeof(CLIENTCreatePersonalClientAndAdditionalInfoInputModel));
+                        regPayeePersonalOutput.data.Add(outputPass);
+                            throw new BuzErrorException(regPayeePersonalOutput, "CLS");
+                        }
+                    #endregion Create Payee in Cleansing
+                }
+                    
+
+                #region Create Payee in Polisy400
+                BaseDataModel polCreatePersonalIn = DataModelFactory.GetModel(typeof(CLIENTCreatePersonalClientAndAdditionalInfoInputModel));
                     polCreatePersonalIn = TransformerFactory.TransformModel(RegPayeePersonalInput, polCreatePersonalIn);
                     CLIENTCreatePersonalClientAndAdditionalInfoContentModel polCreatePayeeContent = CallDevesServiceProxy<CLIENTCreatePersonalClientAndAdditionalInfoOutputModel
                                                                                                         , CLIENTCreatePersonalClientAndAdditionalInfoContentModel>
