@@ -240,7 +240,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     {
                     //@TODO adHoc fix Please fill recipient type  มัน return success เลยถ้าไม่ได้ดักไว้ 
 
-                        List<OutputModelFailDataFieldErrors> fieldError = MessageBuilder.Instance.ExtractSapCreateVendorFieldError<RegPayeePersonalInputModel>(e.Message);
+                        List<OutputModelFailDataFieldErrors> fieldError = MessageBuilder.Instance.ExtractSapCreateVendorFieldError<RegPayeePersonalInputModel>(e.Message,RegPayeePersonalInput);
                         if (fieldError != null)
                         {
                              throw new FieldValidationException(fieldError, "Cannot create sap vendor");

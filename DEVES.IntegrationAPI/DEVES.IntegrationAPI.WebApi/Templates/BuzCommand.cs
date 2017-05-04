@@ -23,6 +23,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             {
                 if (e.OutputModel != null)
                 {
+                   
                     return (BaseDataModel)e.OutputModel;
                 }
 
@@ -33,6 +34,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                     description = e.Description?.Trim(),
                     
                 };
+
                 if (e.SourceData != null)
                 {
                     regFail.data = e.SourceData;
@@ -45,18 +47,21 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                 var regFail = new OutputModelFail
                 {
                     code = AppConst.CODE_INVALID_INPUT,
-                    description = AppConst.DESC_INVALID_INPUT,
+                    description =  e.description,
                     transactionId = TransactionId,
                     transactionDateTime = DateTime.Now,
-                    message = AppConst.MESSAGE_INVALID_INPUT
-                };
+                    message = AppConst.MESSAGE_INVALID_INPUT,
+
+               };
 
                 if (e.fieldErrorData.fieldErrors.Any())
                 {
 
                     regFail.data = e.fieldErrorData;
+                 
 
-                }else if (!string.IsNullOrEmpty(e.fieldError))
+                }
+                else if (!string.IsNullOrEmpty(e.fieldError))
                 {
                     regFail.code = AppConst.CODE_FAILED;
                     regFail.AddFieldError(e.fieldError, e.fieldMessage);
@@ -65,7 +70,19 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                 if (string.IsNullOrEmpty(e.message)) return regFail;
 
                 regFail.message = e.message;
-                regFail.description = e.fieldMessage;
+                if (string.IsNullOrEmpty(regFail.description))
+                {
+                    regFail.description = e.fieldMessage;
+                }
+                if (string.IsNullOrEmpty(regFail.description))
+                {
+                    regFail.description =  AppConst.DESC_INVALID_INPUT;
+                }
+                if (string.IsNullOrEmpty(regFail.description))
+                {
+                    regFail.description = AppConst.DESC_INVALID_INPUT;
+                }
+
 
                 return regFail;
             }

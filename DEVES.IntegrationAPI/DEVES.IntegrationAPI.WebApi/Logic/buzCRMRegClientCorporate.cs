@@ -183,7 +183,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                             if (crmContentOutput.code == CONST_CODE_SUCCESS)
                             {
                                 regClientCorporateOutput.code = CONST_CODE_SUCCESS;
-                                regClientCorporateOutput.message = "SUCCESS";
+                                regClientCorporateOutput.message = AppConst.MESSAGE_SUCCESS;
                                 RegClientCorporateDataOutputModel_Pass dataOutPass =
                                     new RegClientCorporateDataOutputModel_Pass();
                                 dataOutPass.cleansingId = regClientCorporateInput.generalHeader.cleansingId;

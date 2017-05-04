@@ -14,7 +14,10 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
         public string fieldError { get; set; } = "";
     
         public string message  {get; set; } = "";
+        public string description { get; set; } = "";
         public string fieldMessage { get; set; } = "";
+
+     
 
         public FieldValidationException()
         {
@@ -51,16 +54,30 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             this.message = message;
         }
 
-        public FieldValidationException(IEnumerable<OutputModelFailDataFieldErrors> fieldErrorData, string message)
+        public FieldValidationException(IEnumerable<OutputModelFailDataFieldErrors> fieldErrorData, string message,string description)
         {
             foreach (OutputModelFailDataFieldErrors  field in fieldErrorData )
             {
                 this.fieldErrorData.fieldErrors.Add(field);
             }
+
+
           
+            this.message = message;
+            this.description = description;
+        }
+        public FieldValidationException(IEnumerable<OutputModelFailDataFieldErrors> fieldErrorData, string message)
+        {
+            foreach (OutputModelFailDataFieldErrors field in fieldErrorData)
+            {
+                this.fieldErrorData.fieldErrors.Add(field);
+            }
+
+
+
             this.message = message;
         }
 
-        
+
     }
 }
