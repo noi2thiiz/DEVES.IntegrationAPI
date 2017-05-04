@@ -34,7 +34,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             return $"The {masterName.ToLower()} code '{value}' is not defined in master data";
         }
 
-        private bool complete { get; set; } = false;
+       
 
         public List<OutputModelFailDataFieldErrors> ExtractSapCreateVendorFieldError<T>(string message)
         {
@@ -48,13 +48,31 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             //Ex: 'Please fill recipient type'
             if (message.Contains("recipient"))
             {
-                complete = true;
+              
                 errorCorections.Add(new OutputModelFailDataFieldErrors("withHoldingTaxInfo.receiptType", message));
-            }
-            if(!complete)
+            }else
+            if (message.Contains("street"))
             {
-                errorCorections.Add(new OutputModelFailDataFieldErrors("", message));
+               
+                errorCorections.Add(new OutputModelFailDataFieldErrors("addressHeader.address1", message));
+            }else if (message.Contains("postal"))
+            {
+              
+                errorCorections.Add(new OutputModelFailDataFieldErrors("addressHeader.postalCode", message));
             }
+            else if (message.Contains(" tax number 3"))
+            {
+
+                errorCorections.Add(new OutputModelFailDataFieldErrors("addressHeader.idTax", message));
+            }
+           
+            else
+            {
+                errorCorections.Add(new OutputModelFailDataFieldErrors("unknown", message));
+            }
+           
+
+
 
             return errorCorections;
 

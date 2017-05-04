@@ -26,11 +26,15 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             if (src.generalHeader != null)
             {
-                trgt.PREVACC = src.generalHeader.polisyClientId;
-                trgt.VCODE = src.generalHeader.cleansingId;
+                trgt.PREVACC = src.generalHeader?.polisyClientId??"";
+                trgt.VCODE = src.generalHeader?.cleansingId??"";
             }
+            
+              trgt.TAX3 = src.profileHeader?.idTax??"";
+              //@TODO AdHoc Fix ค้นไม่เจอ  แต่ไม่แน่ใจว่าถูกต้องหรือไม่
+              trgt.TAX4 = "";
 
-           
+
 
             // =====Dont Finish ======
 

@@ -9,7 +9,9 @@ using DEVES.IntegrationAPI.WebApi;
 using DEVES.IntegrationAPI.Model.RegPayeeCorporate;
 using DEVES.IntegrationAPI.Model.CLS;
 using DEVES.IntegrationAPI.Model.Polisy400;
+using DEVES.IntegrationAPI.Model.RegPayeePersonal;
 using DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData;
+using SapVendorInfoModel = DEVES.IntegrationAPI.Model.RegPayeeCorporate.SapVendorInfoModel;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
@@ -25,7 +27,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             {
                 regPayeeCorporateInput.profileHeader = new ProfileHeaderModel();
             }
-            if (regPayeeCorporateInput.addressHeader == null)
+
+
+              if (regPayeeCorporateInput.addressHeader == null)
             {
                 regPayeeCorporateInput.addressHeader = new AddressHeaderModel();
             }
@@ -154,6 +158,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             //SAPInqVendorIn = TransformerFactory.TransformModel(regPayeeCorporateInput, SAPInqVendorIn);
 
             SAPInqVendorIn.TAX3 = regPayeeCorporateInput.profileHeader.idTax ?? "";
+        
             SAPInqVendorIn.TAX4 = regPayeeCorporateInput.profileHeader.corporateBranch ?? "";
             SAPInqVendorIn.PREVACC = regPayeeCorporateInput.sapVendorInfo.sapVendorCode ?? "";
             SAPInqVendorIn.VCODE = regPayeeCorporateInput.generalHeader.polisyClientId ?? "";
@@ -171,20 +176,43 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             {
                 #region Create Payee in SAP
 
-                //BaseDataModel SAPCreateVendorIn = DataModelFactory.GetModel(typeof(Model.SAP.SAPCreateVendorInputModel));
-                Model.SAP.SAPCreateVendorInputModel SAPCreateVendorIn = new Model.SAP.SAPCreateVendorInputModel();
-                SAPCreateVendorIn =
-                    (Model.SAP.SAPCreateVendorInputModel) TransformerFactory.TransformModel(regPayeeCorporateInput,
-                        SAPCreateVendorIn);
+                try
+                {
 
-                var SAPCreateVendorContentOut =
-                    CallDevesServiceProxy<Model.SAP.SAPCreateVendorOutputModel,
-                        Model.SAP.SAPCreateVendorContentOutputModel>(CommonConstant.ewiEndpointKeySAPCreateVendor,
-                        SAPCreateVendorIn);
 
-                regPayeeCorporateInput.sapVendorInfo.sapVendorCode = SAPCreateVendorContentOut?.VCODE;
-                outputPass.sapVendorCode = SAPCreateVendorContentOut?.VCODE;
+                    //BaseDataModel SAPCreateVendorIn = DataModelFactory.GetModel(typeof(Model.SAP.SAPCreateVendorInputModel));
+                    Model.SAP.SAPCreateVendorInputModel SAPCreateVendorIn = new Model.SAP.SAPCreateVendorInputModel();
+                    SAPCreateVendorIn =
+                        (Model.SAP.SAPCreateVendorInputModel) TransformerFactory.TransformModel(regPayeeCorporateInput,
+                            SAPCreateVendorIn);
 
+                    var SAPCreateVendorContentOut =
+                        CallDevesServiceProxy<Model.SAP.SAPCreateVendorOutputModel,
+                            Model.SAP.SAPCreateVendorContentOutputModel>(CommonConstant.ewiEndpointKeySAPCreateVendor,
+                            SAPCreateVendorIn);
+                    if (string.IsNullOrEmpty(SAPCreateVendorContentOut?.VCODE))
+                    {
+                        throw new Exception(SAPCreateVendorContentOut?.Message);
+                    }
+
+                    regPayeeCorporateInput.sapVendorInfo.sapVendorCode = SAPCreateVendorContentOut?.VCODE;
+                    outputPass.sapVendorCode = SAPCreateVendorContentOut?.VCODE;
+                }
+                catch (Exception e)
+                {
+                    //@TODO adHoc fix Please fill recipient type  มัน return success เลยถ้าไม่ได้ดักไว้ 
+
+                    List<OutputModelFailDataFieldErrors> fieldError = MessageBuilder.Instance.ExtractSapCreateVendorFieldError<RegPayeePersonalInputModel>(e.Message);
+                    if (fieldError != null)
+                    {
+                        throw new FieldValidationException(fieldError, "Cannot create sap vendor");
+
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
                 #endregion Create Payee in SAP
 
                 #region Create payee in CRM
@@ -215,10 +243,20 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 #endregion Create payee in CRM
             }
             else
-            {
+            {   //error
                 //regPayeeCorporateInput.sapVendorInfo.sapVendorCode = SAPInqVendorContentOut.VCODE;
                 outputPass.sapVendorCode = sapInfo?.VCODE;
                 outputPass.sapVendorGroupCode = sapInfo?.VGROUP;
+                outputPass.corporateName1 = sapInfo?.NAME1;
+                outputPass.corporateName2 = sapInfo?.NAME2;
+               
+            }
+
+            //@TODO adHoc fix if fullname in null
+            if (string.IsNullOrEmpty(outputPass.corporateName1))
+            {
+                outputPass.corporateName1 = regPayeeCorporateInput.profileHeader.corporateName1;
+                outputPass.corporateName2 = regPayeeCorporateInput.profileHeader.corporateName2;
             }
             regPayeeCorporateOutput.data.Add(outputPass);
 
