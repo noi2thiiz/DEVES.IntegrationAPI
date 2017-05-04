@@ -206,7 +206,12 @@
           "type": "string",
           "maxLength": 20
         }
-      }
+      },
+      "required": [
+        "address1",
+        "postalCode",
+        "country"
+      ]
     },
 
     "sapVendorInfo": {
@@ -261,8 +266,14 @@
         }
       },
       "required": [
-        "sapVendorGroupCode" 
-      ]      
+        "sapVendorGroupCode"
+      ]
     }
-  }
+  },
+  "required": [
+    "generalHeader",
+    "profileHeader",
+    "addressInfo",
+    "sapVendorInfo"
+  ]
 }

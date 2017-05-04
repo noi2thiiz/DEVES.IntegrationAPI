@@ -36,61 +36,145 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             var type = typeof(TCommand);
             object instance = Activator.CreateInstance(type);
             BaseCommand cmd = (BaseCommand)instance;
-
+            var outputFail = new OutputModelFail();
 
             cmd.TransactionId = GetTransactionId();
 
-            var contentText = value.ToString();
-            var contentModel = JsonConvert.DeserializeObject<TInput>(contentText);
+            var contentText = value?.ToString();
+            try
+            {
+                var contentModel = JsonConvert.DeserializeObject<TInput>(contentText);
+            }
+            catch (Exception e)
+            {
+                //output model
+                outputFail.code = AppConst.CODE_INVALID_INPUT;
+                outputFail.message = AppConst.MESSAGE_INVALID_INPUT;
+                outputFail.description = "Cannot parse JSON";
+                outputFail.transactionId = GetTransactionId();
+                outputFail.transactionDateTime = DateTime.Now;
+
+                return Request.CreateResponse(outputFail);
+            }
+          
 
             string outvalidate;
             var filePath = HttpContext.Current.Server.MapPath("~/App_Data/JsonSchema/"+ schemaFileName);
 
             if (!JsonHelper.TryValidateJson(contentText, filePath, out outvalidate))
             {
-                var outputFail = new OutputModelFail();
-
-
-
-
-                List<string> errorMessage = JsonHelper.getReturnError();
-                foreach (var text in errorMessage)
+               
+                try
                 {
-                    string fieldMessage = "";
-                    string fieldName = "";
-                    if (text.Contains("Required properties"))
+                 
+
+
+
+
+                    List<string> errorMessage = JsonHelper.getReturnError();
+                    foreach (var text in errorMessage)
                     {
-                        int indexEnd = 0;
-                        for (int i = 0; i < text.Length - 1; i++)
+                        string fieldMessage = "";
+                        string fieldName = "";
+                        if (text.Contains("Required properties"))
                         {
-                            if (text.Substring(i, 1).Equals(":"))
+                            int indexEnd = 0;
+                            for (int i = 0; i < text.Length - 1; i++)
                             {
-                                fieldMessage = text.Substring(0, i);
-                                indexEnd = i + 1;
-                            }
-                            if (text.Substring(i, 1).Equals("."))
-                            {
-                                fieldName = text.Substring(indexEnd, i - indexEnd).Trim();
-                                break;
+                                if (text.Substring(i, 1).Equals(":"))
+                                {
+                                    fieldMessage = text.Substring(0, i);
+                                    indexEnd = i + 1;
+                                }
+                                if (text.Substring(i, 1).Equals("."))
+                                {
+                                    fieldName = text.Substring(indexEnd, i - indexEnd).Trim();
+                                    break;
+                                }
                             }
                         }
-                    }
-                    else if (text.Contains("exceeds maximum length"))
-                    {
-                        bool isMessage = false;
-                        int endMessage = 0;
-                        int startName = 0;
-                        int endName = 0;
-                        for (int i = 0; i < text.Length - 4; i++)
+                        else if (text.Contains("exceeds maximum length"))
                         {
-                            if (text.Substring(i, 4).Equals("Path"))
+                            bool isMessage = false;
+                            int endMessage = 0;
+                            int startName = 0;
+                            int endName = 0;
+                            for (int i = 0; i < text.Length - 4; i++)
                             {
-                                fieldMessage = text.Substring(0, i - 1);
-                                isMessage = true;
-                                endMessage = i + "Path".Length;
+                                if (text.Substring(i, 4).Equals("Path"))
+                                {
+                                    fieldMessage = text.Substring(0, i - 1);
+                                    isMessage = true;
+                                    endMessage = i + "Path".Length;
+                                }
+                                if (isMessage)
+                                {
+                                    if (text.Substring(i, 1).Equals("'"))
+                                    {
+                                        if (startName == 0)
+                                        {
+                                            startName = i + 1;
+                                        }
+                                        else if (endName == 0)
+                                        {
+                                            endName = i - 1;
+                                        }
+                                    }
+                                    if (startName != 0 && endName != 0)
+                                    {
+                                        fieldName = text.Substring(startName, i - startName).Trim();
+                                        break;
+                                    }
+                                }
                             }
-                            if (isMessage)
+                        }
+                        else if (text.Contains("minimum length"))
+                        {
+                            bool isMessage = false;
+                            int startName = 0;
+                            int endName = 0;
+                            for (int i = 0; i < text.Length - 7; i++)
                             {
+                                string check = text.Substring(i, 7);
+                                if (text.Substring(i, 7).Equals("minimum"))
+                                {
+                                    fieldMessage = "Required field must not be null";
+                                    isMessage = true;
+                                }
+                                if (isMessage)
+                                {
+                                    if (text.Substring(i, 1).Equals("'"))
+                                    {
+                                        if (startName == 0)
+                                        {
+                                            startName = i + 1;
+                                        }
+                                        else if (endName == 0)
+                                        {
+                                            endName = i - 1;
+                                        }
+                                    }
+                                    if (startName != 0 && endName != 0)
+                                    {
+                                        fieldName = text.Substring(startName, i - startName).Trim();
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        else if (text.Contains("Invalid type."))
+                        {
+                            int startIndex = "Invalid type.".Length;
+                            int endMessage = 0;
+                            int startName = 0;
+                            int endName = 0;
+                            for (int i = startIndex; i < text.Length - 1; i++)
+                            {
+                                if (text.Substring(i, 1).Equals("."))
+                                {
+                                    fieldMessage = text.Substring(0, i);
+                                    endMessage = i + 1;
+                                }
                                 if (text.Substring(i, 1).Equals("'"))
                                 {
                                     if (startName == 0)
@@ -109,22 +193,17 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                                 }
                             }
                         }
-                    }
-                    else if (text.Contains("minimum length"))
-                    {
-                        bool isMessage = false;
-                        int startName = 0;
-                        int endName = 0;
-                        for (int i = 0; i < text.Length - 7; i++)
+                        else if (text.Contains("not defined in enum"))
                         {
-                            string check = text.Substring(i, 7);
-                            if (text.Substring(i, 7).Equals("minimum"))
+                            int startName = 0;
+                            int endName = 0;
+
+                            for (int i = 0; i < text.Length - 1; i++)
                             {
-                                fieldMessage = "Required field must not be null";
-                                isMessage = true;
-                            }
-                            if (isMessage)
-                            {
+                                if (text.Substring(i, 1).Equals("."))
+                                {
+                                    fieldMessage = text.Substring(0, i);
+                                }
                                 if (text.Substring(i, 1).Equals("'"))
                                 {
                                     if (startName == 0)
@@ -143,78 +222,29 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                                 }
                             }
                         }
-                    }
-                    else if (text.Contains("Invalid type."))
-                    {
-                        int startIndex = "Invalid type.".Length;
-                        int endMessage = 0;
-                        int startName = 0;
-                        int endName = 0;
-                        for (int i = startIndex; i < text.Length - 1; i++)
-                        {
-                            if (text.Substring(i, 1).Equals("."))
-                            {
-                                fieldMessage = text.Substring(0, i);
-                                endMessage = i + 1;
-                            }
-                            if (text.Substring(i, 1).Equals("'"))
-                            {
-                                if (startName == 0)
-                                {
-                                    startName = i + 1;
-                                }
-                                else if (endName == 0)
-                                {
-                                    endName = i - 1;
-                                }
-                            }
-                            if (startName != 0 && endName != 0)
-                            {
-                                fieldName = text.Substring(startName, i - startName).Trim();
-                                break;
-                            }
-                        }
-                    }
-                    else if (text.Contains("not defined in enum"))
-                    {
-                        int startName = 0;
-                        int endName = 0;
 
-                        for (int i = 0; i < text.Length - 1; i++)
-                        {
-                            if (text.Substring(i, 1).Equals("."))
-                            {
-                                fieldMessage = text.Substring(0, i);
-                            }
-                            if (text.Substring(i, 1).Equals("'"))
-                            {
-                                if (startName == 0)
-                                {
-                                    startName = i + 1;
-                                }
-                                else if (endName == 0)
-                                {
-                                    endName = i - 1;
-                                }
-                            }
-                            if (startName != 0 && endName != 0)
-                            {
-                                fieldName = text.Substring(startName, i - startName).Trim();
-                                break;
-                            }
-                        }
+                        outputFail.AddFieldError(fieldName, fieldMessage);
                     }
+                    //output model
+                    outputFail.code = AppConst.CODE_INVALID_INPUT;
+                    outputFail.message = AppConst.MESSAGE_INVALID_INPUT;
+                    outputFail.description = AppConst.DESC_INVALID_INPUT;
+                    outputFail.transactionId = GetTransactionId();
+                    outputFail.transactionDateTime = DateTime.Now;
 
-                    outputFail.AddFieldError(fieldName, fieldMessage);
+                    return Request.CreateResponse(outputFail);
                 }
-                //output model
-                outputFail.code = AppConst.CODE_INVALID_INPUT;
-                outputFail.message = AppConst.MESSAGE_INVALID_INPUT;
-                outputFail.description = AppConst.DESC_INVALID_INPUT;
-                outputFail.transactionId = GetTransactionId();
-                outputFail.transactionDateTime = DateTime.Now;
+                catch (Exception)
+                {
+                    //output model
+                    outputFail.code = AppConst.CODE_INVALID_INPUT;
+                    outputFail.message = AppConst.MESSAGE_INVALID_INPUT;
+                    outputFail.description = "Cannot parse JSON";
+                    outputFail.transactionId = GetTransactionId();
+                    outputFail.transactionDateTime = DateTime.Now;
 
-                return Request.CreateResponse(outputFail);
+                    return Request.CreateResponse(outputFail);
+                }
             }
             else
             {
