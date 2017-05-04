@@ -8,7 +8,7 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
         public string Activity{ get; set; } = "";
 
         public long ApiLogEntryId { get; set; } = 0;              // The (database) ID for the API log entry.
-        public string Application { get; set; } = "";            // The application that made the request.
+        public string Application { get; set; } = "XrmAPI";            // The application that made the request.
         public string User { get; set; } = "";                  // The user that made the request.
         public string Machine { get; set; } = "";                // The machine that made the request.
         public string RequestIpAddress { get; set; } = "";       // The IP address that made the request.

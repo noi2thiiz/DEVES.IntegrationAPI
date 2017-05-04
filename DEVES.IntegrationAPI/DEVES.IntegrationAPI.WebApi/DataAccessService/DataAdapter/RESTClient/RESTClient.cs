@@ -1,8 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Net.Http;
+using System.Runtime.Remoting;
 using System.Text;
-
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -41,6 +43,11 @@ namespace DEVES.IntegrationAPI.WebApi.Core.DataAdepter
             return PostData(URI, req);
         }
 
+       
+       
+
+       
+
         public void Post(string url, string jsonContent)
         {
             HttpWebRequest request = (HttpWebRequest) WebRequest.Create(url);
@@ -68,6 +75,49 @@ namespace DEVES.IntegrationAPI.WebApi.Core.DataAdepter
             {
                 // Log exception and throw as for GET example above
             }
+        }
+
+        public async Task<WebResponse> StartWebRequest(object input)
+        {
+           
+            string jsonString;
+      
+             jsonString = input.ToJson();
+
+            string baseAddress = URI;
+  
+                var httpWebRequest = (HttpWebRequest)WebRequest.Create(baseAddress);
+                httpWebRequest.ContentType = @"application/json;charset=UTF-8";
+                httpWebRequest.Method = "POST";
+                httpWebRequest.Accept = "application/json";
+
+                if (isUseBasicAuth == true)
+                {
+                    // Create a token for basic authentication and add a header for it
+                    String authorization =
+                        Convert.ToBase64String(Encoding.UTF8.GetBytes(username + ":" + password));
+                    httpWebRequest.Headers.Add("Authorization", "Basic " + authorization);
+                }
+
+
+                using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+                {
+                    Console.WriteLine(jsonString);
+                    streamWriter.Write(jsonString);
+                    streamWriter.Flush();
+                    streamWriter.Close();
+                }
+       
+               return  await httpWebRequest.GetResponseAsync();
+                
+
+        }
+
+        public Task<HttpResponseMessage> PostAsync(object input)
+        {
+       
+            var client = new HttpClient();
+            return client.PostAsync(URI, new StringContent(input.ToJson(), Encoding.UTF8, "application/json"));
         }
 
 
@@ -235,6 +285,16 @@ namespace DEVES.IntegrationAPI.WebApi.Core.DataAdepter
             {
                 return false;
             }
+        }
+
+        public static string GetUnknownType(dynamic req)
+        {
+            
+                Type unknown = ((ObjectHandle)req).Unwrap().GetType();
+
+            
+            
+            return unknown.ToString();
         }
     }
     

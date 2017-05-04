@@ -61,27 +61,37 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 trgt.ACCTHOLDER = src.sapVendorInfo.bankInfo.accountHolder;
                 trgt.PAYMETHOD = src.sapVendorInfo.bankInfo.paymentMethods;
                 trgt.BANKACC = src.sapVendorInfo.bankInfo.bankAccount;
+               
             }
             if (src.sapVendorInfo != null && src.sapVendorInfo.withHoldingTaxInfo != null)
             {
                 trgt.WHTCODE = src.sapVendorInfo.withHoldingTaxInfo.whtTaxCode;
                 trgt.RECPTYPE = src.sapVendorInfo.withHoldingTaxInfo.receiptType;
-                if (string.IsNullOrEmpty(trgt.WHTCODE) )
-                {
-                    trgt.WHTCTRY = "TH";
-                }
-                if (string.IsNullOrEmpty(trgt.RECPTYPE))
-                {
-                    trgt.RECPTYPE = AppConst.DEFAULT_PERSONAL_RECPTYPE; // default 03 for personal
-                }
-
+              
             }
 
             trgt.COMPANY = "2020";
             trgt.TAX1 = "";
             trgt.TAX2 = "";
             trgt.TAX4 = "";
-            //trgt.CTRY = "TH";
+            trgt.WHTCTRY = "TH";
+
+            if (string.IsNullOrEmpty(trgt.RECPTYPE))
+            {
+                trgt.RECPTYPE = AppConst.DEFAULT_PERSONAL_RECPTYPE; // default 03 for personal
+            }
+            //'Fix "TH" ก็ต่อเมื่อข้อมูลต่อไปนี้มีค่า  CTRY BANKCODE BANKBRANCH BANKACC
+            if (!(string.IsNullOrEmpty(trgt.BANKCODE) &&
+                 string.IsNullOrEmpty(trgt.BANKBRANCH) &&
+                 string.IsNullOrEmpty(trgt.BANKACC)))
+            {
+                trgt.CTRY = "TH";
+            }
+         
+            
+                
+            
+                
 
             return trgt;
         }

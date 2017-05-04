@@ -55,10 +55,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 trgt.ACCTHOLDER = src.sapVendorInfo.bankInfo.accountHolder;
                 trgt.PAYMETHOD = src.sapVendorInfo.bankInfo.paymentMethods;
 
-                if (string.IsNullOrEmpty(trgt.BANKCODE))
-                {
-                    trgt.CTRY = src.sapVendorInfo.bankInfo.bankCountryCode ?? "TH";
-                }
+               
             }
             if (src.sapVendorInfo != null && src.sapVendorInfo.withHoldingTaxInfo != null)
             {
@@ -66,11 +63,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 trgt.RECPTYPE = src.sapVendorInfo.withHoldingTaxInfo.receiptType;
                
               
-                if (string.IsNullOrEmpty(trgt.RECPTYPE))
-                {
-                    trgt.RECPTYPE = AppConst.DEFAULT_CORPORATE_RECPTYPE; // default for corporate
-                }
-            }
+              }
             if (src.contactHeader != null )
             {
                 trgt.TEL1 = src.contactHeader.telephone1;
@@ -87,7 +80,19 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             trgt.WHTCTRY = "TH";
             
             trgt.TITLE = "";
-          
+
+            if (string.IsNullOrEmpty(trgt.RECPTYPE))
+            {
+                trgt.RECPTYPE = AppConst.DEFAULT_CORPORATE_RECPTYPE; // default for corporate
+            }
+
+            if (!(string.IsNullOrEmpty(trgt.BANKCODE) &&
+                 string.IsNullOrEmpty(trgt.BANKBRANCH) &&
+                 string.IsNullOrEmpty(trgt.BANKACC)))
+            {
+                trgt.CTRY = "TH";
+            }
+
 
             return trgt;
         }
