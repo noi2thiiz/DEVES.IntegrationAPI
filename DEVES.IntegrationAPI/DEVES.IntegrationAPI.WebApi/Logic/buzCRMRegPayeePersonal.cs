@@ -243,7 +243,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         List<OutputModelFailDataFieldErrors> fieldError = MessageBuilder.Instance.ExtractSapCreateVendorFieldError<RegPayeePersonalInputModel>(e.Message,RegPayeePersonalInput);
                         if (fieldError != null)
                         {
-                             throw new FieldValidationException(fieldError, "Cannot create sap vendor");
+                             throw new FieldValidationException(fieldError, "Cannot create SAP Vendor", e.Message);
 
                        }else{
                             throw;

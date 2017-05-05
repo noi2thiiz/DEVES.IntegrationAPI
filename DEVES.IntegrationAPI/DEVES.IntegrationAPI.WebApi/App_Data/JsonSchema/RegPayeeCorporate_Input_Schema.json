@@ -273,7 +273,7 @@
   "required": [
     "generalHeader",
     "profileHeader",
-    "addressInfo",
+    "addressHeader",
     "sapVendorInfo"
   ]
 }

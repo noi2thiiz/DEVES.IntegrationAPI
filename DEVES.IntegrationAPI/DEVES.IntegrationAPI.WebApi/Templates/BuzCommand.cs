@@ -58,7 +58,9 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                 {
 
                     regFail.data = e.fieldErrorData;
-                 
+                    regFail.description = e.description;
+
+
 
                 }
                 else if (!string.IsNullOrEmpty(e.fieldError))
@@ -67,20 +69,23 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                     regFail.AddFieldError(e.fieldError, e.fieldMessage);
                     regFail.description = e.fieldMessage;
                 }
-                if (string.IsNullOrEmpty(e.message)) return regFail;
 
-                regFail.message = e.message;
+                if (!string.IsNullOrEmpty(e.message))
+                {
+                    regFail.message = e.message;
+                }
+
+            
+      
+
                 if (string.IsNullOrEmpty(regFail.description))
                 {
                     regFail.description = e.fieldMessage;
                 }
+
                 if (string.IsNullOrEmpty(regFail.description))
                 {
-                    regFail.description =  AppConst.DESC_INVALID_INPUT;
-                }
-                if (string.IsNullOrEmpty(regFail.description))
-                {
-                    regFail.description = AppConst.DESC_INVALID_INPUT;
+                   regFail.description = AppConst.DESC_INVALID_INPUT;
                 }
 
 
