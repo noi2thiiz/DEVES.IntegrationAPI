@@ -518,7 +518,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
         internal List<string> SearchCrmContactClientId(string cleansingId)
         {
 
-            Console.WriteLine("SearchCrmContactClientId");
+           // Console.WriteLine("SearchCrmContactClientId");
             // For performance, until we found the way to cache the ServiceProxy, we prefer SQL rather than Crm
              
             using (OrganizationServiceProxy sp = GetCrmServiceProxy())

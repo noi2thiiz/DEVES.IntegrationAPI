@@ -14,7 +14,7 @@ using DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
-    public class buzCRMRegClientCorporate : BaseCommand
+    public class buzCRMRegClientCorporate : BuzCommand
     {
 
         public RegClientCorporateOutputModel_Fail regFail { get; set; } = new RegClientCorporateOutputModel_Fail();
@@ -52,7 +52,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 throw new FieldValidationException(fieldErrorData);
             }
         }
-        public override BaseDataModel Execute(object input)
+        public override BaseDataModel ExecuteInput(object input)
         {
             RegClientCorporateContentOutputModel regClientCorporateOutput = new RegClientCorporateContentOutputModel();
             regClientCorporateOutput.data = new List<RegClientCorporateDataOutputModel>();

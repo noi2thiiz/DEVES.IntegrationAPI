@@ -13,21 +13,21 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
     {
         public override BaseDataModel TransformModel(BaseDataModel input, BaseDataModel output)
         {
-            Console.WriteLine("process : TransformAPARInquiryAPARPayeeListContentOutputModel_to_InquiryCRMPayeeListDataOutputModel");
+           // Console.WriteLine("process : TransformAPARInquiryAPARPayeeListContentOutputModel_to_InquiryCRMPayeeListDataOutputModel");
             InquiryAPARPayeeContentModel srcContent = (InquiryAPARPayeeContentModel) input;
             CRMInquiryPayeeContentOutputModel trgtContent = (CRMInquiryPayeeContentOutputModel) output;
 
-            Console.WriteLine("===========InquiryAPARPayeeContentModel Tranform output==========");
-            Console.WriteLine("===========Tranform==========");
-            Console.WriteLine("===========Tranform==========");
+           //// Console.WriteLine("===========InquiryAPARPayeeContentModel Tranform output==========");
+          //  Console.WriteLine("===========Tranform==========");
+           // Console.WriteLine("===========Tranform==========");
 
-            Console.WriteLine(srcContent.ToJson());
+            //Console.WriteLine(srcContent.ToJson());
 
 
-            Console.WriteLine("===========CRMInquiryPayeeContentOutputModel Tranform output==========");
-            Console.WriteLine("===========Tranform==========");
-            Console.WriteLine("===========Tranform==========");
-            Console.WriteLine(trgtContent.ToJson());
+           // Console.WriteLine("===========CRMInquiryPayeeContentOutputModel Tranform output==========");
+           // Console.WriteLine("===========Tranform==========");
+            //Console.WriteLine("===========Tranform==========");
+           // Console.WriteLine(trgtContent.ToJson());
 
 
             trgtContent.data = new List<InquiryCrmPayeeListDataModel>();
@@ -42,6 +42,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         var aparPayeeList = aparPayeeListDataModel.aparPayeeList;
                         trgtContent.data.Add(new InquiryCrmPayeeListDataModel
                         {
+                            sourceData = "APAR",
+                            cleansingId = "",
                             polisyClientId = aparPayeeList.polisyClntnum,
                             sapVendorCode = aparPayeeList.vendorCode,
                             sapVendorGroupCode = aparPayeeList.vendorGroupCode,

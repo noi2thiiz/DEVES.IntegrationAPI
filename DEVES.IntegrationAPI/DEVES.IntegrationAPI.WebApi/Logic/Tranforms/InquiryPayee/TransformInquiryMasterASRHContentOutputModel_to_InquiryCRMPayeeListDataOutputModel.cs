@@ -40,6 +40,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     var ASRHList = ASRHListCollection.ASRHList;
                     trgtContent.data.Add(new InquiryCrmPayeeListDataModel
                     {
+                        sourceData = "MASTER_ASHR",
+                       
                         polisyClientId = ASRHList.polisyClntnum,
                         sapVendorCode = ASRHList.vendorCode,
                         fullName = ASRHList.fullName,

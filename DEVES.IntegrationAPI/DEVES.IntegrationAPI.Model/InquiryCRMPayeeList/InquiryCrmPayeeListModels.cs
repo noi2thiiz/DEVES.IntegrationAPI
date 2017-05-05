@@ -30,6 +30,10 @@ namespace DEVES.IntegrationAPI.Model.InquiryCRMPayeeList
 
     public class InquiryCrmPayeeListDataModel : BaseDataModel
     {
+        public string sourceData { set; get; }
+
+        public string cleansingId { set; get; }
+
         public string polisyClientId { set; get; }
         public string sapVendorCode { set; get; }
         public string sapVendorGroupCode { set; get; }

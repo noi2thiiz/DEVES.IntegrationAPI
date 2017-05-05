@@ -166,7 +166,7 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
 
             var result = client.Execute(req);
             var dbResult = new DbResult();
-            Console.WriteLine(dbResult.ToJson());
+           // Console.WriteLine(dbResult.ToJson());
         }
     }
 }

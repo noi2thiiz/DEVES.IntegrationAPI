@@ -29,8 +29,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 	                4.3) แต่ถ้า CLS ก็ไม่มี ก็เอาชื่อไปหาต่อที่ Polisy400 แทนเพื่อหา ID เพื่อไปลองหาที่ SAP
 	                4.4) ถ้าไม่เจอเลย ก็จบ คือ ไม่เจอ
 	                4.5) แต่ถ้าเจอแล้วไม่เจอใน SAP เลยก็จบ
+                    -- ข้อ 4.5 คุณบีบอกไม่ถูก ถ้าไม่เจอใน SAP ให้เอาข้อมูลจาก vendor ที่พบข้อมูลก่อน SAP ไป return แทน เป็นลำดับย้อนกลับไป
             */
 
+        
             int iRecordsLimit = int.Parse( GetAppConfigurationSetting("SearchRecordsLimit").ToString());
 
             bool bFoundIn_APAR_or_Master = false;
@@ -48,7 +50,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 listSAPSearchCondition.Add(tempInqCrmPayeeInput);
                 int i = 0;
 
-                if ( !listSAPSearchCondition.Exists(x => x.SearchConditionType != ENUM_SAP_SearchConditionType.invalid) )
+                if ( (!listSAPSearchCondition.Exists(x => x.SearchConditionType != ENUM_SAP_SearchConditionType.invalid)) )
                 {
                     #region IF inqCrmPayeeListIn.ClientType == "G" -> APAR.InquiryAPARPayeeList
                     if (inqCrmPayeeListIn.roleCode.ToUpper() == ENUM_CLIENT_ROLE.G.ToString())
@@ -63,13 +65,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                             if (inqAPAROut?.aparPayeeListCollection != null && inqAPAROut.aparPayeeListCollection.Count > 0 )
                             {
+                            
                                 if (inqAPAROut.aparPayeeListCollection.Count + listSAPSearchCondition.Count + tmpListSAPSearchCondition.Count  > iRecordsLimit)
                                 {
                                     throw new TooManySearchResultsException(CommonConstant.CONST_SYSTEM_APAR, iRecordsLimit);
                                 }
                                 //if (inqAPAROut.aparPayeeListCollection.Count > 0)
                                 //{
-                                //    crmInqPayeeOut = (CRMInquiryPayeeContentOutputModel)TransformerFactory.TransformModel(inqAPAROut, crmInqPayeeOut);
+                                    crmInqPayeeOut = (CRMInquiryPayeeContentOutputModel)TransformerFactory.TransformModel(inqAPAROut, crmInqPayeeOut);
                                 //}
                                 BaseTransformer transformer = TransformerFactory.GetTransformer(typeof(InquiryAPARPayeeContentAparPayeeListCollectionDataModel), typeof(InquiryCRMPayeeListInputModel));
                                 foreach (InquiryAPARPayeeContentAparPayeeListCollectionDataModel apar in inqAPAROut.aparPayeeListCollection)
@@ -81,6 +84,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                                     t.roleCode = inqCrmPayeeListIn.roleCode;
                                     tmpListSAPSearchCondition.Add(t);
                                 }
+                                
                                 listSAPSearchCondition.RemoveAt(0);
                             }
                             else
@@ -100,14 +104,19 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         i = 0;
                         while ( i < listSAPSearchCondition.Count )
                         {
+                            Console.WriteLine("106:Search in MASTER: ASRH");
                             // Search in MASTER: MOTOR_InquiryMasterASRH()
                             InquiryMasterASRHDataInputModel inqASRHIn = (InquiryMasterASRHDataInputModel)DataModelFactory.GetModel(typeof(InquiryMasterASRHDataInputModel));
                             inqASRHIn = (InquiryMasterASRHDataInputModel)TransformerFactory.TransformModel(listSAPSearchCondition[i], inqASRHIn);
                             InquiryMasterASRHContentModel inqASRHOut = CallDevesServiceProxy<InquiryMasterASRHOutputModel, InquiryMasterASRHContentModel>(CommonConstant.ewiEndpointKeyMOTORInquiryMasterASRH, inqASRHIn);
 
-                            if (inqASRHOut?.ASRHListCollection?.Count > 0)
+                             //ส่งข้อมูลเท่าที่เจอ
+                            crmInqPayeeOut = (CRMInquiryPayeeContentOutputModel)TransformerFactory.TransformModel(inqASRHOut, crmInqPayeeOut);
+
+                        if (inqASRHOut?.ASRHListCollection?.Count > 0)
                             {
-                                if (inqASRHOut.ASRHListCollection.Count + listSAPSearchCondition.Count + tmpListSAPSearchCondition.Count > iRecordsLimit)
+                            Console.WriteLine("117:Found in MASTER:ASRH");
+                            if (inqASRHOut.ASRHListCollection.Count + listSAPSearchCondition.Count + tmpListSAPSearchCondition.Count > iRecordsLimit)
                                 {
                                     throw new TooManySearchResultsException(CommonConstant.CONST_SYSTEM_MASTER_ASRH, iRecordsLimit);
                                 }
@@ -122,6 +131,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                                     tmpListSAPSearchCondition.Add(t);
                                     //bFoundIn_APAR_or_Master = true;
                                 }
+                                Console.WriteLine("126: FoundIn APAR or Master");
                                 listSAPSearchCondition.RemoveAt(0);
                             }
                             else
@@ -133,34 +143,40 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         listSAPSearchCondition.AddRange(tmpListSAPSearchCondition);
                     }
 
-                    #endregion inqCrmPayeeListIn.roleCode == {A,S,R,H} -> Master.InquiryMasterASRH
-
-                    if (!listSAPSearchCondition.Exists(x => x.SearchConditionType != ENUM_SAP_SearchConditionType.invalid))
-                    {
+                #endregion inqCrmPayeeListIn.roleCode == {A,S,R,H} -> Master.InquiryMasterASRH
+                    Console.WriteLine("Check Condition  Cleansing ?");
+                //@TODO TEST
+                if (!listSAPSearchCondition.Exists(x => x.SearchConditionType != ENUM_SAP_SearchConditionType.invalid) )
+                {
                         #region Search in Cleansing(CLS) then search in Polisy400
                         //if (!bFoundIn_APAR_or_Master)
                         //{
                         bool bFound_Cleansing = false;
+                        Console.WriteLine("Search In Cleansing ");
                         List<InquiryCRMPayeeListInputModel> tmpListSAPSearchCondition;
+                    if (true)
+                    {
                         switch (inqCrmPayeeListIn.clientType.ToUpper())
                         {
                             case "P":
                                 #region Search Client from Cleansing CLS_InquiryCLSPersonalClient
                                 tmpListSAPSearchCondition = new List<InquiryCRMPayeeListInputModel>();
                                 i = 0;
-                                while ( i < listSAPSearchCondition.Count )
+                                while (i < listSAPSearchCondition.Count)
                                 {
                                     CLSInquiryPersonalClientInputModel clsPersonalInput = new CLSInquiryPersonalClientInputModel();
                                     clsPersonalInput = (CLSInquiryPersonalClientInputModel)TransformerFactory.TransformModel(listSAPSearchCondition[i], clsPersonalInput);
 
                                     //++ Call CLS_InquiryCLSPersonalClient through ServiceProxy
                                     CLSInquiryPersonalClientContentOutputModel retCLSInqPersClient = CallDevesServiceProxy<EWIResCLSInquiryPersonalClient, CLSInquiryPersonalClientContentOutputModel>
-                                                                                                            (CommonConstant.ewiEndpointKeyCLSInquiryPersonalClient, clsPersonalInput);
+                                        (CommonConstant.ewiEndpointKeyCLSInquiryPersonalClient, clsPersonalInput);
 
                                     //++ If Found records in Cleansing(CLS) then pour the data from Cleansing to contentOutputModel
                                     //if (retCLSInqPersClient?.data != null && (retCLSInqPersClient.success | IsOutputSuccess(retCLSInqPersClient)) && retCLSInqPersClient.data.Count > 0)
-                                    if ( retCLSInqPersClient?.data?.Count > 0)
+
+                                    if (retCLSInqPersClient?.data?.Count > 0)
                                     {
+                                        Console.WriteLine("P:Found In Cleansing ");
                                         if (retCLSInqPersClient.data.Count + listSAPSearchCondition.Count + tmpListSAPSearchCondition.Count > iRecordsLimit)
                                         {
                                             throw new TooManySearchResultsException(CommonConstant.CONST_SYSTEM_CLS, iRecordsLimit);
@@ -195,19 +211,20 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                                 #region Call CLS_InquiryCLSCorporateClient through ServiceProxy
                                 tmpListSAPSearchCondition = new List<InquiryCRMPayeeListInputModel>();
                                 i = 0;
-                                while (i < listSAPSearchCondition.Count )
+                                while (i < listSAPSearchCondition.Count)
                                 {
                                     CLSInquiryCorporateClientInputModel clsCorpInput = new CLSInquiryCorporateClientInputModel();
                                     clsCorpInput = (CLSInquiryCorporateClientInputModel)TransformerFactory.TransformModel(listSAPSearchCondition[i], clsCorpInput);
 
                                     CLSInquiryCorporateClientContentOutputModel retCLSInqCorpClient = (CLSInquiryCorporateClientContentOutputModel)CallDevesJsonProxy<EWIResCLSInquiryCorporateClient>
-                                                                                                            (CommonConstant.ewiEndpointKeyCLSInquiryCorporateClient, clsCorpInput);
+                                        (CommonConstant.ewiEndpointKeyCLSInquiryCorporateClient, clsCorpInput);
 
                                     //+ If Success then pour the data from Cleansing to contentOutputModel
 
                                     //if (retCLSInqCorpClient?.data != null && (retCLSInqCorpClient.success | IsOutputSuccess(retCLSInqCorpClient)) && retCLSInqCorpClient.data.Count > 0)
-                                    if (retCLSInqCorpClient?.data?.Count>0)
+                                    if (retCLSInqCorpClient?.data?.Count > 0)
                                     {
+                                        Console.WriteLine("C:Found In Cleansing ");
                                         if (retCLSInqCorpClient.data.Count + listSAPSearchCondition.Count + tmpListSAPSearchCondition.Count > iRecordsLimit)
                                         {
                                             throw new TooManySearchResultsException(CommonConstant.CONST_SYSTEM_CLS, iRecordsLimit);
@@ -243,11 +260,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                             default:
                                 break;
                         }
-                        #endregion Search in Cleansing(CLS) then search in Polisy400
+                    }
+                    #endregion Search in Cleansing(CLS) then search in Polisy400
 
-                        //if (!bFound_Cleansing)
-                        if (!listSAPSearchCondition.Exists(x => x.SearchConditionType != ENUM_SAP_SearchConditionType.invalid))
+                    //if (!bFound_Cleansing)
+                     Console.WriteLine("270:Chech Condition Search in Polisy400?");
+                    if (!listSAPSearchCondition.Exists(x => x.SearchConditionType != ENUM_SAP_SearchConditionType.invalid))
                         {
+                          Console.WriteLine("273:Search in Polisy400");
                             tmpListSAPSearchCondition = new List<InquiryCRMPayeeListInputModel>();
                             i = 0;
                             while ( i < listSAPSearchCondition.Count )
@@ -262,8 +282,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                                 //Found in Polisy400
                                 if (retCOMPInqClient?.clientListCollection?.Count > 0 )
-                                {
-                                    if (retCOMPInqClient.clientListCollection.Count + listSAPSearchCondition.Count + tmpListSAPSearchCondition.Count > iRecordsLimit)
+                               {
+                                 Console.WriteLine("289:Found in Polisy400");
+                                if (retCOMPInqClient.clientListCollection.Count + listSAPSearchCondition.Count + tmpListSAPSearchCondition.Count > iRecordsLimit)
                                     {
                                         throw new TooManySearchResultsException(CommonConstant.CONST_SYSTEM_POLISY400, iRecordsLimit);
                                     }
@@ -284,9 +305,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                                 }
                                 else
                                 {
-                                    i++;
+                                    Console.WriteLine("311:Not Found in Polisy400");
+                                i++;
                                 }
-                            }
+                        }
                             listSAPSearchCondition.AddRange(tmpListSAPSearchCondition);
 
                             #endregion Call COMP_Inquiry through ServiceProxy
@@ -296,9 +318,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     }
 
                 }
-
-
-                if (FilterAndValidateSAPSearchConditions(ref listSAPSearchCondition))
+                else
+                {
+                    Console.WriteLine("Not search in  Cleansing ");
+                }
+            var counrSAPResult = 0 ;
+                Console.WriteLine("Before Search SAP");
+           
+            if ( FilterAndValidateSAPSearchConditions(ref listSAPSearchCondition) )
                 {
                     i = 0;
                     #region Search In SAP: SAP_InquiryVendor()
@@ -327,6 +354,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                                 data.repairerFlag = searchCond.repairerFlag;
                                 data.hospitalFlag = searchCond.hospitalFlag;
                             }
+                            counrSAPResult +=1;
                             crmInqPayeeOut.data.AddRange(tmpCrmInqPayeeOut.data);
                         }
                         listSAPSearchCondition.RemoveAt(0);
@@ -337,9 +365,21 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 }
                 else
                 {
+                 Console.WriteLine("Not Found In SAP");
                     //crmInqPayeeOut.content = null;
                 }
-                crmInqPayeeOut.code = CONST_CODE_SUCCESS;                
+                //@TODO AdHoc ลบข้อมูลจาก Source อื่นออก
+                // ถ้าเจอข้อมูลใน SAP ให้ถือว่าใช้ขอมูลจาก SAP
+                if (counrSAPResult >0)
+                {
+                    crmInqPayeeOut.data = crmInqPayeeOut.data.Where(row => row.sourceData == "SAP").Distinct().ToList();
+
+                }
+
+
+           
+
+            crmInqPayeeOut.code = CONST_CODE_SUCCESS;                
                 crmInqPayeeOut.message = "SUCCESS";
            
             crmInqPayeeOut.transactionId = TransactionId;

@@ -12,7 +12,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         private Dictionary<string, SAPInquiryVendorContentVendorInfoModel> _tmpSAPInquiryVendorContentModel;
         private Dictionary<string, InquiryCrmPayeeListDataModel> _tmpOutPutModel;
        
-        public override BaseDataModel TransformModel(BaseDataModel input, BaseDataModel output)
+        public  BaseDataModel XXTransformModelXX(BaseDataModel input, BaseDataModel output)
         {
             //Console.WriteLine(" process : TransformSAPInquiryVendorOutputModel_to_InquiryCRMPayeeListDataOutputModel");
             EWIResSAPInquiryVendorContentModel srcContent = (EWIResSAPInquiryVendorContentModel) input;
@@ -95,6 +95,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         public InquiryCrmPayeeListDataModel TransformDataModel(SAPInquiryVendorContentVendorInfoModel input,
             InquiryCrmPayeeListDataModel output)
         {
+            output.sourceData = "SAP";
             output.polisyClientId = input.PREVACC;
             output.sapVendorCode = input.VCODE;
             output.sapVendorGroupCode = input.VGROUP;
@@ -176,11 +177,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         {
             return output;
         }
-      /*
+      
 
-        public override BaseDataModel TransformModel3(BaseDataModel input, BaseDataModel output)
+        public override BaseDataModel TransformModel(BaseDataModel input, BaseDataModel output)
         {
-            Console.WriteLine(" process :x TransformSAPInquiryVendorOutputModel_to_InquiryCRMPayeeListDataOutputModel");
+           // Console.WriteLine(" process :x TransformSAPInquiryVendorOutputModel_to_InquiryCRMPayeeListDataOutputModel");
             EWIResSAPInquiryVendorContentModel srcContent = (EWIResSAPInquiryVendorContentModel)input;
             CRMInquiryPayeeContentOutputModel outputContent;
             if (output != null)
@@ -197,10 +198,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             foreach (var vendorInfo in srcContent.VendorInfo)
             {
-                outputContent.data.Add(TransformDataModel(vendorInfo, new InquiryCrmPayeeListDataModel()));
+               
+                outputContent.data.Add(TransformDataModel(vendorInfo, new InquiryCrmPayeeListDataModel { sourceData = "SAP" }));
             }
             return outputContent;
         }
-*/
+
     }
 }

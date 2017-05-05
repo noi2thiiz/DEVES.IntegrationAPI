@@ -102,7 +102,7 @@ namespace DEVES.IntegrationAPI.WebApi.Core.DataAdepter
 
                 using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
                 {
-                    Console.WriteLine(jsonString);
+                   // Console.WriteLine(jsonString);
                     streamWriter.Write(jsonString);
                     streamWriter.Flush();
                     streamWriter.Close();
@@ -148,7 +148,7 @@ namespace DEVES.IntegrationAPI.WebApi.Core.DataAdepter
 
                 using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
                 {
-                    Console.WriteLine(jsonString);
+                   // Console.WriteLine(jsonString);
                     streamWriter.Write(jsonString);
                     streamWriter.Flush();
                     streamWriter.Close();
@@ -272,12 +272,12 @@ namespace DEVES.IntegrationAPI.WebApi.Core.DataAdepter
                 catch (JsonReaderException jex)
                 {
                     //Exception in parsing json
-                    Console.WriteLine(jex.Message);
+                    //Console.WriteLine(jex.Message);
                     return false;
                 }
                 catch (Exception ex) //some other exception
                 {
-                    Console.WriteLine(ex.ToString());
+                    //Console.WriteLine(ex.ToString());
                     return false;
                 }
             }
