@@ -6,6 +6,7 @@ using DEVES.IntegrationAPI.Model.MASTER;
 using DEVES.IntegrationAPI.Model.Polisy400;
 using DEVES.IntegrationAPI.Model.SAP;
 using DEVES.IntegrationAPI.Model;
+using DEVES.IntegrationAPI.Model.InquiryCRMPayeeList;
 
 namespace DEVES.IntegrationAPI.Model
 {
@@ -27,7 +28,7 @@ namespace DEVES.IntegrationAPI.Model
     {
 
         public static BaseDataModel GetModel(Type t)
-        {
+        {   
             BaseDataModel o = new NullDataModel();
             #region Model.InquiryClientMaster.CRMInquiryClientContentOutputModel
             if (t == typeof(Model.InquiryClientMaster.CRMInquiryClientContentOutputModel))
@@ -134,8 +135,18 @@ namespace DEVES.IntegrationAPI.Model
                 var modelContent = new CLIENTCreateCorporateClientAndAdditionalInfoInputModel();
                 o = modelContent;
             }
+            #endregion CLIENTCreateCorporateClientAndAdditionalInfoInputModel 
+            #region CRMInquiryPayeeContentOutputModel
+            else if (t == typeof(CRMInquiryPayeeContentOutputModel)) { 
+           
+                var modelContent = new CRMInquiryPayeeContentOutputModel();
+                    modelContent.data = new List<InquiryCrmPayeeListDataModel>();
+                o = modelContent;
+            }
+            #endregion
 
-            #endregion CLIENTCreateCorporateClientAndAdditionalInfoInputModel
+            
+          
             else
             {
                 throw new NotImplementedException("GetModel(T) for type<T>:" + t.Name);

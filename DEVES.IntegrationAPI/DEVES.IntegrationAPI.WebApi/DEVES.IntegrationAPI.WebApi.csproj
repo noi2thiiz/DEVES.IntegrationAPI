@@ -340,6 +340,8 @@
     <Compile Include="Logic\buzInquiryCRMPayeeList.cs" />
     <Compile Include="Logic\CommonConstant.cs" />
     <Compile Include="Logic\DevesCrmAPIExceptions.cs" />
+    <Compile Include="Logic\Tranforms\InquiryPayee\Tranform_clsInqPersonalOut_to_crmInqPayeeOut.cs" />
+    <Compile Include="Logic\Tranforms\InquiryPayee\Tranform_compInqClient_to_crmInqPayeeOut.cs" />
     <Compile Include="Logic\Tranforms\RegClient\TranformCLIENTCreateCorporateClientAndAdditionalInfoContentModel_to_RegClientCorporateInputModel.cs" />
     <Compile Include="Logic\Tranforms\RegClient\TranformCLIENTCreatePersonalClientAndAdditionalInfoOutputModel_to_RegClientPersonalInputModel.cs" />
     <Compile Include="Logic\Tranforms\RegClient\TranformCLSCreateCorporateClientContentOutputModel_to_RegClientCorporateInputModel.cs" />

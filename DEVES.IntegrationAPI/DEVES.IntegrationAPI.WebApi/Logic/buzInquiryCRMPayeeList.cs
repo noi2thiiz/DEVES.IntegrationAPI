@@ -250,9 +250,6 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     Console.WriteLine("289:Found in Polisy400");
 
 
-
-
-
                     if (retCOMPInqClient.clientListCollection.Count + listSAPSearchCondition.Count + tmpListSAPSearchCondition.Count > iRecordsLimit)
                     {
                         throw new TooManySearchResultsException(CommonConstant.CONST_SYSTEM_POLISY400, iRecordsLimit);
@@ -269,24 +266,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         t.emcsCode = listSAPSearchCondition[i].emcsCode;
                         t.roleCode = listSAPSearchCondition[i].roleCode;
                         tmpListSAPSearchCondition.Add(t);
-
-                        //@TODO AdHoc Add COMP
-                        crmInqPayeeOut.data.Add(new InquiryCrmPayeeListDataModel
-                        {
-
-                            sourceData = "COMP",
-                            cleansingId = polData.clientList.cleansingId,
-                            polisyClientId = polData.clientList.clientNumber,
-                            sapVendorCode = "",
-
-                            fullName = polData.clientList.fullName,
-                            taxNo = polData.clientList.telNo,
-                            taxBranchCode = "",
-                            emcsMemHeadId = "",
-                            emcsMemId = "",
-
-                        });
+                        
                     }
+                    //@TODO AdHoc Add Tranform_retCOMPInqClient_to_crmInqPayeeOut
+                    var tranfromer = new Tranform_compInqClient_to_crmInqPayeeOut();
+                    crmInqPayeeOut = (CRMInquiryPayeeContentOutputModel)tranfromer.TransformModel(retCOMPInqClient, crmInqPayeeOut);
                     listSAPSearchCondition.RemoveAt(0);
                 }
                 else
@@ -468,24 +452,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         t.clientType = listSAPSearchCondition[i].clientType;
                         tmpListSAPSearchCondition.Add(t);
 
-                        //@TODO AdHoc Add CLS
-                        crmInqPayeeOut.data.Add(new InquiryCrmPayeeListDataModel
-                        {
-
-                            sourceData = "CLS",
-                            cleansingId = clsData.cleansing_id,
-                            polisyClientId = clsData.clntnum,
-                            sapVendorCode = "",
-
-                            fullName = clsData.cls_full_name,
-                            taxNo = "",
-                            taxBranchCode = "",
-                            emcsMemHeadId = "",
-                            emcsMemId = "",
-
-                        });
-                    }
-                    listSAPSearchCondition.RemoveAt(0);
+                      
+                    };
+                    //@TODO AdHoc Add CLS Tranform_clsInqPersonalOut_to_crmInqPayeeOut
+                     var tranfromer = new Tranform_clsInqPersonalOut_to_crmInqPayeeOut();
+                     crmInqPayeeOut = (CRMInquiryPayeeContentOutputModel)tranfromer.TransformModel( retCLSInqPersClient, crmInqPayeeOut);
+                     listSAPSearchCondition.RemoveAt(0);
                 }
                 else
                 {
