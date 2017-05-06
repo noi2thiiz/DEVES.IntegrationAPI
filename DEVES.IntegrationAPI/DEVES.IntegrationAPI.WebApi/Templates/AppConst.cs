@@ -17,5 +17,7 @@
         public const string DEFAULT_CORPORATE_SAP_VENDOR_COMPANY  = "2020";
 
         public const string QA_SERVER_NAME = "8121-CRM-QA";
+
+        public const string CONST_DEFAULT_UID = "";
     }
 }

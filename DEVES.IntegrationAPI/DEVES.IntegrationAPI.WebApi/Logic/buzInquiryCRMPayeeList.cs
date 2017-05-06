@@ -10,11 +10,14 @@ using DEVES.IntegrationAPI.Model.InquiryCRMPayeeList;
 using DEVES.IntegrationAPI.WebApi.Templates;
 using System.Linq;
 using System.Collections;
+using System.Data.Common;
+
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
     public class buzInquiryCRMPayeeList : BuzCommand
     {
+      
         public override BaseDataModel ExecuteInput(object input)
         {
             /*
@@ -31,8 +34,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 	                4.5) แต่ถ้าเจอแล้วไม่เจอใน SAP เลยก็จบ
                     -- ข้อ 4.5 คุณบีบอกไม่ถูก ถ้าไม่เจอใน SAP ให้เอาข้อมูลจาก vendor ที่พบข้อมูลก่อน SAP ไป return แทน เป็นลำดับย้อนกลับไป
             */
+    
 
-        
             int iRecordsLimit = int.Parse( GetAppConfigurationSetting("SearchRecordsLimit").ToString());
 
             bool bFoundIn_APAR_or_Master = false;
@@ -43,7 +46,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             crmInqPayeeOut.description = "";
 
            
-                Console.WriteLine(input.ToString());
+               // Console.WriteLine(input.ToString());
 
                 InquiryCRMPayeeListInputModel inqCrmPayeeListIn = (InquiryCRMPayeeListInputModel)input;
                 InquiryCRMPayeeListInputModel tempInqCrmPayeeInput = Copy(inqCrmPayeeListIn);
@@ -55,43 +58,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     #region IF inqCrmPayeeListIn.ClientType == "G" -> APAR.InquiryAPARPayeeList
                     if (inqCrmPayeeListIn.roleCode.ToUpper() == ENUM_CLIENT_ROLE.G.ToString())
                     {
-                        List<InquiryCRMPayeeListInputModel> tmpListSAPSearchCondition = new List<InquiryCRMPayeeListInputModel>();
-                        i = 0;
-                        while ( i< listSAPSearchCondition.Count)
-                        {
-                            InquiryAPARPayeeListInputModel inqAPARIn = (InquiryAPARPayeeListInputModel)DataModelFactory.GetModel(typeof(InquiryAPARPayeeListInputModel));
-                            inqAPARIn = (InquiryAPARPayeeListInputModel)TransformerFactory.TransformModel(listSAPSearchCondition[i], inqAPARIn);
-                            InquiryAPARPayeeContentModel inqAPAROut = CallDevesServiceProxy<InquiryAPARPayeeOutputModel, InquiryAPARPayeeContentModel>(CommonConstant.ewiEndpointKeyAPARInquiryPayeeList, inqAPARIn);
-
-                            if (inqAPAROut?.aparPayeeListCollection != null && inqAPAROut.aparPayeeListCollection.Count > 0 )
-                            {
-                            
-                                if (inqAPAROut.aparPayeeListCollection.Count + listSAPSearchCondition.Count + tmpListSAPSearchCondition.Count  > iRecordsLimit)
-                                {
-                                    throw new TooManySearchResultsException(CommonConstant.CONST_SYSTEM_APAR, iRecordsLimit);
-                                }
-                                //if (inqAPAROut.aparPayeeListCollection.Count > 0)
-                                //{
-                                    crmInqPayeeOut = (CRMInquiryPayeeContentOutputModel)TransformerFactory.TransformModel(inqAPAROut, crmInqPayeeOut);
-                                //}
-                                BaseTransformer transformer = TransformerFactory.GetTransformer(typeof(InquiryAPARPayeeContentAparPayeeListCollectionDataModel), typeof(InquiryCRMPayeeListInputModel));
-                                foreach (InquiryAPARPayeeContentAparPayeeListCollectionDataModel apar in inqAPAROut.aparPayeeListCollection)
-                                {
-                                    InquiryCRMPayeeListInputModel t = new InquiryCRMPayeeListInputModel();
-                                    t = (InquiryCRMPayeeListInputModel)transformer.TransformModel(apar, t);
-                                    t.requester = inqCrmPayeeListIn.requester;
-                                    t.emcsCode = inqCrmPayeeListIn.emcsCode;
-                                    t.roleCode = inqCrmPayeeListIn.roleCode;
-                                    tmpListSAPSearchCondition.Add(t);
-                                }
-                                
-                                listSAPSearchCondition.RemoveAt(0);
-                            }
-                            else
-                            {
-                                i ++;
-                            }
-                        }
+                        var tmpListSAPSearchCondition = InquiryAPARPayeeList(listSAPSearchCondition, iRecordsLimit, inqCrmPayeeListIn, ref crmInqPayeeOut);
                         listSAPSearchCondition.AddRange(tmpListSAPSearchCondition);
                     }
 
@@ -100,46 +67,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     #region IF inqCrmPayeeListIn.roleCode == {A,S,R,H} -> Master.InquiryMasterASRH
                     else
                     {
-                        List<InquiryCRMPayeeListInputModel> tmpListSAPSearchCondition = new List<InquiryCRMPayeeListInputModel>();
-                        i = 0;
-                        while ( i < listSAPSearchCondition.Count )
-                        {
-                            Console.WriteLine("106:Search in MASTER: ASRH");
-                            // Search in MASTER: MOTOR_InquiryMasterASRH()
-                            InquiryMasterASRHDataInputModel inqASRHIn = (InquiryMasterASRHDataInputModel)DataModelFactory.GetModel(typeof(InquiryMasterASRHDataInputModel));
-                            inqASRHIn = (InquiryMasterASRHDataInputModel)TransformerFactory.TransformModel(listSAPSearchCondition[i], inqASRHIn);
-                            InquiryMasterASRHContentModel inqASRHOut = CallDevesServiceProxy<InquiryMasterASRHOutputModel, InquiryMasterASRHContentModel>(CommonConstant.ewiEndpointKeyMOTORInquiryMasterASRH, inqASRHIn);
-
-                             //ส่งข้อมูลเท่าที่เจอ
-                            crmInqPayeeOut = (CRMInquiryPayeeContentOutputModel)TransformerFactory.TransformModel(inqASRHOut, crmInqPayeeOut);
-
-                        if (inqASRHOut?.ASRHListCollection?.Count > 0)
-                            {
-                            Console.WriteLine("117:Found in MASTER:ASRH");
-                            if (inqASRHOut.ASRHListCollection.Count + listSAPSearchCondition.Count + tmpListSAPSearchCondition.Count > iRecordsLimit)
-                                {
-                                    throw new TooManySearchResultsException(CommonConstant.CONST_SYSTEM_MASTER_ASRH, iRecordsLimit);
-                                }
-                                BaseTransformer transformer = TransformerFactory.GetTransformer(typeof(InquiryMasterASRHContentASRHListCollectionDataModel), typeof(InquiryCRMPayeeListInputModel));
-                                foreach (InquiryMasterASRHContentASRHListCollectionDataModel asrh in inqASRHOut.ASRHListCollection)
-                                {
-                                    InquiryCRMPayeeListInputModel t = new InquiryCRMPayeeListInputModel();
-                                    t = (InquiryCRMPayeeListInputModel)transformer.TransformModel(asrh, t);
-                                    t.requester = listSAPSearchCondition[i].requester;
-                                    t.emcsCode = listSAPSearchCondition[i].emcsCode;
-                                    t.roleCode = listSAPSearchCondition[i].roleCode;
-                                    tmpListSAPSearchCondition.Add(t);
-                                    //bFoundIn_APAR_or_Master = true;
-                                }
-                                Console.WriteLine("126: FoundIn APAR or Master");
-                                listSAPSearchCondition.RemoveAt(0);
-                            }
-                            else
-                            {
-                                i++;
-                            }
-                            Console.WriteLine(crmInqPayeeOut.ToJson());
-                        }
+                        var tmpListSAPSearchCondition = InquiryMasterASHR(listSAPSearchCondition, iRecordsLimit, ref crmInqPayeeOut);
                         listSAPSearchCondition.AddRange(tmpListSAPSearchCondition);
                     }
 
@@ -153,110 +81,34 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         //{
                         bool bFound_Cleansing = false;
                         Console.WriteLine("Search In Cleansing ");
-                        List<InquiryCRMPayeeListInputModel> tmpListSAPSearchCondition;
+                      
                     if (true)
                     {
                         switch (inqCrmPayeeListIn.clientType.ToUpper())
                         {
                             case "P":
                                 #region Search Client from Cleansing CLS_InquiryCLSPersonalClient
-                                tmpListSAPSearchCondition = new List<InquiryCRMPayeeListInputModel>();
-                                i = 0;
-                                while (i < listSAPSearchCondition.Count)
                                 {
-                                    CLSInquiryPersonalClientInputModel clsPersonalInput = new CLSInquiryPersonalClientInputModel();
-                                    clsPersonalInput = (CLSInquiryPersonalClientInputModel)TransformerFactory.TransformModel(listSAPSearchCondition[i], clsPersonalInput);
 
-                                    //++ Call CLS_InquiryCLSPersonalClient through ServiceProxy
-                                    CLSInquiryPersonalClientContentOutputModel retCLSInqPersClient = CallDevesServiceProxy<EWIResCLSInquiryPersonalClient, CLSInquiryPersonalClientContentOutputModel>
-                                        (CommonConstant.ewiEndpointKeyCLSInquiryPersonalClient, clsPersonalInput);
 
-                                    //++ If Found records in Cleansing(CLS) then pour the data from Cleansing to contentOutputModel
-                                    //if (retCLSInqPersClient?.data != null && (retCLSInqPersClient.success | IsOutputSuccess(retCLSInqPersClient)) && retCLSInqPersClient.data.Count > 0)
-
-                                    if (retCLSInqPersClient?.data?.Count > 0)
-                                    {
-                                        Console.WriteLine("P:Found In Cleansing ");
-                                        if (retCLSInqPersClient.data.Count + listSAPSearchCondition.Count + tmpListSAPSearchCondition.Count > iRecordsLimit)
-                                        {
-                                            throw new TooManySearchResultsException(CommonConstant.CONST_SYSTEM_CLS, iRecordsLimit);
-                                        }
-                                        //bFound_Cleansing = true;
-                                        //crmInqPayeeOut = (CRMInquiryPayeeContentOutputModel)TransformerFactory.TransformModel(retCLSInqPersClient, crmInqPayeeOut);
-                                        //inqCrmPayeeListIn.polisyClientId = retCLSInqPersClient.data[0].clntnum;
-
-                                        BaseTransformer transformer = TransformerFactory.GetTransformer(typeof(CLSInquiryPersonalClientOutputModel), typeof(InquiryCRMPayeeListInputModel));
-                                        foreach (var clsData in retCLSInqPersClient.data)
-                                        {
-                                            InquiryCRMPayeeListInputModel t = new InquiryCRMPayeeListInputModel();
-                                            t = (InquiryCRMPayeeListInputModel)transformer.TransformModel(clsData, t);
-                                            t.requester = listSAPSearchCondition[i].requester;
-                                            t.emcsCode = listSAPSearchCondition[i].emcsCode;
-                                            t.roleCode = listSAPSearchCondition[i].roleCode;
-                                            t.clientType = listSAPSearchCondition[i].clientType;
-                                            tmpListSAPSearchCondition.Add(t);
-                                        }
-                                        listSAPSearchCondition.RemoveAt(0);
-                                    }
-                                    else
-                                    {
-                                        i++;
-                                    }
-                                }
+                                var tmpListSAPSearchCondition = InquiryCLSPersonalClient(iRecordsLimit, listSAPSearchCondition, ref crmInqPayeeOut);
                                 listSAPSearchCondition.AddRange(tmpListSAPSearchCondition);
 
-                                #endregion Search Client from Cleansing
+                               
                                 break;
-                            case "C":
-                                #region Call CLS_InquiryCLSCorporateClient through ServiceProxy
-                                tmpListSAPSearchCondition = new List<InquiryCRMPayeeListInputModel>();
-                                i = 0;
-                                while (i < listSAPSearchCondition.Count)
-                                {
-                                    CLSInquiryCorporateClientInputModel clsCorpInput = new CLSInquiryCorporateClientInputModel();
-                                    clsCorpInput = (CLSInquiryCorporateClientInputModel)TransformerFactory.TransformModel(listSAPSearchCondition[i], clsCorpInput);
-
-                                    CLSInquiryCorporateClientContentOutputModel retCLSInqCorpClient = (CLSInquiryCorporateClientContentOutputModel)CallDevesJsonProxy<EWIResCLSInquiryCorporateClient>
-                                        (CommonConstant.ewiEndpointKeyCLSInquiryCorporateClient, clsCorpInput);
-
-                                    //+ If Success then pour the data from Cleansing to contentOutputModel
-
-                                    //if (retCLSInqCorpClient?.data != null && (retCLSInqCorpClient.success | IsOutputSuccess(retCLSInqCorpClient)) && retCLSInqCorpClient.data.Count > 0)
-                                    if (retCLSInqCorpClient?.data?.Count > 0)
-                                    {
-                                        Console.WriteLine("C:Found In Cleansing ");
-                                        if (retCLSInqCorpClient.data.Count + listSAPSearchCondition.Count + tmpListSAPSearchCondition.Count > iRecordsLimit)
-                                        {
-                                            throw new TooManySearchResultsException(CommonConstant.CONST_SYSTEM_CLS, iRecordsLimit);
-                                        }
-                                        BaseTransformer transformer = TransformerFactory.GetTransformer(typeof(CLSInquiryCorporateClientOutputModel), typeof(InquiryCRMPayeeListInputModel));
-                                        foreach (var clsData in retCLSInqCorpClient.data)
-                                        {
-                                            InquiryCRMPayeeListInputModel t = new InquiryCRMPayeeListInputModel();
-                                            t = (InquiryCRMPayeeListInputModel)transformer.TransformModel(clsData, t);
-                                            t.requester = listSAPSearchCondition[i].requester;
-                                            t.emcsCode = listSAPSearchCondition[i].emcsCode;
-                                            t.roleCode = listSAPSearchCondition[i].roleCode;
-                                            t.clientType = listSAPSearchCondition[i].clientType;
-                                            tmpListSAPSearchCondition.Add(t);
-                                        }
-                                        listSAPSearchCondition.RemoveAt(0);
-
-                                        //if ((retCLSInqCorpClient.success | IsOutputSuccess(retCLSInqCorpClient)) & (retCLSInqCorpClient.data.Count == 1))
-                                        //{
-                                        //    bFound_Cleansing = true;
-                                        //    //crmInqPayeeOut = (CRMInquiryPayeeContentOutputModel)TransformerFactory.TransformModel(retCLSInqCorpClient, crmInqPayeeOut);
-                                        //    inqCrmPayeeListIn.polisyClientId = retCLSInqCorpClient.data[0].clntnum;
-                                        //}
-                                    }
-                                    else
-                                    {
-                                        i++;
-                                    }
                                 }
+                                #endregion Search Client from Cleansing
+
+                            case "C":
+                                {
+                                #region Call CLS_InquiryCLSCorporateClient through ServiceProxy
+
+                                var tmpListSAPSearchCondition  = InquiryCLSCorporateClient(iRecordsLimit, listSAPSearchCondition,ref crmInqPayeeOut);
                                 listSAPSearchCondition.AddRange(tmpListSAPSearchCondition);
                                 #endregion Call CLS_InquiryCLSCorporateClient through ServiceProxy
                                 break;
+                                }
+                               
                             default:
                                 break;
                         }
@@ -266,56 +118,17 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     //if (!bFound_Cleansing)
                      Console.WriteLine("270:Chech Condition Search in Polisy400?");
                     if (!listSAPSearchCondition.Exists(x => x.SearchConditionType != ENUM_SAP_SearchConditionType.invalid))
-                        {
-                          Console.WriteLine("273:Search in Polisy400");
-                            tmpListSAPSearchCondition = new List<InquiryCRMPayeeListInputModel>();
-                            i = 0;
-                            while ( i < listSAPSearchCondition.Count )
-                            {
-                                #region Call COMP_Inquiry through ServiceProxy
-                                COMPInquiryClientMasterInputModel compInqClientInput = new COMPInquiryClientMasterInputModel();
-                                compInqClientInput = (COMPInquiryClientMasterInputModel)TransformerFactory.TransformModel(listSAPSearchCondition[i], compInqClientInput);
+                    {
+                        Console.WriteLine("273:Search in Polisy400");
+                        var tmpListSAPSearchCondition = InquiryCompClientMaster(iRecordsLimit, listSAPSearchCondition, ref crmInqPayeeOut);
 
-                                //+ Call CLS_InquiryCLSPersonalClient through ServiceProxy
-                                var retCOMPInqClient = CallDevesServiceProxy<COMPInquiryClientMasterOutputModel, EWIResCOMPInquiryClientMasterContentModel>
-                                                                                                        (CommonConstant.ewiEndpointKeyCOMPInquiryClient, compInqClientInput);
+                        listSAPSearchCondition.AddRange(tmpListSAPSearchCondition);
 
-                                //Found in Polisy400
-                                if (retCOMPInqClient?.clientListCollection?.Count > 0 )
-                               {
-                                 Console.WriteLine("289:Found in Polisy400");
-                                if (retCOMPInqClient.clientListCollection.Count + listSAPSearchCondition.Count + tmpListSAPSearchCondition.Count > iRecordsLimit)
-                                    {
-                                        throw new TooManySearchResultsException(CommonConstant.CONST_SYSTEM_POLISY400, iRecordsLimit);
-                                    }
 
-                                    //crmInqPayeeOut = (CRMInquiryPayeeContentOutputModel)TransformerFactory.TransformModel(retCOMPInqClient, crmInqPayeeOut);
-
-                                    BaseTransformer transformer = TransformerFactory.GetTransformer(typeof(COMPInquiryClientMasterContentClientListModel), typeof(InquiryCRMPayeeListInputModel));
-                                    foreach (var polData in retCOMPInqClient.clientListCollection)
-                                    {
-                                        InquiryCRMPayeeListInputModel t = new InquiryCRMPayeeListInputModel();
-                                        t = (InquiryCRMPayeeListInputModel)transformer.TransformModel(polData, t);
-                                        t.requester = listSAPSearchCondition[i].requester;
-                                        t.emcsCode = listSAPSearchCondition[i].emcsCode;
-                                        t.roleCode = listSAPSearchCondition[i].roleCode;
-                                        tmpListSAPSearchCondition.Add(t);
-                                    }
-                                    listSAPSearchCondition.RemoveAt(0);
-                                }
-                                else
-                                {
-                                    Console.WriteLine("311:Not Found in Polisy400");
-                                i++;
-                                }
-                        }
-                            listSAPSearchCondition.AddRange(tmpListSAPSearchCondition);
-
-                            #endregion Call COMP_Inquiry through ServiceProxy
-                        }
-                        //}
-                        //}
                     }
+                    //}
+                    //}
+                }
 
                 }
                 else
@@ -326,58 +139,43 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 Console.WriteLine("Before Search SAP");
            
             if ( FilterAndValidateSAPSearchConditions(ref listSAPSearchCondition) )
-                {
-                    i = 0;
+            {
+                i = 0;
                     #region Search In SAP: SAP_InquiryVendor()
-                    while ( listSAPSearchCondition.Count > 0 && crmInqPayeeOut.data.Count <=20)
-                    {
-                        InquiryCRMPayeeListInputModel searchCond = listSAPSearchCondition[0];
-                        SAPInquiryVendorInputModel inqSAPVendorIn = (SAPInquiryVendorInputModel)DataModelFactory.GetModel(typeof(SAPInquiryVendorInputModel));
-                        inqSAPVendorIn = (SAPInquiryVendorInputModel)TransformerFactory.TransformModel(searchCond, inqSAPVendorIn);
 
-                        EWIResSAPInquiryVendorContentModel inqSAPVendorContentOut = CallDevesServiceProxy<SAPInquiryVendorOutputModel, EWIResSAPInquiryVendorContentModel>(CommonConstant.ewiEndpointKeySAPInquiryVendor, inqSAPVendorIn);
+                InquerySapVandor(listSAPSearchCondition, crmInqPayeeOut, iRecordsLimit, counrSAPResult);
 
-                        if (inqSAPVendorContentOut?.VendorInfo != null)
-                        {
-                            if (inqSAPVendorContentOut.VendorInfo.Count + listSAPSearchCondition.Count  > iRecordsLimit)
-                            {
-                                throw new TooManySearchResultsException(CommonConstant.CONST_SYSTEM_SAP, iRecordsLimit);
-                            }
-                            CRMInquiryPayeeContentOutputModel tmpCrmInqPayeeOut = (CRMInquiryPayeeContentOutputModel)TransformerFactory.TransformModel(inqSAPVendorContentOut, crmInqPayeeOut);
-                            foreach (InquiryCrmPayeeListDataModel data in tmpCrmInqPayeeOut.data)
-                            {
-                                data.emcsMemHeadId = searchCond.emcsMemHeadId;
-                                data.emcsMemId = searchCond.emcsMemId;
-                                data.contactNumber = searchCond.contactNumber;
-                                data.assessorFlag = searchCond.assessorFlag;
-                                data.solicitorFlag = searchCond.solicitorFlag;
-                                data.repairerFlag = searchCond.repairerFlag;
-                                data.hospitalFlag = searchCond.hospitalFlag;
-                            }
-                            counrSAPResult +=1;
-                            crmInqPayeeOut.data.AddRange(tmpCrmInqPayeeOut.data);
-                        }
-                        listSAPSearchCondition.RemoveAt(0);
-                    }
-
-
-                    #endregion Search In SAP: SAP_InquiryVendor()
-                }
+                #endregion Search In SAP: SAP_InquiryVendor()
+            }
                 else
                 {
                  Console.WriteLine("Not Found In SAP");
                     //crmInqPayeeOut.content = null;
                 }
-                //@TODO AdHoc ลบข้อมูลจาก Source อื่นออก
-                // ถ้าเจอข้อมูลใน SAP ให้ถือว่าใช้ขอมูลจาก SAP
-                if (counrSAPResult >0)
+                //@TODO AdHoc ลบข้อมูลจาก Source อื่นออก ถ้าเจอข้อมูลใน SAP ให้ถือว่าใช้ขอมูลจาก SAP
+               if (crmInqPayeeOut.data.Where(row => row.sourceData == "SAP").Distinct().ToList().Count > 0)
                 {
                     crmInqPayeeOut.data = crmInqPayeeOut.data.Where(row => row.sourceData == "SAP").Distinct().ToList();
 
+                }else
+                if (crmInqPayeeOut.data.Where(row => row.sourceData == "COMP").Distinct().ToList().Count > 0)
+                {
+                    crmInqPayeeOut.data = crmInqPayeeOut.data.Where(row => row.sourceData == "COMP").Distinct().ToList();
+
                 }
+                else
+                if (crmInqPayeeOut.data.Where(row => row.sourceData == "CLS").Distinct().ToList().Count > 0)
+                {
+                    crmInqPayeeOut.data = crmInqPayeeOut.data.Where(row => row.sourceData == "CLS").Distinct().ToList();
+
+                }
+                //MASTER_ASHR
+                //APAR
 
 
-           
+
+
+
 
             crmInqPayeeOut.code = CONST_CODE_SUCCESS;                
                 crmInqPayeeOut.message = "SUCCESS";
@@ -386,6 +184,366 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             crmInqPayeeOut.transactionDateTime = DateTime.Now;
 
             return crmInqPayeeOut;
+        }
+
+        private void InquerySapVandor(List<InquiryCRMPayeeListInputModel> listSAPSearchCondition, CRMInquiryPayeeContentOutputModel crmInqPayeeOut,
+            int iRecordsLimit, int counrSAPResult)
+        {
+            while (listSAPSearchCondition.Count > 0 && crmInqPayeeOut.data.Count <= 20)
+            {
+                InquiryCRMPayeeListInputModel searchCond = listSAPSearchCondition[0];
+                SAPInquiryVendorInputModel inqSAPVendorIn =
+                    (SAPInquiryVendorInputModel) DataModelFactory.GetModel(typeof(SAPInquiryVendorInputModel));
+                inqSAPVendorIn = (SAPInquiryVendorInputModel) TransformerFactory.TransformModel(searchCond, inqSAPVendorIn);
+
+                EWIResSAPInquiryVendorContentModel inqSAPVendorContentOut =
+                    CallDevesServiceProxy<SAPInquiryVendorOutputModel, EWIResSAPInquiryVendorContentModel>(
+                        CommonConstant.ewiEndpointKeySAPInquiryVendor, inqSAPVendorIn);
+
+                if (inqSAPVendorContentOut?.VendorInfo != null)
+                {
+                    if (inqSAPVendorContentOut.VendorInfo.Count + listSAPSearchCondition.Count > iRecordsLimit)
+                    {
+                        throw new TooManySearchResultsException(CommonConstant.CONST_SYSTEM_SAP, iRecordsLimit);
+                    }
+                    CRMInquiryPayeeContentOutputModel tmpCrmInqPayeeOut =
+                        (CRMInquiryPayeeContentOutputModel) TransformerFactory.TransformModel(inqSAPVendorContentOut,
+                            crmInqPayeeOut);
+                    foreach (InquiryCrmPayeeListDataModel data in tmpCrmInqPayeeOut.data)
+                    {
+                        data.emcsMemHeadId = searchCond.emcsMemHeadId;
+                        data.emcsMemId = searchCond.emcsMemId;
+                        data.contactNumber = searchCond.contactNumber;
+                        data.assessorFlag = searchCond.assessorFlag;
+                        data.solicitorFlag = searchCond.solicitorFlag;
+                        data.repairerFlag = searchCond.repairerFlag;
+                        data.hospitalFlag = searchCond.hospitalFlag;
+                        counrSAPResult += 1;
+                    }
+
+                    crmInqPayeeOut.data.AddRange(tmpCrmInqPayeeOut.data);
+                }
+                listSAPSearchCondition.RemoveAt(0);
+            }
+        }
+
+        private List<InquiryCRMPayeeListInputModel> InquiryCompClientMaster(int iRecordsLimit, List<InquiryCRMPayeeListInputModel> listSAPSearchCondition,ref CRMInquiryPayeeContentOutputModel crmInqPayeeOut)
+        {
+            var tmpListSAPSearchCondition = new List<InquiryCRMPayeeListInputModel>();
+            var i = 0;
+            //  var store = new List<EWIResCOMPInquiryClientMasterContentModel>();
+
+            while (i < listSAPSearchCondition.Count)
+            {
+                #region Call COMP_Inquiry through ServiceProxy
+
+                COMPInquiryClientMasterInputModel compInqClientInput = new COMPInquiryClientMasterInputModel();
+                compInqClientInput = (COMPInquiryClientMasterInputModel)TransformerFactory.TransformModel(listSAPSearchCondition[i], compInqClientInput);
+
+                //+ Call CLS_InquiryCLSPersonalClient through ServiceProxy
+                var retCOMPInqClient = CallDevesServiceProxy<COMPInquiryClientMasterOutputModel, EWIResCOMPInquiryClientMasterContentModel>
+                                                                                        (CommonConstant.ewiEndpointKeyCOMPInquiryClient, compInqClientInput);
+
+                //Found in Polisy400
+                if (retCOMPInqClient?.clientListCollection?.Count > 0)
+                {
+                    Console.WriteLine("289:Found in Polisy400");
+
+
+
+
+
+                    if (retCOMPInqClient.clientListCollection.Count + listSAPSearchCondition.Count + tmpListSAPSearchCondition.Count > iRecordsLimit)
+                    {
+                        throw new TooManySearchResultsException(CommonConstant.CONST_SYSTEM_POLISY400, iRecordsLimit);
+                    }
+
+                    //crmInqPayeeOut = (CRMInquiryPayeeContentOutputModel)TransformerFactory.TransformModel(retCOMPInqClient, crmInqPayeeOut);
+
+                    BaseTransformer transformer = TransformerFactory.GetTransformer(typeof(COMPInquiryClientMasterContentClientListModel), typeof(InquiryCRMPayeeListInputModel));
+                    foreach (var polData in retCOMPInqClient.clientListCollection)
+                    {
+                        InquiryCRMPayeeListInputModel t = new InquiryCRMPayeeListInputModel();
+                        t = (InquiryCRMPayeeListInputModel)transformer.TransformModel(polData, t);
+                        t.requester = listSAPSearchCondition[i].requester;
+                        t.emcsCode = listSAPSearchCondition[i].emcsCode;
+                        t.roleCode = listSAPSearchCondition[i].roleCode;
+                        tmpListSAPSearchCondition.Add(t);
+
+                        //@TODO AdHoc Add COMP
+                        crmInqPayeeOut.data.Add(new InquiryCrmPayeeListDataModel
+                        {
+
+                            sourceData = "COMP",
+                            cleansingId = polData.clientList.cleansingId,
+                            polisyClientId = polData.clientList.clientNumber,
+                            sapVendorCode = "",
+
+                            fullName = polData.clientList.fullName,
+                            taxNo = polData.clientList.telNo,
+                            taxBranchCode = "",
+                            emcsMemHeadId = "",
+                            emcsMemId = "",
+
+                        });
+                    }
+                    listSAPSearchCondition.RemoveAt(0);
+                }
+                else
+                {
+                    Console.WriteLine("311:Not Found in Polisy400");
+                    i++;
+                }
+                #endregion Call COMP_Inquiry through ServiceProxy
+            }
+
+            return tmpListSAPSearchCondition;
+        }
+
+        private List<InquiryCRMPayeeListInputModel> InquiryCLSCorporateClient(int iRecordsLimit, List<InquiryCRMPayeeListInputModel> listSAPSearchCondition,ref CRMInquiryPayeeContentOutputModel crmInqPayeeOut)
+        {
+            var tmpListSAPSearchCondition = new List<InquiryCRMPayeeListInputModel>();
+            var i = 0;
+            while (i < listSAPSearchCondition.Count)
+            {
+                CLSInquiryCorporateClientInputModel clsCorpInput = new CLSInquiryCorporateClientInputModel();
+                clsCorpInput = (CLSInquiryCorporateClientInputModel)TransformerFactory.TransformModel(listSAPSearchCondition[i], clsCorpInput);
+
+                CLSInquiryCorporateClientContentOutputModel retCLSInqCorpClient = (CLSInquiryCorporateClientContentOutputModel)CallDevesJsonProxy<EWIResCLSInquiryCorporateClient>
+                    (CommonConstant.ewiEndpointKeyCLSInquiryCorporateClient, clsCorpInput);
+
+                //+ If Success then pour the data from Cleansing to contentOutputModel
+
+                //if (retCLSInqCorpClient?.data != null && (retCLSInqCorpClient.success | IsOutputSuccess(retCLSInqCorpClient)) && retCLSInqCorpClient.data.Count > 0)
+                if (retCLSInqCorpClient?.data?.Count > 0)
+                {
+                    Console.WriteLine("C:Found In Cleansing ");
+                    if (retCLSInqCorpClient.data.Count + listSAPSearchCondition.Count + tmpListSAPSearchCondition.Count > iRecordsLimit)
+                    {
+                        throw new TooManySearchResultsException(CommonConstant.CONST_SYSTEM_CLS, iRecordsLimit);
+                    }
+                    BaseTransformer transformer = TransformerFactory.GetTransformer(typeof(CLSInquiryCorporateClientOutputModel), typeof(InquiryCRMPayeeListInputModel));
+                    foreach (var clsData in retCLSInqCorpClient.data)
+                    {
+                        InquiryCRMPayeeListInputModel t = new InquiryCRMPayeeListInputModel();
+                        t = (InquiryCRMPayeeListInputModel)transformer.TransformModel(clsData, t);
+                        t.requester = listSAPSearchCondition[i].requester;
+                        t.emcsCode = listSAPSearchCondition[i].emcsCode;
+                        t.roleCode = listSAPSearchCondition[i].roleCode;
+                        t.clientType = listSAPSearchCondition[i].clientType;
+                        tmpListSAPSearchCondition.Add(t);
+
+
+                        //@TODO AdHoc Add CLS
+                        crmInqPayeeOut.data.Add(new InquiryCrmPayeeListDataModel
+                        {
+
+                            sourceData = "CLS",
+                            cleansingId = clsData.cleansing_id,
+                            polisyClientId = clsData.clntnum,
+                            sapVendorCode = "",
+
+                            fullName = clsData.cls_full_name,
+                            taxNo = clsData.cls_tax_no_new,
+                            taxBranchCode = "",
+                            emcsMemHeadId = "",
+                            emcsMemId = "",
+
+                        });
+                    }
+                    listSAPSearchCondition.RemoveAt(0);
+
+                    //if ((retCLSInqCorpClient.success | IsOutputSuccess(retCLSInqCorpClient)) & (retCLSInqCorpClient.data.Count == 1))
+                    //{
+                    //    bFound_Cleansing = true;
+                    //    //crmInqPayeeOut = (CRMInquiryPayeeContentOutputModel)TransformerFactory.TransformModel(retCLSInqCorpClient, crmInqPayeeOut);
+                    //    inqCrmPayeeListIn.polisyClientId = retCLSInqCorpClient.data[0].clntnum;
+                    //}
+                }
+                else
+                {
+                    i++;
+                }
+            }
+
+            return tmpListSAPSearchCondition;
+        }
+
+        public List<InquiryCRMPayeeListInputModel> InquiryMasterASHR(List<InquiryCRMPayeeListInputModel> listSAPSearchCondition, int iRecordsLimit,
+            ref CRMInquiryPayeeContentOutputModel crmInqPayeeOut)
+        {
+            int i;
+            List<InquiryCRMPayeeListInputModel> tmpListSAPSearchCondition = new List<InquiryCRMPayeeListInputModel>();
+            i = 0;
+            while (i < listSAPSearchCondition.Count)
+            {
+                Console.WriteLine("106:Search in MASTER: ASRH");
+                // Search in MASTER: MOTOR_InquiryMasterASRH()
+                InquiryMasterASRHDataInputModel inqASRHIn =
+                    (InquiryMasterASRHDataInputModel) DataModelFactory.GetModel(typeof(InquiryMasterASRHDataInputModel));
+                inqASRHIn =
+                    (InquiryMasterASRHDataInputModel) TransformerFactory.TransformModel(listSAPSearchCondition[i], inqASRHIn);
+                InquiryMasterASRHContentModel inqASRHOut =
+                    CallDevesServiceProxy<InquiryMasterASRHOutputModel, InquiryMasterASRHContentModel>(
+                        CommonConstant.ewiEndpointKeyMOTORInquiryMasterASRH, inqASRHIn);
+
+                //ส่งข้อมูลเท่าที่เจอ
+                crmInqPayeeOut =
+                    (CRMInquiryPayeeContentOutputModel) TransformerFactory.TransformModel(inqASRHOut, crmInqPayeeOut);
+
+                if (inqASRHOut?.ASRHListCollection?.Count > 0)
+                {
+                    Console.WriteLine("117:Found in MASTER:ASRH");
+                    if (inqASRHOut.ASRHListCollection.Count + listSAPSearchCondition.Count + tmpListSAPSearchCondition.Count >
+                        iRecordsLimit)
+                    {
+                        throw new TooManySearchResultsException(CommonConstant.CONST_SYSTEM_MASTER_ASRH, iRecordsLimit);
+                    }
+                    BaseTransformer transformer =
+                        TransformerFactory.GetTransformer(typeof(InquiryMasterASRHContentASRHListCollectionDataModel),
+                            typeof(InquiryCRMPayeeListInputModel));
+                    foreach (InquiryMasterASRHContentASRHListCollectionDataModel asrh in inqASRHOut.ASRHListCollection)
+                    {
+                        InquiryCRMPayeeListInputModel t = new InquiryCRMPayeeListInputModel();
+                        t = (InquiryCRMPayeeListInputModel) transformer.TransformModel(asrh, t);
+                        t.requester = listSAPSearchCondition[i].requester;
+                        t.emcsCode = listSAPSearchCondition[i].emcsCode;
+                        t.roleCode = listSAPSearchCondition[i].roleCode;
+                        tmpListSAPSearchCondition.Add(t);
+                        //bFoundIn_APAR_or_Master = true;
+                    }
+                    Console.WriteLine("126: FoundIn APAR or Master");
+                    listSAPSearchCondition.RemoveAt(0);
+                }
+                else
+                {
+                    i++;
+                }
+                Console.WriteLine(crmInqPayeeOut.ToJson());
+            }
+            return tmpListSAPSearchCondition;
+        }
+
+        private List<InquiryCRMPayeeListInputModel> InquiryCLSPersonalClient(int iRecordsLimit, List<InquiryCRMPayeeListInputModel> listSAPSearchCondition, ref CRMInquiryPayeeContentOutputModel crmInqPayeeOut)
+        {
+            var tmpListSAPSearchCondition = new List<InquiryCRMPayeeListInputModel>();
+            var i = 0;
+            while (i < listSAPSearchCondition.Count)
+            {
+                CLSInquiryPersonalClientInputModel clsPersonalInput = new CLSInquiryPersonalClientInputModel();
+                clsPersonalInput = (CLSInquiryPersonalClientInputModel)TransformerFactory.TransformModel(listSAPSearchCondition[i], clsPersonalInput);
+
+                //++ Call CLS_InquiryCLSPersonalClient through ServiceProxy
+                CLSInquiryPersonalClientContentOutputModel retCLSInqPersClient = CallDevesServiceProxy<EWIResCLSInquiryPersonalClient, CLSInquiryPersonalClientContentOutputModel>
+                    (CommonConstant.ewiEndpointKeyCLSInquiryPersonalClient, clsPersonalInput);
+
+                //++ If Found records in Cleansing(CLS) then pour the data from Cleansing to contentOutputModel
+                //if (retCLSInqPersClient?.data != null && (retCLSInqPersClient.success | IsOutputSuccess(retCLSInqPersClient)) && retCLSInqPersClient.data.Count > 0)
+
+                if (retCLSInqPersClient?.data?.Count > 0)
+                {
+                    Console.WriteLine("P:Found In Cleansing ");
+                    if (retCLSInqPersClient.data.Count + listSAPSearchCondition.Count + tmpListSAPSearchCondition.Count > iRecordsLimit)
+                    {
+                        throw new TooManySearchResultsException(CommonConstant.CONST_SYSTEM_CLS, iRecordsLimit);
+                    }
+                    //bFound_Cleansing = true;
+                    crmInqPayeeOut = new CRMInquiryPayeeContentOutputModel();
+
+                    var transformerCLs =
+                        new
+                            TransformCLSInquiryPersonalClientContentOutputModel_to_InquiryCRMPayeeListDataOutputModel();
+
+                    
+                    //inqCrmPayeeListIn.polisyClientId = retCLSInqPersClient.data[0].clntnum;
+
+                    BaseTransformer transformer = TransformerFactory.GetTransformer(typeof(CLSInquiryPersonalClientOutputModel), typeof(InquiryCRMPayeeListInputModel));
+                    foreach (var clsData in retCLSInqPersClient.data)
+                    {
+                        InquiryCRMPayeeListInputModel t = new InquiryCRMPayeeListInputModel();
+                        t = (InquiryCRMPayeeListInputModel)transformer.TransformModel(clsData, t);
+                        t.requester = listSAPSearchCondition[i].requester;
+                        t.emcsCode = listSAPSearchCondition[i].emcsCode;
+                        t.roleCode = listSAPSearchCondition[i].roleCode;
+                        t.clientType = listSAPSearchCondition[i].clientType;
+                        tmpListSAPSearchCondition.Add(t);
+
+                        //@TODO AdHoc Add CLS
+                        crmInqPayeeOut.data.Add(new InquiryCrmPayeeListDataModel
+                        {
+
+                            sourceData = "CLS",
+                            cleansingId = clsData.cleansing_id,
+                            polisyClientId = clsData.clntnum,
+                            sapVendorCode = "",
+
+                            fullName = clsData.cls_full_name,
+                            taxNo = "",
+                            taxBranchCode = "",
+                            emcsMemHeadId = "",
+                            emcsMemId = "",
+
+                        });
+                    }
+                    listSAPSearchCondition.RemoveAt(0);
+                }
+                else
+                {
+                    i++;
+                }
+            }
+
+            return tmpListSAPSearchCondition;
+        }
+
+        public List<InquiryCRMPayeeListInputModel> InquiryAPARPayeeList(List<InquiryCRMPayeeListInputModel> listSAPSearchCondition, int iRecordsLimit, InquiryCRMPayeeListInputModel inqCrmPayeeListIn,
+            ref CRMInquiryPayeeContentOutputModel crmInqPayeeOut)
+        {
+            int i;
+            List<InquiryCRMPayeeListInputModel> tmpListSAPSearchCondition = new List<InquiryCRMPayeeListInputModel>();
+            i = 0;
+            while (i < listSAPSearchCondition.Count)
+            {
+                InquiryAPARPayeeListInputModel inqAPARIn =
+                    (InquiryAPARPayeeListInputModel) DataModelFactory.GetModel(typeof(InquiryAPARPayeeListInputModel));
+                inqAPARIn =
+                    (InquiryAPARPayeeListInputModel) TransformerFactory.TransformModel(listSAPSearchCondition[i], inqAPARIn);
+                InquiryAPARPayeeContentModel inqAPAROut = CallDevesServiceProxy<InquiryAPARPayeeOutputModel, InquiryAPARPayeeContentModel>(CommonConstant.ewiEndpointKeyAPARInquiryPayeeList, inqAPARIn);
+               // InquiryAPARPayeeContentModel inqAPAROut =
+                //    buzInquiryAPARPayeeListPayeeListService.Instance.Execute(inqAPARIn);
+                if (inqAPAROut?.aparPayeeListCollection != null && inqAPAROut.aparPayeeListCollection.Count > 0)
+                {
+                    if (inqAPAROut.aparPayeeListCollection.Count + listSAPSearchCondition.Count +
+                        tmpListSAPSearchCondition.Count > iRecordsLimit)
+                    {
+                        throw new TooManySearchResultsException(CommonConstant.CONST_SYSTEM_APAR, iRecordsLimit);
+                    }
+                    //if (inqAPAROut.aparPayeeListCollection.Count > 0)
+                    //{
+                    crmInqPayeeOut =
+                        (CRMInquiryPayeeContentOutputModel) TransformerFactory.TransformModel(inqAPAROut, crmInqPayeeOut);
+                    //}
+                    BaseTransformer transformer =
+                        TransformerFactory.GetTransformer(typeof(InquiryAPARPayeeContentAparPayeeListCollectionDataModel),
+                            typeof(InquiryCRMPayeeListInputModel));
+                    foreach (InquiryAPARPayeeContentAparPayeeListCollectionDataModel apar in inqAPAROut.aparPayeeListCollection)
+                    {
+                        InquiryCRMPayeeListInputModel t = new InquiryCRMPayeeListInputModel();
+                        t = (InquiryCRMPayeeListInputModel) transformer.TransformModel(apar, t);
+                        t.requester = inqCrmPayeeListIn.requester;
+                        t.emcsCode = inqCrmPayeeListIn.emcsCode;
+                        t.roleCode = inqCrmPayeeListIn.roleCode;
+                        tmpListSAPSearchCondition.Add(t);
+                    }
+
+                    listSAPSearchCondition.RemoveAt(0);
+                }
+                else
+                {
+                    i++;
+                }
+            }
+            return tmpListSAPSearchCondition;
         }
 
 

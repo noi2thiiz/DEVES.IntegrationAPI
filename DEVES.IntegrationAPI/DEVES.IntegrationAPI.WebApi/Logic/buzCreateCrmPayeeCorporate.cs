@@ -70,7 +70,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         // profileHeader
                         //contentModel.profileHeader.corporateName1;
                         //contentModel.profileHeader.corporateName2;
-                        account.Name = contentModel.profileHeader.corporateName1 + " " + contentModel.profileHeader.corporateName2;
+
+                        //account.Name = contentModel.profileHeader.corporateName1 + " " + contentModel.profileHeader.corporateName2;
+                        account.pfc_long_surname = contentModel.profileHeader.corporateName1;
+                        account.pfc_long_giving_name = contentModel.profileHeader.corporateName2;
+
                         // contentModel.profileHeader.contactPerson; 
                         account.pfc_register_no = contentModel.profileHeader.idRegCorp; // contentModel.profileHeader.idRegCorp;
                         account.pfc_tax_no = contentModel.profileHeader.idTax; // contentModel.profileHeader.idTax;

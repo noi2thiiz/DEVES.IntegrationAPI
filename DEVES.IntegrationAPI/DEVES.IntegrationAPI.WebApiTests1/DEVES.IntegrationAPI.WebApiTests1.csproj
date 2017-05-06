@@ -54,11 +54,16 @@
   <ItemGroup>
     <Compile Include="DataAccessService\DataAdapter\RESTClient\RESTClientTests.cs" />
     <Compile Include="DataAccessService\Mastes\InMemoryDataStorageBaseTests.cs" />
+    <Compile Include="Logic\DataAccess\Adapter\DevesServiceProxyAdapterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TechnicalService\TransactionLogger\ApiLogDataGateWayTests.cs" />
     <Compile Include="TechnicalService\TransactionLogger\JobTimerTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DEVES.IntegrationAPI.Model\DEVES.IntegrationAPI.Model.csproj">
+      <Project>{6468FD67-1302-40B6-B346-1162CB9338C4}</Project>
+      <Name>DEVES.IntegrationAPI.Model</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DEVES.IntegrationAPI.WebApi\DEVES.IntegrationAPI.WebApi.csproj">
       <Project>{9E53BD0D-3233-4320-8445-C575920EB7E6}</Project>
       <Name>DEVES.IntegrationAPI.WebApi</Name>

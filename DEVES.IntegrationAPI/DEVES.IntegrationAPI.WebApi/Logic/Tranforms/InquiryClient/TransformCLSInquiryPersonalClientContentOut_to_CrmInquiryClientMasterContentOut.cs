@@ -8,7 +8,7 @@ using CLS = DEVES.IntegrationAPI.Model.CLS;
 using DEVES.IntegrationAPI.WebApi.Templates;
 using DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData;
 using DEVES.IntegrationAPI.Core.Helper;
-
+//TODO เพิ่ม Source Data= Integration
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
     public class TransformCLSInquiryPersonalClientContentOut_to_CrmInquiryClientMasterContentOut : BaseTransformer
