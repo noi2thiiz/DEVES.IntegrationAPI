@@ -15,7 +15,9 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.DataAdapter
 
             try
             {   //https://crmappqa.deves.co.th/internal-service/api/StoreService/crm/
-                var client = new RESTClient("http://localhost/crm-internal-service/api/StoreService/local");
+                var endpoint = System.Configuration.ConfigurationManager.AppSettings["API_ENDPOINT_INTERNAL_SERVICE"].ToString();
+                endpoint += "/StoreService/ext";
+                var client = new RESTClient(endpoint);
                 var result = client.Execute(req);
               
                 //  Console.WriteLine(result.Content);

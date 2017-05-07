@@ -1,0 +1,288 @@
+formButton
+{
+	background-color: #6699cc;
+	padding: 2px 4px 3px 4px;
+	color: #000000;
+	font-size: 8pt;
+	font-family: tahoma;
+	height: 17px;
+	filter: progid:DXImageTransform.Microsoft.Gradient(GradientType=0,StartColorStr=#B4C5DF, EndColorStr=#91A9D0);
+	border-width: 0px;
+}
+
+
+TEXTAREA
+{
+	font-size: 8pt;
+	font-family: tahoma;
+	width: 100%;
+	height: 100%;
+	border: 1px solid #6699CC;
+}
+
+.inputfields
+{
+	font-size: 8pt;
+	font-family: tahoma;
+	width: 100%;
+	height: 20px;
+	border: 1px solid #6699CC;
+}
+
+.labels
+{
+	font-size: 12pt;
+	font-family: tahoma;
+	width: 100%;
+	height: 20px;
+	padding-left: 3px;
+	padding-top: 2px;
+	font-weight: bold;
+}
+.labelsMessage
+{
+	font-size: 10pt;
+	font-family: tahoma;
+	width: 100%;
+	height: 30px;
+	padding-left: 3px;
+	padding-top: 2px;
+	font-weight: bold;
+}
+
+.labelsMessage1
+{
+	font-size: 10pt;
+	font-family: tahoma;
+	width: 100%;
+	height: 20px;
+	padding-left: 3px;
+	padding-top: 2px;
+	font-weight: bold;
+	text-decoration: underline;
+}
+
+.labelsMessage2
+{
+	font-size: 8pt;
+	font-family: tahoma;
+	width: 100%;
+	height: 10px;
+	font-weight: bold;
+}
+
+INPUT.rad
+{
+	width: 15px;
+	border: 0px;
+	cursor: hand;
+}
+
+DIV.tab
+{
+	overflow-y: auto;
+	padding: 10px;
+}
+
+TD.sec
+{
+	width: 100%;
+	color: #000000;
+	font-weight: bold;
+	padding-left: 0px;
+	padding-bottom: 2px;
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+
+TD
+{
+	font-size: 11pt;
+	font-family: tahoma;
+}
+
+TD.bar
+{
+	border-bottom: 1px solid #96B3DD;
+}
+
+
+SPAN.req
+{
+	font-weight: bold;
+	color: #FF0000;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	padding-top: 5px;
+}
+
+TD.statusBar
+{
+	background-color: #80ABD4;
+	color: #000000;
+	background-image: url(images/statusbar_back.gif);
+	background-repeat: repeat-x;
+	padding-left: 5px;
+	height: 24px;
+	border-bottom: 1px solid #485673;
+	font-weight: bold;
+}
+
+
+LABEL
+{
+	cursor: hand;
+}
+
+TD.radioLabel
+{
+	padding-left: 2px;
+	padding-right: 10px;
+}
+
+TABLE.layout
+{
+	table-layout: fixed;
+	width: 100%;
+	height: 100%;
+}
+
+div.tab
+{
+	width: 100%;
+	height: 100%;
+	border: 1px solid #898C95;
+	background-color: #EAF3FF;
+	display: none;
+}
+
+body
+{
+	font-size: 11px;
+	margin: 0px;
+	border: 0px;
+	background-image: url(_imgs/form_back.gif);
+	background-repeat: repeat-x;
+	background-color: rgb(233, 237, 241);
+	cursor: default;
+}
+
+td
+{
+	font-size: 11px;
+}
+
+table
+{
+	cursor: default;
+}
+
+a
+{
+	color: #0000ff;
+	font-weight: bold;
+}
+
+.menubar
+{
+	height: 44px;
+}
+
+.formtitle
+{
+	padding-left: 10px;
+}
+
+TD.entitytype
+{
+	font-weight: bold;
+	font-size: 11px;
+	padding-top: 2px;
+}
+
+TD.navtitle
+{
+	font-weight: bold;
+	font-size: 18px;
+	padding-top: 1px;
+	color: #6699CC;
+}
+span.menu
+{
+	height: 100%;
+	padding: 2px;
+	padding-left: 5px;
+	padding-right: 5px;
+	border: 1px solid #7288AC;
+}
+
+table.mnuBar
+{
+	color: #000000;
+	height: 30px;
+	width: 100%;
+	background-image: url('images/form_toolbar_back.gif');
+	background-repeat: repeat-x;
+}
+.Select
+{
+	color: #000000;
+	border: #6699CC 1px solid;
+	border-right: 0px;
+	height: 20px;
+	font-family: tahoma,arial;
+	padding-left: 5px;
+	font-size: 11px;
+	width: 100%;
+}
+.Button
+{
+	background-image: url(../_imgs/btn_rest.gif);
+	border-bottom: #3366cc 1px solid;
+	text-align: center;
+	border-left: #3366cc 1px solid;
+	line-height: 12px;
+	background-color: #cee7ff;
+	padding-left: 5px;
+	padding-right: 5px;
+	background-repeat: repeat-x;
+	font-family: Tahoma;
+	height: 20px;
+	font-size: 11px;
+	border-top: #3366cc 1px solid;
+	cursor: pointer;
+	border-right: #3366cc 1px solid;
+}
+
+.ms-crm-Button
+{
+	overflow: visible;
+	width: 100px;
+}
+.pageHide
+{
+	display: none;
+}
+
+LABEL.ms-crm-Dialog-Lookup-QuickFindHint
+{
+	height: 20px;
+	color: #7e7e7e;
+	overflow: hidden;
+	padding-top: 4px;
+	padding-bottom: 4px;
+	padding-right: 5px;
+	padding-left: 5px;
+	position: absolute;
+}
+
+DIV.ms-crm-Dialog-Main2
+{
+	height: 100%;
+	overflow: visible;
+	vertical-align: top;
+	padding: 5px;
+	border-bottom: solid 1px #a5acb5;
+	background-color: rgb(233, 237, 241);
+	width: 98%;
+}

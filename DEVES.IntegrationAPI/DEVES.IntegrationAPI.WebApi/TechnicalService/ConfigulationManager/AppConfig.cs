@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
@@ -39,7 +40,12 @@ namespace DEVES.IntegrationAPI.WebApi
         }
         private delegate void RateChangeNotification(DataTable table);
         //private TableDependency.SqlClient.SqlTableDependency dependency;
-        string ConnectionString = "Data Source=DESKTOP-Q30CAGJ;Initial Catalog=CRM_CUSTOM_APP;User ID=sa;Password=patiwat";
+        //System.Configuration.ConfigurationManager.AppSettings['CRM_CUSTOMAPP_DB'].ToString();
+        //"Data Source=DESKTOP-Q30CAGJ;Initial Catalog=CRM_CUSTOM_APP;User ID=sa;Password=patiwat";
+        
+            
+        string ConnectionString = System.Configuration.ConfigurationManager.AppSettings["CRM_CUSTOMAPP_DB"].ToString();
+        
         private readonly SqlTableDependency<AppConfigEntity> dependency;
         public void Startup()
         {
