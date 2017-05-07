@@ -287,5 +287,11 @@
       ]
     }
 
-  }
+  },
+  "required": [
+    "generalHeader",
+    "profileInfo",
+    "addressInfo",
+    "sapVendorInfo"
+  ]
 }

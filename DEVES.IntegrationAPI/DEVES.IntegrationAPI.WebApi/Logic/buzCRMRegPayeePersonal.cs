@@ -53,7 +53,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             var fieldErrorData = new OutputModelFailData();
             Console.WriteLine("31"); ;
 
-            var masterSalutation = PersonalTitleMasterData.Instance.FindByCode(regPayeePersonalInput.profileInfo.salutation);
+            var masterSalutation = PersonalTitleMasterData.Instance.FindByCode(regPayeePersonalInput?.profileInfo?.salutation,"0001");
             if (masterSalutation == null)
             {
                 var message =
@@ -67,7 +67,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 regPayeePersonalInput.profileInfo.salutation = masterSalutation.PolisyCode;
             }
             Console.WriteLine("46"); ;
-            var masterNationality = NationalityMasterData.Instance.FindByCode(regPayeePersonalInput.profileInfo.nationality, "00203");
+            var masterNationality = NationalityMasterData.Instance.FindByCode(regPayeePersonalInput?.profileInfo?.nationality, "00203");
             if (masterNationality == null)
             {
                 var message =
@@ -81,7 +81,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 regPayeePersonalInput.profileInfo.nationality = masterNationality.PolisyCode;
             }
             Console.WriteLine("60"); ;
-            var masterOccupation = OccupationMasterData.Instance.FindByCode(regPayeePersonalInput.profileInfo.occupation, "00023");
+            var masterOccupation = OccupationMasterData.Instance.FindByCode(regPayeePersonalInput?.profileInfo?.occupation, "00023");
             if (masterOccupation == null)
             {
                 var message =
@@ -97,7 +97,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 regPayeePersonalInput.profileInfo.occupation = masterOccupation.PolisyCode;
             }
             Console.WriteLine("76"); ;
-            var masterCountry = CountryMasterData.Instance.FindByCode(regPayeePersonalInput.addressInfo.country, "00220");
+            var masterCountry = CountryMasterData.Instance.FindByCode(regPayeePersonalInput?.addressInfo?.country, "00220");
             if (masterCountry == null)
             {
                 var message =

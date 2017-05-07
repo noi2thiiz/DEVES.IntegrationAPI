@@ -24,6 +24,8 @@ namespace DEVES.IntegrationAPI.WebApi
         {
             try
             {
+                ConnectionString = System.Configuration.ConfigurationManager.AppSettings["CRM_CUSTOMAPP_DB"].ToString();
+
                 var mapper = new ModelToTableMapper<AppConfigEntity>();
                 mapper.AddMapping(model => model.Key, "Key");
                 //mapper.AddMapping(model => model.Value, "Value");
@@ -31,8 +33,9 @@ namespace DEVES.IntegrationAPI.WebApi
                 //mapper.AddMapping(model => model.Enveronment, "Enveronment");
                 dependency = new SqlTableDependency<AppConfigEntity>(ConnectionString, "AppConfig", mapper);
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 //do not thing
                 //updateConfig();
             }

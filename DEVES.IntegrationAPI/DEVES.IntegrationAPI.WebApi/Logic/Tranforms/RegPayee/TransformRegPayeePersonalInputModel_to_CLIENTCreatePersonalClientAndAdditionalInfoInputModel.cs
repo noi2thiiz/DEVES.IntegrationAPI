@@ -85,11 +85,17 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     default: trgt.busRes = ""; break;
                 }
             }
-           /*
-            B = Business Address
-                P = Postal Address
-                R = Residential Address
-                */
+
+            //@TODO AdHoc Fix กรณีส่ง 00002 แล้ว ตามด้วย post code จะ error
+            if (trgt.country=="004")
+            {
+                trgt.postCode = "";
+            }
+            /*
+             B = Business Address
+                 P = Postal Address
+                 R = Residential Address
+                 */
             return trgt;
         }
 

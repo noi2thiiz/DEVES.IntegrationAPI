@@ -223,5 +223,9 @@
       }
     }
 
-  }
+  },
+  "required": [
+    "generalHeader",
+    "profileInfo"
+  ]
 }
