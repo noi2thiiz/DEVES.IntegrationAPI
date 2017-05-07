@@ -17,7 +17,11 @@ namespace DEVES.IntegrationAPI.WebApi
         {
             GlobalConfiguration.Configuration.MessageHandlers.Add(new ApiLogHandler());
 
+            //start log job persis log
             LogJobHandle.Start();
+
+            //start watch config change
+            AppConfig.Instance.Startup();
 
 
 

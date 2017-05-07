@@ -88,15 +88,38 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             throw new NotImplementedException();
         }
 
+        private string GetEwiUsername()
+        {
+
+            return AppConfig.Instance.Get("EWI_USERNAME") ?? "sysdynamic";
+        }
+        private string GetEwiPassword()
+        {
+
+            return AppConfig.Instance.Get("EWI_PASSWORD") ?? "REZOJUNtN04=";
+        }
+
+        private string GetEwiUid()
+        {
+
+            return AppConfig.Instance.Get("EWI_UID") ?? "DevesClaim";
+        }
+        private string GetEwiGid()
+        {
+
+            return AppConfig.Instance.Get("EWI_GID") ?? "DevesClaim";
+        }
+
+
         internal BaseContentJsonProxyOutputModel CallDevesJsonProxy<T1>(string EWIendpointKey, BaseDataModel JSON, string UID=CONST_DEFAULT_UID) where T1 : BaseEWIResponseModel 
         {
             EWIRequest reqModel = new EWIRequest()
             {
                 //user & password must be switch to get from calling k.Ton's API rather than fixed values.
-                username = "sysdynamic",
-                password = "REZOJUNtN04=",
-                uid = "DevesClaim",
-                gid = "DevesClaim",
+                username = GetEwiUsername(),
+                password = GetEwiPassword(),
+                uid = GetEwiUid(),
+                gid = GetEwiGid(),
                 token = GetLatestToken(),
                 content = JSON
             };
@@ -143,12 +166,13 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             EWIRequest reqModel = new EWIRequest()
             {
                 //user & password must be switch to get from calling k.Ton's API rather than fixed values.
-                username = "sysdynamic",
-                password = "REZOJUNtN04=",
-                uid = "DevesClaim",
-                gid = "DevesClaim",
+                username = GetEwiUsername(),
+                password = GetEwiPassword(),
+                uid = GetEwiUid(),
+                gid = GetEwiGid(),
                 token = GetLatestToken(),
                 content = JSON
+               
             };
             
             jsonReqModel = JsonConvert.SerializeObject(reqModel, Formatting.Indented, new EWIDatetimeConverter(JSON.DateTimeCustomFormat));

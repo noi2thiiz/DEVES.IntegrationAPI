@@ -209,6 +209,12 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="TableDependency, Version=5.3.0.0, Culture=neutral, PublicKeyToken=997305cc1a8bb802, processorArchitecture=MSIL">
+      <HintPath>..\packages\SqlTableDependency.5.3.0.0\lib\TableDependency.dll</HintPath>
+    </Reference>
+    <Reference Include="TableDependency.SqlClient, Version=5.3.0.0, Culture=neutral, PublicKeyToken=c3b0a3ab9ceb00ff, processorArchitecture=MSIL">
+      <HintPath>..\packages\SqlTableDependency.5.3.0.0\lib\TableDependency.SqlClient.dll</HintPath>
+    </Reference>
     <Reference Include="WebBackgrounder, Version=0.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\WebBackgrounder.0.2.0\lib\net40\WebBackgrounder.dll</HintPath>
     </Reference>
@@ -402,6 +408,7 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="TechnicalService\ConfigulationManager\AppConfig.cs" />
     <Compile Include="TechnicalService\TransactionLogger\ApiLogDataGateWay.cs" />
     <Compile Include="TechnicalService\TransactionLogger\ApiLogEntry.cs" />
     <Compile Include="TechnicalService\TransactionLogger\ApiLogHandler.cs" />
