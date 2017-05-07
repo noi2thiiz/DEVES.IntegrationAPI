@@ -14,9 +14,25 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.DataAdapter
             var dbResult = new DbResult();
 
             try
-            {   //https://crmappqa.deves.co.th/internal-service/api/StoreService/crm/
-
-                var endpoint = System.Configuration.ConfigurationManager.AppSettings["API_ENDPOINT_INTERNAL_SERVICE"].ToString();
+            {
+                var endpoint = "https://crmappqa.deves.co.th/internal-service/api";
+                try
+                {
+                    if (string.IsNullOrEmpty(System.Configuration.ConfigurationManager
+                        .AppSettings["API_ENDPOINT_INTERNAL_SERVICE"]))
+                    {
+                        endpoint = System.Configuration.ConfigurationManager
+                            .AppSettings["API_ENDPOINT_INTERNAL_SERVICE"].ToString();
+                    }
+                }
+                catch (Exception)
+                {
+                    //do not thing
+                }
+                
+       
+               
+                Console.WriteLine("Load  Data Store : "+ endpoint);
                 if (req.StoreName== "sp_Query_AppConfig")
                 {
                     endpoint += "/StoreService/ext";
@@ -33,7 +49,7 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.DataAdapter
                 var client = new RESTClient(endpoint);
                 var result = client.Execute(req);
               
-                //  Console.WriteLine(result.Content);
+                 Console.WriteLine(result.Content);
                 JavaScriptSerializer serializer1 = new JavaScriptSerializer();
                 StoreOutput obje = serializer1.Deserialize<StoreOutput>(result.Content);
 
@@ -48,6 +64,7 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.DataAdapter
                 dbResult.Count = 0;
                // dbResult.Data = ;
                 dbResult.Success = false;
+                Console.WriteLine(e.Message+"|"+e.StackTrace);
 
                 return dbResult;
             }

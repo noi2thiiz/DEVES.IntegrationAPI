@@ -21,13 +21,13 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData.Tests
         public void CountryMasterDataFindByFieldTest()
         {
             var result = CountryMasterData.Instance.FindByField("Code", "00002");
-            Assert.AreEqual("00002", result.CountryCode);
+            Assert.AreEqual("004", result.PolisyCode);
         }
         [TestMethod()]
         public void CountryMasterDataFindByEnumFieldTest()
         {
             var result = CountryMasterData.Instance.FindByField(CountryEntityFields.CountryCode, "00002");
-            Assert.AreEqual("00002", result.CountryCode);
+            Assert.AreEqual("AF", result.SapCode);
         }
 
 
@@ -54,7 +54,7 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData.Tests
         public void OccupationMasterDataFindByCodeTest()
         {
             var result = OccupationMasterData.Instance.FindByCode("00003");
-            Assert.AreEqual("00003", result.Code);
+            Assert.AreEqual("081", result.PolisyCode);
         }
         [TestMethod()]
         public void ProvinceMasterDataFindByCodeTest()

@@ -26,17 +26,18 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
 
         protected void Load(string storeName, string fieldCodeName)
         {
-            Console.WriteLine("Load"+ storeName);
+            Console.WriteLine("Load "+ storeName);
              StoreName = storeName;
              FieldCodeName = fieldCodeName;
             if (null != DataList2) return;
             if (System.Environment.MachineName == AppConst.QA_SERVER_NAME)
             {
                 DataReader = new StoreDataReader();
+                Console.WriteLine("StoreDataReader");
             }
             else
             {
-               
+                Console.WriteLine("RestDataReader");
                 DataReader = new RestDataReader();
             }
            
@@ -50,6 +51,7 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
             var reader = DataReader;
             var req = new DbRequest {StoreName = storeName};
             var result = reader.Execute(req);
+            Console.WriteLine(result.ToJson());
             if (result.Count > 0)
             {
                 foreach (Dictionary<string, dynamic> item in result.Data)
@@ -74,7 +76,8 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
             }
             else
             {
-               // throw new Exception("Data Not Found!!");
+                Console.WriteLine("Load " + storeName+ " Data Not Found!!");
+                // throw new Exception("Data Not Found!!");
             }
         }
 
