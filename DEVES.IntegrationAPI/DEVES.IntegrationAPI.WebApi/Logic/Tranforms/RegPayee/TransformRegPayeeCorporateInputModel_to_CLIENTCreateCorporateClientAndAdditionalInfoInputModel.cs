@@ -105,6 +105,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             trgt.assessorBlackListFlag = "";
             trgt.repairerBlackListFlag = "";
 
+
             return trgt;
         }
     }

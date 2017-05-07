@@ -67,11 +67,29 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 trgt.address5 = src.addressInfo.provinceCode;
                 trgt.postCode = src.addressInfo.postalCode;
                 trgt.country = src.addressInfo.country;
-                trgt.busRes = src.addressInfo.addressType;
+                trgt.busRes = "";//src.addressInfo.addressType
                 trgt.latitude = src.addressInfo.latitude;
                 trgt.longtitude = src.addressInfo.longtitude;
             }
-            
+            if (src?.addressInfo?.addressType != null)
+            {
+                switch (src.addressInfo.addressType)
+                {
+                    case "01": trgt.busRes = ""; break; //ไม่ระบุ
+                    case "02": trgt.busRes = "R"; break; //ที่อยู่ตามบัตรประจำตัวประชาชน
+                    case "03": trgt.busRes = "R"; break; //ที่อยู่ตามทะเบียนบ้าน
+                    case "04": trgt.busRes = "B"; break; //ที่อยู่ที่ทำงาน
+                    case "05": trgt.busRes = "R"; break; //ที่อยู่ปัจจุบัน
+                    case "06": trgt.busRes = ""; break; //ที่อยู่ในสัญญา
+                    case "07": trgt.busRes = "P"; break; //ที่อยู่สำหรับจัดส่งเอกสาร
+                    default: trgt.busRes = ""; break;
+                }
+            }
+           /*
+            B = Business Address
+                P = Postal Address
+                R = Residential Address
+                */
             return trgt;
         }
 

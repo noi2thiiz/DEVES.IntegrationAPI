@@ -75,9 +75,5 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData.Tests
             var result = AddressTypeMasterData.Instance.FindByCode("01");
             Assert.AreEqual("01", result.Code);
         }
-
-
-        
-
     }
 }

@@ -19,7 +19,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             CRMInquiryPayeeContentOutputModel trgtContent = (CRMInquiryPayeeContentOutputModel) output;
 
 
-    
+       
 
             trgtContent.data = new List<InquiryCrmPayeeListDataModel>();
 

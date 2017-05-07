@@ -16,28 +16,35 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             InquiryMasterASRHContentModel srcContent = (InquiryMasterASRHContentModel) input;
             CRMInquiryPayeeContentOutputModel trgtContent = (CRMInquiryPayeeContentOutputModel) output;
 
+            #region Prevent Null Reference
 
-           // Console.WriteLine("===========InquiryMasterASRHContentModel Tranform output==========");
-           // Console.WriteLine("===========Tranform==========");
-           // Console.WriteLine("===========Tranform==========");
+            if (srcContent == null)
+            {
+                return trgtContent;
+            }
+            if (srcContent?.ASRHListCollection == null) {
+                return trgtContent;
+            }
 
-           // Console.WriteLine(srcContent.ToJson());
+           if (trgtContent == null)
+            {
+                trgtContent = new CRMInquiryPayeeContentOutputModel();
 
-
-            //Console.WriteLine("===========CRMInquiryPayeeContentOutputModel Tranform output==========");
-           // Console.WriteLine("===========Tranform==========");
-           // Console.WriteLine("===========Tranform==========");
-          //  Console.WriteLine(trgtContent.ToJson());
-
+            }
             trgtContent.data = new List<InquiryCrmPayeeListDataModel>();
 
+            #endregion
 
-
-            foreach (var ASRHListCollection in srcContent.ASRHListCollection)
+         
+           
+            foreach (var ASRHListCollection in srcContent?.ASRHListCollection)
             {
-                if (ASRHListCollection.ASRHList != null)
+             
+                if (ASRHListCollection?.ASRHList != null)
                 {
-                    var ASRHList = ASRHListCollection.ASRHList;
+                  
+                    var ASRHList = ASRHListCollection?.ASRHList;
+                    
                     trgtContent.data.Add(new InquiryCrmPayeeListDataModel
                     {
                         sourceData = "MASTER_ASHR",
@@ -61,7 +68,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 }
             }
 
-
+          
             return trgtContent;
         }
     }

@@ -11,6 +11,7 @@ using DEVES.IntegrationAPI.WebApi.Templates;
 using System.Linq;
 using System.Collections;
 using System.Data.Common;
+using Microsoft.Ajax.Utilities;
 
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
@@ -155,20 +156,21 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 //@TODO AdHoc ลบข้อมูลจาก Source อื่นออก ถ้าเจอข้อมูลใน SAP ให้ถือว่าใช้ขอมูลจาก SAP
                if (crmInqPayeeOut.data.Where(row => row.sourceData == "SAP").Distinct().ToList().Count > 0)
                 {
-                    crmInqPayeeOut.data = crmInqPayeeOut.data.Where(row => row.sourceData == "SAP").Distinct().ToList();
+                    crmInqPayeeOut.data = crmInqPayeeOut.data.Where(row => row.sourceData == "SAP").DistinctBy(row => row.sapVendorCode).ToList();
 
                 }else
                 if (crmInqPayeeOut.data.Where(row => row.sourceData == "COMP").Distinct().ToList().Count > 0)
                 {
-                    crmInqPayeeOut.data = crmInqPayeeOut.data.Where(row => row.sourceData == "COMP").Distinct().ToList();
+                    crmInqPayeeOut.data = crmInqPayeeOut.data.Where(row => row.sourceData == "COMP").DistinctBy(row => row.polisyClientId).ToList();
 
                 }
                 else
                 if (crmInqPayeeOut.data.Where(row => row.sourceData == "CLS").Distinct().ToList().Count > 0)
                 {
-                    crmInqPayeeOut.data = crmInqPayeeOut.data.Where(row => row.sourceData == "CLS").Distinct().ToList();
+                    crmInqPayeeOut.data = crmInqPayeeOut.data.Where(row => row.sourceData == "CLS").DistinctBy(row => row.cleansingId).ToList();
 
                 }
+
                 //MASTER_ASHR
                 //APAR
 
