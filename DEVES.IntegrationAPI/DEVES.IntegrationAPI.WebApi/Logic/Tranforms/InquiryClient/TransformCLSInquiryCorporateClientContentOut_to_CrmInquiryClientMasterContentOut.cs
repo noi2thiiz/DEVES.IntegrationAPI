@@ -17,7 +17,16 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             CLS.CLSInquiryCorporateClientContentOutputModel srcContent = (CLS.CLSInquiryCorporateClientContentOutputModel)input;
             CRMInquiryClientContentOutputModel trgtContent = (CRMInquiryClientContentOutputModel)output;
 
-            if (srcContent.data != null)
+            if (srcContent == null)
+            {
+                return trgtContent;
+            }
+            if (trgtContent ==null)
+            {
+                trgtContent = new CRMInquiryClientContentOutputModel();
+                trgtContent.data = new List<CRMInquiryClientOutputDataModel>();
+            }
+            if (srcContent?.data != null)
             {
                 foreach (CLS.CLSInquiryCorporateClientOutputModel src in srcContent.data)
                 {
@@ -28,29 +37,49 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     trgt.generalHeader = new CRMInquiryClientGeneralHeaderModel();
                     trgt.profileInfo = new CRMInquiryClientProfileInfoModel();
 
-
+                    Console.WriteLine("40");
                     trgt.generalHeader.cleansingId = src.cleansing_id;
                     trgt.generalHeader.polisyClientId = src.clntnum;
-
+                    Console.WriteLine("43");
                     trgt.profileInfo.name1 = src.lgivname;
                     trgt.profileInfo.name2 = src.lsurname;
                     trgt.profileInfo.fullName = src.cls_full_name;
                     // trgt.profileInfo.salutationText = src.salutl;
-                    if(!src.cls_sex.Equals("M") || !src.cls_sex.Equals("F"))
+                       Console.WriteLine("43");
+                    trgt.profileInfo.sex = "U";
+                    if (src.cls_sex != null)
                     {
-                        trgt.profileInfo.sex = "U";
+                        if (!src.cls_sex.Equals("M") || !src.cls_sex.Equals("F"))
+                        {
+                            trgt.profileInfo.sex = "U";
+                        }
                     }
+                   
+                    Console.WriteLine("52");
                     // trgt.profileInfo.sex = src.cls_sex;
                     trgt.profileInfo.idTax = src.cls_tax_no_new;
+                    Console.WriteLine("61");
+                    try
+                    {
+                        var master_occupation =
+                            OccupationMasterData.Instance.FindByCode(isNull(src.cls_occpcode), "00023");
+                        trgt.profileInfo.occupationText = master_occupation.Name;
 
-                    var master_occupation = OccupationMasterData.Instance.FindByCode(isNull(src.cls_occpcode), "00023");
-                    trgt.profileInfo.occupationText = master_occupation.Name;
 
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("72"+e.Message);
+                    }
+
+
+                    Console.WriteLine("64");
                     trgt.contactInfo.telephone1 = src.cltphone01;
                     trgt.contactInfo.telephone2 = src.cltphone02;
                     trgt.contactInfo.fax = src.cls_fax;
                     trgt.contactInfo.contactNumber = src.cls_display_phone;
                     trgt.contactInfo.emailAddress = src.email_1;
+                    Console.WriteLine("64");
 
                     var addrInfo = src.addressListsCollection.FirstOrDefault<Model.CLS.CLSAddressListsCollectionModel>();
                     if (addrInfo != null)
@@ -64,13 +93,23 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                                                                 , addrInfo.postal_code);
                         trgt.addressInfo.countryText = addrInfo.cls_ctrycode_text;
 
-                        var master_addressType = AddressTypeMasterData.Instance.FindByCode(isNull(addrInfo.address_type_code), "01");
-                        trgt.addressInfo.addressTypeText = master_addressType.Name;
+                        try
+                        {
+                            var master_addressType =
+                                AddressTypeMasterData.Instance.FindByCode(isNull(addrInfo.address_type_code), "01");
+                            trgt.addressInfo.addressTypeText = master_addressType.Name;
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine("104:"+e.Message);
+                        }
+                        
                         trgt.addressInfo.latitude = addrInfo.lattitude;
                         trgt.addressInfo.longtitude = addrInfo.longtitude;
                     }
-
+                    Console.WriteLine("82");
                     trgtContent.data.Add(trgt);
+                    Console.WriteLine("84");
                 }
             }
 

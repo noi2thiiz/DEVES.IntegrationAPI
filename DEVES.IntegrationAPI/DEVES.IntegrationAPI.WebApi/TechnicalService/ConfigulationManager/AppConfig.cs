@@ -22,12 +22,21 @@ namespace DEVES.IntegrationAPI.WebApi
 
         private AppConfig()
         {
-            var mapper = new ModelToTableMapper<AppConfigEntity>();
-            mapper.AddMapping(model => model.Key, "Key");
-            //mapper.AddMapping(model => model.Value, "Value");
-            //mapper.AddMapping(model => model.Type, "Type");
-            //mapper.AddMapping(model => model.Enveronment, "Enveronment");
-            dependency = new SqlTableDependency<AppConfigEntity>(ConnectionString, "AppConfig", mapper);
+            try
+            {
+                var mapper = new ModelToTableMapper<AppConfigEntity>();
+                mapper.AddMapping(model => model.Key, "Key");
+                //mapper.AddMapping(model => model.Value, "Value");
+                //mapper.AddMapping(model => model.Type, "Type");
+                //mapper.AddMapping(model => model.Enveronment, "Enveronment");
+                dependency = new SqlTableDependency<AppConfigEntity>(ConnectionString, "AppConfig", mapper);
+            }
+            catch (Exception)
+            {
+                //do not thing
+                //updateConfig();
+            }
+           
         }
         public static AppConfig Instance
         {
@@ -140,7 +149,7 @@ namespace DEVES.IntegrationAPI.WebApi
             }
             else
             {
-                throw new KeyNotFoundException("Config out of range: Key [" + key + "] Not Found");
+                return null;
             }
 
         }

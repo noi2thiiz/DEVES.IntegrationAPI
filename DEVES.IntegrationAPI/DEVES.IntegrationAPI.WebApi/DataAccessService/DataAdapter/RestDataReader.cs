@@ -15,8 +15,21 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.DataAdapter
 
             try
             {   //https://crmappqa.deves.co.th/internal-service/api/StoreService/crm/
+
                 var endpoint = System.Configuration.ConfigurationManager.AppSettings["API_ENDPOINT_INTERNAL_SERVICE"].ToString();
-                endpoint += "/StoreService/ext";
+                if (req.StoreName== "sp_Query_AppConfig")
+                {
+                    endpoint += "/StoreService/ext";
+                }else if (req.StoreName == "sp_Insert_TransactionLog")
+                {
+                    endpoint += "/StoreService/ext";
+                }
+                else
+                {
+                    endpoint += "/StoreService/crm";
+                }
+
+                Console.WriteLine(endpoint);
                 var client = new RESTClient(endpoint);
                 var result = client.Execute(req);
               

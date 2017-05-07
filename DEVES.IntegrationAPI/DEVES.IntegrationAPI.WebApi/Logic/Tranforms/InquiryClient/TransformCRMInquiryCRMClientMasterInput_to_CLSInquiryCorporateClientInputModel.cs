@@ -16,13 +16,18 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             InquiryClientMasterInputModel src = (InquiryClientMasterInputModel)input;
             CLSInquiryCorporateClientInputModel trgt = (CLSInquiryCorporateClientInputModel)output;
 
-            trgt.roleCode = src.conditionHeader.roleCode;
-            trgt.clientId = src.conditionDetail.polisyClientId;
-            trgt.corporateFullName = src.conditionDetail.clientFullname;
-            trgt.taxNo = src.conditionDetail.idCard;
+            trgt.roleCode = src?.conditionHeader?.roleCode;
+            trgt.clientId = src?.conditionDetail?.polisyClientId??"";
+            trgt.corporateFullName = src?.conditionDetail?.clientFullname??"";
+            trgt.taxNo = src?.conditionDetail?.idCard??"";
             trgt.telephone = ""; 
             trgt.emailAddress = "";
             trgt.backDay = "7";
+            if (string.IsNullOrEmpty(trgt.corporateFullName))
+            {
+                trgt.corporateFullName = src?.conditionDetail?.clientName1 + " " + src?.conditionDetail?.clientName2;
+            }
+            trgt.corporateFullName = trgt.corporateFullName.Trim();
 
             return trgt;
         }
