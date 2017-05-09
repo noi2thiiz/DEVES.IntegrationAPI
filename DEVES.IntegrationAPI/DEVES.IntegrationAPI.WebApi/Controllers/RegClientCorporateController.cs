@@ -18,7 +18,8 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
     {
         public object Post([FromBody]object value)
         {
-            return ProcessRequest<buzCRMRegClientCorporate, RegClientCorporateInputModel>(value, "RegClientCorporate_Input_Schema.json");
+            return ProcessRequest<buzCRMRegClientCorporate, RegClientCorporateInputModel>
+                (value, "RegClientCorporate_Input_Schema.json");
             
         }
 

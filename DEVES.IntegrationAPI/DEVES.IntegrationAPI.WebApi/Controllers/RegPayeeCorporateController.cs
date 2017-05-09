@@ -23,7 +23,8 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             //var contentOutput = JsonConvert.DeserializeObject(data);
             //return Request.CreateResponse(contentOutput);
 
-            return ProcessRequest<buzCRMRegPayeeCorporate, RegPayeeCorporateInputModel>(value, "RegPayeeCorporate_Input_Schema.json");
+            return ProcessRequest<buzCRMRegPayeeCorporate, RegPayeeCorporateInputModel>
+                (value, "RegPayeeCorporate_Input_Schema.json");
 
             
             

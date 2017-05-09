@@ -36,6 +36,28 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         public const string CONST_SYSTEM_MASTER_ASRH = "MASTER_ASRH";
         public const string CONST_SYSTEM_APAR= "APAR";
 
+
+
+
+        public const string CODE_SUCCESS = "200";
+        public const string MESSAGE_SUCCESS = "SUCCESS";
+        public const string CODE_FAILED = "500";
+        public const string MESSAGE_INTERNAL_ERROR = "An error has occurred";
+        public const string DEFAULT_UID = "uid";
+        public const string CODE_INVALID_INPUT = "400";
+        public const string MESSAGE_INVALID_INPUT = "Invalid input(s)";
+        public const string DESC_INVALID_INPUT = "Some of your input is invalid. Please recheck again";
+
+        //Create Payee
+        public const string DEFAULT_CORPORATE_RECPTYPE = "53";//นิติบุคคล
+        public const string DEFAULT_PERSONAL_RECPTYPE = "03";//บุคคล
+        public const string DEFAULT_CORPORATE_SAP_VENDOR_COMPANY = "2020";
+
+        public const string QA_SERVER_NAME = "8121-CRM-QA";
+
+        public const string CONST_DEFAULT_UID = "";
+
+
         public static DateTime GetDevesAPINullDate()
         {
             return new DateTime(1900, 01, 01);

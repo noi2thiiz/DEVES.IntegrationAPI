@@ -24,8 +24,8 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             //remove redundant validate json schema code
             //+ Deserialize Input
             //InquiryClientMasterInputModel contentModel = DeserializeJson<InquiryClientMasterInputModel>(input.ToString());
-            return ProcessRequest<buzCrmInquiryClientMaster, InquiryClientMasterInputModel>(value,
-                "InquiryClientMaster_Input_Schema.json");
+            return ProcessRequest<buzCrmInquiryClientMaster, InquiryClientMasterInputModel>
+                (value, "InquiryClientMaster_Input_Schema.json");
           
         }
     }

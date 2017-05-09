@@ -301,7 +301,6 @@
     <Compile Include="Controllers\RegPayeePersonalController.cs" />
     <Compile Include="Controllers\RequestSurveyorController.cs" />
     <Compile Include="Controllers\TestAccountController.cs" />
-    <Compile Include="Controllers\TestModelController.cs" />
     <Compile Include="Controllers\TEST_CLSInquiryClientPersonalController.cs" />
     <Compile Include="Controllers\TEST_RegClaimRequestFromRVPController.cs" />
     <Compile Include="Controllers\UpdateClaimInfoController.cs" />

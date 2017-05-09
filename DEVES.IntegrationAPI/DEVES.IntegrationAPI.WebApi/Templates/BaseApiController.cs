@@ -32,7 +32,10 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             where TInput : class
 
         {
-            Console.WriteLine(value.ToJson());
+            // Console.WriteLine(value.ToJson());
+
+            #region Initiate Command and Output Model
+
             var type = typeof(TCommand);
             object instance = Activator.CreateInstance(type);
             BaseCommand cmd = (BaseCommand)instance;
@@ -40,12 +43,17 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
 
             cmd.TransactionId = GetTransactionId();
 
-            var contentText = value?.ToString();
+            #endregion
+
+
+            string contentText = value?.ToString();
+            //TInput contentModel;
             try
             {
-                var contentModel = JsonConvert.DeserializeObject<TInput>(contentText);
+                //try  Deserialize Object
+                JsonConvert.DeserializeObject<TInput>(contentText);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 //output model
                 outputFail.code = AppConst.CODE_INVALID_INPUT;
