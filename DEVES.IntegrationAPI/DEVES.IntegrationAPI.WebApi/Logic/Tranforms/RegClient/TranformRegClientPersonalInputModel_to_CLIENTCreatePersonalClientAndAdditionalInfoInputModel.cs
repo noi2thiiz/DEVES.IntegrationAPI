@@ -95,7 +95,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 //address3 String	30	O ที่อยู่ บรรทัดที่ 3
                 trgt.address3 = src.addressInfo.address3;
                 //subDistrictCode String	6	O ตำบล / แขวง
-                trgt.address4 = src.addressInfo.subDistrictCode;
+                trgt.address4 = src.addressInfo.districtCode + " " + src.addressInfo.subDistrictCode;
                 
                 //provinceCode    String	2	O จังหวัด
                 trgt.address5 = src.addressInfo.provinceCode;

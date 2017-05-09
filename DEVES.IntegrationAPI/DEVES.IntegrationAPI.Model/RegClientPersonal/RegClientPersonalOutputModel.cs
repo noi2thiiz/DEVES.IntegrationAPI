@@ -38,11 +38,11 @@ namespace DEVES.IntegrationAPI.Model.RegClientPersonal
 
     public class RegClientPersonalDataOutputModel_Pass : RegClientPersonalDataOutputModel
     {
-        public string cleansingId { get; set; }
-        public string polisyClientId { get; set; }
-        public string crmClientId { get; set; }
-        public string personalName { get; set; }
-        public string personalSurname { get; set; }
+        public string cleansingId { get; set; } = "";
+        public string polisyClientId { get; set; } = "";
+        public string crmClientId { get; set; } = "";
+        public string personalName { get; set; } = "";
+        public string personalSurname { get; set; } = "";
 
         public RegClientPersonalDataOutputModel_Pass()
         {

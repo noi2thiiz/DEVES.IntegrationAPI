@@ -18,33 +18,33 @@ namespace DEVES.IntegrationAPI.Model.InquiryCRMPayeeList
     public class InquiryCRMPayeeListInputModel : BaseDataModel
     {
 
-        public string clientType { get; set; }
-        public string roleCode { get; set; }
-        public string polisyClientId { get; set; }
-        public string sapVendorCode { get; set; }
-        public string fullname { get; set; }
-        public string taxNo { get; set; }
-        public string taxBranchCode { get; set; }
-        public string requester { get; set; }
-        public string emcsCode { get; set; }
+        public string clientType { get; set; } = "";
+        public string roleCode { get; set; } = "";
+        public string polisyClientId { get; set; } = "";
+        public string sapVendorCode { get; set; } = "";
+        public string fullname { get; set; } = "";
+        public string taxNo { get; set; } = "";
+        public string taxBranchCode { get; set; } = "";
+        public string requester { get; set; } = "";
+        public string emcsCode { get; set; } = "";
 
 
         [JsonIgnore]
-        public string emcsMemHeadId { get; set; }
+        public string emcsMemHeadId { get; set; } = "";
         [JsonIgnore]
-        public string emcsMemId { get; set; }
+        public string emcsMemId { get; set; } = "";
         [JsonIgnore]
-        public string contactNumber { get; set; }
+        public string contactNumber { get; set; } = "";
         [JsonIgnore]
-        public string assessorFlag { get; set; }
+        public string assessorFlag { get; set; } = "";
         [JsonIgnore]
-        public string solicitorFlag { get; set; }
+        public string solicitorFlag { get; set; } = "";
         [JsonIgnore]
-        public string repairerFlag { get; set; }
+        public string repairerFlag { get; set; } = "";
         [JsonIgnore]
-        public string hospitalFlag { get; set; }
+        public string hospitalFlag { get; set; } = "";
         [JsonIgnore]
-        public string cleansingId { get; set;}
+        public string cleansingId { get; set; } = "";
 
         [JsonIgnore]
         public ENUM_SAP_SearchConditionType SearchConditionType

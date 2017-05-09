@@ -14,10 +14,10 @@ namespace DEVES.IntegrationAPI.Model.RegClientPersonal
     }
     public class CRMRegClientPersonalOutputDataModel
     {
-        public string cleansingId { get; set; }
-        public string polisyClientId { get; set; }
-        public string crmClientId { get; set; }
-        public string personalName { get; set; }
-        public string personalSurname { get; set; }
+        public string cleansingId { get; set; } = "";
+        public string polisyClientId { get; set; } = "";
+        public string crmClientId { get; set; } = "";
+        public string personalName { get; set; } = "";
+        public string personalSurname { get; set; } = "";
     }
 }

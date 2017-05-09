@@ -29,12 +29,12 @@ namespace DEVES.IntegrationAPI.Model.RegPayeePersonal
 
     public class RegPayeePersonalDataOutputModel_Pass: RegPayeePersonalDataOutputModel
     {
-        public string cleansingId { get; set; }
-        public string polisyClientId { get; set; }
-        public string sapVendorCode { get; set; }
-        public string sapVendorGroupCode { get; set; }
-        public string personalName { get; set; }
-        public string personalSurname { get; set; }
+        public string cleansingId { get; set; } = "";
+        public string polisyClientId { get; set; } = "";
+        public string sapVendorCode { get; set; } = "";
+        public string sapVendorGroupCode { get; set; } = "";
+        public string personalName { get; set; } = "";
+        public string personalSurname { get; set; } = "";
 
         public RegPayeePersonalDataOutputModel_Pass()
         {

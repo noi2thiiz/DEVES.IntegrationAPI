@@ -28,13 +28,13 @@ namespace DEVES.IntegrationAPI.Model.RegPayeeCorporate
 
     public class RegPayeeCorporateDataOutputModel_Pass: RegPayeeCorporateDataOutputModel
     {
-        public string cleansingId { get; set; }
-        public string polisyClientId { get; set; }
-        public string sapVendorCode { get; set; }
-        public string sapVendorGroupCode { get; set; }
-        public string corporateName1 { get; set; }
-        public string corporateName2 { get; set; }
-        public string corporateBranch { get; set; }
+        public string cleansingId { get; set; } = "";
+        public string polisyClientId { get; set; } = "";
+        public string sapVendorCode { get; set; } = "";
+        public string sapVendorGroupCode { get; set; } = "";
+        public string corporateName1 { get; set; } = "";
+        public string corporateName2 { get; set; } = "";
+        public string corporateBranch { get; set; } = "";
     }
 
     public class RegPayeeCorporateOutputModel_Fail : BaseContentJsonProxyOutputModel

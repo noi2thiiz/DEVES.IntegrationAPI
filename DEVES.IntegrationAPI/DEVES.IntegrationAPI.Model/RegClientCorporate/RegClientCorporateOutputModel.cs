@@ -35,12 +35,12 @@ namespace DEVES.IntegrationAPI.Model.RegClientCorporate
 
     public class RegClientCorporateDataOutputModel_Pass : RegClientCorporateDataOutputModel
     {
-        public string cleansingId { get; set; }
-        public string polisyClientId { get; set; }
-        public string crmClientId { get; set; }
-        public string corporateName1 { get; set; }
-        public string corporateName2 { get; set; }
-        public string corporateBranch { get; set; }
+        public string cleansingId { get; set; } = "";
+        public string polisyClientId { get; set; } = "";
+        public string crmClientId { get; set; } = "";
+        public string corporateName1 { get; set; } = "";
+        public string corporateName2 { get; set; } = "";
+        public string corporateBranch { get; set; } = "";
     }
 
 
