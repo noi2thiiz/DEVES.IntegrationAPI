@@ -401,6 +401,7 @@
     <Compile Include="Logic\Tranforms\InquiryPayee\TransformSAPInquiryVendorInputModel_to_RegPayeeCorporateInputModel.cs" />
     <Compile Include="Logic\Tranforms\RegPayee\TransformSAPInquiryVendorInputModel_to_RegPayeePersonalInputModel.cs" />
     <Compile Include="Logic\Tranforms\InquiryPayee\TransformSAPInquiryVendorOutputModel_to_InquiryCRMPayeeListDataOutputModel.cs" />
+    <Compile Include="Logic\Validator\MasterDataValidator.cs" />
     <Compile Include="QueryInfo.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />

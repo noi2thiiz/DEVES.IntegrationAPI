@@ -10,6 +10,7 @@ using DEVES.IntegrationAPI.Model.RegClientPersonal;
 using DEVES.IntegrationAPI.Model.CLS;
 using DEVES.IntegrationAPI.Model.Polisy400;
 using DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData;
+using DEVES.IntegrationAPI.WebApi.Logic.Validator;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
@@ -24,68 +25,36 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         public void TranFormInput(RegClientPersonalInputModel regPayeePersonalInput)
         {
             // Validate Master Data before sending to other services
+            var validator = new MasterDataValidator();
+       
 
-            var fieldErrorData = new OutputModelFailData();
+            //profileInfo.salutation
+            RegClientPersonalInput.profileInfo.salutation = validator.TryConvertSalutationCode(
+                "profileInfo.salutation",
+                 RegClientPersonalInput?.profileInfo?.salutation);
+           
+            //"profileInfo.nationality"
+            RegClientPersonalInput.profileInfo.nationality = validator.TryConvertNationalityCode(
+                "profileInfo.nationality", 
+                RegClientPersonalInput?.profileInfo?.nationality);
 
-            var masterSalutation =
-                PersonalTitleMasterData.Instance.FindByCode(RegClientPersonalInput.profileInfo.salutation);
-            if (masterSalutation == null)
-            {
-                var errorMessage =
-                    MessageBuilder.Instance.GetInvalidMasterMessage("Salutation",
-                        RegClientPersonalInput.profileInfo.salutation);
-                fieldErrorData.AddFieldError("profileInfo.salutation", errorMessage);
-            }
-            else
-            {
-                RegClientPersonalInput.profileInfo.salutation = masterSalutation.PolisyCode;
-            }
+            //"profileInfo.occupation"
+            RegClientPersonalInput.profileInfo.occupation = validator.TryConvertOccupationCode(
+                "profileInfo.occupation",
+                RegClientPersonalInput?.profileInfo?.occupation);
 
-            var masterNationality =
-                NationalityMasterData.Instance.FindByCode(RegClientPersonalInput.profileInfo.nationality, "00203");
-            if (masterNationality == null)
-            {
-                var errorMessage =
-                    MessageBuilder.Instance.GetInvalidMasterMessage("Nationality",
-                        RegClientPersonalInput.profileInfo.nationality);
-                fieldErrorData.AddFieldError("profileInfo.nationality", errorMessage);
-            }
-            else
-            {
-                RegClientPersonalInput.profileInfo.nationality = masterNationality.PolisyCode;
-            }
 
-            var masterOccupation =
-                OccupationMasterData.Instance.FindByCode(RegClientPersonalInput.profileInfo.occupation, "00023");
-            if (masterOccupation == null)
-            {
-                var errorMessage =
-                    MessageBuilder.Instance.GetInvalidMasterMessage("Occupation",
-                        RegClientPersonalInput.profileInfo.occupation);
-                fieldErrorData.AddFieldError("profileInfo.occupation", errorMessage);
-            }
-            else
-            {
-                RegClientPersonalInput.profileInfo.occupation = masterOccupation.PolisyCode;
-            }
+            //"profileInfo.country"
+            RegClientPersonalInput.addressInfo.country = validator.TryConvertCountryCode(
+                "addressInfo.country",
+                RegClientPersonalInput?.addressInfo?.country);
 
-            var masterCountry =
-                CountryMasterData.Instance.FindByCode(RegClientPersonalInput.addressInfo.country, "00220");
-            if (masterCountry == null)
-            {
-                var errorMessage =
-                    MessageBuilder.Instance.GetInvalidMasterMessage("Country",
-                        RegClientPersonalInput.addressInfo.country);
-                fieldErrorData.AddFieldError("addressInfo.country", errorMessage);
-            }
-            else
-            {
-                RegClientPersonalInput.addressInfo.country = masterCountry.PolisyCode;
-            }
+           
 
-            if (fieldErrorData.fieldErrors.Any())
+
+            if (validator.Invalid())
             {
-                throw new FieldValidationException(fieldErrorData);
+                throw new FieldValidationException(validator.GetFieldErrorData());
             }
         }
 

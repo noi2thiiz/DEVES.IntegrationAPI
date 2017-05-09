@@ -11,6 +11,7 @@ using DEVES.IntegrationAPI.Model.RegClientCorporate;
 using DEVES.IntegrationAPI.Model.CLS;
 using DEVES.IntegrationAPI.Model.Polisy400;
 using DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData;
+using DEVES.IntegrationAPI.WebApi.Logic.Validator;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
@@ -22,35 +23,34 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
         public void TranFormInput(RegClientCorporateInputModel regClientCorporateInput)
         {
+
             // Validate Master Data before sending to other services
-            var fieldErrorData = new OutputModelFailData();
+            var validator = new MasterDataValidator();
 
-            var masterCountryorigin = NationalityMasterData.Instance.FindByCode(regClientCorporateInput.profileHeader.countryOrigin, "00203");
-         
-            if (masterCountryorigin == null)
+
+
+
+            //"profileInfo.countryOrigin"
+            regClientCorporateInput.profileHeader.countryOrigin = validator.TryConvertNationalityCode(
+                "profileHeader.countryOrigin",
+                regClientCorporateInput?.profileHeader?.countryOrigin);
+
+      
+
+            //"profileInfo.country"
+            regClientCorporateInput.addressHeader.country = validator.TryConvertCountryCode(
+                "addressHeader.country",
+                regClientCorporateInput?.addressHeader?.country);
+
+
+
+
+            if (validator.Invalid())
             {
-
-                var message = MessageBuilder.Instance.GetInvalidMasterMessage("Country Origin",
-                    regClientCorporateInput.profileHeader.countryOrigin);
-                fieldErrorData.AddFieldError("profileHeader.countryOrigin",message);
-
-            }
-            else
-            {
-                //Console.WriteLine("set countryOrigin ");
-                regClientCorporateInput.profileHeader.countryOrigin = masterCountryorigin.PolisyCode;
+                throw new FieldValidationException(validator.GetFieldErrorData());
             }
 
-
-
-
-
-
-            if (fieldErrorData.fieldErrors.Count > 0)
-            {
-           
-                throw new FieldValidationException(fieldErrorData);
-            }
+          
         }
         public override BaseDataModel ExecuteInput(object input)
         {
