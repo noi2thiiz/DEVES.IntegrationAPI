@@ -21,9 +21,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             {
                 case "P":
                     cmd = new buzCrmInquiryPersonalClientMaster();
+                    cmd.TransactionId = TransactionId;
                     break;
                 case "C":
                     cmd = new buzCrmInquiryCorporateClientMaster();
+                    cmd.TransactionId = TransactionId;
                     break;
                 default:
                     break;
