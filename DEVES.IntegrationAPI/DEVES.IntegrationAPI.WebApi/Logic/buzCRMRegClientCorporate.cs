@@ -23,6 +23,29 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
         public void TranFormInput(RegClientCorporateInputModel regClientCorporateInput)
         {
+            if (regClientCorporateInput == null)
+            {
+                regClientCorporateInput = new RegClientCorporateInputModel();
+            }
+            if (regClientCorporateInput.addressHeader ==null)
+            {
+                regClientCorporateInput.addressHeader = new AddressHeaderModel();
+            }
+
+            if (regClientCorporateInput.profileHeader == null)
+            {
+                regClientCorporateInput.profileHeader = new ProfileHeaderModel();
+            }
+
+            if (regClientCorporateInput.contactHeader == null)
+            {
+                regClientCorporateInput.contactHeader = new ContactHeaderModel();
+            }
+
+            if (regClientCorporateInput.generalHeader == null)
+            {
+                regClientCorporateInput.generalHeader = new GeneralHeaderModel();
+            }
 
             // Validate Master Data before sending to other services
             var validator = new MasterDataValidator();
