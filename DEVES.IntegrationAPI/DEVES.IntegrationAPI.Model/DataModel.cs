@@ -25,6 +25,7 @@ namespace DEVES.IntegrationAPI.Model
         [JsonProperty(Order = 6)]
         public OutputModelFailData data { get; set; } = new OutputModelFailData();
 
+        public string stackTrace { get; set; }
 
 
         public void AddFieldError(string fieldName, string fieldMessage)
@@ -76,6 +77,9 @@ namespace DEVES.IntegrationAPI.Model
         [JsonProperty(Order = 6)]
         public TData data { get; set; }
 
-       
+        public string stackTrace { get; set; }
+
+
+
     }
 }

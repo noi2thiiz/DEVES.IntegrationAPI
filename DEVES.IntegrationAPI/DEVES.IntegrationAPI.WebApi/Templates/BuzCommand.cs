@@ -32,13 +32,15 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                     code = AppConst.CODE_FAILED,
                     message = e.Message?.Trim(),
                     description = e.Description?.Trim(),
-                    
+                    stackTrace = e.StackTrace
                 };
 
                 if (e.SourceData != null)
                 {
                     regFail.data = e.SourceData;
                 }
+                regFail.transactionId = !string.IsNullOrEmpty(e.TransactionId) ? e.TransactionId : TransactionId;
+
                
                 return regFail;
             }
@@ -96,8 +98,9 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                 var regFail = new OutputModelFail
                 {
                     code = AppConst.CODE_FAILED,
-                    message = e.Message,
-                    description = e.StackTrace
+                    message = "An error occurred",
+                    description = e.Message,
+                    stackTrace = e.StackTrace,
                 };
 
                 return regFail;

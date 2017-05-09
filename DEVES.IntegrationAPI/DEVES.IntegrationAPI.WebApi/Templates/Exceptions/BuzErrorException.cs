@@ -19,6 +19,8 @@ namespace DEVES.IntegrationAPI.WebApi.Templates.Exceptions
         public string SourceError { get; set; }
 
         public object SourceData { get; set; }
+        public string TransactionId { get; set; }
+        
 
         public object OutputModel { get; set; }
         public BuzErrorException(string code, string message, string description, string sourceError)
@@ -36,6 +38,18 @@ namespace DEVES.IntegrationAPI.WebApi.Templates.Exceptions
             Description = description;
             SourceError = sourceError;
             SourceData = sourceData;
+          
+
+        }
+
+         public BuzErrorException(string code, string message, string description, string sourceError, string transactionId)
+        {
+            Code = code;
+            Message = message;
+            Description = description;
+            SourceError = sourceError;
+          
+            TransactionId = transactionId;
 
         }
 

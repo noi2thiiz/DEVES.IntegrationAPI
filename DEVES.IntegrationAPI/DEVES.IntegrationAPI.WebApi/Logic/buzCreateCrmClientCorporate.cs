@@ -77,8 +77,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
 
                         account.pfc_tac_branch = contentModel.profileHeader.corporateBranch; // contentModel.profileHeader.corporateBranch;
-                   
-                        account.pfc_economic_type = new OptionSetValue(Int32.Parse(OptionsetConvertor(contentModel.profileHeader.econActivity)));
+                        if (!string.IsNullOrEmpty(contentModel?.profileHeader?.econActivity.ToString()))
+                        {
+                            account.pfc_economic_type = new OptionSetValue(Int32.Parse(OptionsetConvertor(contentModel.profileHeader.econActivity)));
+                        }
+                       
                         account.pfc_polisy_nationality_code = contentModel.profileHeader.countryOrigin;
                         switch (contentModel.profileHeader.language)
                         {

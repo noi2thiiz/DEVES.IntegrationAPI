@@ -26,6 +26,10 @@ namespace DEVES.IntegrationAPI.WebApi
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             CultureInfo enUS = new CultureInfo("en-US");
+            if (value == null)
+            {
+                writer.WriteValue("");
+            }
             if(DateTimeCustomFormat== const_defaultDateTimeFormat && value == null)
             {
                 writer.WriteValue("");

@@ -24,6 +24,7 @@ using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Tooling.Connector;
 using System.Threading.Tasks;
 using DEVES.IntegrationAPI.WebApi.TechnicalService.TransactionLogger;
+using DEVES.IntegrationAPI.WebApi.Templates.Exceptions;
 
 namespace DEVES.IntegrationAPI.WebApi.Templates
 {
@@ -202,6 +203,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             resBody = ewiRes.ToJson();
             string[] splitServiceName = ewiRes.ToString().Split('.');
             serviceName = splitServiceName[splitServiceName.Length - 1];
+            serviceName = serviceName.Replace("OutputModel", "");
 
             LogAsync(request, response);
 
@@ -214,9 +216,15 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                 return output;
             }
             else
-            {
-
-                throw new Exception(String.Format("Error:{0}, Message:{1}", ewiRes.responseCode , ewiRes.responseMessage));
+            {   //CLSCreateCorporateClientOutputModel
+                throw new BuzErrorException(
+                    "500", 
+                    $"Error:{ewiRes.responseCode}, Message:{ewiRes.responseMessage}",
+                    $"An error occurred from the external service ({serviceName})",
+              
+                     serviceName,
+                     TransactionId);
+                //throw new Exception(String.Format("Error:{0}, Message:{1}", ewiRes.responseCode , ewiRes.responseMessage));
             }
         }
 
