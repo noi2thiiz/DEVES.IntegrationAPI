@@ -23,7 +23,17 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             */
 
             CLS.CLSInquiryPersonalClientContentOutputModel srcContent = (CLS.CLSInquiryPersonalClientContentOutputModel)input;
-            CRMInquiryClientContentOutputModel trgtContent = (CRMInquiryClientContentOutputModel)output; 
+            CRMInquiryClientContentOutputModel trgtContent = (CRMInquiryClientContentOutputModel)output;
+            if (trgtContent == null)
+            {
+                trgtContent = new CRMInquiryClientContentOutputModel();
+            }
+            if (trgtContent.data == null)
+            {
+                trgtContent.data = new List<CRMInquiryClientOutputDataModel>();
+
+            }
+           
             foreach( CLS.CLSInquiryPersonalClientOutputModel src in srcContent.data)
             {
                 try
@@ -45,9 +55,18 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     trgt.profileInfo.name2 = src.lsurname;
                     trgt.profileInfo.fullName = src.cls_full_name;
 
-                    var master_salutation = PersonalTitleMasterData.Instance.FindByPolisyCode(isNull(src.salutl));
-                    trgt.profileInfo.salutationText = master_salutation.Name;
+                    try
+                    {
+                        var master_salutation = PersonalTitleMasterData.Instance.FindByPolisyCode(isNull(src.salutl));
+                        trgt.profileInfo.salutationText = master_salutation.Name;
 
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
+
+                    
 
                     trgt.profileInfo.sex = ((new[] {"M", "F","U"}).Contains(src.cls_sex.ToUpperIgnoreNull()))
                         ? src.cls_sex.ToUpperIgnoreNull()
@@ -62,9 +81,18 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
 
 
-                    var master_occupation = OccupationMasterData.Instance.FindByCode(isNull(src.cls_occpcode), "00023");
-                    trgt.profileInfo.occupationText = master_occupation.Name;
+                    try
+                    {
+                        var master_occupation = OccupationMasterData.Instance.FindByCode(isNull(src.cls_occpcode), "00023");
+                        trgt.profileInfo.occupationText = master_occupation.Name;
 
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
+
+                    
                     trgt.contactInfo.telephone1 = src.cltphone01;
                     trgt.contactInfo.telephone2 = src.cltphone02;
                     trgt.contactInfo.fax = src.cls_fax;
@@ -84,8 +112,16 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         
                         trgt.addressInfo.countryText = addrInfo.cls_ctrycode_text;
 
-                        var master_addressType = AddressTypeMasterData.Instance.FindByCode(isNull(addrInfo.address_type_code), "01");
-                        trgt.addressInfo.addressTypeText = master_addressType.Name;
+                        try
+                        {
+                            var master_addressType = AddressTypeMasterData.Instance.FindByCode(isNull(addrInfo.address_type_code), "01");
+                            trgt.addressInfo.addressTypeText = master_addressType.Name;
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e.Message);
+                        }
+                       
                         trgt.addressInfo.latitude = addrInfo.lattitude;
                         trgt.addressInfo.longtitude = addrInfo.longtitude;
                     }

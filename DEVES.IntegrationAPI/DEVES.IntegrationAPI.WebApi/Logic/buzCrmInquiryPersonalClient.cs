@@ -25,22 +25,23 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
         public override BaseDataModel ExecuteInput(object input)
         {
+            AddNode("START");
             #region Prepare box for output 
             CRMInquiryClientContentOutputModel crmInqContent = (CRMInquiryClientContentOutputModel)Model.DataModelFactory.GetModel(typeof(CRMInquiryClientContentOutputModel));
             crmInqContent.transactionDateTime = DateTime.Now;
             crmInqContent.transactionId = Guid.NewGuid().ToString();
             #endregion Prepare box for output 
 
-            AddNode("START");
-            
-                #region Search client from CRM
+            AddNode("35");
+
+            #region Search client from CRM
 
 
 
-                #endregion
+            #endregion
 
-                #region Search Client from Cleansing
-                Console.WriteLine("start Search Client from Cleansing ");
+            #region Search Client from Cleansing
+            AddNode("start Search Client from Cleansing ");
                 //++ Call CLS_InquiryCLSPersonalClient through ServiceProxy
                 InquiryClientMasterInputModel contentModel = (InquiryClientMasterInputModel)input;
                 CLSInquiryPersonalClientInputModel clsPersonalInput = new CLSInquiryPersonalClientInputModel();
@@ -55,12 +56,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 if (IsSearchFound(retCLSInqPersClient))
                 {   AddNode("A (SearchFound)");
 
-                    Console.WriteLine("If Found records in Cleansing(CLS) ");
+                    AddNode("If Found records in Cleansing(CLS) ");
+                   // Console.WriteLine(retCLSInqPersClient.ToJson());
                     crmInqContent = (CRMInquiryClientContentOutputModel)TransformerFactory.TransformModel(retCLSInqPersClient, crmInqContent);
-                    string crmClientId = "";
+                   
+                string crmClientId = "";
                     try
                     {
-                        Console.WriteLine("try SearchCrmContactClientId");
+                        AddNode("try SearchCrmContactClientId");
                         List<string> lstCrmClientId = SearchCrmContactClientId(retCLSInqPersClient.data.First().cleansing_id);
                         if (lstCrmClientId != null && lstCrmClientId.Count == 1)
                         {
@@ -70,10 +73,29 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     }
                     finally
                     {
-                        CRMInquiryClientOutputDataModel data = crmInqContent.data.First();
-                        data.generalHeader.crmClientId = crmClientId;
-                        data.generalHeader.clientType = contentModel.conditionHeader.clientType;
-                        data.generalHeader.roleCode = contentModel.conditionHeader.roleCode;
+                        CRMInquiryClientOutputDataModel 
+                        data = crmInqContent?.data?.FirstOrDefault();
+
+                    if (crmInqContent?.data != null || crmInqContent?.data?.Count > 0)
+                        {
+                         
+                            data = new CRMInquiryClientOutputDataModel
+                            {
+                                addressInfo = new CRMInquiryClientAddressInfoModel(),
+                                asrhHeader = new CRMInquiryClientAsrhHeaderModel(),
+                                contactInfo = new CRMInquiryClientContactInfoModel(),
+                                generalHeader = new CRMInquiryClientGeneralHeaderModel(),
+                                profileInfo = new CRMInquiryClientProfileInfoModel()
+                            };
+                        }
+                      
+                       
+                    data.generalHeader.crmClientId = crmClientId;
+                      
+                    data.generalHeader.clientType = contentModel.conditionHeader.clientType;
+                      
+                    data.generalHeader.roleCode = contentModel.conditionHeader.roleCode;
+                        crmInqContent.data.Add(data);
 
                     }
                 }
@@ -82,7 +104,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 #region Search client from Polisy400
                 { AddNode("B (Search client from Polisy400)");
 
-                    Console.WriteLine("Search client from Polisy400");
+                    AddNode("Search client from Polisy400");
                     try
                     {
                         COMPInquiryClientMasterInputModel compInqClientInput = new COMPInquiryClientMasterInputModel();
