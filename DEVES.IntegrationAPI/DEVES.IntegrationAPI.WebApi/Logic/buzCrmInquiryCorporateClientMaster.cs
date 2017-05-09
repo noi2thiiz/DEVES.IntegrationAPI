@@ -24,7 +24,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         {
             CRMInquiryClientContentOutputModel crmInqContent = (CRMInquiryClientContentOutputModel)Model.DataModelFactory.GetModel(typeof(CRMInquiryClientContentOutputModel));
             crmInqContent.transactionDateTime = DateTime.Now;
-            crmInqContent.transactionId = Guid.NewGuid().ToString();
+           
             bool bFoundIn_APAR_or_Master = false;
             try
             {

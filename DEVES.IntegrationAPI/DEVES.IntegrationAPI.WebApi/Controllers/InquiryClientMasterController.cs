@@ -48,7 +48,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
 
                 outputFail.message = "Invalid Input(s)";
                 outputFail.description = "Some of your input is invalid. Please recheck again.";
-
+                outputFail.transactionId = GetTransactionId();
                 _log.Error(_logImportantMessage);
                 _log.ErrorFormat("ErrorCode: {0} {1} ErrorDescription: {1}", outputFail.code, Environment.NewLine, outputFail.description);
                 return Request.CreateResponse<InquiryClientMasterOutputModel_Fail>(outputFail);
@@ -71,7 +71,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 output.message = "Success";
                 output.description = "InquiryClientMaster is done!";
                 //output.transactionId = content.ticketNo;
-                output.transactionId = "InquiryClientMaster";
+                output.transactionId = GetTransactionId();
                 output.transactionDateTime = DateTime.Now.ToString();
                 //InquiryClientMasterOutput.ticketNo = "ticketNo: " + content.ticketNo;
                 //InquiryClientMasterOutput. = "{1} ticketNo need to be added from stored";
