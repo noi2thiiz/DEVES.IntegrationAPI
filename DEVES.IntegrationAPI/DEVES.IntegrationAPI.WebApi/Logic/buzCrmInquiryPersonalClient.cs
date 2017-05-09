@@ -29,7 +29,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             #region Prepare box for output 
             CRMInquiryClientContentOutputModel crmInqContent = (CRMInquiryClientContentOutputModel)Model.DataModelFactory.GetModel(typeof(CRMInquiryClientContentOutputModel));
             crmInqContent.transactionDateTime = DateTime.Now;
-           
+            crmInqContent.transactionId = TransactionId;
             #endregion Prepare box for output 
 
             AddNode("35");

@@ -16,18 +16,19 @@ using DEVES.IntegrationAPI.WebApi.Templates;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
-    public class buzCrmInquiryCorporateClientMaster : BaseCommand
+    public class buzCrmInquiryCorporateClientMaster : BuzCommand
     {
         //const string ewiEndpointKeyCLSInquiryCorporateClient = "EWI_ENDPOINT_CLSInquiryCorporateClient";
 
-        public override BaseDataModel Execute(object input)
+        public override BaseDataModel ExecuteInput(object input)
         {
             CRMInquiryClientContentOutputModel crmInqContent = (CRMInquiryClientContentOutputModel)Model.DataModelFactory.GetModel(typeof(CRMInquiryClientContentOutputModel));
             crmInqContent.transactionDateTime = DateTime.Now;
-           
+            crmInqContent.transactionId = TransactionId;
+
             bool bFoundIn_APAR_or_Master = false;
-            try
-            {
+           // try
+           // {
                 //+ Deserialize Input
                 InquiryClientMasterInputModel contentModel = (InquiryClientMasterInputModel)input;// DeserializeJson<InquiryClientMasterInputModel>(input.ToString());
 
@@ -125,13 +126,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                 crmInqContent.code = CONST_CODE_SUCCESS;
                 crmInqContent.message = "SUCCESS";
-            }
-            catch (Exception e)
-            {
-                crmInqContent.code = CONST_CODE_FAILED;
-                crmInqContent.message = e.Message;
-                crmInqContent.description = e.StackTrace;
-            }
+           // }
+           // catch (Exception e)
+           // {
+           //     crmInqContent.code = CONST_CODE_FAILED;
+           //     crmInqContent.message = e.Message;
+           //     crmInqContent.description = e.StackTrace;
+           // }
             return crmInqContent;
         }
 
