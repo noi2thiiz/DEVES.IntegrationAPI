@@ -91,10 +91,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                         switch (contentModel.profileHeader.language)
                         {
-                            case "392": account.pfc_language = new OptionSetValue(100000002); break; // JP
-                            case "764": account.pfc_language = new OptionSetValue(100000003); break; // TH
-                            case "862": account.pfc_language = new OptionSetValue(100000001); break; // ENG
-                            case "840": account.pfc_language = new OptionSetValue(100000001); break; // ENG
+                            case "J": account.pfc_language = new OptionSetValue(100000002); break; // JP
+                            case "T": account.pfc_language = new OptionSetValue(100000003); break; // TH
+                            case "E": account.pfc_language = new OptionSetValue(100000001); break; // ENG
                             default: account.pfc_language = new OptionSetValue(100000004); break;
                         }
                         if (string.IsNullOrEmpty(contentModel.profileHeader.riskLevel))
