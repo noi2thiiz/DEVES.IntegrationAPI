@@ -65,8 +65,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         // profileHeader
                         //account.Name = contentModel.profileHeader.corporateName1 + " " + contentModel.profileHeader.corporateName2;
                         account.pfc_long_surname = contentModel.profileHeader.corporateName1;
-                        account.pfc_long_giving_name = contentModel.profileHeader.corporateName2;
-                        account.pfc_contact_personal = contentModel.profileHeader.contactPerson; 
+                        account.pfc_long_giving_name = contentModel.profileHeader.corporateName2 ;
+                        account.pfc_contact_personal = contentModel.profileHeader.contactPerson ; 
                         account.pfc_register_no = contentModel.profileHeader.idRegCorp; // contentModel.profileHeader.idRegCorp;
                         account.pfc_tax_no = contentModel.profileHeader.idTax; // contentModel.profileHeader.idTax;
 
@@ -97,6 +97,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                             case "A": account.pfc_AMLO_flag = new OptionSetValue(100000001); break; // A
                             case "B": account.pfc_AMLO_flag = new OptionSetValue(100000002); break; // B
                             case "U": account.pfc_AMLO_flag = new OptionSetValue(100000012); break; // U
+                            default: account.pfc_AMLO_flag = new OptionSetValue(); break;
                         }
 
                         // contact
@@ -184,7 +185,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             }
             else
             {
-                telNum = tel + " # " + ext;
+                telNum = tel + "#" + ext;
             }
 
             return telNum;
