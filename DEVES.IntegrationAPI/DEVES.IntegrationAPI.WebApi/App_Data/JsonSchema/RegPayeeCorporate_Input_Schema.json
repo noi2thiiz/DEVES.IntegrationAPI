@@ -89,6 +89,11 @@
         },
         "language": {
           "type": "string",
+          "enum": [
+            "",
+            "T",
+            "E"
+          ],
           "maxLength": 1
         },
         "riskLevel": {
@@ -97,6 +102,11 @@
         },
         "vipStatus": {
           "type": "string",
+          "enum": [
+            "",
+            "N",
+            "Y"
+          ],
           "maxLength": 1
         }
       },

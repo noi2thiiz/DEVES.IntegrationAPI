@@ -61,6 +61,11 @@
         },
         "sex": {
           "type": "string",
+          "enum": [
+            "F",
+            "M",
+            "U"
+          ],
           "minLength": 1,
           "maxLength": 1
         },
@@ -91,10 +96,22 @@
         },
         "language": {
           "type": "string",
+          "enum": [
+            "",
+            "T",
+            "E"
+          ],
           "maxLength": 1
         },
         "married": {
           "type": "string",
+          "enum": [
+            "",
+            "D",
+            "M",
+            "S",
+            "W"
+          ],
           "maxLength": 1
         },
         "occupation": {
@@ -107,6 +124,11 @@
         },
         "vipStatus": {
           "type": "string",
+          "enum": [
+            "",
+            "Y",
+            "N"
+          ],
           "maxLength": 1
         },
         "remark": {

@@ -129,6 +129,11 @@
         },
         "language": {
           "type": "string",
+          "enum": [
+            "",
+            "T",
+            "E"
+          ],
           "maxLength": 1
         },
         "riskLevel": {
@@ -137,6 +142,11 @@
         },
         "vipStatus": {
           "type": "string",
+          "enum": [
+            "",
+            "N",
+            "Y"
+          ],
           "maxLength": 1
         }
       },
@@ -255,10 +265,20 @@
         },
         "assessorDelistFlag": {
           "type": "string",
+          "enum": [
+            "",
+            "N",
+            "Y"
+          ],
           "maxLength": 1
         },
         "assessorBlackListFlag": {
           "type": "string",
+          "enum": [
+            "",
+            "N",
+            "Y"
+          ],
           "maxLength": 1
         },
         "assessorTerminateDate": {
@@ -271,10 +291,20 @@
         },
         "solicitorDelistFlag": {
           "type": "string",
+          "enum": [
+            "",
+            "N",
+            "Y"
+          ],
           "maxLength": 1
         },
         "solicitorBlackListFlag": {
           "type": "string",
+          "enum": [
+            "",
+            "N",
+            "Y"
+          ],
           "maxLength": 1
         },
         "solicitorTerminateDate": {
@@ -287,10 +317,20 @@
         },
         "repairerDelistFlag": {
           "type": "string",
+          "enum": [
+            "",
+            "N",
+            "Y"
+          ],
           "maxLength": 1
         },
         "repairerBlackListFlag": {
           "type": "string",
+          "enum": [
+            "",
+            "N",
+            "Y"
+          ],
           "maxLength": 1
         },
         "repairerTerminateDate": {
