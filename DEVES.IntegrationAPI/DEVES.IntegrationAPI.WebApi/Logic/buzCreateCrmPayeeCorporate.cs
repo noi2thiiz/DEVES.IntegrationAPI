@@ -71,7 +71,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         //contentModel.profileHeader.corporateName1;
                         //contentModel.profileHeader.corporateName2;
 
-                        //account.Name = contentModel.profileHeader.corporateName1 + " " + contentModel.profileHeader.corporateName2;
+                        account.Name = contentModel.profileHeader.corporateName1 + " " + contentModel.profileHeader.corporateName2;
                         account.pfc_long_surname = contentModel.profileHeader.corporateName1;
                         account.pfc_long_giving_name = contentModel.profileHeader.corporateName2;
 
@@ -81,9 +81,46 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         // contentModel.profileHeader.dateInCorporate;
                         account.pfc_tac_branch = contentModel.profileHeader.corporateBranch; // contentModel.profileHeader.corporateBranch;
                         // contentModel.profileHeader.econActivity;
+                        if (!string.IsNullOrEmpty(contentModel?.profileHeader?.econActivity.ToString()))
+                        {
+                            account.pfc_economic_type = new OptionSetValue(Int32.Parse(OptionsetConvertor(contentModel.profileHeader.econActivity)));
+                        }
                         // contentModel.profileHeader.countryOrigin;
+                        account.pfc_polisy_nationality_code = contentModel.profileHeader.countryOrigin;
                         // contentModel.profileHeader.language; // account, contact
-                        // contentModel.profileHeader.riskLevel; // contact
+
+                        switch (contentModel.profileHeader.language)
+                        {
+                            case "392": account.pfc_language = new OptionSetValue(100000002); break; // JP
+                            case "764": account.pfc_language = new OptionSetValue(100000003); break; // TH
+                            case "862": account.pfc_language = new OptionSetValue(100000001); break; // ENG
+                            case "840": account.pfc_language = new OptionSetValue(100000001); break; // ENG
+                            default: account.pfc_language = new OptionSetValue(100000004); break;
+                        }
+                        if (string.IsNullOrEmpty(contentModel.profileHeader.riskLevel))
+                        {
+                            // do nothing
+                        }
+                        else
+                        {
+                            switch (contentModel.profileHeader.riskLevel)
+                            {
+                                case "A": account.pfc_AMLO_flag = new OptionSetValue(100000001); break; // A
+                                case "B": account.pfc_AMLO_flag = new OptionSetValue(100000002); break; // B
+                                case "C1": account.pfc_AMLO_flag = new OptionSetValue(100000003); break;
+                                case "C2": account.pfc_AMLO_flag = new OptionSetValue(100000004); break;
+                                case "R1": account.pfc_AMLO_flag = new OptionSetValue(100000005); break;
+                                case "R2": account.pfc_AMLO_flag = new OptionSetValue(100000006); break;
+                                case "R3": account.pfc_AMLO_flag = new OptionSetValue(100000007); break;
+                                case "R4": account.pfc_AMLO_flag = new OptionSetValue(100000008); break;
+                                case "RL1": account.pfc_AMLO_flag = new OptionSetValue(100000009); break;
+                                case "RL2": account.pfc_AMLO_flag = new OptionSetValue(100000010); break;
+                                case "RL3": account.pfc_AMLO_flag = new OptionSetValue(100000011); break;
+                                case "U": account.pfc_AMLO_flag = new OptionSetValue(100000012); break; // U
+                                case "X": account.pfc_AMLO_flag = new OptionSetValue(100000013); break;
+                                default: account.pfc_AMLO_flag = new OptionSetValue(); break;
+                            }
+                        }
                         bool isVIP = false;
                         if (contentModel.profileHeader.vipStatus.Equals("Y"))
                         {
@@ -225,6 +262,26 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 }
             }
             return l.ToList();
+        }
+
+        public string OptionsetConvertor(string val)
+        {
+            string opVal = "";
+
+            if (val.Length == 1)
+            {
+                opVal = "10000000" + val;
+            }
+            else if (val.Length == 2)
+            {
+                opVal = "1000000" + val;
+            }
+            else
+            {
+                opVal = "100000" + val;
+            }
+
+            return opVal;
         }
     }
 }

@@ -92,13 +92,31 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                             default: account.pfc_language = new OptionSetValue(100000004); break;
                         }
 
-                        switch (contentModel.profileHeader.riskLevel)
+                        if(string.IsNullOrEmpty(contentModel.profileHeader.riskLevel))
                         {
-                            case "A": account.pfc_AMLO_flag = new OptionSetValue(100000001); break; // A
-                            case "B": account.pfc_AMLO_flag = new OptionSetValue(100000002); break; // B
-                            case "U": account.pfc_AMLO_flag = new OptionSetValue(100000012); break; // U
-                            default: account.pfc_AMLO_flag = new OptionSetValue(); break;
+                            // do nothing
                         }
+                        else
+                        {
+                            switch (contentModel.profileHeader.riskLevel)
+                            {
+                                case "A": account.pfc_AMLO_flag = new OptionSetValue(100000001); break; // A
+                                case "B": account.pfc_AMLO_flag = new OptionSetValue(100000002); break; // B
+                                case "C1": account.pfc_AMLO_flag = new OptionSetValue(100000003); break;
+                                case "C2": account.pfc_AMLO_flag = new OptionSetValue(100000004); break;
+                                case "R1": account.pfc_AMLO_flag = new OptionSetValue(100000005); break;
+                                case "R2": account.pfc_AMLO_flag = new OptionSetValue(100000006); break;
+                                case "R3": account.pfc_AMLO_flag = new OptionSetValue(100000007); break;
+                                case "R4": account.pfc_AMLO_flag = new OptionSetValue(100000008); break;
+                                case "RL1": account.pfc_AMLO_flag = new OptionSetValue(100000009); break; 
+                                case "RL2": account.pfc_AMLO_flag = new OptionSetValue(100000010); break;
+                                case "RL3": account.pfc_AMLO_flag = new OptionSetValue(100000011); break;
+                                case "U": account.pfc_AMLO_flag = new OptionSetValue(100000012); break; // U
+                                case "X": account.pfc_AMLO_flag = new OptionSetValue(100000013); break;
+                                default: account.pfc_AMLO_flag = new OptionSetValue(); break;
+                            }
+                        }
+                        
 
                         // contact
                         bool isVIP = false;

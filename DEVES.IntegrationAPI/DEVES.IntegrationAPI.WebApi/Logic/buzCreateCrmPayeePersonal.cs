@@ -72,6 +72,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         contact.FirstName = contentModel.profileInfo.personalName;
                         contact.LastName = contentModel.profileInfo.personalSurname;
                         // contentModel.profileInfo.sex;
+                        if (contentModel.profileInfo.sex == null) contentModel.profileInfo.sex = "U";
+                        switch (contentModel.profileInfo.sex.ToUpper())
+                        {
+                            case "M": contact.GenderCode = new OptionSetValue(1) ; break;
+                            case "F": contact.GenderCode = new OptionSetValue(2) ; break;
+                            case "U": contact.GenderCode = new OptionSetValue(100000000) ; break;
+
+                        }
                         contact.pfc_citizen_id = contentModel.profileInfo.idCitizen;
                         contact.pfc_passport_id = contentModel.profileInfo.idPassport;
                         contact.pfc_alien_id = contentModel.profileInfo.idAlien;
@@ -84,9 +92,51 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                         contact.pfc_polisy_nationality_code = contentModel.profileInfo.nationality;
                         // contact.pfc_language = contentModel.profileInfo.language; // optionset
+                        if (contentModel.profileInfo.language == null) contentModel.profileInfo.language = "";
+                        switch (contentModel.profileInfo.language.ToUpper())
+                        {
+                            case "T": contact.pfc_language = new OptionSetValue(100000003) ; break;
+                            case "E": contact.pfc_language = new OptionSetValue(100000001) ; break;
+                            case "J": contact.pfc_language = new OptionSetValue(100000002); break;
+
+                        }
                         // contact.FamilyStatusCode = contentModel.profileInfo.married; // optionset
+                        if (contentModel.profileInfo.married == null) contentModel.profileInfo.married = "";
+                        switch (contentModel.profileInfo.married.ToUpper())
+                        {
+                            case "S": contact.FamilyStatusCode = new OptionSetValue(1); break;
+                            case "M": contact.FamilyStatusCode = new OptionSetValue(2); break;
+                            case "D": contact.FamilyStatusCode = new OptionSetValue(3); break;
+                            case "W": contact.FamilyStatusCode = new OptionSetValue(4); break;
+
+                        }
                         // contentModel.profileInfo.occupation;
                         // contact.pfc_client_legal_status = contentModel.profileInfo.riskLevel; // optionset
+                        if (contentModel.profileInfo.riskLevel == null)
+                        {
+                            // do nothing
+                        }
+                        else
+                        {
+                            switch (contentModel.profileInfo.riskLevel.ToUpper())
+                            {
+                                case "A": contact.pfc_AMLO_flag = new OptionSetValue(100000001); break; // A
+                                case "B": contact.pfc_AMLO_flag = new OptionSetValue(100000002); break; // B
+                                case "C1": contact.pfc_AMLO_flag = new OptionSetValue(100000003); break;
+                                case "C2": contact.pfc_AMLO_flag = new OptionSetValue(100000004); break;
+                                case "R1": contact.pfc_AMLO_flag = new OptionSetValue(100000005); break;
+                                case "R2": contact.pfc_AMLO_flag = new OptionSetValue(100000006); break;
+                                case "R3": contact.pfc_AMLO_flag = new OptionSetValue(100000007); break;
+                                case "R4": contact.pfc_AMLO_flag = new OptionSetValue(100000008); break;
+                                case "RL1": contact.pfc_AMLO_flag = new OptionSetValue(100000009); break;
+                                case "RL2": contact.pfc_AMLO_flag = new OptionSetValue(100000010); break;
+                                case "RL3": contact.pfc_AMLO_flag = new OptionSetValue(100000011); break;
+                                case "U": contact.pfc_AMLO_flag = new OptionSetValue(100000012); break; // U
+                                case "X": contact.pfc_AMLO_flag = new OptionSetValue(100000013); break;
+                                default: contact.pfc_AMLO_flag = new OptionSetValue(); break;
+
+                            }
+                        }
                         bool isVIP = false;
                         if (contentModel.profileInfo.vipStatus.Equals("Y"))
                         {

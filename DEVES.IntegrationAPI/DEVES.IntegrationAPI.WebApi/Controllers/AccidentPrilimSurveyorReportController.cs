@@ -189,19 +189,8 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                         {
                             if (text.Substring(i, 1).Equals(".") && isChecking)
                             {
-                                // string fullMessage = text.Substring(0, i);
                                 fieldMessage = text.Substring(0, i);
                                 isChecking = false;
-                                /*
-                                for (int j = 0; i < fullMessage.Length-4; i++)
-                                {
-                                    if (fullMessage.Substring(j, 4).Equals("enum"))
-                                    {
-                                        fieldMessage = fullMessage.Substring(0, j+4);
-                                        break;
-                                    }
-                                }*/
-
                             }
                             if (text.Substring(i, 1).Equals("'"))
                             {
