@@ -111,7 +111,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                         //contact.pfc_occupation = new EntityReference(contact.pfc_occupation.LogicalName, contentModel.profileInfo.occupation);
 
-                        if (contentModel.profileInfo.riskLevel == null)
+                        if (string.IsNullOrEmpty(contentModel.profileInfo.riskLevel))
                         {
                             // do nothing
                         }
