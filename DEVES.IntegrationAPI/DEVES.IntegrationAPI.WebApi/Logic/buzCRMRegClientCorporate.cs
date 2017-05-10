@@ -12,6 +12,7 @@ using DEVES.IntegrationAPI.Model.CLS;
 using DEVES.IntegrationAPI.Model.Polisy400;
 using DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData;
 using DEVES.IntegrationAPI.WebApi.Logic.Validator;
+using DEVES.IntegrationAPI.WebApi.Templates.Exceptions;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
@@ -151,8 +152,28 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         clsCreateCorporateIn = TransformerFactory.TransformModel(regClientCorporateInput, clsCreateCorporateIn);
                         CLSCreateCorporateClientContentOutputModel clsCreateClientContent = CallDevesServiceProxy<CLSCreateCorporateClientOutputModel, CLSCreateCorporateClientContentOutputModel>
                                                                                             (CommonConstant.ewiEndpointKeyCLSCreateCorporateClient, clsCreateCorporateIn);
-                        regClientCorporateInput = (RegClientCorporateInputModel)TransformerFactory.TransformModel(clsCreateClientContent, regClientCorporateInput);
-                    }
+
+                            if (clsCreateClientContent.code == CommonConstant.CODE_SUCCESS)
+                            {
+                                //TODO เอา ค่าที่ได้ไปเป็น output
+                            }
+                            else if (clsCreateClientContent.code == "CLS-1109")
+                            {
+                               //TODO เอา ค่าที่ได้ไปเป็น output
+                            }
+                            else
+                            {
+                                throw new BuzErrorException(
+                                    "500",
+                                    $"Error:{clsCreateClientContent.code}, Message:{clsCreateClientContent.message}",
+                                    "An error occurred from the external service (CLSCreateCorporateClient)",
+
+                                    "CLS",
+                                    TransactionId);
+                                //throw new Exception(String.Format("Error:{0}, Message:{1}", ewiRes.responseCode , ewiRes.responseMessage));
+                            }
+                            regClientCorporateInput = (RegClientCorporateInputModel)TransformerFactory.TransformModel(clsCreateClientContent, regClientCorporateInput);
+                            }
 
                     if (string.IsNullOrEmpty(regClientCorporateInput.generalHeader.polisyClientId) && !string.IsNullOrEmpty(regClientCorporateInput.generalHeader.cleansingId) )
                     {

@@ -11,6 +11,7 @@ using DEVES.IntegrationAPI.Model.CLS;
 using DEVES.IntegrationAPI.Model.Polisy400;
 using DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData;
 using DEVES.IntegrationAPI.WebApi.Logic.Validator;
+using DEVES.IntegrationAPI.WebApi.Templates.Exceptions;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
@@ -165,13 +166,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 }
                 else
                 {
-                    Console.WriteLine("134 : CLS-" + clsCreateClientContent.code);
-                    regClientPersonOutput.code = clsCreateClientContent.code;
-                    regClientPersonOutput.message = clsCreateClientContent.message;
-                    regClientPersonOutput.description = clsCreateClientContent.description;
+                    throw new BuzErrorException(
+                        "500",
+                         $"Error:{clsCreateClientContent.code}, Message:{clsCreateClientContent.message}",
+                         "An error occurred from the external service (CLSCreateCorporateClient)",
 
-
-                    //return regClientPersonOutput;o
+                        "CLS",
+                        TransactionId);
+                    //throw new Exception(String.Format("Error:{0}, Message:{1}", ewiRes.responseCode , ewiRes.responseMessage));
                 }
             }
             else
