@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Web;
 using Newtonsoft.Json;
 using DEVES.IntegrationAPI.WebApi;
@@ -23,6 +24,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         protected RegClientPersonalContentOutputModel regClientPersonOutput { get; set; }
         protected RegClientPersonalDataOutputModel_Pass regClientPersonDataOutput { get; set; }
 
+       
         public void TranFormInput()
         {
             // ป้องกันปัญหา locus ส่ง json มาไม่ครบ
@@ -94,7 +96,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 RegClientPersonalInput?.addressInfo?.addressType
             );
 
-
+         
+         
 
 
             if (validator.Invalid())
@@ -168,7 +171,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 {
                     throw new BuzErrorException(
                         "500",
-                         $"Error:{clsCreateClientContent.code}, Message:{clsCreateClientContent.message}",
+                         $"Error:{clsCreateClientContent.code}:{clsCreateClientContent.message}",
                          "An error occurred from the external service (CLSCreateCorporateClient)",
 
                         "CLS",

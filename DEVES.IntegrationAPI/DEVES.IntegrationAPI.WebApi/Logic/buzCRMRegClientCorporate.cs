@@ -165,7 +165,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                             {
                                 throw new BuzErrorException(
                                     "500",
-                                    $"Error:{clsCreateClientContent.code}, Message:{clsCreateClientContent.message}",
+                                    $"Error:{clsCreateClientContent.code}:{clsCreateClientContent.message}",
                                     "An error occurred from the external service (CLSCreateCorporateClient)",
 
                                     "CLS",

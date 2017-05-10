@@ -23,42 +23,42 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             if (src.generalHeader != null)
             {
 
-                trgt.cleansingId = src.generalHeader.cleansingId;
+                trgt.cleansingId = ""+src.generalHeader.cleansingId;
 
             }
 
             if (src.profileInfo != null)
             {
                 //salutation  String	8	M คำนำหน้าชื่อ
-                trgt.salutation = src.profileInfo.salutation ?? "";
+                trgt.salutation = "" + src.profileInfo.salutation ;
                 //personalName String	60	M ชื่อ
-                trgt.personalName = src.profileInfo.personalName ?? "";
+                trgt.personalName = "" + src.profileInfo.personalName ;
                 //personalSurname String	60	M นามสกุล
-                trgt.personalSurname = src.profileInfo.personalSurname ?? "";
+                trgt.personalSurname = "" + src.profileInfo.personalSurname ;
                 //sex String	1	M เพศลูกค้า
-                trgt.sex = src.profileInfo.sex ?? "";
+                trgt.sex = src.profileInfo.sex ?? "U";
                 //idCitizen String	24	O หมายเลขบัตรประจำตัวประชาชน
-                trgt.idCard = src.profileInfo.idCitizen ?? "";
+                trgt.idCard = "" + src.profileInfo.idCitizen ;
                 //idPassport String	20	O หมายเลขบัตรหนังสือเดินทาง
-                trgt.passportId = src.profileInfo.idPassport ?? "";
+                trgt.passportId = "" + src.profileInfo.idPassport ;
                 //idAlien String	20	O หมายเลขบัตรต่างด้าว
-                trgt.alientId = src.profileInfo.idAlien ?? "";
+                trgt.alientId = "" + src.profileInfo.idAlien ;
                 //idDriving String	20	O หมายเลขบัตรใบขับขี่
-                trgt.driverlicense = src.profileInfo.idDriving ?? "";
+                trgt.driverlicense = "" + src.profileInfo.idDriving;
                 //birthDate String	20	O วันเดือนปีเกิด
 
                 //natioanality String	3	O Nationality
-                trgt.natioanality = src.profileInfo.nationality ?? "";
+                trgt.natioanality = "" + src.profileInfo.nationality ;
                 //language String	1	O ภาษา
-                trgt.language = src.profileInfo.language ?? "";
+                trgt.language = "" + src.profileInfo.language ;
                 //married String	1	O สถานะการสมรส
-                trgt.married = src.profileInfo.married ?? "";
+                trgt.married = "" + src.profileInfo.married ;
                 //occupation String	3	O อาชีพลูกค้า
-                trgt.occupation = src.profileInfo.occupation ?? "";
+                trgt.occupation = "" + src.profileInfo.occupation ;
 
-                trgt.riskLevel = src.profileInfo.riskLevel ?? "";
+                trgt.riskLevel = "" + src.profileInfo.riskLevel ;
                 //vipStatus String	1	O VIP
-                trgt.vipStatus = src.profileInfo.vipStatus ?? "";
+                trgt.vipStatus = "" + src.profileInfo.vipStatus ;
 
 
 
@@ -68,62 +68,62 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 //telephone1 String	10	O เบอร์ติดต่อที่สะดวก(Contact Number)
                 if (string.IsNullOrEmpty(src.contactInfo.telephone1Ext))
                 {
-                    trgt.telephone1 = src.contactInfo.telephone1 ?? "";
+                    trgt.telephone1 = "" + src.contactInfo.telephone1 ;
                 }
                 else
                 {
-                    trgt.telephone1 = src.contactInfo.telephone1 + "#" + src.contactInfo.telephone1Ext ?? "";
+                    trgt.telephone1 = "" + src.contactInfo.telephone1 + "#" + src.contactInfo.telephone1Ext ;
                 }
 
                 //telephone2  String	10	O โทรศัพท์ลูกค้า(Office)
                 if (string.IsNullOrEmpty(src.contactInfo.telephone2Ext))
                 {
-                    trgt.telephone2 = src.contactInfo.telephone2 ?? "";
+                    trgt.telephone2 = "" + src.contactInfo.telephone2 ;
                 }
                 else
                 {
-                    trgt.telephone2 = src.contactInfo.telephone2 + "#" + src.contactInfo.telephone2Ext ?? "";
+                    trgt.telephone2 = "" + src.contactInfo.telephone2 + "#" + src.contactInfo.telephone2Ext;
                 }
 
                 //telNo   String	10	O DID Tel No
                 if (string.IsNullOrEmpty(src.contactInfo.telephone3Ext))
                 {
-                    trgt.telNo = src.contactInfo.telephone3 ?? "";
+                    trgt.telNo = "" + src.contactInfo.telephone3 ;
                 }
                 else
                 {
-                    trgt.telNo = src.contactInfo.telephone3 + "#" + src.contactInfo.telephone3Ext ?? "";
+                    trgt.telNo = "" + src.contactInfo.telephone3 + "#" + src.contactInfo.telephone3Ext;
                 }
            
                 //mobilePhone String	16	O
-                trgt.mobilePhone = src.contactInfo.mobilePhone ?? "";
+                trgt.mobilePhone = "" + src.contactInfo.mobilePhone ;
                 //fax String	16	O
-                trgt.fax = src.contactInfo.fax ?? "";
+                trgt.fax = "" + src.contactInfo.fax;
                 //emailAddress    String	50	O อีเมล์
-                trgt.emailAddress = src.contactInfo.emailAddress ?? "";
+                trgt.emailAddress = "" + src.contactInfo.emailAddress ;
                 //lineID String	50	O Line ID
-                trgt.lineId = src.contactInfo.lineID ?? "";
+                trgt.lineId = "" + src.contactInfo.lineID;
                 //facebook    String	100	O Facebook
-                trgt.facebook = src.contactInfo.facebook ?? "";
+                trgt.facebook = "" + src.contactInfo.facebook;
             }
 
             if (src.addressInfo != null)
             {
                 //address1 String	30	O ที่อยู่ บรรทัดที่ 1
-                trgt.address1 = src.addressInfo.address1 ?? "";
+                trgt.address1 = "" + src.addressInfo.address1 ;
                 //address2 String	30	O ที่อยู่ บรรทัดที่ 2
-                trgt.address2 = src.addressInfo.address2 ?? "";
+                trgt.address2 = "" + src.addressInfo.address2 ;
                 //address3 String	30	O ที่อยู่ บรรทัดที่ 3
-                trgt.address3 = src.addressInfo.address3 ?? "";
+                trgt.address3 = "" + src.addressInfo.address3 ;
                 //subDistrictCode String	6	O ตำบล / แขวง
-                trgt.address4 = src.addressInfo.districtCode + " " + src.addressInfo.subDistrictCode ?? "";
+                trgt.address4 = "" + src.addressInfo.districtCode + " " + src.addressInfo.subDistrictCode ;
                 
                 //provinceCode    String	2	O จังหวัด
-                trgt.address5 = src.addressInfo.provinceCode ?? "";
+                trgt.address5 = "" + src.addressInfo.provinceCode;
                 //postalCode String	10	O ที่อยู่ -> รหัสไปรษณีย์
-                trgt.postCode = src.addressInfo.postalCode ?? "";
+                trgt.postCode = "" + src.addressInfo.postalCode ;
                 //country String	3	O ที่อยู่ -> ประเทศ
-                trgt.country = src.addressInfo.country ?? "";
+                trgt.country = "" + src.addressInfo.country ;
                 //addressType String	1	O
                 // trgt.busRes = src.addressInfo.addressType;
                 switch (src.addressInfo.addressType)
@@ -138,9 +138,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     default: trgt.busRes = ""; break;
                 }
                 //latitude    String	20	O
-                trgt.latitude = src.addressInfo.latitude ?? "";
+                trgt.latitude = "" + src.addressInfo.latitude ;
                 //longtitude  String	20	O
-                trgt.longtitude = src.addressInfo.longtitude ?? "";
+                trgt.longtitude = "" + src.addressInfo.longtitude ;
 
             }
 

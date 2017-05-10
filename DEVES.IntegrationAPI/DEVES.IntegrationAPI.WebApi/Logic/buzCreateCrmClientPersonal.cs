@@ -132,7 +132,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                                 case "RL3": contact.pfc_AMLO_flag = new OptionSetValue(100000011); break;
                                 case "U": contact.pfc_AMLO_flag = new OptionSetValue(100000012); break; // U
                                 case "X": contact.pfc_AMLO_flag = new OptionSetValue(100000013); break;
-                                default: contact.pfc_AMLO_flag = new OptionSetValue(); break;
+                                //default: contact.pfc_AMLO_flag = new OptionSetValue(); break;
 
                             }
                         }
