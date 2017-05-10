@@ -60,7 +60,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                     if (text.Contains("Required properties"))
                     {
                         int indexEnd = 0;
-                        for (int i = 0; i < text.Length - 1; i++)
+                        for (int i = 0; i < text.Length -1 ; i++)
                         {
                             if (text.Substring(i, 1).Equals(":"))
                             {
@@ -72,6 +72,12 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                                 fieldName = text.Substring(indexEnd, i - indexEnd).Trim();
                                 break;
                             }
+                        }
+
+                        string[] splitProp = fieldName.Split(',');
+                        for(int i = 0; i < splitProp.Length; i++)
+                        {
+                            outputFail.data.fieldErrors.Add(new AccidentPrilimSurveyorReportFieldErrorsModel(splitProp[i].Trim(), fieldMessage));
                         }
                     }
                     else if (text.Contains("exceeds maximum length"))
@@ -178,12 +184,24 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                     {
                         int startName = 0;
                         int endName = 0;
-
+                        bool isChecking = true;
                         for (int i = 0; i < text.Length - 1; i++)
                         {
-                            if (text.Substring(i, 1).Equals("."))
+                            if (text.Substring(i, 1).Equals(".") && isChecking)
                             {
+                                // string fullMessage = text.Substring(0, i);
                                 fieldMessage = text.Substring(0, i);
+                                isChecking = false;
+                                /*
+                                for (int j = 0; i < fullMessage.Length-4; i++)
+                                {
+                                    if (fullMessage.Substring(j, 4).Equals("enum"))
+                                    {
+                                        fieldMessage = fullMessage.Substring(0, j+4);
+                                        break;
+                                    }
+                                }*/
+
                             }
                             if (text.Substring(i, 1).Equals("'"))
                             {
@@ -204,7 +222,11 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                         }
                     }
 
-                    outputFail.data.fieldErrors.Add(new AccidentPrilimSurveyorReportFieldErrorsModel(fieldName, fieldMessage));
+                    if (!text.Contains("Required properties"))
+                    {
+                        outputFail.data.fieldErrors.Add(new AccidentPrilimSurveyorReportFieldErrorsModel(fieldName, fieldMessage));
+                    }
+                        
                 }
 
                 outputFail.code = "400";

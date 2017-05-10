@@ -86,7 +86,7 @@
       ]
     },
 
-    "profileInfo": {
+    "profileHeader": {
       "type": "object",
       "properties": {
         "corporateName1": {
@@ -146,7 +146,7 @@
       ]
     },
 
-    "contactInfo": {
+    "contactHeader": {
       "type": "object",
       "properties": {
         "telephone1": {
@@ -196,7 +196,7 @@
       }
     },
 
-    "addressInfo": {
+    "addressHeader": {
       "type": "object",
       "properties": {
         "address1": {
