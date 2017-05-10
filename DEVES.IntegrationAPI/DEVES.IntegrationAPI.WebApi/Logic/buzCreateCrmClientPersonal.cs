@@ -111,14 +111,32 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                         //contact.pfc_occupation = new EntityReference(contact.pfc_occupation.LogicalName, contentModel.profileInfo.occupation);
 
-                        if (contentModel.profileInfo.riskLevel == null) contentModel.profileInfo.riskLevel = "";
-                        switch (contentModel.profileInfo.riskLevel.ToUpper())
+                        if (contentModel.profileInfo.riskLevel == null)
                         {
-                            case "A": contact.pfc_AMLO_flag = new OptionSetValue(100000001); break;
-                            case "B": contact.pfc_AMLO_flag = new OptionSetValue(100000002); break;
-                            case "U": contact.pfc_AMLO_flag = new OptionSetValue(100000012); break;
-
+                            // do nothing
                         }
+                        else
+                        {
+                            switch (contentModel.profileInfo.riskLevel.ToUpper())
+                            {
+                                case "A": contact.pfc_AMLO_flag = new OptionSetValue(100000001); break; // A
+                                case "B": contact.pfc_AMLO_flag = new OptionSetValue(100000002); break; // B
+                                case "C1": contact.pfc_AMLO_flag = new OptionSetValue(100000003); break;
+                                case "C2": contact.pfc_AMLO_flag = new OptionSetValue(100000004); break;
+                                case "R1": contact.pfc_AMLO_flag = new OptionSetValue(100000005); break;
+                                case "R2": contact.pfc_AMLO_flag = new OptionSetValue(100000006); break;
+                                case "R3": contact.pfc_AMLO_flag = new OptionSetValue(100000007); break;
+                                case "R4": contact.pfc_AMLO_flag = new OptionSetValue(100000008); break;
+                                case "RL1": contact.pfc_AMLO_flag = new OptionSetValue(100000009); break;
+                                case "RL2": contact.pfc_AMLO_flag = new OptionSetValue(100000010); break;
+                                case "RL3": contact.pfc_AMLO_flag = new OptionSetValue(100000011); break;
+                                case "U": contact.pfc_AMLO_flag = new OptionSetValue(100000012); break; // U
+                                case "X": contact.pfc_AMLO_flag = new OptionSetValue(100000013); break;
+                                default: contact.pfc_AMLO_flag = new OptionSetValue(); break;
+
+                            }
+                        }
+                        
 
                         bool isVIP = false;
                         if (contentModel.profileInfo.vipStatus == null) contentModel.profileInfo.vipStatus = "";
