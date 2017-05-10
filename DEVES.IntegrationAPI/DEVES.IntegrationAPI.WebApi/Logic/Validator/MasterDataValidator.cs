@@ -171,7 +171,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Validator
             
         }
         
-        public string TryConvertProvinceCode(string fieldName, string masterCode, string defaultCode = "00")
+        public string TryConvertProvinceCode(string fieldName, string masterCode, string countryCode= "00220", string defaultCode = "00")
         {
             if (string.IsNullOrEmpty(masterCode))
             {
@@ -280,6 +280,28 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Validator
             {
                 var errorMessage =
                     MessageBuilder.Instance.GetInvalidMasterMessage("AddressType", masterCode);
+                fieldErrorData.AddFieldError(fieldName, errorMessage);
+            }
+
+            return masterCode;
+
+        }
+
+        protected string[] EconActivityArray = { "001", "002", "003", "004", "005", "006", "007", "008" };
+
+        public string TryConvertEconActivityCode(string fieldName, string masterCode, string defaultCode = "")
+        {
+            if (string.IsNullOrEmpty(masterCode))
+            {
+              return defaultCode;
+                
+            }
+            //allow null
+            //ไม่ต้อง return error ถ้าใส่ค่า emtpy มา
+            if (EconActivityArray.Contains(masterCode) == false)
+            {
+                var errorMessage =
+                    MessageBuilder.Instance.GetInvalidMasterMessage("EconActivity", masterCode);
                 fieldErrorData.AddFieldError(fieldName, errorMessage);
             }
 

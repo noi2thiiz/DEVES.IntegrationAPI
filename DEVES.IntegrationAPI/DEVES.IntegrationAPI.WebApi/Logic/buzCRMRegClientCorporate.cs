@@ -53,21 +53,56 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
 
 
-            //"profileInfo.countryOrigin"
+            //"profileHeader.countryOrigin"
             regClientCorporateInput.profileHeader.countryOrigin = validator.TryConvertNationalityCode(
                 "profileHeader.countryOrigin",
                 regClientCorporateInput?.profileHeader?.countryOrigin);
 
-      
-
-            //"profileInfo.country"
+            //"addressHeader.country"
             regClientCorporateInput.addressHeader.country = validator.TryConvertCountryCode(
                 "addressHeader.country",
                 regClientCorporateInput?.addressHeader?.country);
 
+            //"addressHeader.provinceCode"
+            regClientCorporateInput.addressHeader.provinceCode = validator.TryConvertProvinceCode(
+                "addressHeader.provinceCode",
+                regClientCorporateInput?.addressHeader?.provinceCode,
+                regClientCorporateInput?.addressHeader?.country);
 
+            //"addressHeader.districtCode"
+            regClientCorporateInput.addressHeader.districtCode = validator.TryConvertDistrictCode(
+                    "addressInfo.districtCode",
+                    regClientCorporateInput?.addressHeader?.districtCode,
+                    regClientCorporateInput?.addressHeader?.provinceCode)
+                ;
 
+            //"addressHeader.subDistrictCode"
+            regClientCorporateInput.addressHeader.subDistrictCode = validator.TryConvertSubDistrictCode(
+                "addressInfo.subDistrictCode",
+                regClientCorporateInput?.addressHeader?.subDistrictCode,
+                regClientCorporateInput?.addressHeader?.districtCode,
+                regClientCorporateInput?.addressHeader?.provinceCode
+            );
+            //"addressHeader.addressType"
+            regClientCorporateInput.addressHeader.addressType = validator.TryConvertAddressTypeCode(
+                "addressInfo.addressType",
+                regClientCorporateInput?.addressHeader?.addressType
+            );
 
+            //"addressHeader.addressType"
+            regClientCorporateInput.addressHeader.addressType = validator.TryConvertAddressTypeCode(
+                "addressInfo.addressType",
+                regClientCorporateInput?.addressHeader?.addressType
+            );
+
+            //"profileHeader.econActivity"
+            regClientCorporateInput.profileHeader.econActivity = validator.TryConvertEconActivityCode(
+                "profileHeader.econActivity",
+                regClientCorporateInput?.profileHeader?.econActivity
+            );
+
+            
+            
             if (validator.Invalid())
             {
                 throw new FieldValidationException(validator.GetFieldErrorData());

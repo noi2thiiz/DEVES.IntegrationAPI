@@ -52,7 +52,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             //"profileInfo.provinceCode"
             RegClientPersonalInput.addressInfo.provinceCode = validator.TryConvertProvinceCode(
                 "addressInfo.provinceCode",
-                RegClientPersonalInput?.addressInfo?.provinceCode);
+                RegClientPersonalInput?.addressInfo?.provinceCode,
+                RegClientPersonalInput?.addressInfo?.country);
 
             //"profileInfo.districtCode"
             RegClientPersonalInput.addressInfo.districtCode = validator.TryConvertDistrictCode(
