@@ -11,6 +11,7 @@ using DEVES.IntegrationAPI.Model.RegPayeePersonal;
 using DEVES.IntegrationAPI.Model.CLS;
 using DEVES.IntegrationAPI.Model.Polisy400;
 using DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData;
+using DEVES.IntegrationAPI.WebApi.Logic.Validator;
 using DEVES.IntegrationAPI.WebApi.Templates.Exceptions;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
@@ -23,106 +24,93 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         private RegPayeePersonalDataOutputModel_Pass outputPass { get; set; }= new RegPayeePersonalDataOutputModel_Pass();
         
         // Validate Master Data before sending to other services
-        public void TranFormInput(RegPayeePersonalInputModel regPayeePersonalInput)
+        public void TranFormInput()
         {
             // ป้องกันปัญหา locus ส่ง json มาไม่ครบ
-            if (regPayeePersonalInput.addressInfo == null)
+            if (RegPayeePersonalInput.addressInfo == null)
             {
-                regPayeePersonalInput.addressInfo = new AddressInfoModel();
+                RegPayeePersonalInput.addressInfo = new AddressInfoModel();
             }
-            if (regPayeePersonalInput.contactInfo == null)
+            if (RegPayeePersonalInput.contactInfo == null)
             {
-                regPayeePersonalInput.contactInfo = new ContactInfoModel();
+                RegPayeePersonalInput.contactInfo = new ContactInfoModel();
             }
-            if (regPayeePersonalInput.generalHeader == null)
+            if (RegPayeePersonalInput.generalHeader == null)
             {
-                regPayeePersonalInput.generalHeader = new GeneralHeaderModel();
+                RegPayeePersonalInput.generalHeader = new GeneralHeaderModel();
             }
-            if (regPayeePersonalInput.profileInfo ==null)
+            if (RegPayeePersonalInput.profileInfo ==null)
             {
-                regPayeePersonalInput.profileInfo = new ProfileInfoModel();
+                RegPayeePersonalInput.profileInfo = new ProfileInfoModel();
             }
-            if (regPayeePersonalInput.sapVendorInfo == null)
+            if (RegPayeePersonalInput.sapVendorInfo == null)
             {
-                regPayeePersonalInput.sapVendorInfo = new SapVendorInfoModel();
-            }
-
-            Console.WriteLine("27");;
-
-           
-            var fieldErrorData = new OutputModelFailData();
-            Console.WriteLine("31"); ;
-
-            var masterSalutation = PersonalTitleMasterData.Instance.FindByCode(regPayeePersonalInput?.profileInfo?.salutation,"0001");
-            if (masterSalutation == null)
-            {
-                var message =
-                    MessageBuilder.Instance.GetInvalidMasterMessage("Salutation",
-                        regPayeePersonalInput.profileInfo.salutation);
-
-                fieldErrorData.AddFieldError("profileInfo.salutation", message);
-            }
-            else
-            {
-                regPayeePersonalInput.profileInfo.salutation = masterSalutation.PolisyCode;
-            }
-            Console.WriteLine("46"); ;
-            var masterNationality = NationalityMasterData.Instance.FindByCode(regPayeePersonalInput?.profileInfo?.nationality, "00203");
-            if (masterNationality == null)
-            {
-                var message =
-                    MessageBuilder.Instance.GetInvalidMasterMessage("Nationality",
-                        regPayeePersonalInput.profileInfo.nationality);
-              
-                fieldErrorData.AddFieldError("profileInfo.nationality", message);
-            }
-            else
-            {
-                regPayeePersonalInput.profileInfo.nationality = masterNationality.PolisyCode;
-            }
-            Console.WriteLine("60"); ;
-            var masterOccupation = OccupationMasterData.Instance.FindByCode(regPayeePersonalInput?.profileInfo?.occupation, "00023");
-            if (masterOccupation == null)
-            {
-                var message =
-                    MessageBuilder.Instance.GetInvalidMasterMessage("Occupation",
-                        regPayeePersonalInput.profileInfo.occupation);
-
-                fieldErrorData.AddFieldError("profileInfo.occupation", message);
-
-               
-            }
-            else
-            {
-                regPayeePersonalInput.profileInfo.occupation = masterOccupation.PolisyCode;
-            }
-            Console.WriteLine("76"); ;
-            var masterCountry = CountryMasterData.Instance.FindByCode(regPayeePersonalInput?.addressInfo?.country, "00220");
-            if (masterCountry == null)
-            {
-                var message =
-                    MessageBuilder.Instance.GetInvalidMasterMessage("Country",
-                        regPayeePersonalInput.addressInfo.country);
-                fieldErrorData.AddFieldError("addressInfo.country", message);
-               
-            }
-            else
-            {
-                regPayeePersonalInput.addressInfo.country = masterCountry.PolisyCode;
-            }
-            Console.WriteLine("90"); ;
-
-            if (fieldErrorData.fieldErrors.Any())
-            {
-                throw new FieldValidationException(fieldErrorData);
+                RegPayeePersonalInput.sapVendorInfo = new SapVendorInfoModel();
             }
 
-      
-          
+            // Validate Master Data before sending to other services
+            var validator = new MasterDataValidator();
+
+
+            //profileInfo.salutation
+            RegPayeePersonalInput.profileInfo.salutation = validator.TryConvertSalutationCode(
+                "profileInfo.salutation",
+                RegPayeePersonalInput?.profileInfo?.salutation);
+
+            //"profileInfo.nationality"
+            RegPayeePersonalInput.profileInfo.nationality = validator.TryConvertNationalityCode(
+                "profileInfo.nationality",
+                RegPayeePersonalInput?.profileInfo?.nationality);
+
+            //"profileInfo.occupation"
+            RegPayeePersonalInput.profileInfo.occupation = validator.TryConvertOccupationCode(
+                "profileInfo.occupation",
+                RegPayeePersonalInput?.profileInfo?.occupation);
+
+
+            //"profileInfo.country"
+            RegPayeePersonalInput.addressInfo.country = validator.TryConvertCountryCode(
+                "addressInfo.country",
+                RegPayeePersonalInput?.addressInfo?.country);
+
+            //"profileInfo.provinceCode"
+            RegPayeePersonalInput.addressInfo.provinceCode = validator.TryConvertProvinceCode(
+                "addressInfo.provinceCode",
+                RegPayeePersonalInput?.addressInfo?.provinceCode,
+                RegPayeePersonalInput?.addressInfo?.country);
+
+            //"profileInfo.districtCode"
+            RegPayeePersonalInput.addressInfo.districtCode = validator.TryConvertDistrictCode(
+                    "addressInfo.districtCode",
+                    RegPayeePersonalInput?.addressInfo?.districtCode,
+                    RegPayeePersonalInput?.addressInfo?.provinceCode)
+                ;
+
+            //"profileInfo.subDistrictCode"
+            RegPayeePersonalInput.addressInfo.subDistrictCode = validator.TryConvertSubDistrictCode(
+                "addressInfo.subDistrictCode",
+                RegPayeePersonalInput?.addressInfo?.subDistrictCode,
+                RegPayeePersonalInput?.addressInfo?.districtCode,
+                RegPayeePersonalInput?.addressInfo?.provinceCode
+            );
+            //"profileInfo.addressType"
+            RegPayeePersonalInput.addressInfo.addressType = validator.TryConvertAddressTypeCode(
+                "addressInfo.addressType",
+                RegPayeePersonalInput?.addressInfo?.addressType
+            );
+
+
+
+
+            if (validator.Invalid())
+            {
+                throw new FieldValidationException(validator.GetFieldErrorData());
+            }
         }
         public override BaseDataModel ExecuteInput(object input)
         {
             RegPayeePersonalInput = (RegPayeePersonalInputModel)input;
+            TranFormInput();
 
             var regPayeePersonalOutput =
                 new RegPayeePersonalContentOutputModel
@@ -136,7 +124,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
 
 
-            TranFormInput(RegPayeePersonalInput);
+          
 
 
             if (string.IsNullOrEmpty(RegPayeePersonalInput?.generalHeader?.polisyClientId))

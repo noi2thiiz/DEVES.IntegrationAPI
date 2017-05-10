@@ -21,7 +21,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         public RegClientCorporateOutputModel_Fail regFail { get; set; } = new RegClientCorporateOutputModel_Fail();
         protected RegClientCorporateInputModel regClientCorporateInput { get; set; }
 
-        public void TranFormInput(RegClientCorporateInputModel regClientCorporateInput)
+        public void TranFormInput()
         {
             if (regClientCorporateInput == null)
             {
@@ -101,8 +101,23 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 regClientCorporateInput?.profileHeader?.econActivity
             );
 
-            
-            
+            switch (regClientCorporateInput.generalHeader.roleCode)
+            {
+                case "A":
+                    regClientCorporateInput.generalHeader.assessorFlag = "Y";
+                    break;
+                case "S":
+                    regClientCorporateInput.generalHeader.solicitorFlag = "Y";
+                    break;
+                case "R":
+                    regClientCorporateInput.generalHeader.repairerFlag = "Y";
+                    break;
+                case "H":
+                    regClientCorporateInput.generalHeader.hospitalFlag = "Y";
+                    break;
+            }
+
+
             if (validator.Invalid())
             {
                 throw new FieldValidationException(validator.GetFieldErrorData());
@@ -120,7 +135,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
            
                  regClientCorporateInput = (RegClientCorporateInputModel)input;
-                TranFormInput(regClientCorporateInput);
+                 TranFormInput();
 
 
 

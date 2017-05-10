@@ -11,6 +11,7 @@ using DEVES.IntegrationAPI.Model.CLS;
 using DEVES.IntegrationAPI.Model.Polisy400;
 using DEVES.IntegrationAPI.Model.RegPayeePersonal;
 using DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData;
+using DEVES.IntegrationAPI.WebApi.Logic.Validator;
 using DEVES.IntegrationAPI.WebApi.Templates.Exceptions;
 using SapVendorInfoModel = DEVES.IntegrationAPI.Model.RegPayeeCorporate.SapVendorInfoModel;
 
@@ -21,7 +22,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         public RegPayeeCorporateOutputModel_Fail regFail { get; set; } = new RegPayeeCorporateOutputModel_Fail();
         protected RegPayeeCorporateInputModel regPayeeCorporateInput { get; set; }
 
-        public void TranFormInput(RegPayeeCorporateInputModel regPayeePersonalInput)
+        public void TranFormInput()
         {
             // ป้องกัน null reference จากการส่ง json มาไม่ครบ
             if (regPayeeCorporateInput.profileHeader == null)
@@ -43,45 +44,63 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 regPayeeCorporateInput.sapVendorInfo = new SapVendorInfoModel();
             }
             // Validate Master Data before sending to other services
-            var fieldErrorData = new OutputModelFailData();
+            var validator = new MasterDataValidator();
 
-            var countryOrigin = regPayeeCorporateInput?.profileHeader?.countryOrigin;
 
-            var masterCountryorigin = NationalityMasterData.Instance.FindByCode(countryOrigin, "00203");
 
-            if (masterCountryorigin == null)
+
+            //"profileHeader.countryOrigin"
+            regPayeeCorporateInput.profileHeader.countryOrigin = validator.TryConvertNationalityCode(
+                "profileHeader.countryOrigin",
+                regPayeeCorporateInput?.profileHeader?.countryOrigin);
+
+            //"addressHeader.country"
+            regPayeeCorporateInput.addressHeader.country = validator.TryConvertCountryCode(
+                "addressHeader.country",
+                regPayeeCorporateInput?.addressHeader?.country);
+
+            //"addressHeader.provinceCode"
+            regPayeeCorporateInput.addressHeader.provinceCode = validator.TryConvertProvinceCode(
+                "addressHeader.provinceCode",
+                regPayeeCorporateInput?.addressHeader?.provinceCode,
+                regPayeeCorporateInput?.addressHeader?.country);
+
+            //"addressHeader.districtCode"
+            regPayeeCorporateInput.addressHeader.districtCode = validator.TryConvertDistrictCode(
+                    "addressInfo.districtCode",
+                    regPayeeCorporateInput?.addressHeader?.districtCode,
+                    regPayeeCorporateInput?.addressHeader?.provinceCode)
+                ;
+
+            //"addressHeader.subDistrictCode"
+            regPayeeCorporateInput.addressHeader.subDistrictCode = validator.TryConvertSubDistrictCode(
+                "addressInfo.subDistrictCode",
+                regPayeeCorporateInput?.addressHeader?.subDistrictCode,
+                regPayeeCorporateInput?.addressHeader?.districtCode,
+                regPayeeCorporateInput?.addressHeader?.provinceCode
+            );
+            //"addressHeader.addressType"
+            regPayeeCorporateInput.addressHeader.addressType = validator.TryConvertAddressTypeCode(
+                "addressInfo.addressType",
+                regPayeeCorporateInput?.addressHeader?.addressType
+            );
+
+            //"addressHeader.addressType"
+            regPayeeCorporateInput.addressHeader.addressType = validator.TryConvertAddressTypeCode(
+                "addressInfo.addressType",
+                regPayeeCorporateInput?.addressHeader?.addressType
+            );
+
+            //"profileHeader.econActivity"
+            regPayeeCorporateInput.profileHeader.econActivity = validator.TryConvertEconActivityCode(
+                "profileHeader.econActivity",
+                regPayeeCorporateInput?.profileHeader?.econActivity
+            );
+
+          
+            if (validator.Invalid())
             {
-                Console.WriteLine("NationalityMasterData is invalid");
-                var message =
-                    MessageBuilder.Instance.GetInvalidMasterMessage("Country Origin",
-                        regPayeeCorporateInput.profileHeader.countryOrigin);
-                fieldErrorData.AddFieldError("profileHeader.countryOrigin", message);
-            }
-            else
-            {
-                Console.WriteLine("NationalityMasterData  invalid");
-
-                regPayeeCorporateInput.profileHeader.countryOrigin = masterCountryorigin.PolisyCode;
-            }
-
-            var masterCountry =
-                CountryMasterData.Instance.FindByCode(regPayeeCorporateInput.addressHeader.country, "00220");
-            if (masterCountry == null)
-            {
-                var message =
-                    MessageBuilder.Instance.GetInvalidMasterMessage("Country",
-                        regPayeeCorporateInput.addressHeader.country);
-                fieldErrorData.AddFieldError("addressHeader.country", message);
-            }
-            else
-            {
-                regPayeeCorporateInput.addressHeader.country = masterCountry.PolisyCode;
-            }
-
-
-            if (fieldErrorData.fieldErrors.Count > 0)
-            {
-                throw new FieldValidationException(fieldErrorData);
+                throw new FieldValidationException(validator.GetFieldErrorData());
             }
         }
 
@@ -97,7 +116,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             RegPayeeCorporateDataOutputModel_Pass outputPass = new RegPayeeCorporateDataOutputModel_Pass();
             regPayeeCorporateInput = (RegPayeeCorporateInputModel) input;
-            TranFormInput(regPayeeCorporateInput);
+            TranFormInput();
 
 
             ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -120,7 +139,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     if (clsCreatePayeeContent?.code == CONST_CODE_SUCCESS)
                     {
                         regPayeeCorporateInput.generalHeader.cleansingId =
-                            clsCreatePayeeContent.data?.cleansingId ?? "";
+                            clsCreatePayeeContent?.data?.cleansingId ?? "";
 
                         outputPass.polisyClientId = clsCreatePayeeContent.data?.clientId;
                         outputPass.corporateName1 = clsCreatePayeeContent.data?.corporateName1;

@@ -22,8 +22,26 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         protected RegClientPersonalContentOutputModel regClientPersonOutput { get; set; }
         protected RegClientPersonalDataOutputModel_Pass regClientPersonDataOutput { get; set; }
 
-        public void TranFormInput(RegClientPersonalInputModel regPayeePersonalInput)
+        public void TranFormInput()
         {
+            // ป้องกันปัญหา locus ส่ง json มาไม่ครบ
+            if (RegClientPersonalInput.addressInfo == null)
+            {
+                RegClientPersonalInput.addressInfo = new AddressInfoModel();
+            }
+            if (RegClientPersonalInput.contactInfo == null)
+            {
+                RegClientPersonalInput.contactInfo = new ContactInfoModel();
+            }
+            if (RegClientPersonalInput.generalHeader == null)
+            {
+                RegClientPersonalInput.generalHeader = new GeneralHeaderModel();
+            }
+            if (RegClientPersonalInput.profileInfo == null)
+            {
+                RegClientPersonalInput.profileInfo = new ProfileInfoModel();
+            }
+          
             // Validate Master Data before sending to other services
             var validator = new MasterDataValidator();
        
@@ -88,7 +106,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         {
             RegClientPersonalInput = (RegClientPersonalInputModel) input;
 
-            TranFormInput(RegClientPersonalInput);
+            TranFormInput();
 
             regClientPersonOutput = new RegClientPersonalContentOutputModel
             {
