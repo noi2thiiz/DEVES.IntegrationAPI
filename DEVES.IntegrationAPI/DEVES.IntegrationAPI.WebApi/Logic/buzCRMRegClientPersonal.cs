@@ -49,7 +49,32 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 "addressInfo.country",
                 RegClientPersonalInput?.addressInfo?.country);
 
-           
+            //"profileInfo.provinceCode"
+            RegClientPersonalInput.addressInfo.provinceCode = validator.TryConvertProvinceCode(
+                "addressInfo.provinceCode",
+                RegClientPersonalInput?.addressInfo?.provinceCode);
+
+            //"profileInfo.districtCode"
+            RegClientPersonalInput.addressInfo.districtCode = validator.TryConvertDistrictCode(
+                "addressInfo.districtCode",
+                RegClientPersonalInput?.addressInfo?.districtCode,
+                RegClientPersonalInput?.addressInfo?.provinceCode)
+                ;
+
+            //"profileInfo.subDistrictCode"
+            RegClientPersonalInput.addressInfo.subDistrictCode = validator.TryConvertSubDistrictCode(
+                "addressInfo.subDistrictCode",
+                RegClientPersonalInput?.addressInfo?.subDistrictCode,
+                RegClientPersonalInput?.addressInfo?.districtCode,
+                RegClientPersonalInput?.addressInfo?.provinceCode
+                );
+            //"profileInfo.addressType"
+            RegClientPersonalInput.addressInfo.addressType = validator.TryConvertAddressTypeCode(
+                "addressInfo.addressType",
+                RegClientPersonalInput?.addressInfo?.addressType
+            );
+
+
 
 
             if (validator.Invalid())

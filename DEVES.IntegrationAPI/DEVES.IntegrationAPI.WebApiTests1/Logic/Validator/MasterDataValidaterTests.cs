@@ -1,12 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using DEVES.IntegrationAPI.WebApi.Logic.Validator;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DEVES.IntegrationAPI.WebApi.Logic.Validator;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace DEVES.IntegrationAPI.WebApi.Logic.Validator.Tests
+namespace DEVES.IntegrationAPI.WebApiTests1.Logic.Validator
 {
     [TestClass()]
     public class MasterDataValidaterTests

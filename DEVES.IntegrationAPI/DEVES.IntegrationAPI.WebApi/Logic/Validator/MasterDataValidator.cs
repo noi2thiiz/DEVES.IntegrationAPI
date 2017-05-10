@@ -46,8 +46,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Validator
             return true;
         }
 
-        public string TryConvertSalutationCode(string fieldName,string masterCode,string defaultCode ="")
+        public string TryConvertSalutationCode(string fieldName,string masterCode,string defaultCode = "0001")
         {
+            if (string.IsNullOrEmpty(masterCode))
+            {
+                masterCode = defaultCode;
+            }
             try
             {
                 var masterSalutation =
@@ -75,6 +79,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Validator
 
         public string TryConvertNationalityCode(string fieldName, string masterCode, string defaultCode = "00203")
         {
+            if (string.IsNullOrEmpty(masterCode))
+            {
+                masterCode = defaultCode;
+            }
             try
             {
                 var masterSalutation =
@@ -102,8 +110,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Validator
 
         
 
-        public string TryConvertOccupationCode(string fieldName, string masterCode, string defaultCode = "")
+        public string TryConvertOccupationCode(string fieldName, string masterCode, string defaultCode = "00023")
         {
+            if (string.IsNullOrEmpty(masterCode))
+            {
+                masterCode = defaultCode;
+            }
             try
             {
                 var master =
@@ -131,6 +143,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Validator
 
         public string TryConvertCountryCode(string fieldName, string masterCode, string defaultCode = "00220")
         {
+            if (string.IsNullOrEmpty(masterCode))
+            {
+                masterCode = defaultCode;
+            }
             try
             {
                 var master =
@@ -152,13 +168,76 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Validator
             }
 
             return defaultCode;
+            
+        }
+        
+        public string TryConvertProvinceCode(string fieldName, string masterCode, string defaultCode = "00")
+        {
+            if (string.IsNullOrEmpty(masterCode))
+            {
+                masterCode = defaultCode;
+            }
+            try
+            {
+                var master =
+                    ProvinceMasterData.Instance.FindByCode(masterCode, defaultCode);
+                if (master != null)
+                {
+                    return master.ProvinceCode;
+                }
+                else
+                {
+                    var errorMessage =
+                        MessageBuilder.Instance.GetInvalidMasterMessage("Province", masterCode);
+                    fieldErrorData.AddFieldError(fieldName, errorMessage);
+                }
+            }
+            catch (Exception)
+            {
+                //do nothing
+            }
 
+            return defaultCode;
 
         }
 
-        
-        public string TryConvertSubDistrictCode(string fieldName, string masterCode, string defaultCode = "000000")
+        public string TryConvertDistrictCode(string fieldName, string masterCode, string provinceCode = "0000", string defaultCode = "0000")
         {
+            if (string.IsNullOrEmpty(masterCode))
+            {
+                masterCode = defaultCode;
+            }
+            try
+            {
+                var master =
+                    DistricMasterData.Instance.FindByCode(masterCode, defaultCode);
+                if (master != null)
+                {
+                    return master.DistrictCode;
+                }
+                else
+                {
+                    var errorMessage =
+                        MessageBuilder.Instance.GetInvalidMasterMessage("District", masterCode);
+                    fieldErrorData.AddFieldError(fieldName, errorMessage);
+                }
+            }
+            catch (Exception)
+            {
+                //do nothing
+            }
+
+            return defaultCode;
+
+        }
+
+        public string TryConvertSubDistrictCode(string fieldName, string masterCode, string provinceCode = "00", string districtCode = "0000", string defaultCode = "000000")
+        {
+            if (string.IsNullOrEmpty(masterCode))
+            {
+                masterCode = defaultCode;
+            }
+
             try
             {
                 var master =
@@ -181,6 +260,30 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Validator
 
             return defaultCode;
 
+
+        }
+
+       protected string[] AddressTypeArray = {"01","02","03","04","05","06","07","08" };
+
+        public string TryConvertAddressTypeCode(string fieldName, string masterCode, string defaultCode = "01")
+        {
+            if (string.IsNullOrEmpty(masterCode))
+            {
+                masterCode = defaultCode;
+            }
+            if (masterCode == "00")
+            {
+                masterCode = "01";
+            }
+
+            if (AddressTypeArray.Contains(masterCode) == false)
+            {
+                var errorMessage =
+                    MessageBuilder.Instance.GetInvalidMasterMessage("AddressType", masterCode);
+                fieldErrorData.AddFieldError(fieldName, errorMessage);
+            }
+
+            return masterCode;
 
         }
     }
