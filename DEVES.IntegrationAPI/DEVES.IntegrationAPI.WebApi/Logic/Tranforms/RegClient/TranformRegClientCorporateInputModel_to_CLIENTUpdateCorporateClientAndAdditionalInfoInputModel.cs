@@ -50,11 +50,30 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             }
             if (src.contactHeader != null)
             {
-                trgt.telephones = src.contactHeader.telephone1 ?? "";
-
-                trgt.telephone2 = src.contactHeader.telephone2 ?? "";
-
-                trgt.telex = src.contactHeader.telephone3 ?? "";
+                if (string.IsNullOrEmpty(src.contactHeader.telephone1Ext))
+                {
+                    trgt.telephones = src.contactHeader.telephone1 ?? "";
+                }
+                else
+                {
+                    trgt.telephones = src.contactHeader.telephone1 + "#" + src.contactHeader.telephone1Ext ?? "";
+                }
+                if (string.IsNullOrEmpty(src.contactHeader.telephone2Ext))
+                {
+                    trgt.telephone2 = src.contactHeader.telephone2 ?? "";
+                }
+                else
+                {
+                    trgt.telephone2 = src.contactHeader.telephone2 + "#" + src.contactHeader.telephone2Ext ?? "";
+                }
+                if (string.IsNullOrEmpty(src.contactHeader.telephone3Ext))
+                {
+                    trgt.telex = src.contactHeader.telephone3 ?? "";
+                }
+                else
+                {
+                    trgt.telex = src.contactHeader.telephone3 + "#" + src.contactHeader.telephone3Ext ?? "";
+                }
 
                 trgt.telegram = src.contactHeader.mobilePhone ?? "";
                 trgt.facsimile = src.contactHeader.fax ?? "";

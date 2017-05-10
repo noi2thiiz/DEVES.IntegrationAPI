@@ -35,8 +35,22 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             }
             if (src.contactInfo != null)
             {
-                trgt.TEL1 = src.contactInfo.telephone1 ?? "";
-                trgt.TEL2 = src.contactInfo.telephone2 ?? "";
+                if (string.IsNullOrEmpty(src.contactInfo.telephone1Ext))
+                {
+                    trgt.TEL1 = src.contactInfo.telephone1 ?? "";
+                }
+                else
+                {
+                    trgt.TEL1 = src.contactInfo.telephone1 + src.contactInfo.telephone1Ext ?? "";
+                }
+                if (string.IsNullOrEmpty(src.contactInfo.telephone2Ext))
+                {
+                    trgt.TEL2 = src.contactInfo.telephone2 ?? "";
+                }
+                else
+                {
+                    trgt.TEL2 = src.contactInfo.telephone2 + src.contactInfo.telephone2Ext ?? "";
+                }
                 trgt.FAX = src.contactInfo.fax ?? "";
             }
             if (src.addressInfo != null)

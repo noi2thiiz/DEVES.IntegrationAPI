@@ -14,14 +14,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             InquiryCRMPayeeListInputModel src = (InquiryCRMPayeeListInputModel)input;
             InquiryAPARPayeeListInputModel trgt = (InquiryAPARPayeeListInputModel)output;
 
-            trgt.fullName = src.fullname;
-            trgt.polisyClntnum = src.polisyClientId;
-            trgt.requester = src.requester;
-            trgt.taxBranchCode = src.taxBranchCode;
-            trgt.vendorCode = src.sapVendorCode;
+            trgt.fullName = src.fullname ?? "";
+            trgt.polisyClntnum = src.polisyClientId ?? "";
+            trgt.requester = src.requester ?? "";
+            trgt.taxBranchCode = src.taxBranchCode ?? "";
+            trgt.vendorCode = src.sapVendorCode ?? "";
 
-            trgt.taxNo = src.taxNo;
-            trgt.taxBranchCode  =  src.taxBranchCode;
+            trgt.taxNo = src.taxNo ?? "";
+            trgt.taxBranchCode  =  src.taxBranchCode ?? "";
 
             // cannot map to trgt
             //src.emcsCode

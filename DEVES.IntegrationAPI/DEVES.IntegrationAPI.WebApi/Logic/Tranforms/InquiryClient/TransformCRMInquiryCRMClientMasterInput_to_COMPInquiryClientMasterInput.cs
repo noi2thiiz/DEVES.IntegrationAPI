@@ -16,12 +16,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             InquiryClientMasterInputModel src = (InquiryClientMasterInputModel)input;
             COMPInquiryClientMasterInputModel trgt = (COMPInquiryClientMasterInputModel)output;
 
-            trgt.cltType = src.conditionHeader.clientType;
-            trgt.asrType = src.conditionHeader.roleCode;
-            trgt.clntnum = src.conditionDetail.polisyClientId;
-            trgt.fullName = src.conditionDetail.clientFullname;
-            trgt.idcard = src.conditionDetail.idCard;
-            trgt.branchCode = src.conditionDetail.corporateBranch;
+            trgt.cltType = src.conditionHeader.clientType??"";
+            trgt.asrType = src.conditionHeader.roleCode??"";
+            trgt.clntnum = src.conditionDetail.polisyClientId??"";
+            trgt.fullName = src.conditionDetail.clientFullname ?? "";
+            trgt.idcard = src.conditionDetail.idCard ?? "";
+            trgt.branchCode = src.conditionDetail.corporateBranch ?? "";
             trgt.backDay = "7";
 
             if (string.IsNullOrEmpty(trgt.fullName))

@@ -32,51 +32,72 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             }
             if (src.profileHeader != null)
             {
-                trgt.corporateName1 = src.profileHeader.corporateName1;
-                trgt.corporateName2 = src.profileHeader.corporateName2;
-                trgt.remark = src.profileHeader.contactPerson;
-                trgt.idCard = src.profileHeader.idRegCorp;
-                trgt.taxId = src.profileHeader.idTax;
+                trgt.corporateName1 = src.profileHeader.corporateName1 ?? "";
+                trgt.corporateName2 = src.profileHeader.corporateName2 ?? "";
+                trgt.remark = src.profileHeader.contactPerson ?? "";
+                trgt.idCard = src.profileHeader.idRegCorp ?? "";
+                trgt.taxId = src.profileHeader.idTax ?? "";
                 //{
                 //    CultureInfo usaCulture = new CultureInfo("en-US");
                 //    var dateString = src.profileHeader.dateInCorporate.ToString("yyyyMMdd", usaCulture);
                 //    trgt.dateInCorporate = dateString;
                 //}
                 trgt.dateInCorporateDate = src.profileHeader.dateInCorporate;
-                trgt.corporateStaffNo = src.profileHeader.corporateBranch;
-                trgt.econActivity = src.profileHeader.econActivity;
+                trgt.corporateStaffNo = src.profileHeader.corporateBranch ?? "";
+                trgt.econActivity = src.profileHeader.econActivity ?? "";
 
                 trgt.countryOrigin = src.profileHeader.countryOrigin ?? ""; // buzCountry.Instant.CountryList.FirstOrDefault(x => x.Code == src.profileHeader.countryOrigin)?.ctryPolisy??"";
 
-                trgt.language = src.profileHeader.language;
-                trgt.riskLevel = src.profileHeader.riskLevel;
-                trgt.vipStatus = src.profileHeader.vipStatus;
+                trgt.language = src.profileHeader.language ?? "";
+                trgt.riskLevel = src.profileHeader.riskLevel ?? "";
+                trgt.vipStatus = src.profileHeader.vipStatus ?? "";
 
             }
             if (src.contactHeader != null)
             {
-                trgt.telephones = src.contactHeader.telephone1;
-                trgt.telephone2 = src.contactHeader.telephone2;
-                trgt.telex = src.contactHeader.telephone3;
-                trgt.telegram = src.contactHeader.mobilePhone;
-                trgt.facsimile = src.contactHeader.fax;
-                trgt.emailAddress = src.contactHeader.emailAddress;
-                trgt.lineId = src.contactHeader.lineID;
-                trgt.facebook = src.contactHeader.facebook;
+                if (string.IsNullOrEmpty(src.contactHeader.telephone1Ext))
+                {
+                    trgt.telephones = src.contactHeader.telephone1 ?? "";
+                }
+                else
+                {
+                    trgt.telephones = src.contactHeader.telephone1 + "#" + src.contactHeader.telephone1Ext ?? "";
+                }
+                if (string.IsNullOrEmpty(src.contactHeader.telephone2Ext))
+                {
+                    trgt.telephone2 = src.contactHeader.telephone2 ?? "";
+                }
+                else
+                {
+                    trgt.telephone2 = src.contactHeader.telephone2 + "#" + src.contactHeader.telephone2Ext ?? "";
+                }
+                if (string.IsNullOrEmpty(src.contactHeader.telephone3Ext))
+                {
+                    trgt.telex = src.contactHeader.telephone3 ?? "";
+                }
+                else
+                {
+                    trgt.telex = src.contactHeader.telephone3 + "#" + src.contactHeader.telephone3Ext ?? "";
+                }
+                trgt.telegram = src.contactHeader.mobilePhone ?? "";
+                trgt.facsimile = src.contactHeader.fax ?? "";
+                trgt.emailAddress = src.contactHeader.emailAddress ?? "";
+                trgt.lineId = src.contactHeader.lineID ?? "";
+                trgt.facebook = src.contactHeader.facebook ?? "";
             }
             if (src.addressHeader != null)
             {
-                trgt.address1 = src.addressHeader.address1;
-                trgt.address2 = src.addressHeader.address2;
-                trgt.address3 = src.addressHeader.address3;
-                trgt.address4 = src.addressHeader.subDistrictCode;
-                trgt.address5 = src.addressHeader.provinceCode;
-                trgt.postCode = src.addressHeader.postalCode;
+                trgt.address1 = src.addressHeader.address1 ?? "";
+                trgt.address2 = src.addressHeader.address2 ?? "";
+                trgt.address3 = src.addressHeader.address3 ?? "";
+                trgt.address4 = src.addressHeader.districtCode + " " + src.addressHeader.subDistrictCode ?? "";
+                trgt.address5 = src.addressHeader.provinceCode ?? "";
+                trgt.postCode = src.addressHeader.postalCode ?? "";
 
                 trgt.country = src.addressHeader.country ?? ""; // buzCountry.Instant.CountryList.FirstOrDefault( x => x.Code == src.addressHeader.country)?.ctryPolisy ?? "";
 
-                trgt.latitude = src.addressHeader.latitude;
-                trgt.longtitude = src.addressHeader.longtitude;
+                trgt.latitude = src.addressHeader.latitude ?? "";
+                trgt.longtitude = src.addressHeader.longtitude ?? "";
             }
 
             trgt.fao = "";

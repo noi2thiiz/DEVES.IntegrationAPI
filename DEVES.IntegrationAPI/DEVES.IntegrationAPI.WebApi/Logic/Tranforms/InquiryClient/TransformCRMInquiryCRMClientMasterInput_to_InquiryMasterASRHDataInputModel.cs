@@ -12,12 +12,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             InquiryClientMasterInputModel src = (InquiryClientMasterInputModel)input;
             InquiryMasterASRHDataInputModel trgt = (InquiryMasterASRHDataInputModel)output;
 
-            trgt.fullName = src.conditionDetail.clientFullname;
-            trgt.polisyClntnum = src.conditionDetail.polisyClientId;
-            trgt.asrhType = src.conditionHeader.roleCode;
-            trgt.taxBranchCode = src.conditionDetail.corporateBranch;
-            trgt.taxNo = src.conditionDetail.idCard;
-            trgt.emcsCode = src.conditionDetail.emcsCode;
+            trgt.fullName = src.conditionDetail.clientFullname ?? "";
+            trgt.polisyClntnum = src.conditionDetail.polisyClientId ?? "";
+            trgt.asrhType = src.conditionHeader.roleCode ?? "";
+            trgt.taxBranchCode = src.conditionDetail.corporateBranch ?? "";
+            trgt.taxNo = src.conditionDetail.idCard ?? "";
+            trgt.emcsCode = src.conditionDetail.emcsCode ?? "";
 
             return trgt;
         }
