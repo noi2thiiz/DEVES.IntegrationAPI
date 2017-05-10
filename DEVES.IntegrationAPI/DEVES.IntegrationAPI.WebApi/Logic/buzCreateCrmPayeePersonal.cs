@@ -112,7 +112,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         }
                         // contentModel.profileInfo.occupation;
                         // contact.pfc_client_legal_status = contentModel.profileInfo.riskLevel; // optionset
-                        if (contentModel.profileInfo.riskLevel == null)
+                        if (string.IsNullOrEmpty(contentModel.profileInfo.riskLevel))
                         {
                             // do nothing
                         }
