@@ -100,6 +100,12 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                                     break;
                                 }
                             }
+
+                            string[] splitProp = fieldName.Split(',');
+                            for (int i = 0; i < splitProp.Length; i++)
+                            {
+                                outputFail.AddFieldError(splitProp[i].Trim(), fieldMessage);
+                            }
                         }
                         else if (text.Contains("exceeds maximum length"))
                         {
@@ -205,12 +211,14 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                         {
                             int startName = 0;
                             int endName = 0;
+                            bool isChecking = true;
 
                             for (int i = 0; i < text.Length - 1; i++)
                             {
-                                if (text.Substring(i, 1).Equals("."))
+                                if (text.Substring(i, 1).Equals(".") && isChecking)
                                 {
                                     fieldMessage = text.Substring(0, i);
+                                    isChecking = false;
                                 }
                                 if (text.Substring(i, 1).Equals("'"))
                                 {
@@ -231,7 +239,11 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                             }
                         }
 
-                        outputFail.AddFieldError(fieldName, fieldMessage);
+                        if (!text.Contains("Required properties"))
+                        {
+                            outputFail.AddFieldError(fieldName, fieldMessage);
+                        }
+                        
                     }
                     //output model
                     outputFail.code = AppConst.CODE_INVALID_INPUT;
