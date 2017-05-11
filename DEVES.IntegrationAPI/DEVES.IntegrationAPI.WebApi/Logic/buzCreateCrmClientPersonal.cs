@@ -155,6 +155,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         contact.EMailAddress1 = contentModel.contactInfo.emailAddress;
                         contact.pfc_line_id = contentModel.contactInfo.lineID;
                         contact.pfc_facebook = contentModel.contactInfo.facebook;
+                        contact.pfc_source_data = new OptionSetValue(100000003);
 
                         ExecuteTransactionRequest tranReq = new ExecuteTransactionRequest()
                         {

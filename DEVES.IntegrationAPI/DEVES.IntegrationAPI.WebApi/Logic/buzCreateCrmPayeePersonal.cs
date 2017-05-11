@@ -153,25 +153,25 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         contact.EMailAddress1 = contentModel.contactInfo.emailAddress;
                         contact.pfc_line_id = contentModel.contactInfo.lineID;
                         contact.pfc_facebook = contentModel.contactInfo.facebook;
+                    contact.pfc_source_data = new OptionSetValue(100000003);
+
+                    // addressInfo
+                    /*
+                    contentModel.addressInfo.address1;
+                    contentModel.addressInfo.address2;
+                    contentModel.addressInfo.address3;
+                    contentModel.addressInfo.subDistrictCode;
+                    contentModel.addressInfo.districtCode;
+                    contentModel.addressInfo.provinceCode;
+                    contentModel.addressInfo.postalCode;
+                    contentModel.addressInfo.country;
+                    contentModel.addressInfo.addressType;
+                    contentModel.addressInfo.latitude;
+                    contentModel.addressInfo.longtitude;
 
 
-                        // addressInfo
-                        /*
-                        contentModel.addressInfo.address1;
-                        contentModel.addressInfo.address2;
-                        contentModel.addressInfo.address3;
-                        contentModel.addressInfo.subDistrictCode;
-                        contentModel.addressInfo.districtCode;
-                        contentModel.addressInfo.provinceCode;
-                        contentModel.addressInfo.postalCode;
-                        contentModel.addressInfo.country;
-                        contentModel.addressInfo.addressType;
-                        contentModel.addressInfo.latitude;
-                        contentModel.addressInfo.longtitude;
-
-                        
-                    */
-                        ExecuteTransactionRequest tranReq = new ExecuteTransactionRequest()
+                */
+                    ExecuteTransactionRequest tranReq = new ExecuteTransactionRequest()
                         {
                             Requests = new OrganizationRequestCollection(),
                             ReturnResponses = true

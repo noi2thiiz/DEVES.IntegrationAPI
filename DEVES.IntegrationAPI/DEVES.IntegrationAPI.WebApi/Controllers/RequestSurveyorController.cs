@@ -122,6 +122,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             rsModel.appointPhone = isStringNull("appointPhone");
             rsModel.contractName = isStringNull("contractName");
             rsModel.contractPhone = isStringNull("contractPhone");
+            rsModel.surveyTeam = isStringNull("surveyTeam");
 
             return rsModel;
         }

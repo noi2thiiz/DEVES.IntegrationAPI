@@ -582,6 +582,26 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             //return lstCrmClientId;
 
         }
+
+        internal List<string> SearchContactPolisyId(string cleansingId)
+        {
+
+            // Console.WriteLine("SearchCrmContactClientId");
+            // For performance, until we found the way to cache the ServiceProxy, we prefer SQL rather than Crm
+
+            using (OrganizationServiceProxy sp = GetCrmServiceProxy())
+            {
+                ServiceContext sc = new ServiceContext(sp);
+                var q = from contacts in sc.ContactSet
+                        where contacts.pfc_cleansing_cusormer_profile_code == cleansingId && contacts.StateCode == ContactState.Active
+                        select contacts.pfc_polisy_client_id;
+                List<string> lstCrmClientId = q.ToList<string>();
+
+                return lstCrmClientId;
+            }
+            
+        }
+
         internal List<string> SearchCrmAccountClientId(string cleansingId)
         {
             //List<string> lstCrmClientId = new List<string>();
@@ -610,6 +630,19 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             
         }
 
+        internal List<string> SearchAccountPolisyId(string cleansingId)
+        {
+            using (OrganizationServiceProxy sp = GetCrmServiceProxy())
+            {
+                ServiceContext sc = new ServiceContext(sp);
+                var q = from accounts in sc.AccountSet
+                        where accounts.pfc_cleansing_cusormer_profile_code == cleansingId && accounts.StateCode == AccountState.Active
+                        select accounts.pfc_polisy_client_id;
+                List<string> lstCrmClientId = q.ToList<string>();
+                return lstCrmClientId;
+            }
+
+        }
 
     }
 }
