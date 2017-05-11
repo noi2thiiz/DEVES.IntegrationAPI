@@ -144,6 +144,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             
             AddNode("STOP (RETURN OUTPUT )");
             Console.WriteLine(nodePart);
+            if (crmInqContent.data != null)
+            {
+                crmInqContent.data = crmInqContent.data.Where(row => row?.profileInfo?.name1.Trim() != "").ToList();
+            }
             return crmInqContent;
         }
 

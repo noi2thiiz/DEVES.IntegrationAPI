@@ -280,8 +280,16 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     outputPass.personalName = RegPayeePersonalInput?.profileInfo.personalName;
                     outputPass.personalSurname = RegPayeePersonalInput?.profileInfo.personalSurname;
                 }
+                if (string.IsNullOrEmpty(outputPass.polisyClientId))
+                {
+                   outputPass.polisyClientId = RegPayeePersonalInput?.generalHeader?.polisyClientId;
+                }
+                if (string.IsNullOrEmpty(outputPass.cleansingId))
+                {
+                    outputPass.polisyClientId = RegPayeePersonalInput?.generalHeader?.cleansingId;
+                }
 
-                regPayeePersonalOutput.data.Add(outputPass);
+            regPayeePersonalOutput.data.Add(outputPass);
             
            
             return regPayeePersonalOutput;

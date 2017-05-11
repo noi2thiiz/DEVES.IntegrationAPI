@@ -355,7 +355,7 @@
     <Compile Include="Logic\Tranforms\InquiryClient\TranformEWIResCOMPInquiryClientMasterContentModel_to_CLIENTUpdateCorporateClientAndAdditionalInfoInputModel.cs" />
     <Compile Include="Logic\Tranforms\InquiryClient\TranformInquiryCRMPayeeListInputModel_to_CLSInquiryCorporateClientInputModel.cs" />
     <Compile Include="Logic\Tranforms\InquiryPayee\TranformInquiryCRMPayeeListInputModel_to_CLSInquiryPersonalClientInputModel.cs" />
-    <Compile Include="Logic\Tranforms\InquiryPayee\TranformInquiryCRMPayeeListInputModel_to_COMPInquiryClientMasterInputModel.cs" />
+    <Compile Include="Logic\Tranforms\InquiryClient\TranformInquiryCRMPayeeListInputModel_to_COMPInquiryClientMasterInputModel.cs" />
     <Compile Include="Logic\Tranforms\RegClient\TranformRegClientCorporateInputModel_to_CLIENTCreateCorporateClientAndAdditionalInfoInputModel.cs" />
     <Compile Include="Logic\Tranforms\RegClient\TranformRegClientCorporateInputModel_to_CLIENTUpdateCorporateClientAndAdditionalInfoInputModel.cs" />
     <Compile Include="Logic\Tranforms\RegClient\TranformRegClientCorporateInputModel_to_COMPInquiryClientMasterInputModel.cs" />

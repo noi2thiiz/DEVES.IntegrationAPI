@@ -296,6 +296,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 outputPass.corporateName1 = regPayeeCorporateInput.profileHeader.corporateName1;
                 outputPass.corporateName2 = regPayeeCorporateInput.profileHeader.corporateName2;
             }
+            if (string.IsNullOrEmpty(outputPass.polisyClientId))
+            {
+                outputPass.polisyClientId = regPayeeCorporateInput?.generalHeader?.polisyClientId;
+            }
+            if (string.IsNullOrEmpty(outputPass.cleansingId))
+            {
+                outputPass.polisyClientId = regPayeeCorporateInput?.generalHeader?.cleansingId;
+            }
             regPayeeCorporateOutput.data.Add(outputPass);
 
 

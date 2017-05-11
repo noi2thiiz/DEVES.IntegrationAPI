@@ -126,13 +126,18 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                 crmInqContent.code = CONST_CODE_SUCCESS;
                 crmInqContent.message = "SUCCESS";
-           // }
-           // catch (Exception e)
-           // {
-           //     crmInqContent.code = CONST_CODE_FAILED;
-           //     crmInqContent.message = e.Message;
-           //     crmInqContent.description = e.StackTrace;
-           // }
+            // }
+            // catch (Exception e)
+            // {
+            //     crmInqContent.code = CONST_CODE_FAILED;
+            //     crmInqContent.message = e.Message;
+            //     crmInqContent.description = e.StackTrace;
+            // }
+            if (crmInqContent.data!= null)
+            {
+                crmInqContent.data = crmInqContent.data.Where(row => row?.profileInfo?.name1.Trim() != "").ToList();
+            }
+           
             return crmInqContent;
         }
 
