@@ -547,7 +547,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             return success;
         }
 
-        internal List<string> SearchCrmContactClientId(string cleansingId)
+        public List<string> SearchCrmContactClientId(string cleansingId)
         {
 
            // Console.WriteLine("SearchCrmContactClientId");
@@ -611,6 +611,14 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
         }
 
 
+    }
+
+    public  class TestCommand: BaseCommand
+    {
+        public override BaseDataModel Execute(object input)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
  

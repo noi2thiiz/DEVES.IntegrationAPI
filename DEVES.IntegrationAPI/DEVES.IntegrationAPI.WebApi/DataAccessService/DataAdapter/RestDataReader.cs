@@ -45,11 +45,11 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.DataAdapter
                     endpoint += "/StoreService/crm";
                 }
 
-                Console.WriteLine(endpoint);
+               // Console.WriteLine(endpoint);
                 var client = new RESTClient(endpoint);
                 var result = client.Execute(req);
               
-                 Console.WriteLine(result.Content);
+               //  Console.WriteLine(result.Content);
                 JavaScriptSerializer serializer1 = new JavaScriptSerializer();
                 StoreOutput obje = serializer1.Deserialize<StoreOutput>(result.Content);
 

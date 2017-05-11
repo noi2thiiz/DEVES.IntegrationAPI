@@ -3,6 +3,7 @@ using DEVES.IntegrationAPI.Model;
 using DEVES.IntegrationAPI.Model.Polisy400;
 using DEVES.IntegrationAPI.Model.RegClientCorporate;
 using DEVES.IntegrationAPI.WebApi.Templates;
+using DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
@@ -96,6 +97,28 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                 trgt.latitude = src.addressHeader.latitude ?? "";
                 trgt.longtitude = src.addressHeader.longtitude ?? "";
+
+                string districtName = "";
+                string subDistrictName = "";
+                var district = DistricMasterData.Instance.FindByCode(src.addressHeader.districtCode);
+                if (district != null)
+                {
+                    districtName = district.DistrictName;
+                }
+
+                var subDistrict = SubDistrictMasterData.Instance.FindByCode(src.addressHeader.subDistrictCode);
+                if (subDistrict != null)
+                {
+                    subDistrictName = subDistrict.SubDistrictName;
+                }
+                trgt.address4 = districtName + " " + subDistrictName;
+
+                //provinceCode    String	2	O จังหวัด
+                var province = ProvinceMasterData.Instance.FindByCode(src.addressHeader.subDistrictCode);
+                if (province != null)
+                {
+                    trgt.address5 = province.ProvinceName;
+                }
 
             }
 

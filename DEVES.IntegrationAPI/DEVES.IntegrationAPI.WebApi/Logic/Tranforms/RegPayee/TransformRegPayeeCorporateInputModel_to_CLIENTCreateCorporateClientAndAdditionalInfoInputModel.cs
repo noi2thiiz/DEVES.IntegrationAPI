@@ -7,6 +7,7 @@ using DEVES.IntegrationAPI.WebApi.Templates;
 using System.Globalization;
 using DEVES.IntegrationAPI.Model.RegPayeeCorporate;
 using DEVES.IntegrationAPI.Model.Polisy400;
+using DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
@@ -90,8 +91,39 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 trgt.address1 = src.addressHeader.address1 ?? "";
                 trgt.address2 = src.addressHeader.address2 ?? "";
                 trgt.address3 = src.addressHeader.address3 ?? "";
-                trgt.address4 = src.addressHeader.districtCode + " " + src.addressHeader.subDistrictCode ?? "";
-                trgt.address5 = src.addressHeader.provinceCode ?? "";
+                string districtName = "";
+                string subDistrictName = "";
+                if (!string.IsNullOrEmpty(src.addressHeader.districtCode))
+                {
+                    var district = DistricMasterData.Instance.FindByCode(src.addressHeader.districtCode);
+                    if (district != null)
+                    {
+                        districtName = district.DistrictName;
+                    }
+
+                }
+
+
+                if (!string.IsNullOrEmpty(src.addressHeader?.subDistrictCode))
+                {
+                    var subDistrict = SubDistrictMasterData.Instance.FindByCode(src.addressHeader.subDistrictCode);
+                    if (subDistrict != null)
+                    {
+                        subDistrictName = subDistrict.SubDistrictName;
+                    }
+                }
+
+                trgt.address4 = "" + districtName + " " + subDistrictName;
+
+                //provinceCode    String	2	O จังหวัด
+                if (!string.IsNullOrEmpty(src.addressHeader?.provinceCode))
+                {
+                    var province = ProvinceMasterData.Instance.FindByCode(src.addressHeader.provinceCode);
+                    if (province != null)
+                    {
+                        trgt.address5 = province.ProvinceName;
+                    }
+                }
                 trgt.postCode = src.addressHeader.postalCode ?? "";
 
                 trgt.country = src.addressHeader.country ?? ""; // buzCountry.Instant.CountryList.FirstOrDefault( x => x.Code == src.addressHeader.country)?.ctryPolisy ?? "";

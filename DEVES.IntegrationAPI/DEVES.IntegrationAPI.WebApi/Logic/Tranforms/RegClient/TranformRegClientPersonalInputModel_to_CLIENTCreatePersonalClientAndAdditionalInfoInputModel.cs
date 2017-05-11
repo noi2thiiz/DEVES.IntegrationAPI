@@ -2,6 +2,7 @@
 using DEVES.IntegrationAPI.Model;
 using DEVES.IntegrationAPI.Model.Polisy400;
 using DEVES.IntegrationAPI.Model.RegClientPersonal;
+using DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData;
 using DEVES.IntegrationAPI.WebApi.Templates;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
@@ -30,7 +31,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             if (src.profileInfo != null)
             {
                 //salutation  String	8	M คำนำหน้าชื่อ
-                trgt.salutation = "" + src.profileInfo.salutation ;
+                
+             
+                trgt.salutation = "" + src.profileInfo.salutation;
+
                 //personalName String	60	M ชื่อ
                 trgt.personalName = "" + src.profileInfo.personalName ;
                 //personalSurname String	60	M นามสกุล
@@ -46,6 +50,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 //idDriving String	20	O หมายเลขบัตรใบขับขี่
                 trgt.driverlicense = "" + src.profileInfo.idDriving;
                 //birthDate String	20	O วันเดือนปีเกิด
+                trgt.dtBirthDtate =   src.profileInfo.birthDate;
+
+                trgt.birthPlace = "";
 
                 //natioanality String	3	O Nationality
                 trgt.natioanality = "" + src.profileInfo.nationality ;
@@ -116,10 +123,43 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 //address3 String	30	O ที่อยู่ บรรทัดที่ 3
                 trgt.address3 = "" + src.addressInfo.address3 ;
                 //subDistrictCode String	6	O ตำบล / แขวง
-                trgt.address4 = "" + src.addressInfo.districtCode + " " + src.addressInfo.subDistrictCode ;
+
+                string districtName = "";
+                string subDistrictName = "";
+                if (!string.IsNullOrEmpty(src.addressInfo.districtCode))
+                {
+                    var district = DistricMasterData.Instance.FindByCode(src.addressInfo.districtCode);
+                    if (district != null)
+                    {
+                        districtName = district.DistrictName;
+                    }
+
+                }
                 
+
+                if (!string.IsNullOrEmpty(src.addressInfo?.subDistrictCode))
+                {
+                    var subDistrict = SubDistrictMasterData.Instance.FindByCode(src.addressInfo.subDistrictCode);
+                    if (subDistrict != null)
+                    {
+                        subDistrictName = subDistrict.SubDistrictName;
+                    }
+                }
+              
+                trgt.address4 = "" + districtName + " " + subDistrictName;
+
                 //provinceCode    String	2	O จังหวัด
-                trgt.address5 = "" + src.addressInfo.provinceCode;
+                if (!string.IsNullOrEmpty(src.addressInfo?.provinceCode))
+                {
+                    var province = ProvinceMasterData.Instance.FindByCode(src.addressInfo.provinceCode);
+                    if (province != null)
+                    {
+                        trgt.address5 = province.ProvinceName;
+                    }
+                }
+                
+
+               
                 //postalCode String	10	O ที่อยู่ -> รหัสไปรษณีย์
                 trgt.postCode = "" + src.addressInfo.postalCode ;
                 //country String	3	O ที่อยู่ -> ประเทศ

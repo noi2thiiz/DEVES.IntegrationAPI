@@ -64,12 +64,19 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     try
                     {
                         AddNode("try SearchCrmContactClientId");
-                        List<string> lstCrmClientId = SearchCrmContactClientId(retCLSInqPersClient.data.First().cleansing_id);
+                        List<string> lstCrmClientId =
+                            SearchCrmContactClientId(retCLSInqPersClient.data.First().cleansing_id);
                         if (lstCrmClientId != null && lstCrmClientId.Count == 1)
                         {
                             AddNode("A2 (lstCrmClientId != null)");
                             crmClientId = lstCrmClientId.First();
                         }
+
+
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message);
                     }
                     finally
                     {

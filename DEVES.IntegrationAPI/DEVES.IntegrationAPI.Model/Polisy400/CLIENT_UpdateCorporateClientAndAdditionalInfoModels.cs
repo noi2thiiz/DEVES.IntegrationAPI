@@ -19,6 +19,7 @@ namespace DEVES.IntegrationAPI.Model.Polisy400
         }
         string _dateInCorporate;
 
+
         //"remark": "ทดสอบผ่าน Service Proxy Fulfill Create and Update Corporate",
         public string remark { get; set; }
         //"address1": "43/21 ม.7",

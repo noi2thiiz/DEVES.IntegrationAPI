@@ -7,6 +7,7 @@ using DEVES.IntegrationAPI.WebApi.Templates;
 using DEVES.IntegrationAPI.Model.RegPayeePersonal;
 using DEVES.IntegrationAPI.Model.Polisy400;
 using System.Globalization;
+using DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
@@ -84,8 +85,41 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 trgt.address1 = src.addressInfo.address1 ?? "";
                 trgt.address2 = src.addressInfo.address2 ?? "";
                 trgt.address3 = src.addressInfo.address3 ?? "";
-                trgt.address4 = src.addressInfo.subDistrictCode ?? "";
-                trgt.address5 = src.addressInfo.provinceCode ?? "";
+
+                string districtName = "";
+                string subDistrictName = "";
+                if (!string.IsNullOrEmpty(src.addressInfo.districtCode))
+                {
+                    var district = DistricMasterData.Instance.FindByCode(src.addressInfo.districtCode);
+                    if (district != null)
+                    {
+                        districtName = district.DistrictName;
+                    }
+
+                }
+
+
+                if (!string.IsNullOrEmpty(src.addressInfo?.subDistrictCode))
+                {
+                    var subDistrict = SubDistrictMasterData.Instance.FindByCode(src.addressInfo.subDistrictCode);
+                    if (subDistrict != null)
+                    {
+                        subDistrictName = subDistrict.SubDistrictName;
+                    }
+                }
+
+                trgt.address4 = "" + districtName + " " + subDistrictName;
+
+                //provinceCode    String	2	O จังหวัด
+                if (!string.IsNullOrEmpty(src.addressInfo?.provinceCode))
+                {
+                    var province = ProvinceMasterData.Instance.FindByCode(src.addressInfo.provinceCode);
+                    if (province != null)
+                    {
+                        trgt.address5 = province.ProvinceName;
+                    }
+                }
+
                 trgt.postCode = src.addressInfo.postalCode ?? "";
                 trgt.country = src.addressInfo.country ?? "";
                 trgt.busRes = "";//src.addressInfo.addressType

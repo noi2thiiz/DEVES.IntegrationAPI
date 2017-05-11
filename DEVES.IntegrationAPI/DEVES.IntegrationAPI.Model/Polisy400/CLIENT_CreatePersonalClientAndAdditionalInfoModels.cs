@@ -50,7 +50,8 @@ namespace DEVES.IntegrationAPI.Model.Polisy400
         //"facebook": "148976652",
         public string facebook { get; set; }
         // "birthDate": "",
-        
+
+
         public string birthDate {
             get
             {
@@ -59,6 +60,7 @@ namespace DEVES.IntegrationAPI.Model.Polisy400
                 {
                     CultureInfo enUS = new CultureInfo("en-US");
                     s = dtBirthDtate.Value.ToString(DateTimeCustomFormat, enUS);
+                   
                 }
                 return s;
             }

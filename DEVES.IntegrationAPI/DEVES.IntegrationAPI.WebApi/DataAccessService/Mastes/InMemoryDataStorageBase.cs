@@ -51,7 +51,7 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
             var reader = DataReader;
             var req = new DbRequest {StoreName = storeName};
             var result = reader.Execute(req);
-            Console.WriteLine(result.ToJson());
+            //Console.WriteLine(result.ToJson());
             if (result.Count > 0)
             {
                 foreach (Dictionary<string, dynamic> item in result.Data)

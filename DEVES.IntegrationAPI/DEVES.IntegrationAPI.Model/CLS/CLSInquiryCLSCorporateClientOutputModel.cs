@@ -24,6 +24,7 @@ namespace DEVES.IntegrationAPI.Model.CLS
     }
     public class CLSInquiryCorporateClientOutputModel : BaseDataModel
     {
+        public String sourceData { set; get; } = "";
         public String cleansing_id { set; get; }
         public String clntnum { set; get; }
         public String secuityno { set; get; }

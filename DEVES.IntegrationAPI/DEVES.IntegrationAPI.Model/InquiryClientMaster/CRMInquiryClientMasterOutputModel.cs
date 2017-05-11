@@ -21,6 +21,7 @@ namespace DEVES.IntegrationAPI.Model.InquiryClientMaster
         public CRMInquiryClientContactInfoModel contactInfo { set; get; }
         public CRMInquiryClientAddressInfoModel addressInfo { set; get; }
         public CRMInquiryClientAsrhHeaderModel asrhHeader { set; get; }
+        
     }
     public class CRMInquiryClientGeneralHeaderModel : BaseDataModel
     {

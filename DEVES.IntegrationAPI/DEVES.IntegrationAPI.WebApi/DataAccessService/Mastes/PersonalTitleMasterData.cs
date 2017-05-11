@@ -35,6 +35,6 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
 
     public enum PersonalTitleEntityFields
     {
-        Id,Name,ContractDetail,Polisycode
+        Id,Name,ContractDetail,PolisyCode
     }
 }

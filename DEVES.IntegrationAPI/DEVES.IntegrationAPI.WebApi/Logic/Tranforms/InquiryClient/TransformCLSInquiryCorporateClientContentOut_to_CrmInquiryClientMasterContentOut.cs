@@ -37,15 +37,16 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     trgt.generalHeader = new CRMInquiryClientGeneralHeaderModel();
                     trgt.profileInfo = new CRMInquiryClientProfileInfoModel();
 
-                    Console.WriteLine("40");
+                 
                     trgt.generalHeader.cleansingId = src.cleansing_id;
                     trgt.generalHeader.polisyClientId = src.clntnum;
-                    Console.WriteLine("43");
+                    trgt.generalHeader.sourceData = "CLS";
+
                     trgt.profileInfo.name1 = src.lgivname;
                     trgt.profileInfo.name2 = src.lsurname;
                     trgt.profileInfo.fullName = src.cls_full_name;
                     // trgt.profileInfo.salutationText = src.salutl;
-                       Console.WriteLine("43");
+                   
                     trgt.profileInfo.sex = "U";
                     if (src.cls_sex != null)
                     {
@@ -55,10 +56,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         }
                     }
                    
-                    Console.WriteLine("52");
+                 
                     // trgt.profileInfo.sex = src.cls_sex;
                     trgt.profileInfo.idTax = src.cls_tax_no_new;
-                    Console.WriteLine("61");
+                  
                     try
                     {
                         var master_occupation =
@@ -73,13 +74,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     }
 
 
-                    Console.WriteLine("64");
+                
                     trgt.contactInfo.telephone1 = src.cltphone01;
                     trgt.contactInfo.telephone2 = src.cltphone02;
                     trgt.contactInfo.fax = src.cls_fax;
                     trgt.contactInfo.contactNumber = src.cls_display_phone;
                     trgt.contactInfo.emailAddress = src.email_1;
-                    Console.WriteLine("64");
+                   
 
                     var addrInfo = src.addressListsCollection.FirstOrDefault<Model.CLS.CLSAddressListsCollectionModel>();
                     if (addrInfo != null)
@@ -107,9 +108,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         trgt.addressInfo.latitude = addrInfo.lattitude;
                         trgt.addressInfo.longtitude = addrInfo.longtitude;
                     }
-                    Console.WriteLine("82");
+                  
                     trgtContent.data.Add(trgt);
-                    Console.WriteLine("84");
+                   
                 }
             }
 
