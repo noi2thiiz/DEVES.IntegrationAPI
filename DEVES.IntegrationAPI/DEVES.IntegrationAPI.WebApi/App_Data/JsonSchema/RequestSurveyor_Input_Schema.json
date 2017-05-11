@@ -118,6 +118,10 @@
     },
     "contractPhone": {
       "type": "string"
+    },
+    "surveyTeam": {
+      "type": "string",
+      "maxLength": 10
     }
   },
   "required": [

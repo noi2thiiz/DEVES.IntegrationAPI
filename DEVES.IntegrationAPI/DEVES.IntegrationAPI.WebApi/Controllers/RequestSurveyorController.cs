@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using DEVES.IntegrationAPI.Core.Helper;
+using DEVES.IntegrationAPI.Model.UpdateSurveyStatus;
 
 namespace DEVES.IntegrationAPI.WebApi.Controllers
 {
@@ -122,6 +123,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             rsModel.appointPhone = isStringNull("appointPhone");
             rsModel.contractName = isStringNull("contractName");
             rsModel.contractPhone = isStringNull("contractPhone");
+            rsModel.surveyTeam = isStringNull("surveyTeam");
 
             return rsModel;
         }
@@ -244,6 +246,185 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             }
             else
             {
+                var outputFail = new UpdateSurveyStatusOutputModel_Fail();
+                outputFail.data = new UpdateSurveyStatusDataOutputModel_Fail();
+                outputFail.data.fieldError = new List<UpdateSurveyStatusFieldErrorOutputModel_Fail>();
+
+                List<string> errorMessage = JsonHelper.getReturnError();
+                foreach (var text in errorMessage)
+                {
+                    string fieldMessage = "";
+                    string fieldName = "";
+                    if (text.Contains("Required properties"))
+                    {
+                        int indexEnd = 0;
+                        for (int i = 0; i < text.Length - 1; i++)
+                        {
+                            if (text.Substring(i, 1).Equals(":"))
+                            {
+                                fieldMessage = text.Substring(0, i);
+                                indexEnd = i + 1;
+                            }
+                            if (text.Substring(i, 1).Equals("."))
+                            {
+                                fieldName = text.Substring(indexEnd, i - indexEnd).Trim();
+                                break;
+                            }
+                        }
+
+                        string[] splitProp = fieldName.Split(',');
+                        for (int i = 0; i < splitProp.Length; i++)
+                        {
+                            outputFail.data.fieldError.Add(new UpdateSurveyStatusFieldErrorOutputModel_Fail(splitProp[i].Trim(), fieldMessage));
+                        }
+                    }
+                    else if (text.Contains("exceeds maximum length"))
+                    {
+                        bool isMessage = false;
+                        int endMessage = 0;
+                        int startName = 0;
+                        int endName = 0;
+                        for (int i = 0; i < text.Length - 4; i++)
+                        {
+                            if (text.Substring(i, 4).Equals("Path"))
+                            {
+                                fieldMessage = text.Substring(0, i - 1);
+                                isMessage = true;
+                                endMessage = i + "Path".Length;
+                            }
+                            if (isMessage)
+                            {
+                                if (text.Substring(i, 1).Equals("'"))
+                                {
+                                    if (startName == 0)
+                                    {
+                                        startName = i + 1;
+                                    }
+                                    else if (endName == 0)
+                                    {
+                                        endName = i - 1;
+                                    }
+                                }
+                                if (startName != 0 && endName != 0)
+                                {
+                                    fieldName = text.Substring(startName, i - startName).Trim();
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    else if (text.Contains("minimum length"))
+                    {
+                        bool isMessage = false;
+                        int startName = 0;
+                        int endName = 0;
+                        for (int i = 0; i < text.Length - 7; i++)
+                        {
+                            string check = text.Substring(i, 7);
+                            if (text.Substring(i, 7).Equals("minimum"))
+                            {
+                                fieldMessage = "Required field must not be null";
+                                isMessage = true;
+                            }
+                            if (isMessage)
+                            {
+                                if (text.Substring(i, 1).Equals("'"))
+                                {
+                                    if (startName == 0)
+                                    {
+                                        startName = i + 1;
+                                    }
+                                    else if (endName == 0)
+                                    {
+                                        endName = i - 1;
+                                    }
+                                }
+                                if (startName != 0 && endName != 0)
+                                {
+                                    fieldName = text.Substring(startName, i - startName).Trim();
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    else if (text.Contains("Invalid type."))
+                    {
+                        int startIndex = "Invalid type.".Length;
+                        int endMessage = 0;
+                        int startName = 0;
+                        int endName = 0;
+                        for (int i = startIndex; i < text.Length - 1; i++)
+                        {
+                            if (text.Substring(i, 1).Equals("."))
+                            {
+                                fieldMessage = text.Substring(0, i);
+                                endMessage = i + 1;
+                            }
+                            if (text.Substring(i, 1).Equals("'"))
+                            {
+                                if (startName == 0)
+                                {
+                                    startName = i + 1;
+                                }
+                                else if (endName == 0)
+                                {
+                                    endName = i - 1;
+                                }
+                            }
+                            if (startName != 0 && endName != 0)
+                            {
+                                fieldName = text.Substring(startName, i - startName).Trim();
+                                break;
+                            }
+                        }
+                    }
+                    else if (text.Contains("not defined in enum"))
+                    {
+                        int startName = 0;
+                        int endName = 0;
+                        bool isChecking = true;
+
+                        for (int i = 0; i < text.Length - 1; i++)
+                        {
+                            if (text.Substring(i, 1).Equals(".") && isChecking)
+                            {
+                                fieldMessage = text.Substring(0, i);
+                                isChecking = false;
+                            }
+                            if (text.Substring(i, 1).Equals("'"))
+                            {
+                                if (startName == 0)
+                                {
+                                    startName = i + 1;
+                                }
+                                else if (endName == 0)
+                                {
+                                    endName = i - 1;
+                                }
+                            }
+                            if (startName != 0 && endName != 0)
+                            {
+                                fieldName = text.Substring(startName, i - startName).Trim();
+                                break;
+                            }
+                        }
+                    }
+
+                    if (!text.Contains("Required properties"))
+                    {
+                        outputFail.data.fieldError.Add(new UpdateSurveyStatusFieldErrorOutputModel_Fail(fieldName, fieldMessage));
+                    }
+
+                }
+
+                outputFail.code = "400";
+                outputFail.message = "Invalid Input(s)";
+                outputFail.description = "Some of your input is invalid. Please recheck again.";
+                outputFail.transactionId = "";
+                outputFail.transactionDateTime = DateTime.Now.ToString();
+
+                _log.Error(_logImportantMessage);
+                _log.ErrorFormat("ErrorCode: {0} {1} ErrorDescription: {1}", outputFail.code, Environment.NewLine, outputFail.description);
                 _logImportantMessage = "Error: Input is not valid.";
                 output.eventID = _logImportantMessage;
                 _log.Error(_logImportantMessage);

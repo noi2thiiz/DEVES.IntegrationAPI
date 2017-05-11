@@ -63,7 +63,16 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         contact.pfc_crm_person_id = contentModel.generalHeader.crmClientId;
 
                         // profileInfo
-                        contact.Salutation = contentModel.profileInfo.salutation;
+                        switch(contentModel.profileInfo.salutation)
+                        {
+                            case "0095": contact.Salutation = "นาย"; break;
+                            case "0093": contact.Salutation = "นาง"; break;
+                            case "0094": contact.Salutation = "นางสาว"; break;
+                            case "0006": contact.Salutation = "MR."; break;
+                            case "0368": contact.Salutation = "MS."; break;
+                            case "0155": contact.Salutation = "พระ"; break;
+                            default: contact.Salutation = "คุณ"; break;
+                        }
                         contact.FirstName = contentModel.profileInfo.personalName;
                         contact.LastName = contentModel.profileInfo.personalSurname;
                         Console.WriteLine(contentModel.profileInfo.sex.ToUpper());
@@ -155,6 +164,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         contact.EMailAddress1 = contentModel.contactInfo.emailAddress;
                         contact.pfc_line_id = contentModel.contactInfo.lineID;
                         contact.pfc_facebook = contentModel.contactInfo.facebook;
+                        contact.pfc_source_data = new OptionSetValue(100000003);
 
                         ExecuteTransactionRequest tranReq = new ExecuteTransactionRequest()
                         {

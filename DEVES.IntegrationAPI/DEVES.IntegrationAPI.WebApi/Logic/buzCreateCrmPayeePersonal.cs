@@ -68,7 +68,16 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         // account.AccountNumber = contentModel.generalHeader.crmPayeeId;
 
                         // profileInfo
-                        contact.Salutation = contentModel.profileInfo.salutation;
+                        switch(contentModel.profileInfo.salutation)
+                        {
+                            case "0095": contact.Salutation = "นาย"; break;
+                            case "0093": contact.Salutation = "นาง"; break;
+                            case "0094": contact.Salutation = "นางสาว"; break;
+                            case "0006": contact.Salutation = "MR."; break;
+                            case "0368": contact.Salutation = "MS."; break;
+                            case "0155": contact.Salutation = "พระ"; break;
+                            default: contact.Salutation = "คุณ"; break;
+                        }
                         contact.FirstName = contentModel.profileInfo.personalName;
                         contact.LastName = contentModel.profileInfo.personalSurname;
                         // contentModel.profileInfo.sex;
@@ -153,25 +162,25 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         contact.EMailAddress1 = contentModel.contactInfo.emailAddress;
                         contact.pfc_line_id = contentModel.contactInfo.lineID;
                         contact.pfc_facebook = contentModel.contactInfo.facebook;
+                    contact.pfc_source_data = new OptionSetValue(100000003);
+
+                    // addressInfo
+                    /*
+                    contentModel.addressInfo.address1;
+                    contentModel.addressInfo.address2;
+                    contentModel.addressInfo.address3;
+                    contentModel.addressInfo.subDistrictCode;
+                    contentModel.addressInfo.districtCode;
+                    contentModel.addressInfo.provinceCode;
+                    contentModel.addressInfo.postalCode;
+                    contentModel.addressInfo.country;
+                    contentModel.addressInfo.addressType;
+                    contentModel.addressInfo.latitude;
+                    contentModel.addressInfo.longtitude;
 
 
-                        // addressInfo
-                        /*
-                        contentModel.addressInfo.address1;
-                        contentModel.addressInfo.address2;
-                        contentModel.addressInfo.address3;
-                        contentModel.addressInfo.subDistrictCode;
-                        contentModel.addressInfo.districtCode;
-                        contentModel.addressInfo.provinceCode;
-                        contentModel.addressInfo.postalCode;
-                        contentModel.addressInfo.country;
-                        contentModel.addressInfo.addressType;
-                        contentModel.addressInfo.latitude;
-                        contentModel.addressInfo.longtitude;
-
-                        
-                    */
-                        ExecuteTransactionRequest tranReq = new ExecuteTransactionRequest()
+                */
+                    ExecuteTransactionRequest tranReq = new ExecuteTransactionRequest()
                         {
                             Requests = new OrganizationRequestCollection(),
                             ReturnResponses = true

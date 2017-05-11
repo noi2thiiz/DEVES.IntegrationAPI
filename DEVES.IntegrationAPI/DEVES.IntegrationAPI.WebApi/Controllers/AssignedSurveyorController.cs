@@ -75,6 +75,12 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                                 break;
                             }
                         }
+
+                        string[] splitProp = fieldName.Split(',');
+                        for (int i = 0; i < splitProp.Length; i++)
+                        {
+                            outputFail.data.fieldError.Add(new AssignedSurveyorFieldErrorOutputModel_Fail(splitProp[i].Trim(), fieldMessage));
+                        }
                     }
                     else if (text.Contains("exceeds maximum length"))
                     {
@@ -180,12 +186,14 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                     {
                         int startName = 0;
                         int endName = 0;
+                        bool isChecking = true;
 
-                        for(int i = 0; i < text.Length - 1; i++)
+                        for (int i = 0; i < text.Length - 1; i++)
                         {
-                            if (text.Substring(i, 1).Equals("."))
+                            if (text.Substring(i, 1).Equals(".") && isChecking)
                             {
                                 fieldMessage = text.Substring(0, i);
+                                isChecking = false;
                             }
                             if (text.Substring(i, 1).Equals("'"))
                             {
@@ -206,7 +214,11 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                         }
                     }
 
-                    outputFail.data.fieldError.Add(new AssignedSurveyorFieldErrorOutputModel_Fail(fieldName, fieldMessage));
+                    if (!text.Contains("Required properties"))
+                    {
+                        outputFail.data.fieldError.Add(new AssignedSurveyorFieldErrorOutputModel_Fail(fieldName, fieldMessage));
+                    }
+                    
                 }
 
                 outputFail.code = "400";

@@ -47,5 +47,6 @@ namespace DEVES.IntegrationAPI.Model.RequestSurveyor
         public string appointPhone { get; set; }
         public string contractName { get; set; }
         public string contractPhone { get; set; }
+        public string surveyTeam { get; set; }
     }
 }

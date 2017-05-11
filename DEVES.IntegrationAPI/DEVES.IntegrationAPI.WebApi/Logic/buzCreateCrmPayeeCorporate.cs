@@ -136,7 +136,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         account.EMailAddress1 = contentModel.contactHeader.emailAddress;
                         account.pfc_line_id = contentModel.contactHeader.lineID;
                         account.pfc_facebook = contentModel.contactHeader.facebook;
-
+                        account.pfc_source_data = new OptionSetValue(100000003);
                         /*
                         // addressHeader
                         contentModel.addressHeader.address1;

@@ -20,7 +20,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         protected string nodePart = "nodePart:";
         protected void AddNode(string node)
         {
-            nodePart += node+",==>";
+            nodePart += node + ",==>";
         }
 
         public override BaseDataModel ExecuteInput(object input)
@@ -42,118 +42,162 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             #region Search Client from Cleansing
             AddNode("start Search Client from Cleansing ");
-                //++ Call CLS_InquiryCLSPersonalClient through ServiceProxy
-                InquiryClientMasterInputModel contentModel = (InquiryClientMasterInputModel)input;
-                CLSInquiryPersonalClientInputModel clsPersonalInput = new CLSInquiryPersonalClientInputModel();
-                clsPersonalInput = (CLSInquiryPersonalClientInputModel)TransformerFactory.TransformModel(contentModel, clsPersonalInput);
+            //++ Call CLS_InquiryCLSPersonalClient through ServiceProxy
+            InquiryClientMasterInputModel contentModel = (InquiryClientMasterInputModel)input;
+            CLSInquiryPersonalClientInputModel clsPersonalInput = new CLSInquiryPersonalClientInputModel();
+            clsPersonalInput = (CLSInquiryPersonalClientInputModel)TransformerFactory.TransformModel(contentModel, clsPersonalInput);
 
-                //++ Call CLS_InquiryCLSPersonalClient through ServiceProxy
-                CLSInquiryPersonalClientContentOutputModel retCLSInqPersClient = CallDevesServiceProxy<EWIResCLSInquiryPersonalClient, CLSInquiryPersonalClientContentOutputModel>
-                                                                                        (CommonConstant.ewiEndpointKeyCLSInquiryPersonalClient, clsPersonalInput);
+            //++ Call CLS_InquiryCLSPersonalClient through ServiceProxy
+            CLSInquiryPersonalClientContentOutputModel retCLSInqPersClient = CallDevesServiceProxy<EWIResCLSInquiryPersonalClient, CLSInquiryPersonalClientContentOutputModel>
+                                                                                    (CommonConstant.ewiEndpointKeyCLSInquiryPersonalClient, clsPersonalInput);
 
-                //++ If Found records in Cleansing(CLS) then pour the data from Cleansing to contentOutputModel
+            //++ If Found records in Cleansing(CLS) then pour the data from Cleansing to contentOutputModel
 
-                if (IsSearchFound(retCLSInqPersClient))
-                {   AddNode("A (SearchFound)");
+            if (IsSearchFound(retCLSInqPersClient))
+            {
+                AddNode("A (SearchFound)");
 
-                    AddNode("If Found records in Cleansing(CLS) ");
-                   // Console.WriteLine(retCLSInqPersClient.ToJson());
-                    crmInqContent = (CRMInquiryClientContentOutputModel)TransformerFactory.TransformModel(retCLSInqPersClient, crmInqContent);
-                   
-                string crmClientId = "";
+                AddNode("If Found records in Cleansing(CLS) ");
+                // Console.WriteLine(retCLSInqPersClient.ToJson());
+                crmInqContent = (CRMInquiryClientContentOutputModel)TransformerFactory.TransformModel(retCLSInqPersClient, crmInqContent);
+
+                foreach(CRMInquiryClientOutputDataModel temp in crmInqContent.data) {
+
+                    string crmPolisyClientId = "";
+                    string crmClientId = "";
                     try
                     {
-                        AddNode("try SearchCrmContactClientId");
-                        List<string> lstCrmClientId =
-                            SearchCrmContactClientId(retCLSInqPersClient.data.First().cleansing_id);
+                        List<string> lstCrmClientId = SearchCrmContactClientId(temp.generalHeader.cleansingId);
                         if (lstCrmClientId != null && lstCrmClientId.Count == 1)
                         {
-                            AddNode("A2 (lstCrmClientId != null)");
                             crmClientId = lstCrmClientId.First();
+                            temp.generalHeader.crmClientId = crmClientId;
                         }
-
-
+                        
+                        if(string.IsNullOrEmpty(temp.generalHeader.polisyClientId) || temp.generalHeader.polisyClientId.Equals("0"))
+                        {
+                            List<string> lstPolisyClientId = SearchContactPolisyId(temp.generalHeader.cleansingId);
+                            if (lstPolisyClientId != null && lstPolisyClientId.Count == 1)
+                            {
+                                crmPolisyClientId = lstPolisyClientId.First();
+                                temp.generalHeader.polisyClientId = crmPolisyClientId;
+                            }
+                            
+                        }
+                        
                     }
+
                     catch (Exception e)
                     {
-                        Console.WriteLine(e.Message);
+
                     }
-                    finally
+                }
+                /*
+                string crmPolisyClientId = "";
+                string crmClientId = "";
+                try
+                {
+                    AddNode("try SearchCrmContactClientId");
+                    List<string> lstCrmClientId = SearchCrmContactClientId(retCLSInqPersClient.data.First().cleansing_id);
+                    if (lstCrmClientId != null && lstCrmClientId.Count == 1)
                     {
-                        CRMInquiryClientOutputDataModel 
-                        data = crmInqContent?.data?.FirstOrDefault();
+                        AddNode("A2 (lstCrmClientId != null)");
+                        crmClientId = lstCrmClientId.First();
+                    }
+
+                    List<string> lstPolisyClientId = SearchContactPolisyId(retCLSInqPersClient.data.First().cleansing_id);
+                    if (lstPolisyClientId != null && lstPolisyClientId.Count == 1)
+                    {
+                        AddNode("A2 (lstPolisyClientId != null)");
+                        crmPolisyClientId = lstPolisyClientId.First();
+                    }
+                }
+                */
+                /*
+                finally
+                {
+                    CRMInquiryClientOutputDataModel
+                    data = crmInqContent?.data?.FirstOrDefault();
 
                     if (crmInqContent?.data != null || crmInqContent?.data?.Count > 0)
+                    {
+
+                        data = new CRMInquiryClientOutputDataModel
                         {
-                         
-                            data = new CRMInquiryClientOutputDataModel
-                            {
-                                addressInfo = new CRMInquiryClientAddressInfoModel(),
-                                asrhHeader = new CRMInquiryClientAsrhHeaderModel(),
-                                contactInfo = new CRMInquiryClientContactInfoModel(),
-                                generalHeader = new CRMInquiryClientGeneralHeaderModel(),
-                                profileInfo = new CRMInquiryClientProfileInfoModel()
-                            };
-                        }
-                      
-                       
+                            addressInfo = new CRMInquiryClientAddressInfoModel(),
+                            asrhHeader = new CRMInquiryClientAsrhHeaderModel(),
+                            contactInfo = new CRMInquiryClientContactInfoModel(),
+                            generalHeader = new CRMInquiryClientGeneralHeaderModel(),
+                            profileInfo = new CRMInquiryClientProfileInfoModel()
+                        };
+                    }
+
+
                     data.generalHeader.crmClientId = crmClientId;
-                      
+                    data.generalHeader.polisyClientId = crmPolisyClientId;
                     data.generalHeader.clientType = contentModel.conditionHeader.clientType;
-                      
+
                     data.generalHeader.roleCode = contentModel.conditionHeader.roleCode;
-                        crmInqContent.data.Add(data);
+                    crmInqContent.data.Add(data);
 
-                    }
-                }
-                #endregion Search Client from Cleansing
-                else //+ If not records found in Cleansing(CLS), then Search from Polisy400 
-                #region Search client from Polisy400
-                { AddNode("B (Search client from Polisy400)");
+                }*/
+            }
+            #endregion Search Client from Cleansing
+            else //+ If not records found in Cleansing(CLS), then Search from Polisy400 
+            #region Search client from Polisy400
+            {
+                AddNode("B (Search client from Polisy400)");
 
-                    AddNode("Search client from Polisy400");
-                    try
+                AddNode("Search client from Polisy400");
+                try
+                {
+                    COMPInquiryClientMasterInputModel compInqClientInput = new COMPInquiryClientMasterInputModel();
+                    compInqClientInput = (COMPInquiryClientMasterInputModel)TransformerFactory.TransformModel(contentModel, compInqClientInput);
+
+                    //+ Call CLS_InquiryCLSPersonalClient through ServiceProxy
+                    EWIResCOMPInquiryClientMasterContentModel retCOMPInqClient = CallDevesServiceProxy<COMPInquiryClientMasterOutputModel, EWIResCOMPInquiryClientMasterContentModel>
+                                                                                            (CommonConstant.ewiEndpointKeyCOMPInquiryClient, compInqClientInput);
+
+                    //Found in Polisy400
+                    if (retCOMPInqClient.clientListCollection != null)
                     {
-                        COMPInquiryClientMasterInputModel compInqClientInput = new COMPInquiryClientMasterInputModel();
-                        compInqClientInput = (COMPInquiryClientMasterInputModel)TransformerFactory.TransformModel(contentModel, compInqClientInput);
-
-                        //+ Call CLS_InquiryCLSPersonalClient through ServiceProxy
-                        EWIResCOMPInquiryClientMasterContentModel retCOMPInqClient = CallDevesServiceProxy<COMPInquiryClientMasterOutputModel, EWIResCOMPInquiryClientMasterContentModel>
-                                                                                                (CommonConstant.ewiEndpointKeyCOMPInquiryClient, compInqClientInput);
-
-                        //Found in Polisy400
-                        if (retCOMPInqClient.clientListCollection != null) 
-                        {    AddNode("B2 (ound in Polisy400)");
-                            crmInqContent = (CRMInquiryClientContentOutputModel)TransformerFactory.TransformModel(retCOMPInqClient, crmInqContent);
-                        }
-                        //Not found in Polisy400
-                        else
-                        {
-
-                        }
-
+                        AddNode("B2 (ound in Polisy400)");
+                        crmInqContent = (CRMInquiryClientContentOutputModel)TransformerFactory.TransformModel(retCOMPInqClient, crmInqContent);
                     }
-                    catch (Exception e)
+                    //Not found in Polisy400
+                    else
                     {
-                        throw;
+
                     }
 
                 }
-                #endregion Search client from Polisy400
+                catch (Exception e)
+                {
+                    throw;
+                }
+
+            }
+            #endregion Search client from Polisy400
 
 
-                #region finishing output 
+            #region finishing output 
+            
+            foreach (CRMInquiryClientOutputDataModel temp in crmInqContent.data)
+            {
+                temp.generalHeader.clientType = "P";
+                temp.generalHeader.roleCode = "G";
+            }
 
                 AddNode("END (finishing output )");
-                crmInqContent.code = CONST_CODE_SUCCESS;
-                crmInqContent.message = "SUCCESS";
-                #endregion finishing output 
-            
+            crmInqContent.code = CONST_CODE_SUCCESS;
+            crmInqContent.message = "SUCCESS";
+            #endregion finishing output 
+
             AddNode("STOP (RETURN OUTPUT )");
             Console.WriteLine(nodePart);
             if (crmInqContent.data != null)
             {
-                crmInqContent.data = crmInqContent.data.Where(row => row?.profileInfo?.name1.Trim() != "").ToList();
+                crmInqContent.data = crmInqContent.data.Where(row => row?.profileInfo?.name1.Trim() != "" || row?.profileInfo?.fullName.Trim() != "").ToList();
             }
             return crmInqContent;
         }
