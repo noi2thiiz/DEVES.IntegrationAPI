@@ -3,7 +3,7 @@
   "type": "object",
   "properties": {
 
-    "rvpClaimNo": {
+    "RvpClaimNo": {
       "type": "string",
       "minLength": 1,
       "maxLength": 20
@@ -13,7 +13,7 @@
       "type": "object",
       "properties": {
         "crmPolicyDetailId": {
-          "type": "string", 
+          "type": "string",
           "maxLength": 40
         },
         "crmPolicyDetailCode": {
@@ -100,8 +100,7 @@
         }
       },
       "required": [
-        "driverFullName",
-        "driverClientId"
+        "driverFullName"
       ]
     },
 
@@ -120,14 +119,6 @@
         },
         "accidentDescCode": {
           "type": "string",
-          "enum": [
-            "101",
-            "102",
-            "114",
-            "201",
-            "999"
-
-          ],
           "minLength": 1,
           "maxLength": 100
         },
@@ -270,12 +261,7 @@
         "claimType",
         "sendOutSurveyorCode",
         "reportAccidentResultDate",
-        "caseOwnerCode",
-        "caseOwnerFullName",
-        "informByCrmId",
-        "informByCrmName",
-        "submitByCrmId",
-        "submitByCrmName",
+      
         "accidentLegalResult",
         "numOfAccidentInjury",
         "numOfAccidentParty"

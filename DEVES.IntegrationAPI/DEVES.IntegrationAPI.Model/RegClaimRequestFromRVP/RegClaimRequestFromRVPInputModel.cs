@@ -9,7 +9,7 @@ namespace DEVES.IntegrationAPI.Model.RegClaimRequestFromRVP
 {
     public class RegClaimRequestFromRVPInputModel
     {
-        public string rvpCliamNo { get; set; }
+        public string RvpClaimNo { get; set; }
         public PolicyInfoModel policyInfo { get; set; }
         public PolicyDriverInfoModel policyDriverInfo { get; set; }
         public ClaimInformModel claimInform { get; set; }
