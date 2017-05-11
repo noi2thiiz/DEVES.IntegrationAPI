@@ -68,7 +68,16 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         // account.AccountNumber = contentModel.generalHeader.crmPayeeId;
 
                         // profileInfo
-                        contact.Salutation = contentModel.profileInfo.salutation;
+                        switch(contentModel.profileInfo.salutation)
+                        {
+                            case "0095": contact.Salutation = "นาย"; break;
+                            case "0093": contact.Salutation = "นาง"; break;
+                            case "0094": contact.Salutation = "นางสาว"; break;
+                            case "0006": contact.Salutation = "MR."; break;
+                            case "0368": contact.Salutation = "MS."; break;
+                            case "0155": contact.Salutation = "พระ"; break;
+                            default: contact.Salutation = "คุณ"; break;
+                        }
                         contact.FirstName = contentModel.profileInfo.personalName;
                         contact.LastName = contentModel.profileInfo.personalSurname;
                         // contentModel.profileInfo.sex;
