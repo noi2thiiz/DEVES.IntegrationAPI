@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-
+using DEVES.IntegrationAPI.Core.Helper;
 using Newtonsoft.Json;
 
 using DEVES.IntegrationAPI.Model;
@@ -10,6 +10,7 @@ using DEVES.IntegrationAPI.Model.EWI;
 using DEVES.IntegrationAPI.Model.CLS;
 using DEVES.IntegrationAPI.Model.Polisy400;
 using DEVES.IntegrationAPI.Model.InquiryClientMaster;
+using DEVES.IntegrationAPI.WebApi.Logic.Services;
 using DEVES.IntegrationAPI.WebApi.Templates;
 using WebGrease.Css.Visitor;
 
@@ -17,22 +18,18 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 {
     public class buzCrmInquiryPersonalClientMaster : BuzCommand
     {
-        protected string nodePart = "nodePart:";
-        protected void AddNode(string node)
-        {
-            nodePart += node + ",==>";
-        }
+   
 
         public override BaseDataModel ExecuteInput(object input)
         {
-            AddNode("START");
+            
             #region Prepare box for output 
             CRMInquiryClientContentOutputModel crmInqContent = (CRMInquiryClientContentOutputModel)Model.DataModelFactory.GetModel(typeof(CRMInquiryClientContentOutputModel));
             crmInqContent.transactionDateTime = DateTime.Now;
             crmInqContent.transactionId = TransactionId;
             #endregion Prepare box for output 
 
-            AddNode("35");
+            
 
             #region Search client from CRM
 
@@ -41,7 +38,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             #endregion
 
             #region Search Client from Cleansing
-            AddNode("start Search Client from Cleansing ");
+           
             //++ Call CLS_InquiryCLSPersonalClient through ServiceProxy
             InquiryClientMasterInputModel contentModel = (InquiryClientMasterInputModel)input;
             CLSInquiryPersonalClientInputModel clsPersonalInput = new CLSInquiryPersonalClientInputModel();
@@ -55,9 +52,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             if (IsSearchFound(retCLSInqPersClient))
             {
-                AddNode("A (SearchFound)");
-
-                AddNode("If Found records in Cleansing(CLS) ");
+               
                 // Console.WriteLine(retCLSInqPersClient.ToJson());
                 crmInqContent = (CRMInquiryClientContentOutputModel)TransformerFactory.TransformModel(retCLSInqPersClient, crmInqContent);
 
@@ -73,18 +68,18 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                             crmClientId = lstCrmClientId.First();
                             temp.generalHeader.crmClientId = crmClientId;
                         }
-                        
-                        if(string.IsNullOrEmpty(temp.generalHeader.polisyClientId) || temp.generalHeader.polisyClientId.Equals("0"))
+
+                        if (string.IsNullOrEmpty(temp.generalHeader.polisyClientId) || temp.generalHeader.polisyClientId.Equals("0"))
                         {
-                            List<string> lstPolisyClientId = SearchContactPolisyId(temp.generalHeader.cleansingId);
-                            if (lstPolisyClientId != null && lstPolisyClientId.Count == 1)
+                            var lstPolisyClient = PolisyClientService.Instance.FindByCleansingId(temp.generalHeader.cleansingId, contentModel.conditionHeader.clientType.ToUpperIgnoreNull());
+                            //List<string> lstPolisyClientId = SearchContactPolisyId(temp.generalHeader.cleansingId);
+                            if (lstPolisyClient?.cleansingId != null)
                             {
-                                crmPolisyClientId = lstPolisyClientId.First();
-                                temp.generalHeader.polisyClientId = crmPolisyClientId;
+                                temp.generalHeader.polisyClientId = lstPolisyClient.cleansingId;
                             }
-                            
+
                         }
-                        
+
                     }
 
                     catch (Exception e)
@@ -193,8 +188,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             crmInqContent.message = "SUCCESS";
             #endregion finishing output 
 
-            AddNode("STOP (RETURN OUTPUT )");
-            Console.WriteLine(nodePart);
+            
+         
             if (crmInqContent.data != null)
             {
                 crmInqContent.data = crmInqContent.data.Where(row => row?.profileInfo?.name1.Trim() != "" || row?.profileInfo?.fullName.Trim() != "").ToList();

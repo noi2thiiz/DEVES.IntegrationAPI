@@ -35,6 +35,8 @@ namespace DEVES.IntegrationAPI.Model.Polisy400
         public String branchCode { set; get; }
 
         public string backDay { set; get; }
+        public string cleansingId { set; get; }
+       
 
         public COMPInquiryClientMasterInputModel()
         {

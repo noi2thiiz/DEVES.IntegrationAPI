@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-
+using DEVES.IntegrationAPI.Core.Helper;
 using Newtonsoft.Json;
 
 using DEVES.IntegrationAPI.Model;
@@ -11,6 +11,7 @@ using DEVES.IntegrationAPI.Model.CLS;
 using DEVES.IntegrationAPI.Model.MASTER;
 using DEVES.IntegrationAPI.Model.Polisy400;
 using DEVES.IntegrationAPI.Model.InquiryClientMaster;
+using DEVES.IntegrationAPI.WebApi.Logic.Services;
 using DEVES.IntegrationAPI.WebApi.Templates;
 
 
@@ -71,13 +72,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                                 temp.generalHeader.crmClientId = crmClientId;
                             }
 
+                          
                             if (string.IsNullOrEmpty(temp.generalHeader.polisyClientId) || temp.generalHeader.polisyClientId.Equals("0"))
                             {
-                                List<string> lstPolisyClientId = SearchAccountPolisyId(temp.generalHeader.cleansingId);
-                                if (lstPolisyClientId != null && lstPolisyClientId.Count == 1)
+                                var lstPolisyClient = PolisyClientService.Instance.FindByCleansingId(temp.generalHeader.cleansingId, contentModel.conditionHeader.clientType.ToUpperIgnoreNull());
+                               
+                                if (lstPolisyClient?.cleansingId != null)
                                 {
-                                    crmPolisyClientId = lstPolisyClientId.First();
-                                    temp.generalHeader.polisyClientId = crmPolisyClientId;
+                                    temp.generalHeader.polisyClientId = lstPolisyClient.cleansingId;
                                 }
 
                             }

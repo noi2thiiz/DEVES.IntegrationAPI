@@ -22,11 +22,11 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
     public class RegClaimRequestFromRVPController : ApiController
     {
 
-       
+         
         public object Post([FromBody]object value)
         {
-            Console.WriteLine(value.ToString());
-            var client = new RESTClient("https://crmappqa.deves.co.th/XrmApi/Api/RegClientPersonal");
+           
+            var client = new RESTClient("http://localhost/rvp-service/api/RegClaimRequestFromRVP");
             var result = client.Execute(value.ToString());
             if (result.StatusCode != HttpStatusCode.OK)
             {

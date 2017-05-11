@@ -54,15 +54,17 @@ namespace DEVES.IntegrationAPI.WebApi
         //private TableDependency.SqlClient.SqlTableDependency dependency;
         //System.Configuration.ConfigurationManager.AppSettings['CRM_CUSTOMAPP_DB'].ToString();
         //"Data Source=DESKTOP-Q30CAGJ;Initial Catalog=CRM_CUSTOM_APP;User ID=sa;Password=patiwat";
-        
-            
-        string ConnectionString = System.Configuration.ConfigurationManager.AppSettings["CRM_CUSTOMAPP_DB"].ToString();
-        
+
+
+        private string ConnectionString;
+
+
         private readonly SqlTableDependency<AppConfigEntity> dependency;
         public void Startup()
         {
             try
             {
+                ConnectionString = System.Configuration.ConfigurationManager.AppSettings["CRM_CUSTOMAPP_DB"].ToString();
                 Console.WriteLine("Start auto update config");
 
 
