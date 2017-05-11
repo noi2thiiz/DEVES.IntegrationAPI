@@ -14,7 +14,26 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 {
     public class PolisyClientService: BaseProxyService
     {
-        
+        #region Singleton
+        private static PolisyClientService _instance;
+
+        private PolisyClientService()
+        {
+        }
+
+        public static PolisyClientService Instance
+        {
+            get
+            {
+                if (_instance != null) return _instance;
+                _instance = new PolisyClientService();
+
+                return _instance;
+            }
+        }
+
+
+        #endregion
         public COMPInquiryClientMasterClientModel FindByCleansingId(string cleansingClientId,string clientType="P")
         {
             var input = new COMPInquiryClientMasterInputModel
@@ -39,21 +58,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 
 
 
-        private static PolisyClientService _instance;
 
-        private PolisyClientService()
-        {
-        }
+       
 
-        public static PolisyClientService Instance
-        {
-            get
-            {
-                if (_instance != null) return _instance;
-                _instance = new PolisyClientService();
-
-                return _instance;
-            }
-        }
     }
 }

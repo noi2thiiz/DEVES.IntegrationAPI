@@ -141,9 +141,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             else //+ If not records found in Cleansing(CLS), then Search from Polisy400 
             #region Search client from Polisy400
             {
-                AddNode("B (Search client from Polisy400)");
-
-                AddNode("Search client from Polisy400");
+                
                 try
                 {
                     COMPInquiryClientMasterInputModel compInqClientInput = new COMPInquiryClientMasterInputModel();
@@ -156,7 +154,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     //Found in Polisy400
                     if (retCOMPInqClient.clientListCollection != null)
                     {
-                        AddNode("B2 (ound in Polisy400)");
+                        
                         crmInqContent = (CRMInquiryClientContentOutputModel)TransformerFactory.TransformModel(retCOMPInqClient, crmInqContent);
                     }
                     //Not found in Polisy400
@@ -183,7 +181,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 temp.generalHeader.roleCode = "G";
             }
 
-                AddNode("END (finishing output )");
+                
             crmInqContent.code = CONST_CODE_SUCCESS;
             crmInqContent.message = "SUCCESS";
             #endregion finishing output 
