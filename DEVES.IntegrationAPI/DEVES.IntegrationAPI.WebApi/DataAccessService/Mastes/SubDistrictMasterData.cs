@@ -26,10 +26,13 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
             }
         }
 
-        public string GetPrefix(string code)
+        public string GetPrefix(SubDistrictEntity entity)
         {
-            return "";
+            var code = entity.ProvinceCode;
+            return code == "10" ? "แขวง" : "ตำบล";
         }
+
+
 
     }
 

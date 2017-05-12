@@ -18,6 +18,16 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
                 return _instance;
             }
         }
+
+        public string GetSubDistrictPrefix(string code)
+        {
+            return code == "10" ? "แขวง" : "ตำบล";
+         }
+
+        public string GetDistrictPrefix(string code)
+        {
+            return code == "10" ? "เขต" : "อำเภอ";
+        }
     }
     public class ProvinceEntity
     {
