@@ -98,7 +98,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     var district = DistricMasterData.Instance.FindByCode(src.addressHeader.districtCode);
                     if (district != null)
                     {
-                        districtName = district.DistrictName;
+                        districtName = DistricMasterData.Instance.GetNameWithPrefix(district);
                     }
 
                 }
@@ -109,11 +109,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     var subDistrict = SubDistrictMasterData.Instance.FindByCode(src.addressHeader.subDistrictCode);
                     if (subDistrict != null)
                     {
-                        subDistrictName = subDistrict.SubDistrictName;
+                        subDistrictName = SubDistrictMasterData.Instance.GetNameWithPrefix(subDistrict);
                     }
                 }
 
-                trgt.address4 = "" + subDistrictName + " " + districtName;
+                trgt.address4 = ("" + subDistrictName + " " + districtName).Trim();
+
 
                 //provinceCode    String	2	O จังหวัด
                 if (!string.IsNullOrEmpty(src.addressHeader?.provinceCode))
@@ -121,7 +122,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     var province = ProvinceMasterData.Instance.FindByCode(src.addressHeader.provinceCode);
                     if (province != null)
                     {
-                        trgt.address5 = province.ProvinceName;
+                        trgt.address5 = ProvinceMasterData.Instance.GetNameWithPrefix(province);
                     }
                 }
                 trgt.postCode = src.addressHeader.postalCode ?? "";

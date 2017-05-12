@@ -100,24 +100,37 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                 string districtName = "";
                 string subDistrictName = "";
-                var district = DistricMasterData.Instance.FindByCode(src.addressHeader.districtCode);
-                if (district != null)
+                if (!string.IsNullOrEmpty(src.addressHeader.districtCode))
                 {
-                    districtName = district.DistrictName;
+                    var district = DistricMasterData.Instance.FindByCode(src.addressHeader.districtCode);
+                    if (district != null)
+                    {
+                        districtName = DistricMasterData.Instance.GetNameWithPrefix(district);
+                    }
+
                 }
 
-                var subDistrict = SubDistrictMasterData.Instance.FindByCode(src.addressHeader.subDistrictCode);
-                if (subDistrict != null)
+
+                if (!string.IsNullOrEmpty(src.addressHeader?.subDistrictCode))
                 {
-                    subDistrictName = subDistrict.SubDistrictName;
+                    var subDistrict = SubDistrictMasterData.Instance.FindByCode(src.addressHeader.subDistrictCode);
+                    if (subDistrict != null)
+                    {
+                        subDistrictName = SubDistrictMasterData.Instance.GetNameWithPrefix(subDistrict);
+                    }
                 }
-                trgt.address4 = "" + subDistrictName + " " + districtName;
+
+                trgt.address4 = ("" + subDistrictName + " " + districtName).Trim();
+
 
                 //provinceCode    String	2	O จังหวัด
-                var province = ProvinceMasterData.Instance.FindByCode(src.addressHeader.subDistrictCode);
-                if (province != null)
+                if (!string.IsNullOrEmpty(src.addressHeader?.provinceCode))
                 {
-                    trgt.address5 = province.ProvinceName;
+                    var province = ProvinceMasterData.Instance.FindByCode(src.addressHeader.provinceCode);
+                    if (province != null)
+                    {
+                        trgt.address5 = ProvinceMasterData.Instance.GetNameWithPrefix(province);
+                    }
                 }
 
             }

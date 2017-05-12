@@ -53,7 +53,10 @@
   </Choose>
   <ItemGroup>
     <Compile Include="DataAccessService\DataAdapter\RESTClient\RESTClientTests.cs" />
+    <Compile Include="DataAccessService\Mastes\DistricMasterDataTests.cs" />
     <Compile Include="DataAccessService\Mastes\InMemoryDataStorageBaseTests.cs" />
+    <Compile Include="DataAccessService\Mastes\ProvinceMasterDataTests.cs" />
+    <Compile Include="DataAccessService\Mastes\SubDistrictMasterDataTests.cs" />
     <Compile Include="Logic\DataAccess\Adapter\DevesServiceProxyAdapterTests.cs" />
     <Compile Include="Logic\Services\CleansingClientServiceTests.cs" />
     <Compile Include="Logic\Services\PolisyClientServiceTests.cs" />

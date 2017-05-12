@@ -26,18 +26,19 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
             }
         }
 
-        public string GetPrefix(SubDistrictEntity entity)
-        {
-            var code = entity.ProvinceCode;
-            return code == "10" ? "แขวง" : "ตำบล";
-        }
+      
 
 
         public string GetNameWithPrefix(SubDistrictEntity entity)
         {
+
             if (string.IsNullOrEmpty(entity?.ProvinceCode))
             {
-               return entity?.SubDistrictName ?? "";
+               return  "";
+            }
+            if (entity?.SubDistrictCode == "000000")
+            {
+                return "";
             }
             if (entity?.ProvinceCode == "10")
             {

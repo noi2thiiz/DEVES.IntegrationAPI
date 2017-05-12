@@ -17,13 +17,24 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
             }
         }
 
-        internal string GetNameWithPrefix(DistrictEntity entity)
+        public string GetNameWithPrefix(DistrictEntity entity)
         {
             var provinceCode = entity?.DistrictCode.Substring(0, 2);
+
+           
+
             if (string.IsNullOrEmpty(entity?.DistrictCode))
             {
-                return entity?.DistrictName ?? "";
+                return "";
             }
+
+            if (entity.DistrictCode == "0000")
+            {
+                return "";
+            }
+
+
+
             if (provinceCode == "10")
             {
                 return "เขต" + entity?.DistrictName;

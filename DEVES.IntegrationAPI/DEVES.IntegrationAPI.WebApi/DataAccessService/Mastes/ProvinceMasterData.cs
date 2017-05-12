@@ -23,9 +23,15 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
 
         public string GetNameWithPrefix(ProvinceEntity province)
         {
+            
+
             if (string.IsNullOrEmpty(province?.ProvinceCode))
             {
-                return province?.ProvinceName ?? "";
+                return "";
+            }
+            if (province?.ProvinceCode=="00")
+            {
+                return "";
             }
 
             if (province?.ProvinceCode == "10")
