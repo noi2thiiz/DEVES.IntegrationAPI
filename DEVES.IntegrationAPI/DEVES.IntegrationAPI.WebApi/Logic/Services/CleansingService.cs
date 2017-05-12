@@ -42,8 +42,18 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
             };
             Console.WriteLine(input.ToJson());
 
+            string endpointKey ;
+            if (clientType == "P")
+            {
+                endpointKey = CommonConstant.EWI_ENDPOINT_CLSDeleteCLSPersonalClient;
+                
+            }
+            else
+            {
+                endpointKey = CommonConstant.EWI_ENDPOINT_CLSDeleteCLSCorporateClient;
+            }
+            string endpoint = AppConfig.Instance.Get(endpointKey);
 
-            const string endpoint = "https://crmappdev.deves.co.th/proxy/xml.ashx?https://192.168.3.194/ServiceProxy/ClaimMotor/jsonproxy/CLS_DeleteCLSCorporateClient";
 
             var result = SendRequest(input, endpoint);
             if (result.StatusCode != HttpStatusCode.OK)

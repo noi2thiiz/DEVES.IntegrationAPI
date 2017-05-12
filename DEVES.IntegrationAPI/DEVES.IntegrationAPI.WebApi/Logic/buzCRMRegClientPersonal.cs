@@ -11,6 +11,7 @@ using DEVES.IntegrationAPI.Model.RegClientPersonal;
 using DEVES.IntegrationAPI.Model.CLS;
 using DEVES.IntegrationAPI.Model.Polisy400;
 using DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData;
+using DEVES.IntegrationAPI.WebApi.Logic.Services;
 using DEVES.IntegrationAPI.WebApi.Logic.Validator;
 using DEVES.IntegrationAPI.WebApi.Templates.Exceptions;
 
@@ -18,13 +19,17 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 {
     public class buzCRMRegClientPersonal : BuzCommand
     {
+        //จะใช้เก็บค่า CleansingId เอาไว้ เพื่อใช้ลบออกจาก Cleansing หากมี service ใดๆที่ทำงานไม่สำเร็จ
+        protected string newCleansingId;
+       
+
         protected RegClientPersonalInputModel RegClientPersonalInput { get; set; }
-     
+
         protected CLSCreatePersonalClientContentOutputModel clsCreateClientContent { get; set; }
         protected RegClientPersonalContentOutputModel regClientPersonOutput { get; set; }
         protected RegClientPersonalDataOutputModel_Pass regClientPersonDataOutput { get; set; }
 
-       
+
         public void TranFormInput()
         {
             // ป้องกันปัญหา locus ส่ง json มาไม่ครบ
@@ -44,19 +49,19 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             {
                 RegClientPersonalInput.profileInfo = new ProfileInfoModel();
             }
-          
+
             // Validate Master Data before sending to other services
             var validator = new MasterDataValidator();
-       
+
 
             //profileInfo.salutation
             RegClientPersonalInput.profileInfo.salutation = validator.TryConvertSalutationCode(
                 "profileInfo.salutation",
-                 RegClientPersonalInput?.profileInfo?.salutation);
-           
+                RegClientPersonalInput?.profileInfo?.salutation);
+
             //"profileInfo.nationality"
             RegClientPersonalInput.profileInfo.nationality = validator.TryConvertNationalityCode(
-                "profileInfo.nationality", 
+                "profileInfo.nationality",
                 RegClientPersonalInput?.profileInfo?.nationality);
 
             //"profileInfo.occupation"
@@ -78,9 +83,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             //"profileInfo.districtCode"
             RegClientPersonalInput.addressInfo.districtCode = validator.TryConvertDistrictCode(
-                "addressInfo.districtCode",
-                RegClientPersonalInput?.addressInfo?.districtCode,
-                RegClientPersonalInput?.addressInfo?.provinceCode)
+                    "addressInfo.districtCode",
+                    RegClientPersonalInput?.addressInfo?.districtCode,
+                    RegClientPersonalInput?.addressInfo?.provinceCode)
                 ;
 
             //"profileInfo.subDistrictCode"
@@ -89,15 +94,15 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 RegClientPersonalInput?.addressInfo?.subDistrictCode,
                 RegClientPersonalInput?.addressInfo?.districtCode,
                 RegClientPersonalInput?.addressInfo?.provinceCode
-                );
+            );
             //"profileInfo.addressType"
             RegClientPersonalInput.addressInfo.addressType = validator.TryConvertAddressTypeCode(
                 "addressInfo.addressType",
                 RegClientPersonalInput?.addressInfo?.addressType
             );
 
-         
-         
+
+
 
 
             if (validator.Invalid())
@@ -108,7 +113,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
         public override BaseDataModel ExecuteInput(object input)
         {
-            RegClientPersonalInput = (RegClientPersonalInputModel) input;
+            RegClientPersonalInput = (RegClientPersonalInputModel)input;
 
             TranFormInput();
 
@@ -147,11 +152,15 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     {
                         regClientPersonDataOutput.cleansingId = clsCreateClientContent.data.cleansingId;
 
+
                         regClientPersonOutput.data = new List<RegClientPersonalDataOutputModel>();
                         regClientPersonOutput.data.Add(regClientPersonDataOutput);
+
+                        newCleansingId = clsCreateClientContent.data.cleansingId;
+
                     }
                     RegClientPersonalInput =
-                        (RegClientPersonalInputModel) TransformerFactory.TransformModel(clsCreateClientContent,
+                        (RegClientPersonalInputModel)TransformerFactory.TransformModel(clsCreateClientContent,
                             RegClientPersonalInput);
                 }
                 else if (clsCreateClientContent.code == "CLS-1109")
@@ -171,13 +180,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 {
                     throw new BuzErrorException(
                         "500",
-                         $"Error:{clsCreateClientContent.code}:{clsCreateClientContent.message}",
-                         "An error occurred from the external service (CLSCreateCorporateClient)",
+                        $"Error:{clsCreateClientContent.code}:{clsCreateClientContent.message}",
+                        "An error occurred from the external service (CLSCreateCorporateClient)",
 
                         "CLS",
                         TransactionId);
                     //throw new Exception(String.Format("Error:{0}, Message:{1}", ewiRes.responseCode , ewiRes.responseMessage));
                 }
+
             }
             else
             {
@@ -217,7 +227,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         regClientPersonDataOutput.polisyClientId = polCreateClientContent.clientID;
 
                         RegClientPersonalInput =
-                            (RegClientPersonalInputModel) TransformerFactory.TransformModel(polCreateClientContent,
+                            (RegClientPersonalInputModel)TransformerFactory.TransformModel(polCreateClientContent,
                                 RegClientPersonalInput);
                     }
                 }
@@ -227,7 +237,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 {
                     buzCreateCrmClientPersonal cmdCreateCrmClient = new buzCreateCrmClientPersonal();
                     CreateCrmPersonInfoOutputModel crmContentOutput =
-                        (CreateCrmPersonInfoOutputModel) cmdCreateCrmClient.Execute(RegClientPersonalInput);
+                        (CreateCrmPersonInfoOutputModel)cmdCreateCrmClient.Execute(RegClientPersonalInput);
 
                     if (crmContentOutput.code == AppConst.CODE_SUCCESS)
                     {
@@ -258,19 +268,29 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 else
                 {
                     regClientPersonOutput.code = AppConst.CODE_FAILED;
+                    //เมื่อเกิด error ใด ๆ ใน service อื่นให้ลบ
+                    var deleteResult = CleansingClientService.Instance.RemoveByCleansingId(newCleansingId, "P");
+                   
+               
+                    if (!deleteResult.success)
+                    {
+                        regClientPersonOutput.message = "Failed to complete the transaction, and it does not rollback";
+                        regClientPersonOutput.data = new List<RegClientPersonalDataOutputModel>();
+                        regClientPersonOutput.data.Add(regClientPersonDataOutput);
+                    }
+                   
+
                 }
             }
-            // All Error
-            // แก้ตาม ที่ อาจารย์พรชัย บอก เพื่อให้เขาเอา เลข cleansingIdไปซ่อมข้อมูลได้
+            // Exception Error 
             if (regClientPersonOutput.code != AppConst.CODE_SUCCESS)
             {
                 if (string.IsNullOrEmpty(regClientPersonOutput.message))
                 {
-                    regClientPersonOutput.message = "Failed client registration did not complete";
+                    regClientPersonOutput.message = "Failed to complete the transaction";
                 }
-                regClientPersonOutput.data = new List<RegClientPersonalDataOutputModel>();
-                regClientPersonOutput.data.Add(regClientPersonDataOutput);
             }
+
 
 
             return regClientPersonOutput;

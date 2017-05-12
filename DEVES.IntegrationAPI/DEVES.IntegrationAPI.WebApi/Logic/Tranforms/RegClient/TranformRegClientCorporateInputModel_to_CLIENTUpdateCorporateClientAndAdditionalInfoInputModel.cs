@@ -111,7 +111,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 {
                     subDistrictName = subDistrict.SubDistrictName;
                 }
-                trgt.address4 = districtName + " " + subDistrictName;
+                trgt.address4 = "" + subDistrictName + " " + districtName;
 
                 //provinceCode    String	2	O จังหวัด
                 var province = ProvinceMasterData.Instance.FindByCode(src.addressHeader.subDistrictCode);

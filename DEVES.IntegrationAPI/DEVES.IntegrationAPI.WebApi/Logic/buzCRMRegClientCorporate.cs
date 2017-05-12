@@ -18,6 +18,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 {
     public class buzCRMRegClientCorporate : BuzCommand
     {
+        //จะใช้เก็บค่า CleansingId เอาไว้ เพื่อใช้ลบออกจาก Cleansing หากมี service ใดๆที่ทำงานไม่สำเร็จ
+        protected string newCleansingId;
 
         public RegClientCorporateOutputModel_Fail regFail { get; set; } = new RegClientCorporateOutputModel_Fail();
         protected RegClientCorporateInputModel regClientCorporateInput { get; set; }
@@ -155,7 +157,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                             if (clsCreateClientContent.code == CommonConstant.CODE_SUCCESS)
                             {
-                                //TODO เอา ค่าที่ได้ไปเป็น output
+                               //TODO เอา ค่าที่ได้ไปเป็น output
+                                newCleansingId = clsCreateClientContent.data.cleansingId;
                             }
                             else if (clsCreateClientContent.code == "CLS-1109")
                             {

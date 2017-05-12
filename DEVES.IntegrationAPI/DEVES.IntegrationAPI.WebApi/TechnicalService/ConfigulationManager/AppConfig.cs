@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Text;
+using DEVES.IntegrationAPI.Core.Helper;
 using DEVES.IntegrationAPI.WebApi.DataAccessService.DataAdapter;
 using DEVES.IntegrationAPI.WebApi.Templates;
 using TableDependency;
@@ -66,6 +67,7 @@ namespace DEVES.IntegrationAPI.WebApi
             {
                 
                 ConnectionString = System.Configuration.ConfigurationManager.AppSettings["CRM_CUSTOMAPP_DB"].ToString();
+                
                 Console.WriteLine("Start auto update config");
 
 
@@ -82,9 +84,18 @@ namespace DEVES.IntegrationAPI.WebApi
             }
            
         }
+        private bool isStartTed = false;
+        public void StartupForUnitTest()
+        {
+            if (!isStartTed)
+            {
+                updateConfig();
+            }
+        }
 
         private void updateConfig()
         {
+            string env = System.Configuration.ConfigurationManager.AppSettings["ENVIRONMENT"] ?? "QA";
             Console.WriteLine("UpdateConfig Change");
             RestDataReader rest = new RestDataReader();
             var request = new DbRequest
@@ -92,7 +103,7 @@ namespace DEVES.IntegrationAPI.WebApi
                 StoreName = "sp_Query_AppConfig",
 
             };
-            request.AddParam("Environment","QA");
+            request.AddParam("Environment", env.ToUpperIgnoreNull());
             var result = rest.Execute(request);
             if (result.Success)
             {

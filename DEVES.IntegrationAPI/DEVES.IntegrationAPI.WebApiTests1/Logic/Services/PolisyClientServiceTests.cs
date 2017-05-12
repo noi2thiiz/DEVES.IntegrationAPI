@@ -16,7 +16,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services.Tests
         [TestMethod()]
         public void FindByCleansingClientIdTest()
         {
-            AppConfig.Instance.Startup();
+            AppConfig.Instance.StartupForUnitTest();
             var result = PolisyClientService.Instance.FindByCleansingId("C2017-100000341","P");
             Console.WriteLine(result.ToJson());
             

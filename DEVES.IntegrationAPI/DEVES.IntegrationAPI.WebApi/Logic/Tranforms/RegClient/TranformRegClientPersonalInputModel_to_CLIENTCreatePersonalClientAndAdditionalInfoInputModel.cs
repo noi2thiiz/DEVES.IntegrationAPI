@@ -146,7 +146,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     }
                 }
               
-                trgt.address4 = "" + districtName + " " + subDistrictName;
+                trgt.address4 = "" + subDistrictName + " " + districtName;
 
                 //provinceCode    String	2	O จังหวัด
                 if (!string.IsNullOrEmpty(src.addressInfo?.provinceCode))

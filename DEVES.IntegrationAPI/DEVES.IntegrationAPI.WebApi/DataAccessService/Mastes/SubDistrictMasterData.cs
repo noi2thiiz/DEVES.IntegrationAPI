@@ -26,6 +26,11 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
             }
         }
 
+        public string GetPrefix(string code)
+        {
+            return "";
+        }
+
     }
 
     public class SubDistrictEntity

@@ -26,6 +26,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         public const string ewiEndpointKeyCLIENTCreateCorporateClient = "EWI_ENDPOINT_CLIENTCreateCorporateClient";
         public const string ewiEndpointKeyCLIENTUpdateCorporateClient = "EWI_ENDPOINT_CLIENTUpdateCorporateClient";
 
+
+        public const string EWI_ENDPOINT_CLSDeleteCLSPersonalClient = "EWI_ENDPOINT_CLSDeleteCLSPersonalClient";
+        public const string EWI_ENDPOINT_CLSDeleteCLSCorporateClient = "EWI_ENDPOINT_CLSDeleteCLSCorporateClient";
+
+        
         public const string sqlcmd_Get_RegClaimInfo = "sp_CustomApp_RegClaimInfo_Incident";
 
 
@@ -56,6 +61,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         public const string QA_SERVER_NAME = "8121-CRM-QA";
 
         public const string CONST_DEFAULT_UID = "";
+       
 
 
         public static DateTime GetDevesAPINullDate()

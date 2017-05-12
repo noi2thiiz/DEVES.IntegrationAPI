@@ -290,6 +290,7 @@
     <Compile Include="Controllers\CreateCRMCorporateClientMasterController.cs" />
     <Compile Include="Controllers\CreateCRMPersonalClientMasterController.cs" />
     <Compile Include="Controllers\CRMInquiryClientMasterController.cs" />
+    <Compile Include="Controllers\EwiServiceProxyController.cs" />
     <Compile Include="Controllers\InquiryClientMasterController.cs" />
     <Compile Include="Controllers\InquiryConsultingHistoryController.cs" />
     <Compile Include="Controllers\InquiryCRMPayeeListController.cs" />

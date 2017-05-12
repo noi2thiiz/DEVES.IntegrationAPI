@@ -73,12 +73,21 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             }
             */
             inputData = data;
-
+            Console.WriteLine(CommonConstant.ewiEndpointKeyLOCUSClaimRegistration);
+            Console.WriteLine("---inputData----");
+            Console.WriteLine("---inputData----");
+            Console.WriteLine(inputData.ToJson());
             //+ Call Locus_RegisterClaim through ServiceProxy
+             Console.WriteLine("---contentModel----");
+            Console.WriteLine("---contentModel----");
             string uid = GetDomainName(contentModel.CurrentUserId);
             Model.EWI.EWIResponseContent ret = (Model.EWI.EWIResponseContent)CallDevesJsonProxy<Model.EWI.EWIResponse>(CommonConstant.ewiEndpointKeyLOCUSClaimRegistration, inputData, uid);
-            if(ret.data == null)
+            Console.WriteLine("---ret---");
+            Console.WriteLine("---ret---");
+            Console.WriteLine(ret.ToJson());
+            if (ret.data == null)
             {
+                
                 //+ Response
                 ClaimRegistrationContentOutputModel contentOutputFail = new ClaimRegistrationContentOutputModel();
                 contentOutputFail.data = new List<ClaimRegistrationOutputModel>();
