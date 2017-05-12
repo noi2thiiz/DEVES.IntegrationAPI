@@ -88,7 +88,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             string typeName = this.GetType().Name;
             throw new NotImplementedException();
         }
-
+        /*
         private string GetEwiUsername()
         {
 
@@ -110,17 +110,17 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
 
             return AppConfig.Instance.Get("EWI_GID") ?? "DevesClaim";
         }
-
+        */
 
         internal BaseContentJsonProxyOutputModel CallDevesJsonProxy<T1>(string EWIendpointKey, BaseDataModel JSON, string UID=CONST_DEFAULT_UID) where T1 : BaseEWIResponseModel 
         {
             EWIRequest reqModel = new EWIRequest()
             {
                 //user & password must be switch to get from calling k.Ton's API rather than fixed values.
-                username = GetEwiUsername(),
-                password = GetEwiPassword(),
-                uid = GetEwiUid(),
-                gid = GetEwiGid(),
+                username = AppConfig.GetEwiUsername(),
+                password = AppConfig.GetEwiPassword(),
+                uid = AppConfig.GetEwiUid(),
+                gid = AppConfig.GetEwiGid(),
                 token = GetLatestToken(),
                 content = JSON
             };
@@ -167,10 +167,10 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             EWIRequest reqModel = new EWIRequest()
             {
                 //user & password must be switch to get from calling k.Ton's API rather than fixed values.
-                username = GetEwiUsername(),
-                password = GetEwiPassword(),
-                uid = GetEwiUid(),
-                gid = GetEwiGid(),
+                username = AppConfig.GetEwiUsername(),
+                password = AppConfig.GetEwiPassword(),
+                uid = AppConfig.GetEwiUid(),
+                gid = AppConfig.GetEwiGid(),
                 token = GetLatestToken(),
                 content = JSON
                

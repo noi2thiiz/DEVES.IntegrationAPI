@@ -167,10 +167,10 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
              */
             EWIRequest reqModel = new EWIRequest()
             {
-                username = "sysdynamic",
-                password = "REZOJUNtN04=",
-                gid = "CRMClaim",
-                uid = "CRMClaim",
+                username = AppConfig.GetEwiUsername(),
+                password = AppConfig.GetEwiPassword(),
+                uid = AppConfig.GetEwiUid(),
+                gid = AppConfig.GetEwiGid(),
                 token = "",
                 content = iSurveyInputModel
             };
@@ -180,8 +180,8 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             HttpClient client = new HttpClient();
 
             // URL
-            var ewienpoint = System.Configuration.ConfigurationManager.AppSettings["API_ENDPOINT_EWIPROXY_SERVICE"];
-            client.BaseAddress = new Uri(ewienpoint);
+            var ewiEndpoint = System.Configuration.ConfigurationManager.AppSettings["API_ENDPOINT_EWIPROXY_SERVICE"];
+            client.BaseAddress = new Uri(ewiEndpoint);
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             client.DefaultRequestHeaders.Add("Accept-Encoding", "utf-8");
@@ -244,6 +244,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             {
                 _logImportantMessage += "IncidentId: " + contentModel.incidentId;
                 output = HandleMessage(contentText, contentModel);
+                return Request.CreateResponse<RequestSurveyorDataOutputModel>(output);
             }
             else
             {
@@ -427,11 +428,13 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 _log.Error(_logImportantMessage);
                 _log.ErrorFormat("ErrorCode: {0} {1} ErrorDescription: {1}", outputFail.code, Environment.NewLine, outputFail.description);
                 _logImportantMessage = "Error: Input is not valid.";
-                output.eventID = _logImportantMessage;
+                // output.eventID = "";
+                output.errorMessage = _logImportantMessage;
                 _log.Error(_logImportantMessage);
                 //                _log.ErrorFormat("ErrorCode: {0} {1} ErrorDescription: {1}", output.responseCode, Environment.NewLine, output.responseMessage);
+                return Request.CreateResponse<RequestSurveyorDataOutputModel>(output);
             }
-            return Request.CreateResponse<RequestSurveyorDataOutputModel>(output);
+            
         }
 
         private RequestSurveyorDataOutputModel HandleMessage(string valueText, RequestSurveyorInputModel_WebService content)

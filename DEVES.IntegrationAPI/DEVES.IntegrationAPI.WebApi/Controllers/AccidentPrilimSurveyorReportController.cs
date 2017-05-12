@@ -260,7 +260,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 {
                     output.code = "500";
                     output.message = "False";
-                    output.description = "iSurvey Status ไม่ใด้อยู่ในสถานะเสร็จสมบูรณ์";
+                    output.description = "iSurvey Status ไม่ได้อยู่ในสถานะเสร็จสมบูรณ์";
                     output.transactionId = "";
                     output.transactionDateTime = DateTime.Now.ToString();
 
