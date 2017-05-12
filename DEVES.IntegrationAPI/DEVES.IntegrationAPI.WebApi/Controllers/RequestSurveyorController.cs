@@ -428,7 +428,8 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 _log.Error(_logImportantMessage);
                 _log.ErrorFormat("ErrorCode: {0} {1} ErrorDescription: {1}", outputFail.code, Environment.NewLine, outputFail.description);
                 _logImportantMessage = "Error: Input is not valid.";
-                output.eventID = _logImportantMessage;
+                // output.eventID = "";
+                output.errorMessage = _logImportantMessage;
                 _log.Error(_logImportantMessage);
                 //                _log.ErrorFormat("ErrorCode: {0} {1} ErrorDescription: {1}", output.responseCode, Environment.NewLine, output.responseMessage);
                 return Request.CreateResponse<RequestSurveyorDataOutputModel>(output);
