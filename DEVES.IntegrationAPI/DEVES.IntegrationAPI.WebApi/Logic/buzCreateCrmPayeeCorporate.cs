@@ -137,6 +137,15 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         account.pfc_line_id = contentModel.contactHeader.lineID;
                         account.pfc_facebook = contentModel.contactHeader.facebook;
                         account.pfc_source_data = new OptionSetValue(100000003);
+
+                        // new 6 parameters from P'Guide
+                        account.pfc_telephone1 = contentModel.contactHeader.telephone1;
+                        account.pfc_telephone2 = contentModel.contactHeader.telephone2;
+                        account.pfc_telephone3 = contentModel.contactHeader.telephone3;
+                        account.pfc_fax = contentModel.contactHeader.fax;
+                        account.pfc_moblie_phone = contentModel.contactHeader.mobilePhone;
+                        account.pfc_emailaddress1 = contentModel.contactHeader.emailAddress;
+
                         /*
                         // addressHeader
                         contentModel.addressHeader.address1;

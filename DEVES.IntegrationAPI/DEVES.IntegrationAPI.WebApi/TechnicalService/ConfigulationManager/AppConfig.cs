@@ -170,6 +170,29 @@ namespace DEVES.IntegrationAPI.WebApi
             }
 
         }
+
+        public static string GetEwiUsername()
+        {
+
+            return AppConfig.Instance.Get("EWI_USERNAME");
+        }
+        public static string GetEwiPassword()
+        {
+
+            return AppConfig.Instance.Get("EWI_PASSWORD");
+        }
+
+        public static string GetEwiUid()
+        {
+
+            return AppConfig.Instance.Get("EWI_UID");
+        }
+        public static string GetEwiGid()
+        {
+
+            return AppConfig.Instance.Get("EWI_GID");
+        }
+
     }
 
     public class AppConfigEntity

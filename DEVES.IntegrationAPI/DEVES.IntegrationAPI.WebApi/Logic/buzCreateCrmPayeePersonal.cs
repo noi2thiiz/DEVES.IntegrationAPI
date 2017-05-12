@@ -164,6 +164,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         contact.pfc_facebook = contentModel.contactInfo.facebook;
                     contact.pfc_source_data = new OptionSetValue(100000003);
 
+                    // new 6 parameters from P'Guide
+                    contact.pfc_telephone1 = contentModel.contactInfo.telephone1;
+                    contact.pfc_telephone2 = contentModel.contactInfo.telephone2;
+                    contact.pfc_telephone3 = contentModel.contactInfo.telephone3;
+                    contact.pfc_fax = contentModel.contactInfo.fax;
+                    contact.pfc_moblie_phone1 = contentModel.contactInfo.mobilePhone;
+                    contact.pfc_email_address1 = contentModel.contactInfo.emailAddress;
+
                     // addressInfo
                     /*
                     contentModel.addressInfo.address1;
