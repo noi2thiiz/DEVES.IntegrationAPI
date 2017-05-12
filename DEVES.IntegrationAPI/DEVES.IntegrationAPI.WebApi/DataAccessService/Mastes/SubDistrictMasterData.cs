@@ -33,7 +33,23 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
         }
 
 
-
+        public string GetNameWithPrefix(SubDistrictEntity entity)
+        {
+            if (string.IsNullOrEmpty(entity?.ProvinceCode))
+            {
+               return entity?.SubDistrictName ?? "";
+            }
+            if (entity?.ProvinceCode == "10")
+            {
+                return "แขวง"+ entity?.SubDistrictName;
+            }
+            else
+            {
+                return "ต." + entity?.SubDistrictName;
+            }
+          
+            
+        }
     }
 
     public class SubDistrictEntity

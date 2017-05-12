@@ -19,14 +19,24 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
             }
         }
 
-        public string GetSubDistrictPrefix(string code)
-        {
-            return code == "10" ? "แขวง" : "ตำบล";
-         }
+        
 
-        public string GetDistrictPrefix(string code)
+        public string GetNameWithPrefix(ProvinceEntity province)
         {
-            return code == "10" ? "เขต" : "อำเภอ";
+            if (string.IsNullOrEmpty(province?.ProvinceCode))
+            {
+                return province?.ProvinceName ?? "";
+            }
+
+            if (province?.ProvinceCode == "10")
+            {
+                return province.ProvinceName;
+            }
+            else 
+            {
+                return "จ." + province?.ProvinceName;
+            }
+          
         }
     }
     public class ProvinceEntity

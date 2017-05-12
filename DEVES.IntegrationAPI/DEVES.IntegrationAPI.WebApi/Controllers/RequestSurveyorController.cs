@@ -180,7 +180,8 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             HttpClient client = new HttpClient();
 
             // URL
-            client.BaseAddress = new Uri("http://192.168.3.194/ServiceProxy/ClaimMotor/jsonservice/");
+            var ewienpoint = System.Configuration.ConfigurationManager.AppSettings["API_ENDPOINT_EWIPROXY_SERVICE"];
+            client.BaseAddress = new Uri(ewienpoint);
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             client.DefaultRequestHeaders.Add("Accept-Encoding", "utf-8");
