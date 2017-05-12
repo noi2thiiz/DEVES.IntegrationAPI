@@ -34,6 +34,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 
 
         #endregion
+        /// <summary>
+        /// สำหรับหา Polisy Client จาก CleansingId โดยที่หากพบมากกว่า 1 รายการจะ return รายการที่มี clientNumber มากสุด
+        /// </summary>
+        /// <param name="cleansingClientId"></param>
+        /// <param name="clientType"></param>
+        /// <returns></returns>
         public COMPInquiryClientMasterClientModel FindByCleansingId(string cleansingClientId,string clientType="P")
         {
             var input = new COMPInquiryClientMasterInputModel
@@ -44,8 +50,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
             Console.WriteLine(input.ToJson());
 
             
-            const string endpoint = "https://crmappdev.deves.co.th/proxy/xml.ashx?http://192.168.3.194/ServiceProxy/ClaimMotor/jsonservice/COMP_InquiryClientMaster";
-       
+             string endpoint = AppConfig.Instance.Get("EWI_ENDPOINT_COMPInquiryClientMaster");
+             Console.WriteLine(endpoint);
             var result = SendRequest(input, endpoint);
             if (result.StatusCode != HttpStatusCode.OK)
             {
@@ -53,7 +59,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
             }
             var jss = new JavaScriptSerializer();
             var contentObj = jss.Deserialize<COMPInquiryClientMasterOutputModel>(result.Content);
-            return contentObj?.content?.clientListCollection?[0].clientList;
+            var clientListCollection = contentObj?.content?.clientListCollection;
+            //เลือกรายการที่มีค่า clientNumber มากที่สุด
+            var selecetedResult = clientListCollection?.OrderByDescending(r => r.clientList.clientNumber).First();
+            return selecetedResult?.clientList;
         }
 
 

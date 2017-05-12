@@ -65,17 +65,17 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         List<string> lstCrmClientId = SearchCrmContactClientId(temp.generalHeader.cleansingId);
                         if (lstCrmClientId != null && lstCrmClientId.Count == 1)
                         {
-                            crmClientId = lstCrmClientId.First();
-                            temp.generalHeader.crmClientId = crmClientId;
+                            
+                            temp.generalHeader.crmClientId = lstCrmClientId.First();
                         }
-
+                        // ดึงค่าจาก Polisy มาเติมในกรณีที่ข้อมูลสร้างใหม่ CLS จะยังไม่มีเลข Polisy
                         if (string.IsNullOrEmpty(temp.generalHeader.polisyClientId) || temp.generalHeader.polisyClientId.Equals("0"))
                         {
                             var lstPolisyClient = PolisyClientService.Instance.FindByCleansingId(temp.generalHeader.cleansingId, contentModel.conditionHeader.clientType.ToUpperIgnoreNull());
                             //List<string> lstPolisyClientId = SearchContactPolisyId(temp.generalHeader.cleansingId);
                             if (lstPolisyClient?.cleansingId != null)
                             {
-                                temp.generalHeader.polisyClientId = lstPolisyClient.cleansingId;
+                                temp.generalHeader.polisyClientId = lstPolisyClient.clientNumber;
                             }
 
                         }

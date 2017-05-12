@@ -64,6 +64,7 @@ namespace DEVES.IntegrationAPI.WebApi
         {
             try
             {
+                
                 ConnectionString = System.Configuration.ConfigurationManager.AppSettings["CRM_CUSTOMAPP_DB"].ToString();
                 Console.WriteLine("Start auto update config");
 

@@ -68,8 +68,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                             List<string> lstCrmClientId = SearchCrmAccountClientId(retCLSInqCorpClient.data.First().cleansing_id);
                             if (lstCrmClientId != null && lstCrmClientId.Count == 1)
                             {
-                                crmClientId = lstCrmClientId.First();
-                                temp.generalHeader.crmClientId = crmClientId;
+                              
+                                temp.generalHeader.crmClientId = lstCrmClientId.First();
                             }
 
                           
@@ -79,7 +79,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                                
                                 if (lstPolisyClient?.cleansingId != null)
                                 {
-                                    temp.generalHeader.polisyClientId = lstPolisyClient.cleansingId;
+                                    temp.generalHeader.polisyClientId = lstPolisyClient.clientNumber;
                                 }
 
                             }
