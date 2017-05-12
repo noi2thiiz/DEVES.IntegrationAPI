@@ -27,7 +27,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             }
             if (src.profileInfo != null)
             {
-                trgt.TITLE = src.profileInfo.salutation; //buzMasterSalutation.Instant.SalutationList.FirstOrDefault( t => t.titlePolisy == src.profileInfo.salutation).titleSAP ?? "";
+                trgt.TITLE = buzMasterSalutation.Instant.SalutationList.FirstOrDefault( t => t.titlePolisy == src.profileInfo.salutation).titleSAP ?? "";
                 trgt.NAME1 = src.profileInfo.personalName ?? "";
                 trgt.NAME2 = src.profileInfo.personalSurname ?? "";
                 trgt.TAX3 = src.profileInfo.idCitizen ?? "";
@@ -90,7 +90,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             trgt.TAX2 = "";
             trgt.TAX4 = "";
             trgt.WHTCTRY = "TH";
-            trgt.TITLE = "";
+            //trgt.TITLE = "";
 
             if (string.IsNullOrEmpty(trgt.RECPTYPE))
             {
