@@ -19,5 +19,8 @@
         public const string QA_SERVER_NAME = "8121-CRM-QA";
 
         public const string CONST_DEFAULT_UID = "";
+
+        public const string PRO1_SERVER_NAME = "CRM-APP01";
+        public const string PRO2_SERVER_NAME = "CRM-APP02";
     }
 }

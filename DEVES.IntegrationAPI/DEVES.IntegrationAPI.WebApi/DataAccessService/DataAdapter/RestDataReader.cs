@@ -18,7 +18,7 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.DataAdapter
                 var endpoint = "https://crmappqa.deves.co.th/internal-service/api";
                 try
                 {
-                    if (string.IsNullOrEmpty(System.Configuration.ConfigurationManager
+                    if (false ==string.IsNullOrEmpty(System.Configuration.ConfigurationManager
                         .AppSettings["API_ENDPOINT_INTERNAL_SERVICE"]))
                     {
                         endpoint = System.Configuration.ConfigurationManager

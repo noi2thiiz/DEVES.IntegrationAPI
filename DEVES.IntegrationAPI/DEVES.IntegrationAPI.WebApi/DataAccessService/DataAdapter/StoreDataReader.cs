@@ -17,7 +17,7 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.DataAdapter
 
         public StoreDataReader()
         {
-            this.ConnectionString = @"Data Source=192.168.8.121;Initial Catalog=CRMQA_MSCRM;Persist Security Info=True;User ID=CRMDevelop;Password=Develop%D;Connection Timeout=600";
+            this.ConnectionString = System.Configuration.ConfigurationManager.AppSettings["CRM_CUSTOMAPP_DB_SERVER"];
         }
 
         public DbResult Execute(DbRequest req)

@@ -30,7 +30,9 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
              StoreName = storeName;
              FieldCodeName = fieldCodeName;
             if (null != DataList2) return;
-            if (System.Environment.MachineName == AppConst.QA_SERVER_NAME)
+            if (System.Environment.MachineName == AppConst.QA_SERVER_NAME 
+                || System.Environment.MachineName == AppConst.PRO1_SERVER_NAME
+                || System.Environment.MachineName == AppConst.PRO2_SERVER_NAME)
             {
                 DataReader = new StoreDataReader();
                 Console.WriteLine("StoreDataReader");

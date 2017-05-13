@@ -23,7 +23,9 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
 
                 apiLogEntry.ServiceName = apiLogEntry.ServiceName.Replace("OutputModel", "");
 
-                if (System.Environment.MachineName == AppConst.QA_SERVER_NAME)
+                if (System.Environment.MachineName == AppConst.QA_SERVER_NAME 
+                    || System.Environment.MachineName == AppConst.PRO1_SERVER_NAME 
+                    || System.Environment.MachineName == AppConst.PRO2_SERVER_NAME)
                 {
                    ExecuteSql(apiLogEntry);
                 }
