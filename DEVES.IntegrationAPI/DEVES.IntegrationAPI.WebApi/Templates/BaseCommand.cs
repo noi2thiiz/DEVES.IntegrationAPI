@@ -138,7 +138,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             string EWIendpoint = CommonConstant.PROXY_ENDPOINT+ GetEWIEndpoint(EWIendpointKey);
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, EWIendpoint);
             request.Content = new StringContent(jsonReqModel, System.Text.Encoding.UTF8, "application/json");
-            request.Headers.Add("ContentType", "application/json; charset=UTF-8");
+            //request.Headers.Add("ContentType", "application/json; charset=UTF-8");
             // เช็ค check reponse 
             HttpResponseMessage response = client.SendAsync(request).Result;
             response.EnsureSuccessStatusCode();
@@ -178,6 +178,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                
             };
             
+
             jsonReqModel = JsonConvert.SerializeObject(reqModel, Formatting.Indented, new EWIDatetimeConverter(JSON.DateTimeCustomFormat));
 
             client = new HttpClient(); 
@@ -193,7 +194,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, EWIendpoint);
             // Console.WriteLine("==========jsonReqModel========");
             //Console.WriteLine(jsonReqModel.ToJson());
-            request.Headers.Add("ContentType", "application/json; charset=UTF-8");
+            //request.Headers.Add("ContentType", "application/json; charset=UTF-8");
             request.Content = new StringContent(jsonReqModel, System.Text.Encoding.UTF8, "application/json");
             //Console.WriteLine("==========request========");
             //Console.WriteLine(request.ToJson());
