@@ -8,6 +8,7 @@ using Newtonsoft.Json.Serialization;
 using System.Web.Http.Cors;
 using DEVES.IntegrationAPI.WebApi.TechnicalService;
 using DEVES.IntegrationAPI.WebApi.TechnicalService.TransactionLogger;
+using DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData;
 
 namespace DEVES.IntegrationAPI.WebApi
 {
@@ -22,6 +23,7 @@ namespace DEVES.IntegrationAPI.WebApi
 
             //start watch config change
             AppConfig.Instance.Startup();
+            CountryMasterData.Instance.InitData();
 
 
 

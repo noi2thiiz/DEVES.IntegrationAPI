@@ -53,7 +53,7 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData.Tests
         [TestMethod()]
         public void OccupationMasterDataFindByCodeTest()
         {
-            var result = OccupationMasterData.Instance.FindByCode("00003");
+            var result = OccupationMasterData.Instance.FindByCode("00023");
             Assert.AreEqual("081", result.PolisyCode);
         }
         [TestMethod()]

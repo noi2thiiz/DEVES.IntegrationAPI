@@ -29,19 +29,20 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
             Console.WriteLine("Load "+ storeName);
              StoreName = storeName;
              FieldCodeName = fieldCodeName;
-            if (null != DataList2) return;
-            if (System.Environment.MachineName == AppConst.QA_SERVER_NAME 
-                || System.Environment.MachineName == AppConst.PRO1_SERVER_NAME
-                || System.Environment.MachineName == AppConst.PRO2_SERVER_NAME)
-            {
-                DataReader = new StoreDataReader();
-                Console.WriteLine("StoreDataReader");
-            }
-            else
-            {
-                Console.WriteLine("RestDataReader");
-                DataReader = new RestDataReader();
-            }
+            // if (null != DataList2) return;
+            // if (System.Environment.MachineName == AppConst.QA_SERVER_NAME 
+            //     || System.Environment.MachineName == AppConst.PRO1_SERVER_NAME
+            //     || System.Environment.MachineName == AppConst.PRO2_SERVER_NAME)
+            // {
+            var ConnectionString = System.Configuration.ConfigurationManager.AppSettings["CRMDB"];
+            DataReader = new StoreDataReader(ConnectionString);
+            //    Console.WriteLine("StoreDataReader");
+           // }
+           // else
+           // {
+           //     Console.WriteLine("RestDataReader");
+           //     DataReader = new RestDataReader();
+          //  }
            
            
             DataList = new Dictionary<string, dynamic>();

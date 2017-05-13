@@ -185,12 +185,12 @@ namespace DEVES.IntegrationAPI.WebApi
         public static string GetEwiUid()
         {
 
-            return AppConfig.Instance.Get("EWI_UID") ?? "DevesClaim";
+            return AppConfig.Instance.Get("EWI_UID") ?? "CRM_CLNT";
         }
         public static string GetEwiGid()
         {
 
-            return AppConfig.Instance.Get("EWI_GID") ?? "DevesClaim";
+            return AppConfig.Instance.Get("EWI_GID") ?? "CRM_CLNT";
         }
 
     }

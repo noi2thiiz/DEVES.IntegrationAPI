@@ -20,6 +20,11 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
             }
         }
 
+        public void InitData()
+        {
+            Load("sp_Query_Countries", "CountryCode");
+        }
+
     }
 
     public class CountryEntity
