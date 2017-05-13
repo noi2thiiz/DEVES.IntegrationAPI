@@ -499,6 +499,7 @@
     </Content>
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\_references.js" />
+    <None Include="Web.config_For_Production.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="NewFolder1\" />
