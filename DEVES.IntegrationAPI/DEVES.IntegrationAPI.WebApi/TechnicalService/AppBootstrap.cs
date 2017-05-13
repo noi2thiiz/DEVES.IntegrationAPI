@@ -48,10 +48,10 @@ namespace DEVES.IntegrationAPI.WebApi
 
             //check connection 
             var crmCustomConnectionString = System.Configuration.ConfigurationManager.AppSettings["CRM_CUSTOMAPP_DB"].ToString();
-            TestConnection(crmCustomConnectionString);
+            //TestConnection(crmCustomConnectionString);
 
             var crmdbConnectionString = System.Configuration.ConfigurationManager.AppSettings["CRMDB"].ToString();
-            TestConnection(crmdbConnectionString);
+            //TestConnection(crmdbConnectionString);
 
         }
 

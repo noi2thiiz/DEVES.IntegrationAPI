@@ -21,7 +21,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         private QueryInfo q = new QueryInfo();
         private System.Data.DataTable dt = new System.Data.DataTable();
 
-        private string isStringNull(string a)
+        protected string isStringNull(string a)
         {
             if (dt.Rows[0][a] == null)
             {
@@ -32,7 +32,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 return dt.Rows[0][a].ToString();
             }
         }
-        private int isIntNull(string a)
+        protected int isIntNull(string a)
         {
             if (string.IsNullOrEmpty(dt.Rows[0][a].ToString()))
             {
@@ -43,7 +43,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 return Convert.ToInt32(dt.Rows[0][a]);
             }
         }
-        private double isDoubleNull(string a)
+        protected double isDoubleNull(string a)
         {
             if (string.IsNullOrEmpty(dt.Rows[0][a].ToString()))
             {
@@ -55,7 +55,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             }
         }
 
-        public DateTime isDateTimeNull(string a)
+        protected DateTime isDateTimeNull(string a)
         {
             string datetime = "";
 
