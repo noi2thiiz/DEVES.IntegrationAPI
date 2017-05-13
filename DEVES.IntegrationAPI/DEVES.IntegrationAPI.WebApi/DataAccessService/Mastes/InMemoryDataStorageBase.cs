@@ -23,34 +23,46 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
         protected string StoreName { get; set; }
         protected string FieldCodeName { get; set; }
 
+        public void InitData()
+        {
+            Clear();
+            Load(StoreName, FieldCodeName);
+        }
 
+        private void Clear()
+        {
+            DataList = null;
+            DataList2 = null;
+            DataList3 = null;
+        }
         protected void Load(string storeName, string fieldCodeName)
         {
-            Console.WriteLine("Load "+ storeName);
-             StoreName = storeName;
+            
+            StoreName = storeName;
              FieldCodeName = fieldCodeName;
-            // if (null != DataList2) return;
-            // if (System.Environment.MachineName == AppConst.QA_SERVER_NAME 
-            //     || System.Environment.MachineName == AppConst.PRO1_SERVER_NAME
-            //     || System.Environment.MachineName == AppConst.PRO2_SERVER_NAME)
-            // {
-            var ConnectionString = System.Configuration.ConfigurationManager.AppSettings["CRMDB"];
-            DataReader = new StoreDataReader(ConnectionString);
-            //    Console.WriteLine("StoreDataReader");
-           // }
-           // else
-           // {
-           //     Console.WriteLine("RestDataReader");
-           //     DataReader = new RestDataReader();
-          //  }
-           
-           
-            DataList = new Dictionary<string, dynamic>();
-            DataList2 = new Dictionary<string, dynamic>();
-           
+            
+             if (System.Environment.MachineName == AppConst.QA_SERVER_NAME 
+                 || System.Environment.MachineName == AppConst.PRO1_SERVER_NAME
+                 || System.Environment.MachineName == AppConst.PRO2_SERVER_NAME)
+             {
+                 var connectionString = AppConfig.Instance.GetCRMDBConfigurationString();
+                 DataReader = new StoreDataReader(connectionString);
+               // Console.WriteLine("StoreDataReader");
+            }
+            else
+            {
+                //Console.WriteLine("RestDataReader");
+                DataReader = new RestDataReader();
+           }
 
 
 
+
+
+
+            // สร้าง tmp data เพื่อให้โหลดช้อมูลให้เรียบร้อยก่อน ก่อนที่จะนำไปใช้
+            Dictionary<string, dynamic> DataListTmp1 = new Dictionary<string, dynamic>();
+            Dictionary<string, dynamic> DataListTmp2 = new Dictionary<string, dynamic>();
             var reader = DataReader;
             var req = new DbRequest {StoreName = storeName};
             var result = reader.Execute(req);
@@ -64,18 +76,21 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
                     var code = (string) item[fieldCodeName];
                     if (string.IsNullOrEmpty(code)) continue;
                    
-                    if (!DataList.ContainsKey(code))
+                    if (!DataListTmp1.ContainsKey(code))
                     {
-                        DataList.Add(code.ToString(), item);
+                        DataListTmp1.Add(code.ToString(), item);
                         if (item["Id"] is string)
                         {
                             item["Id"] = new Guid(item["Id"]);
                         }
-                        DataList2.Add(((Guid)item["Id"]).ToString(), item);
+                        DataListTmp2.Add(((Guid)item["Id"]).ToString(), item);
                         
                     }
                    
                 }
+
+                DataList = DataListTmp1;
+                DataList2 = DataListTmp2;
             }
             else
             {
