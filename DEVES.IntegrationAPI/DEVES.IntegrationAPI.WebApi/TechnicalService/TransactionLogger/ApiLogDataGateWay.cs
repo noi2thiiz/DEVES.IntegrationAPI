@@ -49,14 +49,9 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
         {
 
             var configurationString = "";
-            if (System.Environment.MachineName == AppConst.QA_SERVER_NAME)
-            {
+         
                 configurationString = WebConfigurationManager.AppSettings["CRM_CUSTOMAPP_DB_SERVER"];
-            }
-            else
-            {
-                configurationString = WebConfigurationManager.AppSettings["CRM_CUSTOMAPP_DB_TON"];
-            }
+         
            
 
             // var configurationString = CrmConfigurationSettings.AppSettings.Get("settings.CRM_CUSTOM_DB");
@@ -139,7 +134,8 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
         public static void CallWebService(ApiLogEntry apiLogEntry)
         {
             CultureInfo UsaCulture = new CultureInfo("en-US");
-            var client = new RESTClient("https://crmappqa.deves.co.th/internal-service/api/StoreService/ext");
+            var endpoint = WebConfigurationManager.AppSettings["API_ENDPOINT_INTERNAL_SERVICE"];
+            var client = new RESTClient(endpoint+"/StoreService/ext");
             var req = new DbRequest {StoreName = "sp_Insert_TransactionLog"};
             req.AddParam("TransactionID",""+ apiLogEntry.TransactionID);
             
