@@ -174,23 +174,23 @@ namespace DEVES.IntegrationAPI.WebApi
         public static string GetEwiUsername()
         {
 
-            return AppConfig.Instance.Get("EWI_USERNAME");
+            return AppConfig.Instance.Get("EWI_USERNAME") ?? "sysdynamic";
         }
         public static string GetEwiPassword()
         {
 
-            return AppConfig.Instance.Get("EWI_PASSWORD");
+            return AppConfig.Instance.Get("EWI_PASSWORD") ?? "SzokRk43cEM=";
         }
 
         public static string GetEwiUid()
         {
 
-            return AppConfig.Instance.Get("EWI_UID");
+            return AppConfig.Instance.Get("EWI_UID") ?? "DevesClaim";
         }
         public static string GetEwiGid()
         {
 
-            return AppConfig.Instance.Get("EWI_GID");
+            return AppConfig.Instance.Get("EWI_GID") ?? "DevesClaim";
         }
 
     }
