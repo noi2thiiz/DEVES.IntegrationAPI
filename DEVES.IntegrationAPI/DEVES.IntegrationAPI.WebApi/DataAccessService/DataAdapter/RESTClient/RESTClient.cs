@@ -57,7 +57,8 @@ namespace DEVES.IntegrationAPI.WebApi.Core.DataAdepter
             Byte[] byteArray = encoding.GetBytes(jsonContent);
 
             request.ContentLength = byteArray.Length;
-            request.ContentType = @"application/json";
+            //request.ContentType = @"application/json";
+            request.ContentType = @"application/json;charset=UTF-8";
 
             using (Stream dataStream = request.GetRequestStream())
             {

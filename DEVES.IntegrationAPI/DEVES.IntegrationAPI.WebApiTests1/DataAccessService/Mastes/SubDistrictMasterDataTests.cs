@@ -17,8 +17,6 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData.Tests
             var result = SubDistrictMasterData.Instance.FindByCode("100103");
             Assert.AreEqual("แขวงวัดราชบพิธ", SubDistrictMasterData.Instance.GetNameWithPrefix(result));
 
-
-
         }
 
         [TestMethod()]

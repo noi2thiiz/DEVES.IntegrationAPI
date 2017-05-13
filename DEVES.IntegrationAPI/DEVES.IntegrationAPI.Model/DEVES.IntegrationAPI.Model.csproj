@@ -143,6 +143,7 @@
     <Compile Include="SAP\SAPInquiryVendorDataModel.cs" />
     <Compile Include="Simulate_Integration\Simulate_Integration_ClaimRegistration_InputModel.cs" />
     <Compile Include="Simulate_Integration\Simulate_Integration_ClaimRegistration_OutputModel.cs" />
+    <Compile Include="SMS\SendSMSModel.cs" />
     <Compile Include="UpdateClaimInfo\UpdateClaimInfoInputModel.cs" />
     <Compile Include="UpdateClaimInfo\UpdateClaimInfoOutputModel_Fail.cs" />
     <Compile Include="UpdateClaimInfo\UpdateClaimInfoOutputModel_Pass.cs" />

@@ -19,7 +19,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
         private string GetEwiPassword()
         {
 
-            return AppConfig.Instance.Get("EWI_PASSWORD") ?? "REZOJUNtN04=";
+            return AppConfig.Instance.Get("EWI_PASSWORD") ?? "SzokRk43cEM=";
         }
 
         private string GetEwiUid()

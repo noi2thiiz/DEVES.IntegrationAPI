@@ -326,19 +326,23 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
 
         internal T DeserializeJson<T>(string contentText)
         {
+            Console.WriteLine(contentText.ToString());
             T contentModel;
             string validateResult = string.Empty;
             Type objType = typeof(T);
             string key = string.Format(CONST_JSON_SCHEMA_FILE, objType.Name );
             var filePath = HttpContext.Current.Server.MapPath(GetAppConfigurationSetting(key));
-
+            Console.WriteLine(filePath);
             if (JsonHelper.TryValidateJson(contentText, filePath, out validateResult))
             {
+                Console.WriteLine("DeserializeObject");
                 contentModel = JsonConvert.DeserializeObject<T>(contentText);
                 return contentModel;
             }
             else
             {
+                Console.WriteLine("Validation Error!");
+                Console.WriteLine(validateResult.ToJson());
                 throw new JsonSerializationException("Validation Error!");
             }
         }

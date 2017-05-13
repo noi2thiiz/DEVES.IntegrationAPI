@@ -301,6 +301,7 @@
     <Compile Include="Controllers\RegPayeeCorporateController.cs" />
     <Compile Include="Controllers\RegPayeePersonalController.cs" />
     <Compile Include="Controllers\RequestSurveyorController.cs" />
+    <Compile Include="Controllers\SendSMSController.cs" />
     <Compile Include="Controllers\TestAccountController.cs" />
     <Compile Include="Controllers\TEST_CLSInquiryClientPersonalController.cs" />
     <Compile Include="Controllers\UpdateClaimInfoController.cs" />
@@ -343,11 +344,13 @@
     <Compile Include="Logic\buzCRMRegPayeeCorporate.cs" />
     <Compile Include="Logic\buzCRMRegPayeePersonal.cs" />
     <Compile Include="Logic\buzInquiryCRMPayeeList.cs" />
+    <Compile Include="Logic\buzSendSMS.cs" />
     <Compile Include="Logic\CommonConstant.cs" />
     <Compile Include="Logic\DevesCrmAPIExceptions.cs" />
     <Compile Include="Logic\Services\BaseProxyService.cs" />
     <Compile Include="Logic\Services\CleansingService.cs" />
     <Compile Include="Logic\Services\PolisyClientService.cs" />
+    <Compile Include="Logic\Services\SendSmsService.cs" />
     <Compile Include="Logic\Tranforms\InquiryPayee\Tranform_clsInqPersonalOut_to_crmInqPayeeOut.cs" />
     <Compile Include="Logic\Tranforms\InquiryPayee\Tranform_compInqClient_to_crmInqPayeeOut.cs" />
     <Compile Include="Logic\Tranforms\RegClient\TranformCLIENTCreateCorporateClientAndAdditionalInfoContentModel_to_RegClientCorporateInputModel.cs" />
@@ -450,7 +453,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="App_Data\JsonSchema\InquiryConsultingHistoryList_Input_Schema.json" />
-    <Content Include="App_Data\JsonSchema\UpdateClaimInfo_Input_Schema.json" />
     <Content Include="App_Data\JsonSchema\ClaimRegistration_Input_Schema.json" />
     <Content Include="App_Data\JsonSchema\UpdateSurveyStatus_Input_Schema.json" />
     <Content Include="App_Data\JsonSchema\AccidentPrilimSurveyorReport_Input_Schema.json" />
@@ -474,6 +476,7 @@
     <Content Include="App_Data\JsonSchema\JSON_SCHEMA_InquiryCRMPayeeListInputModel.json" />
     <Content Include="App_Data\JsonSchema\RegClientCorporate_Input_Schema.json" />
     <Content Include="App_Data\JsonSchema\RegPayeeCorporate_Input_Schema.json" />
+    <Content Include="App_Data\JsonSchema\SendSMS_Input_Schema.json" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
