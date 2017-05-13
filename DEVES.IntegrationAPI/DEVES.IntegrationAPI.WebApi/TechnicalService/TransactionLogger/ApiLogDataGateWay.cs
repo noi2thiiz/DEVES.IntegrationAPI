@@ -22,15 +22,18 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
               
 
                 apiLogEntry.ServiceName = apiLogEntry.ServiceName.Replace("OutputModel", "");
-
+                Console.WriteLine("MachineName:"+ System.Environment.MachineName);
                 if (System.Environment.MachineName == AppConst.QA_SERVER_NAME 
                     || System.Environment.MachineName == AppConst.PRO1_SERVER_NAME 
                     || System.Environment.MachineName == AppConst.PRO2_SERVER_NAME)
                 {
+                   Console.WriteLine("ExecuteSql");
                    ExecuteSql(apiLogEntry);
+
                 }
                 else
                 {
+                    Console.WriteLine("CallWebService");
                     //ExecuteSql(apiLogEntry);
                     CallWebService(apiLogEntry);
                 }
@@ -40,9 +43,8 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
             }
             catch (Exception e)
             {
-                Console.WriteLine("CANNOT SAVE: transactionLog" );
+                Console.WriteLine("CANNOT SAVE: transactionLog"+e.Message );
 
-                
             }
 
         }
@@ -137,6 +139,8 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
         {
             CultureInfo UsaCulture = new CultureInfo("en-US");
             var endpoint = WebConfigurationManager.AppSettings["API_ENDPOINT_INTERNAL_SERVICE"];
+
+            Console.WriteLine(endpoint + "/StoreService/ext");
             var client = new RESTClient(endpoint+"/StoreService/ext");
             var req = new DbRequest {StoreName = "sp_Insert_TransactionLog"};
             req.AddParam("TransactionID",""+ apiLogEntry.TransactionID);

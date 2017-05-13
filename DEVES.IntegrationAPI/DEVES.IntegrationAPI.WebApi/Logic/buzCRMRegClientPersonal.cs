@@ -269,6 +269,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 {
                     regClientPersonOutput.code = AppConst.CODE_FAILED;
                     //เมื่อเกิด error ใด ๆ ใน service อื่นให้ลบ
+                    /*
                     var deleteResult = CleansingClientService.Instance.RemoveByCleansingId(newCleansingId, "P");
                    
                
@@ -278,6 +279,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         regClientPersonOutput.data = new List<RegClientPersonalDataOutputModel>();
                         regClientPersonOutput.data.Add(regClientPersonDataOutput);
                     }
+                    */
                    
 
                 }

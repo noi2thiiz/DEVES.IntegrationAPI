@@ -30,9 +30,9 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.DataAdapter
                     //do not thing
                 }
                 
-       
+              
                
-                Console.WriteLine("Load  Data Store : "+ endpoint);
+                
                 if (req.StoreName== "sp_Query_AppConfig")
                 {
                     endpoint += "/StoreService/ext";
@@ -45,7 +45,7 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.DataAdapter
                     endpoint += "/StoreService/crm";
                 }
 
-               // Console.WriteLine(endpoint);
+                Console.WriteLine("Load  Data Store : " + endpoint);
                 var client = new RESTClient(endpoint);
                 var result = client.Execute(req);
               

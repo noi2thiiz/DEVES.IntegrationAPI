@@ -61,8 +61,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         public const string QA_SERVER_NAME = "8121-CRM-QA";
 
         public const string CONST_DEFAULT_UID = "";
-       
 
+        public const string PROXY_ENDPOINT = "https://crmapp.deves.co.th/proxy/xml.ashx?";
 
         public static DateTime GetDevesAPINullDate()
         {

@@ -26,7 +26,7 @@ namespace DEVES.IntegrationAPI.WebApi
             try
             {
                 ConnectionString = System.Configuration.ConfigurationManager.AppSettings["CRM_CUSTOMAPP_DB"].ToString();
-
+                Console.WriteLine(ConnectionString);
                 var mapper = new ModelToTableMapper<AppConfigEntity>();
                 mapper.AddMapping(model => model.Key, "Key");
                 //mapper.AddMapping(model => model.Value, "Value");
@@ -106,8 +106,8 @@ namespace DEVES.IntegrationAPI.WebApi
             request.AddParam("Environment", env.ToUpperIgnoreNull());
             var result = rest.Execute(request);
             if (result.Success)
-            {
-               // Console.WriteLine(result.ToJson());
+            {  
+                Console.WriteLine(result.ToJson());
                 foreach (Dictionary<string, dynamic> item in result.Data)
                 {
 
@@ -122,7 +122,7 @@ namespace DEVES.IntegrationAPI.WebApi
                         Config[key] = value;
                     }
                 }
-             
+                
                 Console.WriteLine("update config success");
             }
             else

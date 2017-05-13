@@ -23,6 +23,7 @@ using Microsoft.Xrm.Sdk.Client;
 using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Tooling.Connector;
 using System.Threading.Tasks;
+using DEVES.IntegrationAPI.WebApi.Logic;
 using DEVES.IntegrationAPI.WebApi.TechnicalService.TransactionLogger;
 using DEVES.IntegrationAPI.WebApi.Templates.Exceptions;
 
@@ -134,15 +135,16 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             client.DefaultRequestHeaders.Add("Accept-Encoding", "utf-8");
 
             // + ENDPOINT
-            string EWIendpoint = GetEWIEndpoint(EWIendpointKey);
+            string EWIendpoint = CommonConstant.PROXY_ENDPOINT+ GetEWIEndpoint(EWIendpointKey);
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, EWIendpoint);
             request.Content = new StringContent(jsonReqModel, System.Text.Encoding.UTF8, "application/json");
-
+            request.Headers.Add("ContentType", "application/json; charset=UTF-8");
             // เช็ค check reponse 
             HttpResponseMessage response = client.SendAsync(request).Result;
             response.EnsureSuccessStatusCode();
 
-           // Console.WriteLine("==========jsonReqModel========");
+          //  Console.WriteLine("==========jsonReqModel========");
+           // Console.WriteLine(EWIendpoint);
             //Console.WriteLine(jsonReqModel.ToJson());
 
             T1 ewiRes = response.Content.ReadAsAsync<T1>().Result;
@@ -183,18 +185,20 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             client.DefaultRequestHeaders.Add("Accept-Encoding", "utf-8");
+           
 
             // + ENDPOINT
-            string EWIendpoint = GetEWIEndpoint(EWIendpointKey);
+            string EWIendpoint = CommonConstant.PROXY_ENDPOINT + GetEWIEndpoint(EWIendpointKey);
             reqTime = DateTime.Now;
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, EWIendpoint);
-           // Console.WriteLine("==========jsonReqModel========");
+            // Console.WriteLine("==========jsonReqModel========");
             //Console.WriteLine(jsonReqModel.ToJson());
-
+            request.Headers.Add("ContentType", "application/json; charset=UTF-8");
             request.Content = new StringContent(jsonReqModel, System.Text.Encoding.UTF8, "application/json");
             //Console.WriteLine("==========request========");
             //Console.WriteLine(request.ToJson());
             // เช็ค check reponse 
+            LogAsync(request);
             HttpResponseMessage response = client.SendAsync(request).Result;
             resTime = DateTime.Now;
             response.EnsureSuccessStatusCode();
@@ -228,7 +232,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             }
         }
 
-        protected async Task<ApiLogEntry> LogAsync(HttpRequestMessage req, HttpResponseMessage res)
+        protected async Task<ApiLogEntry> LogAsync(HttpRequestMessage req, HttpResponseMessage res=null)
         {
             
             // Request
@@ -239,6 +243,11 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             //ip = reqContext.Request.UserHostAddress;
             //reqContentType = reqContext.Request.ContentType;
             uri = req.RequestUri.ToString();
+            Console.WriteLine("======LOG======");
+            Console.WriteLine("======LOG======");
+            Console.WriteLine("======LOG======");
+            Console.WriteLine("RequestUri"+uri);
+            Console.WriteLine("RequestContentBody" + jsonReqModel);
             reqMethod = req.Method.Method;
             // routeTemplate = req.GetRouteData().Route.RouteTemplate;
             reqHeader = req.Headers.ToString();
@@ -256,8 +265,12 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             // Map Request vaule to global Variables (Response)
             resContentType = "";
             // resBody = res.Content.Headers.ToString();
-            resStatus = res.StatusCode.ToString();
-            resHeader = res.Headers.ToString();
+            resStatus ="";
+            if (res != null)
+            {
+                resHeader = res.Headers.ToString();
+            }
+           
 
            var apiLogEntry =new ApiLogEntry
             {
