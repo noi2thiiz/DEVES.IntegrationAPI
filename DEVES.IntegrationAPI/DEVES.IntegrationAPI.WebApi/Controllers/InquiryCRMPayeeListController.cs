@@ -21,8 +21,10 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
 
         public object Post([FromBody]object value)
         {
-        
+            //throw new Exception("XXXXXXXXXXXX");
+
             return  ProcessRequest<buzInquiryCRMPayeeList, InquiryCRMPayeeListInputModel>(value, "InquiryCRMPayeeList_Input_Schema.json");
+            
         }
 
    

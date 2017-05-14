@@ -56,6 +56,7 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
             catch (Exception e)
             {
                 // continue
+                Console.WriteLine(e);
             }
 
 

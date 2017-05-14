@@ -6,9 +6,11 @@ using System.Web.Http;
 using Microsoft.Owin.Security.OAuth;
 using Newtonsoft.Json.Serialization;
 using System.Web.Http.Cors;
+using System.Web.Http.ExceptionHandling;
 using DEVES.IntegrationAPI.WebApi.TechnicalService;
 using DEVES.IntegrationAPI.WebApi.TechnicalService.TransactionLogger;
 using DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData;
+using DEVES.IntegrationAPI.WebApi.TechnicalService.TraceExceptionLogger;
 
 namespace DEVES.IntegrationAPI.WebApi
 {
@@ -17,7 +19,10 @@ namespace DEVES.IntegrationAPI.WebApi
         public static void Register(HttpConfiguration config)
         {
             GlobalConfiguration.Configuration.MessageHandlers.Add(new ApiLogHandler());
-
+            GlobalConfiguration.Configuration.Services.Add(typeof(IExceptionLogger), new TraceExceptionLogger());
+            //GlobalConfiguration.Configuration.Services.Replace(typeof(IExceptionHandler), new GlobalExceptionHandler(config.Services.GetExceptionHandler()));
+           // config.Services.Replace(typeof(IExceptionHandler),
+            //    new OopsExceptionHandler(config.Services.GetExceptionHandler()));
             AppBootstrap.Instance.Start();
 
       

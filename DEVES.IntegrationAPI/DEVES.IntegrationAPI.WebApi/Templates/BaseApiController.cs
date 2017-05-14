@@ -36,6 +36,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
 
             #region Initiate Command and Output Model
 
+            
             var type = typeof(TCommand);
             object instance = Activator.CreateInstance(type);
             BaseCommand cmd = (BaseCommand)instance;
