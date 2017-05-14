@@ -9,6 +9,7 @@ using System.Text;
 using DEVES.IntegrationAPI.Core.Helper;
 using DEVES.IntegrationAPI.WebApi.DataAccessService.DataAdapter;
 using DEVES.IntegrationAPI.WebApi.Templates;
+using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using TableDependency;
 using TableDependency.SqlClient;
 
@@ -193,6 +194,30 @@ namespace DEVES.IntegrationAPI.WebApi
             return AppConfig.Instance.Get("EWI_GID") ?? "CRM_CLNT";
         }
 
+        public void Reload()
+        {
+            updateConfig();
+        }
+
+        public object GetConfig()
+        {
+            return Config;
+        }
+
+        public string GetCRMDBConfigurationString()
+        {
+            var connection = System.Configuration.ConfigurationManager.AppSettings["CRMDB"];
+            if (!string.IsNullOrEmpty(connection))
+            {
+                return connection;
+            }
+            else
+            {
+                throw new AppErrorException("500", "Fatal Error:CRM ConnectionString is empty");
+            }
+          
+           
+        }
     }
 
     public class AppConfigEntity

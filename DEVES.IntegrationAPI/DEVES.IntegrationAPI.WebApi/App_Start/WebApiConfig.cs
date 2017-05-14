@@ -18,14 +18,9 @@ namespace DEVES.IntegrationAPI.WebApi
         {
             GlobalConfiguration.Configuration.MessageHandlers.Add(new ApiLogHandler());
 
-            //start log job persis log
-            LogJobHandle.Start();
+            AppBootstrap.Instance.Start();
 
-            //start watch config change
-            AppConfig.Instance.Startup();
-            CountryMasterData.Instance.InitData();
-
-
+      
 
             // Web API configuration and services
             // Configure Web API to use only bearer token authentication.
