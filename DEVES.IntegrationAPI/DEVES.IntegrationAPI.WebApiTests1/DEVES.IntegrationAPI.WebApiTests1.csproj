@@ -61,6 +61,7 @@
     <Compile Include="Logic\Services\CleansingClientServiceTests.cs" />
     <Compile Include="Logic\Services\PolisyClientServiceTests.cs" />
     <Compile Include="Logic\Services\SendSmsServiceTests.cs" />
+    <Compile Include="Logic\Tranforms\RegPayee\TransformRegPayeePersonalInputModel_to_SAPCreateVendorInputModelTests.cs" />
     <Compile Include="Logic\Validator\MasterDataValidaterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TechnicalService\TransactionLogger\ApiLogDataGateWayTests.cs" />

@@ -404,6 +404,7 @@
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccidentPrilimSurveyorReportController.cs" />
+    <Compile Include="Controllers\AdminServiceController.cs" />
     <Compile Include="Controllers\AssignedSurveyorController.cs" />
     <Compile Include="Controllers\ClaimRegistrationController.cs" />
     <Compile Include="Controllers\CreateCRMCorporateClientMasterController.cs" />

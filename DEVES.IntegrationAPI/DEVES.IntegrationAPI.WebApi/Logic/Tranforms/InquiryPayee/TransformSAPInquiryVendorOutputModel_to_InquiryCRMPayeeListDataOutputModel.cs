@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using DEVES.IntegrationAPI.Model;
 using DEVES.IntegrationAPI.Model.InquiryCRMPayeeList;
 using DEVES.IntegrationAPI.Model.SAP;
 using DEVES.IntegrationAPI.WebApi.Templates;
+using Microsoft.Ajax.Utilities;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
@@ -104,7 +106,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             output.companyCode = input.COMPANY;
             output.title = input.TITLE;
             output.name1 = input.NAME1;
-            output.name2 = input.NAME2;
+            output.name2 = input.NAME2; 
             if (string.IsNullOrEmpty(output.fullName ))
             {
                 output.fullName = input.NAME1 + " " +input.NAME2;
@@ -146,7 +148,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         bankName = "",
                         bankBranchCode = bankInfoItem.BANKBRANCH,
                         bankBranchDesc = "",
-                        bankAccount = bankInfoItem.ACCTHOLDER,
+                        bankAccount = bankInfoItem.BANKACC,
                         accountHolder = bankInfoItem.ACCTHOLDER,
                     });
                 }
@@ -181,9 +183,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
         public override BaseDataModel TransformModel(BaseDataModel input, BaseDataModel output)
         {
-           // Console.WriteLine(" process :x TransformSAPInquiryVendorOutputModel_to_InquiryCRMPayeeListDataOutputModel");
+            Console.WriteLine(" process :x TransformSAPInquiryVendorOutputModel_to_InquiryCRMPayeeListDataOutputModel");
+            
             EWIResSAPInquiryVendorContentModel srcContent = (EWIResSAPInquiryVendorContentModel)input;
             CRMInquiryPayeeContentOutputModel outputContent;
+
+            
+
             if (output != null)
             {
                 outputContent = (CRMInquiryPayeeContentOutputModel)output;
@@ -198,9 +204,17 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             foreach (var vendorInfo in srcContent.VendorInfo)
             {
-               
+                
                 outputContent.data.Add(TransformDataModel(vendorInfo, new InquiryCrmPayeeListDataModel { sourceData = "SAP" }));
             }
+            
+            outputContent.data = outputContent.data.DistinctBy(row => new { row.sourceData, row.sapVendorCode,row.polisyClientId, row.cleansingId }).ToList();
+            /*
+            List<Product> result = pr.GroupBy(g => new { g.Title, g.Price })
+                .Select(g => g.First())
+                .ToList();
+                */
+
             return outputContent;
         }
 

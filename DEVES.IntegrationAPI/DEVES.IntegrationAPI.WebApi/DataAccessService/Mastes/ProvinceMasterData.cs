@@ -21,9 +21,13 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
 
         
 
-        public string GetNameWithPrefix(ProvinceEntity province)
+        public string GetNameWithPrefix(ProvinceEntity province,string prefixType="")
         {
-            
+            var prefix = "จ.";
+            if (prefixType == "full")
+            {
+                prefix = "จังหวัด";
+            }
 
             if (string.IsNullOrEmpty(province?.ProvinceCode))
             {
@@ -40,7 +44,7 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
             }
             else 
             {
-                return "จ." + province?.ProvinceName;
+                return prefix + province?.ProvinceName;
             }
           
         }

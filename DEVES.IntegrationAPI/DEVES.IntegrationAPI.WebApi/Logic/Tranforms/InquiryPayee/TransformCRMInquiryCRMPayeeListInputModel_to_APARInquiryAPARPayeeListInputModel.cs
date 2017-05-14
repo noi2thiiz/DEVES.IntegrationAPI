@@ -17,6 +17,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             trgt.fullName = src.fullname ?? "";
             trgt.polisyClntnum = src.polisyClientId ?? "";
             trgt.requester = src.requester ?? "";
+           
             trgt.taxBranchCode = src.taxBranchCode ?? "";
             trgt.vendorCode = src.sapVendorCode ?? "";
 
@@ -26,7 +27,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             // cannot map to trgt
             //src.emcsCode
 
-           /// Console.WriteLine(trgt.ToJson());
+            /// Console.WriteLine(trgt.ToJson());
+
+            switch (src.requester)
+            {
+                case "MC": trgt.requester = "MotorClaim"; break;
+                default: trgt.requester = "MotorClaim"; break;
+            }
 
             return trgt;
         }

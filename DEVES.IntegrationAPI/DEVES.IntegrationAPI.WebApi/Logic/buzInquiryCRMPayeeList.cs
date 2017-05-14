@@ -51,7 +51,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                 InquiryCRMPayeeListInputModel inqCrmPayeeListIn = (InquiryCRMPayeeListInputModel)input;
                 InquiryCRMPayeeListInputModel tempInqCrmPayeeInput = Copy(inqCrmPayeeListIn);
-                listSAPSearchCondition.Add(tempInqCrmPayeeInput);
+
+            switch (inqCrmPayeeListIn.requester)
+            {
+                case "MC": inqCrmPayeeListIn.requester = "MotorClaim"; break;
+                default: inqCrmPayeeListIn.requester = "MotorClaim"; break;
+            }
+
+            listSAPSearchCondition.Add(tempInqCrmPayeeInput);
                 int i = 0;
 
                 if ( (!listSAPSearchCondition.Exists(x => x.SearchConditionType != ENUM_SAP_SearchConditionType.invalid)) )
@@ -61,8 +68,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     {
                         var tmpListSAPSearchCondition = InquiryAPARPayeeList(listSAPSearchCondition, iRecordsLimit, inqCrmPayeeListIn, ref crmInqPayeeOut);
                         listSAPSearchCondition.AddRange(tmpListSAPSearchCondition);
-                    }
-
+                      
+                }
+                    
                     #endregion inqCrmPayeeListIn.roleCode == "G" -> APAR.InquiryAPARPayeeList
 
                     #region IF inqCrmPayeeListIn.roleCode == {A,S,R,H} -> Master.InquiryMasterASRH
@@ -138,12 +146,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 }
             var counrSAPResult = 0 ;
                 Console.WriteLine("Before Search SAP");
-           
+                
+
             if ( FilterAndValidateSAPSearchConditions(ref listSAPSearchCondition) )
             {
                 i = 0;
-                    #region Search In SAP: SAP_InquiryVendor()
-
+                #region Search In SAP: SAP_InquiryVendor()
+                Console.WriteLine(listSAPSearchCondition.ToJson());
                 InquerySapVandor(listSAPSearchCondition, crmInqPayeeOut, iRecordsLimit, counrSAPResult);
 
                 #endregion Search In SAP: SAP_InquiryVendor()
@@ -153,8 +162,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                  Console.WriteLine("Not Found In SAP");
                     //crmInqPayeeOut.content = null;
                 }
-                //@TODO AdHoc ลบข้อมูลจาก Source อื่นออก ถ้าเจอข้อมูลใน SAP ให้ถือว่าใช้ขอมูลจาก SAP
-               if (crmInqPayeeOut.data.Where(row => row.sourceData == "SAP").Distinct().ToList().Count > 0)
+            Console.WriteLine("=========OUTPUT=========");
+            Console.WriteLine("=========OUTPUT=========");
+            Console.WriteLine(crmInqPayeeOut.ToJson());
+            Console.WriteLine("=========OUTPUT=========");
+            Console.WriteLine("=========OUTPUT=========");
+            //@TODO AdHoc ลบข้อมูลจาก Source อื่นออก ถ้าเจอข้อมูลใน SAP ให้ถือว่าใช้ขอมูลจาก SAP
+            if (crmInqPayeeOut.data.Where(row => row.sourceData == "SAP").Distinct().ToList().Count > 0)
                 {
                     crmInqPayeeOut.data = crmInqPayeeOut.data.Where(row => row.sourceData == "SAP").DistinctBy(row => row.sapVendorCode).ToList();
 
@@ -191,9 +205,16 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         private void InquerySapVandor(List<InquiryCRMPayeeListInputModel> listSAPSearchCondition, CRMInquiryPayeeContentOutputModel crmInqPayeeOut,
             int iRecordsLimit, int counrSAPResult)
         {
-            while (listSAPSearchCondition.Count > 0 && crmInqPayeeOut.data.Count <= 20)
+            Console.WriteLine("========204--------");
+            Console.WriteLine(listSAPSearchCondition.ToJson());
+            var limit = 20;
+            var countLoop = 0;
+            while (listSAPSearchCondition.Count > 0 && countLoop <= 20)
             {
+                
                 InquiryCRMPayeeListInputModel searchCond = listSAPSearchCondition[0];
+                Console.WriteLine("==searchCond===");
+                Console.WriteLine(searchCond.ToJson());
                 SAPInquiryVendorInputModel inqSAPVendorIn =
                     (SAPInquiryVendorInputModel) DataModelFactory.GetModel(typeof(SAPInquiryVendorInputModel));
                 inqSAPVendorIn = (SAPInquiryVendorInputModel) TransformerFactory.TransformModel(searchCond, inqSAPVendorIn);
@@ -226,6 +247,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     crmInqPayeeOut.data.AddRange(tmpCrmInqPayeeOut.data);
                 }
                 listSAPSearchCondition.RemoveAt(0);
+                countLoop += 1;
             }
         }
 
@@ -407,6 +429,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 }
                 Console.WriteLine(crmInqPayeeOut.ToJson());
             }
+            // crmInqPayeeOut.data = crmInqPayeeOut.data.DistinctBy(row => new { row.sourceData, row.sapVendorCode, row.polisyClientId, row.cleansingId }).ToList();
             return tmpListSAPSearchCondition;
         }
 

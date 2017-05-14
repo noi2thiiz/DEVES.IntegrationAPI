@@ -6,6 +6,7 @@ using DEVES.IntegrationAPI.Model;
 using DEVES.IntegrationAPI.WebApi.Templates;
 using DEVES.IntegrationAPI.Model.RegPayeePersonal;
 using DEVES.IntegrationAPI.Model.SAP;
+using DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
@@ -28,8 +29,20 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             if (src.profileInfo != null)
             {
                 trgt.TITLE = buzMasterSalutation.Instant.SalutationList.FirstOrDefault( t => t.titlePolisy == src.profileInfo.salutation).titleSAP ?? "";
-                trgt.NAME1 = src.profileInfo.personalName ?? "";
-                trgt.NAME2 = src.profileInfo.personalSurname ?? "";
+
+
+                var fullname = (src.profileInfo.personalName + " " + src.profileInfo.personalSurname).Trim();
+
+                if (fullname.Length > 40)
+                {
+                    trgt.NAME1 = fullname.Substring(0, 40);
+                    trgt.NAME2 = fullname.Substring(41, fullname.Length - 1);
+                }
+                else
+                {
+                    trgt.NAME1 = fullname;
+                }
+
                 trgt.TAX3 = src.profileInfo.idCitizen ?? "";
                 
                 trgt.SEARCH = src.profileInfo.personalName ?? "";
@@ -44,6 +57,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 {
                     trgt.TEL1 = src.contactInfo.telephone1 + src.contactInfo.telephone1Ext ?? "";
                 }
+                
                 if (string.IsNullOrEmpty(src.contactInfo.telephone2Ext))
                 {
                     trgt.TEL2 = src.contactInfo.telephone2 ?? "";
@@ -52,14 +66,58 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 {
                     trgt.TEL2 = src.contactInfo.telephone2 + src.contactInfo.telephone2Ext ?? "";
                 }
+
+                if (!string.IsNullOrEmpty(src.contactInfo.mobilePhone))
+                {
+                    trgt.TEL2 = src.contactInfo.mobilePhone;
+                }
+
+
                 trgt.FAX = src.contactInfo.fax ?? "";
             }
             if (src.addressInfo != null)
             {
-                trgt.STREET1 = src.addressInfo.address1 ?? "";
+
+                string districtName = "";
+                string subDistrictName = "";
+                if (!string.IsNullOrEmpty(src.addressInfo.districtCode))
+                {
+                    var district = DistricMasterData.Instance.FindByCode(src.addressInfo.districtCode);
+                    if (district != null)
+                    {
+                        districtName = DistricMasterData.Instance.GetNameWithPrefix(district, "full");
+                    }
+
+                }
+
+                trgt.DISTRICT = ("" + subDistrictName + " " + districtName).Trim();
+
+                if (!string.IsNullOrEmpty(src.addressInfo?.subDistrictCode))
+                {
+                    var subDistrict = SubDistrictMasterData.Instance.FindByCode(src.addressInfo.subDistrictCode);
+                    if (subDistrict != null)
+                    {
+                        subDistrictName = SubDistrictMasterData.Instance.GetNameWithPrefix(subDistrict, "full");
+                    }
+                }
+
+
+
+                trgt.DISTRICT = (subDistrictName + " " + districtName).Trim();
+                //provinceCode    String	2	O จังหวัด
+                if (!string.IsNullOrEmpty(src.addressInfo?.provinceCode))
+                {
+                    var province = ProvinceMasterData.Instance.FindByCode(src.addressInfo.provinceCode);
+                    if (province != null)
+                    {
+                        trgt.CITY = ProvinceMasterData.Instance.GetNameWithPrefix(province, "full");
+                    }
+                }
+
+                trgt.STREET1 = (src.addressInfo.address1 + " " + src.addressInfo.address2).Trim();
                 trgt.STREET2 = src.addressInfo.address3 ?? "";
-                trgt.DISTRICT = src.addressInfo.subDistrictCode ?? "";
-                trgt.CITY = src.addressInfo.provinceCode ?? "";
+                
+               // trgt.CITY = src.addressInfo.provinceCode ?? "";
                 trgt.POSTCODE = src.addressInfo.postalCode ?? "";
                 trgt.COUNTRY = buzMasterCountry.Instant.CountryList.FirstOrDefault( c => c.ctryPolisy== src.addressInfo.country).ctrySAP??"";
             }

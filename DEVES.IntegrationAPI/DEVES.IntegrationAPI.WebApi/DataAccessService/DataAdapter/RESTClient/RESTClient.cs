@@ -127,6 +127,7 @@ namespace DEVES.IntegrationAPI.WebApi.Core.DataAdepter
 
 
             var dataResult = new RESTClientResult();
+            dataResult.Params = jsonString;
             try
             {
                 HttpWebResponse httpResponse = null;

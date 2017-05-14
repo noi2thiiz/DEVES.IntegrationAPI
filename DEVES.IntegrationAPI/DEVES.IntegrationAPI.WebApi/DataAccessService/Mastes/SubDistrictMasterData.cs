@@ -29,8 +29,10 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
       
 
 
-        public string GetNameWithPrefix(SubDistrictEntity entity)
+        public string GetNameWithPrefix(SubDistrictEntity entity, string prefixType = "")
         {
+            
+            
 
             if (string.IsNullOrEmpty(entity?.ProvinceCode))
             {
@@ -42,11 +44,23 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
             }
             if (entity?.ProvinceCode == "10")
             {
-                return "แขวง"+ entity?.SubDistrictName;
+                
+                    return "แขวง" + entity?.SubDistrictName;
+                
+                
+               
             }
             else
             {
-                return "ต." + entity?.SubDistrictName;
+                if (prefixType == "full")
+                {
+                    return "ตำบล" + entity?.SubDistrictName;
+                }
+                else
+                {
+                    return "ต." + entity?.SubDistrictName;
+                }
+               
             }
           
             

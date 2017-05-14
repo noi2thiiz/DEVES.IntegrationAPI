@@ -17,7 +17,7 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
             }
         }
 
-        public string GetNameWithPrefix(DistrictEntity entity)
+        public string GetNameWithPrefix(DistrictEntity entity,string prefixType = "")
         {
             var provinceCode = entity?.DistrictCode.Substring(0, 2);
 
@@ -41,7 +41,15 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
             }
             else
             {
-                return "อ." + entity?.DistrictName;
+                if (prefixType == "full")
+                {
+                    return "อำเภอ" + entity?.DistrictName;
+                }
+                else
+                {
+                    return "อ." + entity?.DistrictName;
+                }
+                
             }
         }
     }

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Web;
 using System.Text;
 using DEVES.IntegrationAPI.Core.Helper;
+using DEVES.IntegrationAPI.WebApi.Controllers;
 using DEVES.IntegrationAPI.WebApi.DataAccessService.DataAdapter;
 using DEVES.IntegrationAPI.WebApi.Templates;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
@@ -216,6 +217,16 @@ namespace DEVES.IntegrationAPI.WebApi
                 throw new AppErrorException("500", "Fatal Error:CRM ConnectionString is empty");
             }
           
+           
+        }
+
+        public void UpdateEwiConfig(EwiConfig ewiConfig)
+        {
+            Config["EWI_GID"] = !string.IsNullOrEmpty(ewiConfig.EWI_GID)?ewiConfig.EWI_GID:Config["EWI_GID"];
+            Config["EWI_UID"] = !string.IsNullOrEmpty(ewiConfig.EWI_UID)?ewiConfig.EWI_UID:Config["EWI_UID"];
+            Config["EWI_USERNAME"] = !string.IsNullOrEmpty(ewiConfig.EWI_USERNAME)?ewiConfig.EWI_USERNAME:Config["EWI_USERNAME"];
+            Config["EWI_PASSWORD"] = !string.IsNullOrEmpty(ewiConfig.EWI_PASSWORD)?ewiConfig.EWI_PASSWORD:Config["EWI_PASSWORD"];
+            Config["EWI_HOSTNAME"] = !string.IsNullOrEmpty(ewiConfig.EWI_HOSTNAME)?ewiConfig.EWI_PASSWORD:Config["EWI_HOSTNAME"];
            
         }
     }
