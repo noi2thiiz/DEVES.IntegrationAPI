@@ -298,7 +298,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                     retrievedIncident.pfc_deductable_fee = (decimal)content.eventDetailInfo.deductibleFee;
                     // retrievedIncident.pfc_deductable_fee = content.eventDetailInfo.fee;
                     retrievedIncident.pfc_accident_prilim_surveyor_report_date = convertDateTime(content.reportAccidentResultDate);
-                    retrievedIncident.pfc_isurvey_status = new OptionSetValue(Int32.Parse("100000070"));
+                    retrievedIncident.pfc_isurvey_status = new OptionSetValue(Int32.Parse("100000071"));
                     retrievedIncident.pfc_isurvey_status_on = DateTime.Now;
                     retrievedIncident.pfc_motor_accident_sum = 1;
 
@@ -308,8 +308,8 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 catch(Exception e)
                 {
                     output.code = "501";
-                    output.message = "False";
-                    output.description = "Update Entity Incident PROBLEM";
+                    output.message = "Update Entity Incident PROBLEM"; ;
+                    output.description = e.ToString();
                     output.transactionId = "";
                     output.transactionDateTime = DateTime.Now.ToString();
                     output.data = new AccidentPrilimSurveyorReportDataOutputModel_Pass();
@@ -321,6 +321,35 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 // Motor Accident 
                 try
                 {
+                    var query_motorAcc = from c in svcContext.pfc_motor_accidentSet
+                                         where c.pfc_parent_caseId.Id == _accountId
+                                         select c;
+                    pfc_motor_accident motorAccident1 = query_motorAcc.FirstOrDefault<pfc_motor_accident>();
+                    
+                    motorAccident1.pfc_motor_accident_name = "เหตุการณ์ที่ 1";
+                    //motorAccident1.pfc_parent_caseId = new Microsoft.Xrm.Sdk.EntityReference(Incident.EntityLogicalName, _accountId);
+                    //motorAccident1.pfc_activity_date = convertDateTime(content.eventDetailInfo.accidentOn);
+                    motorAccident1.pfc_event_code = content.eventId; // ให้เป็นไปตาม Logic. ของหน้า Motor Accident
+                    motorAccident1.pfc_event_sequence = 1;
+                    motorAccident1.pfc_ref_isurvey_eventid = content.eventId;
+                    motorAccident1.pfc_accident_event_detail = content.eventDetailInfo.accidentNatureDesc;
+                    //motorAccident1.pfc_more_document; // ไม่มี moreDocument
+                    motorAccident1.pfc_accident_latitude = content.eventDetailInfo.accidentLatitude;
+                    motorAccident1.pfc_accident_Longitude = content.eventDetailInfo.accidentLongitude;
+                    motorAccident1.pfc_accident_location = content.eventDetailInfo.accidentPlace;
+                    motorAccident1.pfc_accident_remark = content.eventDetailInfo.accidentRemark;
+                    motorAccident1.pfc_ref_isurvey_total_event = content.eventDetailInfo.totalEvent;
+                    motorAccident1.pfc_ref_isurvey_created_date = convertDateTime(content.eventDetailInfo.iSurveyCreatedDate);
+                    motorAccident1.pfc_ref_isurvey_modified_date = convertDateTime(content.eventDetailInfo.iSurveyModifiedDate);
+                    motorAccident1.pfc_ref_isurvey_isdeleted = convertBool(content.eventDetailInfo.iSurveyIsDeleted);
+                    motorAccident1.pfc_ref_isurvey_isdeleted_date = convertDateTime(content.eventDetailInfo.iSurveyIsDeletedDate);
+                    motorAccident1.pfc_motor_accident_parties_sum = content.eventDetailInfo.numOfAccidentParty;
+
+                    svcContext.UpdateObject(motorAccident1);
+                    svcContext.SaveChanges();
+                    // _serviceProxy.Update(motorAccident1);
+                    _motorId = motorAccident1.Id;
+                    /*
                     pfc_motor_accident motorAccident = new pfc_motor_accident();
                     motorAccident.pfc_motor_accident_name = "เหตุการณ์ที่ 1";
                     motorAccident.pfc_parent_caseId = new Microsoft.Xrm.Sdk.EntityReference(Incident.EntityLogicalName, _accountId);
@@ -345,12 +374,14 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
 
                     // getting GUID of motorAccident and store in "_motorId" variable
                     _motorId = motorId;
+
+                    */
                 }
                 catch (Exception e)
                 {
                     output.code = "501";
-                    output.message = "False";
-                    output.description = "Create Entity Motor Accident PROBLEM";
+                    output.message = "Update Entity Motor Accident PROBLEM";
+                    output.description = e.ToString();
                     output.transactionId = "";
                     output.transactionDateTime = DateTime.Now.ToString();
                     output.data = new AccidentPrilimSurveyorReportDataOutputModel_Pass();
@@ -445,8 +476,8 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                         catch (Exception e)
                         {
                             output.code = "501";
-                            output.message = "False";
-                            output.description = "Create Entity (Case/Motor) PROBLEM";
+                            output.message = "Create Entity (Case/Motor) PROBLEM";
+                            output.description = e.ToString();
                             output.transactionId = "";
                             output.transactionDateTime = DateTime.Now.ToString();
                             output.data = new AccidentPrilimSurveyorReportDataOutputModel_Pass();
@@ -460,8 +491,8 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 catch (Exception e)
                 {
                     output.code = "501";
-                    output.message = "False";
-                    output.description = "Create Entity Motor Accident Parties PROBLEM";
+                    output.message = "Create Entity Motor Accident Parties PROBLEM";
+                    output.description = e.ToString();
                     output.transactionId = "";
                     output.transactionDateTime = DateTime.Now.ToString();
                     output.data = new AccidentPrilimSurveyorReportDataOutputModel_Pass();
@@ -504,8 +535,8 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 catch (Exception e)
                 {
                     output.code = "501";
-                    output.message = "False";
-                    output.description = "Create Entity Motor Accident Part PROBLEM";
+                    output.message = "Create Entity Motor Accident Part PROBLEM";
+                    output.description = e.ToString();
                     output.transactionId = "";
                     output.transactionDateTime = DateTime.Now.ToString();
                     output.data = new AccidentPrilimSurveyorReportDataOutputModel_Pass();
@@ -529,8 +560,8 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             catch (System.ServiceModel.FaultException e)
             {
                 output.code = "500";
-                output.message = "False";
-                output.description = "CRM PROBLEM";
+                output.message = "CRM PROBLEM";
+                output.description = e.ToString();
                 output.transactionId = "";
                 output.transactionDateTime = DateTime.Now.ToString();
                 output.data = new AccidentPrilimSurveyorReportDataOutputModel_Pass();
