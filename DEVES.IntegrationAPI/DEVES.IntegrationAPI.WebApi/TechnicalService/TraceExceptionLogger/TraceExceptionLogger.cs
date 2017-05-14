@@ -46,7 +46,7 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService.TraceExceptionLogger
                 code = AppConst.CODE_FAILED,
                 message = "An error occurred",
                 transactionId = guid,
-                transactionDateTime = DateTime.Now.ToString("dd-MM-yyyy HH-mm-ss"),
+                transactionDateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),//2017-05-15 02:32:18
                 description = context?.Exception?.Message
 
             };
