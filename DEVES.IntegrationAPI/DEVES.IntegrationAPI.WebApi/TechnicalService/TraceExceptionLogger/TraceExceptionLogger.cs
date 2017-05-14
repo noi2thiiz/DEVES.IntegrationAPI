@@ -53,13 +53,20 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService.TraceExceptionLogger
 
             try
             {
-                string path = System.Configuration.ConfigurationManager.AppSettings["ERRORLOG_PATH"];
-              
-                path += "/" + DateTime.Now.ToString("dd-MM-yyyy-HH-mm-ss") + "_" + guid + "_errorlog.log";
+                string dir = System.Configuration.ConfigurationManager.AppSettings["ERRORLOG_PATH"];
+
+                dir += "/" + DateTime.Now.ToString("dd-MM-yyyy");
+                string path = dir + "/" + DateTime.Now.ToString("dd-MM-yyyy-HH-mm-ss")+"_"+ guid + "_log.log";
                 //Console.WriteLine(path);
                 // Create the file.
+                if (!Directory.Exists(dir))
+                {
+                    DirectoryInfo di = Directory.CreateDirectory(dir);
+                   
+                }
 
-                
+              
+
 
                 string message = "";
                     message += "TransactionId:" + guid;
@@ -112,10 +119,10 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService.TraceExceptionLogger
                 message += "Inner Exception" + Environment.NewLine;
                 message += "------------------------------------" + Environment.NewLine;
 
-               
+
 
                 //File.Create(path);
-
+                
                 File.WriteAllText(path, message);
                 
 
