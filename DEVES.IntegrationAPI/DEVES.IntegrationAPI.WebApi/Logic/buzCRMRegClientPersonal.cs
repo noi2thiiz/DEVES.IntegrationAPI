@@ -180,7 +180,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 {
                     throw new BuzErrorException(
                         "500",
-                        $"Error:{clsCreateClientContent.code}:{clsCreateClientContent.message}",
+                        $"CLS Error {clsCreateClientContent.code}:{clsCreateClientContent.message}",
                         "An error occurred from the external service (CLSCreateCorporateClient)",
 
                         "CLS",
@@ -217,7 +217,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     if (string.IsNullOrEmpty(polCreateClientContent?.clientID))
                     {
                         regClientPersonOutput.code = CONST_CODE_FAILED;
-                        regClientPersonOutput.message = "Cannot create Client in Polisy400.";
+                        regClientPersonOutput.message = $"Polisy400 Error:Cannot create Client in Polisy400.";
                         regClientPersonOutput.description = "";
 
                         // แก้ตาม ที่ อาจารย์พรชัย บอก เพื่อให้เขาเอา เลข cleansingIdไปซ่อมข้อมูลได้
@@ -259,7 +259,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     else
                     {
                         regClientPersonOutput.code = AppConst.CODE_FAILED;
-                        regClientPersonOutput.message = "Cannot create Client in CRM.";
+                        regClientPersonOutput.message = "CRM Error:Cannot create Client in CRM.";
                         regClientPersonOutput.description = crmContentOutput.description;
                         regClientPersonOutput.data = new List<RegClientPersonalDataOutputModel>();
                         regClientPersonOutput.data.Add(regClientPersonDataOutput);

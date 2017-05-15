@@ -148,8 +148,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         else
                         {
                             regPayeePersonalOutput.code = AppConst.CODE_FAILED;
-                            regPayeePersonalOutput.message = "Cannot create client in cleasing";
-                            regPayeePersonalOutput.description = clsCreatePayeeContent?.message;
+                            regPayeePersonalOutput.message = $"CLS Error {clsCreatePayeeContent ?.code}:{clsCreatePayeeContent?.message}";
+                            regPayeePersonalOutput.description = clsCreatePayeeContent?.description;
                             outputPass.cleansingId = clsCreatePayeeContent?.data?.cleansingId ?? "";
                             outputPass.polisyClientId = clsCreatePayeeContent?.data?.cleansingId ?? "";
                             outputPass.personalName = clsCreatePayeeContent?.data?.personalName??"";
@@ -231,7 +231,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         List<OutputModelFailDataFieldErrors> fieldError = MessageBuilder.Instance.ExtractSapCreateVendorFieldError<RegPayeePersonalInputModel>(e.Message,RegPayeePersonalInput);
                         if (fieldError != null)
                         {
-                             throw new FieldValidationException(fieldError, "Cannot create SAP Vendor", e.Message);
+                             throw new FieldValidationException(fieldError, "Cannot create SAP Vendor", "SAP Error:" + e.Message);
 
                        }else{
                             throw;
