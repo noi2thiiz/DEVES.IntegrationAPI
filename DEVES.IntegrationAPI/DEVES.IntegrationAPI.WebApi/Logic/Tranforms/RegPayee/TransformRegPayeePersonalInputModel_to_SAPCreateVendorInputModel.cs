@@ -28,7 +28,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             }
             if (src.profileInfo != null)
             {
-                trgt.TITLE = buzMasterSalutation.Instant.SalutationList.FirstOrDefault( t => t.titlePolisy == ).titleSAP ?? "";
+                trgt.TITLE = buzMasterSalutation.Instant.SalutationList.FirstOrDefault( t => t.titlePolisy == src.profileInfo.salutation).titleSAP ?? "";
 
 
                 var fullname = (src.profileInfo.personalName + " " + src.profileInfo.personalSurname).Trim();
@@ -190,7 +190,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             }
 
 
-            MRS.
+            
 
             return trgt;
         }
