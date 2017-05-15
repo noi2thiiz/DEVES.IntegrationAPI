@@ -12,7 +12,7 @@ using Microsoft.IdentityModel.Protocols.WSIdentity;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 {
-    public class PolisyClientService: BaseProxyService
+    public class PolisyClientService : BaseProxyService
     {
         #region Singleton
         private static PolisyClientService _instance;
@@ -40,35 +40,41 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
         /// <param name="cleansingClientId"></param>
         /// <param name="clientType"></param>
         /// <returns></returns>
-        public COMPInquiryClientMasterClientModel FindByCleansingId(string cleansingClientId,string clientType="P")
+        public COMPInquiryClientMasterClientModel FindByCleansingId(string cleansingClientId, string clientType = "P")
         {
-            var input = new COMPInquiryClientMasterInputModel
+            var input = new COMPInquiryClientNoByCleansingIdInputModel
             {
                 cleansingId = cleansingClientId,
-                cltType = clientType
+                topRecord = "5"
+
             };
             Console.WriteLine(input.ToJson());
 
-            
-             string endpoint = AppConfig.Instance.Get("EWI_ENDPOINT_COMPInquiryClientMaster");
-             Console.WriteLine(endpoint);
+
+            string endpoint = AppConfig.Instance.Get("EWI_ENDPOINT_COMPInquiryClientNoByCleansingID");
+            Console.WriteLine(endpoint);
             var result = SendRequest(input, endpoint);
             if (result.StatusCode != HttpStatusCode.OK)
             {
                 throw new InternalErrorException(result.Message);
             }
             var jss = new JavaScriptSerializer();
-            var contentObj = jss.Deserialize<COMPInquiryClientMasterOutputModel>(result.Content);
-            var clientListCollection = contentObj?.content?.clientListCollection;
+            var contentObj = jss.Deserialize<COMPInquiryClientNoByCleansingIdOutputModel>(result.Content);
+            var clientListCollection = contentObj?.content?.itemListCollection;
             //เลือกรายการที่มีค่า clientNumber มากที่สุด
-            var selecetedResult = clientListCollection?.OrderByDescending(r => r.clientList.clientNumber).First();
-            return selecetedResult?.clientList;
+            var selecetedResult = clientListCollection?.OrderByDescending(r => r.itemList.clntnum).First();
+
+            var model = new COMPInquiryClientMasterClientModel
+            {
+                clientNumber = selecetedResult?.itemList?.clntnum,
+                cleansingId = selecetedResult?.itemList?.cleansingId,
+                clientType = selecetedResult?.itemList?.clientType
+            };
+            return model;
+
+
         }
 
-
-
-
-       
 
     }
 }
