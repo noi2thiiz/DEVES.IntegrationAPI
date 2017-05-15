@@ -19,6 +19,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 
         private CleansingClientService()
         {
+           
         }
 
         public static CleansingClientService Instance
@@ -46,11 +47,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
             if (clientType == "P")
             {
                 endpointKey = CommonConstant.EWI_ENDPOINT_CLSDeleteCLSPersonalClient;
-                
+                this.serviceName = "CLSDeleteCLSPersonalClient";
             }
             else
             {
                 endpointKey = CommonConstant.EWI_ENDPOINT_CLSDeleteCLSCorporateClient;
+                this.serviceName = "CLSDeleteCLSCorporateClient";
             }
             string endpoint = AppConfig.Instance.Get(endpointKey);
 

@@ -22,7 +22,7 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
         public DateTime? RequestTimestamp { get; set; } = DateTime.Now;  // The request timestamp.
         public string ResponseContentType { get; set; } = "";    // The response content type.
         public string ResponseContentBody { get; set; } = "";    // The response content body.
-        public int? ResponseStatusCode { get; set; } = 0;       // The response status code.
+        public string ResponseStatusCode { get; set; } = "";       // The response status code.
         public string ResponseHeaders { get; set; } = "";       // The response headers.
         public DateTime? ResponseTimestamp { get; set; } = DateTime.Now;  // The response timestamp.
         public string Controller { get; set; } = "";

@@ -19,6 +19,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 
         private SendSmsService()
         {
+            this.serviceName = "COMPSendSMS";
         }
 
         public static SendSmsService Instance

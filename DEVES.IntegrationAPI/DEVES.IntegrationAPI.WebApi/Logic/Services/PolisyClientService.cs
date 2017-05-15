@@ -19,6 +19,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 
         private PolisyClientService()
         {
+            this.serviceName = "COMPInquiryClientNoByCleansingID";
         }
 
         public static PolisyClientService Instance

@@ -2,15 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web;
+using DEVES.IntegrationAPI.Core.Helper;
 using DEVES.IntegrationAPI.Model.EWI;
 using DEVES.IntegrationAPI.WebApi.Core.DataAdepter;
+using DEVES.IntegrationAPI.WebApi.TechnicalService;
+using DEVES.IntegrationAPI.WebApi.TechnicalService.TransactionLogger;
+using DEVES.IntegrationAPI.WebApi.Templates;
 using Microsoft.IdentityModel.Protocols.WSIdentity;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 {
     public class BaseProxyService
     {
+        public string serviceName { get; set; }
+
         private string GetEwiUsername()
         {
 
@@ -56,6 +64,86 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
             }
 
             return result;
+        }
+
+        protected async Task<ApiLogEntry> LogAsync(HttpRequestMessage req, HttpResponseMessage res = null)
+        {
+
+            // Request
+            // var reqContext = ((HttpContextBase)req.Properties["MS_HttpContext"]);
+
+            // Map Request vaule to global Variables (Request)
+            //user = reqContext.User.Identity.Name;
+            //ip = reqContext.Request.UserHostAddress;
+            //reqContentType = reqContext.Request.ContentType;
+            var uri = req.RequestUri.ToString();
+
+            var reqMethod = req.Method.Method;
+            // routeTemplate = req.GetRouteData().Route.RouteTemplate;
+            var reqHeader = req.Headers.ToString();
+
+            try
+            {
+                // requestRouteData = req.GetRouteData().ToJson();
+            }
+            catch (Exception e)
+            {
+                // do nothing
+            }
+
+
+            // Map Request vaule to global Variables (Response)
+            var resContentType = "";
+            // resBody = res.Content.Headers.ToString();
+            var resStatus = "";
+            var resHeader = "";
+            if (res != null)
+            {
+                resHeader = res.Headers.ToString();
+            }
+
+
+            var apiLogEntry = new ApiLogEntry
+            {
+                Application = "XrmAPI",
+                TransactionID = GetTransactionId(req),
+                Controller = "",
+                ServiceName = serviceName,
+                Activity = "consume",
+                User = "",
+                Machine = Environment.MachineName,
+                RequestIpAddress = "",
+                RequestContentType = "",
+                RequestContentBody = req?.Content.ToString(),
+                RequestUri = uri,
+                RequestMethod = reqMethod,
+                RequestRouteTemplate = "",
+                RequestRouteData = "",
+                ResponseStatusCode = res?.StatusCode.ToString(),
+                RequestHeaders = reqHeader,
+                RequestTimestamp = DateTime.Now,
+                ResponseContentType = resContentType,
+                ResponseContentBody = res?.Content?.ToJson(),
+                // ResponseStatusCode = resStatus,
+                ResponseHeaders = resHeader,
+                ResponseTimestamp = DateTime.Now
+            };
+            InMemoryLogData.Instance.AddLogEntry(apiLogEntry);
+
+            return null;
+        }
+
+        public string GetTransactionId(HttpRequestMessage Request)
+        {
+
+            if (string.IsNullOrEmpty(Request.Properties["TransactionID"].ToStringOrEmpty()))
+            {
+
+                Request.Properties["TransactionID"] = Guid.NewGuid().ToString();
+            }
+
+            return Request.Properties["TransactionID"].ToString();
+
         }
     }
 }

@@ -416,6 +416,7 @@
     <Compile Include="Controllers\InquiryCRMPayeeListController.cs" />
     <Compile Include="Controllers\InquiryPolicyMotorListClientController.cs" />
     <Compile Include="Controllers\InternalServiceController.cs" />
+    <Compile Include="Controllers\InquiryDataServiceController.cs" />
     <Compile Include="Controllers\RegClaimRequestFromRVPController.cs" />
     <Compile Include="Controllers\RegClientCorporateController.cs" />
     <Compile Include="Controllers\RegClientPersonalController.cs" />

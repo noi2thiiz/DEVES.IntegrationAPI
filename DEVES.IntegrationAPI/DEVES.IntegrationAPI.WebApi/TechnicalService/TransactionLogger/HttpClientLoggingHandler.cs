@@ -45,7 +45,7 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
 
                     // Update the API log entry with response info
 
-                    apiLogEntry.ResponseStatusCode = (int)response.StatusCode;
+                    apiLogEntry.ResponseStatusCode = response?.StatusCode.ToString();
                     apiLogEntry.ResponseTimestamp = DateTime.Now;
 
                     if (response.Content != null)

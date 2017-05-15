@@ -170,7 +170,15 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             return proxyRequest("EWI_ENDPOINT_COMPSendSMS", value);
         }
 
-        
+        [HttpPost]
+        [Route("COMP_InquiryClientNoByCleansingID")]
+        [SwaggerResponse(HttpStatusCode.OK, Type = typeof(COMPInquiryClientNoByCleansingIdOutputModel))]
+        public IHttpActionResult COMP_InquiryClientNoByCleansingID([FromBody] COMPInquiryClientNoByCleansingIdInputModel value)
+        {
+            return proxyRequest("EWI_ENDPOINT_COMPInquiryClientNoByCleansingID", value);
+        }
+
+
         protected IHttpActionResult proxyRequest(string endpointKey, object value)
         {
             var endpoint = AppConfig.Instance.Get(endpointKey);

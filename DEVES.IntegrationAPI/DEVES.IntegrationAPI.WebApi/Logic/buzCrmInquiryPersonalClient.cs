@@ -69,8 +69,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                             temp.generalHeader.crmClientId = lstCrmClientId.First();
                         }
                         // ดึงค่าจาก Polisy มาเติมในกรณีที่ข้อมูลสร้างใหม่ CLS จะยังไม่มีเลข Polisy
+                        Console.WriteLine("polisyClientId=" + temp.generalHeader.polisyClientId);
                         if (string.IsNullOrEmpty(temp.generalHeader.polisyClientId) || temp.generalHeader.polisyClientId.Equals("0"))
                         {
+                            Console.WriteLine("ดึงค่าจาก Polisy มาเติมในกรณีที่ข้อมูลสร้างใหม่ CLS จะยังไม่มีเลข Polisy");
                             var lstPolisyClient = PolisyClientService.Instance.FindByCleansingId(temp.generalHeader.cleansingId, contentModel.conditionHeader.clientType.ToUpperIgnoreNull());
                             //List<string> lstPolisyClientId = SearchContactPolisyId(temp.generalHeader.cleansingId);
                             if (lstPolisyClient?.cleansingId != null)
