@@ -33,6 +33,8 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
         public string Name { get; set; }
         public string Code { get; set; }
         public string PolisyCode { get; set; }
+       
+        
     }
 
     public enum NationalityEntityFields

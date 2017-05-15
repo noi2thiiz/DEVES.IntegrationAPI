@@ -31,10 +31,11 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
         public string Name { get; set; }
         public string Code { get; set; }
         public string PolisyCode { get; set; }
+        public string RefSap { get; set; }
     }
 
     public enum PersonalTitleEntityFields
     {
-        Id,Name,ContractDetail,PolisyCode
+        Id,Name,ContractDetail,PolisyCode, RefSap
     }
 }

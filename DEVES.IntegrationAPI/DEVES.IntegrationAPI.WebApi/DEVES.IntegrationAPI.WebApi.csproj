@@ -417,6 +417,7 @@
     <Compile Include="Controllers\InquiryPolicyMotorListClientController.cs" />
     <Compile Include="Controllers\InternalServiceController.cs" />
     <Compile Include="Controllers\InquiryDataServiceController.cs" />
+    <Compile Include="Controllers\MasterDataServiceController.cs" />
     <Compile Include="Controllers\RegClaimRequestFromRVPController.cs" />
     <Compile Include="Controllers\RegClientCorporateController.cs" />
     <Compile Include="Controllers\RegClientPersonalController.cs" />
@@ -440,11 +441,13 @@
     <Compile Include="DataAccessService\Mastes\AddressTypeMasterData.cs" />
     <Compile Include="DataAccessService\Mastes\CountryMasterData.cs" />
     <Compile Include="DataAccessService\Mastes\DistrictMasterData.cs" />
+    <Compile Include="DataAccessService\Mastes\ExtensionMethod\PersonalTitleMasterDataHelper.cs" />
     <Compile Include="DataAccessService\Mastes\InMemoryDataStorageBase.cs" />
     <Compile Include="DataAccessService\Mastes\NationalityMasterData.cs" />
     <Compile Include="DataAccessService\Mastes\OccupationMasterData.cs" />
     <Compile Include="DataAccessService\Mastes\PersonalTitleMasterData.cs" />
     <Compile Include="DataAccessService\Mastes\ProvinceMasterData.cs" />
+    <Compile Include="DataAccessService\Mastes\ExtensionMethod\ProvinceMasterDataHelper.cs" />
     <Compile Include="DataAccessService\Mastes\SubDistrictMasterData.cs" />
     <Compile Include="DataAccessService\Mastes\TypeOfLostMasterData.cs" />
     <Compile Include="DEVES_XRM.cs" />

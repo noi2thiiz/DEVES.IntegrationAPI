@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using System.Web.Hosting;
+using System.Web.UI.WebControls;
 using DEVES.IntegrationAPI.WebApi.DataAccessService.DataAdapter;
 using DEVES.IntegrationAPI.WebApi.Templates;
 using Microsoft.Xrm.Sdk.Deployment;
@@ -15,6 +16,7 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
         where TEntityFieldEnum : struct, IComparable, IConvertible, IFormattable
 
     {
+        protected DbResult DataResult;
         protected Dictionary<string, dynamic> DataList { get; set; } 
         protected Dictionary<string, dynamic> DataList2 { get; set; }
         protected Dictionary<string, dynamic> DataList3 { get; set; }
@@ -28,6 +30,14 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
             Clear();
             Load(StoreName, FieldCodeName);
         }
+
+        public DbResult GetList()
+        {
+            return DataResult;
+
+        }
+
+
 
         private void Clear()
         {
@@ -66,6 +76,7 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
             var reader = DataReader;
             var req = new DbRequest {StoreName = storeName};
             var result = reader.Execute(req);
+                DataResult = result;
             //Console.WriteLine(result.ToJson());
             if (result.Count > 0)
             {
