@@ -200,37 +200,58 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             if (regClientPersonOutput.code == CONST_CODE_SUCCESS)
             {
                 Console.WriteLine("Create:CLIENTCreatePersonalClientAndAdditionalInfo");
-
                 CLIENTCreatePersonalClientAndAdditionalInfoContentModel polCreateClientContent =
                     new CLIENTCreatePersonalClientAndAdditionalInfoContentModel();
-                if (string.IsNullOrEmpty(RegClientPersonalInput.generalHeader.polisyClientId)
-                    && RegClientPersonalInput.generalHeader.notCreatePolisyClientFlag != "Y")
+                try
                 {
-                    BaseDataModel polCreatePersonIn =
-                        DataModelFactory.GetModel(typeof(CLIENTCreatePersonalClientAndAdditionalInfoInputModel));
-                    polCreatePersonIn = TransformerFactory.TransformModel(RegClientPersonalInput, polCreatePersonIn);
-                    polCreateClientContent =
-                        CallDevesServiceProxy<CLIENTCreatePersonalClientAndAdditionalInfoOutputModel
-                                , CLIENTCreatePersonalClientAndAdditionalInfoContentModel>
-                            (CommonConstant.ewiEndpointKeyCLIENTCreatePersonalClient, polCreatePersonIn);
-
-                    if (string.IsNullOrEmpty(polCreateClientContent?.clientID))
+                  
+                    if (string.IsNullOrEmpty(RegClientPersonalInput.generalHeader.polisyClientId)
+                        && RegClientPersonalInput.generalHeader.notCreatePolisyClientFlag != "Y")
                     {
-                        regClientPersonOutput.code = CONST_CODE_FAILED;
-                        regClientPersonOutput.message = $"Polisy400 Error:Cannot create Client in Polisy400.";
-                        regClientPersonOutput.description = "";
+                        BaseDataModel polCreatePersonIn =
+                            DataModelFactory.GetModel(typeof(CLIENTCreatePersonalClientAndAdditionalInfoInputModel));
+                        polCreatePersonIn = TransformerFactory.TransformModel(RegClientPersonalInput, polCreatePersonIn);
+                        polCreateClientContent =
+                            CallDevesServiceProxy<CLIENTCreatePersonalClientAndAdditionalInfoOutputModel
+                                    , CLIENTCreatePersonalClientAndAdditionalInfoContentModel>
+                                (CommonConstant.ewiEndpointKeyCLIENTCreatePersonalClient, polCreatePersonIn);
 
-                        // แก้ตาม ที่ อาจารย์พรชัย บอก เพื่อให้เขาเอา เลข cleansingIdไปซ่อมข้อมูลได้
-                    }
-                    else
-                    {
-                        regClientPersonDataOutput.polisyClientId = polCreateClientContent.clientID;
+                        if (string.IsNullOrEmpty(polCreateClientContent?.clientID))
+                        {
+                            regClientPersonOutput.code = CONST_CODE_FAILED;
+                            regClientPersonOutput.message = $"Polisy400 Error:Cannot create Client in Polisy400.";
+                            regClientPersonOutput.description = "";
 
-                        RegClientPersonalInput =
-                            (RegClientPersonalInputModel)TransformerFactory.TransformModel(polCreateClientContent,
-                                RegClientPersonalInput);
+                            // แก้ตาม ที่ อาจารย์พรชัย บอก เพื่อให้เขาเอา เลข cleansingIdไปซ่อมข้อมูลได้
+                        }
+                        else
+                        {
+                            regClientPersonDataOutput.polisyClientId = polCreateClientContent.clientID;
+
+                            RegClientPersonalInput =
+                                (RegClientPersonalInputModel)TransformerFactory.TransformModel(polCreateClientContent,
+                                    RegClientPersonalInput);
+                        }
                     }
                 }
+                catch (Exception e)
+                {
+                    //เมื่อเกิด error ใด ๆ ใน service อื่นให้ลบ
+                    Console.WriteLine("try rollback" + newCleansingId);
+                    var deleteResult = CleansingClientService.Instance.RemoveByCleansingId(newCleansingId, "P");
+
+                  
+                    if (!deleteResult.success)
+                    {
+                        Console.WriteLine("Failed to complete the transaction, and it does not rollback");
+                        regClientPersonOutput.message = "Failed to complete the transaction, and it does not rollback";
+                        regClientPersonOutput.data = new List<RegClientPersonalDataOutputModel>();
+                        regClientPersonOutput.data.Add(regClientPersonDataOutput);
+                    }
+
+                    throw;
+                }
+                
 
 
                 if (regClientPersonOutput.code == AppConst.CODE_SUCCESS)
@@ -268,20 +289,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 else
                 {
                     regClientPersonOutput.code = AppConst.CODE_FAILED;
-                    //เมื่อเกิด error ใด ๆ ใน service อื่นให้ลบ
-                    /*
-                    var deleteResult = CleansingClientService.Instance.RemoveByCleansingId(newCleansingId, "P");
+                    
                    
-               
-                    if (!deleteResult.success)
-                    {
-                        regClientPersonOutput.message = "Failed to complete the transaction, and it does not rollback";
-                        regClientPersonOutput.data = new List<RegClientPersonalDataOutputModel>();
-                        regClientPersonOutput.data.Add(regClientPersonDataOutput);
-                    }
-                    */
-                   
-
                 }
             }
             // Exception Error 

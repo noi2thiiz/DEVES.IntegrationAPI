@@ -13,6 +13,7 @@ using DEVES.IntegrationAPI.Model.Polisy400;
 using DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData;
 using DEVES.IntegrationAPI.WebApi.Logic.Validator;
 using DEVES.IntegrationAPI.WebApi.Templates.Exceptions;
+using DEVES.IntegrationAPI.WebApi.Logic.Services;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
@@ -160,10 +161,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                                //TODO เอา ค่าที่ได้ไปเป็น output
                                 newCleansingId = clsCreateClientContent.data.cleansingId;
                             }
-                            else if (clsCreateClientContent.code == "CLS-1109")
-                            {
-                               //TODO เอา ค่าที่ได้ไปเป็น output
-                            }
+                            
                             else
                             {
                                 throw new BuzErrorException(
@@ -279,10 +277,25 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                                     catch (Exception e)
                                     {
 
-                                        regClientCorporateOutput.code = CONST_CODE_FAILED;
-                                        regClientCorporateOutput.message = e.Message;
-                                        regClientCorporateOutput.description = e.StackTrace;
+                                //เมื่อเกิด error ใด ๆ ใน service อื่นให้ลบ
+                                        Console.WriteLine("tyy rollback" + newCleansingId);
+                                        var deleteResult = CleansingClientService.Instance.RemoveByCleansingId(newCleansingId, "C");
 
+                                       regClientCorporateOutput.code = CONST_CODE_FAILED;
+                                       regClientCorporateOutput.message = e.Message;
+                                       if (!deleteResult.success)
+                                        {
+                                            Console.WriteLine(
+                                                "Failed to complete the transaction, and it does not rollback");
+                                            regClientCorporateOutput.description =
+                                                "Failed to complete the transaction, and it does not rollback";
+
+                                        }
+                                        else
+                                        {
+                                           
+                                            regClientCorporateOutput.description = "";
+                                        }
                                         RegClientCorporateDataOutputModel_Fail dataOutFail =
                                             new RegClientCorporateDataOutputModel_Fail();
                                         regClientCorporateOutput.data.Add(dataOutFail);

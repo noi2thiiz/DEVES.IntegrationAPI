@@ -46,15 +46,15 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
             string endpointKey ;
             if (clientType == "P")
             {
-                endpointKey = CommonConstant.EWI_ENDPOINT_CLSDeleteCLSPersonalClient;
+                endpointKey = "EWI_ENDPOINT_CLSDeleteCLSPersonalClient";
                 this.serviceName = "CLSDeleteCLSPersonalClient";
             }
             else
             {
-                endpointKey = CommonConstant.EWI_ENDPOINT_CLSDeleteCLSCorporateClient;
+                endpointKey = "EWI_ENDPOINT_CLSDeleteCLSCorporateClient";
                 this.serviceName = "CLSDeleteCLSCorporateClient";
             }
-            string endpoint = AppConfig.Instance.Get(endpointKey);
+            string endpoint = "https://crmapp.deves.co.th/proxy/xml.ashx?" + AppConfig.Instance.Get(endpointKey);
 
 
             var result = SendRequest(input, endpoint);

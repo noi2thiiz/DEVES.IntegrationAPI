@@ -11,6 +11,7 @@ using DEVES.IntegrationAPI.Model.RegPayeePersonal;
 using DEVES.IntegrationAPI.Model.CLS;
 using DEVES.IntegrationAPI.Model.Polisy400;
 using DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData;
+using DEVES.IntegrationAPI.WebApi.Logic.Services;
 using DEVES.IntegrationAPI.WebApi.Logic.Validator;
 using DEVES.IntegrationAPI.WebApi.Templates.Exceptions;
 
@@ -18,8 +19,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 {
     public class buzCRMRegPayeePersonal: BuzCommand
     {
+        protected string newCleansingId;
 
-      
         private RegPayeePersonalInputModel RegPayeePersonalInput { get; set; }
         private RegPayeePersonalDataOutputModel_Pass outputPass { get; set; }= new RegPayeePersonalDataOutputModel_Pass();
         
@@ -139,6 +140,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         //regPayeePersonalInput = (RegPayeePersonalInputModel)TransformerFactory.TransformModel(clsCreatePayeeContent, regPayeePersonalInput);
                         if (clsCreatePayeeContent?.code == CONST_CODE_SUCCESS)
                         {
+                            newCleansingId = clsCreatePayeeContent.data?.cleansingId;
                             RegPayeePersonalInput.generalHeader.cleansingId = clsCreatePayeeContent.data?.cleansingId ?? "";
 
                             outputPass.polisyClientId = clsCreatePayeeContent.data?.clientId;
@@ -171,17 +173,28 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     CLIENTCreatePersonalClientAndAdditionalInfoContentModel polCreatePayeeContent = CallDevesServiceProxy<CLIENTCreatePersonalClientAndAdditionalInfoOutputModel
                                                                                                         , CLIENTCreatePersonalClientAndAdditionalInfoContentModel>
                                                                                                         (CommonConstant.ewiEndpointKeyCLIENTCreatePersonalClient, polCreatePersonalIn);
-                    //regPayeePersonalInput = (RegPayeePersonalInputModel)TransformerFactory.TransformModel(polCreatePayeeContent, regPayeePersonalInput);
-
-                    if (polCreatePayeeContent != null)
+                //regPayeePersonalInput = (RegPayeePersonalInputModel)TransformerFactory.TransformModel(polCreatePayeeContent, regPayeePersonalInput);
+                    try
                     {
-                        RegPayeePersonalInput.generalHeader.polisyClientId = polCreatePayeeContent.clientID; 
+                        if (polCreatePayeeContent != null)
+                        {
+                            RegPayeePersonalInput.generalHeader.polisyClientId = polCreatePayeeContent.clientID;
 
-                        outputPass.polisyClientId = polCreatePayeeContent.clientID;
+                            outputPass.polisyClientId = polCreatePayeeContent.clientID;
+                        }
                     }
-                             
-                    #endregion Create Payee in Polisy400
-                }
+                    catch (Exception)
+                    {
+                        //เมื่อเกิด error ใด ๆ ใน service อื่นให้ลบ
+                        Console.WriteLine("try rollback" + newCleansingId);
+                        var deleteResult = CleansingClientService.Instance.RemoveByCleansingId(newCleansingId, "P");
+                        throw;
+
+                    }
+
+
+                #endregion Create Payee in Polisy400
+            }
 
                 #region Search Payee in SAP
                 Model.SAP.SAPInquiryVendorInputModel SAPInqVendorIn = (Model.SAP.SAPInquiryVendorInputModel)DataModelFactory.GetModel(typeof(Model.SAP.SAPInquiryVendorInputModel));
@@ -228,7 +241,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     {
                     //@TODO adHoc fix Please fill recipient type  มัน return success เลยถ้าไม่ได้ดักไว้ 
 
-                        List<OutputModelFailDataFieldErrors> fieldError = MessageBuilder.Instance.ExtractSapCreateVendorFieldError<RegPayeePersonalInputModel>(e.Message,RegPayeePersonalInput);
+                       Console.WriteLine("244:try rollback" + newCleansingId);
+                        var deleteResult = CleansingClientService.Instance.RemoveByCleansingId(newCleansingId, "P");
+
+                    List<OutputModelFailDataFieldErrors> fieldError = MessageBuilder.Instance.ExtractSapCreateVendorFieldError<RegPayeePersonalInputModel>(e.Message,RegPayeePersonalInput);
                         if (fieldError != null)
                         {
                              throw new FieldValidationException(fieldError, "Cannot create SAP Vendor", "SAP Error:" + e.Message);

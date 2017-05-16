@@ -55,11 +55,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 
             };
             Console.WriteLine("====Request====");
+            Console.WriteLine(endpoint);
             Console.WriteLine(reqModel.ToJson());
 
             var client = new RESTClient(endpoint);
             var result = client.Execute(reqModel);
-           // LogAsync(result.Request,result.Response);
+            //LogAsync(result.Request,result.Response);
             if (result.StatusCode != HttpStatusCode.OK)
             {
                 Console.WriteLine("====result.Message====");
@@ -67,7 +68,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
           
                 throw new InternalErrorException(result.Message);
             }
-
+            Console.WriteLine("====result.Content====");
+            Console.WriteLine(result.Content);
             return result;
         }
 
