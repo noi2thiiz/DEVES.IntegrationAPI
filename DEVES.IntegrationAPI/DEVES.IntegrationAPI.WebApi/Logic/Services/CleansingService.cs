@@ -37,6 +37,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
         #endregion
         public BaseEWIResponseModel RemoveByCleansingId(string cleansingClientId, string clientType = "P")
         {
+            
             var input = new 
             {
                 cleansing_id = cleansingClientId

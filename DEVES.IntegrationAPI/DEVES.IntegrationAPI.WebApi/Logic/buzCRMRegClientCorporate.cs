@@ -277,7 +277,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                                     catch (Exception e)
                                     {
 
-                                //เมื่อเกิด error ใด ๆ ใน service อื่นให้ลบ
+                                        //เมื่อเกิด error ใด ๆ ใน service อื่นให้ลบ
                                         Console.WriteLine("tyy rollback" + newCleansingId);
                                         var deleteResult = CleansingClientService.Instance.RemoveByCleansingId(newCleansingId, "C");
 

@@ -11,6 +11,7 @@ using DEVES.IntegrationAPI.Model.CLS;
 using DEVES.IntegrationAPI.Model.Polisy400;
 using DEVES.IntegrationAPI.Model.RegPayeePersonal;
 using DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData;
+using DEVES.IntegrationAPI.WebApi.Logic.Services;
 using DEVES.IntegrationAPI.WebApi.Logic.Validator;
 using DEVES.IntegrationAPI.WebApi.Templates.Exceptions;
 using SapVendorInfoModel = DEVES.IntegrationAPI.Model.RegPayeeCorporate.SapVendorInfoModel;
@@ -19,6 +20,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 {
     public class buzCRMRegPayeeCorporate : BuzCommand
     {
+        protected string newCleansingId;
+
         public RegPayeeCorporateOutputModel_Fail regFail { get; set; } = new RegPayeeCorporateOutputModel_Fail();
         protected RegPayeeCorporateInputModel regPayeeCorporateInput { get; set; }
 
@@ -124,7 +127,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             if (string.IsNullOrEmpty(regPayeeCorporateInput?.generalHeader?.polisyClientId))
             {
                 if (string.IsNullOrEmpty(regPayeeCorporateInput?.generalHeader?.cleansingId))
-                {
+                {   //เก็บค่า newCleansingId ไว้ลบ
                     #region Create Payee in Cleansing
 
                     BaseDataModel clsCreateCorporateIn =
@@ -138,6 +141,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     //regPayeeCorporateInput = (RegPayeeCorporateInputModel)TransformerFactory.TransformModel(clsCreatePayeeContent, regPayeeCorporateInput);
                     if (clsCreatePayeeContent?.code == CONST_CODE_SUCCESS)
                     {
+                        //เก็บค่าไว้ลบ 
+                        newCleansingId = clsCreatePayeeContent?.data?.cleansingId;
                         regPayeeCorporateInput.generalHeader.cleansingId =
                             clsCreatePayeeContent?.data?.cleansingId ?? "";
 
@@ -165,25 +170,34 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                     #endregion Create Payee in Cleansing
                 }
-
+                //implement rollback
                 #region Create Payee in Polisy400
 
-                BaseDataModel polCreateCorporateIn =
-                    DataModelFactory.GetModel(typeof(CLIENTCreateCorporateClientAndAdditionalInfoInputModel));
-                polCreateCorporateIn = TransformerFactory.TransformModel(regPayeeCorporateInput, polCreateCorporateIn);
-                CLIENTCreateCorporateClientAndAdditionalInfoContentModel polCreatePayeeContent =
-                    CallDevesServiceProxy<CLIENTCreateCorporateClientAndAdditionalInfoOutputModel
-                            , CLIENTCreateCorporateClientAndAdditionalInfoContentModel>
-                        (CommonConstant.ewiEndpointKeyCLIENTCreateCorporateClient, polCreateCorporateIn);
-                //regPayeeCorporateInput = (RegPayeeCorporateInputModel)TransformerFactory.TransformModel(polCreatePayeeContent, regPayeeCorporateInput);
-
-                if (polCreatePayeeContent != null)
+                try
                 {
-                    regPayeeCorporateInput.generalHeader.polisyClientId = polCreatePayeeContent.clientID;
+                    BaseDataModel polCreateCorporateIn =
+                        DataModelFactory.GetModel(typeof(CLIENTCreateCorporateClientAndAdditionalInfoInputModel));
+                    polCreateCorporateIn = TransformerFactory.TransformModel(regPayeeCorporateInput, polCreateCorporateIn);
+                    CLIENTCreateCorporateClientAndAdditionalInfoContentModel polCreatePayeeContent =
+                        CallDevesServiceProxy<CLIENTCreateCorporateClientAndAdditionalInfoOutputModel
+                                , CLIENTCreateCorporateClientAndAdditionalInfoContentModel>
+                            (CommonConstant.ewiEndpointKeyCLIENTCreateCorporateClient, polCreateCorporateIn);
+                    //regPayeeCorporateInput = (RegPayeeCorporateInputModel)TransformerFactory.TransformModel(polCreatePayeeContent, regPayeeCorporateInput);
 
-                    outputPass.polisyClientId = polCreatePayeeContent.clientID;
+                    if (polCreatePayeeContent != null)
+                    {
+                        regPayeeCorporateInput.generalHeader.polisyClientId = polCreatePayeeContent.clientID;
+
+                        outputPass.polisyClientId = polCreatePayeeContent.clientID;
+                    }
                 }
-
+                catch (Exception)
+                {
+                    //@TODO adHoc fix Please fill recipient type  มัน return success เลยถ้าไม่ได้ดักไว้ 
+                    Console.WriteLine("244:try rollback" + newCleansingId);
+                    var deleteResult = CleansingClientService.Instance.RemoveByCleansingId(newCleansingId, "C");
+                    throw;
+                }
                 #endregion Create Payee in Polisy400
             }
 
@@ -211,7 +225,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             if (string.IsNullOrEmpty(sapInfo?.VCODE))
             {
-                
+                //error
+                //implement rollback
                 #region Create Payee in SAP
 
                 try
@@ -239,6 +254,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 catch (Exception e)
                 {
                     //@TODO adHoc fix Please fill recipient type  มัน return success เลยถ้าไม่ได้ดักไว้ 
+                    Console.WriteLine("244:try rollback" + newCleansingId);
+                    var deleteResult = CleansingClientService.Instance.RemoveByCleansingId(newCleansingId, "C");
 
                     List<OutputModelFailDataFieldErrors> fieldError = MessageBuilder.Instance.ExtractSapCreateVendorFieldError<RegPayeeCorporateInputModel>(e.Message, regPayeeCorporateInput);
                     if (fieldError != null)
@@ -281,7 +298,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 #endregion Create payee in CRM
             }
             else
-            {   //error
+            {   
                 //regPayeeCorporateInput.sapVendorInfo.sapVendorCode = SAPInqVendorContentOut.VCODE;
                 outputPass.sapVendorCode = sapInfo?.VCODE;
                 outputPass.sapVendorGroupCode = sapInfo?.VGROUP;

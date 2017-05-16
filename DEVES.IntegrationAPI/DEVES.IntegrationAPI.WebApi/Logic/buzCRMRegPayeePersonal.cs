@@ -165,8 +165,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         }
                     #endregion Create Payee in Cleansing
                 }
-                    
 
+                //implement rollback
                 #region Create Payee in Polisy400
                 BaseDataModel polCreatePersonalIn = DataModelFactory.GetModel(typeof(CLIENTCreatePersonalClientAndAdditionalInfoInputModel));
                     polCreatePersonalIn = TransformerFactory.TransformModel(RegPayeePersonalInput, polCreatePersonalIn);
@@ -211,10 +211,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 var sapInfo = SAPInqVendorContentOut?.VendorInfo?.FirstOrDefault();
 
                 if (string.IsNullOrEmpty(sapInfo?.VCODE))
-                {
-                    #region Create Payee in SAP
-                    //BaseDataModel SAPCreateVendorIn = DataModelFactory.GetModel(typeof(Model.SAP.SAPCreateVendorInputModel));
-                    try
+               {   //implement rollback
+                #region Create Payee in SAP
+                //BaseDataModel SAPCreateVendorIn = DataModelFactory.GetModel(typeof(Model.SAP.SAPCreateVendorInputModel));
+                try
                     {
                         Model.SAP.SAPCreateVendorInputModel SAPCreateVendorIn =
                             new Model.SAP.SAPCreateVendorInputModel();
@@ -240,8 +240,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     catch (Exception e)
                     {
                     //@TODO adHoc fix Please fill recipient type  มัน return success เลยถ้าไม่ได้ดักไว้ 
-
-                       Console.WriteLine("244:try rollback" + newCleansingId);
+                        
+                        Console.WriteLine("244:try rollback" + newCleansingId);
                         var deleteResult = CleansingClientService.Instance.RemoveByCleansingId(newCleansingId, "P");
 
                     List<OutputModelFailDataFieldErrors> fieldError = MessageBuilder.Instance.ExtractSapCreateVendorFieldError<RegPayeePersonalInputModel>(e.Message,RegPayeePersonalInput);
