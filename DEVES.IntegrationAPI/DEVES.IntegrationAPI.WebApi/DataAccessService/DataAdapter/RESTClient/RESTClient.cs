@@ -208,6 +208,9 @@ namespace DEVES.IntegrationAPI.WebApi.Core.DataAdepter
                 {
                     dataResult.StatusCode = httpResponse.StatusCode;
                     dataResult.Response = httpResponse;
+                    dataResult.Request =  httpWebRequest;
+
+
                     dataResult.Message = "response with status: " + httpResponse.StatusCode + " " + httpResponse.StatusDescription;
                     return dataResult;
                 }

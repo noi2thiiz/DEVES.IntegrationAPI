@@ -52,11 +52,15 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
             Console.WriteLine(input.ToJson());
 
 
-            string endpoint = AppConfig.Instance.Get("EWI_ENDPOINT_COMPInquiryClientNoByCleansingID");
+            string endpoint = "https://crmapp.deves.co.th/proxy/xml.ashx?"+AppConfig.Instance.Get("EWI_ENDPOINT_COMPInquiryClientNoByCleansingID");
             Console.WriteLine(endpoint);
             var result = SendRequest(input, endpoint);
+            Console.WriteLine("====result====");
+            Console.WriteLine(result.Content);
             if (result.StatusCode != HttpStatusCode.OK)
             {
+                Console.WriteLine("====InternalErrorException====");
+                Console.WriteLine(result.Message);
                 throw new InternalErrorException(result.Message);
             }
             var jss = new JavaScriptSerializer();
@@ -64,7 +68,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
             var clientListCollection = contentObj?.content?.itemListCollection;
             //เลือกรายการที่มีค่า clientNumber มากที่สุด
             var selecetedResult = clientListCollection?.OrderByDescending(r => r.itemList.clntnum).First();
-
+           
             var model = new COMPInquiryClientMasterClientModel
             {
                 clientNumber = selecetedResult?.itemList?.clntnum,

@@ -54,19 +54,24 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
                 content = JSON
 
             };
+            Console.WriteLine("====Request====");
+            Console.WriteLine(reqModel.ToJson());
 
-            
             var client = new RESTClient(endpoint);
             var result = client.Execute(reqModel);
+           // LogAsync(result.Request,result.Response);
             if (result.StatusCode != HttpStatusCode.OK)
             {
+                Console.WriteLine("====result.Message====");
+                Console.WriteLine(result.Message);  
+          
                 throw new InternalErrorException(result.Message);
             }
 
             return result;
         }
 
-        protected async Task<ApiLogEntry> LogAsync(HttpRequestMessage req, HttpResponseMessage res = null)
+        protected void LogAsync(HttpWebRequest req, HttpWebResponse res = null)
         {
 
             // Request
@@ -78,7 +83,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
             //reqContentType = reqContext.Request.ContentType;
             var uri = req.RequestUri.ToString();
 
-            var reqMethod = req.Method.Method;
+            var reqMethod = req.Method.ToString();
             // routeTemplate = req.GetRouteData().Route.RouteTemplate;
             var reqHeader = req.Headers.ToString();
 
@@ -106,7 +111,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
             var apiLogEntry = new ApiLogEntry
             {
                 Application = "XrmAPI",
-                TransactionID = GetTransactionId(req),
+                TransactionID = "",
                 Controller = "",
                 ServiceName = serviceName,
                 Activity = "consume",
@@ -114,7 +119,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
                 Machine = Environment.MachineName,
                 RequestIpAddress = "",
                 RequestContentType = "",
-                RequestContentBody = req?.Content.ToString(),
+                //RequestContentBody = req?.Con,
                 RequestUri = uri,
                 RequestMethod = reqMethod,
                 RequestRouteTemplate = "",
@@ -123,14 +128,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
                 RequestHeaders = reqHeader,
                 RequestTimestamp = DateTime.Now,
                 ResponseContentType = resContentType,
-                ResponseContentBody = res?.Content?.ToJson(),
+               // ResponseContentBody = res?.Content?.ToJson(),
                 // ResponseStatusCode = resStatus,
                 ResponseHeaders = resHeader,
                 ResponseTimestamp = DateTime.Now
             };
             InMemoryLogData.Instance.AddLogEntry(apiLogEntry);
 
-            return null;
+           
         }
 
         public string GetTransactionId(HttpRequestMessage Request)

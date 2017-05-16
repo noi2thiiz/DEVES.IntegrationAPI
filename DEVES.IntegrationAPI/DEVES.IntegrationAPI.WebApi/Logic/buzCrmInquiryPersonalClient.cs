@@ -72,12 +72,24 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         Console.WriteLine("polisyClientId=" + temp.generalHeader.polisyClientId);
                         if (string.IsNullOrEmpty(temp.generalHeader.polisyClientId) || temp.generalHeader.polisyClientId.Equals("0"))
                         {
-                            Console.WriteLine("ดึงค่าจาก Polisy มาเติมในกรณีที่ข้อมูลสร้างใหม่ CLS จะยังไม่มีเลข Polisy");
-                            var lstPolisyClient = PolisyClientService.Instance.FindByCleansingId(temp.generalHeader.cleansingId, contentModel.conditionHeader.clientType.ToUpperIgnoreNull());
-                            //List<string> lstPolisyClientId = SearchContactPolisyId(temp.generalHeader.cleansingId);
-                            if (lstPolisyClient?.cleansingId != null)
-                            {
+                            Console.WriteLine("find Polisy for new client ");
+
+           
+                        var lstPolisyClient = PolisyClientService.Instance.FindByCleansingId(temp.generalHeader.cleansingId, contentModel.conditionHeader.clientType.ToUpperIgnoreNull());
+                        List<string> lstPolisyClientId = SearchContactPolisyId(temp.generalHeader.cleansingId);
+                        if (lstPolisyClient?.cleansingId != null)
+                        {
+                       
+                                Console.WriteLine("found Polisy for new client =" + lstPolisyClient.clientNumber);
                                 temp.generalHeader.polisyClientId = lstPolisyClient.clientNumber;
+                            }
+                            else
+                            {
+                              Console.WriteLine(" not found Polisy for new client =" );
+                            }
+                            if (temp.generalHeader.polisyClientId=="0")
+                            {
+                                temp.generalHeader.polisyClientId = "";
                             }
 
                         }
@@ -86,7 +98,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                     catch (Exception e)
                     {
-
+                        Console.WriteLine("Error: "+e.Message+"--"+e.StackTrace);
                     }
                 }
                 /*

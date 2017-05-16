@@ -9,6 +9,6 @@ namespace DEVES.IntegrationAPI.WebApi.Core.DataAdepter
         public string Message { get; set; }
         public HttpStatusCode StatusCode { get; set; }
         public HttpWebResponse Response { get; set; }
-
+        public HttpWebRequest Request { get; set; }
     }
 }
