@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DEVES.IntegrationAPI.Model.CRM
 {
-    class CRMRequestCleansingIdDataInputModel:BaseDataModel
+    public class CRMRequestCleansingIdDataInputModel:BaseDataModel
     {
         public string titlePersonalid { get; set; } = "";
         public string stringpersonalCode { get; set; } = "";

@@ -4,8 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Http;
 using DEVES.IntegrationAPI.Model;
-using DEVES.IntegrationAPI.Model.CLS;
 using DEVES.IntegrationAPI.WebApi.Templates;
+using DEVES.IntegrationAPI.Model.CRM;
 
 namespace DEVES.IntegrationAPI.WebApi.Controllers
 {
@@ -13,7 +13,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
     {
 
       
-        public IHttpActionResult RequestCleansingId(CLSInquiryCorporateClientInputModel input)
+        public IHttpActionResult RequestCleansingId(CRMRequestCleansingIdDataInputModel input)
         {
             if (!ModelState.IsValid)
             {
@@ -49,7 +49,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
 
         
 
-        public void updateCleansingIdToCRM(CLSInquiryCorporateClientInputModel input,string cleansingId)
+        public void updateCleansingIdToCRM(CRMRequestCleansingIdDataInputModel input,string cleansingId)
         {
             
               //pfc_title_personalid
