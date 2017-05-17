@@ -89,33 +89,66 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
             return contentObj;
         }
 
-        public EWIResCLSInquiryPersonalClient GetCleansingId(CRMRequestCleansingIdDataInputModel input)
+        public CLSCreatePersonalClientOutputModel CreatePersonalClient(CLSCreatePersonalClientInputModel input)
         {
-            // var endpointKey = ;
-            string endpoint = AppConfig.Instance.Get(CommonConstant.ewiEndpointKeyCLSInquiryPersonalClient);
-
-            var clsinput = new CLSInquiryPersonalClientInputModel
-            {
-
-
-                personalFullName =(input.firstname+" "+input.lastname).Trim(),
-                idCitizen = input.citizenId,
-                emailAddress = input.emailaddress1,
-                roleCode = "",
-
-                telephone = input.mobilePhone1,
-                
-
-            };
-
-            var result = SendRequest(clsinput, endpoint);
+           
+            string endpoint = AppConfig.Instance.Get(CommonConstant.ewiEndpointKeyCLSCreatePersonalClient);
+            var result = SendRequest(input, endpoint);
             if (result.StatusCode != HttpStatusCode.OK)
             {
                 throw new InternalErrorException(result.Message);
             }
             var jss = new JavaScriptSerializer();
-            var contentObj = jss.Deserialize<EWIResCLSInquiryPersonalClient>(result.Content);
+            var contentObj = jss.Deserialize<CLSCreatePersonalClientOutputModel>(result.Content);
             return contentObj;
+        }
+
+        public string GetCleansingId(CRMRequestCleansingIdDataInputModel input)
+        {
+           
+
+            //หาไม่เจอ เลยต้องสร้างใหม่
+            var clsPersonalInput = new CLSCreatePersonalClientInputModel
+            {
+                roleCode = "G",
+                personalName = input.firstname ?? "",
+                personalSurname = input.lastname ?? "",
+                telephone1 = input.telephone1 ?? "",
+                telephone2 = input.telephone2 ?? "",
+                mobilePhone = input.mobilePhone1??"",
+                emailAddress = input.emailaddress1??"",
+                fax = input.fax,
+                idCitizen = input.citizenId
+                
+             };
+
+            if(!string.IsNullOrEmpty(input.gendercode))
+            {
+                switch (input.gendercode)
+                {
+                    case "100000001":
+                        clsPersonalInput.sex = "M"; break;
+                    case "100000002":
+                        clsPersonalInput.sex = "F"; break;
+                    default:
+                        clsPersonalInput.sex = "U"; break;
+                }
+                
+            }
+
+            if (!string.IsNullOrEmpty(input.personalCode))
+            {
+                clsPersonalInput.salutation = input.personalCode.ToUpper();
+            }
+            
+
+            var createResult = CreatePersonalClient(clsPersonalInput);
+            if (createResult.success)
+            {
+                return createResult.content.data.cleansingId;
+            }
+
+            return null;
         }
         
     }

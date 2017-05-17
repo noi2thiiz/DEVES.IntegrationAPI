@@ -32,22 +32,45 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services.Tests
             {
 
 
-                personalFullName= "อนันต์",
+                personalFullName = "อนันต์",
                 idCitizen = "",
                 emailAddress = "",
-                roleCode= "",
-               
-                telephone= "",
-                clientId= ""
-                
-    };
+                roleCode = "",
+
+                telephone = "",
+                clientId = ""
+
+            };
 
             var result = CleansingClientService.Instance.InquiryPersonalClient(input);
             Console.WriteLine("=====================result=========================");
             Console.WriteLine(result);
             Console.WriteLine(result.ToJson());
             Assert.IsNotNull(result);
-         
+
+            Assert.AreEqual(true, result.success);
+        }
+
+        [TestMethod()]
+        public void CreatePersonalClientTest()
+        {
+            AppConfig.Instance.StartupForUnitTest();
+            var input = new CLSCreatePersonalClientInputModel
+            {
+                roleCode = "G",
+                personalName = "ทดสอบสร้างคน",
+                personalSurname = "ลองสร้างใหม่",
+                salutation  ="0001",
+                sex="M"
+            };
+            
+
+            var result = CleansingClientService.Instance.CreatePersonalClient(input);
+            Console.WriteLine("=====================result=========================");
+            Console.WriteLine(result);
+            Console.WriteLine(result.ToJson());
+            Assert.IsNotNull(result);
+
             Assert.AreEqual(true, result.success);
         }
     }
