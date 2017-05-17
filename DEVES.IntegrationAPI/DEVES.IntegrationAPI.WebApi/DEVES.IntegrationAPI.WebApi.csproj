@@ -470,6 +470,7 @@
     <Compile Include="Logic\buzCRMRegPayeeCorporate.cs" />
     <Compile Include="Logic\buzCRMRegPayeePersonal.cs" />
     <Compile Include="Logic\buzInquiryCRMPayeeList.cs" />
+    <Compile Include="Logic\buzReqClsId.cs" />
     <Compile Include="Logic\buzSendSMS.cs" />
     <Compile Include="Logic\CommonConstant.cs" />
     <Compile Include="Logic\DevesCrmAPIExceptions.cs" />
