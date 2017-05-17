@@ -229,6 +229,13 @@ namespace DEVES.IntegrationAPI.WebApi
             Config["EWI_HOSTNAME"] = !string.IsNullOrEmpty(ewiConfig.EWI_HOSTNAME)?ewiConfig.EWI_PASSWORD:Config["EWI_HOSTNAME"];
            
         }
+
+        public string GetProxyEnpoint()
+        {
+            
+           return System.Configuration.ConfigurationManager.AppSettings["API_ENDPOINT_CRMPROXY"];
+            
+        }
     }
 
     public class AppConfigEntity

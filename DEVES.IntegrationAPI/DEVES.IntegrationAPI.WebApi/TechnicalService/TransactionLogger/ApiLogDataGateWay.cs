@@ -31,6 +31,10 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
                    ExecuteSql(apiLogEntry);
 
                 }
+                if (System.Environment.MachineName== "DESKTOP-Q30CAGJ")
+                {
+                    ExecuteSql(apiLogEntry); 
+                }
                 else
                 {
                     Console.WriteLine("CallWebService");
@@ -54,9 +58,16 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
 
             var configurationString = "";
          
+                
+            if (System.Environment.MachineName == "DESKTOP-Q30CAGJ")
+            {
+                configurationString = WebConfigurationManager.AppSettings["CRM_CUSTOMAPP_DB_TON"];
+            }
+            else
+            {
                 configurationString = WebConfigurationManager.AppSettings["CRM_CUSTOMAPP_DB_SERVER"];
-         
-           
+            }
+
 
             // var configurationString = CrmConfigurationSettings.AppSettings.Get("settings.CRM_CUSTOM_DB");
             using (SqlConnection openCon = new SqlConnection(configurationString))

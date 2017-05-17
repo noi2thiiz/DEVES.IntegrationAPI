@@ -167,21 +167,30 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 }
 
                 //implement rollback
+                
                 #region Create Payee in Polisy400
-                BaseDataModel polCreatePersonalIn = DataModelFactory.GetModel(typeof(CLIENTCreatePersonalClientAndAdditionalInfoInputModel));
-                    polCreatePersonalIn = TransformerFactory.TransformModel(RegPayeePersonalInput, polCreatePersonalIn);
-                    CLIENTCreatePersonalClientAndAdditionalInfoContentModel polCreatePayeeContent = CallDevesServiceProxy<CLIENTCreatePersonalClientAndAdditionalInfoOutputModel
-                                                                                                        , CLIENTCreatePersonalClientAndAdditionalInfoContentModel>
-                                                                                                        (CommonConstant.ewiEndpointKeyCLIENTCreatePersonalClient, polCreatePersonalIn);
+               
                 //regPayeePersonalInput = (RegPayeePersonalInputModel)TransformerFactory.TransformModel(polCreatePayeeContent, regPayeePersonalInput);
                     try
-                    {
-                        if (polCreatePayeeContent != null)
+                {
+                    BaseDataModel polCreatePersonalIn = DataModelFactory.GetModel(typeof(CLIENTCreatePersonalClientAndAdditionalInfoInputModel));
+                    polCreatePersonalIn = TransformerFactory.TransformModel(RegPayeePersonalInput, polCreatePersonalIn);
+                    CLIENTCreatePersonalClientAndAdditionalInfoContentModel polCreatePayeeContent= CallDevesServiceProxy<CLIENTCreatePersonalClientAndAdditionalInfoOutputModel
+                                , CLIENTCreatePersonalClientAndAdditionalInfoContentModel>
+                            (CommonConstant.ewiEndpointKeyCLIENTCreatePersonalClient, polCreatePersonalIn);
+
+                    if (polCreatePayeeContent != null)
                         {
                             RegPayeePersonalInput.generalHeader.polisyClientId = polCreatePayeeContent.clientID;
 
                             outputPass.polisyClientId = polCreatePayeeContent.clientID;
                         }
+                        else
+                        {
+                           //เมื่อเกิด error ใด ๆ ใน service อื่นให้ลบ
+                            Console.WriteLine("try rollback" + newCleansingId);
+                            var deleteResult = CleansingClientService.Instance.RemoveByCleansingId(newCleansingId, "P");
+                    }
                     }
                     catch (Exception)
                     {

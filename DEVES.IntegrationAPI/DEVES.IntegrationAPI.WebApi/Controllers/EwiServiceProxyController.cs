@@ -164,8 +164,8 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
 
         [HttpPost]
         [Route("COMP_SendSMS")]
-        [SwaggerResponse(HttpStatusCode.OK, Type = typeof(SendSMSInputModel))]
-        public IHttpActionResult COMP_SendSMS([FromBody] SendSMSOutputModel value)
+        [SwaggerResponse(HttpStatusCode.OK, Type = typeof(SendSMSOutputModel))]
+        public IHttpActionResult COMP_SendSMS([FromBody]  SendSMSInputModel value)
         {
             return proxyRequest("EWI_ENDPOINT_COMPSendSMS", value);
         }

@@ -52,7 +52,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
             Console.WriteLine(input.ToJson());
 
 
-            string endpoint = "https://crmapp.deves.co.th/proxy/xml.ashx?"+AppConfig.Instance.Get("EWI_ENDPOINT_COMPInquiryClientNoByCleansingID");
+            string endpoint = AppConfig.Instance.Get("EWI_ENDPOINT_COMPInquiryClientNoByCleansingID");
             Console.WriteLine(endpoint);
             var result = SendRequest(input, endpoint);
             Console.WriteLine("====result====");

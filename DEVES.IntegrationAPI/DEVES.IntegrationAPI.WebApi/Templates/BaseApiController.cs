@@ -54,12 +54,12 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                 //try  Deserialize Object
                 JsonConvert.DeserializeObject<TInput>(contentText);
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 //output model
                 outputFail.code = AppConst.CODE_INVALID_INPUT;
                 outputFail.message = AppConst.MESSAGE_INVALID_INPUT;
-                outputFail.description = "Cannot parse JSON";
+                outputFail.description = "Cannot parse JSON:"+e.Message+ contentText;
                 outputFail.transactionId = GetTransactionId();
                 outputFail.transactionDateTime = DateTime.Now;
 

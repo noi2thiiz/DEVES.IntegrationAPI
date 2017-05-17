@@ -54,13 +54,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
                 content = JSON
 
             };
+            endpoint = AppConfig.Instance.GetProxyEnpoint() + endpoint;
             Console.WriteLine("====Request====");
             Console.WriteLine(endpoint);
             Console.WriteLine(reqModel.ToJson());
 
             var client = new RESTClient(endpoint);
             var result = client.Execute(reqModel);
-            //LogAsync(result.Request,result.Response);
+            //InMemoryLogData.Instance.LogRequest(serviceName,result.Request, result.Response);
             if (result.StatusCode != HttpStatusCode.OK)
             {
                 Console.WriteLine("====result.Message====");
