@@ -8,9 +8,8 @@ namespace DEVES.IntegrationAPI.Model.CRM
 {
     public class CRMRequestCleansingIdDataInputModel:BaseDataModel
     {
-        public string titlePersonalid { get; set; } = "";
-        public string stringpersonalCode { get; set; } = "";
-        public string stringfirstname { get; set; } = "";
+        public string personalCode { get; set; } = ""; // 0000 (Master Data salutation)
+        public string firstname { get; set; } = "";
         public string lastname { get; set; } = "";
         public string gendercode{ get; set; } = "";
         public string citizenId { get; set; } = "";
