@@ -21,7 +21,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             {
 
                 // search personal form cls
-                var  result = CleansingClientService.Instance.GetCleansingId(input);
+                var result = CleansingClientService.Instance.GetCleansingId(input);
                 if (result.success)
                 {
                     foreach (CLSInquiryPersonalClientOutputModel item in result.content.data)
@@ -31,10 +31,21 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                         updateCleansingIdToCRM(input, cleansingId);
                     }
                 }
-                
-                
-                
+
+
+
                 //สำเร็จไม่สำเร็จก็จะ return ok 
+                return Ok(new OutputGenericDataModel<object>
+                {
+                    code = AppConst.CODE_SUCCESS,
+                    message = AppConst.MESSAGE_SUCCESS,
+                    transactionDateTime = DateTime.Now,
+                    transactionId = GetTransactionId()
+
+                });
+            }
+            else
+            {
                 return Ok(new OutputGenericDataModel<object>
                 {
                     code = AppConst.CODE_INVALID_INPUT,
@@ -44,14 +55,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
 
                 });
             }
-            return Ok(new OutputGenericDataModel<object>
-            {
-                code = AppConst.CODE_SUCCESS,
-                message = AppConst.MESSAGE_SUCCESS,
-                transactionDateTime = DateTime.Now,
-                transactionId = GetTransactionId()
-
-            });
+            
 
         }
 
