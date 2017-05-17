@@ -52,6 +52,17 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         public void updateCleansingIdToCRM(CLSInquiryCorporateClientInputModel input,string cleansingId)
         {
             
+              //pfc_title_personalid
+              //  firstname
+              //lastname
+              //  gendercode
+              //pfc_citizen_id
+              //  pfc_telephone1
+              //pfc_telephone2
+              //  pfc_telephone3
+              //pfc_fax
+              //  pfc_moblie_phone1
+              //emailaddress1
         }
     }
 }
