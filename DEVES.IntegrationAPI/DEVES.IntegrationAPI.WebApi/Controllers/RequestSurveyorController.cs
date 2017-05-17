@@ -485,7 +485,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 _log.Error("RequestId - " + _logImportantMessage);
                 _log.Error(errorMessage);
 
-                output.eventID = errorMessage;
+                output.errorMessage = errorMessage;
             }
 
             return output;
