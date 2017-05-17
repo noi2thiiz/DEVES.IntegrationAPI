@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 
 using System.Configuration;
+using System.Web.Configuration;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
@@ -62,7 +63,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
         public const string CONST_DEFAULT_UID = "";
 
-        public const string PROXY_ENDPOINT = "https://crmapp.deves.co.th/proxy/xml.ashx?";
+        public static string PROXY_ENDPOINT = WebConfigurationManager.AppSettings["API_ENDPOINT_CRMPROXY"];
 
         public static DateTime GetDevesAPINullDate()
         {

@@ -149,8 +149,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     IncidentId = contentModel.IncidentId,
                     pfc_locus_claim_id = locusClaimRegOutput.claimId,
                     pfc_locus_claim_status_on = DateTime.Now,
-                    pfc_locus_claim_status_code = "fixed",
-                    pfc_locus_claim_status_desc = "fixed",
+                    pfc_locus_claim_status_code = "1",
+                    pfc_locus_claim_status_desc = "ลงทะเบียนสินไหมแล้ว",
                     pfc_claim_number = locusClaimRegOutput.claimNo
                 };
 

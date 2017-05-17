@@ -50,6 +50,17 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                // Console.WriteLine(input.ToString());
 
                 InquiryCRMPayeeListInputModel inqCrmPayeeListIn = (InquiryCRMPayeeListInputModel)input;
+            string isOptionalEmpty = inqCrmPayeeListIn.polisyClientId + inqCrmPayeeListIn.sapVendorCode + inqCrmPayeeListIn.fullname + inqCrmPayeeListIn.taxNo + inqCrmPayeeListIn.taxBranchCode + inqCrmPayeeListIn.emcsCode;
+            if(string.IsNullOrEmpty(isOptionalEmpty.Trim()))
+            {
+                crmInqPayeeOut.code = CONST_CODE_FAILED;
+                crmInqPayeeOut.message = "FAILED";
+                crmInqPayeeOut.description = "Please fill at least 1 condition";
+                crmInqPayeeOut.transactionId = TransactionId;
+                crmInqPayeeOut.transactionDateTime = DateTime.Now;
+
+                return crmInqPayeeOut;
+            }
                 InquiryCRMPayeeListInputModel tempInqCrmPayeeInput = Copy(inqCrmPayeeListIn);
 
             switch (inqCrmPayeeListIn.requester)
