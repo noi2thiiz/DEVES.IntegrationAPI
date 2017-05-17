@@ -61,7 +61,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                 return crmInqPayeeOut;
             }
-                InquiryCRMPayeeListInputModel tempInqCrmPayeeInput = Copy(inqCrmPayeeListIn);
+            InquiryCRMPayeeListInputModel tempInqCrmPayeeInput = Copy(inqCrmPayeeListIn);
 
             switch (inqCrmPayeeListIn.requester)
             {
@@ -183,18 +183,21 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 {
                     crmInqPayeeOut.data = crmInqPayeeOut.data.Where(row => row.sourceData == "SAP").DistinctBy(row => row.sapVendorCode).ToList();
 
-                }else
+                }
+            
+            else
                 if (crmInqPayeeOut.data.Where(row => row.sourceData == "COMP").Distinct().ToList().Count > 0)
                 {
                     crmInqPayeeOut.data = crmInqPayeeOut.data.Where(row => row.sourceData == "COMP").DistinctBy(row => row.polisyClientId).ToList();
 
                 }
-                else
-                if (crmInqPayeeOut.data.Where(row => row.sourceData == "CLS").Distinct().ToList().Count > 0)
-                {
-                    crmInqPayeeOut.data = crmInqPayeeOut.data.Where(row => row.sourceData == "CLS").DistinctBy(row => row.cleansingId).ToList();
+                 //ตัด CLS ออก
+                 // else
+                 // if (crmInqPayeeOut.data.Where(row => row.sourceData == "CLS").Distinct().ToList().Count > 0)
+                 // {
+                 //   crmInqPayeeOut.data = crmInqPayeeOut.data.Where(row => row.sourceData == "CLS").DistinctBy(row => row.cleansingId).ToList();
 
-                }
+                 //}
 
                 //MASTER_ASHR
                 //APAR

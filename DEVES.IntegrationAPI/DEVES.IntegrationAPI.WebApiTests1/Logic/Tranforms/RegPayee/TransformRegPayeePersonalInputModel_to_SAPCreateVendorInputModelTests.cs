@@ -15,20 +15,24 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
         public void TransformModelTest()
         {
             var fullname = "AAAAABBBBBCCCCCDDDDDEEEEEFFFFFQQQQQWWWWWOOOOODDDDDLLLLLCCCCCPPPPPSSSSS";
-            string NAME1 = "";
-            string NAME2 = "";
+            string name1 = "";
+            string name2 = "";
+            Console.WriteLine(fullname.Length);
             if (fullname.Length > 40)
             {
-                NAME1 = fullname.Substring(0, 40);
-                NAME2 = fullname.Substring(41, fullname.Length - 1);
+                name1 = fullname.Substring(0, 40);
+                Console.WriteLine(name1);
+                name2 = fullname.Substring(40, fullname.Length - 40);
+                Console.WriteLine(name2);
             }
             else
             {
-                NAME1 = fullname;
+                name1 = fullname;
             }
-            Assert.AreEqual(40, NAME1.Length);
-            Assert.AreEqual("X", NAME1);
-            Assert.AreEqual("Y", NAME2);
+            Assert.AreEqual(40, name1.Length);
+            Assert.AreEqual(30, name2.Length);
+            Assert.AreEqual("AAAAABBBBBCCCCCDDDDDEEEEEFFFFFQQQQQWWWWW", name1);
+            Assert.AreEqual("OOOOODDDDDLLLLLCCCCCPPPPPSSSSS", name2);
         }
     }
 }

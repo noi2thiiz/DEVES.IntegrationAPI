@@ -474,6 +474,7 @@
     <Compile Include="Logic\buzSendSMS.cs" />
     <Compile Include="Logic\CommonConstant.cs" />
     <Compile Include="Logic\DevesCrmAPIExceptions.cs" />
+    <Compile Include="Logic\Services\BaseEwiServiceProxy.cs" />
     <Compile Include="Logic\Services\BaseProxyService.cs" />
     <Compile Include="Logic\Services\CleansingService.cs" />
     <Compile Include="Logic\Services\PolisyClientService.cs" />

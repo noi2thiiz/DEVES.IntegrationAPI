@@ -199,9 +199,10 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             //Console.WriteLine("==========request========");
             //Console.WriteLine(request.ToJson());
             // เช็ค check reponse 
-            LogAsync(request);
+           // LogAsync(request);
             HttpResponseMessage response = client.SendAsync(request).Result;
             resTime = DateTime.Now;
+            LogAsync(request, response);
             response.EnsureSuccessStatusCode();
             
             T1 ewiRes = response.Content.ReadAsAsync<T1>().Result;
@@ -210,7 +211,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             serviceName = splitServiceName[splitServiceName.Length - 1];
             serviceName = serviceName.Replace("OutputModel", "");
 
-            LogAsync(request, response);
+           
 
             //Console.WriteLine("==========response========");
            // Console.WriteLine(ewiRes.ToJson());

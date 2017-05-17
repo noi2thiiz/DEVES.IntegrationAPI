@@ -12,7 +12,7 @@ using Microsoft.IdentityModel.Protocols.WSIdentity;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 {
-    public class PolisyClientService : BaseProxyService
+    public class PolisyClientService : BaseEwiServiceProxy
     {
         #region Singleton
         private static PolisyClientService _instance;

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Script.Serialization;
+using DEVES.IntegrationAPI.Model;
 using DEVES.IntegrationAPI.Model.CLS;
 using DEVES.IntegrationAPI.Model.CRM;
 using DEVES.IntegrationAPI.Model.EWI;
@@ -14,7 +15,7 @@ using Microsoft.IdentityModel.Protocols.WSIdentity;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 {
-    public class CleansingClientService:BaseProxyService
+    public class CleansingClientService: BaseEwiServiceProxy
     {
         #region Singleton
         private static CleansingClientService _instance;
@@ -39,13 +40,16 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
         {
             throw new NotImplementedException();
         }
-
+        public class RemoveByCleansingIdInputModel :BaseDataModel
+        {
+            public string cleansing_id { get; set; }
+        }
 
         #endregion
         public BaseEWIResponseModel RemoveByCleansingId(string cleansingClientId, string clientType = "P")
         {
             
-            var input = new 
+            var input = new RemoveByCleansingIdInputModel
             {
                 cleansing_id = cleansingClientId
             };

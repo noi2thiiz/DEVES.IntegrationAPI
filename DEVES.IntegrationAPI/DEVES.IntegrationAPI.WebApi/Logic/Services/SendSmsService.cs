@@ -12,7 +12,7 @@ using Microsoft.IdentityModel.Protocols.WSIdentity;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 {
-    public class SendSmsService: BaseProxyService
+    public class SendSmsService: BaseEwiServiceProxy
     {
         #region Singleton
         private static SendSmsService _instance;

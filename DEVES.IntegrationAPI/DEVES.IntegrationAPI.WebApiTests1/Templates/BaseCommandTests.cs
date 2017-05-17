@@ -18,7 +18,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates.Tests
             List<string> lstCrmClientId = testcmd.SearchCrmContactClientId("C2017-100000351");
             Assert.IsNotNull(lstCrmClientId);
             Console.WriteLine(lstCrmClientId.ToJson());
-            Assert.AreEqual("", lstCrmClientId[0]);
+            Assert.AreEqual("201705-0019591", lstCrmClientId[0]);
         }
     }
 }

@@ -33,7 +33,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 if (fullname.Length > 40)
                 {
                     trgt.NAME1 = fullname.Substring(0, 40);
-                    trgt.NAME2 = fullname.Substring(41, fullname.Length - 1);
+                    trgt.NAME2 = fullname.Substring(40, fullname.Length - 40);
                 }
                 else
                 {

@@ -87,6 +87,10 @@ namespace DEVES.IntegrationAPI.Model.Polisy400
         {
             get
             {
+                if (string.IsNullOrEmpty(dateOfBirth))
+                {
+                    return null;
+                }
                 DateTime? dtBirthDate = null;
                 if (dateOfBirth.Length == 8 && dateOfBirth != CONST_DATE_NULL_POLISY400)
                 {
@@ -105,6 +109,11 @@ namespace DEVES.IntegrationAPI.Model.Polisy400
         public DateTime? dateOfDeathDate
         {
             get {
+                if (string.IsNullOrEmpty(dateOfDeath))
+                {
+                    return null;
+                }
+
                 DateTime? dtDeathDate = null;
                 if (dateOfDeath.Length == 8 && dateOfDeath != CONST_DATE_NULL_POLISY400 )
                 {
