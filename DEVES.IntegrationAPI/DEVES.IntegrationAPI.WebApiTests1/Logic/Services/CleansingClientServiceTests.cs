@@ -28,12 +28,22 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services.Tests
         public void InquiryPersonalClientTest()
         {
             AppConfig.Instance.StartupForUnitTest();
-            var input = new CLSInquiryCorporateClientInputModel
+            var input = new CLSInquiryPersonalClientInputModel
             {
 
-            };
+
+                personalFullName= "อนันต์",
+                idCitizen = "",
+                emailAddress = "",
+                roleCode= "",
+               
+                telephone= "",
+                clientId= ""
+                
+    };
 
             var result = CleansingClientService.Instance.InquiryPersonalClient(input);
+            Console.WriteLine("=====================result=========================");
             Console.WriteLine(result);
             Console.WriteLine(result.ToJson());
             Assert.IsNotNull(result);

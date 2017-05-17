@@ -27,18 +27,17 @@ namespace DEVES.IntegrationAPI.WebApi
         {
             try
             {
-                ConnectionString = System.Configuration.ConfigurationManager.AppSettings["CRM_CUSTOMAPP_DB"].ToString();
-                Console.WriteLine(ConnectionString);
-                var mapper = new ModelToTableMapper<AppConfigEntity>();
-                mapper.AddMapping(model => model.Key, "Key");
-                //mapper.AddMapping(model => model.Value, "Value");
-                //mapper.AddMapping(model => model.Type, "Type");
-                //mapper.AddMapping(model => model.Enveronment, "Enveronment");
-                dependency = new SqlTableDependency<AppConfigEntity>(ConnectionString, "AppConfig", mapper);
+                //ConnectionString = System.Configuration.ConfigurationManager.AppSettings["CRM_CUSTOMAPP_DB"].ToString();
+                //Console.WriteLine(ConnectionString);
+                //var mapper = new ModelToTableMapper<AppConfigEntity>();
+                // mapper.AddMapping(model => model.Key, "Key");
+
+                // dependency = new SqlTableDependency<AppConfigEntity>(ConnectionString, "AppConfig", mapper);
+              
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                //Console.WriteLine(e.Message);
                 //do not thing
                 //updateConfig();
             }
@@ -70,19 +69,19 @@ namespace DEVES.IntegrationAPI.WebApi
                 
                 ConnectionString = System.Configuration.ConfigurationManager.AppSettings["CRM_CUSTOMAPP_DB"].ToString();
                 
-                Console.WriteLine("Start auto update config");
+               // Console.WriteLine("Start auto update config");
 
 
-                dependency.OnChanged += dependency_OnChanged; //new OnChangeEventHandler(OnChange);
-                dependency.OnError += dependency_OnError;
+               // dependency.OnChanged += dependency_OnChanged; //new OnChangeEventHandler(OnChange);
+               // dependency.OnError += dependency_OnError;
                 // dependency.OnError += OnError;
                 updateConfig();
-                dependency.Start();
+               // dependency.Start();
             }
             catch (Exception)
             {
                 Console.WriteLine("Cannot  Start auto update config");
-                updateConfig();
+               // updateConfig();
             }
            
         }

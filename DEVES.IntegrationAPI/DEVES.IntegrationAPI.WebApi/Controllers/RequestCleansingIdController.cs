@@ -4,8 +4,10 @@ using System.Linq;
 using System.Web;
 using System.Web.Http;
 using DEVES.IntegrationAPI.Model;
+using DEVES.IntegrationAPI.Model.CLS;
 using DEVES.IntegrationAPI.WebApi.Templates;
 using DEVES.IntegrationAPI.Model.CRM;
+using DEVES.IntegrationAPI.WebApi.Logic.Services;
 
 namespace DEVES.IntegrationAPI.WebApi.Controllers
 {
@@ -15,17 +17,23 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
       
         public IHttpActionResult RequestCleansingId(CRMRequestCleansingIdDataInputModel input)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
 
                 // search personal form cls
-
-
-                // update  CleansingId to crm
-                string cleansingId = "";
-                updateCleansingIdToCRM(input, cleansingId);
-
-
+                var  result = CleansingClientService.Instance.GetCleansingId(input);
+                if (result.success)
+                {
+                    foreach (CLSInquiryPersonalClientOutputModel item in result.content.data)
+                    {
+                        // update  CleansingId to crm
+                        string cleansingId = item.cleansing_id;
+                        updateCleansingIdToCRM(input, cleansingId);
+                    }
+                }
+                
+                
+                
                 //สำเร็จไม่สำเร็จก็จะ return ok 
                 return Ok(new OutputGenericDataModel<object>
                 {
@@ -48,6 +56,8 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         }
 
         
+
+
 
         public void updateCleansingIdToCRM(CRMRequestCleansingIdDataInputModel input,string cleansingId)
         {

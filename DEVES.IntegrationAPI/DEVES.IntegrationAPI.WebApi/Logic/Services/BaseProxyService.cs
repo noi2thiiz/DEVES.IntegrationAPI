@@ -54,7 +54,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
                 content = JSON
 
             };
-            endpoint = AppConfig.Instance.GetProxyEnpoint() + endpoint;
+            Console.WriteLine(CommonConstant.PROXY_ENDPOINT);
+            endpoint = CommonConstant.PROXY_ENDPOINT + endpoint;
             Console.WriteLine("====Request====");
             Console.WriteLine(endpoint);
             Console.WriteLine(reqModel.ToJson());
