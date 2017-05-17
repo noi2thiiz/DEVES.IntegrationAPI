@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Script.Serialization;
+using DEVES.IntegrationAPI.Model.CLS;
 using DEVES.IntegrationAPI.Model.EWI;
 using DEVES.IntegrationAPI.Model.Polisy400;
 using DEVES.IntegrationAPI.WebApi.Core.DataAdepter;
@@ -67,5 +68,20 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
             var contentObj = jss.Deserialize<BaseEWIResponseModel>(result.Content);
             return contentObj;
         }
+
+        public EWIResCLSInquiryPersonalClient InquiryPersonalClient(CLSInquiryCorporateClientInputModel input)
+        {
+           // var endpointKey = ;
+            string endpoint = AppConfig.Instance.Get(CommonConstant.ewiEndpointKeyCLSInquiryPersonalClient);
+            var result = SendRequest(input, endpoint);
+            if (result.StatusCode != HttpStatusCode.OK)
+            {
+                throw new InternalErrorException(result.Message);
+            }
+            var jss = new JavaScriptSerializer();
+            var contentObj = jss.Deserialize<EWIResCLSInquiryPersonalClient>(result.Content);
+            return contentObj;
+        }
+        
     }
 }

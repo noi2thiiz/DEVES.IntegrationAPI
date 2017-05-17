@@ -423,6 +423,7 @@
     <Compile Include="Controllers\RegClientPersonalController.cs" />
     <Compile Include="Controllers\RegPayeeCorporateController.cs" />
     <Compile Include="Controllers\RegPayeePersonalController.cs" />
+    <Compile Include="Controllers\RequestCleansingIdController.cs" />
     <Compile Include="Controllers\RequestSurveyorController.cs" />
     <Compile Include="Controllers\SendSMSController.cs" />
     <Compile Include="Controllers\TestAccountController.cs" />

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DEVES.IntegrationAPI.Model.CLS;
 using DEVES.IntegrationAPI.WebApi.Templates;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic.Services.Tests
@@ -20,7 +21,24 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services.Tests
             Console.WriteLine(result);
             Console.WriteLine(result.ToJson());
             Assert.IsNotNull(result);
-            Assert.AreEqual(true,result.success);
+            Assert.AreEqual(true, result.success);
+        }
+
+        [TestMethod()]
+        public void InquiryPersonalClientTest()
+        {
+            AppConfig.Instance.StartupForUnitTest();
+            var input = new CLSInquiryCorporateClientInputModel
+            {
+
+            };
+
+            var result = CleansingClientService.Instance.InquiryPersonalClient(input);
+            Console.WriteLine(result);
+            Console.WriteLine(result.ToJson());
+            Assert.IsNotNull(result);
+         
+            Assert.AreEqual(true, result.success);
         }
     }
 }

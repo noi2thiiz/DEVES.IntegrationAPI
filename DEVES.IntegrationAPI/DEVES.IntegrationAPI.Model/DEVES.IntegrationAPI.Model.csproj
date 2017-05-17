@@ -102,6 +102,7 @@
     <Compile Include="CrmMappingAttribute.cs" />
     <Compile Include="CRM\CRM_MasterCountry.cs" />
     <Compile Include="CRM\CRM_MasterSalutation.cs" />
+    <Compile Include="CRM\CRM_RequestCleansingIdDataModel.cs" />
     <Compile Include="DataModel.cs" />
     <Compile Include="DataModelFactory.cs" />
     <Compile Include="EWI\Enum.cs" />
