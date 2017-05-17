@@ -146,7 +146,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
             
 
             var createResult = CreatePersonalClient(clsPersonalInput);
-            if (createResult.content.success)
+            if (createResult.success)
             {
                 return createResult?.content?.data?.cleansingId??"";
             }

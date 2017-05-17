@@ -131,7 +131,8 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             HttpClient client = new HttpClient();
 
             client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            var media = new MediaTypeWithQualityHeaderValue("application/json") { CharSet = "utf-8" };
+            client.DefaultRequestHeaders.Accept.Add(media);
             client.DefaultRequestHeaders.Add("Accept-Encoding", "utf-8");
 
             // + ENDPOINT
@@ -140,23 +141,24 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             request.Content = new StringContent(jsonReqModel, System.Text.Encoding.UTF8, "application/json");
             //request.Headers.Add("ContentType", "application/json; charset=UTF-8");
             // เช็ค check reponse 
+            LogAsync(request);
             HttpResponseMessage response = client.SendAsync(request).Result;
             response.EnsureSuccessStatusCode();
-
-          //  Console.WriteLine("==========jsonReqModel========");
-           // Console.WriteLine(EWIendpoint);
+           
+            //  Console.WriteLine("==========jsonReqModel========");
+            // Console.WriteLine(EWIendpoint);
             //Console.WriteLine(jsonReqModel.ToJson());
 
             T1 ewiRes = response.Content.ReadAsAsync<T1>().Result;
             resBody = ewiRes.ToJson();
-            string[] splitServiceName = ewiRes.ToString().Split('.');
-            serviceName = splitServiceName[splitServiceName.Length-1];
+            var sv = EWIendpoint.Split('/');
+            serviceName = sv[sv.Length - 1];
 
             LogAsync(request, response);
 
 
-           // Console.WriteLine("==========response========");
-           // Console.WriteLine(ewiRes.ToJson());
+            // Console.WriteLine("==========response========");
+            // Console.WriteLine(ewiRes.ToJson());
 
             BaseContentJsonProxyOutputModel output =  (BaseContentJsonProxyOutputModel)typeof(T1).GetProperty("content").GetValue(ewiRes);
             return output;
@@ -184,8 +186,10 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             client = new HttpClient(); 
 
             client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            client.DefaultRequestHeaders.Add("Accept-Encoding", "utf-8");
+            var media = new MediaTypeWithQualityHeaderValue("application/json") { CharSet = "utf-8" };
+            client.DefaultRequestHeaders.Accept.Add(media);
+            //client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            //client.DefaultRequestHeaders.Add("Accept-Encoding", "utf-8");
            
 
             // + ENDPOINT
@@ -199,22 +203,22 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             //Console.WriteLine("==========request========");
             //Console.WriteLine(request.ToJson());
             // เช็ค check reponse 
-           // LogAsync(request);
+             LogAsync(request);
             HttpResponseMessage response = client.SendAsync(request).Result;
             resTime = DateTime.Now;
-            LogAsync(request, response);
+         
             response.EnsureSuccessStatusCode();
-            
+           
             T1 ewiRes = response.Content.ReadAsAsync<T1>().Result;
             resBody = ewiRes.ToJson();
             string[] splitServiceName = ewiRes.ToString().Split('.');
-            serviceName = splitServiceName[splitServiceName.Length - 1];
-            serviceName = serviceName.Replace("OutputModel", "");
+            var sv = EWIendpoint.Split('/');
+            serviceName = sv[sv.Length - 1];
+            LogAsync(request, response);
 
-           
 
             //Console.WriteLine("==========response========");
-           // Console.WriteLine(ewiRes.ToJson());
+            // Console.WriteLine(ewiRes.ToJson());
             if (ewiRes.success)
             {
 
@@ -234,7 +238,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             }
         }
 
-        protected async Task<ApiLogEntry> LogAsync(HttpRequestMessage req, HttpResponseMessage res=null)
+        protected async Task<ApiLogEntry> LogAsync(HttpRequestMessage req, HttpResponseMessage res)
         {
             
             // Request
@@ -272,16 +276,17 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             {
                 resHeader = res.Headers.ToString();
             }
-           
+               var sv = uri.Split('/');
+               serviceName = sv[sv.Length - 1];
 
-           var apiLogEntry =new ApiLogEntry
+            var apiLogEntry =new ApiLogEntry
             {
                 Application = appName,
                 TransactionID = TransactionId,
                 Controller = "",
                 ServiceName = serviceName,
-                Activity = activity,
-                User = user,
+                Activity = "consume:Receive response",
+               User = user,
                 Machine = machineName,
                 RequestIpAddress = ip,
                 RequestContentType = client.DefaultRequestHeaders?.Accept.ToString(),
@@ -294,9 +299,73 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                 RequestTimestamp = reqTime,
                 ResponseContentType = resContentType,
                 ResponseContentBody = resBody,
-                // ResponseStatusCode = resStatus,
+                ResponseStatusCode = res?.StatusCode.ToString(),
                 ResponseHeaders = resHeader,
-                ResponseTimestamp = resTime
+                ResponseTimestamp = DateTime.Now
+            };
+            InMemoryLogData.Instance.AddLogEntry(apiLogEntry);
+
+            return null;
+        }
+
+        protected async Task<ApiLogEntry> LogAsync(HttpRequestMessage req)
+        {
+
+            // Request
+            // var reqContext = ((HttpContextBase)req.Properties["MS_HttpContext"]);
+
+            // Map Request vaule to global Variables (Request)
+            //user = reqContext.User.Identity.Name;
+            //ip = reqContext.Request.UserHostAddress;
+            //reqContentType = reqContext.Request.ContentType;
+            uri = req.RequestUri.ToString();
+            Console.WriteLine("======LOG======");
+            Console.WriteLine("======LOG======");
+            Console.WriteLine("======LOG======");
+            Console.WriteLine("RequestUri" + uri);
+            Console.WriteLine("RequestContentBody" + jsonReqModel);
+            reqMethod = req.Method.Method;
+            // routeTemplate = req.GetRouteData().Route.RouteTemplate;
+            reqHeader = req.Headers.ToString();
+
+            try
+            {
+                // requestRouteData = req.GetRouteData().ToJson();
+            }
+            catch (Exception e)
+            {
+                // do nothing
+            }
+            var sv = uri.Split('/');
+            serviceName = sv[sv.Length - 1];
+
+            // Map Request vaule to global Variables (Response)
+            resContentType = "";
+            // resBody = res.Content.Headers.ToString();
+            resStatus = "";
+         
+
+
+            var apiLogEntry = new ApiLogEntry
+            {
+                Application = appName,
+                TransactionID = TransactionId,
+                Controller = "",
+                ServiceName = serviceName,
+                Activity = "consume:Send request",
+                User = user,
+                Machine = machineName,
+                RequestIpAddress = ip,
+                RequestContentType = client.DefaultRequestHeaders?.Accept.ToString(),
+                RequestContentBody = jsonReqModel,
+                RequestUri = uri,
+                RequestMethod = reqMethod,
+                RequestRouteTemplate = routeTemplate,
+                RequestRouteData = requestRouteData,
+                RequestHeaders = reqHeader,
+                RequestTimestamp = reqTime,
+            
+                ResponseTimestamp = DateTime.Now
             };
             InMemoryLogData.Instance.AddLogEntry(apiLogEntry);
 

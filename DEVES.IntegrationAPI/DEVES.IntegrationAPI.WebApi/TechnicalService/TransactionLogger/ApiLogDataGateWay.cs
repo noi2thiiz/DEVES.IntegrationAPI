@@ -33,6 +33,7 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
                 }
                 if (System.Environment.MachineName== "DESKTOP-Q30CAGJ")
                 {
+                   // CallWebService(apiLogEntry);
                     ExecuteSql(apiLogEntry); 
                 }
                 else
@@ -48,6 +49,7 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
             catch (Exception e)
             {
                 Console.WriteLine("CANNOT SAVE: transactionLog"+e.Message );
+                Console.WriteLine("CANNOT SAVE: transactionLog" + e.StackTrace);
 
             }
 
@@ -126,13 +128,13 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
                     querySaveStaff.Parameters.Add("@RequestRouteData", SqlDbType.NVarChar).Value = "" + apiLogEntry.RequestRouteData;
                     querySaveStaff.Parameters.Add("@RequestHeaders", SqlDbType.NVarChar).Value = "" + apiLogEntry.RequestHeaders;
 
-                    querySaveStaff.Parameters.Add("@RequestTimestamp", SqlDbType.DateTime).Value = apiLogEntry.ResponseTimestamp;
+                    querySaveStaff.Parameters.Add("@RequestTimestamp", SqlDbType.DateTime).Value = apiLogEntry?.ResponseTimestamp??DateTime.Now;
                     querySaveStaff.Parameters.Add("@ResponseContentType", SqlDbType.NVarChar).Value = "" + apiLogEntry.ResponseContentType;
                     querySaveStaff.Parameters.Add("@ResponseContentBody", SqlDbType.NVarChar).Value = "" + apiLogEntry.ResponseContentBody;
 
                     querySaveStaff.Parameters.Add("@ResponseStatusCode", SqlDbType.NVarChar).Value = "" + apiLogEntry.ResponseStatusCode;
                     querySaveStaff.Parameters.Add("@ResponseHeaders", SqlDbType.NVarChar).Value = "" + apiLogEntry.RequestHeaders;
-                    querySaveStaff.Parameters.Add("@ResponseTimestamp", SqlDbType.DateTime).Value = apiLogEntry.ResponseTimestamp;
+                    querySaveStaff.Parameters.Add("@ResponseTimestamp", SqlDbType.DateTime).Value = apiLogEntry?.ResponseTimestamp??DateTime.Now;
 
 
 

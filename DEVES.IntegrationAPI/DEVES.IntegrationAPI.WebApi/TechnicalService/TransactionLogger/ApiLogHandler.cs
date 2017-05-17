@@ -115,8 +115,8 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
                 RequestContentType = context.Request.ContentType,
                 RequestRouteTemplate = routeTemplate,
                 RequestRouteData = requestRouteData,
-                RequestIpAddress = context.Request.UserHostAddress,
-                RequestMethod = request.Method.Method,
+                RequestIpAddress = context?.Request?.UserHostAddress,
+                RequestMethod = request?.Method?.Method,
                 RequestHeaders = SerializeHeaders(request.Headers),
                 RequestTimestamp = DateTime.Now,
                 RequestUri = request.RequestUri.ToString()

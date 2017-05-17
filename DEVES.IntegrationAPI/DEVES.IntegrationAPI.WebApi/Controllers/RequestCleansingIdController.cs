@@ -63,9 +63,14 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 return Ok(new OutputGenericDataModel<object>
                 {
                     code = AppConst.CODE_FAILED,
-                    message = "Cannot create cleansing ",
+                    message = "Cannot find Cleansing id  ",
                     transactionDateTime = DateTime.Now,
-                    transactionId = GetTransactionId()
+                    transactionId = GetTransactionId(),
+                    data = new
+                    {
+                        input,
+                        cleansingId
+                    }
                 });
             }
 
@@ -75,8 +80,14 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             {
                 code = AppConst.CODE_FAILED,
                 message = AppConst.MESSAGE_INTERNAL_ERROR,
+                description = "Cannot update cleansing id",
                 transactionDateTime = DateTime.Now,
-                transactionId = GetTransactionId()
+                transactionId = GetTransactionId(),
+                data = new
+                {
+                    input,
+                    cleansingId
+                }
             });
         }
 
