@@ -253,6 +253,21 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 Incident incident = query.FirstOrDefault<Incident>();
                 _accountId = new Guid(incident.IncidentId.ToString());
 
+                if(Int32.Parse(content.iSurveyStatus) <= incident.pfc_isurvey_status.Value)
+                {
+                    output.code = "200";
+                    output.message = "Success";
+                    output.description = "Update survey status is done!";
+                    output.transactionId = "";
+                    output.transactionDateTime = System.DateTime.Now.ToString();
+                    output.data = UpdateSurveyStatusOutput;
+                    output.data.message = "ClaimNoti Number: " + content.claimNotiNo +
+                        " i-Survey status: " + content.iSurveyStatus +
+                        " i-Survey status on: " + content.iSurveyStatusOn;
+
+                    return output;
+                }
+
                 Incident retrievedIncident = (Incident)_serviceProxy.Retrieve(Incident.EntityLogicalName, _accountId, new Microsoft.Xrm.Sdk.Query.ColumnSet(true));
                 try
                 {
@@ -279,7 +294,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 output.code = "200";
                 output.message = "Success";
                 output.description = "Update survey status is done!";
-                output.transactionId = content.ticketNo;
+                output.transactionId = "";
                 output.transactionDateTime = System.DateTime.Now.ToString();
                 output.data = UpdateSurveyStatusOutput;
                 output.data.message = "ClaimNoti Number: " + content.claimNotiNo +

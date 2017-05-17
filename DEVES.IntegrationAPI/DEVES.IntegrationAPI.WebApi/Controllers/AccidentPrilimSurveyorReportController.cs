@@ -296,9 +296,15 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                     retrievedIncident.pfc_num_of_death = new OptionSetValue(Int32.Parse(convertOptionSet(Incident.EntityLogicalName, "", content.eventDetailInfo.numOfDeath.ToString())));
                     retrievedIncident.pfc_excess_fee = (decimal)content.eventDetailInfo.excessFee;
                     retrievedIncident.pfc_deductable_fee = (decimal)content.eventDetailInfo.deductibleFee;
-                    // retrievedIncident.pfc_deductable_fee = content.eventDetailInfo.fee;
                     retrievedIncident.pfc_accident_prilim_surveyor_report_date = convertDateTime(content.reportAccidentResultDate);
-                    retrievedIncident.pfc_isurvey_status = new OptionSetValue(Int32.Parse("100000071"));
+                    if (retrievedIncident.pfc_isurvey_status.Value >= 100000071)
+                    {
+                        // ถ้าค่าใน crm มากกว่า 71 อยู่แล้ว ไม่ต้องปรับ
+                    }
+                    else
+                    {
+                        retrievedIncident.pfc_isurvey_status = new OptionSetValue(Int32.Parse("100000071"));
+                    }
                     retrievedIncident.pfc_isurvey_status_on = DateTime.Now;
                     retrievedIncident.pfc_motor_accident_sum = 1;
 
