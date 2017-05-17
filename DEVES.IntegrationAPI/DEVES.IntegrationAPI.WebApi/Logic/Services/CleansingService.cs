@@ -106,23 +106,22 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
         public string GetCleansingId(CRMRequestCleansingIdDataInputModel input)
         {
            
-
             //หาไม่เจอ เลยต้องสร้างใหม่
             var clsPersonalInput = new CLSCreatePersonalClientInputModel
             {
                 roleCode = "G",
-                personalName = input.firstname ?? "",
-                personalSurname = input.lastname ?? "",
-                telephone1 = input.telephone1 ?? "",
-                telephone2 = input.telephone2 ?? "",
-                mobilePhone = input.mobilePhone1??"",
-                emailAddress = input.emailaddress1??"",
-                fax = input.fax,
-                idCitizen = input.citizenId
+                personalName = input?.firstname ?? "",
+                personalSurname = input?.lastname ?? "",
+                telephone1 = input?.telephone1 ?? "",
+                telephone2 = input?.telephone2 ?? "",
+                mobilePhone = input?.mobilePhone1??"",
+                emailAddress = input?.emailaddress1??"",
+                fax = input?.fax,
+                idCitizen = input?.citizenId
                 
              };
 
-            if(!string.IsNullOrEmpty(input.gendercode))
+            if(!string.IsNullOrEmpty(input?.gendercode))
             {
                 switch (input.gendercode)
                 {
@@ -136,19 +135,19 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
                 
             }
 
-            if (!string.IsNullOrEmpty(input.personalCode))
+            if (!string.IsNullOrEmpty(input?.personalCode))
             {
-                clsPersonalInput.salutation = input.personalCode.ToUpper();
+                clsPersonalInput.salutation = input?.personalCode?.ToUpper()??"0001";
             }
             
 
             var createResult = CreatePersonalClient(clsPersonalInput);
-            if (createResult.success)
+            if (createResult.content.success)
             {
-                return createResult.content.data.cleansingId;
+                return createResult?.content?.data?.cleansingId??"";
             }
 
-            return null;
+            return "";
         }
         
     }
