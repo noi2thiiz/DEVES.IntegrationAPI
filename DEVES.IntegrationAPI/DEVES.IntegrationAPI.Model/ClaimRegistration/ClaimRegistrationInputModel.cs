@@ -298,6 +298,8 @@ namespace DEVES.IntegrationAPI.Model.ClaimRegistration
         [CrmMapping(FieldName = "serviceBranch", Source = ENUMDataSource.srcSQL)]
         [CrmMapping(FieldName = "currentUser", Source = ENUMDataSource.srcCrm)]
         public String serviceBranch { set; get; }
+        [CrmMapping(FieldName = "pfc_policy_additionalId", Source = ENUMDataSource.srcSQL)]
+        public Guid policyAdditionalID { set; get; }
     }
     public class LocusClaiminformModel : BaseDataModel
     {

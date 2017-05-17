@@ -141,6 +141,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 claim.pfc_claim_number = locusClaimRegOutput.claimNo;
                 claim.pfc_zrepclmno = data.claimHeader.claimNotiNo;
                 claim.pfc_ref_caseId = new Microsoft.Xrm.Sdk.EntityReference(Incident.EntityLogicalName, contentModel.IncidentId);
+                claim.pfc_policy_additional = new Microsoft.Xrm.Sdk.EntityReference(Incident.EntityLogicalName, data.claimHeader.policyAdditionalID);
 
                 //crmSvc.Create(claim);
 
