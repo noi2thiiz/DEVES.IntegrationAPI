@@ -41,6 +41,28 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
            
             //++ Call CLS_InquiryCLSPersonalClient through ServiceProxy
             InquiryClientMasterInputModel contentModel = (InquiryClientMasterInputModel)input;
+
+            string var1 = contentModel.conditionDetail.cleansingId;
+            string var2 = contentModel.conditionDetail.polisyClientId;
+            string var3 = contentModel.conditionDetail.crmClientId;
+            string var4 = contentModel.conditionDetail.clientName1;
+            string var5 = contentModel.conditionDetail.clientName2;
+            string var6 = contentModel.conditionDetail.clientFullname;
+            string var7 = contentModel.conditionDetail.idCard;
+            string var8 = contentModel.conditionDetail.corporateBranch;
+            string var9 = contentModel.conditionDetail.emcsCode;
+            string isOptionalEmpty = var1 + var2 + var3 + var4 + var5 + var6 + var7 + var8 + var9;
+            if (string.IsNullOrEmpty(isOptionalEmpty.Trim()))
+            {
+                crmInqContent.code = CONST_CODE_FAILED;
+                crmInqContent.message = "FAILED";
+                crmInqContent.description = "Please fill at least 1 condition";
+                crmInqContent.transactionId = TransactionId;
+                crmInqContent.transactionDateTime = DateTime.Now;
+
+                return crmInqContent;
+            }
+
             CLSInquiryPersonalClientInputModel clsPersonalInput = new CLSInquiryPersonalClientInputModel();
             clsPersonalInput = (CLSInquiryPersonalClientInputModel)TransformerFactory.TransformModel(contentModel, clsPersonalInput);
 
