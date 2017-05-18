@@ -253,11 +253,13 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 Incident incident = query.FirstOrDefault<Incident>();
                 _accountId = new Guid(incident.IncidentId.ToString());
 
-                if(Int32.Parse(content.iSurveyStatus) <= incident.pfc_isurvey_status.Value)
+                int statusInput = Int32.Parse(content.iSurveyStatus);
+                int statusCRM = (incident.pfc_isurvey_status.Value % 100000000);
+                if (statusInput <= statusCRM)
                 {
                     output.code = "200";
                     output.message = "Success";
-                    output.description = "Update survey status is done!";
+                    output.description = "Update survey status is done! (i-Survey status is not changed)";
                     output.transactionId = "";
                     output.transactionDateTime = System.DateTime.Now.ToString();
                     output.data = UpdateSurveyStatusOutput;
