@@ -107,6 +107,7 @@ namespace DEVES.IntegrationAPI.Model.CLS
         public string longtitude { get; set; }
 
     }
+  
 
     public class CLSCreatePersonalClientOutputModel : BaseEWIResponseModel
     {

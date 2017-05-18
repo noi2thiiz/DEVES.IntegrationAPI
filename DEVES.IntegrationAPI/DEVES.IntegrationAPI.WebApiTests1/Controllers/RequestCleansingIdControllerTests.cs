@@ -16,11 +16,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
         [TestMethod()]
         public void updateCleansingIdToCRMTest()
         {
-            buzReqClsId ctrl = new buzReqClsId();
-
-            CRMRequestCleansingIdDataInputModel input = new CRMRequestCleansingIdDataInputModel();
-            string clsId = "C2017-7357";
-            ctrl.Execute(input, clsId);
+     
            
         }
     }

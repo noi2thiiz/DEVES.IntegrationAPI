@@ -74,6 +74,15 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
             }
             var jss = new JavaScriptSerializer();
             var contentObj = jss.Deserialize<BaseEWIResponseModel>(result.Content);
+            if (false == contentObj.success)
+            {
+                throw new Exception($"CLS Error {contentObj.responseCode}: {contentObj.responseMessage}");
+            }
+
+            if (false == contentObj.success)
+            {
+                throw new Exception($"CLS Error {contentObj.responseCode}: {contentObj.responseMessage}");
+            }
             return contentObj;
         }
 
@@ -88,6 +97,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
             }
             var jss = new JavaScriptSerializer();
             var contentObj = jss.Deserialize<EWIResCLSInquiryPersonalClient>(result.Content);
+            if (false == contentObj.success)
+            {
+                throw new Exception($"CLS Error {contentObj.responseCode}: {contentObj.responseMessage}");
+            }
+            if (false == (contentObj.content.code == AppConst.CODE_CLS_DUPLICATE || contentObj.content.code == AppConst.CODE_SUCCESS))
+            {
+                throw new Exception($"CLS Error {contentObj.responseCode}: {contentObj.responseMessage}");
+            }
             return contentObj;
         }
 
@@ -106,6 +123,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
             Console.WriteLine("1000000005");
             var jss = new JavaScriptSerializer();
             var contentObj = jss.Deserialize<CLSCreatePersonalClientOutputModel>(result.Content);
+            if (false == contentObj.success)
+            {
+                throw new Exception($"CLS Error {contentObj.responseCode}: {contentObj.responseMessage}");
+            }
+            if (false == (contentObj.content.code == AppConst.CODE_CLS_DUPLICATE || contentObj.content.code == AppConst.CODE_SUCCESS))
+            {
+                throw new Exception($"CLS Error {contentObj.responseCode}: {contentObj.responseMessage}");
+            }
             return contentObj;
         }
 
@@ -120,6 +145,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
             }
             var jss = new JavaScriptSerializer();
             var contentObj = jss.Deserialize<CLSCreateCorporateClientOutputModel>(result.Content);
+            if (false == contentObj.success)
+            {
+                throw new Exception($"CLS Error {contentObj.responseCode}: {contentObj.responseMessage}");
+            }
+            if (false == (contentObj.content.code == AppConst.CODE_CLS_DUPLICATE || contentObj.content.code == AppConst.CODE_SUCCESS))
+            {
+                throw new Exception($"CLS Error {contentObj.responseCode}: {contentObj.responseMessage}");
+            }
             return contentObj;
         }
         /// <summary>
@@ -132,6 +165,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
            
             var createResult = CreatePersonalClient(input);
             Console.WriteLine("createResult.success"+ createResult.success);
+
+            
+
             if (createResult.success)
             {
                 if (createResult.content.code == AppConst.CODE_CLS_DUPLICATE || createResult.content.code == AppConst.CODE_SUCCESS)
@@ -140,16 +176,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
                     Console.WriteLine("cleansingId=" + cleansingId);
                     return cleansingId;
                 }
-                else
-                {
-                    throw new Exception($"CLS Error {createResult.content.code}: {createResult.content.message}");
-                }
-               
+  
             }
-            else
-            {
-                 throw new Exception($"CLS Error {createResult.responseCode}: {createResult.responseMessage}");
-            }
+           
 
             return "";
         }
@@ -164,8 +193,15 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
             var createResult = CreateCorporateClient(input);
             if (createResult.success)
             {
-                return createResult?.content?.data?.cleansingId ?? "";
+                if (createResult.content.code == AppConst.CODE_CLS_DUPLICATE || createResult.content.code == AppConst.CODE_SUCCESS)
+                {
+                    string cleansingId = createResult.content.data.cleansingId;
+                    Console.WriteLine("cleansingId=" + cleansingId);
+                    return cleansingId;
+                }
+               
             }
+           
 
             return "";
         }
