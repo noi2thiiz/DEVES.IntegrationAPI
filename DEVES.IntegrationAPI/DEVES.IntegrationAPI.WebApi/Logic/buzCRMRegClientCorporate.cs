@@ -176,7 +176,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                             regClientCorporateInput = (RegClientCorporateInputModel)TransformerFactory.TransformModel(clsCreateClientContent, regClientCorporateInput);
                             }
 
-                    if (string.IsNullOrEmpty(regClientCorporateInput.generalHeader.polisyClientId) && !string.IsNullOrEmpty(regClientCorporateInput.generalHeader.cleansingId) )
+                    if (string.IsNullOrEmpty(regClientCorporateInput.generalHeader.polisyClientId)
+                    && !string.IsNullOrEmpty(regClientCorporateInput.generalHeader.cleansingId) )
                     {
 
                         BaseDataModel polCreateCorporateIn = DataModelFactory.GetModel(typeof(CLIENTCreateCorporateClientAndAdditionalInfoInputModel));
@@ -276,26 +277,30 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                                     }
                                     catch (Exception e)
                                     {
-
-                                        //เมื่อเกิด error ใด ๆ ใน service อื่นให้ลบ
-                                        Console.WriteLine("tyy rollback" + newCleansingId);
-                                        var deleteResult = CleansingClientService.Instance.RemoveByCleansingId(newCleansingId, "C");
-
-                                       regClientCorporateOutput.code = CONST_CODE_FAILED;
-                                       regClientCorporateOutput.message = e.Message;
-                                       if (!deleteResult.success)
+                                        if (!string.IsNullOrEmpty(newCleansingId))
                                         {
-                                            Console.WriteLine(
-                                                "Failed to complete the transaction, and it does not rollback");
-                                            regClientCorporateOutput.description =
-                                                "Failed to complete the transaction, and it does not rollback";
+                                            //เมื่อเกิด error ใด ๆ ใน service อื่นให้ลบ
+                                            Console.WriteLine("tyy rollback" + newCleansingId);
 
-                                        }
-                                        else
-                                        {
-                                           
-                                            regClientCorporateOutput.description = "";
-                                        }
+                                            var deleteResult = CleansingClientService.Instance.RemoveByCleansingId(newCleansingId, "C");
+
+                                            regClientCorporateOutput.code = CONST_CODE_FAILED;
+                                            regClientCorporateOutput.message = e.Message;
+                                            if (!deleteResult.success)
+                                            {
+                                                Console.WriteLine(
+                                                    "Failed to complete the transaction, and it does not rollback");
+                                                regClientCorporateOutput.description =
+                                                    "Failed to complete the transaction, and it does not rollback";
+
+                                            }
+                                            else
+                                            {
+
+                                                regClientCorporateOutput.description = "";
+                                            }
+                                }
+                                       
                                         RegClientCorporateDataOutputModel_Fail dataOutFail =
                                             new RegClientCorporateDataOutputModel_Fail();
                                         regClientCorporateOutput.data.Add(dataOutFail);

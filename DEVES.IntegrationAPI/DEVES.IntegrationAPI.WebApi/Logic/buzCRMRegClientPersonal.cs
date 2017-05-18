@@ -145,7 +145,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     TransactionId);
             }
 
-
+            /////////////////////////////////PROCESS/////////////////////////////////////////////
 
             //1:Parameter CleansingId Does Not Contain Data
             if (string.IsNullOrEmpty(RegClientPersonalInput?.generalHeader?.cleansingId))
@@ -171,7 +171,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         {
                             //ถ้าสร้างไม่สำเร็จจะลบข้อมูลใน  CLS ออก
                             //ระวังอย่างแก้โค้ดจนเอา CleansingId ที่ไม่ได้สร้างใหม่มาลบ
-                            DeleteNewClientInCLS(cleansingId);
+                            
+                                DeleteNewClientInCLS(cleansingId);
+                            
+                          
                             throw;
                         }
                     }
@@ -232,6 +235,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             Console.WriteLine("try rollback" + newCleansingId);
             try
             {
+                if (string.IsNullOrEmpty(newCleansingId)) return;
+
                 var deleteResult = CleansingClientService.Instance.RemoveByCleansingId(newCleansingId, "P");
 
                 if (!deleteResult.success)

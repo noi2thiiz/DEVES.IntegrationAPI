@@ -194,8 +194,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 catch (Exception)
                 {
                     //@TODO adHoc fix Please fill recipient type  มัน return success เลยถ้าไม่ได้ดักไว้ 
-                    Console.WriteLine("244:try rollback" + newCleansingId);
-                    var deleteResult = CleansingClientService.Instance.RemoveByCleansingId(newCleansingId, "C");
+                    if(!string.IsNullOrEmpty(newCleansingId))
+                    {
+                        Console.WriteLine("244:try rollback" + newCleansingId);
+                        var deleteResult = CleansingClientService.Instance.RemoveByCleansingId(newCleansingId, "C");
+                    }
+                   
                     throw;
                 }
                 #endregion Create Payee in Polisy400
@@ -254,8 +258,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 catch (Exception e)
                 {
                     //@TODO adHoc fix Please fill recipient type  มัน return success เลยถ้าไม่ได้ดักไว้ 
-                    Console.WriteLine("244:try rollback" + newCleansingId);
-                    var deleteResult = CleansingClientService.Instance.RemoveByCleansingId(newCleansingId, "C");
+                    if (!string.IsNullOrEmpty(newCleansingId))
+                    {
+                        Console.WriteLine("244:try rollback" + newCleansingId);
+                        var deleteResult = CleansingClientService.Instance.RemoveByCleansingId(newCleansingId, "C");
+                    }
+                    
 
                     List<OutputModelFailDataFieldErrors> fieldError = MessageBuilder.Instance.ExtractSapCreateVendorFieldError<RegPayeeCorporateInputModel>(e.Message, regPayeeCorporateInput);
                     if (fieldError != null)

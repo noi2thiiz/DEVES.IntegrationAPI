@@ -187,16 +187,24 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         }
                         else
                         {
-                           //เมื่อเกิด error ใด ๆ ใน service อื่นให้ลบ
+                        //เมื่อเกิด error ใด ๆ ใน service อื่นให้ลบ
+                            if (!string.IsNullOrEmpty(newCleansingId))
+                            {
                             Console.WriteLine("try rollback" + newCleansingId);
-                            var deleteResult = CleansingClientService.Instance.RemoveByCleansingId(newCleansingId, "P");
+                                var deleteResult = CleansingClientService.Instance.RemoveByCleansingId(newCleansingId, "P");
+                            }
+                           
                     }
                     }
                     catch (Exception)
                     {
                         //เมื่อเกิด error ใด ๆ ใน service อื่นให้ลบ
-                        Console.WriteLine("try rollback" + newCleansingId);
-                        var deleteResult = CleansingClientService.Instance.RemoveByCleansingId(newCleansingId, "P");
+                        if (!string.IsNullOrEmpty(newCleansingId))
+                        {
+                            Console.WriteLine("try rollback" + newCleansingId);
+                            var deleteResult = CleansingClientService.Instance.RemoveByCleansingId(newCleansingId, "P");
+                        }
+                       
                         throw;
 
                     }
@@ -249,9 +257,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     catch (Exception e)
                     {
                     //@TODO adHoc fix Please fill recipient type  มัน return success เลยถ้าไม่ได้ดักไว้ 
-                        
-                        Console.WriteLine("244:try rollback" + newCleansingId);
-                        var deleteResult = CleansingClientService.Instance.RemoveByCleansingId(newCleansingId, "P");
+                        if (!string.IsNullOrEmpty(newCleansingId))
+                        {
+                            Console.WriteLine("244:try rollback" + newCleansingId);
+                            var deleteResult = CleansingClientService.Instance.RemoveByCleansingId(newCleansingId, "P");
+
+                        }
 
                     List<OutputModelFailDataFieldErrors> fieldError = MessageBuilder.Instance.ExtractSapCreateVendorFieldError<RegPayeePersonalInputModel>(e.Message,RegPayeePersonalInput);
                         if (fieldError != null)
