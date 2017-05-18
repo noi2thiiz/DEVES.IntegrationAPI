@@ -4,7 +4,7 @@
     {
         public const string CODE_SUCCESS = "200";
         public const string CODE_CLS_DUPLICATE = "CLS-1109";
-        public const string MESSAGE_SUCCESS = "SUCCESS";
+        public const string MESSAGE_SUCCESS = "Success";
         public const string CODE_FAILED = "500";
         public const string MESSAGE_INTERNAL_ERROR = "An error has occurred";
         public const string DEFAULT_UID = "uid";

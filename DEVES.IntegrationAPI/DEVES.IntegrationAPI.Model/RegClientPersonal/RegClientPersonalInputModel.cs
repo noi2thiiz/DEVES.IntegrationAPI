@@ -9,6 +9,8 @@ namespace DEVES.IntegrationAPI.Model.RegClientPersonal
         public ProfileInfoModel profileInfo { get; set; } = new ProfileInfoModel();
         public ContactInfoModel contactInfo { get; set; } = new ContactInfoModel();
         public AddressInfoModel addressInfo { get; set; } = new AddressInfoModel();
+
+     
     }
 
     public class GeneralHeaderModel : BaseDataModel

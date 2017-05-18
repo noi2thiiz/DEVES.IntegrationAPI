@@ -409,6 +409,7 @@
     <Compile Include="Controllers\ClaimRegistrationController.cs" />
     <Compile Include="Controllers\CreateCRMCorporateClientMasterController.cs" />
     <Compile Include="Controllers\CreateCRMPersonalClientMasterController.cs" />
+    <Compile Include="Controllers\CrmApiTestController.cs" />
     <Compile Include="Controllers\CRMInquiryClientMasterController.cs" />
     <Compile Include="Controllers\EwiServiceProxyController.cs" />
     <Compile Include="Controllers\InquiryClientMasterController.cs" />
@@ -648,6 +649,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\_references.js" />
     <None Include="Web.config_For_Production.config" />
+    <Content Include="Web_config_For_QA.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="NewFolder1\" />

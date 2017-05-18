@@ -34,6 +34,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             data.profileInfo = contentModel.profileInfo ?? new ProfileInfoModel();
             data.contactInfo = contentModel.contactInfo ?? new ContactInfoModel();
             data.addressInfo = contentModel.addressInfo ?? new AddressInfoModel();
+          
 
             // Search ข้อมูลจาก cleansing มาเก็บภายใน List
             List<string> crmData = SearchCrmContactClientId(data.generalHeader.cleansingId);
@@ -207,14 +208,27 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 }
 
                 List<string> crmIdOutput = SearchCrmContactClientId(data.generalHeader.cleansingId);
+                if (crmIdOutput.Any())
+                {
+                    dataOutput.crmClientId = crmIdOutput[0]; // generate from crm
+                    // dataOutput.data = "Waiting for generating algorithm";
+                    //dataOutput.data = contentModel.generalHeader.crmClientId;
+                    dataOutput.code = CONST_CODE_SUCCESS;
+                    dataOutput.transactionId = TransactionId;
+                    dataOutput.transactionDateTime = DateTime.Now;
+                    return dataOutput;
+                }
+                else
+                {
+                    dataOutput.code = CONST_CODE_FAILED;
+                    dataOutput.message = "Client CleansingId not found in CRM";
+                    dataOutput.transactionId = TransactionId;
+                    dataOutput.transactionDateTime = DateTime.Now;
+                    return dataOutput;
+                }
 
-                dataOutput.crmClientId = crmIdOutput[0]; // generate from crm
-                // dataOutput.data = "Waiting for generating algorithm";
-                //dataOutput.data = contentModel.generalHeader.crmClientId;
-                dataOutput.code =CONST_CODE_SUCCESS;
-                dataOutput.transactionId = TransactionId;
-                dataOutput.transactionDateTime = DateTime.Now;
-                return dataOutput;
+               
+                
             }
             else if (crmData.Count == 1) // Means List crmData has 1 data
             {
@@ -228,6 +242,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             {
                 dataOutput.code =CONST_CODE_FAILED;
                 dataOutput.transactionId = TransactionId;
+                dataOutput.message = "Return more than one row of client data from  cleansingId";
                 dataOutput.transactionDateTime = DateTime.Now;
                 return dataOutput;
             }
