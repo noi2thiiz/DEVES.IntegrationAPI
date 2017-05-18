@@ -13,6 +13,7 @@ namespace DEVES.IntegrationAPI.Model.CRM
         public string roleCode { get; set; } = "";
         public string clientType { get; set; } = "";
         public string guid { get; set; } = "";
+        public string refCode { get; set; } = "";
         public CRMRequestPersonalCleansingIdDataInputModel profileInfo { get; set; }
         public CRMRequestCorporateCleansingIdDataInputModel profileHeader { get; set; }
     }
@@ -55,6 +56,8 @@ namespace DEVES.IntegrationAPI.Model.CRM
         public string telephone3 { get; set; } = "";
         public string fax { get; set; } = "";
         public string mobilePhone1 { get; set; } = "";
-        
+
+        public string emailaddress1 { get; set; } = "";
+
     }
 }

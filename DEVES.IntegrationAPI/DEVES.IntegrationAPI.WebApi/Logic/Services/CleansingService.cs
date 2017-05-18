@@ -79,10 +79,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
                 throw new Exception($"CLS Error {contentObj.responseCode}: {contentObj.responseMessage}");
             }
 
-            if (false == contentObj.success)
-            {
-                throw new Exception($"CLS Error {contentObj.responseCode}: {contentObj.responseMessage}");
-            }
+           
             return contentObj;
         }
 
@@ -103,7 +100,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
             }
             if (false == (contentObj.content.code == AppConst.CODE_CLS_DUPLICATE || contentObj.content.code == AppConst.CODE_SUCCESS))
             {
-                throw new Exception($"CLS Error {contentObj.responseCode}: {contentObj.responseMessage}");
+                throw new Exception($"CLS Error {contentObj.content.code}: {contentObj.content.message}");
             }
             return contentObj;
         }
@@ -129,7 +126,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
             }
             if (false == (contentObj.content.code == AppConst.CODE_CLS_DUPLICATE || contentObj.content.code == AppConst.CODE_SUCCESS))
             {
-                throw new Exception($"CLS Error {contentObj.responseCode}: {contentObj.responseMessage}");
+                throw new Exception($"CLS Error {contentObj.content.code}: {contentObj.content.message}");
             }
             return contentObj;
         }
@@ -151,7 +148,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
             }
             if (false == (contentObj.content.code == AppConst.CODE_CLS_DUPLICATE || contentObj.content.code == AppConst.CODE_SUCCESS))
             {
-                throw new Exception($"CLS Error {contentObj.responseCode}: {contentObj.responseMessage}");
+                throw new Exception($"CLS Error {contentObj.content.code}: {contentObj.content.message}");
             }
             return contentObj;
         }

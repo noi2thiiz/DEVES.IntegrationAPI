@@ -65,7 +65,8 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                         fax = profileInfo?.fax,
                         idCitizen = profileInfo?.citizenId,
                         salutation = profileInfo?.personalCode?.ToUpper() ?? "0001",
-                        sex = MasterDataConvertor.Instance.ConvertSexOptionSetValueToMasterCode(profileInfo?.gendercode)
+                        sex = MasterDataConvertor.Instance.ConvertSexOptionSetValueToMasterCode(profileInfo?.gendercode),
+                        
 
                     };
 
@@ -84,10 +85,12 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                         corporateBranch = profileHeader?.taxbranch ?? "",
                         telephone1 = profileHeader?.telephone1 ?? "",
                         telephone2 = profileHeader?.telephone2 ?? "",
+                        
                         mobilePhone = profileHeader?.mobilePhone1 ?? "",
                         idTax  = profileHeader?.taxno ?? "",
                         fax = profileHeader?.fax,
-                   
+                        emailAddress = profileHeader.emailaddress1,
+
 
                     };
                     cleansingId = CleansingClientService.Instance.GetCorporateCleansingId(clsCorporateInput);
@@ -97,7 +100,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 if (!string.IsNullOrEmpty(cleansingId))
                 {
                     var cmd = new buzReqClsId();
-                    var success = cmd.Execute(input?.guid, input.clientType, cleansingId);
+                    var success = cmd.Execute(input?.guid??"", input?.refCode??"", input.clientType, cleansingId);
                     if (success)
                     {
                         return Ok(new OutputGenericDataModel<object>
