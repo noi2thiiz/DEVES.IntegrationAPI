@@ -68,6 +68,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         if (null != retrievedPersonal)
                         {
                             retrievedPersonal.pfc_cleansing_cusormer_profile_code = cleansingId;
+                            retrievedPersonal.pfc_temp_ref_code = "";
                            _serviceProxy.Update(retrievedPersonal);
                         }
                         
@@ -118,7 +119,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             {
                 var query = from c in svcContext.ContactSet
                     where (c.pfc_cleansing_cusormer_profile_code == null || c.pfc_cleansing_cusormer_profile_code == "")
-                          && (c.ContactId == new Guid(""))
+                          && (c.pfc_temp_ref_code == refCode)
 
                     select c;
                 Contact personal = query.FirstOrDefault<Contact>();
