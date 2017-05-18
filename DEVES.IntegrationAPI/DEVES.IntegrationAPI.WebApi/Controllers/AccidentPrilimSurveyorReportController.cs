@@ -25,8 +25,12 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         OrganizationServiceProxy _serviceProxy;
         private Guid _accountId;
 
+        private Guid _transactionId;
+
         public object Post([FromBody]object value)
         {
+            _transactionId = new Guid();
+
             _log.InfoFormat("IP ADDRESS: {0}, HttpMethod: POST", CommonHelper.GetIpAddress());
 
             var outputPass = new AccidentPrilimSurveyorReportOutputModel_Pass();
@@ -221,7 +225,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 outputFail.code = "400";
                 outputFail.message = "Invalid Input(s)";
                 outputFail.description = "Some of your input is invalid. Please recheck again.";
-                outputFail.transactionId = "Ticket ID: " + contentModel.ticketNo + ", Claim Noti No: " + contentModel.claimNotiNo;
+                outputFail.transactionId = _transactionId.ToString();
                 outputFail.transactionDateTime = DateTime.Now.ToString();
 
 
@@ -318,7 +322,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                     output.code = "501";
                     output.message = "Update Entity Incident PROBLEM"; ;
                     output.description = e.ToString();
-                    output.transactionId = "";
+                    output.transactionId = _transactionId.ToString();
                     output.transactionDateTime = DateTime.Now.ToString();
                     output.data = new AccidentPrilimSurveyorReportDataOutputModel_Pass();
                     output.data.message = e.StackTrace;
@@ -390,7 +394,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                     output.code = "501";
                     output.message = "Update Entity Motor Accident PROBLEM";
                     output.description = e.ToString();
-                    output.transactionId = "";
+                    output.transactionId = _transactionId.ToString();
                     output.transactionDateTime = DateTime.Now.ToString();
                     output.data = new AccidentPrilimSurveyorReportDataOutputModel_Pass();
                     output.data.message = e.StackTrace;
@@ -486,7 +490,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                             output.code = "501";
                             output.message = "Create Entity (Case/Motor) PROBLEM";
                             output.description = e.ToString();
-                            output.transactionId = "";
+                            output.transactionId = _transactionId.ToString();
                             output.transactionDateTime = DateTime.Now.ToString();
                             output.data = new AccidentPrilimSurveyorReportDataOutputModel_Pass();
                             output.data.message = e.StackTrace;
@@ -501,7 +505,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                     output.code = "501";
                     output.message = "Create Entity Motor Accident Parties PROBLEM";
                     output.description = e.ToString();
-                    output.transactionId = "";
+                    output.transactionId = _transactionId.ToString();
                     output.transactionDateTime = DateTime.Now.ToString();
                     output.data = new AccidentPrilimSurveyorReportDataOutputModel_Pass();
                     output.data.message = e.StackTrace;
@@ -545,7 +549,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                     output.code = "501";
                     output.message = "Create Entity Motor Accident Part PROBLEM";
                     output.description = e.ToString();
-                    output.transactionId = "";
+                    output.transactionId = _transactionId.ToString();
                     output.transactionDateTime = DateTime.Now.ToString();
                     output.data = new AccidentPrilimSurveyorReportDataOutputModel_Pass();
                     output.data.message = e.StackTrace;
@@ -558,7 +562,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 output.code = "200";
                 output.message = "Success";
                 output.description = "AccidentPrilimSurveyorReportOutput is done!";
-                output.transactionId = "";
+                output.transactionId = _transactionId.ToString();
                 //output.transactionId = Request.Properties["TransactionID"].ToString();
                 output.transactionDateTime = DateTime.Now.ToString();
                 output.data = AccidentPrilimSurveyorReportOutput;
@@ -570,7 +574,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 output.code = "500";
                 output.message = "CRM PROBLEM";
                 output.description = e.ToString();
-                output.transactionId = "";
+                output.transactionId = _transactionId.ToString();
                 output.transactionDateTime = DateTime.Now.ToString();
                 output.data = new AccidentPrilimSurveyorReportDataOutputModel_Pass();
                 output.data.message = e.StackTrace;

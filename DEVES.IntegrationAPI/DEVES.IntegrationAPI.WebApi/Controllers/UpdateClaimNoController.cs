@@ -23,8 +23,10 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         OrganizationServiceProxy _serviceProxy;
         private Guid _accountId;
 
+        private Guid _transactionId;
         public object Post([FromBody]object value)
         {
+            _transactionId = new Guid();
 
             _log.InfoFormat("IP ADDRESS: {0}, HttpMethod: POST", CommonHelper.GetIpAddress());
 
@@ -221,7 +223,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 outputFail.code = "400";
                 outputFail.message = "Invalid Input(s)";
                 outputFail.description = "Some of your input is invalid. Please recheck again.";
-                outputFail.transactionId = "Ticket ID: " + contentModel.ticketNo + ", Claim Noti No: " + contentModel.claimNotiNo;
+                outputFail.transactionId = _transactionId.ToString();
                 outputFail.transactionDateTime = DateTime.Now.ToString();
 
                 _log.Error(_logImportantMessage);
@@ -268,7 +270,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                     output.code = "501";
                     output.message = "Create data PROBLEM";
                     output.description = e.ToString();
-                    output.transactionId = "";
+                    output.transactionId = _transactionId.ToString();
                     output.transactionDateTime = DateTime.Now.ToString();
                     output.data = null;
 
@@ -306,7 +308,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                     output.code = "501";
                     output.message = "(Update data PROBLEM) or (query ticketNo and claimNotiNo and get null value)";
                     output.description = e.ToString();
-                    output.transactionId = "";
+                    output.transactionId = _transactionId.ToString();
                     output.transactionDateTime = DateTime.Now.ToString();
                     output.data = null;
 
@@ -317,7 +319,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 output.code = "200";
                 output.message = "Success";
                 output.description = "Update ClaimNo is done!";
-                output.transactionId = content.ticketNo;
+                output.transactionId = _transactionId.ToString();
                 output.transactionDateTime = DateTime.Now.ToString();
                 UpdateClaimNoOutput.message = "ticketNo: " + content.ticketNo
                     + " claimNotiNo: " + content.claimNotiNo
@@ -330,7 +332,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 output.code = "500";
                 output.message = "False";
                 output.description = "CRM PROBLEM";
-                output.transactionId = "";
+                output.transactionId = _transactionId.ToString();
                 output.transactionDateTime = DateTime.Now.ToString();
                 output.data = null;
 
@@ -354,7 +356,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 output.code = "400";
                 output.message = "False";
                 output.description = "ไม่พบ ticketNo";
-                output.transactionId = "Ticket Number: null";
+                output.transactionId = _transactionId.ToString();
                 output.transactionDateTime = DateTime.Now.ToString();
                 output.data = null;
 

@@ -27,8 +27,10 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         OrganizationServiceProxy _serviceProxy;
         private Guid _accountId;
 
+        private Guid _transactionId;
         public object Post([FromBody]object value)
         {
+            _transactionId = new Guid();
 
             _log.InfoFormat("IP ADDRESS: {0}, HttpMethod: POST", CommonHelper.GetIpAddress());
 
@@ -224,7 +226,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 outputFail.code = "400";
                 outputFail.message = "Invalid Input(s)";
                 outputFail.description = "Some of your input is invalid. Please recheck again.";
-                outputFail.transactionId = "Ticket ID: " + contentModel.ticketNo + ", Claim Noti No: " + contentModel.claimNotiNo;
+                outputFail.transactionId = _transactionId.ToString();
                 outputFail.transactionDateTime = DateTime.Now.ToString();
 
                 _log.Error(_logImportantMessage);
@@ -290,7 +292,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                     output.code = "501";
                     output.message = "False";
                     output.description = "Retrieving data PROBLEM";
-                    output.transactionId = "";
+                    output.transactionId = _transactionId.ToString();
                     output.transactionDateTime = DateTime.Now.ToString();
                     output.data = null;
                     
@@ -301,7 +303,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 output.code = "200";
                 output.message = "Success";
                 output.description = "Assigning surveyor is done!";
-                output.transactionId = "Ticket ID: " + content.ticketNo + ", Claim Noti No: " + content.claimNotiNo;
+                output.transactionId = _transactionId.ToString();
                 output.transactionDateTime = DateTime.Now.ToString();
                 output.data = AssignedSurveyorOutput;
                 output.data.message = "ClaimNoti Number: " + content.claimNotiNo +
@@ -316,7 +318,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 output.code = "500";
                 output.message = "False";
                 output.description = "CRM PROBLEM";
-                output.transactionId = "";
+                output.transactionId = _transactionId.ToString();
                 output.transactionDateTime = DateTime.Now.ToString();
                 output.data = null;
                 
@@ -339,7 +341,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 output.code = "400";
                 output.message = "False";
                 output.description = errorMessage.ToString();
-                output.transactionId = "";
+                output.transactionId = _transactionId.ToString();
                 output.transactionDateTime = DateTime.Now.ToString();
                 output.data = null;
             }

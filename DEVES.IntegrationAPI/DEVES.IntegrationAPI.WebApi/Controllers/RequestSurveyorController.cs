@@ -21,6 +21,8 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         private QueryInfo q = new QueryInfo();
         private System.Data.DataTable dt = new System.Data.DataTable();
 
+        private Guid _transactionId;
+
         protected string isStringNull(string a)
         {
             if (dt.Rows[0][a] == null)
@@ -221,6 +223,8 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         // For testing
         public object Post([FromBody]object value)
         {
+            _transactionId = new Guid();
+
             _log.InfoFormat("IP ADDRESS: {0}, HttpMethod: Post", CommonHelper.GetIpAddress());
 
             //RequestSurveyorInputModel iSurveyInputModel = Mapping("CAS201702-00003", "");
@@ -422,7 +426,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 outputFail.code = "400";
                 outputFail.message = "Invalid Input(s)";
                 outputFail.description = "Some of your input is invalid. Please recheck again.";
-                outputFail.transactionId = "";
+                outputFail.transactionId = _transactionId.ToString();
                 outputFail.transactionDateTime = DateTime.Now.ToString();
 
                 _log.Error(_logImportantMessage);
