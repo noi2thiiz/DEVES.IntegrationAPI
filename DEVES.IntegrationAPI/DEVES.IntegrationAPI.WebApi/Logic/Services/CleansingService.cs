@@ -131,10 +131,24 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
         {
            
             var createResult = CreatePersonalClient(input);
-            
+            Console.WriteLine("createResult.success"+ createResult.success);
             if (createResult.success)
             {
-                return createResult?.content?.data?.cleansingId??"";
+                if (createResult.content.code == AppConst.CODE_CLS_DUPLICATE || createResult.content.code == AppConst.CODE_SUCCESS)
+                {
+                    string cleansingId = createResult.content.data.cleansingId;
+                    Console.WriteLine("cleansingId=" + cleansingId);
+                    return cleansingId;
+                }
+                else
+                {
+                    throw new Exception($"CLS Error {createResult.content.code}: {createResult.content.message}");
+                }
+               
+            }
+            else
+            {
+                 throw new Exception($"CLS Error {createResult.responseCode}: {createResult.responseMessage}");
             }
 
             return "";
