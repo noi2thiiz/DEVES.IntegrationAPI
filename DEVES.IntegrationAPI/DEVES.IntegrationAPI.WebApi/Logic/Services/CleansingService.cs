@@ -10,6 +10,7 @@ using DEVES.IntegrationAPI.Model.CRM;
 using DEVES.IntegrationAPI.Model.EWI;
 using DEVES.IntegrationAPI.Model.Polisy400;
 using DEVES.IntegrationAPI.WebApi.Core.DataAdepter;
+using DEVES.IntegrationAPI.WebApi.DataAccessService;
 using DEVES.IntegrationAPI.WebApi.Templates;
 using Microsoft.IdentityModel.Protocols.WSIdentity;
 
@@ -36,10 +37,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
             }
         }
 
-        internal object InquiryPersonalClient(CRMRequestCleansingIdDataInputModel input)
-        {
-            throw new NotImplementedException();
-        }
+  
         public class RemoveByCleansingIdInputModel :BaseDataModel
         {
             public string cleansing_id { get; set; }
@@ -97,55 +95,43 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
         {
            
             string endpoint = AppConfig.Instance.Get(CommonConstant.ewiEndpointKeyCLSCreatePersonalClient);
+            Console.WriteLine("98:"+endpoint);
+            var result = SendRequest(input, endpoint);
+            Console.WriteLine("result"+ result.Content);
+            if (result.StatusCode != HttpStatusCode.OK)
+            {
+                
+                throw new InternalErrorException(result.Message);
+            }
+            Console.WriteLine("1000000005");
+            var jss = new JavaScriptSerializer();
+            var contentObj = jss.Deserialize<CLSCreatePersonalClientOutputModel>(result.Content);
+            return contentObj;
+        }
+
+        public CLSCreateCorporateClientOutputModel CreateCorporateClient(CLSCreateCorporateClientInputModel input)
+        {
+
+            string endpoint = AppConfig.Instance.Get(CommonConstant.ewiEndpointKeyCLSCreateCorporateClient);
             var result = SendRequest(input, endpoint);
             if (result.StatusCode != HttpStatusCode.OK)
             {
                 throw new InternalErrorException(result.Message);
             }
             var jss = new JavaScriptSerializer();
-            var contentObj = jss.Deserialize<CLSCreatePersonalClientOutputModel>(result.Content);
+            var contentObj = jss.Deserialize<CLSCreateCorporateClientOutputModel>(result.Content);
             return contentObj;
         }
-
-        public string GetCleansingId(CRMRequestCleansingIdDataInputModel input)
+        /// <summary>
+        /// สร้าง client  Personal เพื่อเอา CleansingId หรือ ถ้าซ้ำก็เอา CleansingId ที่ CLS return กลับมา
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public string GetPersonalCleansingId(CLSCreatePersonalClientInputModel input)
         {
            
-            //หาไม่เจอ เลยต้องสร้างใหม่
-            var clsPersonalInput = new CLSCreatePersonalClientInputModel
-            {
-                roleCode = "G",
-                personalName = input?.firstname ?? "",
-                personalSurname = input?.lastname ?? "",
-                telephone1 = input?.telephone1 ?? "",
-                telephone2 = input?.telephone2 ?? "",
-                mobilePhone = input?.mobilePhone1??"",
-                emailAddress = input?.emailaddress1??"",
-                fax = input?.fax,
-                idCitizen = input?.citizenId
-                
-             };
-
-            if(!string.IsNullOrEmpty(input?.gendercode))
-            {
-                switch (input.gendercode)
-                {
-                    case "100000001":
-                        clsPersonalInput.sex = "M"; break;
-                    case "100000002":
-                        clsPersonalInput.sex = "F"; break;
-                    default:
-                        clsPersonalInput.sex = "U"; break;
-                }
-                
-            }
-
-            if (!string.IsNullOrEmpty(input?.personalCode))
-            {
-                clsPersonalInput.salutation = input?.personalCode?.ToUpper()??"0001";
-            }
+            var createResult = CreatePersonalClient(input);
             
-
-            var createResult = CreatePersonalClient(clsPersonalInput);
             if (createResult.success)
             {
                 return createResult?.content?.data?.cleansingId??"";
@@ -153,6 +139,22 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 
             return "";
         }
-        
+        /// <summary>
+        /// สร้าง client corporate เพื่อเอา CleansingId หรือ ถ้าซ้ำก็เอา CleansingId ที่ CLS return กลับมา
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public string GetCorporateCleansingId(CLSCreateCorporateClientInputModel input)
+        {
+
+            var createResult = CreateCorporateClient(input);
+            if (createResult.success)
+            {
+                return createResult?.content?.data?.cleansingId ?? "";
+            }
+
+            return "";
+        }
+
     }
 }

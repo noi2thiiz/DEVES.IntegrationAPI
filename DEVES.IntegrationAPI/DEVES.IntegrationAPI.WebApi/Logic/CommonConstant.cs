@@ -20,7 +20,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         public const string ewiEndpointKeyMOTORInquiryMasterASRH = "EWI_ENDPOINT_MOTORInquiryMasterASRH";
 
         public const string ewiEndpointKeyCLSInquiryCorporateClient = "EWI_ENDPOINT_CLSInquiryCorporateClient";
-        public const string ewiEndpointKeyCLSCreatePersonalClient = "EWI_ENDPOINT_CLSCreatePersonalClient";
+        public const string ewiEndpointKeyCLSCreatePersonalClient = "EWI_ENDPOINT_CLSCreatePersonalClient"; 
         public const string ewiEndpointKeyCLSCreateCorporateClient = "EWI_ENDPOINT_CLSCreateCorporateClient";
         public const string ewiEndpointKeySAPCreateVendor = "EWI_ENDPOINT_SAPCreateVendor";
         public const string ewiEndpointKeyCLIENTCreatePersonalClient = "EWI_ENDPOINT_CLIENTCreatePersonalClient";

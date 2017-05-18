@@ -117,6 +117,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 
                 // request.Headers.Add("ContentType", "application/json; charset=UTF-8");
                 request.Content = new StringContent(jsonReqModel, System.Text.Encoding.UTF8, "application/json");
+                Console.WriteLine("==========LogAsync========");
                 LogAsync(request);
                 HttpResponseMessage response = client.SendAsync(request).Result;
                 resTime = DateTime.Now;
@@ -129,6 +130,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
                 resBody = ewiRes.Result;
                 resTime = DateTime.Now;
                 LogAsync(request, response);
+                Console.WriteLine("133==========Result========");
                 result.Content = ewiRes.Result;
                 result.StatusCode = response.StatusCode;
 
@@ -136,7 +138,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
             catch (Exception e)
             {
                 result.Message = e.Message;
-              Console.WriteLine(e.Message);
+              Console.WriteLine(e.Message+":"+e.StackTrace);
 
             }
             return result;
@@ -181,7 +183,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
             var apiLogEntry = new ApiLogEntry
             {
                 Application = appName,
-                TransactionID = TransactionId,
+                TransactionID = GetTransactionId(req),
                 Controller = "",
                 ServiceName = serviceName,
                 Activity = "consume:Receive response",
@@ -199,7 +201,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
                 ResponseContentType = resContentType,
                 ResponseContentBody = resBody,
                  ResponseStatusCode = res?.StatusCode.ToString(),
-                ResponseHeaders = resHeader,
+                ResponseHeaders = res?.Headers.ToJson(),
                 ResponseTimestamp = resTime
             };
             InMemoryLogData.Instance.AddLogEntry(apiLogEntry);
@@ -243,7 +245,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
             var apiLogEntry = new ApiLogEntry
             {
                 Application = appName,
-                TransactionID = TransactionId,
+                TransactionID = GetTransactionId(req),
                 Controller = "",
                 ServiceName = serviceName,
                 Activity = "consume:Send request",
@@ -333,6 +335,27 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
             // Console.WriteLine(key);
             // Console.WriteLine("==================End Key=================");
             return System.Configuration.ConfigurationManager.AppSettings[key].ToString();
+        }
+
+        public string GetTransactionId(HttpRequestMessage Request)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(Request.Properties["TransactionID"].ToStringOrEmpty()))
+                {
+
+                    Request.Properties["TransactionID"] = Guid.NewGuid().ToString();
+                }
+
+                return Request.Properties["TransactionID"].ToString();
+            }
+            catch (Exception)
+            {
+                Request.Properties["TransactionID"] = Guid.NewGuid().ToString();
+                return Request.Properties["TransactionID"].ToString();
+            }
+            
+
         }
 
         private static bool IsValidJson(string strInput)

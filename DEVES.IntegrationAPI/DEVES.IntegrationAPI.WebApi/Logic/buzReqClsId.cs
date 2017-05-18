@@ -8,6 +8,7 @@ using DEVES.IntegrationAPI.Model.CRM;
 using Microsoft.Xrm.Sdk.Client;
 using Microsoft.Xrm.Tooling.Connector;
 using System.Configuration;
+using Microsoft.Xrm.Sdk;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
@@ -16,12 +17,19 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
         OrganizationServiceProxy _serviceProxy;
         private Guid _accountId;
-
-        public bool Execute(CRMRequestCleansingIdDataInputModel input, string cleansingId)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="guid"></param>
+        /// <param name="clientType"> C or P</param>
+        /// <param name="cleansingId"> </param>
+        /// <returns></returns>
+        public bool Execute(string guid , string clientType, string cleansingId)
         {
             try
             {
-                var connection = new CrmServiceClient(ConfigurationManager.ConnectionStrings["CRM_DEVES"].ConnectionString);
+                var connection = new CrmServiceClient(ConfigurationManager.ConnectionStrings["CRM_DEVES"]
+                    .ConnectionString);
 
                 bool check = connection.IsReady;
                 if (!check) // check is ready = true
@@ -29,44 +37,61 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     return false; // should return something that notice system about CRM is not connect properly
                 }
 
+
                 _serviceProxy = connection.OrganizationServiceProxy;
                 ServiceContext svcContext = new ServiceContext(_serviceProxy);
-
+                /*
                 var query = from c in svcContext.ContactSet
                             where (c.pfc_cleansing_cusormer_profile_code == null || c.pfc_cleansing_cusormer_profile_code == "")
-                        && (c.FirstName == null || c.FirstName == input.firstname)
-                        && (c.LastName == null || c.LastName == input.lastname)
-                        && (c.pfc_citizen_id == null || c.pfc_citizen_id == input.citizenId)
-                        && (c.pfc_telephone1 == null || c.pfc_telephone1 == input.telephone1)
-                        && (c.pfc_telephone2 == null || c.pfc_telephone2 == input.telephone2)
-                        && (c.pfc_telephone3 == null || c.pfc_telephone3 == input.telephone3)
-                        && (c.pfc_fax == null || c.pfc_fax == input.fax)
-                        && (c.pfc_MobilePhone1 == null || c.pfc_MobilePhone1 == input.telephone1)
-                        && (c.EMailAddress1 == null || c.EMailAddress1 == input.emailaddress1)
-                        && (c.GenderCode == new Microsoft.Xrm.Sdk.OptionSetValue(Int32.Parse(input.gendercode)))
-                        && (c.Salutation == null || c.Salutation == input.titlePersonalname)
+                        && (c.ContactId == new Guid(guid))
+                       
                             select c;
-
-                Contact personal = query.FirstOrDefault<Contact>();
-                _accountId = new Guid(personal.Id.ToString());
-
-                Contact retrievedIncident = (Contact)_serviceProxy.Retrieve(Contact.EntityLogicalName, _accountId, new Microsoft.Xrm.Sdk.Query.ColumnSet(true));
-                try
-                {
-                    retrievedIncident.pfc_cleansing_cusormer_profile_code = cleansingId;
-
-                    _serviceProxy.Update(retrievedIncident);
-                }
-                catch (Exception e)
-                {
-                    return false;
-                }
+                             Contact personal = query.FirstOrDefault<Contact>();
+                 */
 
             }
             catch (Exception e)
             {
                 return false;
             }
+
+            try
+                {
+                    if (clientType=="P")
+                    {
+                        _accountId = new Guid(guid);
+                        Contact retrievedIncident = (Contact)_serviceProxy.Retrieve(Contact.EntityLogicalName, _accountId, new Microsoft.Xrm.Sdk.Query.ColumnSet(true));
+
+                         retrievedIncident.pfc_cleansing_cusormer_profile_code = cleansingId;
+
+                        _serviceProxy.Update(retrievedIncident);
+                    }
+                    else if (clientType == "C")
+                    {
+                        _accountId = new Guid(guid);
+                        Account retrievedIncident = (Account) _serviceProxy.Retrieve(Account.EntityLogicalName,
+                            _accountId, new Microsoft.Xrm.Sdk.Query.ColumnSet(true));
+                        retrievedIncident.pfc_cleansing_cusormer_profile_code = cleansingId;
+
+                        _serviceProxy.Update(retrievedIncident);
+                    }
+                    else
+                    {
+                        return false;
+                    }
+
+
+
+
+                   
+                }
+                catch (Exception e)
+                {
+                    return false;
+                }
+
+            
+           
 
             return true;
         }

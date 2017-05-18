@@ -11,60 +11,128 @@ using DEVES.IntegrationAPI.WebApi.Logic.Services;
 using Microsoft.Xrm.Sdk.Client;
 using Microsoft.Xrm.Tooling.Connector;
 using System.Configuration;
+using DEVES.IntegrationAPI.WebApi.DataAccessService;
 using DEVES.IntegrationAPI.WebApi.Logic;
 
 namespace DEVES.IntegrationAPI.WebApi.Controllers
 {
-    public class RequestCleansingIdController:BaseApiController
-    {
 
+    public class RequestCleansingIdController : BaseApiController
+    {
+        
         OrganizationServiceProxy _serviceProxy;
         private Guid _accountId;
+        /// <summary>
+        /// ใช้สำหรับ Quick create บนหน้าจอ CRM 
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         [HttpPost]
-        public IHttpActionResult Post([FromBody]CRMRequestCleansingIdDataInputModel input)
+        
+        public IHttpActionResult RequestCleansingId([FromBody]CRMRequestCleansingIdDataInputModel input)
         {
-            if (!ModelState.IsValid)
-            {
-                //invalid input
-                return Ok(new OutputGenericDataModel<object>
-                {
-                    code = AppConst.CODE_INVALID_INPUT,
-                    message = AppConst.MESSAGE_INVALID_INPUT,
-                    transactionDateTime = DateTime.Now,
-                    transactionId = GetTransactionId()
-                });
-            }
+            /*
+             * รับข้อมูลจาก Quick create จากนั้นนำข้อมูลไปสร้างในระบบ CLS หากซ้ำ ก็เอา Cleansing Id ที่ CLS ให้กลับมา
+             * แล้วนำไป update ใน CRM ตาม GUID ที่หน้าจอส่งมา
+             * *
+             */
 
 
-            // search personal form cls
-            var cleansingId = CleansingClientService.Instance.GetCleansingId(input);
-            if (!string.IsNullOrEmpty(cleansingId))
+
+            string cleansingId = "";
+            try
             {
-                var cmd = new buzReqClsId();
-                var success = cmd.Execute(input, cleansingId);
-                if (success)
+                if (!ModelState.IsValid)
                 {
-                    return Ok(new OutputGenericDataModel<object>
+                    //invalid input
+                    throw new Exception(AppConst.MESSAGE_INVALID_INPUT);
+
+                }
+                //กรณีสร้าง Personal
+                if (input.clientType == "P")
+                {
+                   
+                    var profileInfo = input?.profileInfo;
+                    var clsPersonalInput = new CLSCreatePersonalClientInputModel
                     {
-                        code = AppConst.CODE_SUCCESS,
-                        message = AppConst.MESSAGE_SUCCESS,
-                        transactionDateTime = DateTime.Now,
-                        transactionId = GetTransactionId(),
-                        data = new
+                        roleCode = "G",
+                        personalName = profileInfo?.firstname ?? "",
+                        personalSurname = profileInfo?.lastname ?? "",
+                        telephone1 = profileInfo?.telephone1 ?? "",
+                        telephone2 = profileInfo?.telephone2 ?? "",
+                        mobilePhone = profileInfo?.mobilePhone1 ?? "",
+                        emailAddress = profileInfo?.emailaddress1 ?? "",
+                        fax = profileInfo?.fax,
+                        idCitizen = profileInfo?.citizenId,
+                        salutation = profileInfo?.personalCode?.ToUpper() ?? "0001",
+                        sex = MasterDataConvertor.Instance.ConvertSexOptionSetValueToMasterCode(profileInfo?.gendercode)
+
+                    };
+
+                    cleansingId = CleansingClientService.Instance.GetPersonalCleansingId(clsPersonalInput);
+
+                }
+                //กรณี สร้าง  Corporate
+                else if (input.clientType == "C")
+                {
+                    var profileHeader = input?.profileHeader;
+                    var clsCorporateInput = new CLSCreateCorporateClientInputModel
+                    {
+                        roleCode = input?.roleCode ?? "G",
+                        corporateName1 = profileHeader?.name1 ?? "",
+                        corporateName2 = profileHeader?.name2 ?? "",
+                        corporateBranch = profileHeader?.taxbranch ?? "",
+                        telephone1 = profileHeader?.telephone1 ?? "",
+                        telephone2 = profileHeader?.telephone2 ?? "",
+                        mobilePhone = profileHeader?.mobilePhone1 ?? "",
+                        idTax  = profileHeader?.taxno ?? "",
+                        fax = profileHeader?.fax,
+                   
+
+                    };
+                    cleansingId = CleansingClientService.Instance.GetCorporateCleansingId(clsCorporateInput);
+                }
+
+                //update cleansingId to CRM
+                if (!string.IsNullOrEmpty(cleansingId))
+                {
+                    var cmd = new buzReqClsId();
+                    var success = cmd.Execute(input?.guid, input.clientType, cleansingId);
+                    if (success)
+                    {
+                        return Ok(new OutputGenericDataModel<object>
                         {
-                            input,
-                            cleansingId
-                        }
-                    });
+                            code = AppConst.CODE_SUCCESS,
+                            message = AppConst.MESSAGE_SUCCESS,
+                            transactionDateTime = DateTime.Now,
+                            transactionId = GetTransactionId(),
+                            data = new
+                            {
+                                input,
+                                cleansingId
+                            }
+                        });
+                    }
+                }
+                else
+                {
+                    throw new Exception("Cannot find Cleansing id ");
+
                 }
             }
-            else
+            catch (Exception e)
             {
+
+
+
+                //error
                 return Ok(new OutputGenericDataModel<object>
                 {
                     code = AppConst.CODE_FAILED,
-                    message = "Cannot find Cleansing id  ",
+                    stackTrace = e.StackTrace,
+                    message = e.Message,
                     transactionDateTime = DateTime.Now,
+                    description = "",
                     transactionId = GetTransactionId(),
                     data = new
                     {
@@ -74,22 +142,11 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 });
             }
 
+            return InternalServerError();
 
-            //error
-            return Ok(new OutputGenericDataModel<object>
-            {
-                code = AppConst.CODE_FAILED,
-                message = AppConst.MESSAGE_INTERNAL_ERROR,
-                description = "Cannot update cleansing id",
-                transactionDateTime = DateTime.Now,
-                transactionId = GetTransactionId(),
-                data = new
-                {
-                    input,
-                    cleansingId
-                }
-            });
+
         }
+
 
     }
 }
