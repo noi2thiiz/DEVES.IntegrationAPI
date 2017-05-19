@@ -228,6 +228,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     }
                 }
             };
+
+            //complete
         }
 
         public void DeleteNewClientInCLS(string newCleansingId)
@@ -333,7 +335,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             {
                 throw new BuzErrorException(
                     "500",
-                    $"CLS Error: CLS return success but not return cleansingId",
+                    $"CLS Error: The service return success but not return cleansingId",
                     "An error occurred from the external service (CLSCreatePersonalClient)",
                     "CLS",
                     TransactionId);

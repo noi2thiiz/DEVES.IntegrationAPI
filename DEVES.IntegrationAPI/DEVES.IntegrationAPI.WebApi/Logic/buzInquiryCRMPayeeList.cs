@@ -192,12 +192,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                 }
                  //ตัด CLS ออก
-                 // else
-                 // if (crmInqPayeeOut.data.Where(row => row.sourceData == "CLS").Distinct().ToList().Count > 0)
-                 // {
-                 //   crmInqPayeeOut.data = crmInqPayeeOut.data.Where(row => row.sourceData == "CLS").DistinctBy(row => row.cleansingId).ToList();
+                  else
+                  if (crmInqPayeeOut.data.Where(row => row.sourceData == "CLS").Distinct().ToList().Count > 0)
+                  {
+                    crmInqPayeeOut.data = crmInqPayeeOut.data.Where(row => row.sourceData == "CLS").DistinctBy(row => row.cleansingId).ToList();
 
-                 //}
+                  }
 
                 //MASTER_ASHR
                 //APAR
@@ -355,8 +355,43 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         t.clientType = listSAPSearchCondition[i].clientType;
                         tmpListSAPSearchCondition.Add(t);
 
+                        string street1Text = "";
+                        string street2Text = "";
+                        string districtText = "";
+                        string provinceText = "";
+                        string postalCode = "";
+                        string countryText = "";
+                        string fullAddressText = "";
+
+                        int lastSeq = 0;
 
                         //@TODO AdHoc Add CLS
+                        if (clsData.addressListsCollection != null)
+                        {
+                            foreach (var clsAddress in clsData.addressListsCollection)
+                            {
+                                if (clsAddress.sequence_id > lastSeq)
+                                {
+                                    lastSeq = clsAddress.sequence_id;
+                                }
+                            }
+
+                            foreach (var clsAddress in clsData.addressListsCollection)
+                            {
+                                if (clsAddress.sequence_id == lastSeq)
+                                {
+                                    street1Text = clsAddress.address_1;
+                                    street2Text = clsAddress.address_2;
+                                    districtText = clsAddress.district_text;
+                                    provinceText = clsAddress.province_text;
+                                    postalCode = clsAddress.postal_code;
+                                    countryText = clsAddress.cls_ctrycode_text;
+                                    fullAddressText = clsAddress.full_original_address;
+
+                                    break;
+                                }
+                            }
+                        }
                         crmInqPayeeOut.data.Add(new InquiryCrmPayeeListDataModel
                         {
 
@@ -364,12 +399,22 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                             cleansingId = clsData.cleansing_id,
                             polisyClientId = clsData.clntnum,
                             sapVendorCode = "",
-
+                            name1 = clsData.lgivname,
+                            name2 = clsData.lsurname,
+                       
                             fullName = clsData.cls_full_name,
                             taxNo = clsData.cls_tax_no_new,
                             taxBranchCode = "",
                             emcsMemHeadId = "",
                             emcsMemId = "",
+                            street1 = street1Text,
+                            street2 = street2Text,
+                            district = districtText,
+                            city = provinceText,
+                            postalCode = postalCode,
+                            // countryCode = ,
+                            countryCodeDesc = countryText,
+                            address = fullAddressText,
 
                         });
                     }

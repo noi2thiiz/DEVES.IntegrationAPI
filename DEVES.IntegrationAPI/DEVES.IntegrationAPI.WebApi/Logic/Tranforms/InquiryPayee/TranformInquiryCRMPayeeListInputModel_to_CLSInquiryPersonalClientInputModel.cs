@@ -22,7 +22,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             trgt.personalFullName = ""+src.fullname;
             trgt.idCitizen = ""+src.taxNo;
-            trgt.backDay = "30";
+            trgt.backDay = "15";
             trgt.telephone="";
             trgt.emailAddress="";
 

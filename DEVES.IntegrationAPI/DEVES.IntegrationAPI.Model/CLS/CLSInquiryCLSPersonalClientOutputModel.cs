@@ -56,7 +56,7 @@ namespace DEVES.IntegrationAPI.Model.CLS
         public String ref_cleansing_id { set; get; }
         public String address_id { set; get; }
         public String address_type_code { set; get; }
-        public String sequence_id { set; get; }
+        public int sequence_id { set; get; }
         public String address_1 { set; get; }
         public String address_2 { set; get; }
         public String address_3 { set; get; }

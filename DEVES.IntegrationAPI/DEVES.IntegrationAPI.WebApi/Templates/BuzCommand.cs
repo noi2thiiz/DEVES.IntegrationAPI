@@ -98,8 +98,8 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                 var regFail = new OutputModelFail
                 {
                     code = AppConst.CODE_FAILED,
-                    message = "An error occurred",
-                    description = e.Message,
+                    message = e.Message,
+                    description = "",
                     stackTrace = e.StackTrace,
                 };
 
