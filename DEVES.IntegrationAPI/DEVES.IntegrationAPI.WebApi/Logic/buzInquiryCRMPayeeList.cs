@@ -255,6 +255,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         data.solicitorFlag = searchCond.solicitorFlag;
                         data.repairerFlag = searchCond.repairerFlag;
                         data.hospitalFlag = searchCond.hospitalFlag;
+                        data.polisyClientId = searchCond.polisyClientId; // เอา  polisyClientId จากข้อมูลต้นทาง (APAR,ASHR ) มาใช้แทน
                         counrSAPResult += 1;
                     }
 
@@ -362,6 +363,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         string postalCode = "";
                         string countryText = "";
                         string fullAddressText = "";
+                        string ctrycode = "";
 
                         int lastSeq = 0;
 
@@ -399,22 +401,30 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                             cleansingId = clsData.cleansing_id,
                             polisyClientId = clsData.clntnum,
                             sapVendorCode = "",
+                            title = "",
                             name1 = clsData.lgivname,
                             name2 = clsData.lsurname,
-                       
+                            // countryCode = clsData.c
+                            telephone1 = clsData?.cltphone01,
+                            telephone2 = clsData?.cltphone02,
+                            contactNumber = clsData?.cls_display_phone,
+
+
                             fullName = clsData.cls_full_name,
                             taxNo = clsData.cls_tax_no_new,
-                            taxBranchCode = "",
+                            
                             emcsMemHeadId = "",
                             emcsMemId = "",
                             street1 = street1Text,
                             street2 = street2Text,
                             district = districtText,
                             city = provinceText,
+
                             postalCode = postalCode,
-                            // countryCode = ,
+                            countryCode = "",
                             countryCodeDesc = countryText,
                             address = fullAddressText,
+                            
 
                         });
                     }
@@ -471,12 +481,15 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                             typeof(InquiryCRMPayeeListInputModel));
                     foreach (InquiryMasterASRHContentASRHListCollectionDataModel asrh in inqASRHOut.ASRHListCollection)
                     {
-                        InquiryCRMPayeeListInputModel t = new InquiryCRMPayeeListInputModel();
-                        t = (InquiryCRMPayeeListInputModel) transformer.TransformModel(asrh, t);
-                        t.requester = listSAPSearchCondition[i].requester;
-                        t.emcsCode = listSAPSearchCondition[i].emcsCode;
-                        t.roleCode = listSAPSearchCondition[i].roleCode;
-                        tmpListSAPSearchCondition.Add(t);
+                       
+                            InquiryCRMPayeeListInputModel t = new InquiryCRMPayeeListInputModel();
+                            t = (InquiryCRMPayeeListInputModel)transformer.TransformModel(asrh, t);
+                            t.requester = listSAPSearchCondition[i].requester;
+                            t.emcsCode = listSAPSearchCondition[i].emcsCode;
+                            t.roleCode = listSAPSearchCondition[i].roleCode;
+                            tmpListSAPSearchCondition.Add(t);
+                        
+                       
                         //bFoundIn_APAR_or_Master = true;
                     }
                     Console.WriteLine("126: FoundIn APAR or Master");
@@ -552,6 +565,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             return tmpListSAPSearchCondition;
         }
 
+        public bool IsValidSAPPolisyClientId(string polisyClientNum)
+        {
+            return true;
+        }
+
         public List<InquiryCRMPayeeListInputModel> InquiryAPARPayeeList(List<InquiryCRMPayeeListInputModel> listSAPSearchCondition, int iRecordsLimit, InquiryCRMPayeeListInputModel inqCrmPayeeListIn,
             ref CRMInquiryPayeeContentOutputModel crmInqPayeeOut)
         {
@@ -567,7 +585,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 InquiryAPARPayeeContentModel inqAPAROut = CallDevesServiceProxy<InquiryAPARPayeeOutputModel, InquiryAPARPayeeContentModel>(CommonConstant.ewiEndpointKeyAPARInquiryPayeeList, inqAPARIn);
                // InquiryAPARPayeeContentModel inqAPAROut =
                 //    buzInquiryAPARPayeeListPayeeListService.Instance.Execute(inqAPARIn);
-                if (inqAPAROut?.aparPayeeListCollection != null && inqAPAROut.aparPayeeListCollection.Count > 0)
+                if (inqAPAROut?.aparPayeeListCollection != null
+                    && inqAPAROut.aparPayeeListCollection.Count > 0
+                   )
                 {
                     if (inqAPAROut.aparPayeeListCollection.Count + listSAPSearchCondition.Count +
                         tmpListSAPSearchCondition.Count > iRecordsLimit)
@@ -584,12 +604,16 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                             typeof(InquiryCRMPayeeListInputModel));
                     foreach (InquiryAPARPayeeContentAparPayeeListCollectionDataModel apar in inqAPAROut.aparPayeeListCollection)
                     {
-                        InquiryCRMPayeeListInputModel t = new InquiryCRMPayeeListInputModel();
-                        t = (InquiryCRMPayeeListInputModel) transformer.TransformModel(apar, t);
-                        t.requester = inqCrmPayeeListIn.requester;
-                        t.emcsCode = inqCrmPayeeListIn.emcsCode;
-                        t.roleCode = inqCrmPayeeListIn.roleCode;
-                        tmpListSAPSearchCondition.Add(t);
+                        //if ( && IsValidSAPPolisyClientId(inqCrmPayeeListIn.))
+                       // {
+                            InquiryCRMPayeeListInputModel t = new InquiryCRMPayeeListInputModel();
+                            t = (InquiryCRMPayeeListInputModel)transformer.TransformModel(apar, t);
+                            t.requester = inqCrmPayeeListIn.requester;
+                            t.emcsCode = inqCrmPayeeListIn.emcsCode;
+                            t.roleCode = inqCrmPayeeListIn.roleCode;
+                            tmpListSAPSearchCondition.Add(t);
+                        //}
+                       
                     }
 
                     listSAPSearchCondition.RemoveAt(0);
