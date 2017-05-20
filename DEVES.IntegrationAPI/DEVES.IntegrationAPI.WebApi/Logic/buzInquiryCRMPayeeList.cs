@@ -19,7 +19,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 {
     public class buzInquiryCRMPayeeList : BuzCommand
     {
-      
+        /// <summary>
+        /// ใช้ทดสอบว่า หากไม่เจอข้อมูลใน SAP ข้อมูล OUTPUT จะเป็นอย่างไร
+        /// production set = false
+        /// </summary>
+        public bool IgnoreSap = true;
+        public bool IgnoreApar = true;
         public override BaseDataModel ExecuteInput(object input)
         {
             /*
@@ -71,17 +76,21 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             }
 
             listSAPSearchCondition.Add(tempInqCrmPayeeInput);
-                int i = 0;
 
                 if ( (!listSAPSearchCondition.Exists(x => x.SearchConditionType != ENUM_SAP_SearchConditionType.invalid)) )
                 {
-                    #region IF inqCrmPayeeListIn.ClientType == "G" -> APAR.InquiryAPARPayeeList
+                #region IF inqCrmPayeeListIn.ClientType == "G" -> APAR.InquiryAPARPayeeList
+
+                    if (!IgnoreApar)
+                    {
                     if (inqCrmPayeeListIn.roleCode.ToUpper() == ENUM_CLIENT_ROLE.G.ToString())
                     {
                         var tmpListSAPSearchCondition = InquiryAPARPayeeList(listSAPSearchCondition, iRecordsLimit, inqCrmPayeeListIn, ref crmInqPayeeOut);
                         listSAPSearchCondition.AddRange(tmpListSAPSearchCondition);
-                      
+
+                    }
                 }
+                    
                     
                     #endregion inqCrmPayeeListIn.roleCode == "G" -> APAR.InquiryAPARPayeeList
 
@@ -158,22 +167,24 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 }
             var counrSAPResult = 0 ;
                 Console.WriteLine("Before Search SAP");
-                
 
-            if ( FilterAndValidateSAPSearchConditions(ref listSAPSearchCondition) )
+            if (!IgnoreSap)
             {
-                i = 0;
-                #region Search In SAP: SAP_InquiryVendor()
-                Console.WriteLine(listSAPSearchCondition.ToJson());
-                InquerySapVandor(listSAPSearchCondition, crmInqPayeeOut, iRecordsLimit, counrSAPResult);
+                if (FilterAndValidateSAPSearchConditions(ref listSAPSearchCondition))
+                {
+                    #region Search In SAP: SAP_InquiryVendor()
+                    Console.WriteLine(listSAPSearchCondition.ToJson());
+                    InquerySapVandor(listSAPSearchCondition, crmInqPayeeOut, iRecordsLimit, counrSAPResult);
 
-                #endregion Search In SAP: SAP_InquiryVendor()
-            }
+                    #endregion Search In SAP: SAP_InquiryVendor()
+                }
                 else
                 {
-                 Console.WriteLine("Not Found In SAP");
+                    Console.WriteLine("Not Found In SAP");
                     //crmInqPayeeOut.content = null;
                 }
+            }
+            
             Console.WriteLine("=========OUTPUT=========");
             Console.WriteLine("=========OUTPUT=========");
             Console.WriteLine(crmInqPayeeOut.ToJson());
@@ -217,6 +228,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             return crmInqPayeeOut;
         }
 
+        
+       
         private void InquerySapVandor(List<InquiryCRMPayeeListInputModel> listSAPSearchCondition, CRMInquiryPayeeContentOutputModel crmInqPayeeOut,
             int iRecordsLimit, int counrSAPResult)
         {
@@ -357,79 +370,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         t.clientType = listSAPSearchCondition[i].clientType;
                         tmpListSAPSearchCondition.Add(t);
 
-                        string street1Text = "";
-                        string street2Text = "";
-                        string districtText = "";
-                        string provinceText = "";
-                        string postalCode = "";
-                        string countryText = "";
-                        string fullAddressText = "";
-                        string ctrymastercode = "";
-                       
-                        int lastSeq = 0;
-
-                        //@TODO AdHoc Add CLS
-                        if (clsData.addressListsCollection != null)
-                        {
-                            foreach (var clsAddress in clsData.addressListsCollection)
-                            {
-                                if (clsAddress.sequence_id > lastSeq)
-                                {
-                                    lastSeq = clsAddress.sequence_id;
-                                }
-                            }
-
-                            foreach (var clsAddress in clsData.addressListsCollection)
-                            {
-                                if (clsAddress.sequence_id == lastSeq)
-                                {
-                                    street1Text = clsAddress.address_1;
-                                    street2Text = clsAddress.address_2;
-                                    districtText = clsAddress.district_text;
-                                    provinceText = clsAddress.province_text;
-                                    postalCode = clsAddress.postal_code;
-                                    countryText = clsAddress.cls_ctrycode_text;
-                                    ctrymastercode = CountryMasterData.Instance.FindByPolisyCode(clsAddress?.ctrycode)?.SapCode ?? "";
-                                    fullAddressText = clsAddress.full_original_address;
-
-                                    break;
-                                }
-                            }
-                        }
-                        crmInqPayeeOut.data.Add(new InquiryCrmPayeeListDataModel
-                        {
-
-                            sourceData = "CLS",
-                            cleansingId = clsData.cleansing_id,
-                            polisyClientId = clsData.clntnum,
-                            sapVendorCode = "",
-                            title = "",
-                            name1 = clsData.lgivname,
-                            name2 = clsData.lsurname,
-                            // countryCode = clsData.c
-                            telephone1 = clsData?.cltphone01,
-                            telephone2 = clsData?.cltphone02,
-                            contactNumber = clsData?.cls_display_phone,
-
-
-                            fullName = clsData.cls_full_name,
-                            taxNo = clsData.cls_tax_no_new,
-                            
-                            emcsMemHeadId = "",
-                            emcsMemId = "",
-                            street1 = street1Text,
-                            street2 = street2Text,
-                            district = districtText,
-                            city = provinceText,
-
-                            postalCode = postalCode,
-                            countryCode = ctrymastercode,
-                            countryCodeDesc = countryText,
-                            address = fullAddressText,
-                            
-
-                        });
+                      
+                      
                     }
+                    //tranform CLS to OUTPUT
+                    var tranfromer = new Tranform_clsInqCorporateOut_to_crmInqPayeeOut();
+                    crmInqPayeeOut = (CRMInquiryPayeeContentOutputModel)tranfromer.TransformModel(retCLSInqCorpClient, crmInqPayeeOut);
+
                     listSAPSearchCondition.RemoveAt(0);
 
                     //if ((retCLSInqCorpClient.success | IsOutputSuccess(retCLSInqCorpClient)) & (retCLSInqCorpClient.data.Count == 1))

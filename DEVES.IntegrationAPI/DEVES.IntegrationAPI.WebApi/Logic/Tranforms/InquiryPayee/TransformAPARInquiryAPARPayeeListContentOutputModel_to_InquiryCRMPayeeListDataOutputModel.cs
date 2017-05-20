@@ -31,7 +31,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
 
             trgtContent.data = new List<InquiryCrmPayeeListDataModel>();
-
+            trgtContent.AddDebugInfo("Transformer", "TransformAPARInquiryAPARPayeeListContentOutputModel_to_InquiryCRMPayeeListDataOutputModel");
 
             foreach (var aparPayeeListDataModel in srcContent.aparPayeeListCollection)
             {
@@ -40,23 +40,28 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     if (aparPayeeListDataModel.aparPayeeList != null)
                     {
                         var aparPayeeList = aparPayeeListDataModel.aparPayeeList;
-                        trgtContent.data.Add(new InquiryCrmPayeeListDataModel
+                        var model = new InquiryCrmPayeeListDataModel
                         {
                             sourceData = "APAR",
                             cleansingId = "",
-                            polisyClientId = aparPayeeList.polisyClntnum,
-                            sapVendorCode = aparPayeeList.vendorCode,
-                            sapVendorGroupCode = aparPayeeList.vendorGroupCode,
+                            polisyClientId = aparPayeeList?.polisyClntnum ?? "",
+                            sapVendorCode = aparPayeeList?.vendorCode ?? "",
+                            sapVendorGroupCode = aparPayeeList?.vendorGroupCode ?? "",
 
-                            address = aparPayeeList.address,
-                            telephone1 = aparPayeeList.telephone1,
-                            telephone2 = aparPayeeList.telephone2,
+                            address = aparPayeeList?.address ?? "",
+                            telephone1 = aparPayeeList?.telephone1 ?? "",
+                            telephone2 = aparPayeeList?.telephone2 ?? "",
 
-                            faxNo = aparPayeeList.faxNo,
+                            faxNo = aparPayeeList?.faxNo ?? "",
+                            taxNo = aparPayeeList?.taxNo ?? "",
 
-                            taxBranchCode = aparPayeeList.taxBranchCode,
-                            fullName =  aparPayeeList.fullName
-                        });
+                            taxBranchCode = aparPayeeList?.taxBranchCode ?? "",
+                            fullName = aparPayeeList?.fullName ?? ""
+                        };
+                        
+                        model.AddDebugInfo("APAR  JSON Source", aparPayeeListDataModel);
+                        model.AddDebugInfo("Transformer", "TransformSAPInquiryVendorOutputModel_to_InquiryCRMPayeeListDataOutputModel");
+                        trgtContent.data.Add(model);
                     }
                 }
             }

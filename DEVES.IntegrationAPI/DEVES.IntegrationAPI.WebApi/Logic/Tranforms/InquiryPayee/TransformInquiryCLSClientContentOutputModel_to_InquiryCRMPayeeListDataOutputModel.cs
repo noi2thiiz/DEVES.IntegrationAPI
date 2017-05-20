@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using DEVES.IntegrationAPI.Model;
 using DEVES.IntegrationAPI.Model.APAR;
+using DEVES.IntegrationAPI.Model.CLS;
 using DEVES.IntegrationAPI.Model.InquiryCRMPayeeList;
 using DEVES.IntegrationAPI.Model.MASTER;
 using DEVES.IntegrationAPI.WebApi.Templates;
@@ -9,66 +10,46 @@ using DEVES.IntegrationAPI.WebApi.Templates;
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
     public class
-        TransformInquiryMasterASRHContentOutputModel_to_InquiryCRMPayeeListDataOutputModel : BaseTransformer
+        TransformCLSInquiryPersonalClientContentOutputModel_to_InquiryCRMPayeeListDataOutputModel : BaseTransformer
     {
         public override BaseDataModel TransformModel(BaseDataModel input, BaseDataModel output)
         {
-            InquiryMasterASRHContentModel srcContent = (InquiryMasterASRHContentModel) input;
-            CRMInquiryPayeeContentOutputModel trgtContent = (CRMInquiryPayeeContentOutputModel) output;
+            // CLS.CLSInquiryPersonalClientContentOutputModel srcContent = (CLS.CLSInquiryPersonalClientContentOutputModel)input;
+            CLSInquiryPersonalClientContentOutputModel srcContent = (CLSInquiryPersonalClientContentOutputModel)input;
+            CRMInquiryPayeeContentOutputModel trgtContent = (CRMInquiryPayeeContentOutputModel)output;
 
-            #region Prevent Null Reference
 
-            if (srcContent == null)
-            {
-                return trgtContent;
-            }
-            if (srcContent?.ASRHListCollection == null) {
-                return trgtContent;
-            }
 
-           if (trgtContent == null)
-            {
-                trgtContent = new CRMInquiryPayeeContentOutputModel();
 
-            }
             trgtContent.data = new List<InquiryCrmPayeeListDataModel>();
+            trgtContent.AddDebugInfo("transformer", "TransformCLSInquiryPersonalClientContentOutputModel_to_InquiryCRMPayeeListDataOutputModel");
 
-            #endregion
 
-         
-           
-            foreach (var ASRHListCollection in srcContent?.ASRHListCollection)
+
+            foreach (var clsData in srcContent.data)
             {
-             
-                if (ASRHListCollection?.ASRHList != null)
+                var model = new InquiryCrmPayeeListDataModel
                 {
-                  
-                    var ASRHList = ASRHListCollection?.ASRHList;
-                    
-                    trgtContent.data.Add(new InquiryCrmPayeeListDataModel
-                    {
-                        sourceData = "MASTER_ASHR",
-                       
-                        polisyClientId = ASRHList.polisyClntnum,
-                        sapVendorCode = ASRHList.vendorCode,
-                        fullName = ASRHList.fullName,
-                        taxNo = ASRHList.taxNo,
-                        taxBranchCode = ASRHList.taxBranchCode,
-                        emcsMemHeadId = ASRHList.emcsMemHeadId,
-                        emcsMemId = ASRHList.emcsMemId,
-                        address = ASRHList.address,
-                        contactNumber = ASRHList.contactNumber,
-                        assessorFlag = ASRHList.assessorFlag,
-                        solicitorFlag = ASRHList.solicitorFlag,
-                        repairerFlag = ASRHList.repairerFlag
-                        //  ASRHList "businessType": null,
-                        //  ASRHList.masterASRHCode
-                        // ASRHList.polisyClntnum
-                    });
-                }
+
+                    sourceData = "CLS",
+                    cleansingId = clsData.cleansing_id,
+                    polisyClientId = clsData.clntnum,
+                    sapVendorCode = "",
+                    fullName = clsData.cls_full_name,
+                    taxNo = clsData.cls_fax,
+                    taxBranchCode = "",
+                    emcsMemHeadId = "",
+                    emcsMemId = ""
+
+
+                };
+                model.AddDebugInfo("transformer", "TransformCLSInquiryPersonalClientContentOutputModel_to_InquiryCRMPayeeListDataOutputModel");
+                model.AddDebugInfo("CLS Source", clsData);
+                trgtContent.data.Add(model);
+
             }
 
-          
+
             return trgtContent;
         }
     }

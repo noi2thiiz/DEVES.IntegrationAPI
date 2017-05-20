@@ -167,23 +167,37 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
             {
                 code = defaulCode;
             }
+           
             return FindByCode(code);
         }
 
         public TEntityClass FindByPolisyCode(string code)
         {
-            //@TO adHoc Load All Data
-            if (DataList3 != null) return DataList3[code];
-            DataList3 = new Dictionary<string, dynamic>();
-            foreach (var item in DataList)
+            if (string.IsNullOrEmpty(code))
             {
-                   
-                if (!DataList3.ContainsKey(item.Value["PolisyCode"]))
-                {
-                    DataList3.Add(item.Value["PolisyCode"], item);
-                }
+                return default(TEntityClass);
             }
-            return DataList3[code];
+            //@TO adHoc Load All Data
+            if (DataList3 == null)
+            {
+                DataList3 = new Dictionary<string, dynamic>();
+                foreach (var item in DataList)
+                {
+
+                    if (!DataList3.ContainsKey(item.Value["PolisyCode"]))
+                    {
+                        DataList3.Add(item.Value["PolisyCode"], item);
+                    }
+                }
+
+            }
+            if (DataList3.ContainsKey(code))
+            {
+                return Tranform(DataList3[code]);
+            }
+
+          
+            return default(TEntityClass);
         }
 
         public TEntityClass FindByPolisyCode(string code, string defaulCode)
@@ -196,18 +210,31 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
         }
         public TEntityClass FindBySapCode(string code)
         {
-            if (DataListSap != null) return DataListSap[code];
-            DataListSap = new Dictionary<string, dynamic>();
-            foreach (var item in DataList)
+            if (string.IsNullOrEmpty(code))
             {
-
-                if (!DataListSap.ContainsKey(item.Value["SapCode"]))
+                return default(TEntityClass);
+            }
+            if (DataListSap == null)
+            {
+                DataListSap = new Dictionary<string, dynamic>();
+                foreach (var item in DataList)
                 {
-                    DataListSap.Add(item.Value["SapCode"], item);
+
+                    if (!DataListSap.ContainsKey(item.Value["SapCode"]))
+                    {
+                        DataListSap.Add(item.Value["SapCode"], item);
+                    }
                 }
             }
-            return DataListSap[code];
-            return FindByPolisyCode(code);
+            
+            if (DataListSap.ContainsKey(code))
+            {
+                return Tranform(DataListSap[code]);
+            }
+
+            return default(TEntityClass);
+
+
         }
 
         public TEntityClass FindByField(TEntityFieldEnum fieldEnum, string fieldValue)

@@ -28,21 +28,24 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             foreach (var compData in srcContent.clientListCollection)
             {
-                trgtContent.data.Add(
-                new InquiryCrmPayeeListDataModel
+                var dataItem = new InquiryCrmPayeeListDataModel
                 {
-                 
+
                     sourceData = "COMP",
                     cleansingId = compData.clientList.cleansingId,
                     polisyClientId = compData.clientList.clientNumber,
                     sapVendorCode = "",
                     fullName = compData.clientList.fullName,
                     taxNo = compData.clientList.taxId,
-                   // taxBranchCode = compData.clientList.,
+                    // taxBranchCode = compData.clientList.,
                     emcsMemHeadId = "",
                     emcsMemId = ""
-                    
-                });
+
+                };
+                dataItem.AddDebugInfo("COMP JSON Source", compData);
+                dataItem.AddDebugInfo("Transformer", "TransformEWIResCOMPInquiryClientMasterContentModel_to_InquiryCRMPayeeListDataOutputModel");
+
+                trgtContent.data.Add(dataItem);
 
             }
 

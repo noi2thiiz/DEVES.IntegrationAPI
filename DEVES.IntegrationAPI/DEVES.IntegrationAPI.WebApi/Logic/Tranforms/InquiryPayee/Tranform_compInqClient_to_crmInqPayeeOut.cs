@@ -90,7 +90,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
 
 
-
+                dataItem.AddDebugInfo("COMP JSON Source", polData);
+                dataItem.AddDebugInfo("Transformer", "Tranform_compInqClient_to_crmInqPayeeOut");
                 crmInqPayeeOut.data.Add(dataItem);
             }
             /*

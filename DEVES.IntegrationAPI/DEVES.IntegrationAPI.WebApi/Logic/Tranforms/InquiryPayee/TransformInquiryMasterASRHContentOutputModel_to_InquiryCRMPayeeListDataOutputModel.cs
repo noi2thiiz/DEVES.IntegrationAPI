@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using DEVES.IntegrationAPI.Model;
 using DEVES.IntegrationAPI.Model.APAR;
-using DEVES.IntegrationAPI.Model.CLS;
 using DEVES.IntegrationAPI.Model.InquiryCRMPayeeList;
 using DEVES.IntegrationAPI.Model.MASTER;
 using DEVES.IntegrationAPI.WebApi.Templates;
@@ -10,40 +9,73 @@ using DEVES.IntegrationAPI.WebApi.Templates;
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
     public class
-        TransformCLSInquiryPersonalClientContentOutputModel_to_InquiryCRMPayeeListDataOutputModel : BaseTransformer
+        TransformInquiryMasterASRHContentOutputModel_to_InquiryCRMPayeeListDataOutputModel : BaseTransformer
     {
         public override BaseDataModel TransformModel(BaseDataModel input, BaseDataModel output)
         {
-            // CLS.CLSInquiryPersonalClientContentOutputModel srcContent = (CLS.CLSInquiryPersonalClientContentOutputModel)input;
-            CLSInquiryPersonalClientContentOutputModel srcContent = (CLSInquiryPersonalClientContentOutputModel) input;
-            CRMInquiryPayeeContentOutputModel trgtContent = (CRMInquiryPayeeContentOutputModel) output;
+            InquiryMasterASRHContentModel srcContent = (InquiryMasterASRHContentModel)input;
+            CRMInquiryPayeeContentOutputModel trgtContent = (CRMInquiryPayeeContentOutputModel)output;
 
+            #region Prevent Null Reference
 
-       
+            if (srcContent == null)
+            {
+                return trgtContent;
+            }
+            if (srcContent?.ASRHListCollection == null)
+            {
+                return trgtContent;
+            }
 
+            if (trgtContent == null)
+            {
+                trgtContent = new CRMInquiryPayeeContentOutputModel();
+
+            }
             trgtContent.data = new List<InquiryCrmPayeeListDataModel>();
 
+            #endregion
 
 
-            foreach (var clsData in srcContent.data)
+
+            foreach (var ASRHListCollection in srcContent?.ASRHListCollection)
             {
-                trgtContent.data.Add(
-                new InquiryCrmPayeeListDataModel
+
+                if (ASRHListCollection?.ASRHList != null)
                 {
-                 
-                    sourceData = "CLS",
-                    cleansingId = clsData.cleansing_id,
-                    polisyClientId = clsData.clntnum,
-                    sapVendorCode = "",
-                    fullName = clsData.cls_full_name,
-                    taxNo = clsData.cls_fax,
-                    taxBranchCode = "",
-                    emcsMemHeadId = "",
-                    emcsMemId = ""
 
-                    
-                });
+                    var ASRHList = ASRHListCollection?.ASRHList;
+                    var dataItem = new InquiryCrmPayeeListDataModel
+                    {
+                        sourceData = "MASTER_ASHR",
 
+                        polisyClientId = ASRHList.polisyClntnum,
+                        sapVendorCode = ASRHList.vendorCode,
+                        fullName = ASRHList.fullName,
+                        taxNo = ASRHList.taxNo,
+                        taxBranchCode = ASRHList.taxBranchCode,
+                        emcsMemHeadId = ASRHList.emcsMemHeadId,
+                        emcsMemId = ASRHList.emcsMemId,
+                        address = ASRHList.address,
+                        contactNumber = ASRHList.contactNumber,
+                        assessorFlag = ASRHList.assessorFlag,
+                        solicitorFlag = ASRHList.solicitorFlag,
+                        repairerFlag = ASRHList.repairerFlag
+                        //  ASRHList "businessType": null,
+                        //  ASRHList.masterASRHCode
+                        // ASRHList.polisyClntnum
+                    };
+                    switch (ASRHList.businessType)
+                    {
+                        case "Hospital" :
+                            dataItem.hospitalFlag = "Y"; break;
+                    }
+
+                    dataItem.AddDebugInfo("MASTER_ASHR JSON Source", ASRHListCollection);
+                    dataItem.AddDebugInfo("Transformer", "TransformInquiryMasterASRHContentOutputModel_to_InquiryCRMPayeeListDataOutputModel");
+
+                    trgtContent.data.Add(dataItem);
+                }
             }
 
 

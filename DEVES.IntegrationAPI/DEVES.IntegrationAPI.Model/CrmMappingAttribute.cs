@@ -20,7 +20,34 @@ namespace DEVES.IntegrationAPI.Model
         internal const string CONST_FORMAT_DATE_POLISY400 = "ddMMyyyy";
         [JsonIgnore]
         public string DateTimeCustomFormat = "yyyy-MM-dd HH:mm:ss";
+
+        [JsonProperty(Order = 1000)]
+        public List<DataModelDebugInfo> _debugInfo { get; set; }
+
+        public void AddDebugInfo(string message , dynamic info)
+        {
+            if (_debugInfo == null)
+            {
+                _debugInfo = new List<DataModelDebugInfo>();
+                _debugInfo.Add(new DataModelDebugInfo
+                {
+                    message = "warning",
+                    info="_debugInfo will be remove on production!!"
+                });
+            }
+            _debugInfo.Add(new DataModelDebugInfo
+            {
+                message = message,
+                info = info
+            });
+        }
     }
+
+    public class DataModelDebugInfo
+    {
+        public string message { get; set; }
+        public dynamic info { get; set; }
+}
 
     public abstract class BaseContentJsonServiceOutputModel : BaseDataModel
     {

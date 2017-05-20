@@ -12,16 +12,16 @@ using DEVES.IntegrationAPI.WebApi.Logic.Validator;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
-    public class Tranform_clsInqPersonalOut_to_crmInqPayeeOut : BaseTransformer
+    public class Tranform_clsInqCorporateOut_to_crmInqPayeeOut : BaseTransformer
     {
         public override BaseDataModel TransformModel(BaseDataModel input, BaseDataModel output)
         {
-            CLSInquiryPersonalClientContentOutputModel clsInqPersClient = (CLSInquiryPersonalClientContentOutputModel)input;
+            CLSInquiryCorporateClientContentOutputModel retCLSInqCorpClient = (CLSInquiryCorporateClientContentOutputModel)input;
             CRMInquiryPayeeContentOutputModel crmInqPayeeOut = (CRMInquiryPayeeContentOutputModel)output
 
                                                                ?? (CRMInquiryPayeeContentOutputModel)DataModelFactory.GetModel(typeof(CRMInquiryPayeeContentOutputModel));
             #region prevent null reference
-            if (clsInqPersClient?.data == null)
+            if (retCLSInqCorpClient?.data == null)
             {
                 return crmInqPayeeOut;
             }
@@ -30,22 +30,21 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 crmInqPayeeOut.data = new List<InquiryCrmPayeeListDataModel>();
             }
             #endregion
-
-            foreach (var clsData in clsInqPersClient.data)
+            retCLSInqCorpClient.AddDebugInfo("tranformer", "Tranform_clsInqCorporateOut_to_crmInqPayeeOut");
+            foreach (var clsData in retCLSInqCorpClient.data)
             {
                 string street1Text = "";
                 string street2Text = "";
                 string districtText = "";
                 string provinceText = "";
                 string postalCode = "";
-                string countryCode = "";
                 string countryText = "";
                 string fullAddressText = "";
-
-                var validator = new MasterDataValidator();
+                string ctrymastercode = "";
 
                 int lastSeq = 0;
 
+                //@TODO AdHoc Add CLS
                 if (clsData.addressListsCollection != null)
                 {
                     foreach (var clsAddress in clsData.addressListsCollection)
@@ -64,56 +63,51 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                             street2Text = clsAddress.address_2;
                             districtText = clsAddress.district_text;
                             provinceText = clsAddress.province_text;
-                            postalCode = clsAddress.postal_code; 
-                            countryCode = CountryMasterData.Instance.FindByPolisyCode(clsAddress?.ctrycode)?.SapCode??"";
+                            postalCode = clsAddress.postal_code;
                             countryText = clsAddress.cls_ctrycode_text;
+                            ctrymastercode = CountryMasterData.Instance.FindByPolisyCode(clsAddress?.ctrycode)?.SapCode ?? "";
                             fullAddressText = clsAddress.full_original_address;
 
                             break;
                         }
                     }
                 }
+
                 var model = new InquiryCrmPayeeListDataModel
                 {
 
                     sourceData = "CLS",
-                    cleansingId = clsData?.cleansing_id,
-                    polisyClientId = clsData?.clntnum,
+                    cleansingId = clsData.cleansing_id,
+                    polisyClientId = clsData.clntnum,
                     sapVendorCode = "",
-                    sapVendorGroupCode = "",
+                    title = "",
+                    name1 = clsData.lgivname,
+                    name2 = clsData.lsurname,
+                    // countryCode = clsData.c
+                    telephone1 = clsData?.cltphone01,
+                    telephone2 = clsData?.cltphone02,
+                    contactNumber = clsData?.cls_display_phone,
 
-                    // emcsMemHeadId = ,
-                    // emcsMemId ="",
-                    // companyCode ="",
-                    title = validator.TryConvertSalutationCode("clsData.salutl", clsData?.salutl),
-                    name1 = clsData?.lgivname,
-                    name2 = clsData?.lsurname,
-                    fullName = clsData?.cls_full_name,
+
+                    fullName = clsData.cls_full_name,
+                    taxNo = clsData.cls_tax_no_new,
+
+                    emcsMemHeadId = "",
+                    emcsMemId = "",
                     street1 = street1Text,
                     street2 = street2Text,
                     district = districtText,
                     city = provinceText,
+
                     postalCode = postalCode,
-                    countryCode = countryCode,
+                    countryCode = ctrymastercode,
                     countryCodeDesc = countryText,
                     address = fullAddressText,
-                    telephone1 = clsData?.cltphone01,
-                    telephone2 = clsData?.cltphone02,
-                    faxNo = clsData?.cls_fax,
-                    contactNumber = clsData?.cls_display_phone,
-                    //taxNo = ,
-                    //taxBranchCode ="",
-                    //paymentTerm="",
-                    //paymentTermDesc ="",
-                    //paymentMethods = ,
-                    //inactive = ,
-                    //assessorFlag =,
-                    //solicitorFlag = ,
-                    //repairerFlag = ,
-                    //hospitalFlag =
+
 
                 };
-                model.AddDebugInfo("CLS JSON", clsData);
+                model.AddDebugInfo("CLS Source", clsData);
+                model.AddDebugInfo("tranformer", "Tranform_clsInqCorporateOut_to_crmInqPayeeOut");
                 crmInqPayeeOut.data.Add(model);
 
             }
