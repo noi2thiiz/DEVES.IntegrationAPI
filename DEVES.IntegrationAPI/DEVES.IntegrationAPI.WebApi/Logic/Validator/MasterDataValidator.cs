@@ -141,6 +141,36 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Validator
 
         }
 
+        public string TryConvertCountryPolisyCode(string fieldName, string polisyCode, string defaultCode = "764")
+        {
+            if (string.IsNullOrEmpty(polisyCode))
+            {
+                polisyCode = defaultCode;
+            }
+            try
+            {
+                var master =
+                    CountryMasterData.Instance.FindByCode(polisyCode, defaultCode);
+                if (master != null)
+                {
+                    return master.CountryCode;
+                }
+                else
+                {
+                    var errorMessage =
+                        MessageBuilder.Instance.GetInvalidMasterMessage("Country", polisyCode);
+                    fieldErrorData.AddFieldError(fieldName, errorMessage);
+                }
+            }
+            catch (Exception)
+            {
+                //do nothing
+            }
+
+            return defaultCode;
+
+        }
+
         public string TryConvertCountryCode(string fieldName, string masterCode, string defaultCode = "00220")
         {
             if (string.IsNullOrEmpty(masterCode))

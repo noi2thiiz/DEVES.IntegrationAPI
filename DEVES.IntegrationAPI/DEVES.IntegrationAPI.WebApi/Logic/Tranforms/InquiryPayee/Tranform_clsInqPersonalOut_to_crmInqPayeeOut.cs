@@ -7,6 +7,7 @@ using DEVES.IntegrationAPI.Model;
 using DEVES.IntegrationAPI.Model.CLS;
 using DEVES.IntegrationAPI.Model.InquiryCRMPayeeList;
 using DEVES.IntegrationAPI.WebApi.Templates;
+using DEVES.IntegrationAPI.WebApi.Logic.Validator;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
@@ -36,8 +37,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 string districtText = "";
                 string provinceText = "";
                 string postalCode = "";
+                string countryCode = "";
                 string countryText = "";
                 string fullAddressText = "";
+
+                var validator = new MasterDataValidator();
 
                 int lastSeq = 0;
 
@@ -60,6 +64,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                             districtText = clsAddress.district_text;
                             provinceText = clsAddress.province_text;
                             postalCode = clsAddress.postal_code;
+                            countryCode = validator.TryConvertCountryPolisyCode("clsAddress.ctrycode", clsAddress.ctrycode);
                             countryText = clsAddress.cls_ctrycode_text;
                             fullAddressText = clsAddress.full_original_address;
 
@@ -80,7 +85,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     // emcsMemHeadId = ,
                     // emcsMemId ="",
                     // companyCode ="",
-                    // title = ,
+                    title = validator.TryConvertSalutationCode("clsData.salutl", clsData?.salutl),
                     name1 = clsData?.lgivname,
                     name2 = clsData?.lsurname,
                     fullName = clsData?.cls_full_name,
@@ -89,13 +94,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     district = districtText,
                     city = provinceText,
                     postalCode = postalCode,
-                    // countryCode = ,
+                    countryCode = countryCode,
                     countryCodeDesc = countryText,
                     address = fullAddressText,
-                    telephone1 = clsData?.cls_display_phone,
-                    // telephone2 = ,
+                    telephone1 = clsData?.cltphone01,
+                    telephone2 = clsData?.cltphone02,
                     faxNo = clsData?.cls_fax,
-                    // contactNumber ="",
+                    contactNumber = clsData?.cls_display_phone,
                     //taxNo = ,
                     //taxBranchCode ="",
                     //paymentTerm="",
