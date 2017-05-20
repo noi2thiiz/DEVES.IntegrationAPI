@@ -138,6 +138,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 outputContent = new CRMInquiryPayeeContentOutputModel();
                 outputContent.data = new List<InquiryCrmPayeeListDataModel>();
             }
+            
 
             foreach (var vendorInfo in srcContent.VendorInfo)
             {
@@ -145,7 +146,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 outputContent.data.Add(TransformDataModel(vendorInfo, new InquiryCrmPayeeListDataModel { sourceData = "SAP" }));
             }
             
-            outputContent.data = outputContent.data.DistinctBy(row => new { row.sourceData, row.sapVendorCode,row.polisyClientId, row.cleansingId }).ToList();
+           // outputContent.data = outputContent.data.DistinctBy(row => new { row.sourceData, row.sapVendorCode,row.polisyClientId, row.cleansingId }).ToList();
             /*
             List<Product> result = pr.GroupBy(g => new { g.Title, g.Price })
                 .Select(g => g.First())

@@ -28,11 +28,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         public bool IgnoreApar = false;
         public bool IgnoreCls = false;
 
-        public InquiryCRMPayeeListInputModel SAPResult = new InquiryCRMPayeeListInputModel();
-        public InquiryCRMPayeeListInputModel CLSResult = new InquiryCRMPayeeListInputModel();
-        public InquiryCRMPayeeListInputModel COMPResult = new InquiryCRMPayeeListInputModel();
-        public InquiryCRMPayeeListInputModel APARResult = new InquiryCRMPayeeListInputModel();
-        public InquiryCRMPayeeListInputModel ASHRResult = new InquiryCRMPayeeListInputModel();
+        public CRMInquiryPayeeContentOutputModel SAPResult = new CRMInquiryPayeeContentOutputModel();
+        public CRMInquiryPayeeContentOutputModel CLSResult = new CRMInquiryPayeeContentOutputModel();
+        public CRMInquiryPayeeContentOutputModel COMPResult = new CRMInquiryPayeeContentOutputModel();
+        public CRMInquiryPayeeContentOutputModel APARResult = new CRMInquiryPayeeContentOutputModel();
+        public CRMInquiryPayeeContentOutputModel ASHRResult = new CRMInquiryPayeeContentOutputModel();
         public override BaseDataModel ExecuteInput(object input)
         {
             /*
@@ -216,8 +216,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             crmInqPayeeOut.AddDebugInfo("ALL output", tmp);
             //@TODO AdHoc ลบข้อมูลจาก Source อื่นออก ถ้าเจอข้อมูลใน SAP ให้ถือว่าใช้ขอมูลจาก SAP
             if (crmInqPayeeOut.data.Where(row => row.sourceData == "SAP").Distinct().ToList().Count > 0)
-                {
-                    crmInqPayeeOut.data = crmInqPayeeOut.data.Where(row => row.sourceData == "SAP").DistinctBy(row => row.sapVendorCode).ToList();
+            {
+                crmInqPayeeOut.data = crmInqPayeeOut.data.Where(row => row.sourceData == "SAP").ToList();
 
                 }
             
@@ -264,24 +264,29 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             int iRecordsLimit, int counrSAPResult)
         {
             crmInqPayeeOut.AddDebugInfo("call method", "listSAPSearchCondition");
-         
-            var limit = 40;
+            SAPResult.data = new List<InquiryCrmPayeeListDataModel>();
+               var limit = 40;
             var countLoop = 0;
-            crmInqPayeeOut.AddDebugInfo("watch", listSAPSearchCondition.ToJson());
+            crmInqPayeeOut.AddDebugInfo("watch listSAPSearchCondition ", listSAPSearchCondition.ToJson());
             //sapSearchResultCash จะใช้เก็บข้อมูลที่จะ search sap โดยหากเป็น sapVendorCode จะไม่ search ซ้ำ
             var sapSearchResultCash =  new Dictionary<string, EWIResSAPInquiryVendorContentModel>();
 
-            while (listSAPSearchCondition.Count > 0 && countLoop <= 20)
+            while (listSAPSearchCondition.Count > 0 && countLoop <= limit)
             {
+                crmInqPayeeOut.AddDebugInfo("Loop while search sap " + countLoop, countLoop);
               
                 InquiryCRMPayeeListInputModel searchCond = listSAPSearchCondition[0];
-
+                string polisyClientId = searchCond.polisyClientId;
+              crmInqPayeeOut.AddDebugInfo("searchCond polisyClientId="+ polisyClientId, searchCond);
+              
                 SAPInquiryVendorInputModel inqSAPVendorIn =
                     (SAPInquiryVendorInputModel)DataModelFactory.GetModel(typeof(SAPInquiryVendorInputModel));
 
                 inqSAPVendorIn =
                     (SAPInquiryVendorInputModel)TransformerFactory.TransformModel(searchCond, inqSAPVendorIn);
+                crmInqPayeeOut.AddDebugInfo("inqSAPVendorIn ", inqSAPVendorIn);
 
+                crmInqPayeeOut.AddDebugInfo("searchCond affter  Transformer", searchCond);
                 var sapSearchKeyCode = (inqSAPVendorIn.PREVACC + inqSAPVendorIn.TAX3 + inqSAPVendorIn.TAX4 + inqSAPVendorIn.VCODE).ReplaceMultiplSpacesWithSingleSpace();
                 EWIResSAPInquiryVendorContentModel inqSAPVendorContentOut;
                 if (!sapSearchResultCash.ContainsKey(sapSearchKeyCode))
@@ -298,7 +303,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     //ดึงค่า Cash
                     inqSAPVendorContentOut = sapSearchResultCash[sapSearchKeyCode];
                 }
-               
+                crmInqPayeeOut.AddDebugInfo("searchResult", inqSAPVendorContentOut);
 
                 if (inqSAPVendorContentOut?.VendorInfo != null)
                 {
@@ -308,7 +313,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     }
                     CRMInquiryPayeeContentOutputModel tmpCrmInqPayeeOut =
                         (CRMInquiryPayeeContentOutputModel) TransformerFactory.TransformModel(inqSAPVendorContentOut,
-                            crmInqPayeeOut);
+                            new CRMInquiryPayeeContentOutputModel());
                    
                     foreach (InquiryCrmPayeeListDataModel data in tmpCrmInqPayeeOut.data)
                     {
@@ -319,15 +324,22 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         data.solicitorFlag = searchCond.solicitorFlag;
                         data.repairerFlag = searchCond.repairerFlag;
                         data.hospitalFlag = searchCond.hospitalFlag;
-                        data.polisyClientId = searchCond.polisyClientId; // เอา  polisyClientId จากข้อมูลต้นทาง (APAR,ASHR ) มาใช้แทน
+                        data.polisyClientId = polisyClientId; // เอา  polisyClientId จากข้อมูลต้นทาง (APAR,ASHR ) มาใช้แทน
                         counrSAPResult += 1;
-                        
+                        // crmInqPayeeOut.AddDebugInfo("watch tmpCrmInqPayeeOut ", data);
+                        // crmInqPayeeOut.AddDebugInfo("watch searchCond ", searchCond);
+                        // data.AddDebugInfo("searchCond", searchCond);
+                        crmInqPayeeOut.AddDebugInfo("search Transformed result", data);
                     }
-                  
-                    crmInqPayeeOut.data.AddRange(tmpCrmInqPayeeOut.data);
+
+                    SAPResult.data.AddRange(tmpCrmInqPayeeOut.data);
                 }
                 listSAPSearchCondition.RemoveAt(0);
                 countLoop += 1;
+            }
+            if (SAPResult.data.Any())
+            {
+                crmInqPayeeOut.data = SAPResult.data;
             }
         }
         /// <summary>
