@@ -11,6 +11,7 @@ using DEVES.IntegrationAPI.WebApi.Templates;
 using System.Linq;
 using System.Collections;
 using System.Data.Common;
+using DEVES.IntegrationAPI.Core.Helper;
 using DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData;
 using Microsoft.Ajax.Utilities;
 
@@ -23,9 +24,15 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         /// ใช้ทดสอบว่า หากไม่เจอข้อมูลใน SAP ข้อมูล OUTPUT จะเป็นอย่างไร
         /// production set = false
         /// </summary>
-        public bool IgnoreSap = true;
-        public bool IgnoreApar = true;
-        public bool IgnoreCls = true;
+        public bool IgnoreSap = false;
+        public bool IgnoreApar = false;
+        public bool IgnoreCls = false;
+
+        public InquiryCRMPayeeListInputModel SAPResult = new InquiryCRMPayeeListInputModel();
+        public InquiryCRMPayeeListInputModel CLSResult = new InquiryCRMPayeeListInputModel();
+        public InquiryCRMPayeeListInputModel COMPResult = new InquiryCRMPayeeListInputModel();
+        public InquiryCRMPayeeListInputModel APARResult = new InquiryCRMPayeeListInputModel();
+        public InquiryCRMPayeeListInputModel ASHRResult = new InquiryCRMPayeeListInputModel();
         public override BaseDataModel ExecuteInput(object input)
         {
             /*
@@ -82,6 +89,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 {
                 #region IF inqCrmPayeeListIn.ClientType == "G" -> APAR.InquiryAPARPayeeList
 
+                    crmInqPayeeOut.AddDebugInfo("flow", "IF inqCrmPayeeListIn.ClientType == G -> APAR.InquiryAPARPayeeList");
+
                     if (!IgnoreApar)
                     {
                     if (inqCrmPayeeListIn.roleCode.ToUpper() == ENUM_CLIENT_ROLE.G.ToString())
@@ -98,12 +107,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     #region IF inqCrmPayeeListIn.roleCode == {A,S,R,H} -> Master.InquiryMasterASRH
                     else
                     {
-                        var tmpListSAPSearchCondition = InquiryMasterASHR(listSAPSearchCondition, iRecordsLimit, ref crmInqPayeeOut);
+                    crmInqPayeeOut.AddDebugInfo("flow", "IF inqCrmPayeeListIn.ClientType == {A,S,R,H} -> Master.InquiryMasterASRH");
+                    var tmpListSAPSearchCondition = InquiryMasterASHR(listSAPSearchCondition, iRecordsLimit, ref crmInqPayeeOut);
                         listSAPSearchCondition.AddRange(tmpListSAPSearchCondition);
                     }
 
                 #endregion inqCrmPayeeListIn.roleCode == {A,S,R,H} -> Master.InquiryMasterASRH
-                    Console.WriteLine("Check Condition  Cleansing ?");
+                  
                 //@TODO TEST
                    
                     if (!listSAPSearchCondition.Exists(x => x.SearchConditionType != ENUM_SAP_SearchConditionType.invalid))
@@ -112,19 +122,19 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         //if (!bFoundIn_APAR_or_Master)
                         //{
                         bool bFound_Cleansing = false;
-                        Console.WriteLine("Search In Cleansing ");
+                       
 
                         if (!IgnoreCls)
                         {
-
+                            crmInqPayeeOut.AddDebugInfo("flow", "Search in Cleansing(CLS) then search in Polisy400");
                             switch (inqCrmPayeeListIn.clientType.ToUpper())
                             {
                                 case "P":
-
+                                    
                                     #region Search Client from Cleansing CLS_InquiryCLSPersonalClient
 
                                 {
-
+                                    
 
                                     var tmpListSAPSearchCondition =
                                         InquiryCLSPersonalClient(iRecordsLimit, listSAPSearchCondition,
@@ -140,7 +150,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                                 case "C":
                                 {
                                     #region Call CLS_InquiryCLSCorporateClient through ServiceProxy
-
+                                    
                                     var tmpListSAPSearchCondition = InquiryCLSCorporateClient(iRecordsLimit,
                                         listSAPSearchCondition, ref crmInqPayeeOut);
                                     listSAPSearchCondition.AddRange(tmpListSAPSearchCondition);
@@ -159,10 +169,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                         //if (!bFound_Cleansing)
                         Console.WriteLine("270:Chech Condition Search in Polisy400?");
+
                         if (!listSAPSearchCondition.Exists(x => x.SearchConditionType != ENUM_SAP_SearchConditionType.invalid))
                         {
-                            Console.WriteLine("273:Search in Polisy400");
-                            var tmpListSAPSearchCondition = InquiryCompClientMaster(iRecordsLimit, listSAPSearchCondition, ref crmInqPayeeOut);
+                     
+                            crmInqPayeeOut.AddDebugInfo("flow", "Search in Polisy400");
+                        var tmpListSAPSearchCondition = InquiryCompClientMaster(iRecordsLimit, listSAPSearchCondition, ref crmInqPayeeOut);
 
                             listSAPSearchCondition.AddRange(tmpListSAPSearchCondition);
 
@@ -186,6 +198,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             {
                 if (FilterAndValidateSAPSearchConditions(ref listSAPSearchCondition))
                 {
+                    crmInqPayeeOut.AddDebugInfo("flow", "Search In SAP: SAP_InquiryVendor");
                     #region Search In SAP: SAP_InquiryVendor()
                     Console.WriteLine(listSAPSearchCondition.ToJson());
                     InquerySapVandor(listSAPSearchCondition, crmInqPayeeOut, iRecordsLimit, counrSAPResult);
@@ -194,16 +207,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 }
                 else
                 {
-                    Console.WriteLine("Not Found In SAP");
+                    crmInqPayeeOut.AddDebugInfo("flow", "Not Found In SAP");
+                
                     //crmInqPayeeOut.content = null;
                 }
             }
-            
-            Console.WriteLine("=========OUTPUT=========");
-            Console.WriteLine("=========OUTPUT=========");
-            Console.WriteLine(crmInqPayeeOut.ToJson());
-            Console.WriteLine("=========OUTPUT=========");
-            Console.WriteLine("=========OUTPUT=========");
+            var tmp = crmInqPayeeOut.data.Where(row => row.sourceData != "").ToList();
+            crmInqPayeeOut.AddDebugInfo("ALL output", tmp);
             //@TODO AdHoc ลบข้อมูลจาก Source อื่นออก ถ้าเจอข้อมูลใน SAP ให้ถือว่าใช้ขอมูลจาก SAP
             if (crmInqPayeeOut.data.Where(row => row.sourceData == "SAP").Distinct().ToList().Count > 0)
                 {
@@ -242,28 +252,53 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             return crmInqPayeeOut;
         }
 
-        
-       
+
+        /// <summary>
+        /// listSAPSearchCondition
+        /// </summary>
+        /// <param name="listSAPSearchCondition"></param>
+        /// <param name="crmInqPayeeOut"></param>
+        /// <param name="iRecordsLimit"></param>
+        /// <param name="counrSAPResult"></param>
         private void InquerySapVandor(List<InquiryCRMPayeeListInputModel> listSAPSearchCondition, CRMInquiryPayeeContentOutputModel crmInqPayeeOut,
             int iRecordsLimit, int counrSAPResult)
         {
-            Console.WriteLine("========204--------");
-            Console.WriteLine(listSAPSearchCondition.ToJson());
-            var limit = 20;
+            crmInqPayeeOut.AddDebugInfo("call method", "listSAPSearchCondition");
+         
+            var limit = 40;
             var countLoop = 0;
+            crmInqPayeeOut.AddDebugInfo("watch", listSAPSearchCondition.ToJson());
+            //sapSearchResultCash จะใช้เก็บข้อมูลที่จะ search sap โดยหากเป็น sapVendorCode จะไม่ search ซ้ำ
+            var sapSearchResultCash =  new Dictionary<string, EWIResSAPInquiryVendorContentModel>();
+
             while (listSAPSearchCondition.Count > 0 && countLoop <= 20)
             {
-                
+              
                 InquiryCRMPayeeListInputModel searchCond = listSAPSearchCondition[0];
-                Console.WriteLine("==searchCond===");
-                Console.WriteLine(searchCond.ToJson());
-                SAPInquiryVendorInputModel inqSAPVendorIn =
-                    (SAPInquiryVendorInputModel) DataModelFactory.GetModel(typeof(SAPInquiryVendorInputModel));
-                inqSAPVendorIn = (SAPInquiryVendorInputModel) TransformerFactory.TransformModel(searchCond, inqSAPVendorIn);
 
-                EWIResSAPInquiryVendorContentModel inqSAPVendorContentOut =
-                    CallDevesServiceProxy<SAPInquiryVendorOutputModel, EWIResSAPInquiryVendorContentModel>(
-                        CommonConstant.ewiEndpointKeySAPInquiryVendor, inqSAPVendorIn);
+                SAPInquiryVendorInputModel inqSAPVendorIn =
+                    (SAPInquiryVendorInputModel)DataModelFactory.GetModel(typeof(SAPInquiryVendorInputModel));
+
+                inqSAPVendorIn =
+                    (SAPInquiryVendorInputModel)TransformerFactory.TransformModel(searchCond, inqSAPVendorIn);
+
+                var sapSearchKeyCode = (inqSAPVendorIn.PREVACC + inqSAPVendorIn.TAX3 + inqSAPVendorIn.TAX4 + inqSAPVendorIn.VCODE).ReplaceMultiplSpacesWithSingleSpace();
+                EWIResSAPInquiryVendorContentModel inqSAPVendorContentOut;
+                if (!sapSearchResultCash.ContainsKey(sapSearchKeyCode))
+                {
+                    
+
+                     inqSAPVendorContentOut =
+                        CallDevesServiceProxy<SAPInquiryVendorOutputModel, EWIResSAPInquiryVendorContentModel>(
+                            CommonConstant.ewiEndpointKeySAPInquiryVendor, inqSAPVendorIn);
+                    sapSearchResultCash[sapSearchKeyCode] = inqSAPVendorContentOut;
+                }
+                else
+                {
+                    //ดึงค่า Cash
+                    inqSAPVendorContentOut = sapSearchResultCash[sapSearchKeyCode];
+                }
+               
 
                 if (inqSAPVendorContentOut?.VendorInfo != null)
                 {
@@ -274,6 +309,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     CRMInquiryPayeeContentOutputModel tmpCrmInqPayeeOut =
                         (CRMInquiryPayeeContentOutputModel) TransformerFactory.TransformModel(inqSAPVendorContentOut,
                             crmInqPayeeOut);
+                   
                     foreach (InquiryCrmPayeeListDataModel data in tmpCrmInqPayeeOut.data)
                     {
                         data.emcsMemHeadId = searchCond.emcsMemHeadId;
@@ -285,17 +321,25 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         data.hospitalFlag = searchCond.hospitalFlag;
                         data.polisyClientId = searchCond.polisyClientId; // เอา  polisyClientId จากข้อมูลต้นทาง (APAR,ASHR ) มาใช้แทน
                         counrSAPResult += 1;
+                        
                     }
-
+                  
                     crmInqPayeeOut.data.AddRange(tmpCrmInqPayeeOut.data);
                 }
                 listSAPSearchCondition.RemoveAt(0);
                 countLoop += 1;
             }
         }
-
+        /// <summary>
+        /// InquiryCompClientMaster
+        /// </summary>
+        /// <param name="iRecordsLimit"></param>
+        /// <param name="listSAPSearchCondition"></param>
+        /// <param name="crmInqPayeeOut"></param>
+        /// <returns></returns>
         private List<InquiryCRMPayeeListInputModel> InquiryCompClientMaster(int iRecordsLimit, List<InquiryCRMPayeeListInputModel> listSAPSearchCondition,ref CRMInquiryPayeeContentOutputModel crmInqPayeeOut)
         {
+            crmInqPayeeOut.AddDebugInfo("call method", "InquiryCompClientMaster");
             var tmpListSAPSearchCondition = new List<InquiryCRMPayeeListInputModel>();
             var i = 0;
             //  var store = new List<EWIResCOMPInquiryClientMasterContentModel>();
@@ -350,9 +394,18 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             return tmpListSAPSearchCondition;
         }
-
+        /// <summary>
+        /// InquiryCLSCorporateClient
+        /// </summary>
+        /// <param name="iRecordsLimit"></param>
+        /// <param name="listSAPSearchCondition"></param>
+        /// <param name="crmInqPayeeOut"></param>
+        /// <returns></returns>
         private List<InquiryCRMPayeeListInputModel> InquiryCLSCorporateClient(int iRecordsLimit, List<InquiryCRMPayeeListInputModel> listSAPSearchCondition,ref CRMInquiryPayeeContentOutputModel crmInqPayeeOut)
         {
+          
+
+            crmInqPayeeOut.AddDebugInfo("call method", "InquiryCLSCorporateClient");
             var tmpListSAPSearchCondition = new List<InquiryCRMPayeeListInputModel>();
             var i = 0;
             while (i < listSAPSearchCondition.Count)
@@ -392,7 +445,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     crmInqPayeeOut = (CRMInquiryPayeeContentOutputModel)tranfromer.TransformModel(retCLSInqCorpClient, crmInqPayeeOut);
 
                     listSAPSearchCondition.RemoveAt(0);
-
+                   
                     //if ((retCLSInqCorpClient.success | IsOutputSuccess(retCLSInqCorpClient)) & (retCLSInqCorpClient.data.Count == 1))
                     //{
                     //    bFound_Cleansing = true;
@@ -408,10 +461,18 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             return tmpListSAPSearchCondition;
         }
-
+        /// <summary>
+        /// InquiryMasterASHR
+        /// </summary>
+        /// <param name="listSAPSearchCondition"></param>
+        /// <param name="iRecordsLimit"></param>
+        /// <param name="crmInqPayeeOut"></param>
+        /// <returns></returns>
         public List<InquiryCRMPayeeListInputModel> InquiryMasterASHR(List<InquiryCRMPayeeListInputModel> listSAPSearchCondition, int iRecordsLimit,
             ref CRMInquiryPayeeContentOutputModel crmInqPayeeOut)
         {
+            crmInqPayeeOut.AddDebugInfo("call method", "InquiryMasterASHR");
+
             int i;
             List<InquiryCRMPayeeListInputModel> tmpListSAPSearchCondition = new List<InquiryCRMPayeeListInputModel>();
             i = 0;
@@ -467,9 +528,16 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             // crmInqPayeeOut.data = crmInqPayeeOut.data.DistinctBy(row => new { row.sourceData, row.sapVendorCode, row.polisyClientId, row.cleansingId }).ToList();
             return tmpListSAPSearchCondition;
         }
-
+        /// <summary>
+        /// InquiryCLSPersonalClient
+        /// </summary>
+        /// <param name="iRecordsLimit"></param>
+        /// <param name="listSAPSearchCondition"></param>
+        /// <param name="crmInqPayeeOut"></param>
+        /// <returns></returns>
         private List<InquiryCRMPayeeListInputModel> InquiryCLSPersonalClient(int iRecordsLimit, List<InquiryCRMPayeeListInputModel> listSAPSearchCondition, ref CRMInquiryPayeeContentOutputModel crmInqPayeeOut)
         {
+            crmInqPayeeOut.AddDebugInfo("call method", "InquiryCLSPersonalClient");
             var tmpListSAPSearchCondition = new List<InquiryCRMPayeeListInputModel>();
             var i = 0;
             while (i < listSAPSearchCondition.Count)
@@ -533,9 +601,18 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             return true;
         }
 
+        /// <summary>
+        /// InquiryAPARPayeeList
+        /// </summary>
+        /// <param name="listSAPSearchCondition"></param>
+        /// <param name="iRecordsLimit"></param>
+        /// <param name="inqCrmPayeeListIn"></param>
+        /// <param name="crmInqPayeeOut"></param>
+        /// <returns></returns>
         public List<InquiryCRMPayeeListInputModel> InquiryAPARPayeeList(List<InquiryCRMPayeeListInputModel> listSAPSearchCondition, int iRecordsLimit, InquiryCRMPayeeListInputModel inqCrmPayeeListIn,
             ref CRMInquiryPayeeContentOutputModel crmInqPayeeOut)
         {
+            crmInqPayeeOut.AddDebugInfo("call method", "InquiryAPARPayeeList");
             int i;
             List<InquiryCRMPayeeListInputModel> tmpListSAPSearchCondition = new List<InquiryCRMPayeeListInputModel>();
             i = 0;
