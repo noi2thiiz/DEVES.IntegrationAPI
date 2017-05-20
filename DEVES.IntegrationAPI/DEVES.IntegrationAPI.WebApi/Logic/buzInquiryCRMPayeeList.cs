@@ -11,6 +11,7 @@ using DEVES.IntegrationAPI.WebApi.Templates;
 using System.Linq;
 using System.Collections;
 using System.Data.Common;
+using System.Globalization;
 using DEVES.IntegrationAPI.Core.Helper;
 using DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData;
 using Microsoft.Ajax.Utilities;
@@ -217,7 +218,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             //@TODO AdHoc ลบข้อมูลจาก Source อื่นออก ถ้าเจอข้อมูลใน SAP ให้ถือว่าใช้ขอมูลจาก SAP
             if (crmInqPayeeOut.data.Where(row => row.sourceData == "SAP").Distinct().ToList().Count > 0)
             {
-                crmInqPayeeOut.data = crmInqPayeeOut.data.Where(row => row.sourceData == "SAP").ToList();
+                crmInqPayeeOut.data = crmInqPayeeOut.data.Where(row => row.sourceData == "SAP").DistinctBy(row => row.polisyClientId).ToList();
 
                 }
             
@@ -231,12 +232,18 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                   else
                   if (crmInqPayeeOut.data.Where(row => row.sourceData == "CLS").Distinct().ToList().Count > 0)
                   {
-                    crmInqPayeeOut.data = crmInqPayeeOut.data.Where(row => row.sourceData == "CLS").DistinctBy(row => row.cleansingId).ToList();
+                    crmInqPayeeOut.data = crmInqPayeeOut.data.Where(row => row.sourceData == "CLS").DistinctBy(row => row.polisyClientId).ToList();
 
                   }
 
-                //MASTER_ASHR
-                //APAR
+            //MASTER_ASHR
+            //APAR
+
+            //เอา ที่ขึ้นต้นด้วยตัวเลขเท่านั้น
+            var numbers = Enumerable
+                .Range(0, 10)
+                .Select(i => i.ToString(CultureInfo.InvariantCulture));
+              crmInqPayeeOut.data = crmInqPayeeOut.data.Where(row => numbers.Contains(row.polisyClientId.Substring(0, 1))  ).DistinctBy(row => row.polisyClientId).OrderBy(row => row.polisyClientId).ToList();
 
 
 
