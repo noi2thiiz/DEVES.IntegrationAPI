@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using DEVES.IntegrationAPI.Core.Helper;
 using DEVES.IntegrationAPI.Model;
 using DEVES.IntegrationAPI.Model.InquiryCRMPayeeList;
 using DEVES.IntegrationAPI.Model.SAP;
@@ -118,6 +119,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             output.street1 = input.STREET1;
             output.street2 = input.STREET2;
             output.district = input.DISTRICT;
+            
 
             output.city = input.CITY;
             output.postalCode = input.POSTCODE;
@@ -137,6 +139,16 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             output.paymentTermDesc = input.PAYTERM_DESC;
             output.paymentMethods = input.PAYMETHOD;
             output.inactive = input.INACTIVE;
+            if (output.street1 == "ไม่แจ้งที่อยู่")
+            {
+                output.address = "ไม่แจ้งที่อยู่";
+            }
+            else
+            {
+                output.address = (output.street1 + " " + output.street2 + " " + " " + input.DISTRICT + " " + output.city + " "
+                                  + output.postalCode + " " + output.countryCodeDesc).ReplaceMultiplSpacesWithSingleSpace();
+            }
+            
 
             if (input.BankInfo != null)
             {

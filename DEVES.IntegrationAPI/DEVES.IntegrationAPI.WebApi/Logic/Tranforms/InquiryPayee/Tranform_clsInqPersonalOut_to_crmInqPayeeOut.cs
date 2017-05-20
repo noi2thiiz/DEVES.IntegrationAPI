@@ -6,6 +6,7 @@ using System.Web;
 using DEVES.IntegrationAPI.Model;
 using DEVES.IntegrationAPI.Model.CLS;
 using DEVES.IntegrationAPI.Model.InquiryCRMPayeeList;
+using DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData;
 using DEVES.IntegrationAPI.WebApi.Templates;
 using DEVES.IntegrationAPI.WebApi.Logic.Validator;
 
@@ -63,8 +64,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                             street2Text = clsAddress.address_2;
                             districtText = clsAddress.district_text;
                             provinceText = clsAddress.province_text;
-                            postalCode = clsAddress.postal_code;
-                            countryCode = validator.TryConvertCountryPolisyCode("clsAddress.ctrycode", clsAddress.ctrycode);
+                            postalCode = clsAddress.postal_code; 
+                            countryCode = CountryMasterData.Instance.FindByPolisyCode(clsAddress?.ctrycode)?.SapCode??"";
                             countryText = clsAddress.cls_ctrycode_text;
                             fullAddressText = clsAddress.full_original_address;
 

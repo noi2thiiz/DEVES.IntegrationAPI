@@ -11,6 +11,7 @@ using DEVES.IntegrationAPI.WebApi.Templates;
 using System.Linq;
 using System.Collections;
 using System.Data.Common;
+using DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData;
 using Microsoft.Ajax.Utilities;
 
 
@@ -363,8 +364,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         string postalCode = "";
                         string countryText = "";
                         string fullAddressText = "";
-                        string ctrycode = "";
-
+                        string ctrymastercode = "";
+                       
                         int lastSeq = 0;
 
                         //@TODO AdHoc Add CLS
@@ -388,6 +389,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                                     provinceText = clsAddress.province_text;
                                     postalCode = clsAddress.postal_code;
                                     countryText = clsAddress.cls_ctrycode_text;
+                                    ctrymastercode = CountryMasterData.Instance.FindByPolisyCode(clsAddress?.ctrycode)?.SapCode ?? "";
                                     fullAddressText = clsAddress.full_original_address;
 
                                     break;
@@ -421,7 +423,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                             city = provinceText,
 
                             postalCode = postalCode,
-                            countryCode = "",
+                            countryCode = ctrymastercode,
                             countryCodeDesc = countryText,
                             address = fullAddressText,
                             

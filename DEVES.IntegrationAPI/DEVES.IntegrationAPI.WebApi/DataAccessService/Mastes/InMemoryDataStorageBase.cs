@@ -20,6 +20,7 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
         protected Dictionary<string, dynamic> DataList { get; set; } 
         protected Dictionary<string, dynamic> DataList2 { get; set; }
         protected Dictionary<string, dynamic> DataList3 { get; set; }
+        protected Dictionary<string, dynamic> DataListSap { get; set; }
 
         protected IDataReader DataReader { get; set; }
         protected string StoreName { get; set; }
@@ -191,6 +192,21 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
             {
                 code = defaulCode;
             }
+            return FindByPolisyCode(code);
+        }
+        public TEntityClass FindBySapCode(string code)
+        {
+            if (DataListSap != null) return DataListSap[code];
+            DataListSap = new Dictionary<string, dynamic>();
+            foreach (var item in DataList)
+            {
+
+                if (!DataListSap.ContainsKey(item.Value["SapCode"]))
+                {
+                    DataListSap.Add(item.Value["SapCode"], item);
+                }
+            }
+            return DataListSap[code];
             return FindByPolisyCode(code);
         }
 
