@@ -10,10 +10,15 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using DEVES.IntegrationAPI.Core.Helper;
 using DEVES.IntegrationAPI.Model.UpdateSurveyStatus;
+using DEVES.IntegrationAPI.WebApi.Logic;
+using DEVES.IntegrationAPI.WebApi.TechnicalService;
+using DEVES.IntegrationAPI.WebApi.TechnicalService.TransactionLogger;
+using DEVES.IntegrationAPI.WebApi.Templates;
+using WebGrease.Activities;
 
 namespace DEVES.IntegrationAPI.WebApi.Controllers
 {
-    public class RequestSurveyorController : ApiController
+    public class RequestSurveyorController : ApiBaseAdHocController
     {
         private string _logImportantMessage;
         private readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(RequestSurveyorController));
@@ -132,22 +137,25 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
 
         private EWIResponseContent_ReqSur RequestSurveyorOniSurvey(string incidentId, string currentUserId)
         {
-
-            ///PFC:: Change fixed values to be the configurable values
-            ///
-
-
-            RequestSurveyorInputModel iSurveyInputModel = Mapping(incidentId, currentUserId);
-
-
-            /*
-            string iSurveyInputContent = iSurveyInputModel.ToString();
-            var fileJsonPath = HttpContext.Current.Server.MapPath("~/App_Data/JsonSchema/RequestSurveyor_Input_Schema.json");
-            string outvalidate = string.Empty;
-
-            if (!JsonHelper.TryValidateJson(iSurveyInputContent, fileJsonPath, out outvalidate))
+            try
             {
-            */
+
+
+                ///PFC:: Change fixed values to be the configurable values
+                ///
+
+
+                RequestSurveyorInputModel iSurveyInputModel = Mapping(incidentId, currentUserId);
+
+
+                /*
+                string iSurveyInputContent = iSurveyInputModel.ToString();
+                var fileJsonPath = HttpContext.Current.Server.MapPath("~/App_Data/JsonSchema/RequestSurveyor_Input_Schema.json");
+                string outvalidate = string.Empty;
+
+                if (!JsonHelper.TryValidateJson(iSurveyInputContent, fileJsonPath, out outvalidate))
+                {
+                */
                 /*
                  *  "CaseID":"", (เพิ่มเติม เลข Case ID)
                     "notifyName": "",
@@ -161,62 +169,89 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                     "empCode": "G001",
                  */
 
-                 /*
-                EWIResponseContent_ReqSur error = new EWIResponseContent_ReqSur();
-                error.eventid = "Required field is not follow schema";
-                return error;
-            }
-             */
-            EWIRequest reqModel = new EWIRequest()
-            {
-                username = AppConfig.GetEwiUsername(),
-                password = AppConfig.GetEwiPassword(),
-                uid = AppConfig.GetEwiUid(),
-                gid = AppConfig.GetEwiGid(),
-                token = "",
-                content = iSurveyInputModel
-            };
-
-            string jsonReqModel = JsonConvert.SerializeObject(reqModel, Formatting.Indented, new EWIDatetimeConverter());
-
-            HttpClient client = new HttpClient();
-
-            // URL
-            var ewiEndpoint = System.Configuration.ConfigurationManager.AppSettings["API_ENDPOINT_EWIPROXY_SERVICE"];
-            client.BaseAddress = new Uri(ewiEndpoint);
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            client.DefaultRequestHeaders.Add("Accept-Encoding", "utf-8");
-
-            // + ENDPOINT
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "MOTOR_RequestSurveyor");
-            request.Content = new StringContent(jsonReqModel, System.Text.Encoding.UTF8, "application/json");
-            //request.Content = new StringContent(Dummy_Input(), System.Text.Encoding.UTF8, "application/json");
-
-            // check reponse 
-            HttpResponseMessage response = client.SendAsync(request).Result;
-            response.EnsureSuccessStatusCode();
-
-            EWIResponse_ReqSur ewiRes = response.Content.ReadAsAsync<EWIResponse_ReqSur>().Result;
-            // EWIResponseContent_ReqSur iSurveyOutput = (EWIResponseContent_ReqSur)ewiRes.content;
-            EWIResponseContent_ReqSur iSurveyOutput = new EWIResponseContent_ReqSur();
-            // iSurveyOutput.eventid = ewiRes.content.ToString();
-            if(ewiRes.content.ToString().Equals("{}"))
-            {
-                iSurveyOutput.eventid = ewiRes.content.ToString();
-                iSurveyOutput.errorMessage = ewiRes.responseMessage.ToString();
-            }
-            else
-            {
-                iSurveyOutput.eventid = ewiRes.content.ToString();
-                iSurveyOutput.errorMessage = null;
-            }
-            return iSurveyOutput;
-            /*
-            ISurvey_RequestSurveyorDataOutputModel iSurveyOutput = response.Content.ReadAsAsync<ISurvey_RequestSurveyorDataOutputModel>().Result;
-
-            return iSurveyOutput;
+                /*
+               EWIResponseContent_ReqSur error = new EWIResponseContent_ReqSur();
+               error.eventid = "Required field is not follow schema";
+               return error;
+           }
             */
+                EWIRequest reqModel = new EWIRequest()
+                {
+                    username = AppConfig.GetEwiUsername(),
+                    password = AppConfig.GetEwiPassword(),
+                    uid = AppConfig.GetEwiUid(),
+                    gid = AppConfig.GetEwiGid(),
+                    token = "",
+                    content = iSurveyInputModel
+                };
+
+                string jsonReqModel =
+                    JsonConvert.SerializeObject(reqModel, Formatting.Indented, new EWIDatetimeConverter());
+
+                HttpClient client = new HttpClient();
+
+                // URL
+                reqTime = DateTime.Now;
+                var crmEndpoint = CommonConstant.PROXY_ENDPOINT;
+                var ewiEndpoint = crmEndpoint+
+                    System.Configuration.ConfigurationManager.AppSettings["API_ENDPOINT_EWIPROXY_SERVICE"]+ "MOTOR_RequestSurveyor";
+                Console.WriteLine(ewiEndpoint);
+               
+              
+                Console.WriteLine(jsonReqModel);
+                client.BaseAddress = new Uri(crmEndpoint + ewiEndpoint);
+                client.DefaultRequestHeaders.Accept.Clear();
+                var media = new MediaTypeWithQualityHeaderValue("application/json") { CharSet = "utf-8" };
+                client.DefaultRequestHeaders.Accept.Add(media);
+                client.DefaultRequestHeaders.Add("Accept-Encoding", "utf-8");
+
+                // + ENDPOINT
+              
+                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, ewiEndpoint);
+                request.Content = new StringContent(jsonReqModel, System.Text.Encoding.UTF8, "application/json");
+                //request.Content = new StringContent(Dummy_Input(), System.Text.Encoding.UTF8, "application/json");
+                LogAsync(request, jsonReqModel);
+                // check reponse 
+                HttpResponseMessage response = client.SendAsync(request).Result;
+                response.EnsureSuccessStatusCode();
+
+                EWIResponse_ReqSur ewiRes = response.Content.ReadAsAsync<EWIResponse_ReqSur>().Result;
+                // EWIResponseContent_ReqSur iSurveyOutput = (EWIResponseContent_ReqSur)ewiRes.content;
+                resBody = ewiRes.ToJson();
+                resTime = DateTime.Now;
+             
+                EWIResponseContent_ReqSur iSurveyOutput = new EWIResponseContent_ReqSur();
+                // iSurveyOutput.eventid = ewiRes.content.ToString();
+                if (ewiRes.content.ToString().Equals("{}"))
+                {
+                    iSurveyOutput.eventid = ewiRes.content.ToString();
+                    iSurveyOutput.errorMessage = ewiRes.responseMessage.ToString();
+                }
+                else
+                {
+                    iSurveyOutput.eventid = ewiRes.content.ToString();
+                    iSurveyOutput.errorMessage = null;
+                }
+                LogAsync(request, response);
+                return iSurveyOutput;
+                /*
+                ISurvey_RequestSurveyorDataOutputModel iSurveyOutput = response.Content.ReadAsAsync<ISurvey_RequestSurveyorDataOutputModel>().Result;
+
+                return iSurveyOutput;
+                */
+            }
+            catch (HttpRequestException e)
+            {
+                Console.WriteLine(e.Message+e.StackTrace);
+                LogErrorException(e);
+                throw;
+            }
+            catch (Exception e)
+            {
+                LogErrorException(e);
+                throw;
+            }
+
 
         }
 
@@ -451,10 +486,11 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             var output = locusClaimRegOutput.data;
             */
             RequestSurveyorDataOutputModel output = new RequestSurveyorDataOutputModel();
-            EWIResponseContent_ReqSur iSurveyOutput = new EWIResponseContent_ReqSur();
-            _log.Info("HandleMessage");
             try
             {
+               
+                EWIResponseContent_ReqSur iSurveyOutput = new EWIResponseContent_ReqSur();
+               // _log.Info("HandleMessage");
                 //content.caseNo
                 // iSurveyOutput = RequestSurveyorOniSurvey(content.incidentId, content.currentUserId);
                 iSurveyOutput = RequestSurveyorOniSurvey(content.incidentId, content.currentUserId);
@@ -490,6 +526,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 _log.Error(errorMessage);
 
                 output.errorMessage = errorMessage;
+                LogErrorException(e);
             }
 
             return output;

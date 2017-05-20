@@ -557,6 +557,7 @@
     <Compile Include="TechnicalService\TransactionLogger\HttpClientLoggingHandler.cs" />
     <Compile Include="TechnicalService\TransactionLogger\InMemoryLogData.cs" />
     <Compile Include="TechnicalService\TransactionLogger\LogJob.cs" />
+    <Compile Include="Templates\ApiBaseAdHocController.cs" />
     <Compile Include="Templates\BaseApiController.cs" />
     <Compile Include="Templates\BaseCommand.cs" />
     <Compile Include="Templates\BaseTransformer.cs" />
