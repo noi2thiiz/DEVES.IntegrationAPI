@@ -25,6 +25,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         /// </summary>
         public bool IgnoreSap = true;
         public bool IgnoreApar = true;
+        public bool IgnoreCls = true;
         public override BaseDataModel ExecuteInput(object input)
         {
             /*
@@ -104,61 +105,74 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 #endregion inqCrmPayeeListIn.roleCode == {A,S,R,H} -> Master.InquiryMasterASRH
                     Console.WriteLine("Check Condition  Cleansing ?");
                 //@TODO TEST
-                if (!listSAPSearchCondition.Exists(x => x.SearchConditionType != ENUM_SAP_SearchConditionType.invalid) )
-                {
+                   
+                    if (!listSAPSearchCondition.Exists(x => x.SearchConditionType != ENUM_SAP_SearchConditionType.invalid))
+                    {
                         #region Search in Cleansing(CLS) then search in Polisy400
                         //if (!bFoundIn_APAR_or_Master)
                         //{
                         bool bFound_Cleansing = false;
                         Console.WriteLine("Search In Cleansing ");
-                      
-                    if (true)
-                    {
-                        switch (inqCrmPayeeListIn.clientType.ToUpper())
+
+                        if (!IgnoreCls)
                         {
-                            case "P":
-                                #region Search Client from Cleansing CLS_InquiryCLSPersonalClient
+
+                            switch (inqCrmPayeeListIn.clientType.ToUpper())
+                            {
+                                case "P":
+
+                                    #region Search Client from Cleansing CLS_InquiryCLSPersonalClient
+
                                 {
 
 
-                                var tmpListSAPSearchCondition = InquiryCLSPersonalClient(iRecordsLimit, listSAPSearchCondition, ref crmInqPayeeOut);
-                                listSAPSearchCondition.AddRange(tmpListSAPSearchCondition);
+                                    var tmpListSAPSearchCondition =
+                                        InquiryCLSPersonalClient(iRecordsLimit, listSAPSearchCondition,
+                                            ref crmInqPayeeOut);
+                                    listSAPSearchCondition.AddRange(tmpListSAPSearchCondition);
 
-                               
-                                break;
+
+                                    break;
                                 }
+
                                 #endregion Search Client from Cleansing
 
-                            case "C":
+                                case "C":
                                 {
-                                #region Call CLS_InquiryCLSCorporateClient through ServiceProxy
+                                    #region Call CLS_InquiryCLSCorporateClient through ServiceProxy
 
-                                var tmpListSAPSearchCondition  = InquiryCLSCorporateClient(iRecordsLimit, listSAPSearchCondition,ref crmInqPayeeOut);
-                                listSAPSearchCondition.AddRange(tmpListSAPSearchCondition);
-                                #endregion Call CLS_InquiryCLSCorporateClient through ServiceProxy
-                                break;
+                                    var tmpListSAPSearchCondition = InquiryCLSCorporateClient(iRecordsLimit,
+                                        listSAPSearchCondition, ref crmInqPayeeOut);
+                                    listSAPSearchCondition.AddRange(tmpListSAPSearchCondition);
+
+                                    #endregion Call CLS_InquiryCLSCorporateClient through ServiceProxy
+
+                                    break;
                                 }
-                               
-                            default:
-                                break;
+
+                                default:
+                                    break;
+                            }
                         }
+
+                        #endregion Search in Cleansing(CLS) then search in Polisy400
+
+                        //if (!bFound_Cleansing)
+                        Console.WriteLine("270:Chech Condition Search in Polisy400?");
+                        if (!listSAPSearchCondition.Exists(x => x.SearchConditionType != ENUM_SAP_SearchConditionType.invalid))
+                        {
+                            Console.WriteLine("273:Search in Polisy400");
+                            var tmpListSAPSearchCondition = InquiryCompClientMaster(iRecordsLimit, listSAPSearchCondition, ref crmInqPayeeOut);
+
+                            listSAPSearchCondition.AddRange(tmpListSAPSearchCondition);
+
+
+                        }
+                        //}
+                        //}
                     }
-                    #endregion Search in Cleansing(CLS) then search in Polisy400
-
-                    //if (!bFound_Cleansing)
-                     Console.WriteLine("270:Chech Condition Search in Polisy400?");
-                    if (!listSAPSearchCondition.Exists(x => x.SearchConditionType != ENUM_SAP_SearchConditionType.invalid))
-                    {
-                        Console.WriteLine("273:Search in Polisy400");
-                        var tmpListSAPSearchCondition = InquiryCompClientMaster(iRecordsLimit, listSAPSearchCondition, ref crmInqPayeeOut);
-
-                        listSAPSearchCondition.AddRange(tmpListSAPSearchCondition);
-
-
-                    }
-                    //}
-                    //}
-                }
+                
+                
 
                 }
                 else

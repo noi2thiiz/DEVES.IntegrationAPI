@@ -45,6 +45,7 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
             DataList = null;
             DataList2 = null;
             DataList3 = null;
+            DataListSap = null;
         }
         protected void Load(string storeName, string fieldCodeName)
         {
@@ -143,9 +144,9 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
             {
                 return default(TEntityClass);
             }
-            var provinceRow = ((Dictionary<string, dynamic>) DataList2[guid]);
+            var item = ((Dictionary<string, dynamic>) DataList2[guid]);
           
-            return Tranform(provinceRow);
+            return Tranform(item);
         }
 
         public TEntityClass FindByCode(string code)
@@ -157,8 +158,8 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
                 return default(TEntityClass);
             }
 
-            var provinceRow = ((Dictionary<string, dynamic>)DataList[code]);
-            return Tranform(provinceRow);
+            var item = ((Dictionary<string, dynamic>)DataList[code]);
+            return Tranform(item);
         }
 
         public TEntityClass FindByCode(string code, string defaulCode)
@@ -181,19 +182,20 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
             if (DataList3 == null)
             {
                 DataList3 = new Dictionary<string, dynamic>();
-                foreach (var item in DataList)
+                foreach (Dictionary<string, dynamic> item in DataList.Values)
                 {
-
-                    if (!DataList3.ContainsKey(item.Value["PolisyCode"]))
+                   
+                        if (!DataList3.ContainsKey(item["PolisyCode"].ToString()))
                     {
-                        DataList3.Add(item.Value["PolisyCode"], item);
+                        DataList3.Add(item["PolisyCode"].ToString(), item);
                     }
                 }
 
             }
             if (DataList3.ContainsKey(code))
             {
-                return Tranform(DataList3[code]);
+                var item = ((Dictionary<string, dynamic>)DataList3[code]);
+                return Tranform(item);
             }
 
           
@@ -217,19 +219,20 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
             if (DataListSap == null)
             {
                 DataListSap = new Dictionary<string, dynamic>();
-                foreach (var item in DataList)
+                foreach (Dictionary<string, dynamic> item in DataList.Values)
                 {
 
-                    if (!DataListSap.ContainsKey(item.Value["SapCode"]))
+                    if (!DataListSap.ContainsKey(item["SapCode"].ToString()))
                     {
-                        DataListSap.Add(item.Value["SapCode"], item);
+                        DataListSap.Add(item["SapCode"].ToString(), item);
                     }
                 }
             }
             
             if (DataListSap.ContainsKey(code))
             {
-                return Tranform(DataListSap[code]);
+                var item = ((Dictionary<string, dynamic>)DataListSap[code]);
+                return Tranform(item);
             }
 
             return default(TEntityClass);

@@ -75,5 +75,12 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData.Tests
             var result = AddressTypeMasterData.Instance.FindByCode("01");
             Assert.AreEqual("01", result.Code);
         }
+
+        [TestMethod()]
+        public void CountryMasterDataFindByPolicyCodeTest()
+        {
+            var result = CountryMasterData.Instance.FindByPolisyCode("764");
+            Assert.AreEqual("00220", result.CountryCode);
+        }
     }
 }

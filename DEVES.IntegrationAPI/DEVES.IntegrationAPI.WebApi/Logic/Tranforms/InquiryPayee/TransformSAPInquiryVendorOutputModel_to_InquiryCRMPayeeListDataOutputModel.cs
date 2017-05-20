@@ -5,6 +5,7 @@ using DEVES.IntegrationAPI.Core.Helper;
 using DEVES.IntegrationAPI.Model;
 using DEVES.IntegrationAPI.Model.InquiryCRMPayeeList;
 using DEVES.IntegrationAPI.Model.SAP;
+using DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData;
 using DEVES.IntegrationAPI.WebApi.Templates;
 using Microsoft.Ajax.Utilities;
 
@@ -44,7 +45,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             output.city = input.CITY;
             output.postalCode = input.POSTCODE;
-            output.countryCode = input.COUNTRY;
+            output.countryCode = CountryMasterData.Instance.FindBySapCode(input.COUNTRY)?.CountryCode ?? "";
             output.countryCodeDesc = input.COUNTRY_DESC;
             //dataItrm.address = "";
             output.telephone1 = input.TEL1;

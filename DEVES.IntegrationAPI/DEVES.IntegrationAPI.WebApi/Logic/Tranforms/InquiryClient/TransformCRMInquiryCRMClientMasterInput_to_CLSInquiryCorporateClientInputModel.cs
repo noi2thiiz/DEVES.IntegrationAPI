@@ -22,7 +22,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             trgt.taxNo = src?.conditionDetail?.idCard??"";
             trgt.telephone = ""; 
             trgt.emailAddress = "";
-            trgt.backDay = "7";
+            trgt.backDay = AppConst.COMM_BACK_DAY.ToString();
             if (string.IsNullOrEmpty(trgt.corporateFullName))
             {
                 trgt.corporateFullName = src?.conditionDetail?.clientName1 + " " + src?.conditionDetail?.clientName2;

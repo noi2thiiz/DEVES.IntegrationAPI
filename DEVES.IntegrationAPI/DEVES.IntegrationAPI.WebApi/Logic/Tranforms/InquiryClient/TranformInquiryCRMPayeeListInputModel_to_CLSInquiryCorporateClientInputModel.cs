@@ -17,7 +17,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             trgt.corporateFullName = ""+src.fullname;
             trgt.taxNo = ""+src.taxNo;
-            trgt.backDay = "30";
+            trgt.backDay = AppConst.COMM_BACK_DAY.ToString();
              trgt.telephone = "";
             trgt.emailAddress= "";
 

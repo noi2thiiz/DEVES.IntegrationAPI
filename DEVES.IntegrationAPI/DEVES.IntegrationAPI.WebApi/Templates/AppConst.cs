@@ -23,5 +23,7 @@
 
         public const string PRO1_SERVER_NAME = "CRM-APP01";
         public const string PRO2_SERVER_NAME = "CRM-APP02";
+
+        public const int COMM_BACK_DAY = 15;
     }
 }

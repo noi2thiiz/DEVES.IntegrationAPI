@@ -22,7 +22,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             trgt.fullName = src.conditionDetail.clientFullname ?? "";
             trgt.idcard = src.conditionDetail.idCard ?? "";
             trgt.branchCode = src.conditionDetail.corporateBranch ?? "";
-            trgt.backDay = "7";
+            trgt.backDay = AppConst.COMM_BACK_DAY.ToString();
 
             if (string.IsNullOrEmpty(trgt.fullName))
             {

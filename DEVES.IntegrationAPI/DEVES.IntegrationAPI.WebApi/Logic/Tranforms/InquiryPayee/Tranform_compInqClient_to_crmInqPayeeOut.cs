@@ -7,6 +7,7 @@ using DEVES.IntegrationAPI.Model;
 using DEVES.IntegrationAPI.Model.CLS;
 using DEVES.IntegrationAPI.Model.InquiryCRMPayeeList;
 using DEVES.IntegrationAPI.Model.Polisy400;
+using DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData;
 using DEVES.IntegrationAPI.WebApi.Templates;
 using Microsoft.Ajax.Utilities;
 
@@ -49,7 +50,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     name2 = client?.name2,
                     fullName = client?.fullName,
 
-                    countryCode = client?.country,
+                    countryCode = CountryMasterData.Instance.FindByPolisyCode(client?.country)?.CountryCode??"" ,
                     countryCodeDesc = client?.countryText,
                     // address ="",
                     telephone1 = client?.telephone1,
@@ -77,7 +78,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     dataItem.postalCode = client?.postCode;
                     //dataItem.province = client?.address5;
                     dataItem.address = client?.address1 + "|" + client?.address2 + "|" + client?.address3 + "|" +
-                                       client?.address4 + "|" + client?.address5;
+                                       client?.address4 + "|" + client?.address5 +"|"+ client ?.postCode;
 
                     // street2 ="",
                     // district = client?.d,

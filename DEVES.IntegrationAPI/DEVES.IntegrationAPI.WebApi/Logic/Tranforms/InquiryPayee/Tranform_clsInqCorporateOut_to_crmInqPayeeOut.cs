@@ -65,7 +65,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                             provinceText = clsAddress.province_text;
                             postalCode = clsAddress.postal_code;
                             countryText = clsAddress.cls_ctrycode_text;
-                            ctrymastercode = CountryMasterData.Instance.FindByPolisyCode(clsAddress?.ctrycode)?.SapCode ?? "";
+                            ctrymastercode = CountryMasterData.Instance.FindByPolisyCode(clsAddress?.ctrycode)?.CountryCode ?? "";
                             fullAddressText = clsAddress.full_original_address;
 
                             break;

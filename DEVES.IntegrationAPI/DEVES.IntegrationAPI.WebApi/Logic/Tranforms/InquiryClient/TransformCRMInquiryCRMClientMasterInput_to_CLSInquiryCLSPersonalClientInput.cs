@@ -24,7 +24,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             trgt.idCitizen = src.conditionDetail.idCard;
             trgt.telephone = "";
             trgt.emailAddress = "";
-            trgt.backDay = "7";
+            trgt.backDay = AppConst.COMM_BACK_DAY.ToString();
 
             if (string.IsNullOrEmpty(trgt.personalFullName))
             {
