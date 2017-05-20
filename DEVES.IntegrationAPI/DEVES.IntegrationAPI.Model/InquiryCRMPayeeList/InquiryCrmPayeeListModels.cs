@@ -71,6 +71,9 @@ namespace DEVES.IntegrationAPI.Model.InquiryCRMPayeeList
         public List<bankInfoModel> bankInfo { set; get; }
         [JsonProperty(Order = 31)]
         public List<withHoldingTaxInfoModel> withHoldingTaxInfo { set; get; }
+
+        public string sapVendorAccountCode { get; set; }
+        public string sapVendorPayterm { get; set; }
     } 
     public class bankInfoModel : BaseDataModel
     {

@@ -100,6 +100,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             output.sourceData = "SAP";
             output.polisyClientId = input.PREVACC;
             output.sapVendorCode = input.VCODE;
+            output.sapVendorAccountCode = input.PREVACC;
+            output.sapVendorPayterm = input.PAYTERM;
             output.sapVendorGroupCode = input.VGROUP;
             //dataItrm.emcsMemHeadId = "";
             //dataItrm.emcsMemId = "";
