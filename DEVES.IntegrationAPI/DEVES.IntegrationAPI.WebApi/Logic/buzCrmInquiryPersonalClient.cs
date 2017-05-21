@@ -11,6 +11,7 @@ using DEVES.IntegrationAPI.Model.CLS;
 using DEVES.IntegrationAPI.Model.Polisy400;
 using DEVES.IntegrationAPI.Model.InquiryClientMaster;
 using DEVES.IntegrationAPI.Model.RegPayeeCorporate;
+using DEVES.IntegrationAPI.WebApi.Logic.DataBaseContracts;
 using DEVES.IntegrationAPI.WebApi.Logic.Services;
 using DEVES.IntegrationAPI.WebApi.Templates;
 using WebGrease.Css.Visitor;
@@ -84,12 +85,18 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     string crmClientId = "";
                     try
                     {
-                        List<string> lstCrmClientId = SearchCrmContactClientId(temp.generalHeader.cleansingId);
-                        if (lstCrmClientId != null && lstCrmClientId.Count == 1)
+                        if (string.IsNullOrEmpty(temp.generalHeader.crmClientId))
                         {
-                            
-                            temp.generalHeader.crmClientId = lstCrmClientId.First();
+                            List<string> lstCrmClientId = SpApiCustomerClient.Instance.SearchCrmContactClientId("P", temp?.generalHeader?.cleansingId);
+                            //SearchCrmContactClientId(temp?.generalHeader?.cleansingId);
+                            if (lstCrmClientId != null && lstCrmClientId.Count == 1)
+                            {
+
+                                temp.generalHeader.crmClientId = lstCrmClientId.First();
+                            }
                         }
+                       
+                        
                         // ดึงค่าจาก Polisy มาเติมในกรณีที่ข้อมูลสร้างใหม่ CLS จะยังไม่มีเลข Polisy
                         Console.WriteLine("polisyClientId=" + temp.generalHeader.polisyClientId);
                         if (string.IsNullOrEmpty(temp.generalHeader.polisyClientId) || temp.generalHeader.polisyClientId.Equals("0"))

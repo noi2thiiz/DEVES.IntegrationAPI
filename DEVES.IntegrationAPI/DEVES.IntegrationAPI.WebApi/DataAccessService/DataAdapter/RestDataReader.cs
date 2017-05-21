@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Web.Script.Serialization;
 using DEVES.IntegrationAPI.WebApi.Core.DataAdepter;
+using DEVES.IntegrationAPI.WebApi.Templates;
 
 namespace DEVES.IntegrationAPI.WebApi.DataAccessService.DataAdapter
 {
@@ -46,6 +47,7 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.DataAdapter
                 }
 
                 Console.WriteLine("Load  Data Store : " + endpoint);
+               // Console.WriteLine(req.ToJson());
                 var client = new RESTClient(endpoint);
                 var result = client.Execute(req);
               

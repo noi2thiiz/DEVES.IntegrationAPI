@@ -14,9 +14,19 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.DataBaseContracts.Tests
         [TestMethod()]
         public void SearchCrmContactClientIdTest()
         {
-            var result = SpApiCustomerClient.Instance.SearchCrmContactClientId("C", "C2017-007753697");
-           
-            Assert.AreEqual("201011-0063734",result.FirstOrDefault());
+            AppConfig.Instance.StartupForUnitTest();
+         
+
+
+            var result = SpApiCustomerClient.Instance.SearchCrmContactClientId("P", "CRM5555");
+
+            Assert.AreEqual("201611-0000187", result.FirstOrDefault());
+
+         
+
+            
+
+
         }
         [TestMethod()]
         public void SearchCrmContactClientIdShoudNotFoundTest()
@@ -24,6 +34,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.DataBaseContracts.Tests
             var result = SpApiCustomerClient.Instance.SearchCrmContactClientId("C", "C2017-999999999");
 
             Assert.AreEqual(null, result.FirstOrDefault());
+        }
+
+        [TestMethod()]
+        public void GetCrmContactClientIdTest()
+        {
+           var result = SpApiCustomerClient.Instance.GetCrmContactClientId("P", "C2017-000007565");
+
+            Assert.AreEqual("201009-0005559", result);
         }
     }
 }

@@ -10,7 +10,7 @@ using Microsoft.Xrm.Client.Collections.Generic;
 namespace DEVES.IntegrationAPI.WebApi.Logic.DataBaseContracts
 {
     public class SpApiCustomerClient: BaseDataBaseContracts<CustomerClientEntity>
-    {
+    {   
         private static SpApiCustomerClient _instance;
 
         public static SpApiCustomerClient Instance
@@ -26,7 +26,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.DataBaseContracts
 
         public List<string> SearchCrmContactClientId(string clientType,string clientId)
         {
-            
+            clientId = clientId.Trim().Replace(" ", "");
             var result = Excecute(new Dictionary<string, string> { { "clientType", clientType }, { "clientId", clientId } });
             Console.WriteLine(result.ToJson());
             var searchResult = new List<string>();
@@ -36,7 +36,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.DataBaseContracts
                 {
                     foreach (var item in result.Data)
                     {
-                        searchResult.Add(Tranform(result.Data[0])?.CrmClientId);
+                        searchResult.Add(Tranform(item)?.CrmClientId);
                     }
                     
                   
@@ -45,6 +45,26 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.DataBaseContracts
             }
             return searchResult;
         }
+
+        public string GetCrmContactClientId(string clientType, string clientId)
+        {
+            clientId = clientId.Trim().Replace(" ", "");
+            var result = Excecute(new Dictionary<string, string> { { "clientType", clientType }, { "clientId", clientId } });
+            Console.WriteLine(result.ToJson());
+            var searchResult = "";
+            if (result.Success)
+            {
+                if (result.Data.Any())
+                {
+                    return Tranform(result.Data[0])?.CrmClientId;
+
+
+                }
+
+            }
+            return searchResult;
+        }
+
 
         public SpApiCustomerClient(string storeName) : base(storeName)
         {

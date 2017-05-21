@@ -111,6 +111,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 
                 string EWIendpoint = CommonConstant.PROXY_ENDPOINT + endpoint;
                 reqTime = DateTime.Now;
+                Console.WriteLine("==========EWIendpoint========");
+                Console.WriteLine(EWIendpoint);
                 HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, EWIendpoint);
                 Console.WriteLine("==========jsonReqModel========");
                 Console.WriteLine(jsonReqModel);

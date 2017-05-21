@@ -18,14 +18,16 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.DataBaseContracts
         {
             StoreName = storeName;
 
-            var conectionString = AppConfig.Instance.GetCRMDBConfigurationString();
-            if (Environment.MachineName == AppConst.LOCAL_MACHINE_NAAME)
+          
+            if (AppConst.IS_SERVER)
             {
-                DataReader = new RestDataReader();
+                var conectionString = AppConfig.Instance.GetCRMDBConfigurationString();
+                DataReader = new StoreDataReader(conectionString);
             }
             else
             {
-                DataReader = new StoreDataReader(conectionString);
+                DataReader = new RestDataReader();
+               
             }
            
 

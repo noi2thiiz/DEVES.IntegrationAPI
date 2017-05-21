@@ -1,4 +1,6 @@
-﻿namespace DEVES.IntegrationAPI.WebApi.Templates
+﻿using System;
+
+namespace DEVES.IntegrationAPI.WebApi.Templates
 {
     public static class AppConst
     {
@@ -27,7 +29,12 @@
 
         public static string COMM_BACK_DAY = AppConfig.Instance.Get("SEARCH_POLISY_BACKDAY")??"5";
 
-       
+        public static bool IS_SERVER=
+        
+             Environment.MachineName == QA_SERVER_NAME || Environment.MachineName == PRO1_SERVER_NAME ||
+                   Environment.MachineName == PRO2_SERVER_NAME;
+        
+
     }
 
     public class TestAppConst

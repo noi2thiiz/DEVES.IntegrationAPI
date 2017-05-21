@@ -153,10 +153,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 #region Search crmClientId by CleansingId
                 foreach (CRMInquiryClientOutputDataModel data in crmInqContent.data)
                 {
-                    List<string> crmData = SearchCrmContactClientId(contentModel.conditionDetail.cleansingId);
-                    if (crmData != null && crmData.Count == 1)
+                    if (string.IsNullOrEmpty(data?.generalHeader?.crmClientId))
                     {
-                        data.generalHeader.crmClientId = crmData.First();
+                        List<string> crmData = SearchCrmContactClientId(contentModel?.conditionDetail?.cleansingId);
+                        if (crmData != null && crmData.Count == 1)
+                        {
+                            data.generalHeader.crmClientId = crmData.First();
+                        }
                     }
                 }
                 #endregion Search crmClientId by CleansingId
