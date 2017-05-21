@@ -21,7 +21,7 @@ namespace DEVES.IntegrationAPI.Model
         [JsonIgnore]
         public string DateTimeCustomFormat = "yyyy-MM-dd HH:mm:ss";
 
-        [JsonProperty(Order = 1000)]
+        [JsonProperty(Order = 2000)]
         public List<DataModelDebugInfo> _debugInfo { get; set; }
 
         public void AddDebugInfo(string message , dynamic info)

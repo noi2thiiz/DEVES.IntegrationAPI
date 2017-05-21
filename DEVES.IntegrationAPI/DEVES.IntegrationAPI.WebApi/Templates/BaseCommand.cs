@@ -24,6 +24,7 @@ using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Tooling.Connector;
 using System.Threading.Tasks;
 using DEVES.IntegrationAPI.WebApi.Logic;
+using DEVES.IntegrationAPI.WebApi.Logic.DataBaseContracts;
 using DEVES.IntegrationAPI.WebApi.TechnicalService.TransactionLogger;
 using DEVES.IntegrationAPI.WebApi.Templates.Exceptions;
 
@@ -638,9 +639,10 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
         public List<string> SearchCrmContactClientId(string cleansingId)
         {
 
-           // Console.WriteLine("SearchCrmContactClientId");
+            // Console.WriteLine("SearchCrmContactClientId");
             // For performance, until we found the way to cache the ServiceProxy, we prefer SQL rather than Crm
-             
+            return SpApiCustomerClient.Instance.SearchCrmContactClientId("P", cleansingId);
+            /*
             using (OrganizationServiceProxy sp = GetCrmServiceProxy())
             {
                 ServiceContext sc = new ServiceContext(sp);
@@ -654,6 +656,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
 
                 return lstCrmClientId;
             }
+            */
             
 
 
@@ -676,7 +679,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
 
             // Console.WriteLine("SearchCrmContactClientId");
             // For performance, until we found the way to cache the ServiceProxy, we prefer SQL rather than Crm
-
+            
             using (OrganizationServiceProxy sp = GetCrmServiceProxy())
             {
                 ServiceContext sc = new ServiceContext(sp);
@@ -687,6 +690,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
 
                 return lstCrmClientId;
             }
+            
             
         }
 
@@ -705,7 +709,8 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             //return lstCrmClientId;
 
             // For performance, until we found the way to cache the ServiceProxy, we prefer SQL rather than Crm
-              
+            return SpApiCustomerClient.Instance.SearchCrmContactClientId("C", cleansingId);
+            /*
             using (OrganizationServiceProxy sp = GetCrmServiceProxy())
             {
                 ServiceContext sc = new ServiceContext(sp);
@@ -715,6 +720,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                 List<string> lstCrmClientId = q.ToList<string>();
                 return lstCrmClientId;
             }
+            */
             
         }
 

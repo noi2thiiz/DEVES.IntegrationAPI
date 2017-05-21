@@ -76,7 +76,7 @@
     "surveyorMobile": {
       "type": "string",
       "maxLength": 200
-    },
+    }
 	},
 	"required": [
     "ticketNo",

@@ -477,6 +477,9 @@
     <Compile Include="Logic\buzSendSMS.cs" />
     <Compile Include="Logic\CommonConstant.cs" />
     <Compile Include="Logic\Converter\MasterDataConvertor.cs" />
+    <Compile Include="Logic\Converter\OptionSetConvertor.cs" />
+    <Compile Include="Logic\DataBaseContracts\BaseDataBaseContracts.cs" />
+    <Compile Include="Logic\DataBaseContracts\SpApiCustomerClient.cs" />
     <Compile Include="Logic\DevesCrmAPIExceptions.cs" />
     <Compile Include="Logic\Services\BaseEwiServiceProxy.cs" />
     <Compile Include="Logic\Services\BaseProxyService.cs" />
@@ -656,6 +659,7 @@
     <Content Include="Web_config_For_QA.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="DataAccessService\Store\" />
     <Folder Include="NewFolder1\" />
     <Folder Include="Providers\" />
   </ItemGroup>

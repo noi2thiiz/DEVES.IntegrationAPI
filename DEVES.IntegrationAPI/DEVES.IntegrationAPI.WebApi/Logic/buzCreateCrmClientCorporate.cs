@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using DEVES.IntegrationAPI.WebApi.Logic.Converter;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
@@ -77,44 +78,25 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
 
                         account.pfc_tac_branch = contentModel.profileHeader.corporateBranch; // contentModel.profileHeader.corporateBranch;
-                        if (!string.IsNullOrEmpty(contentModel?.profileHeader?.econActivity.ToString()))
+                        if (!string.IsNullOrEmpty(contentModel?.profileHeader?.econActivity))
                         {
-                            account.pfc_economic_type = new OptionSetValue(Int32.Parse(OptionsetConvertor(contentModel.profileHeader.econActivity)));
+
+                            account.pfc_economic_type =
+                                OptionSetConvertor.GetOptionsetValue(contentModel?.profileHeader?.econActivity);
                         }
                        
                         account.pfc_polisy_nationality_code = contentModel.profileHeader.countryOrigin;
-                        switch (contentModel.profileHeader.language)
-                        {
-                            case "J": account.pfc_language = new OptionSetValue(100000002); break; // JP
-                            case "T": account.pfc_language = new OptionSetValue(100000003); break; // TH
-                            case "E": account.pfc_language = new OptionSetValue(100000001); break; // ENG
-                            default: account.pfc_language = new OptionSetValue(100000004); break;
-                        }
+                       
+                        account.pfc_language =
+                                    OptionSetConvertor.GetLanguageOptionSetValue(contentModel?.profileHeader?.language);
+                        
 
-                        if(string.IsNullOrEmpty(contentModel.profileHeader.riskLevel))
+                        if(!string.IsNullOrEmpty(contentModel.profileHeader.riskLevel))
                         {
-                            // do nothing
+                            account.pfc_AMLO_flag =
+                                OptionSetConvertor.GetRiskLevelOptionSetValue(contentModel?.profileHeader?.riskLevel);
                         }
-                        else
-                        {
-                            switch (contentModel.profileHeader.riskLevel)
-                            {
-                                case "A": account.pfc_AMLO_flag = new OptionSetValue(100000001); break; // A
-                                case "B": account.pfc_AMLO_flag = new OptionSetValue(100000002); break; // B
-                                case "C1": account.pfc_AMLO_flag = new OptionSetValue(100000003); break;
-                                case "C2": account.pfc_AMLO_flag = new OptionSetValue(100000004); break;
-                                case "R1": account.pfc_AMLO_flag = new OptionSetValue(100000005); break;
-                                case "R2": account.pfc_AMLO_flag = new OptionSetValue(100000006); break;
-                                case "R3": account.pfc_AMLO_flag = new OptionSetValue(100000007); break;
-                                case "R4": account.pfc_AMLO_flag = new OptionSetValue(100000008); break;
-                                case "RL1": account.pfc_AMLO_flag = new OptionSetValue(100000009); break; 
-                                case "RL2": account.pfc_AMLO_flag = new OptionSetValue(100000010); break;
-                                case "RL3": account.pfc_AMLO_flag = new OptionSetValue(100000011); break;
-                                case "U": account.pfc_AMLO_flag = new OptionSetValue(100000012); break; // U
-                                case "X": account.pfc_AMLO_flag = new OptionSetValue(100000013); break;
-                                default: account.pfc_AMLO_flag = new OptionSetValue(); break;
-                            }
-                        }
+                       
                         
 
                         // contact
@@ -127,22 +109,22 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                         // contactHeader 
 
-                        account.Telephone1 = TelephoneConvertor(contentModel.contactHeader.telephone1, contentModel.contactHeader.telephone1Ext);
-                        account.Telephone2 = TelephoneConvertor(contentModel.contactHeader.telephone2, contentModel.contactHeader.telephone2Ext);
-                        account.Telephone3 = TelephoneConvertor(contentModel.contactHeader.telephone3, contentModel.contactHeader.telephone3Ext);
-                        account.pfc_moblie_phone1 = contentModel.contactHeader.mobilePhone;
-                        account.EMailAddress1 = contentModel.contactHeader.emailAddress;
-                        account.pfc_line_id = contentModel.contactHeader.lineID;
-                        account.pfc_facebook = contentModel.contactHeader.facebook;
-                        account.pfc_source_data = new OptionSetValue(100000003);
+                        account.Telephone1 = TelephoneConvertor(contentModel?.contactHeader?.telephone1, contentModel?.contactHeader?.telephone1Ext);
+                        account.Telephone2 = TelephoneConvertor(contentModel?.contactHeader?.telephone2, contentModel?.contactHeader?.telephone2Ext);
+                        account.Telephone3 = TelephoneConvertor(contentModel?.contactHeader?.telephone3, contentModel?.contactHeader?.telephone3Ext);
+                        account.pfc_moblie_phone1 = contentModel?.contactHeader?.mobilePhone;
+                        account.EMailAddress1 = contentModel?.contactHeader?.emailAddress;
+                        account.pfc_line_id = contentModel?.contactHeader?.lineID;
+                        account.pfc_facebook = contentModel?.contactHeader?.facebook;
+                        account.pfc_source_data = OptionSetConvertor.GetIntegrationSourceDataOptionSetValue();
 
                         // new 6 parameters from P'Guide
-                        account.pfc_telephone1 = contentModel.contactHeader.telephone1;
-                        account.pfc_telephone2 = contentModel.contactHeader.telephone2;
-                        account.pfc_telephone3 = contentModel.contactHeader.telephone3;
-                        account.pfc_fax = contentModel.contactHeader.fax;
-                        account.pfc_moblie_phone = contentModel.contactHeader.mobilePhone;
-                        account.pfc_emailaddress1 = contentModel.contactHeader.emailAddress;
+                        account.pfc_telephone1 = contentModel?.contactHeader?.telephone1;
+                        account.pfc_telephone2 = contentModel?.contactHeader?.telephone2;
+                        account.pfc_telephone3 = contentModel?.contactHeader?.telephone3;
+                        account.pfc_fax = contentModel?.contactHeader?.fax;
+                        account.pfc_moblie_phone = contentModel?.contactHeader?.mobilePhone;
+                        account.pfc_emailaddress1 = contentModel?.contactHeader?.emailAddress;
 
 
                         ExecuteTransactionRequest tranReq = new ExecuteTransactionRequest()
@@ -217,24 +199,6 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             return telNum;
         }
 
-        public string OptionsetConvertor(string val)
-        {
-            string opVal = "";
-
-            if (val.Length == 1)
-            {
-                opVal = "10000000" + val;
-            }
-            else if (val.Length == 2)
-            {
-                opVal = "1000000" + val;
-            }
-            else
-            {
-                opVal = "100000" + val;
-            }
-
-            return opVal;
-        }
+        
     }
 }

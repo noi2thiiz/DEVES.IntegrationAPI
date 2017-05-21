@@ -23,8 +23,11 @@
 
         public const string PRO1_SERVER_NAME = "CRM-APP01";
         public const string PRO2_SERVER_NAME = "CRM-APP02";
+        public const string LOCAL_MACHINE_NAAME = "DESKTOP-Q30CAGJ";
 
         public static string COMM_BACK_DAY = AppConfig.Instance.Get("SEARCH_POLISY_BACKDAY")??"5";
+
+       
     }
 
     public class TestAppConst
