@@ -165,10 +165,14 @@ namespace DEVES.IntegrationAPI.WebApi
             {
                 return Config[key];
             }
-            else
+
+            if (System.Configuration.ConfigurationManager.AppSettings[key] != null)
             {
-                return null;
+                return System.Configuration.ConfigurationManager.AppSettings[key].ToString();
             }
+          
+                return null;
+            
 
         }
 

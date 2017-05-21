@@ -17,8 +17,11 @@ using DEVES.IntegrationAPI.WebApi.Templates.Exceptions;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
+    
     public class buzCRMRegPayeePersonal: BuzCommand
     {
+       
+
         protected string newCleansingId;
 
         private RegPayeePersonalInputModel RegPayeePersonalInput { get; set; }
@@ -110,6 +113,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         }
         public override BaseDataModel ExecuteInput(object input)
         {
+            AddDebugInfo("call ExecuteInput", input);
             RegPayeePersonalInput = (RegPayeePersonalInputModel)input;
             TranFormInput();
 
@@ -190,7 +194,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         //เมื่อเกิด error ใด ๆ ใน service อื่นให้ลบ
                             if (!string.IsNullOrEmpty(newCleansingId))
                             {
-                            Console.WriteLine("try rollback" + newCleansingId);
+                                AddDebugInfo("try rollback" + newCleansingId);
                                 var deleteResult = CleansingClientService.Instance.RemoveByCleansingId(newCleansingId, "P");
                             }
                            
@@ -201,7 +205,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         //เมื่อเกิด error ใด ๆ ใน service อื่นให้ลบ
                         if (!string.IsNullOrEmpty(newCleansingId))
                         {
-                            Console.WriteLine("try rollback" + newCleansingId);
+                            AddDebugInfo("try rollback" + newCleansingId);
                             var deleteResult = CleansingClientService.Instance.RemoveByCleansingId(newCleansingId, "P");
                         }
                        
@@ -213,14 +217,17 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 #endregion Create Payee in Polisy400
             }
 
-                #region Search Payee in SAP
-                Model.SAP.SAPInquiryVendorInputModel SAPInqVendorIn = (Model.SAP.SAPInquiryVendorInputModel)DataModelFactory.GetModel(typeof(Model.SAP.SAPInquiryVendorInputModel));
+            #region Search Payee in SAP
+           
+            Model.SAP.SAPInquiryVendorInputModel SAPInqVendorIn = (Model.SAP.SAPInquiryVendorInputModel)DataModelFactory.GetModel(typeof(Model.SAP.SAPInquiryVendorInputModel));
                 //SAPInqVendorIn = TransformerFactory.TransformModel(regPayeePersonalInput, SAPInqVendorIn);
 
                 SAPInqVendorIn.TAX3 = RegPayeePersonalInput.profileInfo.idCitizen??"";
                 SAPInqVendorIn.TAX4 = "";
                 SAPInqVendorIn.PREVACC = RegPayeePersonalInput.sapVendorInfo.sapVendorCode ?? "";
                 SAPInqVendorIn.VCODE = RegPayeePersonalInput.generalHeader.polisyClientId ?? "";
+
+                AddDebugInfo("Search Payee in SAP", SAPInqVendorIn);
 
                 var SAPInqVendorContentOut = CallDevesServiceProxy<Model.SAP.SAPInquiryVendorOutputModel, Model.SAP.EWIResSAPInquiryVendorContentModel>(CommonConstant.ewiEndpointKeySAPInquiryVendor, SAPInqVendorIn);
                 #endregion Search Payee in SAP
@@ -233,13 +240,16 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 //BaseDataModel SAPCreateVendorIn = DataModelFactory.GetModel(typeof(Model.SAP.SAPCreateVendorInputModel));
                 try
                     {
-                        Model.SAP.SAPCreateVendorInputModel SAPCreateVendorIn =
+                       
+                    Model.SAP.SAPCreateVendorInputModel SAPCreateVendorIn =
                             new Model.SAP.SAPCreateVendorInputModel();
                         SAPCreateVendorIn =
                             (Model.SAP.SAPCreateVendorInputModel) TransformerFactory.TransformModel(
                                 RegPayeePersonalInput, SAPCreateVendorIn);
 
-                        var SAPCreateVendorContentOut =
+                        AddDebugInfo(" create SAP Vendor ", SAPCreateVendorIn);
+
+                    var SAPCreateVendorContentOut =
                             CallDevesServiceProxy<Model.SAP.SAPCreateVendorOutputModel,
                                 Model.SAP.SAPCreateVendorContentOutputModel>(
                                 CommonConstant.ewiEndpointKeySAPCreateVendor, SAPCreateVendorIn);
@@ -259,7 +269,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     //@TODO adHoc fix Please fill recipient type  มัน return success เลยถ้าไม่ได้ดักไว้ 
                         if (!string.IsNullOrEmpty(newCleansingId))
                         {
-                            Console.WriteLine("244:try rollback" + newCleansingId);
+                            AddDebugInfo("rollback newCleansingId="+ newCleansingId);
+                           
                             var deleteResult = CleansingClientService.Instance.RemoveByCleansingId(newCleansingId, "P");
 
                         }
@@ -267,7 +278,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     List<OutputModelFailDataFieldErrors> fieldError = MessageBuilder.Instance.ExtractSapCreateVendorFieldError<RegPayeePersonalInputModel>(e.Message,RegPayeePersonalInput);
                         if (fieldError != null)
                         {
-                             throw new FieldValidationException(fieldError, "Cannot create SAP Vendor", "SAP Error:" + e.Message);
+                            AddDebugInfo("Cannot create SAP Vendor SAP Error:" + e.Message,e.StackTrace);
+                           throw new FieldValidationException(fieldError, "Cannot create SAP Vendor", "SAP Error:" + e.Message);
 
                        }else{
                             throw;
@@ -275,9 +287,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     }
 
 
-                    #endregion Create Payee in SAP
+                #endregion Create Payee in SAP
 
+                try
+                {
                     #region Create payee in CRM
+                    AddDebugInfo("Create payee in CRM ");
                     buzCreateCrmPayeePersonal cmdCreateCrmPayee = new buzCreateCrmPayeePersonal();
                     CreateCrmPersonInfoOutputModel crmContentOutput = (CreateCrmPersonInfoOutputModel)cmdCreateCrmPayee.Execute(RegPayeePersonalInput);
 
@@ -288,7 +303,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         //dataOutPass.sapVendorCode = regPayeePersonalInput.sapVendorInfo.sapVendorCode;
 
 
-                       //  dataOutPass.sapVendorGroupCode = regPayeePersonalInput.sapVendorInfo.sapVendorGroupCode;
+                        //  dataOutPass.sapVendorGroupCode = regPayeePersonalInput.sapVendorInfo.sapVendorGroupCode;
                         //dataOutPass.personalName = regPayeePersonalInput.profileInfo.personalName;
                         //dataOutPass.personalSurname = regPayeePersonalInput.profileInfo.personalSurname;
                         ////dataOutPass.corporateBranch = regPayeePersonalInput.profileInfo.corporateBranch;
@@ -302,10 +317,19 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     }
                     #endregion Create payee in CRM
                 }
+                catch (Exception e)
+                {
+                    //do not thing
+                    AddDebugInfo("Cannot create Client in CRM :" + e.Message, e.StackTrace);
+                }
+
+
+                }
                 else
                 {
-                    //regPayeePersonalInput.sapVendorInfo.sapVendorCode = SAPInqVendorContentOut.VCODE;
-                    outputPass.sapVendorCode = sapInfo?.VCODE;
+                    AddDebugInfo(" found existing SAP Vendor ", sapInfo);
+                //regPayeePersonalInput.sapVendorInfo.sapVendorCode = SAPInqVendorContentOut.VCODE;
+                outputPass.sapVendorCode = sapInfo?.VCODE;
                     outputPass.sapVendorGroupCode = RegPayeePersonalInput?.sapVendorInfo?.sapVendorGroupCode;
                     //sapInfo?.VGROUP ?? regPayeePersonalInput?.sapVendorInfo?.sapVendorGroupCode ?? "";
                 }
@@ -326,8 +350,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 }
 
             regPayeePersonalOutput.data.Add(outputPass);
-            
-           
+
+            AddDebugInfo(" output ");
+            regPayeePersonalOutput.AddListDebugInfo(GetDebugInfoList());
             return regPayeePersonalOutput;
 
         }

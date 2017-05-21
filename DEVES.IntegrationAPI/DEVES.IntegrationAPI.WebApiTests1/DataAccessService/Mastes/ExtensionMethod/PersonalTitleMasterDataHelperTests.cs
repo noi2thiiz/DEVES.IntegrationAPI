@@ -12,20 +12,31 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.Mastes.ExtensionMethod.T
     [TestClass()]
     public class PersonalTitleMasterDataHelperTests
     {
-        [TestMethod()]
-        public void ToPersonalTitleForSAPTest()
+        public PersonalTitleMasterDataHelperTests()
         {
             AppConfig.Instance.StartupForUnitTest();
             PersonalTitleMasterData.Instance.InitData();
-
-            Assert.AreEqual("นางสาว", ("0005").ToPersonalTitleName());
-
-            Assert.AreEqual("น.ส.", ("0005").ToPersonalTitleForSap());
-
+        }
+        [TestMethod()]
+        public void ToPersonalTitleNameTest()
+        {
            
+            Assert.AreEqual("นางสาว", ("0005").ToPersonalTitleName());
+        }
+
+        [TestMethod()]
+        public void ToPersonalTitlePolisyCodeTest()
+        {
 
             Assert.AreEqual("0094", ("0005").ToPersonalTitlePolisyCode());
+        }
 
+        [TestMethod()]
+        public void ToPersonalTitleForSAPTest()
+        {
+           
+    
+            Assert.AreEqual("น.ส.", ("0005").ToPersonalTitleForSap());
 
 
         }

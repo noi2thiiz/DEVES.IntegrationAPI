@@ -10,7 +10,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Validator
 {
     public class MasterDataValidator
     {
-        protected OutputModelFailData fieldErrorData;
+        public OutputModelFailData fieldErrorData;
         public MasterDataValidator()
         {
              fieldErrorData = new OutputModelFailData();
@@ -20,7 +20,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Validator
         {
             return fieldErrorData;
         }
-        internal bool Invalid()
+        public bool Invalid()
         {
             return fieldErrorData.fieldErrors.Any();
         }
@@ -55,7 +55,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Validator
             try
             {
                 var masterSalutation =
-                    PersonalTitleMasterData.Instance.FindByCode(masterCode, defaultCode);
+                    PersonalTitleMasterData.Instance.FindByCode(masterCode);
                 if (masterSalutation != null)
                 {
                     return masterSalutation.PolisyCode;
@@ -67,8 +67,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Validator
                     fieldErrorData.AddFieldError(fieldName, errorMessage);
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                Console.WriteLine(e.Message+":"+e.StackTrace);
                 //do nothing
             }
 

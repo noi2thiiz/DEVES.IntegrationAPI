@@ -54,6 +54,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services.Tests
         [TestMethod()]
         public void CreatePersonalClientTest()
         {
+            //ทดสอบบน QA เท่านั้น
             AppConfig.Instance.StartupForUnitTest();
             var input = new CLSCreatePersonalClientInputModel
             {
@@ -72,6 +73,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services.Tests
             Assert.IsNotNull(result);
 
             Assert.AreEqual(true, result.success);
+            
         }
     }
 }

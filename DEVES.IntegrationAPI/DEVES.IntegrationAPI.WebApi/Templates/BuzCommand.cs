@@ -9,6 +9,20 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
 {
     public abstract class BuzCommand:BaseCommand
     {
+        protected BaseDataModel debugInfo { get; set; } = new DebugInfoDataModel();
+
+        public void AddDebugInfo(string message, dynamic info)
+        {
+            debugInfo.AddDebugInfo(message, info);
+        }
+        public void AddDebugInfo(string message)
+        {
+            debugInfo.AddDebugInfo(message, message);
+        }
+        public List<DataModelDebugInfo> GetDebugInfoList()
+        {
+            return debugInfo._debugInfo;
+        }
         public override BaseDataModel Execute(object input)
         {
             try

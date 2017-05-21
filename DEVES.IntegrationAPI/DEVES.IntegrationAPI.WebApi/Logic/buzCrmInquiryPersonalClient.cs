@@ -20,7 +20,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
     public class buzCrmInquiryPersonalClientMaster : BuzCommand
     {
 
-        public BaseDataModel debugInfo { get; set; }= new BankInfoModel();
+        
 
         public override BaseDataModel ExecuteInput(object input)
         {

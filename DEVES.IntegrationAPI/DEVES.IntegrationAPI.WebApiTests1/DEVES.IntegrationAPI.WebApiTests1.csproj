@@ -69,6 +69,7 @@
     <Compile Include="DataAccessService\Mastes\InMemoryDataStorageBaseTests.cs" />
     <Compile Include="DataAccessService\Mastes\ProvinceMasterDataTests.cs" />
     <Compile Include="DataAccessService\Mastes\SubDistrictMasterDataTests.cs" />
+    <Compile Include="Logic\buzCrmInquiryPersonalClientMasterTests.cs" />
     <Compile Include="Logic\DataAccess\Adapter\DevesServiceProxyAdapterTests.cs" />
     <Compile Include="Logic\Services\CleansingClientServiceTests.cs" />
     <Compile Include="Logic\Services\PolisyClientServiceTests.cs" />
@@ -79,6 +80,7 @@
     <Compile Include="TechnicalService\TransactionLogger\ApiLogDataGateWayTests.cs" />
     <Compile Include="TechnicalService\TransactionLogger\JobTimerTests.cs" />
     <Compile Include="Templates\BaseCommandTests.cs" />
+    <Compile Include="Templates\testConfigTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DEVES.IntegrationAPI.Model\DEVES.IntegrationAPI.Model.csproj">

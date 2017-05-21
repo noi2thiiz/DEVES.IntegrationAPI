@@ -54,7 +54,30 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData.Tests
         public void OccupationMasterDataFindByCodeTest()
         {
             var result = OccupationMasterData.Instance.FindByCode("00023");
-            Assert.AreEqual("081", result.PolisyCode);
+            Assert.AreEqual("000", result.PolisyCode);
+
+             result = OccupationMasterData.Instance.FindByCode("00022");
+            Assert.AreEqual("051", result.PolisyCode);
+
+
+            result = OccupationMasterData.Instance.FindByCode("00021");
+            Assert.AreEqual("006", result.PolisyCode);
+
+            result = OccupationMasterData.Instance.FindByCode("00020");
+            Assert.AreEqual("086", result.PolisyCode);
+
+            result = OccupationMasterData.Instance.FindByCode("00019");
+            Assert.AreEqual("019", result.PolisyCode);
+
+            result = OccupationMasterData.Instance.FindByCode("00018");
+            Assert.AreEqual("017", result.PolisyCode);
+
+            result = OccupationMasterData.Instance.FindByCode("00017");
+            Assert.AreEqual("020", result.PolisyCode);
+
+            result = OccupationMasterData.Instance.FindByCode("00016");
+            Assert.AreEqual("018", result.PolisyCode);
+
         }
         [TestMethod()]
         public void ProvinceMasterDataFindByCodeTest()

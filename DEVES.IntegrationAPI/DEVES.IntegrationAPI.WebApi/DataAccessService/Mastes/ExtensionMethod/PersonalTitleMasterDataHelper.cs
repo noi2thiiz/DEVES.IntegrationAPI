@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData;
+using DEVES.IntegrationAPI.WebApi.Templates;
 
 namespace DEVES.IntegrationAPI.WebApi.DataAccessService.Mastes.ExtensionMethod
 {
@@ -19,6 +20,7 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.Mastes.ExtensionMethod
         {
             if (string.IsNullOrEmpty(code)) return "";
             var resutl = PersonalTitleMasterData.Instance.FindByCode(code);
+            Console.WriteLine(resutl.ToJson());
             return resutl != null ? resutl.RefSap : "";
         }
 

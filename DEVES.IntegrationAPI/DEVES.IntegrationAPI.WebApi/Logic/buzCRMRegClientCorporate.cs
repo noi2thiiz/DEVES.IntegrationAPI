@@ -156,13 +156,15 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             {
 
                
-                
+                AddDebugInfo("regClientCorporateInput.generalHeader.roleCode = G");
 
                 return createASRHCorporate(regClientCorporateInput);
                 //return createGeneralCorporate(regClientCorporateInput);
             }
             else
             {
+                AddDebugInfo("regClientCorporateInput.generalHeader.roleCode != G");
+
                 return createASRHCorporate(regClientCorporateInput);
             }
             
@@ -451,7 +453,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                                 if (!string.IsNullOrEmpty(newCleansingId))
                                 {
                                     //เมื่อเกิด error ใด ๆ ใน service อื่นให้ลบ
-                                    Console.WriteLine("tyy rollback" + newCleansingId);
+                                    
+                                    AddDebugInfo("try rollback" + newCleansingId);
 
                                     var deleteResult = CleansingClientService.Instance.RemoveByCleansingId(newCleansingId, "C");
 
@@ -459,7 +462,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                                     regClientCorporateOutput.message = e.Message;
                                     if (!deleteResult.success)
                                     {
-                                        Console.WriteLine(
+                                        AddDebugInfo(
                                             "Failed to complete the transaction, and it does not rollback");
                                         regClientCorporateOutput.description =
                                             "Failed to complete the transaction, and it does not rollback";
@@ -479,32 +482,39 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         }
                     }
 
-                    buzCreateCrmClientCorporate cmdCreateCrmClient = new buzCreateCrmClientCorporate();
-                    CreateCrmCorporateInfoOutputModel crmContentOutput =
-                        (CreateCrmCorporateInfoOutputModel)cmdCreateCrmClient.Execute(regClientCorporateInput);
-
-                    if (crmContentOutput.code == CONST_CODE_SUCCESS)
+                    try
                     {
+                        buzCreateCrmClientCorporate cmdCreateCrmClient = new buzCreateCrmClientCorporate();
+                        CreateCrmCorporateInfoOutputModel crmContentOutput =
+                            (CreateCrmCorporateInfoOutputModel) cmdCreateCrmClient.Execute(regClientCorporateInput);
 
-                        regClientCorporateOutput.code = CONST_CODE_SUCCESS;
-                        regClientCorporateOutput.message = AppConst.MESSAGE_SUCCESS;
-                        RegClientCorporateDataOutputModel_Pass dataOutPass =
-                            new RegClientCorporateDataOutputModel_Pass();
-                        dataOutPass.cleansingId = regClientCorporateInput.generalHeader.cleansingId;
-                        dataOutPass.polisyClientId = regClientCorporateInput.generalHeader.polisyClientId;
-                        dataOutPass.crmClientId = crmContentOutput.crmClientId;
-                        dataOutPass.corporateName1 = regClientCorporateInput.profileHeader.corporateName1;
-                        dataOutPass.corporateName2 = regClientCorporateInput.profileHeader.corporateName2;
-                        dataOutPass.corporateBranch = regClientCorporateInput.profileHeader.corporateBranch;
+                        if (crmContentOutput.code == CONST_CODE_SUCCESS)
+                        {
 
-                        regClientCorporateOutput.data.Add(dataOutPass);
+                            regClientCorporateOutput.code = CONST_CODE_SUCCESS;
+                            regClientCorporateOutput.message = AppConst.MESSAGE_SUCCESS;
+                            RegClientCorporateDataOutputModel_Pass dataOutPass =
+                                new RegClientCorporateDataOutputModel_Pass();
+                            dataOutPass.cleansingId = regClientCorporateInput.generalHeader.cleansingId;
+                            dataOutPass.polisyClientId = regClientCorporateInput.generalHeader.polisyClientId;
+                            dataOutPass.crmClientId = crmContentOutput.crmClientId;
+                            dataOutPass.corporateName1 = regClientCorporateInput.profileHeader.corporateName1;
+                            dataOutPass.corporateName2 = regClientCorporateInput.profileHeader.corporateName2;
+                            dataOutPass.corporateBranch = regClientCorporateInput.profileHeader.corporateBranch;
+
+                            regClientCorporateOutput.data.Add(dataOutPass);
+                        }
+                        else
+                        {
+
+                            regClientCorporateOutput.code = CONST_CODE_FAILED;
+                            regClientCorporateOutput.message = crmContentOutput.message;
+                            regClientCorporateOutput.description = crmContentOutput.description;
+                        }
                     }
-                    else
+                    catch (Exception)
                     {
-
-                        regClientCorporateOutput.code = CONST_CODE_FAILED;
-                        regClientCorporateOutput.message = crmContentOutput.message;
-                        regClientCorporateOutput.description = crmContentOutput.description;
+                        //@TODO something 
                     }
 
                 }
@@ -512,7 +522,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             }
             else
             {
-
+                AddDebugInfo("There is some conflicts among the arguments Look between roleCode and {assessorFlag ,solicitorFlag ,repairerFlag or hospitalFlag}");
                 regClientCorporateOutput.code = CONST_CODE_FAILED;
                 regClientCorporateOutput.message = "There is some conflicts among the arguments Look between roleCode and {assessorFlag ,solicitorFlag ,repairerFlag or hospitalFlag}";
                 regClientCorporateOutput.description = "";

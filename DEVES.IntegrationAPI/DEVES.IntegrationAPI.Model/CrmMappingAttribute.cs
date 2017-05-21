@@ -41,8 +41,30 @@ namespace DEVES.IntegrationAPI.Model
                 info = info
             });
         }
+
+        public void AddListDebugInfo(List<DataModelDebugInfo> debugInfo)
+        {
+            if (!debugInfo.Any())
+            {
+                return;
+            }
+            if (_debugInfo == null)
+            {
+                _debugInfo = new List<DataModelDebugInfo>();
+                _debugInfo.Add(new DataModelDebugInfo
+                {
+                    message = "warning",
+                    info = "_debugInfo will be remove on production!!"
+                });
+            }
+            _debugInfo.AddRange(debugInfo);
+        }
     }
 
+    public class DebugInfoDataModel : BaseDataModel
+    {
+        
+    }
     public class DataModelDebugInfo
     {
         public string message { get; set; }
