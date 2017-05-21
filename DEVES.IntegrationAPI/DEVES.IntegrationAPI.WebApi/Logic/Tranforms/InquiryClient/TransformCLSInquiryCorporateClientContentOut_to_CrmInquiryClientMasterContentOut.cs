@@ -38,14 +38,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     trgt.profileInfo = new CRMInquiryClientProfileInfoModel();
 
                  
-                    trgt.generalHeader.cleansingId = src.cleansing_id;
-                    trgt.generalHeader.polisyClientId = src.clntnum;
+                    trgt.generalHeader.cleansingId = src?.cleansing_id?.Trim() ?? "";
+                    trgt.generalHeader.polisyClientId = src?.clntnum?.Trim() ?? "";
                     trgt.generalHeader.sourceData = "CLS";
 
-                    trgt.profileInfo.name1 = src.lgivname;
-                    trgt.profileInfo.name2 = src.lsurname;
-                    trgt.profileInfo.fullName = src.cls_full_name;
-                    // trgt.profileInfo.salutationText = src.salutl;
+                    trgt.profileInfo.name1 = src?.lgivname?.Trim() ?? "";
+                    trgt.profileInfo.name2 = src?.lsurname?.Trim() ?? "";
+                    trgt.profileInfo.fullName = src?.cls_full_name?.Trim() ?? "";
+                     trgt.profileInfo.salutationText =PersonalTitleMasterData.Instance.FindByCode(src?.salutl)?.Name??"";
                    
                     trgt.profileInfo.sex = "U";
                     if (src.cls_sex != null)
@@ -58,13 +58,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                    
                  
                     // trgt.profileInfo.sex = src.cls_sex;
-                    trgt.profileInfo.idTax = src.cls_tax_no_new;
+                    trgt.profileInfo.idTax = src?.cls_tax_no_new?.Trim() ?? "";
                   
                     try
                     {
-                        var master_occupation =
-                            OccupationMasterData.Instance.FindByCode(isNull(src.cls_occpcode), "00023");
-                        trgt.profileInfo.occupationText = master_occupation.Name;
+                        trgt.profileInfo.occupationText=
+                            OccupationMasterData.Instance.FindByCode(isNull(src?.cls_occpcode), "00023")?.Name?? "";
+                       
 
 
                     }
@@ -75,11 +75,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
 
                 
-                    trgt.contactInfo.telephone1 = src.cltphone01;
-                    trgt.contactInfo.telephone2 = src.cltphone02;
-                    trgt.contactInfo.fax = src.cls_fax;
-                    trgt.contactInfo.contactNumber = src.cls_display_phone;
-                    trgt.contactInfo.emailAddress = src.email_1;
+                    trgt.contactInfo.telephone1 = src?.cltphone01.Trim() ?? "";
+                    trgt.contactInfo.telephone2 = src?.cltphone02.Trim() ?? "";
+                    trgt.contactInfo.fax = src?.cls_fax.Trim() ?? "";
+                    trgt.contactInfo.contactNumber = src?.cls_display_phone.Trim() ?? "";
+                    trgt.contactInfo.emailAddress = src?.email_1.Trim() ?? "";
                    
 
                     var addrInfo = src.addressListsCollection.FirstOrDefault<Model.CLS.CLSAddressListsCollectionModel>();
@@ -92,7 +92,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                                                                 , addrInfo.district_display
                                                                 , addrInfo.province_display
                                                                 , addrInfo.postal_code);
-                        trgt.addressInfo.countryText = addrInfo.cls_ctrycode_text;
+                        trgt.addressInfo.countryText = addrInfo?.cls_ctrycode_text?.Trim()??"";
 
                         try
                         {
@@ -108,12 +108,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         trgt.addressInfo.latitude = addrInfo.lattitude;
                         trgt.addressInfo.longtitude = addrInfo.longtitude;
                     }
-                  
+                    trgt.AddDebugInfo("TransformCLSInquiryCorporateClientContentOut_to_CrmInquiryClientMasterContentOut", "");
+                    trgt.AddDebugInfo("Source Data", src);
                     trgtContent.data.Add(trgt);
                    
                 }
             }
-
+            trgtContent.AddDebugInfo("TransformCLSInquiryCorporateClientContentOut_to_CrmInquiryClientMasterContentOut", "");
             return trgtContent;
         }
         public string isNull(string a)

@@ -1,0 +1,173 @@
+USE [CRMQA_MSCRM]
+GO
+/****** Object:  StoredProcedure [dbo].[sp_API_InquiryPolicyMotorListForRVP]    Script Date: 21/5/2560 10:56:03 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+ALTER PROCEDURE [dbo].[sp_API_InquiryPolicyMotorListForRVP]
+	@policyNo NVARCHAR(100), 
+	@chassisNo NVARCHAR(100),
+	@carRegisNo NVARCHAR(100), 
+	@carRegisProve NVARCHAR(100),
+	@accidentOn NVARCHAR(100) = null,
+	@renewalNo NVARCHAR(10) = null,
+	@fleetCarNo NVARCHAR(10) = null
+	
+AS
+BEGIN
+	BEGIN TRANSACTION 
+	
+	DECLARE @accidentDate DateTime;
+	IF ISDATE(@accidentOn) =1    
+	 SET @accidentDate= CAST(@accidentOn AS DateTime); 
+
+    --กรณีใหม่ 99 ให้ดูจาก pfc_chassis_num อย่างเดียว
+	IF @carRegisProve ='99' 
+		SET @carRegisNo = null;
+		 
+	
+		--DECLARE @policyNo NVARCHAR(100) = '2010815184834'
+		--DECLARE @chassisNo NVARCHAR(100) = ''
+		--DECLARE @carRegisNo NVARCHAR(100) = N'ย0532'
+		--DECLARE @carRegisProve NVARCHAR(100) = ''	
+		SELECT QueryTable.*, 
+		      CASE 
+			       WHEN QueryTable.policyClientStatus IN ('IF','CA') THEN 'YES'
+		           ELSE  'NO' END 
+		      AS [allowForRegClaimRvp]
+			 ,
+			 -- หมดอายุในช่วง 16.30  (เป็น UTC+7 อยู่แล้ว)
+			 CASE WHEN  @accidentDate IS NULL THEN null
+			      WHEN  @accidentDate BETWEEN policyEffectiveDate AND policyExpiryDate THEN 'YES'
+                  ELSE  'NO' END
+              AS [effectiveStatus] 
+			 
+			  
+		FROM (
+		select top 10
+		    -- CAST(@renewalNo AS int) as Input_renewalNo,
+		     --@accidentOn as Input_accidentOn
+			--,@accidentDate as Input_accidentDate
+			--,
+			CONVERT(NVARCHAR(40),PolDetail.pfc_policy_additionalId) as [crmPolicyDetailId]
+			, PolDetail.pfc_policy_additional_primary_key as [crmPolicyDetailCode]
+			, PolDetail.pfc_chdr_num as [policyNo]
+			, PolDetail.pfc_zren_num as [renewalNo] 
+			, PolDetail.pfc_rsk_num as [fleetCarNo]
+			, PolDetail.pfc_bar_code as [barcode]
+			, PolDetail.pfc_insurance_card as [insureCardNo]
+			, PolDetail.pfc_policy_vip as [policyVip]
+			, PolDetail.pfc_policy_additional_name as [policyAdditionalName]
+			, null as [MCM_SEQ]
+			, PolHeader.pfc_policyId as [policyId]
+			, PolHeader.pfc_policy_mc_nmc as [policyMcNmc]
+			, PolHeader.pfc_tran_num as [policySeqNo]
+			, null as [endorseNo]
+			, PolHeader.pfc_cnt_branch_code as [branchCode]
+			, PolHeader.pfc_prod_type as [contractType]
+			, PolDetail.pfc_cover_code as [policyProductTypeCode]
+			, PolDetail.pfc_cover_name as [policyProductTypeName]
+			, case when PolDetail.pfc_issue_date is null then null else DATEADD(HOUR,7,PolDetail.pfc_issue_date) end as [policyIssueDate]
+			, case when PolDetail.pfc_effective_date is null then null else DATEADD(HOUR,7,PolDetail.pfc_effective_date) end as [policyEffectiveDate]
+			, case when PolDetail.pfc_expiry_date is null then null else DATEADD(MINUTE,+1410,PolDetail.pfc_expiry_date) end as [policyExpiryDate]
+			, case when PolDetail.pfc_garage_flag = 1 then 'Y' else 'N' end as [policyGarageFlag]
+			, case when PolDetail.pfc_receive_status = 1 then 'Y' else 'N' end as [policyPaymentStatus]
+			, REPLACE(PolDetail.pfc_reg_num,'@','') as [policyCarRegisterNo]
+			, PolDetail.pfc_reg_num_prov as [policyCarRegisterProv]
+			, PolDetail.pfc_chassis_num as [carChassisNo]
+			, PolDetail.pfc_vehicle_type as [carVehicleType]
+			, PolDetail.pfc_vehicle_brand_model as [carVehicleModel]
+			, PolDetail.pfc_vehicle_year as [carVehicleYear]
+			, PolDetail.pfc_vehicle_body as [carVehicleBody]
+			, PolDetail.pfc_vehicle_size as [carVehicleSize]
+			, CAST(ROUND(PolDetail.pfc_deduct ,2) as decimal(23,2)) as [policyDeduct]
+			, PolHeader.pfc_agent_code as [agentCode]
+			, PolHeader.pfc_agent_fullname as [agentName]
+			, PolHeader.pfc_agent_branch as [agentBranch]--PolHeader
+			--, PolHeader.pfc_cus_cleansing_id as [insuredCleansingId] --PolHeader
+			--, PolHeader.pfc_cus_client_number as [insuredClientId]
+			, PolDetail.pfc_customer_cleansing_id as [insuredCleansingId] --PolHeader
+			, PolDetail.pfc_customer_client_id as [insuredClientId]
+			, PolDetail.pfc_clt_type as [insuredClientType]
+			, PolDetail.pfc_customerIdName as [insuredFullName]
+			, PolHeader.pfc_cus_fullname 
+			, PolDetail.pfc_customerIdName
+			, dbo.f_GetPicklistName('pfc_policy','pfc_client_status__code',PolHeader.pfc_client_status__code) as [policyClientStatus]
+			, PolDetail.pfc_policy_status
+			, dbo.f_GetPicklistName('pfc_policy_additional','pfc_policy_status',PolDetail.pfc_policy_status) as [policyStatus] 
+			--,'|-----|' as '|',PolHeader.*,'|' as '|',PolDetail.*
+			
+		from dbo.pfc_policy_additionalBase PolDetail with (nolock)
+		inner join dbo.pfc_policyBase PolHeader with (nolock) on PolHeader.pfc_policyId = PolDetail.pfc_policyId
+		where PolDetail.pfc_source_data = 100000002 and PolHeader.pfc_policy_mc_nmc = 100000000 
+		--and PolDetail.pfc_policy_status= CAST(@policyStatus AS int) OR @policyStatus = ''
+		-- ตรวจสอบสถานะเฉพาะที่ IF=8 หรือ CA=2 เท่านั้น
+		
+		And 
+			(
+				(
+					PolDetail.pfc_bar_code like @policyNo 
+					OR PolDetail.pfc_chdr_num like @policyNo
+				)
+				AND (
+					   REPLACE(PolDetail.pfc_chassis_num,'@','') like @chassisNo
+					   OR REPLACE(PolDetail.pfc_reg_num,'@','') like @carRegisNo
+				)
+
+				
+			)
+        
+		
+		--AND (  --Optional  locus ส่งมาลบ 1 ที่ crmapi จะลบออกก่อนส่งมาแล้ว
+		--	 PolDetail.pfc_zren_num  = CAST(@renewalNo AS int) OR  @renewalNo IS NULL)
+
+        --AND ( -- Optional
+		--	  PolDetail.pfc_rsk_num   = CAST(@fleetCarNo AS int) OR  @fleetCarNo IS NULL)
+        ) as QueryTable
+		
+			order by policyExpiryDate desc
+	COMMIT TRANSACTION -- Commit transaction if the transaction is successful
+
+END
+
+/*
+DECLARE @policyNo NVARCHAR(100) = '2010034076831'
+DECLARE @chassisNo NVARCHAR(100) = ''
+DECLARE @carRegisNo NVARCHAR(100) = N'ตม4533'
+DECLARE @carRegisProve NVARCHAR(100) = ''
+DECLARE @policyStatus NVARCHAR(1) = '0'
+EXEC [dbo].[sp_API_InquiryPolicyMotorList] @policyNo,@chassisNo,@carRegisNo,@carRegisProve,@policyStatus
+
+
+DECLARE @policyNo NVARCHAR(100) = 'K0042305'
+DECLARE @chassisNo NVARCHAR(100) = '50P026812'
+DECLARE @carRegisNo NVARCHAR(100) = N'ฬคษ192'
+DECLARE @carRegisProve NVARCHAR(100) = 'กท'
+EXEC [dbo].[sp_API_InquiryPolicyMotorList] @policyNo,@chassisNo,@carRegisNo,@carRegisProve
+
+
+
+DECLARE @policyNo NVARCHAR(100) = 'K0050265'
+DECLARE @chassisNo NVARCHAR(100) = '4D0182510'
+DECLARE @carRegisNo NVARCHAR(100) = N'ขกพ360'
+DECLARE @carRegisProve NVARCHAR(100) = 'ลพ'
+EXEC [dbo].[sp_API_InquiryPolicyMotorListForRVP2] @policyNo,@chassisNo,@carRegisNo,@carRegisProve
+
+
+DECLARE @policyNo NVARCHAR(100) = '2010044428873'
+DECLARE @chassisNo NVARCHAR(100) = 'CN110D0012664'
+DECLARE @carRegisNo NVARCHAR(100) = N'ตฉ5811'
+DECLARE @carRegisProve NVARCHAR(100) = 'นม'
+DECLARE @accidentOn NVARCHAR(100) = '2017-01-09 06:20:00'
+DECLARE @renewalNo NVARCHAR(10) = '3'
+DECLARE @fleetCarNo NVARCHAR(10) = '1'
+EXEC [dbo].[sp_API_InquiryPolicyMotorListForRVP] @policyNo,@chassisNo,@carRegisNo,@carRegisProve,@accidentOn,@renewalNo,@fleetCarNo
+
+
+
+@accidentOn NVARCHAR(100) = null,
+	@renewalNo NVARCHAR(10) = null
+
+*/

@@ -215,43 +215,50 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             }
             var tmp = crmInqPayeeOut.data.Where(row => row.sourceData != "").ToList();
             crmInqPayeeOut.AddDebugInfo("ALL output", tmp);
-            //@TODO AdHoc ลบข้อมูลจาก Source อื่นออก ถ้าเจอข้อมูลใน SAP ให้ถือว่าใช้ขอมูลจาก SAP
-            if (crmInqPayeeOut.data.Where(row => row.sourceData == "SAP").Distinct().ToList().Count > 0)
-            {
-                crmInqPayeeOut.data = crmInqPayeeOut.data.Where(row => row.sourceData == "SAP").DistinctBy(row => row.polisyClientId).ToList();
+               //@TODO AdHoc ลบข้อมูลจาก Source อื่นออก ถ้าเจอข้อมูลใน SAP ให้ถือว่าใช้ขอมูลจาก SAP
+                if (crmInqPayeeOut.data.Where(row => row.sourceData == "SAP").Distinct().ToList().Count > 0)
+                {
+                crmInqPayeeOut.data = crmInqPayeeOut.data.Where(row => row.sourceData == "SAP").DistinctBy(row => row.polisyClientId).OrderByDescending(row => row.polisyClientId).ToList();
 
                 }
-            
-            else
+                else
+                if (crmInqPayeeOut.data.Where(row => row.sourceData == "MASTER_ASHR").Distinct().ToList().Count > 0)
+                {
+                    crmInqPayeeOut.data = crmInqPayeeOut.data.Where(row => row.sourceData == "MASTER_ASHR").DistinctBy(row => row.polisyClientId).OrderByDescending(row => row.polisyClientId).ToList();
+
+                }
+                else
+                if (crmInqPayeeOut.data.Where(row => row.sourceData == "APAR").Distinct().ToList().Count > 0)
+                {
+                    crmInqPayeeOut.data = crmInqPayeeOut.data.Where(row => row.sourceData == "APAR").DistinctBy(row => row.polisyClientId).OrderByDescending(row => row.polisyClientId).ToList();
+
+                }
+                else
                 if (crmInqPayeeOut.data.Where(row => row.sourceData == "COMP").Distinct().ToList().Count > 0)
                 {
-                    crmInqPayeeOut.data = crmInqPayeeOut.data.Where(row => row.sourceData == "COMP").DistinctBy(row => row.polisyClientId).ToList();
+                    crmInqPayeeOut.data = crmInqPayeeOut.data.Where(row => row.sourceData == "COMP").DistinctBy(row => row.polisyClientId).OrderByDescending(row => row.polisyClientId).ToList();
 
                 }
-                 //ตัด CLS ออก
-                  else
-                  if (crmInqPayeeOut.data.Where(row => row.sourceData == "CLS").Distinct().ToList().Count > 0)
+                else
+                if (crmInqPayeeOut.data.Where(row => row.sourceData == "CLS").Distinct().ToList().Count > 0)
                   {
-                    crmInqPayeeOut.data = crmInqPayeeOut.data.Where(row => row.sourceData == "CLS").DistinctBy(row => row.polisyClientId).ToList();
+                    crmInqPayeeOut.data = crmInqPayeeOut.data.Where(row => row.sourceData == "CLS").DistinctBy(row => row.polisyClientId).OrderByDescending(row => row.polisyClientId).ToList();
 
                   }
 
-            //MASTER_ASHR
-            //APAR
+           
 
             //เอา ที่ขึ้นต้นด้วยตัวเลขเท่านั้น
-            var numbers = Enumerable
-                .Range(0, 10)
-                .Select(i => i.ToString(CultureInfo.InvariantCulture));
-              crmInqPayeeOut.data = crmInqPayeeOut.data.Where(row => numbers.Contains(row.polisyClientId.Substring(0, 1))  ).DistinctBy(row => row.polisyClientId).OrderBy(row => row.polisyClientId).ToList();
+            // var numbers = Enumerable
+            //  .Range(0, 10)
+            //  .Select(i => i.ToString(CultureInfo.InvariantCulture));
+            // crmInqPayeeOut.data = crmInqPayeeOut.data.Where(row => numbers.Contains(row.polisyClientId.Substring(0, 1))  ).DistinctBy(row => row.polisyClientId).OrderByDescending(row => row.polisyClientId).ToList();
 
 
 
 
-
-
-            crmInqPayeeOut.code = CONST_CODE_SUCCESS;                
-                crmInqPayeeOut.message = "SUCCESS";
+            crmInqPayeeOut.code = AppConst.CODE_SUCCESS;                
+            crmInqPayeeOut.message = AppConst.MESSAGE_SUCCESS;
            
             crmInqPayeeOut.transactionId = TransactionId;
             crmInqPayeeOut.transactionDateTime = DateTime.Now;

@@ -10,6 +10,7 @@ using DEVES.IntegrationAPI.Model.EWI;
 using DEVES.IntegrationAPI.Model.CLS;
 using DEVES.IntegrationAPI.Model.Polisy400;
 using DEVES.IntegrationAPI.Model.InquiryClientMaster;
+using DEVES.IntegrationAPI.Model.RegPayeeCorporate;
 using DEVES.IntegrationAPI.WebApi.Logic.Services;
 using DEVES.IntegrationAPI.WebApi.Templates;
 using WebGrease.Css.Visitor;
@@ -18,7 +19,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 {
     public class buzCrmInquiryPersonalClientMaster : BuzCommand
     {
-   
+
+        public BaseDataModel debugInfo { get; set; }= new BankInfoModel();
 
         public override BaseDataModel ExecuteInput(object input)
         {
@@ -31,11 +33,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             
 
-            #region Search client from CRM
-
-
-
-            #endregion
+         
 
             #region Search Client from Cleansing
            
@@ -65,8 +63,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             CLSInquiryPersonalClientInputModel clsPersonalInput = new CLSInquiryPersonalClientInputModel();
             clsPersonalInput = (CLSInquiryPersonalClientInputModel)TransformerFactory.TransformModel(contentModel, clsPersonalInput);
+            crmInqContent.AddDebugInfo("Start Search", clsPersonalInput);
 
             //++ Call CLS_InquiryCLSPersonalClient through ServiceProxy
+            debugInfo.AddDebugInfo("Call CLS_InquiryCLSPersonalClient through ServiceProxy", clsPersonalInput);
             CLSInquiryPersonalClientContentOutputModel retCLSInqPersClient = CallDevesServiceProxy<EWIResCLSInquiryPersonalClient, CLSInquiryPersonalClientContentOutputModel>
                                                                                     (CommonConstant.ewiEndpointKeyCLSInquiryPersonalClient, clsPersonalInput);
 
@@ -74,12 +74,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             if (IsSearchFound(retCLSInqPersClient))
             {
-               
+                debugInfo.AddDebugInfo(" Found records in Cleansing(CLS) ", retCLSInqPersClient);
                 // Console.WriteLine(retCLSInqPersClient.ToJson());
                 crmInqContent = (CRMInquiryClientContentOutputModel)TransformerFactory.TransformModel(retCLSInqPersClient, crmInqContent);
 
                 foreach(CRMInquiryClientOutputDataModel temp in crmInqContent.data) {
-
+                    debugInfo.AddDebugInfo("loop foreach temp in crmInqContent.data", temp);
                     string crmPolisyClientId = "";
                     string crmClientId = "";
                     try
@@ -94,20 +94,21 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         Console.WriteLine("polisyClientId=" + temp.generalHeader.polisyClientId);
                         if (string.IsNullOrEmpty(temp.generalHeader.polisyClientId) || temp.generalHeader.polisyClientId.Equals("0"))
                         {
-                            Console.WriteLine("find Polisy for new client ");
+                            debugInfo.AddDebugInfo("Find Polisy for new client  "+ temp.generalHeader.polisyClientId,"");
+                            
 
            
                         var lstPolisyClient = PolisyClientService.Instance.FindByCleansingId(temp.generalHeader.cleansingId, contentModel.conditionHeader.clientType.ToUpperIgnoreNull());
                         List<string> lstPolisyClientId = SearchContactPolisyId(temp.generalHeader.cleansingId);
                         if (lstPolisyClient?.cleansingId != null)
                         {
-                       
-                                Console.WriteLine("found Polisy for new client =" + lstPolisyClient.clientNumber);
+
+                                debugInfo.AddDebugInfo("found Polisy for new client =" + lstPolisyClient.clientNumber,"");
                                 temp.generalHeader.polisyClientId = lstPolisyClient.clientNumber;
                             }
                             else
                             {
-                              Console.WriteLine(" not found Polisy for new client =" );
+                                debugInfo.AddDebugInfo(" not found Polisy for new client =" ,"");
                             }
                             if (temp.generalHeader.polisyClientId=="0")
                             {
@@ -120,7 +121,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                     catch (Exception e)
                     {
-                        Console.WriteLine("Error: "+e.Message+"--"+e.StackTrace);
+                       
+                        debugInfo.AddDebugInfo("Error", "Error: "+e.Message+"--"+e.StackTrace);
                     }
                 }
                 /*
@@ -172,12 +174,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     crmInqContent.data.Add(data);
 
                 }*/
+                debugInfo.AddDebugInfo("endregion Search Client from Cleansing", "");
             }
+           
             #endregion Search Client from Cleansing
             else //+ If not records found in Cleansing(CLS), then Search from Polisy400 
             #region Search client from Polisy400
             {
-                
+                debugInfo.AddDebugInfo("region Search client from Polisy400", "");
                 try
                 {
                     COMPInquiryClientMasterInputModel compInqClientInput = new COMPInquiryClientMasterInputModel();
@@ -190,7 +194,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     //Found in Polisy400
                     if (retCOMPInqClient.clientListCollection != null)
                     {
-                        
+                        debugInfo.AddDebugInfo("Found in Polisy400", retCOMPInqClient);
                         crmInqContent = (CRMInquiryClientContentOutputModel)TransformerFactory.TransformModel(retCOMPInqClient, crmInqContent);
                     }
                     //Not found in Polisy400
@@ -228,6 +232,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             {
                 crmInqContent.data = crmInqContent.data.Where(row => row?.profileInfo?.name1.Trim() != "" || row?.profileInfo?.fullName.Trim() != "").ToList();
             }
+            crmInqContent.AddDebugInfo("Output","");
+            crmInqContent._debugInfo.AddRange(debugInfo._debugInfo);
             return crmInqContent;
         }
 
