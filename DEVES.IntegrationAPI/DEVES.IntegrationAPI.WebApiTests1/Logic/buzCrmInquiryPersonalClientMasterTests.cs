@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Script.Serialization;
 using DEVES.IntegrationAPI.Model.InquiryClientMaster;
 using DEVES.IntegrationAPI.WebApi.Templates;
 
@@ -19,22 +20,22 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
         {
             AppConfig.Instance.StartupForUnitTest();
 
-            var cmd = new buzCrmInquiryPersonalClientMaster();
-            var input = new InquiryClientMasterInputModel
+            var cmd = new buzCrmInquiryClientMaster();
+            var inputContent = @"{'conditionHeader':
             {
-
-                conditionHeader = new ConditionHeaderModel
-                {
-                    clientType = "P",
-                    roleCode = "G"
-                },
-                conditionDetail = new ConditionDetailModel
-                {
-                    clientFullname = "พรชัย"
-                }
-            };
-           var result =  cmd.Execute(input);
-
+                'clientType' : 'P',
+                'roleCode' : 'G'
+            },
+            'conditionDetail':
+            {
+                'clientFullname' : 'พรชัย'
+            }
+            }"  ;
+            var jss = new JavaScriptSerializer();
+            var input = jss.Deserialize<InquiryClientMasterInputModel>(inputContent);
+            Console.WriteLine(input.ToJson());
+            var result =  cmd.Execute(input);
+            Console.WriteLine("==============result==================");
             Console.WriteLine(result.ToJson());
             Assert.IsNotNull(result);
         }

@@ -246,6 +246,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
         internal bool IsSearchFound(CLSInquiryPersonalClientContentOutputModel content)
         {
+            if (null == content)
+            {
+                return false;
+            }
             return ((content.success | IsOutputSuccess(content)) & (content.data.Any()));
         }
     }

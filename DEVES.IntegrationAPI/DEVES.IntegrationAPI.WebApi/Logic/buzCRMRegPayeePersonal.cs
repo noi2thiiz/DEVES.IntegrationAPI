@@ -129,9 +129,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
 
 
-          
 
 
+            //ถ้าส่ง polisyClientId มาจะข้ามไปสร้าง SAP เลย  ไม่ต้องส่ง Cleansing มาก็ได้ แต่ user ไม่ควรทำได้เอง ระบบควรทำให้
             if (string.IsNullOrEmpty(RegPayeePersonalInput?.generalHeader?.polisyClientId))
                 {
                     if (string.IsNullOrEmpty(RegPayeePersonalInput?.generalHeader?.cleansingId))
@@ -278,7 +278,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     List<OutputModelFailDataFieldErrors> fieldError = MessageBuilder.Instance.ExtractSapCreateVendorFieldError<RegPayeePersonalInputModel>(e.Message,RegPayeePersonalInput);
                         if (fieldError != null)
                         {
-                            AddDebugInfo("Cannot create SAP Vendor SAP Error:" + e.Message,e.StackTrace);
+                            AddDebugInfo("Cannot create SAP :" + e.Message,e.StackTrace);
                            throw new FieldValidationException(fieldError, "Cannot create SAP Vendor", "SAP Error:" + e.Message);
 
                        }else{

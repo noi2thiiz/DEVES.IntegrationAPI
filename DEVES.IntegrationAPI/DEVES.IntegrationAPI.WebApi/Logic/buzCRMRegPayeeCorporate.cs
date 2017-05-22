@@ -123,7 +123,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
 
             ///////////////////////////////////////////////////////////////////////////////////////////////////
-          
+            
+            //ถ้าส่ง polisyClientId มาจะข้ามไปสร้าง SAP เลย  ไม่ต้องส่ง Cleansing มาก็ได้ แต่ user ไม่ควรทำได้เอง ระบบควรทำให้
             if (string.IsNullOrEmpty(regPayeeCorporateInput?.generalHeader?.polisyClientId))
             {
                 if (string.IsNullOrEmpty(regPayeeCorporateInput?.generalHeader?.cleansingId))
@@ -145,7 +146,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     AddDebugInfo("Create Payee in Cleansing Output ", clsCreatePayeeContent);
                     if (clsCreatePayeeContent?.code == CONST_CODE_SUCCESS)
                     {
-                        //เก็บค่าไว้ลบ 
+                        //เก็บค่าไว้ลบ กรณีสร้างใหม่
                         newCleansingId = clsCreatePayeeContent?.data?.cleansingId;
                         regPayeeCorporateInput.generalHeader.cleansingId =
                             clsCreatePayeeContent?.data?.cleansingId ?? "";

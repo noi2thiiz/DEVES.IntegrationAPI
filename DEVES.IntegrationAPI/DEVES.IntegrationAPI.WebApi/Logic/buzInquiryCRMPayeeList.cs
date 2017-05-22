@@ -14,6 +14,7 @@ using System.Data.Common;
 using System.Globalization;
 using DEVES.IntegrationAPI.Core.Helper;
 using DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData;
+using DEVES.IntegrationAPI.WebApi.Logic.Services;
 using Microsoft.Ajax.Utilities;
 
 
@@ -164,6 +165,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                                 default:
                                     break;
                             }
+
+                           
                         }
 
                         #endregion Search in Cleansing(CLS) then search in Polisy400
@@ -214,6 +217,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 }
             }
             var tmp = crmInqPayeeOut.data.Where(row => row.sourceData != "").ToList();
+
+           
             crmInqPayeeOut.AddDebugInfo("ALL output", tmp);
                //@TODO AdHoc ลบข้อมูลจาก Source อื่นออก ถ้าเจอข้อมูลใน SAP ให้ถือว่าใช้ขอมูลจาก SAP
                 if (crmInqPayeeOut.data.Where(row => row.sourceData == "SAP").Distinct().ToList().Count > 0)
@@ -262,7 +267,15 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
            
             crmInqPayeeOut.transactionId = TransactionId;
             crmInqPayeeOut.transactionDateTime = DateTime.Now;
-
+            try
+            {
+                crmInqPayeeOut.AddListDebugInfo(GetDebugInfoList());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error"+e.Message+":"+e.StackTrace);
+            }
+            
             return crmInqPayeeOut;
         }
 
@@ -461,15 +474,25 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         t.emcsCode = listSAPSearchCondition[i].emcsCode;
                         t.roleCode = listSAPSearchCondition[i].roleCode;
                         t.clientType = listSAPSearchCondition[i].clientType;
+
+                        //หาเลข polisy มาเติม
+                        if(string.IsNullOrEmpty(t.polisyClientId) && !string.IsNullOrEmpty(t.cleansingId))
+                        {
+                            AddDebugInfo("find polisyClientId by cleansingId" + t.cleansingId);
+                            t.polisyClientId = PolisyClientService.Instance.FindByCleansingId(t.cleansingId,"C")?.clientNumber??"";
+                            AddDebugInfo("find polisyClientId result" + t.polisyClientId);
+                        }
                         tmpListSAPSearchCondition.Add(t);
 
+                        
                       
                       
                     }
                     //tranform CLS to OUTPUT
                     var tranfromer = new Tranform_clsInqCorporateOut_to_crmInqPayeeOut();
                     crmInqPayeeOut = (CRMInquiryPayeeContentOutputModel)tranfromer.TransformModel(retCLSInqCorpClient, crmInqPayeeOut);
-
+                    //เอา polisy มาเติมใน output
+                   
                     listSAPSearchCondition.RemoveAt(0);
                    
                     //if ((retCLSInqCorpClient.success | IsOutputSuccess(retCLSInqCorpClient)) & (retCLSInqCorpClient.data.Count == 1))
@@ -604,6 +627,16 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         t.emcsCode = listSAPSearchCondition[i].emcsCode;
                         t.roleCode = listSAPSearchCondition[i].roleCode;
                         t.clientType = listSAPSearchCondition[i].clientType;
+
+                        //หาเลข polisy มาเติม
+                        if (string.IsNullOrEmpty(t.polisyClientId) && !string.IsNullOrEmpty(t.cleansingId))
+                        {
+                            AddDebugInfo("find polisyClientId by cleansingId"+ t.cleansingId);
+                            t.polisyClientId = PolisyClientService.Instance.FindByCleansingId(t.cleansingId, "P")?.clientNumber ?? "";
+                            AddDebugInfo("find polisyClientId result" + t.polisyClientId);
+                        }
+
+
                         tmpListSAPSearchCondition.Add(t);
 
                       
