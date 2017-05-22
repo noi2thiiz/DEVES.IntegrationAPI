@@ -74,14 +74,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
 
                 serviceName = sv[sv.Length - 1];
 
-                try
-                {
-                    // requestRouteData = req.GetRouteData().ToJson();
-                }
-                catch (Exception e)
-                {
-                    // do nothing
-                }
+               
 
 
                 // Map Request vaule to global Variables (Response)

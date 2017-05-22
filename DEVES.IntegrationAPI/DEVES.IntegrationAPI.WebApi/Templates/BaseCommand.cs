@@ -268,70 +268,70 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
 
         protected async Task<ApiLogEntry> LogAsync(HttpRequestMessage req, HttpResponseMessage res)
         {
-            
-            // Request
-            // var reqContext = ((HttpContextBase)req.Properties["MS_HttpContext"]);
-
-            // Map Request vaule to global Variables (Request)
-            //user = reqContext.User.Identity.Name;
-            //ip = reqContext.Request.UserHostAddress;
-            //reqContentType = reqContext.Request.ContentType;
-            uri = req.RequestUri.ToString();
-            Console.WriteLine("======LOG======");
-            Console.WriteLine("======LOG======");
-            Console.WriteLine("======LOG======");
-            Console.WriteLine("RequestUri"+uri);
-            Console.WriteLine("RequestContentBody" + jsonReqModel);
-            reqMethod = req.Method.Method;
-            // routeTemplate = req.GetRouteData().Route.RouteTemplate;
-            reqHeader = req.Headers.ToString();
-
             try
             {
-                // requestRouteData = req.GetRouteData().ToJson();
+
+                // Request
+                // var reqContext = ((HttpContextBase)req.Properties["MS_HttpContext"]);
+
+                // Map Request vaule to global Variables (Request)
+                //user = reqContext.User.Identity.Name;
+                //ip = reqContext.Request.UserHostAddress;
+                //reqContentType = reqContext.Request.ContentType;
+                uri = req.RequestUri.ToString();
+                Console.WriteLine("======LOG======");
+                Console.WriteLine("======LOG======");
+                Console.WriteLine("======LOG======");
+                Console.WriteLine("RequestUri" + uri);
+                Console.WriteLine("RequestContentBody" + jsonReqModel);
+                reqMethod = req.Method.Method;
+                // routeTemplate = req.GetRouteData().Route.RouteTemplate;
+                reqHeader = req.Headers.ToString();
+
+               
+
+
+                // Map Request vaule to global Variables (Response)
+                resContentType = "";
+                // resBody = res.Content.Headers.ToString();
+                resStatus = "";
+                if (res != null)
+                {
+                    resHeader = res.Headers.ToString();
+                }
+                var sv = uri.Split('/');
+                serviceName = sv[sv.Length - 1];
+
+                var apiLogEntry = new ApiLogEntry
+                {
+                    Application = appName,
+                    TransactionID = TransactionId,
+                    Controller = "",
+                    ServiceName = serviceName,
+                    Activity = "consume:Receive response",
+                    User = user,
+                    Machine = machineName,
+                    RequestIpAddress = ip,
+                    RequestContentType = client.DefaultRequestHeaders?.Accept.ToString(),
+                    RequestContentBody = jsonReqModel,
+                    RequestUri = uri,
+                    RequestMethod = reqMethod,
+                    RequestRouteTemplate = routeTemplate,
+                    RequestRouteData = requestRouteData,
+                    RequestHeaders = reqHeader,
+                    RequestTimestamp = reqTime,
+                    ResponseContentType = resContentType,
+                    ResponseContentBody = resBody,
+                    ResponseStatusCode = res?.StatusCode.ToString(),
+                    ResponseHeaders = resHeader,
+                    ResponseTimestamp = DateTime.Now
+                };
+                InMemoryLogData.Instance.AddLogEntry(apiLogEntry);
             }
             catch (Exception e)
             {
-                // do nothing
+                Console.WriteLine(e.Message+e.StackTrace);
             }
-            
-
-            // Map Request vaule to global Variables (Response)
-            resContentType = "";
-            // resBody = res.Content.Headers.ToString();
-            resStatus ="";
-            if (res != null)
-            {
-                resHeader = res.Headers.ToString();
-            }
-               var sv = uri.Split('/');
-               serviceName = sv[sv.Length - 1];
-
-            var apiLogEntry =new ApiLogEntry
-            {
-                Application = appName,
-                TransactionID = TransactionId,
-                Controller = "",
-                ServiceName = serviceName,
-                Activity = "consume:Receive response",
-               User = user,
-                Machine = machineName,
-                RequestIpAddress = ip,
-                RequestContentType = client.DefaultRequestHeaders?.Accept.ToString(),
-                RequestContentBody = jsonReqModel,
-                RequestUri = uri,
-                RequestMethod = reqMethod,
-                RequestRouteTemplate = routeTemplate,
-                RequestRouteData = requestRouteData,
-                RequestHeaders = reqHeader,
-                RequestTimestamp = reqTime,
-                ResponseContentType = resContentType,
-                ResponseContentBody = resBody,
-                ResponseStatusCode = res?.StatusCode.ToString(),
-                ResponseHeaders = resHeader,
-                ResponseTimestamp = DateTime.Now
-            };
-            InMemoryLogData.Instance.AddLogEntry(apiLogEntry);
 
             return null;
         }
