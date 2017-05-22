@@ -70,13 +70,25 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             if(string.IsNullOrEmpty(isOptionalEmpty.Trim()))
             {
                 crmInqPayeeOut.code = CONST_CODE_FAILED;
-                crmInqPayeeOut.message = "FAILED";
-                crmInqPayeeOut.description = "Please fill at least 1 condition";
+                crmInqPayeeOut.message = "Please fill at least 1 condition";
+                crmInqPayeeOut.description = "";
                 crmInqPayeeOut.transactionId = TransactionId;
                 crmInqPayeeOut.transactionDateTime = DateTime.Now;
 
                 return crmInqPayeeOut;
             }
+
+            //ลบ บริษัทออกจากชื่อ
+            if (!string.IsNullOrEmpty(inqCrmPayeeListIn.fullname))
+            {
+                inqCrmPayeeListIn.fullname = inqCrmPayeeListIn.fullname?.Replace("บริษัท.", "");
+                inqCrmPayeeListIn.fullname = inqCrmPayeeListIn.fullname?.Replace("บริษัท", "");
+                inqCrmPayeeListIn.fullname = inqCrmPayeeListIn.fullname?.Replace("บ.", "");
+                inqCrmPayeeListIn.fullname = inqCrmPayeeListIn.fullname?.Replace("จำกัด", "");
+                inqCrmPayeeListIn.fullname = inqCrmPayeeListIn.fullname.ReplaceMultiplSpacesWithSingleSpace();
+
+            }
+
             InquiryCRMPayeeListInputModel tempInqCrmPayeeInput = Copy(inqCrmPayeeListIn);
 
             switch (inqCrmPayeeListIn.requester)
@@ -379,17 +391,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         private List<InquiryCRMPayeeListInputModel> InquiryCompClientMaster(int iRecordsLimit, List<InquiryCRMPayeeListInputModel> listSAPSearchCondition,ref CRMInquiryPayeeContentOutputModel crmInqPayeeOut)
         {
             
-            var limitTry = 3;
-            var countTry = 0;
-            while (countTry <  limitTry)
-            {
-                countTry += 1;
-                //ลองพยายามค้นใหม่
                 try
                 {
-                   
-
-                    AddDebugInfo("try call method InquiryCompClientMaster :" + countTry);
+  
+                    AddDebugInfo("try call method InquiryCompClientMaster ");
                     var tmpListSAPSearchCondition = new List<InquiryCRMPayeeListInputModel>();
                     var i = 0;
                     //  var store = new List<EWIResCOMPInquiryClientMasterContentModel>();
@@ -436,13 +441,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         }
                         else
                         {
-                            Console.WriteLine("311:Not Found in Polisy400");
-                           
+                            AddDebugInfo("311:Not Found in Polisy400");
+                            i++; // next search
                         }
-                        i++;
+                       
                        
                         #endregion Call COMP_Inquiry through ServiceProxy
                     }
+                    //return output break loop while
                     return tmpListSAPSearchCondition;
                 }
                 catch (Exception e)
@@ -450,7 +456,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     AddDebugInfo("Search 400 error"+e.Message,e.StackTrace);
                    
                 }
-            }
+            
             //return empty
             return default(List<InquiryCRMPayeeListInputModel>);
 
@@ -464,74 +470,87 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         /// <returns></returns>
         private List<InquiryCRMPayeeListInputModel> InquiryCLSCorporateClient(int iRecordsLimit, List<InquiryCRMPayeeListInputModel> listSAPSearchCondition,ref CRMInquiryPayeeContentOutputModel crmInqPayeeOut)
         {
-          
-
-            AddDebugInfo("call method", "InquiryCLSCorporateClient");
-            var tmpListSAPSearchCondition = new List<InquiryCRMPayeeListInputModel>();
-            var i = 0;
-            while (i < listSAPSearchCondition.Count)
-            {
-                CLSInquiryCorporateClientInputModel clsCorpInput = new CLSInquiryCorporateClientInputModel();
-                clsCorpInput = (CLSInquiryCorporateClientInputModel)TransformerFactory.TransformModel(listSAPSearchCondition[i], clsCorpInput);
-
-                CLSInquiryCorporateClientContentOutputModel retCLSInqCorpClient = (CLSInquiryCorporateClientContentOutputModel)CallDevesJsonProxy<EWIResCLSInquiryCorporateClient>
-                    (CommonConstant.ewiEndpointKeyCLSInquiryCorporateClient, clsCorpInput);
-
-                //+ If Success then pour the data from Cleansing to contentOutputModel
-
-                //if (retCLSInqCorpClient?.data != null && (retCLSInqCorpClient.success | IsOutputSuccess(retCLSInqCorpClient)) && retCLSInqCorpClient.data.Count > 0)
-                if (retCLSInqCorpClient?.data?.Count > 0)
-                {
-                    Console.WriteLine("C:Found In Cleansing ");
-                    if (retCLSInqCorpClient.data.Count + listSAPSearchCondition.Count + tmpListSAPSearchCondition.Count > iRecordsLimit)
+           
+                    AddDebugInfo("call method", "InquiryCLSCorporateClient");
+                    var tmpListSAPSearchCondition = new List<InquiryCRMPayeeListInputModel>();
+                    var i = 0;
+                    while (i < listSAPSearchCondition.Count)
                     {
-                        throw new TooManySearchResultsException(CommonConstant.CONST_SYSTEM_CLS, iRecordsLimit);
-                    }
-                    BaseTransformer transformer = TransformerFactory.GetTransformer(typeof(CLSInquiryCorporateClientOutputModel), typeof(InquiryCRMPayeeListInputModel));
-                    foreach (var clsData in retCLSInqCorpClient.data)
-                    {
-                        InquiryCRMPayeeListInputModel t = new InquiryCRMPayeeListInputModel();
-                        t = (InquiryCRMPayeeListInputModel)transformer.TransformModel(clsData, t);
-                        t.requester = listSAPSearchCondition[i].requester;
-                        t.emcsCode = listSAPSearchCondition[i].emcsCode;
-                        t.roleCode = listSAPSearchCondition[i].roleCode;
-                        t.clientType = listSAPSearchCondition[i].clientType;
+                        CLSInquiryCorporateClientInputModel clsCorpInput = new CLSInquiryCorporateClientInputModel();
+                        clsCorpInput =
+                            (CLSInquiryCorporateClientInputModel) TransformerFactory.TransformModel(
+                                listSAPSearchCondition[i], clsCorpInput);
 
-                        //หาเลข polisy มาเติม
-                        if(string.IsNullOrEmpty(t.polisyClientId) && !string.IsNullOrEmpty(t.cleansingId))
+                        CLSInquiryCorporateClientContentOutputModel retCLSInqCorpClient =
+                            (CLSInquiryCorporateClientContentOutputModel)
+                            CallDevesJsonProxy<EWIResCLSInquiryCorporateClient>
+                                (CommonConstant.ewiEndpointKeyCLSInquiryCorporateClient, clsCorpInput);
+
+                        //+ If Success then pour the data from Cleansing to contentOutputModel
+
+                        //if (retCLSInqCorpClient?.data != null && (retCLSInqCorpClient.success | IsOutputSuccess(retCLSInqCorpClient)) && retCLSInqCorpClient.data.Count > 0)
+                        if (retCLSInqCorpClient?.data?.Count > 0)
                         {
-                            AddDebugInfo("find polisyClientId by cleansingId" + t.cleansingId);
-                            t.polisyClientId = PolisyClientService.Instance.FindByCleansingId(t.cleansingId,"C")?.clientNumber??"";
-                            AddDebugInfo("find polisyClientId result" + t.polisyClientId);
-                        }
-                        tmpListSAPSearchCondition.Add(t);
+                            AddDebugInfo("C:Found In Cleansing ");
+                            if (retCLSInqCorpClient.data.Count + listSAPSearchCondition.Count +
+                                tmpListSAPSearchCondition.Count > iRecordsLimit)
+                            {
+                                throw new TooManySearchResultsException(CommonConstant.CONST_SYSTEM_CLS, iRecordsLimit);
+                            }
+                            BaseTransformer transformer =
+                                TransformerFactory.GetTransformer(typeof(CLSInquiryCorporateClientOutputModel),
+                                    typeof(InquiryCRMPayeeListInputModel));
+                            foreach (var clsData in retCLSInqCorpClient.data)
+                            {
+                                InquiryCRMPayeeListInputModel t = new InquiryCRMPayeeListInputModel();
+                                t = (InquiryCRMPayeeListInputModel) transformer.TransformModel(clsData, t);
+                                t.requester = listSAPSearchCondition[i].requester;
+                                t.emcsCode = listSAPSearchCondition[i].emcsCode;
+                                t.roleCode = listSAPSearchCondition[i].roleCode;
+                                t.clientType = listSAPSearchCondition[i].clientType;
 
-                        
-                      
-                      
+                                //หาเลข polisy มาเติม
+                                if (string.IsNullOrEmpty(t.polisyClientId) && !string.IsNullOrEmpty(t.cleansingId))
+                                {
+                                    AddDebugInfo("find polisyClientId by cleansingId" + t.cleansingId);
+                                    t.polisyClientId =
+                                        PolisyClientService.Instance.FindByCleansingId(t.cleansingId, "C")
+                                            ?.clientNumber ?? "";
+                                    AddDebugInfo("find polisyClientId result" + t.polisyClientId);
+                                }
+                                tmpListSAPSearchCondition.Add(t);
+
+
+
+
+                            }
+                            //tranform CLS to OUTPUT
+                            var tranfromer = new Tranform_clsInqCorporateOut_to_crmInqPayeeOut();
+                            crmInqPayeeOut =
+                                (CRMInquiryPayeeContentOutputModel) tranfromer.TransformModel(retCLSInqCorpClient,
+                                    crmInqPayeeOut);
+                            //เอา polisy มาเติมใน output
+
+                            listSAPSearchCondition.RemoveAt(0);
+
+                            //if ((retCLSInqCorpClient.success | IsOutputSuccess(retCLSInqCorpClient)) & (retCLSInqCorpClient.data.Count == 1))
+                            //{
+                            //    bFound_Cleansing = true;
+                            //    //crmInqPayeeOut = (CRMInquiryPayeeContentOutputModel)TransformerFactory.TransformModel(retCLSInqCorpClient, crmInqPayeeOut);
+                            //    inqCrmPayeeListIn.polisyClientId = retCLSInqCorpClient.data[0].clntnum;
+                            //}
+                        }
+                        else
+                        {
+                            AddDebugInfo("Not found in CLS");
+                            i++; // next search
+                        }
                     }
-                    //tranform CLS to OUTPUT
-                    var tranfromer = new Tranform_clsInqCorporateOut_to_crmInqPayeeOut();
-                    crmInqPayeeOut = (CRMInquiryPayeeContentOutputModel)tranfromer.TransformModel(retCLSInqCorpClient, crmInqPayeeOut);
-                    //เอา polisy มาเติมใน output
-                   
-                    listSAPSearchCondition.RemoveAt(0);
-                   
-                    //if ((retCLSInqCorpClient.success | IsOutputSuccess(retCLSInqCorpClient)) & (retCLSInqCorpClient.data.Count == 1))
-                    //{
-                    //    bFound_Cleansing = true;
-                    //    //crmInqPayeeOut = (CRMInquiryPayeeContentOutputModel)TransformerFactory.TransformModel(retCLSInqCorpClient, crmInqPayeeOut);
-                    //    inqCrmPayeeListIn.polisyClientId = retCLSInqCorpClient.data[0].clntnum;
-                    //}
-                }
-                else
-                {
-                    i++;
-                }
+
+                    return tmpListSAPSearchCondition;
+               
             }
 
-            return tmpListSAPSearchCondition;
-        }
         /// <summary>
         /// InquiryMasterASHR
         /// </summary>

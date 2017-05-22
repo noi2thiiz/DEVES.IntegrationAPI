@@ -36,26 +36,51 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             //+ Deserialize Input
             InquiryClientMasterInputModel contentModel = (InquiryClientMasterInputModel)input;// DeserializeJson<InquiryClientMasterInputModel>(input.ToString());
 
-            string var1 = contentModel.conditionDetail.cleansingId;
-            string var2 = contentModel.conditionDetail.polisyClientId;
-            string var3 = contentModel.conditionDetail.crmClientId;
-            string var4 = contentModel.conditionDetail.clientName1;
-            string var5 = contentModel.conditionDetail.clientName2;
-            string var6 = contentModel.conditionDetail.clientFullname;
-            string var7 = contentModel.conditionDetail.idCard;
-            string var8 = contentModel.conditionDetail.corporateBranch;
-            string var9 = contentModel.conditionDetail.emcsCode;
+            string var1 = contentModel?.conditionDetail?.cleansingId??"";
+            string var2 = contentModel?.conditionDetail?.polisyClientId??"";
+            string var3 = contentModel?.conditionDetail?.crmClientId??"";
+            string var4 = contentModel?.conditionDetail?.clientName1??"";
+            string var5 = contentModel?.conditionDetail?.clientName2??"";
+            string var6 = contentModel?.conditionDetail?.clientFullname??"";
+            string var7 = contentModel?.conditionDetail?.idCard??"";
+            string var8 = contentModel?.conditionDetail?.corporateBranch??"";
+            string var9 = contentModel?.conditionDetail?.emcsCode??"";
             string isOptionalEmpty = var1 + var2 + var3 + var4 + var5 + var6 + var7 + var8 + var9;
             if (string.IsNullOrEmpty(isOptionalEmpty.Trim()))
             {
-                crmInqContent.code = CONST_CODE_FAILED;
-                crmInqContent.message = "FAILED";
-                crmInqContent.description = "Please fill at least 1 condition";
+                crmInqContent.code = AppConst.CODE_INVALID_INPUT;
+                crmInqContent.message = "Please fill at least 1 condition";
+                crmInqContent.description = "";
                 crmInqContent.transactionId = TransactionId;
                 crmInqContent.transactionDateTime = DateTime.Now;
 
                 return crmInqContent;
             }
+            //ลบ บริษัทออกจากชื่อ
+            if (contentModel?.conditionDetail != null)
+            {
+                contentModel.conditionDetail.clientFullname = contentModel?.conditionDetail?.clientFullname?.Replace("บริษัท.", "");
+                contentModel.conditionDetail.clientFullname = contentModel?.conditionDetail?.clientFullname?.Replace("บริษัท", "");
+                contentModel.conditionDetail.clientFullname = contentModel?.conditionDetail?.clientFullname?.Replace("บ.", "");
+                contentModel.conditionDetail.clientFullname = contentModel?.conditionDetail?.clientFullname?.Replace("จำกัด", "");
+
+                contentModel.conditionDetail.clientFullname = contentModel.conditionDetail.clientFullname
+                    .ReplaceMultiplSpacesWithSingleSpace();
+
+                contentModel.conditionDetail.clientName1 = contentModel?.conditionDetail?.clientName1?.Replace("บริษัท.", "");
+                contentModel.conditionDetail.clientName1 = contentModel?.conditionDetail?.clientName1?.Replace("บริษัท", "");
+                contentModel.conditionDetail.clientName1 = contentModel?.conditionDetail?.clientName1?.Replace("บ.", "");
+                contentModel.conditionDetail.clientName1 = contentModel?.conditionDetail?.clientName1?.Replace("จำกัด", "");
+                contentModel.conditionDetail.clientName2 = contentModel?.conditionDetail?.clientName2?.Replace("จำกัด", "");
+
+
+                contentModel.conditionDetail.clientName1 = contentModel?.conditionDetail?.clientName1
+                    .ReplaceMultiplSpacesWithSingleSpace();
+
+                contentModel.conditionDetail.clientName2 = contentModel?.conditionDetail?.clientName2
+                    .ReplaceMultiplSpacesWithSingleSpace();
+            }
+           
 
             if (contentModel.conditionHeader.roleCode.ToUpper() == ENUM_CLIENT_ROLE.G.ToString())
             {
