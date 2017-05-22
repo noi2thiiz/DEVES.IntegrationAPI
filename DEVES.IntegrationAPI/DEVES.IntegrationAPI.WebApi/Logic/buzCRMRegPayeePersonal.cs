@@ -157,7 +157,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                             regPayeePersonalOutput.message = $"CLS Error {clsCreatePayeeContent ?.code}:{clsCreatePayeeContent?.message}";
                             regPayeePersonalOutput.description = clsCreatePayeeContent?.description;
                             outputPass.cleansingId = clsCreatePayeeContent?.data?.cleansingId ?? "";
-                            outputPass.polisyClientId = clsCreatePayeeContent?.data?.cleansingId ?? "";
+                            outputPass.polisyClientId = clsCreatePayeeContent?.data?.clientId ?? "";
                             outputPass.personalName = clsCreatePayeeContent?.data?.personalName??"";
                             outputPass.personalSurname = clsCreatePayeeContent?.data?.personalSurname??"";
                             outputPass.sapVendorCode = "";
