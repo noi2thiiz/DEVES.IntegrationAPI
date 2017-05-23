@@ -25,7 +25,8 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
          
         public object Post([FromBody]object value)
         {
-            var endpoint = AppConfig.Instance.Get("CRMAPI_ENDPOINT_RegClaimRequestFromRVP");
+            var endpoint = "http://crmapi.deves.co.th/rvp-service/api/RegClaimRequestFromRVP";
+                //'""AppConfig.Instance.Get("CRMAPI_ENDPOINT_RegClaimRequestFromRVP");
             var client = new RESTClient(endpoint);
             var result = client.Execute(value.ToString());
             if (result.StatusCode != HttpStatusCode.OK)

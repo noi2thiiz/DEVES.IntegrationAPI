@@ -21,6 +21,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
     public class buzCRMRegPayeeCorporate : BuzCommand
     {
         protected string newCleansingId;
+        protected string newPolisyClientId;
+        protected string newCrmClientId;
+        protected string newSapVendorCode;
+        protected string newSapVendorGroupCode;
+
+        protected bool ignoreSap = false;
+        protected bool ignoreCrm = false;
 
         public RegPayeeCorporateOutputModel_Fail regFail { get; set; } = new RegPayeeCorporateOutputModel_Fail();
         protected RegPayeeCorporateInputModel regPayeeCorporateInput { get; set; }
@@ -157,8 +164,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     }
                     else
                     {
-                        regPayeeCorporateOutput.code = AppConst.CODE_FAILED;
-                        regPayeeCorporateOutput.message = $"CLS Error {clsCreatePayeeContent?.code}:{clsCreatePayeeContent?.message}";
+                        regPayeeCorporateOutput.code = clsCreatePayeeContent?.code??AppConst.CODE_FAILED;
+                        regPayeeCorporateOutput.message = $"CLS Error:{clsCreatePayeeContent?.message}";
                         regPayeeCorporateOutput.description = clsCreatePayeeContent?.description;
                         outputPass.cleansingId = clsCreatePayeeContent?.data?.cleansingId ?? "";
                         outputPass.polisyClientId = clsCreatePayeeContent?.data?.clientId??"";
@@ -196,6 +203,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                     if (polCreatePayeeContent != null)
                     {
+                        newPolisyClientId = polCreatePayeeContent?.clientID??"";
+
                         regPayeeCorporateInput.generalHeader.polisyClientId = polCreatePayeeContent.clientID;
 
                         outputPass.polisyClientId = polCreatePayeeContent.clientID;
@@ -229,6 +238,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             SAPInqVendorIn.PREVACC = regPayeeCorporateInput.sapVendorInfo.sapVendorCode ?? "";
             SAPInqVendorIn.VCODE = regPayeeCorporateInput.generalHeader.polisyClientId ?? "";
 
+
             var SAPInqVendorContentOut =
                 CallDevesServiceProxy<Model.SAP.SAPInquiryVendorOutputModel,
                     Model.SAP.EWIResSAPInquiryVendorContentModel>(CommonConstant.ewiEndpointKeySAPInquiryVendor,
@@ -248,23 +258,29 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 {
 
 
-                    //BaseDataModel SAPCreateVendorIn = DataModelFactory.GetModel(typeof(Model.SAP.SAPCreateVendorInputModel));
-                    Model.SAP.SAPCreateVendorInputModel SAPCreateVendorIn = new Model.SAP.SAPCreateVendorInputModel();
-                    SAPCreateVendorIn =
-                        (Model.SAP.SAPCreateVendorInputModel) TransformerFactory.TransformModel(regPayeeCorporateInput,
-                            SAPCreateVendorIn);
-
-                    var SAPCreateVendorContentOut =
-                        CallDevesServiceProxy<Model.SAP.SAPCreateVendorOutputModel,
-                            Model.SAP.SAPCreateVendorContentOutputModel>(CommonConstant.ewiEndpointKeySAPCreateVendor,
-                            SAPCreateVendorIn);
-                    if (string.IsNullOrEmpty(SAPCreateVendorContentOut?.VCODE))
+                    if (!ignoreSap)
                     {
-                        throw new Exception(SAPCreateVendorContentOut?.Message);
-                    }
+                        //BaseDataModel SAPCreateVendorIn = DataModelFactory.GetModel(typeof(Model.SAP.SAPCreateVendorInputModel));
+                        Model.SAP.SAPCreateVendorInputModel SAPCreateVendorIn = new Model.SAP.SAPCreateVendorInputModel();
+                        SAPCreateVendorIn =
+                            (Model.SAP.SAPCreateVendorInputModel)TransformerFactory.TransformModel(regPayeeCorporateInput,
+                                SAPCreateVendorIn);
 
-                    regPayeeCorporateInput.sapVendorInfo.sapVendorCode = SAPCreateVendorContentOut?.VCODE;
-                    outputPass.sapVendorCode = SAPCreateVendorContentOut?.VCODE;
+                        var SAPCreateVendorContentOut =
+                            CallDevesServiceProxy<Model.SAP.SAPCreateVendorOutputModel,
+                                Model.SAP.SAPCreateVendorContentOutputModel>(CommonConstant.ewiEndpointKeySAPCreateVendor,
+                                SAPCreateVendorIn);
+                        if (string.IsNullOrEmpty(SAPCreateVendorContentOut?.VCODE))
+                        {
+                            throw new Exception(SAPCreateVendorContentOut?.Message);
+                        }
+
+                        regPayeeCorporateInput.sapVendorInfo.sapVendorCode = SAPCreateVendorContentOut?.VCODE;
+                        outputPass.sapVendorCode = SAPCreateVendorContentOut?.VCODE;
+
+                        newSapVendorCode = SAPCreateVendorContentOut?.VCODE;
+                    }
+                  
                 }
                 catch (Exception e)
                 {
@@ -277,15 +293,19 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     
 
                     List<OutputModelFailDataFieldErrors> fieldError = MessageBuilder.Instance.ExtractSapCreateVendorFieldError<RegPayeeCorporateInputModel>(e.Message, regPayeeCorporateInput);
-                    if (fieldError != null)
+                    if (fieldError.Any())
                     {
                         AddDebugInfo("FieldValidationException" + "SAP Error:" + e.Message);
-                        throw new FieldValidationException(fieldError, "Cannot create SAP Vendor", "SAP Error:" + e.Message);
+                       
+                     
+                         throw new FieldValidationException(fieldError, "Cannot create SAP Vendor:" + MessageBuilder.Instance.ConvertMessageSapToCrm(e.Message), ""); 
+                        
 
                     }
                     else
                     {
-                        throw;
+                        throw new FieldValidationException(fieldError, "SAP Error:" + MessageBuilder.Instance.ConvertMessageSapToCrm(e.Message), "");
+                      
                     }
                 }
                 #endregion Create Payee in SAP
@@ -294,28 +314,31 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                 try
                 {
-                    AddDebugInfo("Create payee in CRM");
-                    buzCreateCrmPayeeCorporate cmdCreateCrmPayee = new buzCreateCrmPayeeCorporate();
-                    CreateCrmCorporateInfoOutputModel crmContentOutput =
-                        (CreateCrmCorporateInfoOutputModel)cmdCreateCrmPayee.Execute(regPayeeCorporateInput);
+                    if (!ignoreCrm)
+                    {
+                        AddDebugInfo("Create payee in CRM");
+                        buzCreateCrmPayeeCorporate cmdCreateCrmPayee = new buzCreateCrmPayeeCorporate();
+                        CreateCrmCorporateInfoOutputModel crmContentOutput =
+                            (CreateCrmCorporateInfoOutputModel)cmdCreateCrmPayee.Execute(regPayeeCorporateInput);
 
-                    if (crmContentOutput.code == CONST_CODE_SUCCESS)
-                    {
-                        //RegPayeeCorporateDataOutputModel_Pass dataOutPass = new RegPayeeCorporateDataOutputModel_Pass();
-                        //dataOutPass.polisyClientId = regPayeeCorporateInput.generalHeader.polisyClientId;
-                        //dataOutPass.sapVendorCode = regPayeeCorporateInput.sapVendorInfo.sapVendorCode;
-                        //dataOutPass.sapVendorGroupCode = regPayeeCorporateInput.sapVendorInfo.sapVendorGroupCode;
-                        //dataOutPass.personalName = regPayeeCorporateInput.profileInfo.personalName;
-                        //dataOutPass.personalSurname = regPayeeCorporateInput.profileInfo.personalSurname;
-                        outputPass.corporateBranch = regPayeeCorporateInput.profileHeader.corporateBranch;
-                        outputPass.sapVendorGroupCode = regPayeeCorporateInput.sapVendorInfo.sapVendorGroupCode;
-                        //regPayeeCorporateOutput.data.Add(dataOutPass);
-                    }
-                    else
-                    {
-                        regPayeeCorporateOutput.code = CONST_CODE_FAILED;
-                        regPayeeCorporateOutput.message = crmContentOutput.message;
-                        regPayeeCorporateOutput.description = crmContentOutput.description;
+                        if (crmContentOutput.code == CONST_CODE_SUCCESS)
+                        {
+                            //RegPayeeCorporateDataOutputModel_Pass dataOutPass = new RegPayeeCorporateDataOutputModel_Pass();
+                            //dataOutPass.polisyClientId = regPayeeCorporateInput.generalHeader.polisyClientId;
+                            //dataOutPass.sapVendorCode = regPayeeCorporateInput.sapVendorInfo.sapVendorCode;
+                            //dataOutPass.sapVendorGroupCode = regPayeeCorporateInput.sapVendorInfo.sapVendorGroupCode;
+                            //dataOutPass.personalName = regPayeeCorporateInput.profileInfo.personalName;
+                            //dataOutPass.personalSurname = regPayeeCorporateInput.profileInfo.personalSurname;
+                            outputPass.corporateBranch = regPayeeCorporateInput.profileHeader.corporateBranch;
+                            outputPass.sapVendorGroupCode = regPayeeCorporateInput.sapVendorInfo.sapVendorGroupCode;
+                            //regPayeeCorporateOutput.data.Add(dataOutPass);
+                        }
+                        else
+                        {
+                            regPayeeCorporateOutput.code = CONST_CODE_FAILED;
+                            regPayeeCorporateOutput.message = crmContentOutput.message;
+                            regPayeeCorporateOutput.description = crmContentOutput.description;
+                        }
                     }
                 }
                 catch (Exception e)
@@ -334,23 +357,56 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 outputPass.sapVendorGroupCode = sapInfo?.VGROUP;
                 outputPass.corporateName1 = sapInfo?.NAME1;
                 outputPass.corporateName2 = sapInfo?.NAME2;
-               
+                newSapVendorCode= sapInfo?.VCODE;
+                newSapVendorGroupCode = sapInfo?.VGROUP;
+
+
             }
 
             //@TODO adHoc fix if fullname in null
+            // Tranform จน งง ว่าข้อมูลไปยังไงมายังไง เลยต้องมา check อีกที
+           
+            if (!string.IsNullOrEmpty(newPolisyClientId))
+            {
+                outputPass.polisyClientId = newPolisyClientId;
+            }
+
+            if (!string.IsNullOrEmpty(newCleansingId))
+            {
+                outputPass.cleansingId = newCleansingId;
+            }
+
+            if (!string.IsNullOrEmpty(newSapVendorCode))
+            {
+                outputPass.sapVendorCode = newSapVendorCode;
+            }
+
+
+            // ถ้ายังไม่มีค่าเอา input มา output
+            if (string.IsNullOrEmpty(outputPass.polisyClientId))
+            {
+                outputPass.polisyClientId = regPayeeCorporateInput.generalHeader.polisyClientId;
+            }
+
+
+            if (string.IsNullOrEmpty(outputPass.cleansingId))
+            {
+                outputPass.cleansingId = regPayeeCorporateInput.generalHeader.cleansingId;
+            }
+
             if (string.IsNullOrEmpty(outputPass.corporateName1))
             {
                 outputPass.corporateName1 = regPayeeCorporateInput.profileHeader.corporateName1;
                 outputPass.corporateName2 = regPayeeCorporateInput.profileHeader.corporateName2;
             }
-            if (string.IsNullOrEmpty(outputPass.polisyClientId))
-            {
-                outputPass.polisyClientId = regPayeeCorporateInput?.generalHeader?.polisyClientId;
-            }
-            if (string.IsNullOrEmpty(outputPass.cleansingId))
-            {
-                outputPass.polisyClientId = regPayeeCorporateInput?.generalHeader?.cleansingId;
-            }
+
+
+
+
+            outputPass.sapVendorGroupCode = !string.IsNullOrEmpty(newSapVendorGroupCode)? newSapVendorGroupCode: regPayeeCorporateInput.sapVendorInfo.sapVendorGroupCode; ;
+             outputPass.corporateBranch = regPayeeCorporateInput.profileHeader.corporateBranch;
+
+
             regPayeeCorporateOutput.data.Add(outputPass);
 
             //add debug info to model
@@ -417,13 +473,20 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                             SAPCreateVendorIn);
                     regPayeeCorporateInput.sapVendorInfo.sapVendorCode = SAPCreateVendorContentOut.VCODE;
                 }
-
-                buzCreateCrmClientCorporate cmdCreateCrmPayee = new buzCreateCrmClientCorporate();
-                CreateCrmCorporateInfoOutputModel crmContentOutput =
-                    (CreateCrmCorporateInfoOutputModel) cmdCreateCrmPayee.Execute(regPayeeCorporateInput);
-
-                if (crmContentOutput.code == CONST_CODE_SUCCESS)
+                try
                 {
+                    buzCreateCrmClientCorporate cmdCreateCrmPayee = new buzCreateCrmClientCorporate();
+                    CreateCrmCorporateInfoOutputModel crmContentOutput =
+                        (CreateCrmCorporateInfoOutputModel) cmdCreateCrmPayee.Execute(regPayeeCorporateInput);
+                }
+                catch (Exception )
+                {
+                    //do notthing
+                }
+               
+
+                //if (crmContentOutput.code == CONST_CODE_SUCCESS)
+                //{
                     regPayeeCorporateOutput.code = AppConst.CODE_SUCCESS;
                     regPayeeCorporateOutput.message = AppConst.MESSAGE_SUCCESS;
                     RegPayeeCorporateDataOutputModel_Pass dataOutPass = new RegPayeeCorporateDataOutputModel_Pass();
@@ -435,13 +498,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     dataOutPass.corporateBranch = regPayeeCorporateInput.profileHeader.corporateBranch;
 
                     regPayeeCorporateOutput.data.Add(dataOutPass);
-                }
-                else
-                {
-                    regPayeeCorporateOutput.code = AppConst.CODE_FAILED;
-                    regPayeeCorporateOutput.message = crmContentOutput.message;
-                    regPayeeCorporateOutput.description = crmContentOutput.description;
-                }
+                //}
+                //else
+               // {
+                 //   regPayeeCorporateOutput.code = AppConst.CODE_FAILED;
+                 //   regPayeeCorporateOutput.message = crmContentOutput.message;
+                //    regPayeeCorporateOutput.description = crmContentOutput.description;
+               // }
             }
             catch (FieldValidationException e)
             {
@@ -466,6 +529,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             }
             regPayeeCorporateOutput.transactionDateTime = DateTime.Now;
             regPayeeCorporateOutput.transactionId = TransactionId;
+
+           
+
             return regPayeeCorporateOutput;
         }
     }

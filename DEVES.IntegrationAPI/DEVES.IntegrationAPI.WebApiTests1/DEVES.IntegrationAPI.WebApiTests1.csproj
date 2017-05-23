@@ -82,6 +82,7 @@
     <Compile Include="TechnicalService\TransactionLogger\ApiLogDataGateWayTests.cs" />
     <Compile Include="TechnicalService\TransactionLogger\JobTimerTests.cs" />
     <Compile Include="Templates\BaseCommandTests.cs" />
+    <Compile Include="Templates\MessageBuilderTests.cs" />
     <Compile Include="Templates\testConfigTests.cs" />
   </ItemGroup>
   <ItemGroup>

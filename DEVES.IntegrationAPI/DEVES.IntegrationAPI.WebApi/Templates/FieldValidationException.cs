@@ -78,6 +78,8 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             this.message = message;
         }
 
+       
+
 
     }
 }

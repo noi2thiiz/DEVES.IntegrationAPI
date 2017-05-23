@@ -153,6 +153,15 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
 
         }
 
-       
+        public string ConvertMessageSapToCrm(string message)
+        {
+            if (message.IndexOf("Please fill tax number 3", StringComparison.Ordinal) >=0)
+            {
+                return "Please fill tax id (เลขจดทะเบียนนิติบุคคล/เลขประจำตัวผู้เสียภาษี)";
+            }
+            return message;
+        }
+
+
     }
 }

@@ -325,7 +325,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     (SAPInquiryVendorInputModel)TransformerFactory.TransformModel(searchCond, inqSAPVendorIn);
                 AddDebugInfo("inqSAPVendorIn ", inqSAPVendorIn);
 
-                AddDebugInfo("searchCond affter  Transformer", searchCond);
+               
                 var sapSearchKeyCode = (inqSAPVendorIn.PREVACC + inqSAPVendorIn.TAX3 + inqSAPVendorIn.TAX4 + inqSAPVendorIn.VCODE).ReplaceMultiplSpacesWithSingleSpace();
                 EWIResSAPInquiryVendorContentModel inqSAPVendorContentOut;
                 if (!sapSearchResultCash.ContainsKey(sapSearchKeyCode))
@@ -363,7 +363,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         data.solicitorFlag = searchCond.solicitorFlag;
                         data.repairerFlag = searchCond.repairerFlag;
                         data.hospitalFlag = searchCond.hospitalFlag;
-                        data.polisyClientId = polisyClientId; // เอา  polisyClientId จากข้อมูลต้นทาง (APAR,ASHR ) มาใช้แทน
+                        data.polisyClientId = (!string.IsNullOrEmpty(polisyClientId)?  polisyClientId: data.polisyClientId); // เอา  polisyClientId จากข้อมูลต้นทาง (APAR,ASHR ) มาใช้แทน
                         counrSAPResult += 1;
                         // AddDebugInfo("watch tmpCrmInqPayeeOut ", data);
                         // AddDebugInfo("watch searchCond ", searchCond);
@@ -405,18 +405,18 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                         COMPInquiryClientMasterInputModel compInqClientInput = new COMPInquiryClientMasterInputModel();
                         compInqClientInput = (COMPInquiryClientMasterInputModel)TransformerFactory.TransformModel(listSAPSearchCondition[i], compInqClientInput);
-
-                        //+ Call CLS_InquiryCLSPersonalClient through ServiceProxy
-                        var retCOMPInqClient = CallDevesServiceProxy<COMPInquiryClientMasterOutputModel, EWIResCOMPInquiryClientMasterContentModel>
+                        AddDebugInfo("Not search in  compInqClientInput input ", compInqClientInput);
+                    //+ Call CLS_InquiryCLSPersonalClient through ServiceProxy
+                    var retCOMPInqClient = CallDevesServiceProxy<COMPInquiryClientMasterOutputModel, EWIResCOMPInquiryClientMasterContentModel>
                             (CommonConstant.ewiEndpointKeyCOMPInquiryClient, compInqClientInput);
 
                         //Found in Polisy400
                         if (retCOMPInqClient?.clientListCollection?.Count > 0)
                         {
-                            Console.WriteLine("289:Found in Polisy400");
+                           // Console.WriteLine("289:Found in Polisy400");
+                            AddDebugInfo("Found in Polisy400 ", retCOMPInqClient);
 
-
-                            if (retCOMPInqClient.clientListCollection.Count + listSAPSearchCondition.Count + tmpListSAPSearchCondition.Count > iRecordsLimit)
+                        if (retCOMPInqClient.clientListCollection.Count + listSAPSearchCondition.Count + tmpListSAPSearchCondition.Count > iRecordsLimit)
                             {
                                 throw new TooManySearchResultsException(CommonConstant.CONST_SYSTEM_POLISY400, iRecordsLimit);
                             }

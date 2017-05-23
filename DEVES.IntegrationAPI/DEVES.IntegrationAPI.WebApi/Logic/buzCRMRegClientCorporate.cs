@@ -338,8 +338,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     else
                     {
                         throw new BuzErrorException(
-                            "500",
-                            $"CLS Error {clsCreateClientContent.code}:{clsCreateClientContent.message}",
+                            clsCreateClientContent.code,
+                            $"CLS Error:{clsCreateClientContent.message}",
                             "An error occurred from the external service (CLSCreateCorporateClient)",
 
                             "CLS",
@@ -523,7 +523,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             else
             {
                 AddDebugInfo("There is some conflicts among the arguments Look between roleCode and {assessorFlag ,solicitorFlag ,repairerFlag or hospitalFlag}");
-                regClientCorporateOutput.code = CONST_CODE_FAILED;
+                regClientCorporateOutput.code = AppConst.CODE_INVALID_INPUT;
                 regClientCorporateOutput.message = "There is some conflicts among the arguments Look between roleCode and {assessorFlag ,solicitorFlag ,repairerFlag or hospitalFlag}";
                 regClientCorporateOutput.description = "";
             }

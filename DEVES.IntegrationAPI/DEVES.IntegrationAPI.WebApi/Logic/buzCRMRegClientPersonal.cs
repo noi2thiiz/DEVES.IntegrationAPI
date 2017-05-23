@@ -298,6 +298,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             if (string.IsNullOrEmpty(polCreateClientContent?.clientID))
             {
+                
                 throw new BuzErrorException(
                     "500",
                     "Polisy400 Error :Cannot create Client in Polisy400",
@@ -332,8 +333,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             if (clsCreateClientContent.code != CONST_CODE_SUCCESS)
             {
                 throw new BuzErrorException(
-                    "500",
-                    $"CLS Error {clsCreateClientContent.code}:{clsCreateClientContent.message}",
+                    clsCreateClientContent.code??AppConst.CODE_FAILED,
+                    $"CLS:{clsCreateClientContent.message}",
                     clsCreateClientContent.description,
                     "CLS",
                     TransactionId);
