@@ -485,7 +485,11 @@
     <Compile Include="Logic\Services\BaseEwiServiceProxy.cs" />
     <Compile Include="Logic\Services\BaseProxyService.cs" />
     <Compile Include="Logic\Services\CleansingService.cs" />
+    <Compile Include="Logic\Services\CLSInquiryCLSCorporateClient.cs" />
+    <Compile Include="Logic\Services\CLSInquiryCLSPersonalClient.cs" />
+    <Compile Include="Logic\Services\COMPInquiryClientMaster.cs" />
     <Compile Include="Logic\Services\MOTORInquiryAPARPayeeList.cs" />
+    <Compile Include="Logic\Services\MOTORInquiryMasterASRH.cs" />
     <Compile Include="Logic\Services\PolisyClientService.cs" />
     <Compile Include="Logic\Services\SAPInquiryVendor.cs" />
     <Compile Include="Logic\Services\SendSmsService.cs" />
