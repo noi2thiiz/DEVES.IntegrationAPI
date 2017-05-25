@@ -15,11 +15,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services.Tests
         [TestMethod()]
         public void ExecuteSAPInquiryVendorTest()
         {
-           // var result = SAPInquiryVendor.Instance.Execute(new SAPInquiryVendorInputModel
-           // {
-            //    PREVACC = 
-            //});
-           // Assert.Fail();
+            AppConfig.Instance.StartupForUnitTest();
+            var result = SAPInquiryVendor.Instance.Execute(new SAPInquiryVendorInputModel
+            {
+                PREVACC = "14645096"
+            });
+            Assert.AreEqual(true, result.VendorInfo.Any());
         }
     }
 }

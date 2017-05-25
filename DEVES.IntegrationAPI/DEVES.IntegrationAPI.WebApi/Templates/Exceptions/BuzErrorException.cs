@@ -30,6 +30,13 @@ namespace DEVES.IntegrationAPI.WebApi.Templates.Exceptions
             Description = description;
             SourceError = sourceError;
         }
+        public BuzErrorException(string code, string message, string description)
+        {
+            Code = code;
+            Message = message;
+            Description = description;
+         
+        }
 
         public BuzErrorException(string code, string message, string description,object sourceData, string sourceError)
         {

@@ -42,7 +42,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
            
 
 
-            string endpoint = AppConfig.Instance.Get(CommonConstant.ewiEndpointKeyAPARInquiryPayeeList);
+            string endpoint = AppConfig.Instance.Get(CommonConstant.ewiEndpointKeySAPInquiryVendor);
 
             var result = SendRequest(input, endpoint);
 
