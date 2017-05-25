@@ -36,9 +36,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
             var cmd = new buzInquiryCRMPayeeListNew();
             var result = cmd.ExecuteInput(new InquiryCRMPayeeListInputModel
             {
+                roleCode = "G",
+                clientType = "P",
                 requester = "MC",
                 fullname = "พรชัย"
             });
+
+            Console.WriteLine("===========Execute Output===============");
             Console.WriteLine(result.ToJson());
             Assert.IsNotNull(result);
             
