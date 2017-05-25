@@ -71,10 +71,13 @@
     <Compile Include="DataAccessService\Mastes\ProvinceMasterDataTests.cs" />
     <Compile Include="DataAccessService\Mastes\SubDistrictMasterDataTests.cs" />
     <Compile Include="Logic\buzCrmInquiryPersonalClientMasterTests.cs" />
+    <Compile Include="Logic\buzInquiryCRMPayeeListNewTests.cs" />
     <Compile Include="Logic\DataAccess\Adapter\DevesServiceProxyAdapterTests.cs" />
     <Compile Include="Logic\DataBaseContracts\SpApiCustomerClientTests.cs" />
     <Compile Include="Logic\Services\CleansingClientServiceTests.cs" />
+    <Compile Include="Logic\Services\MotorInquiryAparPayeeListTests.cs" />
     <Compile Include="Logic\Services\PolisyClientServiceTests.cs" />
+    <Compile Include="Logic\Services\SAPInquiryVendorTests.cs" />
     <Compile Include="Logic\Services\SendSmsServiceTests.cs" />
     <Compile Include="Logic\Tranforms\RegPayee\TransformRegPayeePersonalInputModel_to_SAPCreateVendorInputModelTests.cs" />
     <Compile Include="Logic\Validator\MasterDataValidaterTests.cs" />

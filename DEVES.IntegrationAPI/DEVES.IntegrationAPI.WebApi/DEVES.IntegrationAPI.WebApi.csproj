@@ -473,6 +473,7 @@
     <Compile Include="Logic\buzCRMRegPayeeCorporate.cs" />
     <Compile Include="Logic\buzCRMRegPayeePersonal.cs" />
     <Compile Include="Logic\buzInquiryCRMPayeeList.cs" />
+    <Compile Include="Logic\buzInquiryCRMPayeeListNew.cs" />
     <Compile Include="Logic\buzReqClsId.cs" />
     <Compile Include="Logic\buzSendSMS.cs" />
     <Compile Include="Logic\CommonConstant.cs" />
@@ -484,7 +485,9 @@
     <Compile Include="Logic\Services\BaseEwiServiceProxy.cs" />
     <Compile Include="Logic\Services\BaseProxyService.cs" />
     <Compile Include="Logic\Services\CleansingService.cs" />
+    <Compile Include="Logic\Services\MOTORInquiryAPARPayeeList.cs" />
     <Compile Include="Logic\Services\PolisyClientService.cs" />
+    <Compile Include="Logic\Services\SAPInquiryVendor.cs" />
     <Compile Include="Logic\Services\SendSmsService.cs" />
     <Compile Include="Logic\Tranforms\InquiryPayee\Tranform_clsInqCorporateOut_to_crmInqPayeeOut.cs" />
     <Compile Include="Logic\Tranforms\InquiryPayee\Tranform_clsInqPersonalOut_to_crmInqPayeeOut.cs" />
@@ -656,7 +659,9 @@
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\_references.js" />
     <None Include="Web.config_For_Production.config" />
-    <Content Include="Web_config_For_QA.config" />
+    <Content Include="Web_config_For_QA.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DataAccessService\Store\" />
