@@ -589,7 +589,6 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="log4net.xml" />
-    <Content Include="proxy\call.html" />
     <Content Include="Scripts\ai.0.22.9-build00167.js" />
     <Content Include="Scripts\ai.0.22.9-build00167.min.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -622,20 +621,6 @@
     <Content Include="App_Data\JsonSchema\RegClientCorporate_Input_Schema.json" />
     <Content Include="App_Data\JsonSchema\RegPayeeCorporate_Input_Schema.json" />
     <Content Include="App_Data\JsonSchema\SendSMS_Input_Schema.json" />
-    <Content Include="proxy\json.ashx" />
-    <None Include="proxy\json.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <Content Include="proxy\jsonproxy.ashx" />
-    <Content Include="proxy\proxy.ashx" />
-    <Content Include="proxy\proxy.config" />
-    <Content Include="proxy\README.md" />
-    <Content Include="proxy\soap.ashx" />
-    <Content Include="proxy\Web.config" />
-    <Content Include="proxy\xml.ashx" />
-    <None Include="proxy\xml.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

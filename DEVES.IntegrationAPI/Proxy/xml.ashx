@@ -57,9 +57,9 @@ public class proxy : IHttpHandler {
             return _count - ts.TotalSeconds * _rate <= 0;
         }
     }
-
+    private int  PROXY_TIMEOUT = 15000;
     private static string PROXY_REFERER = "http://localhost/proxy/proxy.ashx";
-    private static string DEFAULT_OAUTH = "";
+    private static string DEFAULT_OAUTH = "https://www.arcgis.com/sharing/oauth2/";
     private static int CLEAN_RATEMAP_AFTER = 10000; //clean the rateMap every xxxx requests
     private static System.Net.IWebProxy SYSTEM_PROXY = System.Net.HttpWebRequest.DefaultWebProxy; // Use the default system proxy
     private static LogTraceListener logTraceListener = null;
@@ -402,7 +402,7 @@ public class proxy : IHttpHandler {
         // Note: this might not be what everyone expects, but it helps some users
         // TODO: make this configurable
         if (fromResponse.ContentType.Contains("application/vnd.ogc.wms_xml")) {
-            toResponse.ContentType = "text/xml";
+            toResponse.ContentType = "application/json;charset=UTF-8";
             log(TraceLevel.Verbose, "Adjusting Content-Type for WMS OGC: " + fromResponse.ContentType );
         } else {
             toResponse.ContentType = fromResponse.ContentType;
@@ -479,6 +479,7 @@ public class proxy : IHttpHandler {
         req.ServicePoint.Expect100Continue = false;
         req.Referer = referer;
         req.Method = method;
+        req.Timeout = PROXY_TIMEOUT;
 
         // Use the default system proxy
         req.Proxy = SYSTEM_PROXY;
@@ -488,7 +489,7 @@ public class proxy : IHttpHandler {
 
         if (bytes != null && bytes.Length > 0 || method == "POST") {
             req.Method = "POST";
-            req.ContentType = string.IsNullOrEmpty(contentType) ? "text/xml" : contentType;
+            req.ContentType = string.IsNullOrEmpty(contentType) ? "application/json;charset=UTF-8" : contentType;
             req.Headers.Add("SOAPAction:''");
 
             if (bytes != null && bytes.Length > 0)
@@ -741,20 +742,23 @@ public class proxy : IHttpHandler {
 
     private static void sendErrorResponse(HttpResponse response, String errorDetails, String errorMessage, System.Net.HttpStatusCode errorCode)
     {
+        response.ContentType = "application/json;charset=UTF-8";
         String message = string.Format("{{\"error\": {{\"code\": {0},\"message\":\"{1}\"", (int)errorCode, errorMessage);
         if (!string.IsNullOrEmpty(errorDetails))
         {
             message += string.Format(",\"details\":[\"message\":\"{0}\"]", errorDetails); 
         }
-      
-        message += ",\"success\":\"false\"";
+        message += "}";
+        message += ",\"success\":false";
         message += string.Format(",\"responseCode\": {0},\"responseMessage\":\"{1}\"", (int)errorCode, errorMessage);
-        message += "}}";
-        response.StatusCode = (int)errorCode;
-        //custom status description for when the rate limit has been exceeded
-        if (response.StatusCode == 429) {
+        message += string.Format(",\"content\": {{\"code\": {0},\"message\":\"{1}\"}}", (int)errorCode, errorMessage);
+        message += "}";
+        if ((int)errorCode == 429) {
             response.StatusDescription = "Too Many Requests";
         }
+        response.StatusCode = 200;
+        //custom status description for when the rate limit has been exceeded
+      
         //this displays our customized error messages instead of IIS's custom errors
         response.TrySkipIisCustomErrors = true;
         response.Write(message);
