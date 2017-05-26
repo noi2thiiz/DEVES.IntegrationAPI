@@ -15,15 +15,16 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
         #region Singleton
         private static CLSInquiryCLSPersonalClient _instance;
 
-        private CLSInquiryCLSPersonalClient()
+        public CLSInquiryCLSPersonalClient()
         {
-
+            serviceName = "CLSInquiryCLSPersonal";
         }
 
         public static CLSInquiryCLSPersonalClient Instance
         {
             get
             {
+
                 if (_instance != null) return _instance;
                 _instance = new CLSInquiryCLSPersonalClient();
 
@@ -35,7 +36,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 
         public CLSInquiryPersonalClientContentOutputModel Execute(CLSInquiryPersonalClientInputModel input)
         {
-            input.backDay = AppConst.COMM_BACK_DAY;
+            //input.backDay = AppConst.COMM_BACK_DAY;
 
             string endpoint = AppConfig.Instance.Get(CommonConstant.ewiEndpointKeyCLSInquiryPersonalClient);
 

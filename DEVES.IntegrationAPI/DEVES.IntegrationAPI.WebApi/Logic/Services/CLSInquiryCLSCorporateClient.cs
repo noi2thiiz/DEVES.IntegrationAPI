@@ -15,23 +15,26 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
         #region Singleton
         private static CLSInquiryCLSCorporateClient _instance;
 
-        private CLSInquiryCLSCorporateClient()
-        {
-
-        }
+        
 
         public static CLSInquiryCLSCorporateClient Instance
         {
             get
             {
+    
                 if (_instance != null) return _instance;
-                _instance = new CLSInquiryCLSCorporateClient();
+                 _instance = new CLSInquiryCLSCorporateClient();
 
                 return _instance;
             }
         }
 
         #endregion
+
+        public CLSInquiryCLSCorporateClient()
+        {
+            serviceName = "CLSInquiryCLSCorporateClient";
+        }
 
         public CLSInquiryCorporateClientContentOutputModel Execute(CLSInquiryCorporateClientInputModel input)
         {

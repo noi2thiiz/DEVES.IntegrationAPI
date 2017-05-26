@@ -17,15 +17,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
         #region Singleton
         private static PolisyClientService _instance;
 
-        private PolisyClientService()
-        {
-            this.serviceName = "COMPInquiryClientNoByCleansingID";
-        }
+       
 
         public static PolisyClientService Instance
         {
             get
             {
+              
                 if (_instance != null) return _instance;
                 _instance = new PolisyClientService();
 
@@ -35,6 +33,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 
 
         #endregion
+        public PolisyClientService()
+        {
+            this.serviceName = "COMPInquiryClientNoByCleansingID";
+        }
         /// <summary>
         /// สำหรับหา Polisy Client จาก CleansingId โดยที่หากพบมากกว่า 1 รายการจะ return รายการที่มี clientNumber มากสุด
         /// </summary>

@@ -18,15 +18,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
         #region Singleton
         private static SAPInquiryVendor _instance;
 
-        private SAPInquiryVendor()
-        {
-
-        }
+       
 
         public static SAPInquiryVendor Instance
         {
             get
             {
+              
+              
                 if (_instance != null) return _instance;
                 _instance = new SAPInquiryVendor();
 
@@ -36,7 +35,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 
 
         #endregion
+        public SAPInquiryVendor()
+        {
+            serviceName = "SAPInquiryVendor";
 
+        }
         public EWIResSAPInquiryVendorContentModel Execute(SAPInquiryVendorInputModel input)
         {
            

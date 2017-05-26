@@ -45,18 +45,16 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     trgt.profileInfo.name1 = src?.lgivname?.Trim() ?? "";
                     trgt.profileInfo.name2 = src?.lsurname?.Trim() ?? "";
                     trgt.profileInfo.fullName = src?.cls_full_name?.Trim() ?? "";
-                     trgt.profileInfo.salutationText =PersonalTitleMasterData.Instance.FindByCode(src?.salutl)?.Name??"";
-                   
-                    trgt.profileInfo.sex = "U";
-                    if (src.cls_sex != null)
-                    {
-                        if (!src.cls_sex.Equals("M") || !src.cls_sex.Equals("F"))
-                        {
-                            trgt.profileInfo.sex = "U";
-                        }
-                    }
-                   
-                 
+                    
+                    
+                    trgt.profileInfo.sex = "";
+                    trgt.profileInfo.salutationText = "";
+
+                    
+
+
+
+
                     // trgt.profileInfo.sex = src.cls_sex;
                     trgt.profileInfo.idTax = src?.cls_tax_no_new?.Trim() ?? "";
                   

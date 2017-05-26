@@ -14,17 +14,17 @@ namespace DEVES.IntegrationAPI.Model.SAP
     public class SAPInquiryVendorInputModel : BaseDataModel
     {
         // "TAX3": "123456789012",
-        public string TAX3 { get; set; }
+        public string TAX3 { get; set; } = "";
 
         //"TAX4": "00000",
 
-        public string TAX4 { get; set; }
+        public string TAX4 { get; set; } = "";
 
         //"PREVACC": "",
-        public string PREVACC { get; set; }
+        public string PREVACC { get; set; } = "";
 
         //"VCODE": ""
-        public string VCODE { get; set; }
+        public string VCODE { get; set; } = "";
     }
 
     public class SAPInquiryVendorOutputModel : BaseEWIResponseModel

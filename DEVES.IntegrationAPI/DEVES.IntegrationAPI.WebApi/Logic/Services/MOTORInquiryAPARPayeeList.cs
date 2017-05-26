@@ -20,15 +20,17 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
         #region Singleton
         private static MotorInquiryAparPayeeList _instance;
 
-        private MotorInquiryAparPayeeList()
+        public MotorInquiryAparPayeeList()
         {
-
+            serviceName = "MotorInquiryAparPayeeList";
         }
 
         public static MotorInquiryAparPayeeList Instance
         {
             get
             {
+                //ยกเลิก Singleton
+               
                 if (_instance != null) return _instance;
                 _instance = new MotorInquiryAparPayeeList();
 

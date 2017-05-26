@@ -15,15 +15,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
         #region Singleton
         private static COMPInquiryClientMaster _instance;
 
-        private COMPInquiryClientMaster()
-        {
-
-        }
+        
 
         public static COMPInquiryClientMaster Instance
         {
             get
             {
+              
+             
                 if (_instance != null) return _instance;
                 _instance = new COMPInquiryClientMaster();
 
@@ -32,6 +31,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
         }
 
         #endregion
+
+        public COMPInquiryClientMaster()
+        {
+            serviceName = "COMPInquiryClientMaster";
+        }
 
         public EWIResCOMPInquiryClientMasterContentModel Execute(COMPInquiryClientMasterInputModel input)
         {

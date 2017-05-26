@@ -57,7 +57,7 @@ public class proxy : IHttpHandler {
             return _count - ts.TotalSeconds * _rate <= 0;
         }
     }
-    private int  PROXY_TIMEOUT = 15000;
+    private int  PROXY_TIMEOUT = 40000;
     private static string PROXY_REFERER = "http://localhost/proxy/proxy.ashx";
     private static string DEFAULT_OAUTH = "https://www.arcgis.com/sharing/oauth2/";
     private static int CLEAN_RATEMAP_AFTER = 10000; //clean the rateMap every xxxx requests

@@ -17,24 +17,27 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
         #region Singleton
         private static SendSmsService _instance;
 
-        private SendSmsService()
-        {
-            this.serviceName = "COMPSendSMS";
-        }
+        
 
         public static SendSmsService Instance
         {
             get
             {
-                if (_instance != null) return _instance;
-                _instance = new SendSmsService();
+                //ยกเลิก Singleton
+                return new SendSmsService();
+               // if (_instance != null) return _instance;
+               // _instance = new SendSmsService();
 
-                return _instance;
+                //return _instance;
             }
         }
 
 
         #endregion
+        public SendSmsService()
+        {
+            this.serviceName = "COMPSendSMS";
+        }
         public BaseEWIResponseModel SendMessage(string message, string mobileNumber)
         {
             var input = new SendSMSInputModel

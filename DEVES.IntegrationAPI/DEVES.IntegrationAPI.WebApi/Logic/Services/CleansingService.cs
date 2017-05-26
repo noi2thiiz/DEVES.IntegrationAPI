@@ -21,19 +21,18 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
         #region Singleton
         private static CleansingClientService _instance;
 
-        private CleansingClientService()
-        {
-           
-        }
+       
 
         public static CleansingClientService Instance
         {
             get
             {
-                if (_instance != null) return _instance;
-                _instance = new CleansingClientService();
+                //ยกเลิก Singleton
+                return new CleansingClientService();
+                //if (_instance != null) return _instance;
+                //_instance = new CleansingClientService();
 
-                return _instance;
+                //return _instance;
             }
         }
 
@@ -44,6 +43,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
         }
 
         #endregion
+        public CleansingClientService()
+        {
+            serviceName = "CleansingClient";
+        }
         public BaseEWIResponseModel RemoveByCleansingId(string cleansingClientId, string clientType = "P")
         {
             if (string.IsNullOrEmpty(cleansingClientId))

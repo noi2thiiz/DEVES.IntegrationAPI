@@ -96,6 +96,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     trgt.asrhHeader.repairerFlag = src.clientList.repairerFlag;
                     trgt.asrhHeader.hospitalFlag = src.clientList.hospitalFlag;
 
+                    if (trgt.generalHeader.clientType=="P")
+                    {
+                        trgt.profileInfo.salutationText = "";
+                        trgt.profileInfo.sex = "U";
+                    }
                     trgtContent.data.Add(trgt);
                 }
             }

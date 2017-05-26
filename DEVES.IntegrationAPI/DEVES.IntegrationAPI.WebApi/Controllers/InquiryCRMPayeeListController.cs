@@ -27,6 +27,23 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             
         }
 
-   
+
+    }
+
+    public class InquiryCRMPayeeListNewController : BaseApiController
+    {
+
+        // private string _logImportantMessage;
+        // private readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(InquiryCRMPayeeListController));
+
+        public object Post([FromBody]object value)
+        {
+
+
+            return ProcessRequest<buzInquiryCRMPayeeListNew, InquiryCRMPayeeListInputModel>(value, "InquiryCRMPayeeList_Input_Schema.json");
+
+        }
+
+
     }
 }

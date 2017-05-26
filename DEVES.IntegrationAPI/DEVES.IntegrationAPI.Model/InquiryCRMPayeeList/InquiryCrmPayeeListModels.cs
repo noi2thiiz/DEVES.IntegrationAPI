@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DEVES.IntegrationAPI.Model;
+using DEVES.IntegrationAPI.Model.SAP;
 using Newtonsoft.Json;
 
 namespace DEVES.IntegrationAPI.Model.InquiryCRMPayeeList
@@ -74,6 +75,9 @@ namespace DEVES.IntegrationAPI.Model.InquiryCRMPayeeList
 
         public string sapVendorAccountCode { get; set; }
         public string sapVendorPayterm { get; set; }
+
+        public List<InquiryCrmPayeeListDataModel>  sapResults { get; set; }
+        public SAPInquiryVendorInputModel sapSearchCondition { get; set; }
     } 
     public class bankInfoModel : BaseDataModel
     {

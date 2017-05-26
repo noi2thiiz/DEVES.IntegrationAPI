@@ -17,24 +17,25 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
         #region Singleton
         private static MOTORInquiryMasterASRH _instance;
 
-        private MOTORInquiryMasterASRH()
-        {
-
-        }
+        
 
         public static MOTORInquiryMasterASRH Instance
         {
             get
             {
+
                 if (_instance != null) return _instance;
                 _instance = new MOTORInquiryMasterASRH();
 
                 return _instance;
             }
         }
-        
-        #endregion
 
+        #endregion
+        public MOTORInquiryMasterASRH()
+        {
+            serviceName = "MOTORInquiryMasterASRH";
+        }
         public InquiryMasterASRHContentModel Execute(InquiryMasterASRHDataInputModel input)
         {
             string endpoint = AppConfig.Instance.Get(CommonConstant.ewiEndpointKeyMOTORInquiryMasterASRH);

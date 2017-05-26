@@ -10,14 +10,15 @@ namespace DEVES.IntegrationAPI.Model.APAR
 {
     public class InquiryAPARPayeeListInputModel : BaseDataModel
     {
-        public string polisyClntnum { get; set; }
-        public string vendorCode { get; set; }
-        public string fullName { get; set; }
-        public string taxNo { get; set; }
-        public string taxBranchCode { get; set; }
-        public string requester { get; set; }
+        public string polisyClntnum { get; set; } = "";
+        public string vendorCode { get; set; } = "";
+        public string fullName { get; set; } = "";
+        public string taxNo { get; set; } = "";
+        public string taxBranchCode { get; set; } = "";
+        public string clientType { get; set; } = "";
+        public string requester { get; set; } = "";
 
-    
+
     }
 
     public class InquiryAPARPayeeOutputModel : BaseEWIResponseModel
