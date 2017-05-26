@@ -123,6 +123,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     CLSResult = InquiryCLSCorporateClient(searchCondition);
                     if (CLSResult != null)
                     {
+
                         AllSearchResult.AddRange(CLSResult);
                     }
                 }
@@ -160,14 +161,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 throw new BuzErrorException("200", "ไม่พบข้อมูล", " กรุณาตรวจสอบเงื่อนไขในการค้นหาอีกครั้ง หรือใช้เงื่อนไขอื่นในการค้นหา ข้อควรระวัง ไม่ควรค้นจากการระบุเงื่อนไขหลายๆอย่างพร้อมกัน เช่นการค้นทั้งชื่อนามสกุลพร้อมกับเลขประจำตัวประชาชน");
             }
 
+            //ซ่อมข้อมูล  Client ID 
+            FixEmptyPolisyClientId(ref AllSearchResult);
+
 
             //กรณีที่พบข้อมูลค้นหาต่อที่ SAP
-            // * foreach item in result
-            //     if item contain VCODE then Search by VCODE
-            //     if not found and item contain  PolisyClientID then search by PREVACC
-            //     if not found and item contain  Tax ID then search by Tax(TAX3+TAX4)
-
-
             SAPResult = InquerySapVandor(AllSearchResult);
 
             // ค้นข้อมูลใน CRM เพื่อเอาเลข CRM Client ID มาเติม ??? ต้องทำมัย
@@ -177,7 +175,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             // ตัวที่อยู่ใน search condition ทั้งหมดจะต้องไม่ซ้ำกันเลย
 
 
-            //order by by vcode,cleasing id desc
+            //order by vcode,cleasing id desc
             FinalSearchResult = SAPResult
                 .DistinctBy(row => new
                 {
@@ -218,16 +216,49 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             return crmInqPayeeOut;
         }
 
+        private void FixEmptyPolisyClientId(ref List<InquiryCrmPayeeListDataModel> listSearchResult)
+        {
+            // ดึงค่าจาก Polisy มาเติมในกรณีที่ข้อมูลสร้างใหม่ CLS จะยังไม่มีเลข Polisy
+
+            foreach (var temp in listSearchResult)
+            {
+                if (string.IsNullOrEmpty(temp.polisyClientId) || temp.polisyClientId.Equals("0"))
+                {
+                    debugInfo.AddDebugInfo("Find Polisy for new client  " + temp.polisyClientId, "");
+
+
+
+                    var lstPolisyClient = PolisyClientService.Instance.FindByCleansingId(temp.cleansingId,inqCrmPayeeInput.clientType);
+                   
+                    if (lstPolisyClient?.cleansingId != null)
+                    {
+
+                        debugInfo.AddDebugInfo("found Polisy for new client =" + lstPolisyClient.clientNumber, "");
+                        temp.polisyClientId = lstPolisyClient.clientNumber;
+                    }
+                    else
+                    {
+                        debugInfo.AddDebugInfo(" not found Polisy for new client =", "");
+                    }
+                    if (temp.polisyClientId == "0")
+                    {
+                        temp.polisyClientId = "";
+                    }
+
+                }
+            }
+            
+        }
 
         /// <summary>
-        /// listSAPSearchCondition
+        ///  // * foreach item in result
+        //     if item contain VCODE then Search by VCODE
+        //     if not found and item contain  PolisyClientID then search by PREVACC
+        //     if not found and item contain  Tax ID then search by Tax(TAX3+TAX4)
         /// </summary>
-        /// <param name="listSAPSearchCondition"></param>
-        /// <param name="crmInqPayeeOut"></param>
-        /// <param name="iRecordsLimit"></param>
-        /// <param name="counrSAPResult"></param>
-        ///  public List<InquiryCrmPayeeListDataModel> InquiryAPARPayeeList(InquiryCRMPayeeListInputModel searchCondition)
-       private List<InquiryCrmPayeeListDataModel> InquerySapVandor(List<InquiryCrmPayeeListDataModel> listSAPSearchConditions)
+        /// <param name="listSAPSearchConditions"></param>
+        /// <returns></returns>
+        private List<InquiryCrmPayeeListDataModel> InquerySapVandor(List<InquiryCrmPayeeListDataModel> listSAPSearchConditions)
         {
            
             var allSearchResult = new List<InquiryCrmPayeeListDataModel>();
@@ -436,6 +467,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
 
             };
+
             AddDebugInfo("call method CLSInquiryCLSPersonalClient", clssearchCondition);
             var inqClsPesonalOut = service.Execute(clssearchCondition);
 
@@ -446,7 +478,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                 crmInqPayeeOut =
                     (CRMInquiryPayeeContentOutputModel)CLSPersonalOutTransform.TransformModel(inqClsPesonalOut, crmInqPayeeOut);
+
+                //ถ้า output ไม่ polisy client id ให้ไปหามาเติม
             }
+
 
             return crmInqPayeeOut.data;
         }

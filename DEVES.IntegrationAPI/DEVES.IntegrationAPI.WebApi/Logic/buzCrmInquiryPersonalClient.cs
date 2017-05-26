@@ -108,10 +108,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                             
 
            
-                        var lstPolisyClient = PolisyClientService.Instance.FindByCleansingId(temp.generalHeader.cleansingId, contentModel.conditionHeader.clientType.ToUpperIgnoreNull());
-                        List<string> lstPolisyClientId = SearchContactPolisyId(temp.generalHeader.cleansingId);
-                        if (lstPolisyClient?.cleansingId != null)
-                        {
+                            var lstPolisyClient = PolisyClientService.Instance.FindByCleansingId(temp.generalHeader.cleansingId, contentModel.conditionHeader.clientType.ToUpperIgnoreNull());
+                           
+                            if (lstPolisyClient?.cleansingId != null)
+                            {
 
                                 debugInfo.AddDebugInfo("found Polisy for new client =" + lstPolisyClient.clientNumber,"");
                                 temp.generalHeader.polisyClientId = lstPolisyClient.clientNumber;
