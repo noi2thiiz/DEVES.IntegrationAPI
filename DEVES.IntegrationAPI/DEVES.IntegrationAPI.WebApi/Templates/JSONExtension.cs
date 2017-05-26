@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web.Script.Serialization;
+using Newtonsoft.Json;
 
 namespace DEVES.IntegrationAPI.WebApi.Templates
 {
@@ -9,6 +10,8 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
 
         public static string ToJson(this object obj)
         {
+          
+        
             JavaScriptSerializer serializer = new JavaScriptSerializer();
             return serializer.Serialize(obj);
         }

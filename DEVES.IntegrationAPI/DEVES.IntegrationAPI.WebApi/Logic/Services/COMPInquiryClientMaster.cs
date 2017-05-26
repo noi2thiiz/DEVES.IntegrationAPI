@@ -56,7 +56,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
             var contentObj = jss.Deserialize<COMPInquiryClientMasterOutputModel>(result.Content);
             if (false == contentObj.success)
             {
-                throw new Exception($"EWI-CLS Error {contentObj.responseCode}: {contentObj.responseMessage}");
+                throw new Exception($"COMP Error {contentObj.responseCode}: {contentObj.responseMessage}");
             }
 
 

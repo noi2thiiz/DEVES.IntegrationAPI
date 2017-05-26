@@ -15,10 +15,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
         #region Singleton
         private static CLSInquiryCLSPersonalClient _instance;
 
-        public CLSInquiryCLSPersonalClient()
-        {
-            serviceName = "CLSInquiryCLSPersonal";
-        }
+        
 
         public static CLSInquiryCLSPersonalClient Instance
         {
@@ -33,7 +30,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
         }
 
         #endregion
-
+        public CLSInquiryCLSPersonalClient()
+        {
+            serviceName = "CLSInquiryCLSPersonal";
+        }
         public CLSInquiryPersonalClientContentOutputModel Execute(CLSInquiryPersonalClientInputModel input)
         {
             //input.backDay = AppConst.COMM_BACK_DAY;
@@ -53,7 +53,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
             var contentObj = jss.Deserialize<EWIResCLSInquiryPersonalClient>(result.Content);
             if (false == contentObj.success)
             {
-                throw new Exception($"EWI-CLS Error {contentObj.responseCode}: {contentObj.responseMessage}");
+                throw new Exception($"CLS Error {contentObj.responseCode}: {contentObj.responseMessage}");
             }
 
 

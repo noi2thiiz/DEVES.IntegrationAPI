@@ -55,7 +55,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
             var contentObj = jss.Deserialize<EWIResCLSInquiryCorporateClient>(result.Content);
             if (false == contentObj.success)
             {
-                throw new Exception($"EWI-CLS Error {contentObj.responseCode}: {contentObj.responseMessage}");
+                throw new Exception($"CLS Error {contentObj.responseCode}: {contentObj.responseMessage}");
             }
 
 

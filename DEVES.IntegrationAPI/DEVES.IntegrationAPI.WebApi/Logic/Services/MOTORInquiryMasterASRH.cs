@@ -53,7 +53,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
             var contentObj = jss.Deserialize<InquiryMasterASRHOutputModel>(result.Content);
             if (false == contentObj.success)
             {
-                throw new Exception($"EWI-ASRH Error {contentObj.responseCode}: {contentObj.responseMessage}");
+                throw new Exception($"ASRH Error {contentObj.responseCode}: {contentObj.responseMessage}");
             }
 
             return contentObj?.content;

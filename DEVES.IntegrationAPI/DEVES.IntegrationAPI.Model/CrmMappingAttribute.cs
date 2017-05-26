@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Web.Script.Serialization;
+using DEVES.IntegrationAPI.WebApi;
 using Newtonsoft.Json;
 
 namespace DEVES.IntegrationAPI.Model
@@ -58,6 +59,14 @@ namespace DEVES.IntegrationAPI.Model
                 });
             }
             _debugInfo.AddRange(debugInfo);
+        }
+
+        public string ToJson()
+        {
+            return JsonConvert.SerializeObject(this, Formatting.Indented,
+                new ModelDatetimeConverter(this?.DateTimeCustomFormat));
+
+           
         }
     }
 

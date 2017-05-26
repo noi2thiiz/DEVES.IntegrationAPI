@@ -75,7 +75,11 @@
     <Compile Include="Logic\DataAccess\Adapter\DevesServiceProxyAdapterTests.cs" />
     <Compile Include="Logic\DataBaseContracts\SpApiCustomerClientTests.cs" />
     <Compile Include="Logic\Services\CleansingClientServiceTests.cs" />
+    <Compile Include="Logic\Services\CLSInquiryCLSCorporateClientTests.cs" />
+    <Compile Include="Logic\Services\CLSInquiryCLSPersonalClientTests.cs" />
+    <Compile Include="Logic\Services\COMPInquiryClientMasterTests.cs" />
     <Compile Include="Logic\Services\MotorInquiryAparPayeeListTests.cs" />
+    <Compile Include="Logic\Services\MOTORInquiryMasterASRHTests.cs" />
     <Compile Include="Logic\Services\PolisyClientServiceTests.cs" />
     <Compile Include="Logic\Services\SAPInquiryVendorTests.cs" />
     <Compile Include="Logic\Services\SendSmsServiceTests.cs" />

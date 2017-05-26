@@ -429,7 +429,6 @@
     <Compile Include="Controllers\RequestSurveyorController.cs" />
     <Compile Include="Controllers\SendSMSController.cs" />
     <Compile Include="Controllers\TestAccountController.cs" />
-    <Compile Include="Controllers\TEST_CLSInquiryClientPersonalController.cs" />
     <Compile Include="Controllers\UpdateClaimInfoController.cs" />
     <Compile Include="Controllers\UpdateClaimNoController.cs" />
     <Compile Include="Controllers\UpdateCompliantStatusController.cs" />

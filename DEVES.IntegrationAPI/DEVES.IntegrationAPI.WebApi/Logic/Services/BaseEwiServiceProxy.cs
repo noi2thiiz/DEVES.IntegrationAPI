@@ -118,7 +118,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 
                 // request.Headers.Add("ContentType", "application/json; charset=UTF-8");
                 request.Content = new StringContent(jsonReqModel, System.Text.Encoding.UTF8, "application/json");
-                Console.WriteLine("==========LogAsync========");
+              
                 LogAsync(request);
                 HttpResponseMessage response = client.SendAsync(request).Result;
                 resTime = DateTime.Now;
@@ -131,7 +131,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
                 resBody = ewiRes.Result;
                 resTime = DateTime.Now;
                 LogAsync(request, response);
-                Console.WriteLine("133==========Result========");
+              
                 result.Content = ewiRes.Result;
                 result.StatusCode = response.StatusCode;
 

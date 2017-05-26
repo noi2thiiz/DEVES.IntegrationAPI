@@ -18,19 +18,19 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
 
        // private string _logImportantMessage;
        // private readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(InquiryCRMPayeeListController));
-
+        
         public object Post([FromBody]object value)
         {
-          
+           
 
-            return  ProcessRequest<buzInquiryCRMPayeeList, InquiryCRMPayeeListInputModel>(value, "InquiryCRMPayeeList_Input_Schema.json");
+            return  ProcessRequest<buzInquiryCRMPayeeListNew, InquiryCRMPayeeListInputModel>(value, "InquiryCRMPayeeList_Input_Schema.json");
             
         }
 
 
     }
 
-    public class InquiryCRMPayeeListNewController : BaseApiController
+    public class InquiryCRMPayeeListOldController : BaseApiController
     {
 
         // private string _logImportantMessage;
@@ -40,7 +40,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         {
 
 
-            return ProcessRequest<buzInquiryCRMPayeeListNew, InquiryCRMPayeeListInputModel>(value, "InquiryCRMPayeeList_Input_Schema.json");
+            return ProcessRequest<buzInquiryCRMPayeeList, InquiryCRMPayeeListInputModel>(value, "InquiryCRMPayeeList_Input_Schema.json");
 
         }
 

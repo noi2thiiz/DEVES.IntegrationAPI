@@ -48,11 +48,6 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
         public void TranformInput()
         {
-            switch (inqCrmPayeeInput.requester)
-            {
-                case "MC": inqCrmPayeeInput.requester = "MotorClaim"; break;
-                default: inqCrmPayeeInput.requester = "MotorClaim"; break;
-            }
          
             //ลบ บริษัทออกจากชื่อ
             if (!string.IsNullOrEmpty(inqCrmPayeeInput.fullname))
@@ -162,7 +157,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             }
 
             //ซ่อมข้อมูล  Client ID 
-            FixEmptyPolisyClientId(ref AllSearchResult);
+            AllSearchResult =  FixEmptyPolisyClientId(AllSearchResult,inqCrmPayeeInput.clientType);
 
 
             //กรณีที่พบข้อมูลค้นหาต่อที่ SAP
@@ -176,30 +171,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
 
             //order by vcode,cleasing id desc
-            FinalSearchResult = SAPResult
-                .DistinctBy(row => new
-                {
-                    row.fullName,
-                    row.cleansingId,
-                    row.polisyClientId,
-                    row.sapVendorCode,
-                    row.sapVendorGroupCode,
-                    row.taxNo,
-                    row.taxBranchCode,
-                    row.name1,
-                    row.name2
-                }).OrderByDescending(
-
-                    row => new {
-                        row.fullName,
-                        row.sapVendorCode,
-                        row.sapVendorGroupCode,
-                        row.polisyClientId,
-                        row.taxNo,
-                        row.taxBranchCode
-                    }).ToList();
-
-
+            var distinctResult =  ProcessDistinct(SAPResult);
+            FinalSearchResult = ProcessOrderBy(distinctResult);
 
             //return output
 
@@ -216,19 +189,57 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             return crmInqPayeeOut;
         }
 
-        private void FixEmptyPolisyClientId(ref List<InquiryCrmPayeeListDataModel> listSearchResult)
+        public List<InquiryCrmPayeeListDataModel> ProcessDistinct(List<InquiryCrmPayeeListDataModel> sapResult)
+        {
+            return sapResult
+                .DistinctBy(row => new
+                {
+                    row.fullName,
+                    row.name1,
+                    row.name2,
+                    row.cleansingId,
+                    row.polisyClientId,
+                    row.sapVendorCode,
+                    row.sapVendorGroupCode,
+                    row.taxNo,
+                    row.taxBranchCode
+                   
+                }).ToList();
+        }
+
+        public List<InquiryCrmPayeeListDataModel> ProcessOrderBy(List<InquiryCrmPayeeListDataModel> sapResult)
+        {
+            return sapResult
+               
+                .OrderBy(row => row.fullName)
+                
+                .ThenByDescending(row => row.sapVendorCode)
+                .ThenBy(row => row.sapVendorGroupCode)
+                .ThenByDescending(row => row.polisyClientId)
+                .ThenBy(row => row.taxNo)
+                .ThenBy(row => row.taxBranchCode)
+                .ToList();
+
+            
+        }
+
+        public List<InquiryCrmPayeeListDataModel> FixEmptyPolisyClientId( List<InquiryCrmPayeeListDataModel> listSearchResult,string defaultClientType)
         {
             // ดึงค่าจาก Polisy มาเติมในกรณีที่ข้อมูลสร้างใหม่ CLS จะยังไม่มีเลข Polisy
-
+            if (listSearchResult==null)
+            {
+                return default(List<InquiryCrmPayeeListDataModel>);
+            }
+            var polisyClientService = new PolisyClientService();
             foreach (var temp in listSearchResult)
             {
-                if (string.IsNullOrEmpty(temp.polisyClientId) || temp.polisyClientId.Equals("0"))
+                if (string.IsNullOrEmpty(temp.polisyClientId) || temp?.polisyClientId== "0")
                 {
                     debugInfo.AddDebugInfo("Find Polisy for new client  " + temp.polisyClientId, "");
 
 
 
-                    var lstPolisyClient = PolisyClientService.Instance.FindByCleansingId(temp.cleansingId,inqCrmPayeeInput.clientType);
+                    var lstPolisyClient = polisyClientService.FindByCleansingId(temp.cleansingId, defaultClientType);
                    
                     if (lstPolisyClient?.cleansingId != null)
                     {
@@ -247,7 +258,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                 }
             }
-            
+            return listSearchResult;
         }
 
         /// <summary>

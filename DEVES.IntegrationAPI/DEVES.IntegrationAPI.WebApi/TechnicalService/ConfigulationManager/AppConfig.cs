@@ -108,7 +108,7 @@ namespace DEVES.IntegrationAPI.WebApi
             var result = rest.Execute(request);
             if (result.Success)
             {  
-                Console.WriteLine(result.ToJson());
+               // Console.WriteLine(result.ToJson());
                 foreach (Dictionary<string, dynamic> item in result.Data)
                 {
 

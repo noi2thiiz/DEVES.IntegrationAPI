@@ -43,7 +43,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 
         public InquiryAPARPayeeContentModel Execute(InquiryAPARPayeeListInputModel input)
         {
-            switch (input.requester)
+            if (input==null)
+            {
+                return default(InquiryAPARPayeeContentModel);
+            }
+
+            switch (input?.requester?.ToUpper())
             {
                 case "MC": input.requester = "MotorClaim"; break;
                 default: input.requester = "MotorClaim"; break;
@@ -65,7 +70,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
             var contentObj = jss.Deserialize<InquiryAPARPayeeOutputModel>(result.Content);
             if (false == contentObj.success)
             {
-                throw new Exception($"EWI-APAR Error {contentObj.responseCode}: {contentObj.responseMessage}");
+                throw new Exception($"APAR Error {contentObj.responseCode}: {contentObj.responseMessage}");
             }
 
           
