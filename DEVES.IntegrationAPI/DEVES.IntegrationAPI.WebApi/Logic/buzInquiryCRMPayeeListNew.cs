@@ -79,17 +79,16 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             crmInqPayeeOut.data = new List<InquiryCrmPayeeListDataModel>();
 
             List<InquiryCRMPayeeListInputModel> listSAPSearchCondition = new List<InquiryCRMPayeeListInputModel>();
-          
-           // listSAPSearchCondition.Add(searchCondition);
-
             Console.WriteLine(listSAPSearchCondition);
            
             inqCrmPayeeInput = (InquiryCRMPayeeListInputModel)input;
             InquiryCRMPayeeListInputModel searchCondition = Copy(inqCrmPayeeInput);
-            //validate input
-            TranformInput();
 
+            //validate and  tranform input
+            TranformInput();
             string RoleCode = inqCrmPayeeInput?.roleCode?.ToUpper();
+
+            //Start Process
 
             // สาย A S R H ให้ค้นที่ MASTERASRH ก่อน
             if (RoleCode!="G")
@@ -150,7 +149,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             }
 
             //ถ้าข้อมูลมากกว่า 100 รายการ จะ throw error
-            if (AllSearchResult.Count>100)
+            if (AllSearchResult.Count> iRecordsLimit)
             {
                 throw new  BuzErrorException("500", "คุณระบุเงื่อนไขในการสืบค้นน้อยเกินไป", "คุณระบุเงื่อนไขในการสืบค้นน้อยเกินไป ทำให้พบข้อมูลจำนวนมากเกินกว่าที่ระบบอนุญาต กรุณาระบุเงื่อนไขที่ชัดเจนมากขึ้น เช่นการระบุชื่อและนามสกุล");
             }
@@ -170,9 +169,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
 
             SAPResult = InquerySapVandor(AllSearchResult);
-            // ค้นข้อมูลใน CRM เพื่อเอาเลข CRM Client ID มาเติม
 
-
+            // ค้นข้อมูลใน CRM เพื่อเอาเลข CRM Client ID มาเติม ??? ต้องทำมัย
 
 
             // remove duplicate data 
@@ -180,35 +178,28 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
 
             //order by by vcode,cleasing id desc
-            if (SAPResult.Any())
-            {
-                FinalSearchResult = SAPResult
-                    .DistinctBy(row => new
-                    {
+            FinalSearchResult = SAPResult
+                .DistinctBy(row => new
+                {
+                    row.fullName,
+                    row.cleansingId,
+                    row.polisyClientId,
+                    row.sapVendorCode,
+                    row.sapVendorGroupCode,
+                    row.taxNo,
+                    row.taxBranchCode,
+                    row.name1,
+                    row.name2
+                }).OrderByDescending(
+
+                    row => new {
                         row.fullName,
-                        row.cleansingId,
-                        row.polisyClientId,
                         row.sapVendorCode,
                         row.sapVendorGroupCode,
+                        row.polisyClientId,
                         row.taxNo,
-                        row.taxBranchCode,
-                        row.name1,
-                        row.name2
-                    }).OrderByDescending(
-                    
-                       row => new { row.sapVendorCode,
-                                    row.sapVendorGroupCode,
-                                    row.polisyClientId,
-                                    row.taxNo,
-                                    row.taxBranchCode
-                     }).ToList();
-
-                crmInqPayeeOut.data.AddRange(FinalSearchResult);
-            }
-            else
-            {
-                crmInqPayeeOut.data.AddRange(AllSearchResult);
-            }
+                        row.taxBranchCode
+                    }).ToList();
 
 
 
@@ -220,8 +211,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             crmInqPayeeOut.transactionId = TransactionId;
             crmInqPayeeOut.transactionDateTime = DateTime.Now;
             crmInqPayeeOut.AddListDebugInfo(GetDebugInfoList());
-            
-           
+            crmInqPayeeOut.data.AddRange(FinalSearchResult);
+
+
+
             return crmInqPayeeOut;
         }
 
