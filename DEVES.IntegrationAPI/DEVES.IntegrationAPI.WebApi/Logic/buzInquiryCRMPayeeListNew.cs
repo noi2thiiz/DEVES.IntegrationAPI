@@ -28,6 +28,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         /// ใช้ทดสอบว่า หากไม่เจอข้อมูลใน SAP ข้อมูล OUTPUT จะเป็นอย่างไร
         /// production set = false
         /// </summary>
+      
         public bool IgnoreSap = false;
         public bool IgnoreApar = false;
         public bool IgnoreCls = false;
@@ -230,7 +231,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             {
                 return default(List<InquiryCrmPayeeListDataModel>);
             }
-            var polisyClientService = new PolisyClientService();
+            var polisyClientService = new PolisyClientService(TransactionId,ControllerName);
             foreach (var temp in listSearchResult)
             {
                 if (string.IsNullOrEmpty(temp.polisyClientId) || temp?.polisyClientId== "0")
@@ -274,7 +275,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
            
             var allSearchResult = new List<InquiryCrmPayeeListDataModel>();
            
-            var service = new SAPInquiryVendor();
+            var service = new SAPInquiryVendor(TransactionId, ControllerName);
+           
 
             foreach (var condition in listSAPSearchConditions)
             {
@@ -361,7 +363,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         private List<InquiryCrmPayeeListDataModel> InquiryCompClientMaster(InquiryCRMPayeeListInputModel searchCondition)
         {
             AddDebugInfo("call method COMPInquiryClientMaster", searchCondition);
-            var service = new COMPInquiryClientMaster();
+            var service = new COMPInquiryClientMaster(TransactionId, ControllerName);
             var inqPolisyOut = service.Execute(new COMPInquiryClientMasterInputModel
             {
                 cltType = searchCondition?.clientType??"",
@@ -395,7 +397,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         private List<InquiryCrmPayeeListDataModel> InquiryCLSCorporateClient(InquiryCRMPayeeListInputModel searchCondition)
         {
             AddDebugInfo("call method CLSInquiryCLSCorporateClient", searchCondition);
-            var service = new CLSInquiryCLSCorporateClient();
+            var service = new CLSInquiryCLSCorporateClient(TransactionId, ControllerName);
             var inqClsCorporateOut = service.Execute(new CLSInquiryCorporateClientInputModel
             {
                 clientId = searchCondition?.polisyClientId??"",
@@ -431,7 +433,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         public List<InquiryCrmPayeeListDataModel> InquiryMasterASHR(InquiryCRMPayeeListInputModel searchCondition)
         {
             AddDebugInfo("call method MOTORInquiryMasterASRH", searchCondition);
-            var service = new MOTORInquiryMasterASRH();
+            var service = new MOTORInquiryMasterASRH(TransactionId, ControllerName);
             var inqASRHOut = service.Execute(new InquiryMasterASRHDataInputModel
             {
                 vendorCode = searchCondition?.sapVendorCode??"",
@@ -465,7 +467,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         private List<InquiryCrmPayeeListDataModel> InquiryCLSPersonalClient(InquiryCRMPayeeListInputModel searchCondition)
         {
            
-            var service = new CLSInquiryCLSPersonalClient();
+            var service = new CLSInquiryCLSPersonalClient(TransactionId, ControllerName);
             var clssearchCondition = new CLSInquiryPersonalClientInputModel
             {
 
@@ -514,9 +516,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             AddDebugInfo("call method InquiryAPARPayeeList", searchCondition);
             var crmInqPayeeOut = new CRMInquiryPayeeContentOutputModel();
            // return crmInqPayeeOut?.data;
-            
 
-            var inqAparOut = MotorInquiryAparPayeeList.Instance.Execute(new InquiryAPARPayeeListInputModel
+            var service = new MotorInquiryAparPayeeList(TransactionId, ControllerName);
+            var inqAparOut = service.Execute(new InquiryAPARPayeeListInputModel
                 {
                     taxNo = searchCondition?.taxNo??"",
                     taxBranchCode = searchCondition?.taxBranchCode ?? "",

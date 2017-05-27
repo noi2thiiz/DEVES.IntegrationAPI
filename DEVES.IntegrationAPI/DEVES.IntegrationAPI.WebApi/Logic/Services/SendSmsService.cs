@@ -34,10 +34,16 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 
 
         #endregion
-        public SendSmsService()
+        public SendSmsService() : base("")
         {
             this.serviceName = "COMPSendSMS";
         }
+
+        public SendSmsService(string globalTransactionID, string controllerName = "") : base(globalTransactionID, controllerName)
+        {
+            this.serviceName = "COMPSendSMS";
+        }
+
         public BaseEWIResponseModel SendMessage(string message, string mobileNumber)
         {
             var input = new SendSMSInputModel

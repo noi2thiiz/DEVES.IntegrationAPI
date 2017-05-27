@@ -30,10 +30,16 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
         }
 
         #endregion
-        public CLSInquiryCLSPersonalClient()
+        public CLSInquiryCLSPersonalClient():base("")
         {
             serviceName = "CLSInquiryCLSPersonal";
         }
+
+        public CLSInquiryCLSPersonalClient(string globalTransactionID, string controllerName = "") : base(globalTransactionID, controllerName)
+        {
+            serviceName = "CLSInquiryCLSPersonal";
+        }
+
         public CLSInquiryPersonalClientContentOutputModel Execute(CLSInquiryPersonalClientInputModel input)
         {
             //input.backDay = AppConst.COMM_BACK_DAY;

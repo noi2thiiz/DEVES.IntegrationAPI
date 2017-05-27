@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,16 +14,21 @@ using System.Web.Http.Routing;
 using DEVES.IntegrationAPI.WebApi.TechnicalService.TransactionLogger;
 using DEVES.IntegrationAPI.WebApi.Templates;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace DEVES.IntegrationAPI.WebApi.TechnicalService
 {
     public class ApiLogHandler : DelegatingHandler
     {
+        System.Diagnostics.Stopwatch timer = new Stopwatch();
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
             CancellationToken cancellationToken)
         {
+           
+            timer.Start();
+
             // Gen TransactionID
-            var transactionId = Guid.NewGuid().ToString();
+            var transactionId = GlobalTransactionIdGenerator.Instance.GetNewGuid();
             if (!request.Properties.ContainsKey("TransactionID"))
             {
                 request.Properties["TransactionID"] = transactionId;
@@ -82,11 +89,79 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
                         apiLogEntry.ResponseContentType = response.Content?.Headers.ContentType.MediaType;
                         apiLogEntry.ResponseHeaders = SerializeHeaders(response?.Content?.Headers);
                     }
+                    try
+                    {
+                        var responseContent = JObject.Parse(apiLogEntry.ResponseContentBody);
 
+                        var responseContentCode = "";
+                        var responseContentMessage = "";
+                        var responseContentDescription = "";
+                        var responseContentId = "";
+                        var responseContentDateTime = "";
+                        if (responseContent != null)
+                        {
+                            apiLogEntry.ContentCode = responseContent["code"]?.ToString() ?? "";
+                            apiLogEntry.ContentMessage = responseContent["message"]?.ToString() ?? "";
+                            apiLogEntry.ContentDescription = responseContent["description"]?.ToString() ?? "";
+                            apiLogEntry.ContentTransactionId = responseContent["transactionId"]?.ToString() ?? "";
+                            apiLogEntry.ContentTransactionDateTime =
+                                responseContent["transactionDateTime"]?.ToString() ?? "";
+
+                            if ( !string.IsNullOrEmpty(responseContent["data"]?.ToString()))
+                            {
+                                
+                                var token = JToken.Parse(responseContent["data"].ToString());
+
+                                if (token is JArray)
+                                {
+                                    IEnumerable<object> items = token.ToObject<List<object>>();
+                                    apiLogEntry.TotalRecord = items.Count();
+                                }
+                                else if (token is JObject)
+                                {
+                                    apiLogEntry.TotalRecord = 1;
+                                }
+                                else
+                                {
+                                    apiLogEntry.TotalRecord = 0;
+                                }
+                            }
+                        }
+
+
+                        
+
+                        if (responseContent["_debugInfo"] != null)
+                        {
+                            apiLogEntry.DebugLog = responseContent["_debugInfo"].ToString();
+                            responseContent["_debugInfo"] = null;
+                        }
+
+                        if (responseContent["stackTrace"] != null)
+                        {
+                            apiLogEntry.StackTrace = responseContent["stackTrace"].ToString();
+                            responseContent["stackTrace"] = null;
+                        }
+
+
+                        //  var m = new JsonMediaTypeFormatter();
+                        response.Content = new StringContent(responseContent.ToString(), System.Text.Encoding.UTF8,
+                            "application/json");
+                        // ApiLogDataGateWay.Create(apiLogEntry);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("142"+e.Message);
+                    }
+                    timer.Stop();
+
+                    TimeSpan timeTaken = timer.Elapsed;
+                    apiLogEntry.ResponseTime = timeTaken.ToString();
                     InMemoryLogData.Instance.AddLogEntry(apiLogEntry);
+                    Console.WriteLine(response.Content);
+                    GlobalTransactionIdGenerator.Instance.ClearGlobalId(apiLogEntry.TransactionID);
 
-                   // ApiLogDataGateWay.Create(apiLogEntry);
-
+                    
                     return response;
                 }, cancellationToken);
         }

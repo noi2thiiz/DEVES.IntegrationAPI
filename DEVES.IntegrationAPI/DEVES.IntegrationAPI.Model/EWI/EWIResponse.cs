@@ -80,11 +80,7 @@ namespace DEVES.IntegrationAPI.Model.EWI
 
     public class EWIResponseContent : BaseContentJsonProxyOutputModel
     {
-        //public string code { get; set; }
-        //public string message { get; set; }
-        //public string description { get; set; }
-        //public string transactionId { get; set; }
-        //public DateTime transactionDateTime { get; set; }
+       
         public EWIResponseContentData data { get; set; }
     }
 

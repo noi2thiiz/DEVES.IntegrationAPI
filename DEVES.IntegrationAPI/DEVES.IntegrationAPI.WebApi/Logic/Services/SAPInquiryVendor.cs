@@ -17,8 +17,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
     {
         #region Singleton
         private static SAPInquiryVendor _instance;
-
-       
+        private string v;
 
         public static SAPInquiryVendor Instance
         {
@@ -35,11 +34,17 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 
 
         #endregion
-        public SAPInquiryVendor()
+        public SAPInquiryVendor() : base("")
         {
             serviceName = "SAPInquiryVendor";
 
         }
+
+        public SAPInquiryVendor(string globalTransactionID, string controllerName = "") : base(globalTransactionID, controllerName)
+        {
+            serviceName = "SAPInquiryVendor";
+        }
+
         public EWIResSAPInquiryVendorContentModel Execute(SAPInquiryVendorInputModel input)
         {
            

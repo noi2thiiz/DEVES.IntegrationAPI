@@ -32,7 +32,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 
         #endregion
 
-        public COMPInquiryClientMaster()
+        public COMPInquiryClientMaster():base("")
+        {
+            serviceName = "COMPInquiryClientMaster";
+        }
+
+        public COMPInquiryClientMaster(string globalTransactionID, string controllerName = "") : base(globalTransactionID, controllerName)
         {
             serviceName = "COMPInquiryClientMaster";
         }

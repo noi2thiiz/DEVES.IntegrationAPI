@@ -20,7 +20,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
         #region Singleton
         private static MotorInquiryAparPayeeList _instance;
 
-        public MotorInquiryAparPayeeList()
+        public MotorInquiryAparPayeeList():base("")
+        {
+            serviceName = "MotorInquiryAparPayeeList";
+        }
+
+        public MotorInquiryAparPayeeList(string globalTransactionID, string controllerName = "") : base(globalTransactionID, controllerName)
         {
             serviceName = "MotorInquiryAparPayeeList";
         }

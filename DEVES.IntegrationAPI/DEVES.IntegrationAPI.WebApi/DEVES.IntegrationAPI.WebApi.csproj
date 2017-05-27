@@ -558,6 +558,7 @@
     <Compile Include="Startup.cs" />
     <Compile Include="TechnicalService\AppBootstrap.cs" />
     <Compile Include="TechnicalService\ConfigulationManager\AppConfig.cs" />
+    <Compile Include="TechnicalService\GlobalTransactionId.cs" />
     <Compile Include="TechnicalService\TraceExceptionLogger\GlobalExceptionHandler.cs" />
     <Compile Include="TechnicalService\TraceExceptionLogger\TraceExceptionLogger.cs" />
     <Compile Include="TechnicalService\TransactionLogger\ApiLogDataGateWay.cs" />

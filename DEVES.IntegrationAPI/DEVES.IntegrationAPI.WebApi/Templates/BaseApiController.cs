@@ -7,6 +7,7 @@ using System.Web.Http;
 using DEVES.IntegrationAPI.Core.Helper;
 using DEVES.IntegrationAPI.Model;
 using DEVES.IntegrationAPI.Model.InquiryCRMPayeeList;
+using DEVES.IntegrationAPI.WebApi.TechnicalService;
 using Newtonsoft.Json;
 
 namespace DEVES.IntegrationAPI.WebApi.Templates
@@ -19,8 +20,8 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
            
             if (string.IsNullOrEmpty(Request.Properties["TransactionID"].ToStringOrEmpty()))
             {
-             
-                Request.Properties["TransactionID"] = Guid.NewGuid().ToString();
+
+                Request.Properties["TransactionID"] = GlobalTransactionIdGenerator.Instance.GetNewGuid();
             }
 
             return Request.Properties["TransactionID"].ToString();

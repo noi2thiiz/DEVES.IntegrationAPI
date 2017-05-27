@@ -32,10 +32,16 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
         }
 
         #endregion
-        public MOTORInquiryMasterASRH()
+        public MOTORInquiryMasterASRH() : base("")
         {
             serviceName = "MOTORInquiryMasterASRH";
         }
+
+        public MOTORInquiryMasterASRH(string globalTransactionID, string controllerName = "") : base(globalTransactionID, controllerName)
+        {
+            serviceName = "MOTORInquiryMasterASRH";
+        }
+
         public InquiryMasterASRHContentModel Execute(InquiryMasterASRHDataInputModel input)
         {
             string endpoint = AppConfig.Instance.Get(CommonConstant.ewiEndpointKeyMOTORInquiryMasterASRH);

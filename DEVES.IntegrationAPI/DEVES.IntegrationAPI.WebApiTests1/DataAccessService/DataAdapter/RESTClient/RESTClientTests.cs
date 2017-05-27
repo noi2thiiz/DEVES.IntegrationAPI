@@ -43,11 +43,6 @@ namespace DEVES.IntegrationAPI.WebApi.Core.DataAdepter.Tests
             Console.WriteLine("Sended");
         }
 
-        [TestMethod()]
-        public void GetUnknownTypeTest()
-        {
-            string req = "xxxx";
-            Assert.AreEqual("String", RESTClient.GetUnknownType(req));
-        }
+       
     }
 }

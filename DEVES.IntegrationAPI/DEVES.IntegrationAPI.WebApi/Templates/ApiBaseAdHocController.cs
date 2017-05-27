@@ -39,14 +39,14 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             {
                 if (string.IsNullOrEmpty(Request.Properties["TransactionID"].ToStringOrEmpty()))
                 {
-                    Request.Properties["TransactionID"] = Guid.NewGuid().ToString();
+                    Request.Properties["TransactionID"] = GlobalTransactionIdGenerator.Instance.GetNewGuid();
                 }
 
                 return Request.Properties["TransactionID"].ToString();
             }
             catch (Exception)
             {
-                Request.Properties["TransactionID"] = Guid.NewGuid().ToString();
+                Request.Properties["TransactionID"] = GlobalTransactionIdGenerator.Instance.GetNewGuid();
                 return Request.Properties["TransactionID"].ToString();
             }
         }

@@ -33,10 +33,16 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 
 
         #endregion
-        public PolisyClientService()
+        public PolisyClientService() : base("")
         {
             this.serviceName = "COMPInquiryClientNoByCleansingID";
         }
+
+        public PolisyClientService(string globalTransactionID, string controllerName = "") : base(globalTransactionID, controllerName)
+        {
+            this.serviceName = "COMPInquiryClientNoByCleansingID";
+        }
+
         /// <summary>
         /// สำหรับหา Polisy Client จาก CleansingId โดยที่หากพบมากกว่า 1 รายการจะ return รายการที่มี clientNumber มากสุด
         /// </summary>

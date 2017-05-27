@@ -292,15 +292,7 @@ namespace DEVES.IntegrationAPI.WebApi.Core.DataAdepter
             }
         }
 
-        public static string GetUnknownType(dynamic req)
-        {
-            
-                Type unknown = ((ObjectHandle)req).Unwrap().GetType();
-
-            
-            
-            return unknown.ToString();
-        }
+       
     }
     
 }

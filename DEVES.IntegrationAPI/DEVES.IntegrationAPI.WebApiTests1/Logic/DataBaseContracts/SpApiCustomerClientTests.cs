@@ -39,9 +39,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.DataBaseContracts.Tests
         [TestMethod()]
         public void GetCrmContactClientIdTest()
         {
-           var result = SpApiCustomerClient.Instance.GetCrmContactClientId("P", "C2017-000007565");
+           var result = SpApiCustomerClient.Instance.GetCrmContactClientId("P", "C2017-005420931");
 
-            Assert.AreEqual("201009-0005559", result);
+            Assert.AreEqual("201011-0000330", result);
         }
     }
 }

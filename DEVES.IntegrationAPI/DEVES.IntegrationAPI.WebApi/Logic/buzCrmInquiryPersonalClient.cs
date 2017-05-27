@@ -135,55 +135,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         debugInfo.AddDebugInfo("Error", "Error: "+e.Message+"--"+e.StackTrace);
                     }
                 }
-                /*
-                string crmPolisyClientId = "";
-                string crmClientId = "";
-                try
-                {
-                    AddNode("try SearchCrmContactClientId");
-                    List<string> lstCrmClientId = SearchCrmContactClientId(retCLSInqPersClient.data.First().cleansing_id);
-                    if (lstCrmClientId != null && lstCrmClientId.Count == 1)
-                    {
-                        AddNode("A2 (lstCrmClientId != null)");
-                        crmClientId = lstCrmClientId.First();
-                    }
-
-                    List<string> lstPolisyClientId = SearchContactPolisyId(retCLSInqPersClient.data.First().cleansing_id);
-                    if (lstPolisyClientId != null && lstPolisyClientId.Count == 1)
-                    {
-                        AddNode("A2 (lstPolisyClientId != null)");
-                        crmPolisyClientId = lstPolisyClientId.First();
-                    }
-                }
-                */
-                /*
-                finally
-                {
-                    CRMInquiryClientOutputDataModel
-                    data = crmInqContent?.data?.FirstOrDefault();
-
-                    if (crmInqContent?.data != null || crmInqContent?.data?.Count > 0)
-                    {
-
-                        data = new CRMInquiryClientOutputDataModel
-                        {
-                            addressInfo = new CRMInquiryClientAddressInfoModel(),
-                            asrhHeader = new CRMInquiryClientAsrhHeaderModel(),
-                            contactInfo = new CRMInquiryClientContactInfoModel(),
-                            generalHeader = new CRMInquiryClientGeneralHeaderModel(),
-                            profileInfo = new CRMInquiryClientProfileInfoModel()
-                        };
-                    }
-
-
-                    data.generalHeader.crmClientId = crmClientId;
-                    data.generalHeader.polisyClientId = crmPolisyClientId;
-                    data.generalHeader.clientType = contentModel.conditionHeader.clientType;
-
-                    data.generalHeader.roleCode = contentModel.conditionHeader.roleCode;
-                    crmInqContent.data.Add(data);
-
-                }*/
+                
                 debugInfo.AddDebugInfo("endregion Search Client from Cleansing", "");
             }
            
@@ -232,8 +184,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             }
 
                 
-            crmInqContent.code = CONST_CODE_SUCCESS;
-            crmInqContent.message = "SUCCESS";
+            crmInqContent.code = AppConst.CODE_SUCCESS;
+            crmInqContent.message = AppConst.MESSAGE_SUCCESS;
             #endregion finishing output 
 
             

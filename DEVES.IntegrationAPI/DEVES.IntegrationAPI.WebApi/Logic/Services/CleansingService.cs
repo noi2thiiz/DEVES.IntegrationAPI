@@ -43,10 +43,16 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
         }
 
         #endregion
-        public CleansingClientService()
+        public CleansingClientService():base("")
         {
             serviceName = "CleansingClient";
         }
+
+        public CleansingClientService(string globalTransactionID, string controllerName = "") : base(globalTransactionID, controllerName)
+        {
+            serviceName = "CleansingClient";
+        }
+
         public BaseEWIResponseModel RemoveByCleansingId(string cleansingClientId, string clientType = "P")
         {
             if (string.IsNullOrEmpty(cleansingClientId))

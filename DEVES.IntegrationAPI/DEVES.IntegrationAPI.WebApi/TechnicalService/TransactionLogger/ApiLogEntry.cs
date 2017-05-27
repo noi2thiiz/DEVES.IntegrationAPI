@@ -29,5 +29,24 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
         public string ServiceName { get; set; } = "";
 
         public bool IsPersisted { get; set; } = false;
+        public string GlobalTransactionID { get; set; }
+
+        public string DebugLog { get; set; } = "";
+        public int TotalRecord { get; set; } = 0;
+        public string ErrorLog { get; set; } = "";
+
+        public string Remark { get; set; } = "";
+
+        public string ContentCode { get; set; } = "";
+        public string ContentMessage { get; set; } = "";
+        public string ContentDescription { get; set; } = "";
+        public string ContentTransactionId { get; set; } = "";
+        public string ContentTransactionDateTime { get; set; } = "";
+        public string EWICode { get; set; } = "";
+        public string EWIMessage { get; set; } = "";
+        public string EWIToken { get; set; } = "";
+        public string StackTrace { get; set; } = "";
+        public string ResponseTime { get; set; } = "";
+        
     }
 }

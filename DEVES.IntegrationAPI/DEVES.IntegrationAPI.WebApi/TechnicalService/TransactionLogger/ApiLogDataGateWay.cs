@@ -23,14 +23,12 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
 
                 apiLogEntry.ServiceName = apiLogEntry.ServiceName.Replace("OutputModel", "");
                 Console.WriteLine("MachineName:"+ System.Environment.MachineName);
-                if (System.Environment.MachineName == AppConst.QA_SERVER_NAME 
-                    || System.Environment.MachineName == AppConst.PRO1_SERVER_NAME 
-                    || System.Environment.MachineName == AppConst.PRO2_SERVER_NAME)
+                if (AppConst.IS_SERVER)
                 {
-                   Console.WriteLine("ExecuteSql");
+                   Console.WriteLine("Execute Log By Sql");
                    ExecuteSql(apiLogEntry);
 
-                }
+                }else
                 if (System.Environment.MachineName== "DESKTOP-Q30CAGJ")
                 {
                    // CallWebService(apiLogEntry);
@@ -79,7 +77,7 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
                                             [Controller],
                                             [ServiceName],
                                             [Activity],
-                                            [TransactionID],
+                                            [TransactionID], [GlobalTransactionID],
                                             [Application],
                                             [User],
                                             Machine,
@@ -89,16 +87,24 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
                                             RequestUri,
                                             RequestMethod,
                                             RequestRouteTemplate,RequestRouteData,RequestHeaders,RequestTimestamp,
-                                            ResponseContentType,ResponseContentBody,ResponseStatusCode,ResponseHeaders,ResponseTimestamp)
+                                            ResponseContentType,ResponseContentBody,ResponseStatusCode,ResponseHeaders,ResponseTimestamp,
+                                            DebugLog,TotalRecord,ErrorLog,StackTrace,Remark,
+                                            ContentCode,ContentMessage,ContentTransactionId,ContentTransactionDateTime,
+                                            EWICode,EWIMessage,EWIToken,ResponseTime)
                                             VALUES (@Controller,
                                                     @ServiceName,
                                                     @Activity,
-                                                    @TransactionID,@Application,@User,@Machine,@RequestIpAddress,
+                                                    @TransactionID,@GlobalTransactionID,
+                                                    @Application,@User,@Machine,@RequestIpAddress,
                                                     @RequestContentType,
                                                     @RequestContentBody,@RequestUri,@RequestMethod,
                                                     @RequestRouteTemplate,@RequestRouteData,@RequestHeaders,@RequestTimestamp,
                                                     @ResponseContentType,@ResponseContentBody,@ResponseStatusCode,@ResponseHeaders,
-                                                    @ResponseTimestamp)";
+                                                    @ResponseTimestamp,
+                                                    @DebugLog,@TotalRecord,@ErrorLog,@StackTrace,
+                                                    @Remark,@ContentCode,@ContentMessage,
+                                                    @ContentTransactionId,@ContentTransactionDateTime,
+                                                    @EWICode,@EWIMessage,@EWIToken,@ResponseTime)";
 
 
 
@@ -111,7 +117,9 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
                     querySaveStaff.Parameters.Add("@Controller", SqlDbType.NVarChar).Value = apiLogEntry.Controller;
                     querySaveStaff.Parameters.Add("@ServiceName", SqlDbType.NVarChar).Value = apiLogEntry.ServiceName;
                     querySaveStaff.Parameters.Add("@Activity", SqlDbType.NVarChar).Value = apiLogEntry.Activity;
-                    querySaveStaff.Parameters.Add("@TransactionID", SqlDbType.NVarChar).Value = apiLogEntry.TransactionID;
+                    querySaveStaff.Parameters.Add("@TransactionID", SqlDbType.NVarChar).Value =
+                        apiLogEntry.TransactionID;
+                    querySaveStaff.Parameters.Add("@GlobalTransactionID", SqlDbType.NVarChar).Value = apiLogEntry?.GlobalTransactionID?? apiLogEntry?.TransactionID??"";
 
 
 
@@ -121,22 +129,42 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
                     querySaveStaff.Parameters.Add("@Machine", SqlDbType.NVarChar).Value = "" + apiLogEntry.Machine;
                     querySaveStaff.Parameters.Add("@RequestIpAddress", SqlDbType.NVarChar).Value = "" + apiLogEntry.RequestIpAddress;
                     querySaveStaff.Parameters.Add("@RequestContentType", SqlDbType.NVarChar).Value = "" + apiLogEntry.RequestContentType;
-                    querySaveStaff.Parameters.Add("@RequestContentBody", SqlDbType.NVarChar).Value = "" + apiLogEntry.RequestContentBody;
+                    querySaveStaff.Parameters.Add("@RequestContentBody", SqlDbType.NText).Value = "" + apiLogEntry.RequestContentBody;
                     querySaveStaff.Parameters.Add("@RequestUri", SqlDbType.NVarChar).Value = "" + apiLogEntry.RequestUri;
                     querySaveStaff.Parameters.Add("@RequestMethod", SqlDbType.NVarChar).Value = "" + apiLogEntry.RequestMethod;
                     querySaveStaff.Parameters.Add("@RequestRouteTemplate", SqlDbType.NVarChar).Value = "" + apiLogEntry.RequestRouteTemplate;
                     querySaveStaff.Parameters.Add("@RequestRouteData", SqlDbType.NVarChar).Value = "" + apiLogEntry.RequestRouteData;
                     querySaveStaff.Parameters.Add("@RequestHeaders", SqlDbType.NVarChar).Value = "" + apiLogEntry.RequestHeaders;
-
+                   
                     querySaveStaff.Parameters.Add("@RequestTimestamp", SqlDbType.DateTime).Value = apiLogEntry?.ResponseTimestamp??DateTime.Now;
                     querySaveStaff.Parameters.Add("@ResponseContentType", SqlDbType.NVarChar).Value = "" + apiLogEntry.ResponseContentType;
-                    querySaveStaff.Parameters.Add("@ResponseContentBody", SqlDbType.NVarChar).Value = "" + apiLogEntry.ResponseContentBody;
+                    querySaveStaff.Parameters.Add("@ResponseContentBody", SqlDbType.NText).Value = "" + apiLogEntry.ResponseContentBody;
 
                     querySaveStaff.Parameters.Add("@ResponseStatusCode", SqlDbType.NVarChar).Value = "" + apiLogEntry.ResponseStatusCode;
                     querySaveStaff.Parameters.Add("@ResponseHeaders", SqlDbType.NVarChar).Value = "" + apiLogEntry.RequestHeaders;
                     querySaveStaff.Parameters.Add("@ResponseTimestamp", SqlDbType.DateTime).Value = apiLogEntry?.ResponseTimestamp??DateTime.Now;
 
 
+                    querySaveStaff.Parameters.Add("@DebugLog", SqlDbType.NVarChar).Value = "" + apiLogEntry.DebugLog;
+                    querySaveStaff.Parameters.Add("@TotalRecord", SqlDbType.Int).Value = "" + apiLogEntry.TotalRecord;
+                    querySaveStaff.Parameters.Add("@ErrorLog", SqlDbType.NVarChar).Value = "" + apiLogEntry.ErrorLog;
+                    querySaveStaff.Parameters.Add("@StackTrace", SqlDbType.NText).Value = "" + apiLogEntry.StackTrace;
+                    
+                    querySaveStaff.Parameters.Add("@Remark", SqlDbType.NVarChar).Value = "" + apiLogEntry.Remark;
+
+                    querySaveStaff.Parameters.Add("@ContentCode", SqlDbType.NVarChar).Value = "" + apiLogEntry.ContentCode;
+                    querySaveStaff.Parameters.Add("@ContentMessage", SqlDbType.NVarChar).Value = "" + apiLogEntry.ContentMessage;
+
+                    querySaveStaff.Parameters.Add("@ContentTransactionId", SqlDbType.NVarChar).Value = "" + apiLogEntry.ContentTransactionId;
+                    querySaveStaff.Parameters.Add("@ContentTransactionDateTime", SqlDbType.NVarChar).Value = "" + apiLogEntry.ContentTransactionDateTime;
+
+                    querySaveStaff.Parameters.Add("@EWICode", SqlDbType.NVarChar).Value = "" + apiLogEntry.EWICode;
+                    querySaveStaff.Parameters.Add("@EWIMessage", SqlDbType.NVarChar).Value = "" + apiLogEntry.EWIMessage;
+                    querySaveStaff.Parameters.Add("@EWIToken", SqlDbType.NVarChar).Value = "" + apiLogEntry.EWIToken;
+
+                    querySaveStaff.Parameters.Add("@ResponseTime", SqlDbType.NVarChar).Value = "" + apiLogEntry.ResponseTime;
+
+                    
 
 
 

@@ -31,7 +31,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 
         #endregion
 
-        public CLSInquiryCLSCorporateClient()
+        public CLSInquiryCLSCorporateClient():base("")
+        {
+            serviceName = "CLSInquiryCLSCorporateClient";
+        }
+
+        public CLSInquiryCLSCorporateClient(string globalTransactionID, string controllerName = "") : base(globalTransactionID, controllerName)
         {
             serviceName = "CLSInquiryCLSCorporateClient";
         }
