@@ -67,13 +67,15 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
             {
                 configurationString = WebConfigurationManager.AppSettings["CRM_CUSTOMAPP_DB_SERVER"];
             }
-
+            var logTable = WebConfigurationManager.AppSettings["LOG_TABLE"];
+           
 
             // var configurationString = CrmConfigurationSettings.AppSettings.Get("settings.CRM_CUSTOM_DB");
             using (SqlConnection openCon = new SqlConnection(configurationString))
             {
-                string saveStaff = @"INSERT into
-                                            transactionLog (
+                
+                var saveStaff = $"INSERT into {logTable} ";
+                saveStaff += @"(
                                             [Controller],
                                             [ServiceName],
                                             [Activity],
@@ -90,7 +92,7 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
                                             ResponseContentType,ResponseContentBody,ResponseStatusCode,ResponseHeaders,ResponseTimestamp,
                                             DebugLog,TotalRecord,ErrorLog,StackTrace,Remark,
                                             ContentCode,ContentMessage,ContentTransactionId,ContentTransactionDateTime,
-                                            EWICode,EWIMessage,EWIToken,ResponseTime)
+                                            EWICode,EWIMessage,EWIToken,ResponseTime,ResponseTimeTotalMilliseconds)
                                             VALUES (@Controller,
                                                     @ServiceName,
                                                     @Activity,
@@ -104,7 +106,7 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
                                                     @DebugLog,@TotalRecord,@ErrorLog,@StackTrace,
                                                     @Remark,@ContentCode,@ContentMessage,
                                                     @ContentTransactionId,@ContentTransactionDateTime,
-                                                    @EWICode,@EWIMessage,@EWIToken,@ResponseTime)";
+                                                    @EWICode,@EWIMessage,@EWIToken,@ResponseTime,@ResponseTimeTotalMilliseconds)";
 
 
 
@@ -163,6 +165,7 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
                     querySaveStaff.Parameters.Add("@EWIToken", SqlDbType.NVarChar).Value = "" + apiLogEntry.EWIToken;
 
                     querySaveStaff.Parameters.Add("@ResponseTime", SqlDbType.NVarChar).Value = "" + apiLogEntry.ResponseTime;
+                    querySaveStaff.Parameters.Add("@ResponseTimeTotalMilliseconds", SqlDbType.Float).Value =  apiLogEntry.ResponseTimeTotalMilliseconds;
 
                     
 
@@ -178,6 +181,7 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
 
         public static void CallWebService(ApiLogEntry apiLogEntry)
         {
+
             CultureInfo UsaCulture = new CultureInfo("en-US");
             var endpoint = WebConfigurationManager.AppSettings["API_ENDPOINT_INTERNAL_SERVICE"];
 

@@ -1,13 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Script.Serialization;
 using DEVES.IntegrationAPI.WebApi.Core.DataAdepter;
 using DEVES.IntegrationAPI.WebApi.Templates;
 
 namespace DEVES.IntegrationAPI.WebApi.DataAccessService.DataAdapter
 {
-    public class RestDataReader: IDataReader
+    public class RestDataReader: DataReaderBase,IDataReader
     {
+        private string db="";
+
+        public RestDataReader(string dbName="")
+        {
+            this.db= dbName;
+        }
+
         public string ConnectionString { get; set; }
         public DbResult Execute(DbRequest req)
         {
@@ -34,17 +42,23 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.DataAdapter
               
                
                 
-                if (req.StoreName== "sp_Query_AppConfig")
+                if (req.StoreName == "sp_Query_AppConfig"
+                       || req.StoreName == "sp_Insert_TransactionLog" 
+                       || req.StoreName == "sp_Get_MaxTransactionID"
+                       || req.StoreName == "sp_Insert_XrmApiTransactionLog")
                 {
                     endpoint += "/StoreService/ext";
-                }else if (req.StoreName == "sp_Insert_TransactionLog")
+                }
+                else if (db != "")
                 {
-                    endpoint += "/StoreService/ext";
+                    endpoint += "/StoreService/"+ db;
                 }
                 else
                 {
                     endpoint += "/StoreService/crm";
                 }
+
+                
 
                 Console.WriteLine("Load  Data Store : " + endpoint);
                // Console.WriteLine(req.ToJson());
@@ -72,9 +86,31 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.DataAdapter
             }
            
         }
+        public DbResult Execute<T>(DbRequest req)
+        {
+            
+            DbResult result = Execute(req);
+            if (result.Success)
+            {
+                if (result.Count > 0)
+                {
+                    var sources = result.Data.ToList();
+                    result.Data.Clear();
+                    foreach (var item in sources)
+                    {
+                     
+                        result.Data.Add(Tranform<T>(item));
+                    }
 
 
-        
+                    
+                }
+
+            }
+            return result;
+        }
+
+
     }
 
    

@@ -43,8 +43,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
 
                 };
-                model.AddDebugInfo("transformer", "TransformCLSInquiryPersonalClientContentOutputModel_to_InquiryCRMPayeeListDataOutputModel");
-                model.AddDebugInfo("CLS Source", clsData);
+               // model.AddDebugInfo("transformer", "TransformCLSInquiryPersonalClientContentOutputModel_to_InquiryCRMPayeeListDataOutputModel");
+               // model.AddDebugInfo("CLS Source", clsData);
                 trgtContent.data.Add(model);
 
             }

@@ -146,14 +146,23 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService.TraceExceptionLogger
 
         public string GetTransactionId(HttpRequestMessage Request)
         {
-
-            if (string.IsNullOrEmpty(Request.Properties["TransactionID"].ToStringOrEmpty()))
+            try
             {
+                if (string.IsNullOrEmpty(Request?.Properties["TransactionID"]?.ToStringOrEmpty()))
+                {
 
-                Request.Properties["TransactionID"] = Guid.NewGuid().ToString();
+                    Request.Properties["TransactionID"] = GlobalTransactionIdGenerator.Instance.GetNewGuid();
+                }
+
+                return Request.Properties["TransactionID"].ToString();
+            }
+            catch (Exception)
+            {
+                Request.Properties["TransactionID"] = GlobalTransactionIdGenerator.Instance.GetNewGuid();
+                return Request.Properties["TransactionID"].ToString();
             }
 
-            return Request.Properties["TransactionID"].ToString();
+            
 
         }
     }

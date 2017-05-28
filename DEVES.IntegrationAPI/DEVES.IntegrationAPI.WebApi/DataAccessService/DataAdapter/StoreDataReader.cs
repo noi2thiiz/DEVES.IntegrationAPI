@@ -7,7 +7,7 @@ using System.Web;
 
 namespace DEVES.IntegrationAPI.WebApi.DataAccessService.DataAdapter
 {
-    public class StoreDataReader : IDataReader
+    public class StoreDataReader : DataReaderBase, IDataReader
     {
         public string ConnectionString { get; set; }
         public StoreDataReader(string connectionString)
@@ -118,6 +118,30 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.DataAdapter
                     comm.Parameters.Add(new SqlParameter(kvp.Key, kvp.Value));
             }
             return comm.ExecuteReader(); //System.Data.CommandBehavior.CloseConnection
+        }
+
+        public DbResult Execute<T>(DbRequest req)
+        {
+
+            DbResult result = Execute(req);
+            if (result.Success)
+            {
+                if (result.Count > 0)
+                {
+                    var sources = result.Data.ToList();
+                    result.Data.Clear();
+                    foreach (var item in sources)
+                    {
+
+                        result.Data.Add(Tranform<T>(item));
+                    }
+
+
+
+                }
+
+            }
+            return result;
         }
 
     }

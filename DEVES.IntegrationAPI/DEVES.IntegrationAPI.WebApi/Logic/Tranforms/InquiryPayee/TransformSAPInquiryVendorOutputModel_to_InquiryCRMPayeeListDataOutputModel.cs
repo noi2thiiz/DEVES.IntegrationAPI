@@ -107,8 +107,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     });
                 }
             }
-            output.AddDebugInfo("SAP JSON Source", input);
-            output.AddDebugInfo("Transformer", "TransformSAPInquiryVendorOutputModel_to_InquiryCRMPayeeListDataOutputModel");
+           // output.AddDebugInfo("SAP JSON Source", input);
+           // output.AddDebugInfo("Transformer", "TransformSAPInquiryVendorOutputModel_to_InquiryCRMPayeeListDataOutputModel");
             return output;
         }
         public bankInfoModel TransformSAPInquiryVendorBankInfoModelToBankInfoModel(SAPInquiryVendorBankInfoModel input,
@@ -152,7 +152,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 .Select(g => g.First())
                 .ToList();
                 */
-            outputContent.AddDebugInfo("Transformer", "TransformSAPInquiryVendorOutputModel_to_InquiryCRMPayeeListDataOutputModel");
+           // outputContent.AddDebugInfo("Transformer", "TransformSAPInquiryVendorOutputModel_to_InquiryCRMPayeeListDataOutputModel");
             return outputContent;
         }
 

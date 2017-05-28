@@ -3,6 +3,7 @@ using DEVES.IntegrationAPI.Model.InquiryCRMPayeeList;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Web;
@@ -21,10 +22,17 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         
         public object Post([FromBody]object value)
         {
-           
 
-            return  ProcessRequest<buzInquiryCRMPayeeListNew, InquiryCRMPayeeListInputModel>(value, "InquiryCRMPayeeList_Input_Schema.json");
-            
+            System.Diagnostics.Stopwatch timer = new Stopwatch();
+            timer.Start();
+
+            var output =   ProcessRequest<buzInquiryCRMPayeeListNew, InquiryCRMPayeeListInputModel>(value, "InquiryCRMPayeeList_Input_Schema.json");
+
+            timer.Stop();
+            TimeSpan t = timer.Elapsed;
+            System.Diagnostics.Debug.WriteLine("Post Execute =" + t.TotalMilliseconds);
+
+            return output;
         }
 
 
@@ -38,9 +46,16 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
 
         public object Post([FromBody]object value)
         {
+            System.Diagnostics.Stopwatch timer = new Stopwatch();
+            timer.Start();
+           
 
+            var output = ProcessRequest<buzInquiryCRMPayeeList, InquiryCRMPayeeListInputModel>(value, "InquiryCRMPayeeList_Input_Schema.json");
 
-            return ProcessRequest<buzInquiryCRMPayeeList, InquiryCRMPayeeListInputModel>(value, "InquiryCRMPayeeList_Input_Schema.json");
+            timer.Stop();
+            TimeSpan t = timer.Elapsed;
+            System.Diagnostics.Debug.Write("ExecuteInput=" + t.TotalMilliseconds);
+            return output;
 
         }
 

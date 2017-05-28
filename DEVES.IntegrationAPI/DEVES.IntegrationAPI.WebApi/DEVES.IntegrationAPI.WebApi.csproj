@@ -433,6 +433,7 @@
     <Compile Include="Controllers\UpdateClaimNoController.cs" />
     <Compile Include="Controllers\UpdateCompliantStatusController.cs" />
     <Compile Include="Controllers\UpdateSurveyStatusController.cs" />
+    <Compile Include="DataAccessService\DataAdapter\DataReaderBase.cs" />
     <Compile Include="DataAccessService\DataAdapter\DbRequest.cs" />
     <Compile Include="DataAccessService\DataAdapter\DbResult.cs" />
     <Compile Include="DataAccessService\DataAdapter\IDataReader.cs" />
@@ -625,6 +626,7 @@
     <Content Include="App_Data\JsonSchema\RegClientCorporate_Input_Schema.json" />
     <Content Include="App_Data\JsonSchema\RegPayeeCorporate_Input_Schema.json" />
     <Content Include="App_Data\JsonSchema\SendSMS_Input_Schema.json" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

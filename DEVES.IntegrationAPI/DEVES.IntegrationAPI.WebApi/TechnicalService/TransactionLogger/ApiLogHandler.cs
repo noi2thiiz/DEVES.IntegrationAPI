@@ -24,7 +24,8 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
             CancellationToken cancellationToken)
         {
-           
+            timer = new Stopwatch();
+            Debug.WriteLine("timer Start");
             timer.Start();
 
             // Gen TransactionID
@@ -58,12 +59,12 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
                 // descriptor here will contain information about the controller to which the request will be routed. If it's null (i.e. controller not found), it will throw an exception
                 var descriptor = controllerSelector.SelectController(request);
                 apiLogEntry.Controller = "" + descriptor.ControllerName;
-                Console.WriteLine("controllerSelector : " + apiLogEntry.Controller);
+              
             }
             catch (Exception e)
             {
                 // continue
-                Console.WriteLine(e);
+                Debug.WriteLine(e);
             }
 
 
@@ -82,83 +83,19 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
 
                     apiLogEntry.ResponseStatusCode = response?.StatusCode.ToString();
                     apiLogEntry.ResponseTimestamp = DateTime.Now;
-
-                    if (response?.Content != null)
-                    {
-                        apiLogEntry.ResponseContentBody = response.Content?.ReadAsStringAsync().Result;
-                        apiLogEntry.ResponseContentType = response.Content?.Headers.ContentType.MediaType;
-                        apiLogEntry.ResponseHeaders = SerializeHeaders(response?.Content?.Headers);
-                    }
-                    try
-                    {
-                        var responseContent = JObject.Parse(apiLogEntry.ResponseContentBody);
-
-                        var responseContentCode = "";
-                        var responseContentMessage = "";
-                        var responseContentDescription = "";
-                        var responseContentId = "";
-                        var responseContentDateTime = "";
-                        if (responseContent != null)
-                        {
-                            apiLogEntry.ContentCode = responseContent["code"]?.ToString() ?? "";
-                            apiLogEntry.ContentMessage = responseContent["message"]?.ToString() ?? "";
-                            apiLogEntry.ContentDescription = responseContent["description"]?.ToString() ?? "";
-                            apiLogEntry.ContentTransactionId = responseContent["transactionId"]?.ToString() ?? "";
-                            apiLogEntry.ContentTransactionDateTime =
-                                responseContent["transactionDateTime"]?.ToString() ?? "";
-
-                            if ( !string.IsNullOrEmpty(responseContent["data"]?.ToString()))
-                            {
-                                
-                                var token = JToken.Parse(responseContent["data"].ToString());
-
-                                if (token is JArray)
-                                {
-                                    IEnumerable<object> items = token.ToObject<List<object>>();
-                                    apiLogEntry.TotalRecord = items.Count();
-                                }
-                                else if (token is JObject)
-                                {
-                                    apiLogEntry.TotalRecord = 1;
-                                }
-                                else
-                                {
-                                    apiLogEntry.TotalRecord = 0;
-                                }
-                            }
-                        }
+                    apiLogEntry.Response = response;
+                    apiLogEntry.Request = request;
 
 
-                        
-
-                        if (responseContent["_debugInfo"] != null)
-                        {
-                            apiLogEntry.DebugLog = responseContent["_debugInfo"].ToString();
-                            responseContent["_debugInfo"] = null;
-                        }
-
-                        if (responseContent["stackTrace"] != null)
-                        {
-                            apiLogEntry.StackTrace = responseContent["stackTrace"].ToString();
-                            responseContent["stackTrace"] = null;
-                        }
-
-
-                        //  var m = new JsonMediaTypeFormatter();
-                        response.Content = new StringContent(responseContent.ToString(), System.Text.Encoding.UTF8,
-                            "application/json");
-                        // ApiLogDataGateWay.Create(apiLogEntry);
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine("142"+e.Message);
-                    }
                     timer.Stop();
 
-                    TimeSpan timeTaken = timer.Elapsed;
-                    apiLogEntry.ResponseTime = timeTaken.ToString();
+                    TimeSpan t = timer.Elapsed;
+                    apiLogEntry.ResponseTime  = $"{t.Hours:D2}h:{t.Minutes:D2}m:{t.Seconds:D2}s:{t.Milliseconds:D3}ms";
+
+                    apiLogEntry.ResponseTimeTotalMilliseconds = (float)t.TotalMilliseconds;
+                    Debug.WriteLine("timer Stop="+t.TotalMilliseconds);
                     InMemoryLogData.Instance.AddLogEntry(apiLogEntry);
-                    Console.WriteLine(response.Content);
+                   
                     GlobalTransactionIdGenerator.Instance.ClearGlobalId(apiLogEntry.TransactionID);
 
                     
@@ -179,6 +116,7 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
             }
             catch (Exception e)
             {
+                Debug.WriteLine(e);
             }
 
             return new ApiLogEntry

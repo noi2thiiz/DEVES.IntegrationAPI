@@ -1,9 +1,9 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Web.Hosting;
 using System.Threading;
-using DEVES.IntegrationAPI.WebApi.TechnicalService.TransactionLogger;
-using WebBackgrounder;
+
 namespace DEVES.IntegrationAPI.WebApi.TechnicalService.TransactionLogger
 {
     public static class LogJobHandle
@@ -14,8 +14,8 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService.TransactionLogger
 
         public static void Start()
         {
-            Console.WriteLine("Log Job Start");
-            timer.Change(TimeSpan.Zero, TimeSpan.FromMilliseconds(5000));
+            Debug.WriteLine("Log Job Start");
+            timer.Change(TimeSpan.Zero, TimeSpan.FromMinutes(1));
         }
 
         private static void OnTimerElapsed(object sender)
@@ -23,8 +23,8 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService.TransactionLogger
             logJob.DoWork(() =>
             {
                 /* What is it that you do around here */
-                Console.WriteLine("logJob:DoWork ");
-                Console.WriteLine("log:Count " + InMemoryLogData.Instance.LogData.Count);
+                Debug.WriteLine("logJob:DoWork ");
+                Debug.WriteLine("log:Count " + InMemoryLogData.Instance.LogData.Count);
                 if (InMemoryLogData.Instance.LogData.Any())
                 {
                     for (var i=0; i<= InMemoryLogData.Instance.LogData.Count; i++)

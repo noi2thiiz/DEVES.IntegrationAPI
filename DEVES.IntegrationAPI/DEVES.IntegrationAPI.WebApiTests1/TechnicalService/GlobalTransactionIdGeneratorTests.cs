@@ -21,5 +21,13 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService.Tests
             Console.WriteLine(guid2);
             Assert.IsNotNull(guid2);
         }
+
+        [TestMethod()]
+        public void LoadMaxTransactionInfoTest()
+        {
+            var info = GlobalTransactionIdGenerator.Instance.LoadMaxTransactionInfo();
+          
+            Assert.IsNotNull(info);
+        }
     }
 }

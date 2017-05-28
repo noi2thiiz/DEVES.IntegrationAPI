@@ -42,8 +42,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     emcsMemId = ""
 
                 };
-                dataItem.AddDebugInfo("COMP JSON Source", compData);
-                dataItem.AddDebugInfo("Transformer", "TransformEWIResCOMPInquiryClientMasterContentModel_to_InquiryCRMPayeeListDataOutputModel");
+               // dataItem.AddDebugInfo("COMP JSON Source", compData);
+               // dataItem.AddDebugInfo("Transformer", "TransformEWIResCOMPInquiryClientMasterContentModel_to_InquiryCRMPayeeListDataOutputModel");
 
                 trgtContent.data.Add(dataItem);
 

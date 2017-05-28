@@ -20,6 +20,7 @@ using DEVES.IntegrationAPI.WebApi.TechnicalService;
 using DEVES.IntegrationAPI.WebApi.TechnicalService.TransactionLogger;
 using DEVES.IntegrationAPI.WebApi.Templates;
 using DEVES.IntegrationAPI.WebApi.Templates.Exceptions;
+using Microsoft.Ajax.Utilities;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Client;
 using Newtonsoft.Json;
@@ -164,8 +165,20 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
             
         }
       
-        protected void LogAsync(HttpRequestMessage req, HttpResponseMessage res, TimeSpan timeTaken)
+        protected void LogAsync(HttpRequestMessage req, HttpResponseMessage res, TimeSpan t)
         {
+            var responseTime = "";
+            float responseTimeTotalMilliseconds=0 ;
+            try
+            {
+                responseTime = $"{t.Hours:D2}h:{t.Minutes:D2}m:{t.Seconds:D2}s:{t.Milliseconds:D3}ms";
+                responseTimeTotalMilliseconds = (float)t.TotalMilliseconds;
+            }
+            catch (Exception)
+            {
+                //do nothing
+            }
+
 
             try
             {
@@ -251,7 +264,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
                     ContentDescription = responseContentDescription,
                     ContentTransactionId = responseContentId,
                     ContentTransactionDateTime = responseContentDateTime,
-                    ResponseTime = timeTaken.ToString(),
+                    ResponseTime = responseTime,
+                    ResponseTimeTotalMilliseconds= responseTimeTotalMilliseconds
 
 
 

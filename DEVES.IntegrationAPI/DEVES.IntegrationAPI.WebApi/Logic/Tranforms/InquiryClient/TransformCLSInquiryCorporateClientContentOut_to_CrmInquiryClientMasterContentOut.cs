@@ -106,13 +106,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         trgt.addressInfo.latitude = addrInfo.lattitude;
                         trgt.addressInfo.longtitude = addrInfo.longtitude;
                     }
-                    trgt.AddDebugInfo("TransformCLSInquiryCorporateClientContentOut_to_CrmInquiryClientMasterContentOut", "");
-                    trgt.AddDebugInfo("Source Data", src);
+                   // trgt.AddDebugInfo("TransformCLSInquiryCorporateClientContentOut_to_CrmInquiryClientMasterContentOut", "");
+                   // trgt.AddDebugInfo("Source Data", src);
                     trgtContent.data.Add(trgt);
                    
                 }
             }
-            trgtContent.AddDebugInfo("TransformCLSInquiryCorporateClientContentOut_to_CrmInquiryClientMasterContentOut", "");
+           // trgtContent.AddDebugInfo("TransformCLSInquiryCorporateClientContentOut_to_CrmInquiryClientMasterContentOut", "");
             return trgtContent;
         }
         public string isNull(string a)

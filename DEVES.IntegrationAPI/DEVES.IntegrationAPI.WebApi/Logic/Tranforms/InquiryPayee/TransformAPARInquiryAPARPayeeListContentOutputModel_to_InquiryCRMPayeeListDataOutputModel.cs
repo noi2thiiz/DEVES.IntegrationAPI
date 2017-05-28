@@ -59,8 +59,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                             fullName = aparPayeeList?.fullName ?? ""
                         };
                         
-                        model.AddDebugInfo("APAR  JSON Source", aparPayeeListDataModel);
-                        model.AddDebugInfo("Transformer", "TransformSAPInquiryVendorOutputModel_to_InquiryCRMPayeeListDataOutputModel");
+                       // model.AddDebugInfo("APAR  JSON Source", aparPayeeListDataModel);
+                       // model.AddDebugInfo("Transformer", "TransformSAPInquiryVendorOutputModel_to_InquiryCRMPayeeListDataOutputModel");
                         trgtContent.data.Add(model);
                     }
                 }

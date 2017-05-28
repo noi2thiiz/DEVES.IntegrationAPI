@@ -106,8 +106,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
 
                 };
-                model.AddDebugInfo("CLS Source", clsData);
-                model.AddDebugInfo("tranformer", "Tranform_clsInqCorporateOut_to_crmInqPayeeOut");
+                //model.AddDebugInfo("CLS Source", clsData);
+                //model.AddDebugInfo("tranformer", "Tranform_clsInqCorporateOut_to_crmInqPayeeOut");
                 crmInqPayeeOut.data.Add(model);
 
             }

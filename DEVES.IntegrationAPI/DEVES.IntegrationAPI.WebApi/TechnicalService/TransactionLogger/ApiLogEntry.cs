@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http;
 
 namespace DEVES.IntegrationAPI.WebApi.TechnicalService
 {
@@ -47,6 +48,8 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
         public string EWIToken { get; set; } = "";
         public string StackTrace { get; set; } = "";
         public string ResponseTime { get; set; } = "";
-        
+        public float ResponseTimeTotalMilliseconds { get; set; } = 0;
+        public HttpRequestMessage Request { get; set; }
+        public HttpResponseMessage Response { get; set; }
     }
 }

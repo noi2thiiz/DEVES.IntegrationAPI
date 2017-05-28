@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData;
+using DEVES.IntegrationAPI.WebApi.TechnicalService;
 using DEVES.IntegrationAPI.WebApi.TechnicalService.TransactionLogger;
 
 namespace DEVES.IntegrationAPI.WebApi
@@ -29,8 +30,12 @@ namespace DEVES.IntegrationAPI.WebApi
 
         public void Start()
         {
+           
             //start watch config change
             AppConfig.Instance.Startup();
+
+            // load last id
+            GlobalTransactionIdGenerator.Instance.Init();
 
             //start log job persis log
             LogJobHandle.Start();

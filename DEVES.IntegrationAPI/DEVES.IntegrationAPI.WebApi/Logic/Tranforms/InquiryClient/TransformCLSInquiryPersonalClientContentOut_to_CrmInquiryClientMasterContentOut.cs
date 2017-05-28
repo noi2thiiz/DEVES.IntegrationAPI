@@ -125,8 +125,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         trgt.addressInfo.latitude = addrInfo.lattitude;
                         trgt.addressInfo.longtitude = addrInfo.longtitude;
                     }
-                    trgt.AddDebugInfo("TransformCLSInquiryPersonalClientContentOut_to_CrmInquiryClientMasterContentOut","");
-                    trgt.AddDebugInfo("Source Data", src);
+                    //trgt.AddDebugInfo("TransformCLSInquiryPersonalClientContentOut_to_CrmInquiryClientMasterContentOut","");
+                   // trgt.AddDebugInfo("Source Data", src);
                     trgtContent.data.Add(trgt);
                 }
                 catch (Exception e)
@@ -134,7 +134,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     Console.WriteLine( e.Message );
                 }
             }
-            trgtContent.AddDebugInfo("TransformCLSInquiryPersonalClientContentOut_to_CrmInquiryClientMasterContentOut", "");
+           // trgtContent.AddDebugInfo("TransformCLSInquiryPersonalClientContentOut_to_CrmInquiryClientMasterContentOut", "");
             return trgtContent;
         }
 

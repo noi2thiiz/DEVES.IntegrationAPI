@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Configuration;
+using DEVES.IntegrationAPI.WebApi.DataAccessService.DataAdapter;
 using DEVES.IntegrationAPI.WebApi.Templates;
 
 namespace DEVES.IntegrationAPI.WebApi.TechnicalService
@@ -12,20 +14,10 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
     {
         private GlobalTransactionIdGenerator()
         {
-            if (Environment.MachineName == AppConst.PRO1_SERVER_NAME)
+            if (IsReady==false)
             {
-                appId = "01";
+                Init();
             }
-            else if (Environment.MachineName == AppConst.PRO2_SERVER_NAME)
-            {
-                appId = "02";
-            }
-            else
-            {
-                appId = "00";
-            }
-            currentdate = DateTime.Now.ToString("yyMMdd");
-            //หา ลำดับล่าสุดจาก ฐานข้อมูล
 
         }
 
@@ -50,21 +42,26 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
         private int logCount = 0;
         private string appId = "00";
 
-        private string currentdate = "";
+        
+        private string logMonth = "";
+        private string logDate = "";
         private Random rnd = new Random();
         public string GetNewGuid()
         {
-            var now = DateTime.Now.ToString("yyMMdd");
-            var time = DateTime.Now.ToString("HHms");
-            if (currentdate == now)
-            {
-                ++logCount;
-            }
-            else
-            {
-                logCount=0;
-                currentdate = now;
-            }
+           
+                var now = DateTime.Now.ToString("yyMMdd");
+                var month = DateTime.Now.ToString("yyMM");
+                var time = DateTime.Now.ToString("HHms");
+                if (logMonth == month)
+                {
+                    ++logCount;
+                }
+                else
+                {
+                    logCount=0;
+                
+                    logMonth = month;
+                }
 
 
             int seed = rnd.Next(1, 999);
@@ -97,7 +94,98 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
                 globalIdList.Remove(globalId);
             }
         }
+        
+        public MaxTransactionEntity LoadMaxTransactionInfo()
+        {
+                IDataReader reader;
 
+                //  var client = new RESTClient(endpoint + "/StoreService/ext");
+                var req = new DbRequest
+                {
+                    StoreName = "sp_Get_MaxTransactionID"
+                };
+                req.AddParam("Machine",Environment.MachineName);
+                var configurationString = "";
+
+            
+                if (AppConst.IS_SERVER)
+                {
+                    configurationString = WebConfigurationManager.AppSettings["CRM_CUSTOMAPP_DB_SERVER"];
+                    reader = new StoreDataReader(configurationString);
+                }
+                else if (System.Environment.MachineName == "DESKTOP-Q30CAGJ")
+                {
+                    configurationString = WebConfigurationManager.AppSettings["CRM_CUSTOMAPP_DB_TON"];
+                    reader = new StoreDataReader(configurationString);
+
+
+                }
+                else
+                {
+                reader = new RestDataReader("ext");
+                }
+
+              
+               
+               
+            
+            var result = reader.Execute<MaxTransactionEntity>(req);
+            Console.WriteLine(result.ToJson());
+            if (result.Success)
+            {
+                if (result.Count>0)
+                {
+                    var output = (MaxTransactionEntity)result.Data[0];
+
+                    return output;
+                }
+              
+            }
+
+
+            return default(MaxTransactionEntity);
+        }
+        public bool IsReady = false;
+        public void Init()
+        {
+            if (Environment.MachineName == AppConst.PRO1_SERVER_NAME)
+            {
+                appId = "01";
+            }
+            else if (Environment.MachineName == AppConst.PRO2_SERVER_NAME)
+            {
+                appId = "02";
+            }
+            else
+            {
+                appId = "00";
+            }
+           
+            var maxTransactionInfo = LoadMaxTransactionInfo();
+            if (maxTransactionInfo != null)
+            {
+                logDate = maxTransactionInfo.LogDate ?? "";
+                logMonth = maxTransactionInfo.LogMonth ?? "";
+                logCount = maxTransactionInfo.MaxTransactionID;
+            }
+            
+            IsReady = true;
+            //หา ลำดับล่าสุดจาก ฐานข้อมูล
+        }
+
+        public class MaxTransactionEntity
+        {
+            public int id { get; set; } = 0;
+            public string Machine { get; set; } = "";
+            public string EnvID { get; set; } = "00";
+            public int MaxTransactionID { get; set; } = 0;
+
+            public string LogMonth { get; set; } = "";
+            public string LogDate { get; set; } = "";
+            
+                
+        }
+      
 
     }
 }

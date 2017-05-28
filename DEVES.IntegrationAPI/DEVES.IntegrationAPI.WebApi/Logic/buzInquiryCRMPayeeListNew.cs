@@ -11,10 +11,12 @@ using DEVES.IntegrationAPI.WebApi.Templates;
 using System.Linq;
 using System.Collections;
 using System.Data.Common;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq.Expressions;
 using DEVES.IntegrationAPI.Core.Helper;
 using DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData;
+using DEVES.IntegrationAPI.WebApi.Logic;
 using DEVES.IntegrationAPI.WebApi.Logic.Services;
 using DEVES.IntegrationAPI.WebApi.Templates.Exceptions;
 using Microsoft.Ajax.Utilities;
@@ -22,13 +24,16 @@ using Microsoft.Ajax.Utilities;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
+      
     public class buzInquiryCRMPayeeListNew : BuzCommand
     {
         /// <summary>
         /// ใช้ทดสอบว่า หากไม่เจอข้อมูลใน SAP ข้อมูล OUTPUT จะเป็นอย่างไร
         /// production set = false
         /// </summary>
-      
+
+        
+
         public bool IgnoreSap = false;
         public bool IgnoreApar = false;
         public bool IgnoreCls = false;
@@ -49,7 +54,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
         public void TranformInput()
         {
-         
+            System.Diagnostics.Stopwatch timer = new Stopwatch();
+            timer.Start();
             //ลบ บริษัทออกจากชื่อ
             if (!string.IsNullOrEmpty(inqCrmPayeeInput.fullname))
             {
@@ -61,10 +67,15 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             }
 
+            timer.Stop();
+            TimeSpan t = timer.Elapsed;
+            AddDebugInfo("TranformInput="+t.TotalMilliseconds);
+
         }
         public override BaseDataModel ExecuteInput(object input)
         {
-
+            System.Diagnostics.Stopwatch timer = new Stopwatch();
+            timer.Start();
             //config
             int iRecordsLimit = int.Parse( GetAppConfigurationSetting("SearchRecordsLimit").ToString());
 
@@ -176,7 +187,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             FinalSearchResult = ProcessOrderBy(distinctResult);
 
             //return output
-
+            timer.Stop();
+            TimeSpan t = timer.Elapsed;
+            AddDebugInfo("ExecuteInput=" + t.TotalMilliseconds);
             crmInqPayeeOut.code = AppConst.CODE_SUCCESS;
             crmInqPayeeOut.message = AppConst.MESSAGE_SUCCESS;
             crmInqPayeeOut.description = "";
@@ -186,6 +199,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             crmInqPayeeOut.data.AddRange(FinalSearchResult);
 
 
+
+           
 
             return crmInqPayeeOut;
         }
@@ -236,7 +251,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             {
                 if (string.IsNullOrEmpty(temp.polisyClientId) || temp?.polisyClientId== "0")
                 {
-                    debugInfo.AddDebugInfo("Find Polisy for new client  " + temp.polisyClientId, "");
+                    //debugInfo.AddDebugInfo("Find Polisy for new client  " + temp.polisyClientId, "");
 
 
 
@@ -245,12 +260,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     if (lstPolisyClient?.cleansingId != null)
                     {
 
-                        debugInfo.AddDebugInfo("found Polisy for new client =" + lstPolisyClient.clientNumber, "");
+                        //debugInfo.AddDebugInfo("found Polisy for new client =" + lstPolisyClient.clientNumber, "");
                         temp.polisyClientId = lstPolisyClient.clientNumber;
                     }
                     else
                     {
-                        debugInfo.AddDebugInfo(" not found Polisy for new client =", "");
+                        //debugInfo.AddDebugInfo(" not found Polisy for new client =", "");
                     }
                     if (temp.polisyClientId == "0")
                     {
@@ -336,7 +351,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                             ? polisyClientId
                             : data.polisyClientId); // เอา  polisyClientId จากข้อมูลต้นทาง (APAR,ASHR ) มาใช้แทน
 
-                        AddDebugInfo("search Transformed result", data);
+                     //   AddDebugInfo("search Transformed result", data);
 
                         allSearchResult.Add(data);
                     }
@@ -362,7 +377,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         /// <returns></returns>
         private List<InquiryCrmPayeeListDataModel> InquiryCompClientMaster(InquiryCRMPayeeListInputModel searchCondition)
         {
-            AddDebugInfo("call method COMPInquiryClientMaster", searchCondition);
+            //AddDebugInfo("call method COMPInquiryClientMaster", searchCondition);
             var service = new COMPInquiryClientMaster(TransactionId, ControllerName);
             var inqPolisyOut = service.Execute(new COMPInquiryClientMasterInputModel
             {
@@ -396,7 +411,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         /// <returns></returns>
         private List<InquiryCrmPayeeListDataModel> InquiryCLSCorporateClient(InquiryCRMPayeeListInputModel searchCondition)
         {
-            AddDebugInfo("call method CLSInquiryCLSCorporateClient", searchCondition);
+           // AddDebugInfo("call method CLSInquiryCLSCorporateClient", searchCondition);
             var service = new CLSInquiryCLSCorporateClient(TransactionId, ControllerName);
             var inqClsCorporateOut = service.Execute(new CLSInquiryCorporateClientInputModel
             {
@@ -432,7 +447,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         /// <returns></returns>
         public List<InquiryCrmPayeeListDataModel> InquiryMasterASHR(InquiryCRMPayeeListInputModel searchCondition)
         {
-            AddDebugInfo("call method MOTORInquiryMasterASRH", searchCondition);
+           // AddDebugInfo("call method MOTORInquiryMasterASRH", searchCondition);
             var service = new MOTORInquiryMasterASRH(TransactionId, ControllerName);
             var inqASRHOut = service.Execute(new InquiryMasterASRHDataInputModel
             {
@@ -481,7 +496,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             };
 
-            AddDebugInfo("call method CLSInquiryCLSPersonalClient", clssearchCondition);
+           // AddDebugInfo("call method CLSInquiryCLSPersonalClient", clssearchCondition);
             var inqClsPesonalOut = service.Execute(clssearchCondition);
 
 
@@ -513,7 +528,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         public List<InquiryCrmPayeeListDataModel> InquiryAPARPayeeList(InquiryCRMPayeeListInputModel searchCondition)
         {
             
-            AddDebugInfo("call method InquiryAPARPayeeList", searchCondition);
+           // AddDebugInfo("call method InquiryAPARPayeeList", searchCondition);
             var crmInqPayeeOut = new CRMInquiryPayeeContentOutputModel();
            // return crmInqPayeeOut?.data;
 

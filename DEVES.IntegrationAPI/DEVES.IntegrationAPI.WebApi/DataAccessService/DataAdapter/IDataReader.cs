@@ -8,6 +8,6 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.DataAdapter
      
 
         DbResult Execute(DbRequest req);
-       
+        DbResult Execute<T>(DbRequest req);
     }
 }

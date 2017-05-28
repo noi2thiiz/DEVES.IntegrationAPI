@@ -71,8 +71,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                             dataItem.hospitalFlag = "Y"; break;
                     }
 
-                    dataItem.AddDebugInfo("MASTER_ASHR JSON Source", ASRHListCollection);
-                    dataItem.AddDebugInfo("Transformer", "TransformInquiryMasterASRHContentOutputModel_to_InquiryCRMPayeeListDataOutputModel");
+                   // dataItem.AddDebugInfo("MASTER_ASHR JSON Source", ASRHListCollection);
+                   // dataItem.AddDebugInfo("Transformer", "TransformInquiryMasterASRHContentOutputModel_to_InquiryCRMPayeeListDataOutputModel");
 
                     trgtContent.data.Add(dataItem);
                 }

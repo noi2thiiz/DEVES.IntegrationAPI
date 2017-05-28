@@ -113,12 +113,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     //hospitalFlag =
 
                 };
-                model.AddDebugInfo("CLS JSON", clsData);
+                //model.AddDebugInfo("CLS JSON", clsData);
                 crmInqPayeeOut.data.Add(model);
 
             }
 
-            crmInqPayeeOut.AddDebugInfo("Tranformer", "Tranform_clsInqPersonalOut_to_crmInqPayeeOut");
+           // crmInqPayeeOut.AddDebugInfo("Tranformer", "Tranform_clsInqPersonalOut_to_crmInqPayeeOut");
             return crmInqPayeeOut;
 
         }
