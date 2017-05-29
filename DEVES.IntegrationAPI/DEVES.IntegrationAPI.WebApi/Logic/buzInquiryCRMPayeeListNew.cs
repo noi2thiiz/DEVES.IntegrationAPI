@@ -163,28 +163,31 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             }
 
             //กรณีที่ไม่พบข้อมูล
-            if (!AllSearchResult.Any())
+            if (AllSearchResult.Any())
             {
-                throw new BuzErrorException("200", "ไม่พบข้อมูล", " กรุณาตรวจสอบเงื่อนไขในการค้นหาอีกครั้ง หรือใช้เงื่อนไขอื่นในการค้นหา ข้อควรระวัง ไม่ควรค้นจากการระบุเงื่อนไขหลายๆอย่างพร้อมกัน เช่นการค้นทั้งชื่อนามสกุลพร้อมกับเลขประจำตัวประชาชน");
+                // throw new BuzErrorException("200", "ไม่พบข้อมูล", " กรุณาตรวจสอบเงื่อนไขในการค้นหาอีกครั้ง หรือใช้เงื่อนไขอื่นในการค้นหา ข้อควรระวัง ไม่ควรค้นจากการระบุเงื่อนไขหลายๆอย่างพร้อมกัน เช่นการค้นทั้งชื่อนามสกุลพร้อมกับเลขประจำตัวประชาชน");
+
+                //ซ่อมข้อมูล  Client ID 
+                AllSearchResult = FixEmptyPolisyClientId(AllSearchResult, inqCrmPayeeInput.clientType);
+
+
+                //กรณีที่พบข้อมูลค้นหาต่อที่ SAP
+                SAPResult = InquerySapVandor(AllSearchResult);
+
+                // ค้นข้อมูลใน CRM เพื่อเอาเลข CRM Client ID มาเติม ??? ต้องทำมัย
+
+
+                // remove duplicate data 
+                // ตัวที่อยู่ใน search condition ทั้งหมดจะต้องไม่ซ้ำกันเลย
+
+
+                //order by vcode,cleasing id desc
+                var distinctResult = ProcessDistinct(SAPResult);
+                FinalSearchResult = ProcessOrderBy(distinctResult);
+                crmInqPayeeOut.data.AddRange(FinalSearchResult);
             }
 
-            //ซ่อมข้อมูล  Client ID 
-            AllSearchResult =  FixEmptyPolisyClientId(AllSearchResult,inqCrmPayeeInput.clientType);
-
-
-            //กรณีที่พบข้อมูลค้นหาต่อที่ SAP
-            SAPResult = InquerySapVandor(AllSearchResult);
-
-            // ค้นข้อมูลใน CRM เพื่อเอาเลข CRM Client ID มาเติม ??? ต้องทำมัย
-
-
-            // remove duplicate data 
-            // ตัวที่อยู่ใน search condition ทั้งหมดจะต้องไม่ซ้ำกันเลย
-
-
-            //order by vcode,cleasing id desc
-            var distinctResult =  ProcessDistinct(SAPResult);
-            FinalSearchResult = ProcessOrderBy(distinctResult);
+           
 
             //return output
             timer.Stop();
@@ -196,7 +199,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             crmInqPayeeOut.transactionId = TransactionId;
             crmInqPayeeOut.transactionDateTime = DateTime.Now;
             crmInqPayeeOut.AddListDebugInfo(GetDebugInfoList());
-            crmInqPayeeOut.data.AddRange(FinalSearchResult);
+           
 
 
 
@@ -287,7 +290,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         /// <returns></returns>
         private List<InquiryCrmPayeeListDataModel> InquerySapVandor(List<InquiryCrmPayeeListDataModel> listSAPSearchConditions)
         {
-           
+            AddDebugInfo("InquerySapVandor");
             var allSearchResult = new List<InquiryCrmPayeeListDataModel>();
            
             var service = new SAPInquiryVendor(TransactionId, ControllerName);
@@ -309,8 +312,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
 
                 }
+                AddDebugInfo("searchResult 1", searchResult);
 
-                if (searchResult == null && !string.IsNullOrEmpty(condition?.polisyClientId))
+                if ((searchResult?.VendorInfo == null || !searchResult.VendorInfo.Any() ) && !string.IsNullOrEmpty(condition?.polisyClientId))
                 {
                     var sapSearchCondition = new SAPInquiryVendorInputModel
                     {
@@ -319,19 +323,19 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     condition.sapSearchCondition = sapSearchCondition;
                     searchResult = service.Execute(sapSearchCondition);
                 }
-
-                if (searchResult == null && !string.IsNullOrEmpty(condition?.taxNo))
+                AddDebugInfo("searchResult 2", searchResult);
+                if ((searchResult?.VendorInfo == null || !searchResult.VendorInfo.Any() )&& !string.IsNullOrEmpty(condition?.taxNo))
                 {
                     var sapSearchCondition = new SAPInquiryVendorInputModel
                     {
                         TAX3 = condition?.taxNo,
-                        TAX4 = condition?.taxNo
+                        TAX4 = condition?.taxBranchCode
                     };
                     condition.sapSearchCondition = sapSearchCondition;
                     searchResult = service.Execute(sapSearchCondition);
                 }
 
-                if (searchResult?.VendorInfo != null)
+                if (searchResult != null && searchResult.VendorInfo.Any()) 
                 {
 
                     CRMInquiryPayeeContentOutputModel tmpCrmInqPayeeOut =
@@ -377,7 +381,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         /// <returns></returns>
         private List<InquiryCrmPayeeListDataModel> InquiryCompClientMaster(InquiryCRMPayeeListInputModel searchCondition)
         {
-            //AddDebugInfo("call method COMPInquiryClientMaster", searchCondition);
+            AddDebugInfo("call method COMPInquiryClientMaster", searchCondition);
             var service = new COMPInquiryClientMaster(TransactionId, ControllerName);
             var inqPolisyOut = service.Execute(new COMPInquiryClientMasterInputModel
             {
@@ -411,7 +415,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         /// <returns></returns>
         private List<InquiryCrmPayeeListDataModel> InquiryCLSCorporateClient(InquiryCRMPayeeListInputModel searchCondition)
         {
-           // AddDebugInfo("call method CLSInquiryCLSCorporateClient", searchCondition);
+            AddDebugInfo("call method CLSInquiryCLSCorporateClient", searchCondition);
             var service = new CLSInquiryCLSCorporateClient(TransactionId, ControllerName);
             var inqClsCorporateOut = service.Execute(new CLSInquiryCorporateClientInputModel
             {
@@ -447,7 +451,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         /// <returns></returns>
         public List<InquiryCrmPayeeListDataModel> InquiryMasterASHR(InquiryCRMPayeeListInputModel searchCondition)
         {
-           // AddDebugInfo("call method MOTORInquiryMasterASRH", searchCondition);
+           AddDebugInfo("call method MOTORInquiryMasterASRH", searchCondition);
             var service = new MOTORInquiryMasterASRH(TransactionId, ControllerName);
             var inqASRHOut = service.Execute(new InquiryMasterASRHDataInputModel
             {
@@ -481,7 +485,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         /// <returns></returns>
         private List<InquiryCrmPayeeListDataModel> InquiryCLSPersonalClient(InquiryCRMPayeeListInputModel searchCondition)
         {
-           
+            AddDebugInfo("call method InquiryCLSPersonalClient", searchCondition);
             var service = new CLSInquiryCLSPersonalClient(TransactionId, ControllerName);
             var clssearchCondition = new CLSInquiryPersonalClientInputModel
             {
@@ -528,7 +532,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         public List<InquiryCrmPayeeListDataModel> InquiryAPARPayeeList(InquiryCRMPayeeListInputModel searchCondition)
         {
             
-           // AddDebugInfo("call method InquiryAPARPayeeList", searchCondition);
+            AddDebugInfo("call method InquiryAPARPayeeList", searchCondition);
             var crmInqPayeeOut = new CRMInquiryPayeeContentOutputModel();
            // return crmInqPayeeOut?.data;
 
