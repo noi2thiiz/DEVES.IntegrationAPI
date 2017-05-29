@@ -85,11 +85,27 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             CRMInquiryPayeeContentOutputModel crmInqPayeeOut = new CRMInquiryPayeeContentOutputModel();
             crmInqPayeeOut.data = new List<InquiryCrmPayeeListDataModel>();
 
+           
+
+
             List<InquiryCRMPayeeListInputModel> listSAPSearchCondition = new List<InquiryCRMPayeeListInputModel>();
             Console.WriteLine(listSAPSearchCondition);
            
             inqCrmPayeeInput = (InquiryCRMPayeeListInputModel)input;
             InquiryCRMPayeeListInputModel searchCondition = Copy(inqCrmPayeeInput);
+
+            string isOptionalEmpty = inqCrmPayeeInput.polisyClientId + inqCrmPayeeInput.sapVendorCode + inqCrmPayeeInput.fullname + inqCrmPayeeInput.taxNo + inqCrmPayeeInput.taxBranchCode + inqCrmPayeeInput.emcsCode;
+            if (string.IsNullOrEmpty(isOptionalEmpty.Trim()))
+            {
+                crmInqPayeeOut.code = CONST_CODE_FAILED;
+                crmInqPayeeOut.message = "Please fill at least 1 condition";
+                crmInqPayeeOut.description = "";
+                crmInqPayeeOut.transactionId = TransactionId;
+                crmInqPayeeOut.transactionDateTime = DateTime.Now;
+
+                return crmInqPayeeOut;
+            }
+
 
             //validate and  tranform input
             TranformInput();
