@@ -99,40 +99,52 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                             }
                         }
                        
-                        
-                        // ดึงค่าจาก Polisy มาเติมในกรณีที่ข้อมูลสร้างใหม่ CLS จะยังไม่มีเลข Polisy
-                        Console.WriteLine("polisyClientId=" + temp.generalHeader.polisyClientId);
-                        if (string.IsNullOrEmpty(temp.generalHeader.polisyClientId) || temp.generalHeader.polisyClientId.Equals("0"))
-                        {
-                            debugInfo.AddDebugInfo("Find Polisy for new client  "+ temp.generalHeader.polisyClientId,"");
-                            
-
-           
-                            var lstPolisyClient = PolisyClientService.Instance.FindByCleansingId(temp.generalHeader.cleansingId, contentModel.conditionHeader.clientType.ToUpperIgnoreNull());
-                           
-                            if (lstPolisyClient?.cleansingId != null)
-                            {
-
-                                debugInfo.AddDebugInfo("found Polisy for new client =" + lstPolisyClient.clientNumber,"");
-                                temp.generalHeader.polisyClientId = lstPolisyClient.clientNumber;
-                            }
-                            else
-                            {
-                                debugInfo.AddDebugInfo(" not found Polisy for new client =" ,"");
-                            }
-                            if (temp.generalHeader.polisyClientId=="0")
-                            {
-                                temp.generalHeader.polisyClientId = "";
-                            }
-
-                        }
-
+                       
                     }
 
                     catch (Exception e)
                     {
                        
-                        debugInfo.AddDebugInfo("Error", "Error: "+e.Message+"--"+e.StackTrace);
+                        debugInfo.AddDebugInfo("Error on search crmClientId", "Error: "+e.Message+"--"+e.StackTrace);
+                    }
+
+                    // ดึงค่าจาก Polisy มาเติมในกรณีที่ข้อมูลสร้างใหม่ CLS จะยังไม่มีเลข Polisy
+                    Console.WriteLine("polisyClientId=" + temp.generalHeader.polisyClientId);
+                    try
+                    {
+                        if (string.IsNullOrEmpty(temp.generalHeader.polisyClientId) ||
+                            temp.generalHeader.polisyClientId.Equals("0"))
+                        {
+                            debugInfo.AddDebugInfo("Find Polisy for new client  " + temp.generalHeader.polisyClientId,
+                                "");
+
+
+
+                            var lstPolisyClient =
+                                PolisyClientService.Instance.FindByCleansingId(temp.generalHeader.cleansingId,
+                                    contentModel.conditionHeader.clientType.ToUpperIgnoreNull());
+
+                            if (lstPolisyClient?.cleansingId != null)
+                            {
+
+                                debugInfo.AddDebugInfo("found Polisy for new client =" + lstPolisyClient.clientNumber,
+                                    "");
+                                temp.generalHeader.polisyClientId = lstPolisyClient.clientNumber;
+                            }
+                            else
+                            {
+                                debugInfo.AddDebugInfo(" not found Polisy for new client =", "");
+                            }
+                            if (temp.generalHeader.polisyClientId == "0")
+                            {
+                                temp.generalHeader.polisyClientId = "";
+                            }
+
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        debugInfo.AddDebugInfo("Error on search polisyClientId by Cleansing id",e.Message);
                     }
                 }
                 
@@ -159,15 +171,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         debugInfo.AddDebugInfo("Found in Polisy400", retCOMPInqClient);
                         crmInqContent = (CRMInquiryClientContentOutputModel)TransformerFactory.TransformModel(retCOMPInqClient, crmInqContent);
                     }
-                    //Not found in Polisy400
-                    else
-                    {
-
-                    }
+                    
 
                 }
                 catch (Exception e)
                 {
+                    debugInfo.AddDebugInfo("error in Polisy400", e.Message);
                     throw;
                 }
 

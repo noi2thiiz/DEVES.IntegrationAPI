@@ -119,28 +119,37 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                             }
 
                           
-                            if (string.IsNullOrEmpty(temp.generalHeader.polisyClientId) || temp.generalHeader.polisyClientId.Equals("0"))
+                           
+                            bFoundIn_APAR_or_Master = true;
+                        }
+        
+                        catch (Exception e)
+                        {
+                            debugInfo.AddDebugInfo("Error on search crmClientId", "Error: " + e.Message + "--" + e.StackTrace);
+                        }
+
+                        try
+                        {
+                            if (string.IsNullOrEmpty(temp.generalHeader.polisyClientId) ||
+                                temp.generalHeader.polisyClientId.Equals("0"))
                             {
-                                var lstPolisyClient = PolisyClientService.Instance.FindByCleansingId(temp.generalHeader.cleansingId, contentModel.conditionHeader.clientType.ToUpperIgnoreNull());
-                               
+                                var lstPolisyClient =
+                                    PolisyClientService.Instance.FindByCleansingId(temp.generalHeader.cleansingId,
+                                        contentModel.conditionHeader.clientType.ToUpperIgnoreNull());
+
                                 if (lstPolisyClient?.cleansingId != null)
                                 {
                                     temp.generalHeader.polisyClientId = lstPolisyClient.clientNumber;
                                 }
 
                             }
-                            bFoundIn_APAR_or_Master = true;
                         }
-                        /*
-                        finally
-                        {
-                            CRMInquiryClientOutputDataModel data = crmInqContent.data.First();
-                            data.generalHeader.crmClientId = crmClientId;
-                        }*/
                         catch (Exception e)
                         {
-
+                            debugInfo.AddDebugInfo("Error on search polisyClientId by Cleansing id", e.Message);
                         }
+
+                       
                     }
 
 
