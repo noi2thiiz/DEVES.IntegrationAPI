@@ -227,6 +227,11 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                     iSurveyOutput.eventid = ewiRes.content.ToString();
                     iSurveyOutput.errorMessage = ewiRes.responseMessage.ToString();
                 }
+                else if(ewiRes.responseCode != "EWI-0000I")
+                {
+                    iSurveyOutput.eventid = "ส่งข้อมูลเข้า i-Survey ไม่สำเร็จ" + "\n" + "กรุณากดอีกครั้งหรือติดต่อแผนก IT";
+                    iSurveyOutput.errorMessage = "ส่งข้อมูลเข้า i-Survey ไม่สำเร็จ: " + ewiRes.responseMessage.ToString();
+                }
                 else
                 {
                     iSurveyOutput.eventid = ewiRes.content.ToString();
@@ -270,6 +275,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             {
                 _logImportantMessage = "Error: Json format is invalid.";
                 output.eventID = _logImportantMessage;
+                output.errorMessage = _logImportantMessage;
                 _log.Error(_logImportantMessage);
                 return Request.CreateResponse<RequestSurveyorDataOutputModel>(output);
             }
