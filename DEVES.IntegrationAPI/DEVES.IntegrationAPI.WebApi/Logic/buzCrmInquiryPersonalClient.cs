@@ -14,6 +14,7 @@ using DEVES.IntegrationAPI.Model.RegPayeeCorporate;
 using DEVES.IntegrationAPI.WebApi.Logic.DataBaseContracts;
 using DEVES.IntegrationAPI.WebApi.Logic.Services;
 using DEVES.IntegrationAPI.WebApi.Templates;
+using DEVES.IntegrationAPI.WebApi.Templates.Exceptions;
 using WebGrease.Css.Visitor;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
@@ -75,6 +76,15 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                                                                                     (CommonConstant.ewiEndpointKeyCLSInquiryPersonalClient, clsPersonalInput);
 
             //++ If Found records in Cleansing(CLS) then pour the data from Cleansing to contentOutputModel
+            if (retCLSInqPersClient.success)
+            {
+                throw new BuzErrorException(
+                    retCLSInqPersClient.code,
+                    $"CLS Error:{retCLSInqPersClient.message}",
+                    retCLSInqPersClient.description,
+                    "CLS",
+                    TransactionId);
+            }
 
             if (IsSearchFound(retCLSInqPersClient))
             {
@@ -208,7 +218,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             return crmInqContent;
         }
 
-        internal bool IsSearchFound(CLSInquiryPersonalClientContentOutputModel content)
+        private bool IsSearchFound(CLSInquiryPersonalClientContentOutputModel content)
         {
             if (null == content?.data)
             {

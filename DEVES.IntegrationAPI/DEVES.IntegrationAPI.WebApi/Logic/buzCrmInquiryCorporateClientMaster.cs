@@ -13,6 +13,7 @@ using DEVES.IntegrationAPI.Model.Polisy400;
 using DEVES.IntegrationAPI.Model.InquiryClientMaster;
 using DEVES.IntegrationAPI.WebApi.Logic.Services;
 using DEVES.IntegrationAPI.WebApi.Templates;
+using DEVES.IntegrationAPI.WebApi.Templates.Exceptions;
 
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
@@ -97,6 +98,15 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                 //+ If Success then pour the data from Cleansing to contentOutputModel
 
+                if (retCLSInqCorpClient.success )
+                {
+                    throw new BuzErrorException(
+                        retCLSInqCorpClient.code,
+                        $"CLS Error:{retCLSInqCorpClient.message}",
+                        retCLSInqCorpClient.description,
+                        "CLS",
+                        TransactionId);
+                }
 
                 if (IsSearchFound(retCLSInqCorpClient))
                 {
@@ -241,7 +251,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             return crmInqContent;
         }
 
-        internal bool IsSearchFound(CLSInquiryCorporateClientContentOutputModel content)
+        private bool IsSearchFound(CLSInquiryCorporateClientContentOutputModel content)
         {
             if (content?.data == null)
             {
