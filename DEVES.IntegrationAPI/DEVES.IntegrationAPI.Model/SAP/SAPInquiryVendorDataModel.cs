@@ -37,6 +37,10 @@ namespace DEVES.IntegrationAPI.Model.SAP
     {
         [JsonProperty(Order = 21)]
         public SAPInquiryVendorContentStatusModel Status { set; get; }
+        public string error { set; get; }
+        public string result_code { set; get; }
+        public int result_status { set; get; }
+        public string result_time { set; get; }
 
         [JsonProperty(Order = 22)]
         public List<SAPInquiryVendorContentVendorInfoModel> VendorInfo { set; get; }

@@ -46,11 +46,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
         public CleansingClientService():base("")
         {
             serviceName = "CleansingClient";
+            systemName = "CLS";
         }
 
         public CleansingClientService(string globalTransactionID, string controllerName = "") : base(globalTransactionID, controllerName)
         {
             serviceName = "CleansingClient";
+            systemName = "CLS";
         }
 
         public BaseEWIResponseModel RemoveByCleansingId(string cleansingClientId, string clientType = "P")

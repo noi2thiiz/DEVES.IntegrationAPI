@@ -14,7 +14,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
     public class buzInquiryCRMPayeeListNewTests
     {
         [TestMethod()]
-        public void ExecuteInquiryAPARPayeeListTest()
+        public void Execute_InquiryAPARPayeeListTest()
         {
             AppConfig.Instance.StartupForUnitTest();
 
@@ -29,7 +29,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
         }
 
         [TestMethod()]
-        public void ExecuteInputTest()
+        public void ExecuteInput_buzInquiryCRMPayeeListNewTest()
         {
             AppConfig.Instance.StartupForUnitTest();
 

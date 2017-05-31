@@ -24,7 +24,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services.Tests
         }
 
         [TestMethod()]
-        public void ExecuteTest()
+        public void Execute_CLSInquiryCLSCorporateClientTest()
         {
             AppConfig.Instance.StartupForUnitTest();
             service = new CLSInquiryCLSCorporateClient();

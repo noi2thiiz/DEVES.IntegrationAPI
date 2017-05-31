@@ -12,14 +12,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services.Tests
     [TestClass()]
     public class COMPInquiryClientMasterTests
     {
-        [TestMethod()]
-        public void COMPInquiryClientMasterTest()
-        {
-            AppConfig.Instance.StartupForUnitTest();
-            var service = new COMPInquiryClientMaster();
-            Assert.IsNotNull(service);
-        }
-
+   
         [TestMethod()]
         public void ExecuteTest()
         {

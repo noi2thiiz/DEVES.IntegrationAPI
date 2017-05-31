@@ -36,12 +36,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
         #endregion
         public PolisyClientService() : base("")
         {
-            this.serviceName = "COMPInquiryClientNoByCleansingID";
+            serviceName = "COMP_InquiryClientNoByCleansingID";
+            systemName = "COMP";
         }
 
         public PolisyClientService(string globalTransactionID, string controllerName = "") : base(globalTransactionID, controllerName)
         {
-            this.serviceName = "COMPInquiryClientNoByCleansingID";
+            serviceName = "COMP_InquiryClientNoByCleansingID";
+            systemName = "COMP";
         }
 
         /// <summary>

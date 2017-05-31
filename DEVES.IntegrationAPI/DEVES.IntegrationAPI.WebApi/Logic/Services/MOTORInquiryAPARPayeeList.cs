@@ -23,12 +23,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 
         public MotorInquiryAparPayeeList():base("")
         {
-            serviceName = "MotorInquiryAparPayeeList";
+            serviceName = "MOTOR_InquiryAPARPayeeList";
+            systemName = "APAR";
         }
 
         public MotorInquiryAparPayeeList(string globalTransactionID, string controllerName = "") : base(globalTransactionID, controllerName)
         {
-            serviceName = "MotorInquiryAparPayeeList";
+            serviceName = "MOTOR_InquiryAPARPayeeList";
+            systemName = "APAR";
         }
 
         public static MotorInquiryAparPayeeList Instance

@@ -12,16 +12,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services.Tests
     [TestClass()]
     public class CLSInquiryCLSPersonalClientTests
     {
-        [TestMethod()]
-        public void CLSInquiryCLSPersonalClientTest()
-        {
-            AppConfig.Instance.StartupForUnitTest();
-            var service = new CLSInquiryCLSPersonalClient();
-            Assert.IsNotNull(service);
-        }
+      
 
         [TestMethod()]
-        public void ExecuteTest()
+        public void Execute_CLSInquiryCLSPersonalClientTest()
         {
             AppConfig.Instance.StartupForUnitTest();
             var service = new CLSInquiryCLSPersonalClient();

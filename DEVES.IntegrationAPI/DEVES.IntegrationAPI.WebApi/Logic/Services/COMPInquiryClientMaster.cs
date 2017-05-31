@@ -35,12 +35,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 
         public COMPInquiryClientMaster():base("")
         {
-            serviceName = "COMPInquiryClientMaster";
+            serviceName = "COMP_InquiryClientMaster";
+            systemName = "COMP";
         }
 
         public COMPInquiryClientMaster(string globalTransactionID, string controllerName = "") : base(globalTransactionID, controllerName)
         {
-            serviceName = "COMPInquiryClientMaster";
+            serviceName = "COMP_InquiryClientMaster";
+            systemName = "COMP";
         }
 
         public EWIResCOMPInquiryClientMasterContentModel Execute(COMPInquiryClientMasterInputModel input)

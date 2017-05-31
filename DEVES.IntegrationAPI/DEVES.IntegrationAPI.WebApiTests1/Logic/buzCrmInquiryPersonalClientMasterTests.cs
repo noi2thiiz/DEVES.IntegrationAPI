@@ -17,7 +17,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
     {
        
         [TestMethod()]
-        public void ExecuteBuzInquiryCrmClientMasterTest()
+        public void Execute_BuzInquiryCrmClientMasterTest()
         {
             AppConfig.Instance.StartupForUnitTest();
 

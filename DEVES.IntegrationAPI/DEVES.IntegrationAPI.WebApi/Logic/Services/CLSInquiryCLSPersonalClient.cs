@@ -33,12 +33,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
         #endregion
         public CLSInquiryCLSPersonalClient():base("")
         {
-            serviceName = "CLSInquiryCLSPersonal";
+            serviceName = "CLS_InquiryCLSPersonal";
+            systemName = "CLS";
         }
 
         public CLSInquiryCLSPersonalClient(string globalTransactionID, string controllerName = "") : base(globalTransactionID, controllerName)
         {
-            serviceName = "CLSInquiryCLSPersonal";
+            serviceName = "CLS_InquiryCLSPersonal";
+            systemName = "CLS";
         }
 
         public CLSInquiryPersonalClientContentOutputModel Execute(CLSInquiryPersonalClientInputModel input)

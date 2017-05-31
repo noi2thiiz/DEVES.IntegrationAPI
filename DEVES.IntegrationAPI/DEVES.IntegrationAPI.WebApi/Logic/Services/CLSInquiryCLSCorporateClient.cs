@@ -34,12 +34,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 
         public CLSInquiryCLSCorporateClient():base("")
         {
-            serviceName = "CLSInquiryCLSCorporateClient";
+            serviceName = "CLS_InquiryCLSCorporateClient";
+            systemName = "CLS";
         }
 
         public CLSInquiryCLSCorporateClient(string globalTransactionID, string controllerName = "") : base(globalTransactionID, controllerName)
         {
-            serviceName = "CLSInquiryCLSCorporateClient";
+            serviceName = "CLS_InquiryCLSCorporateClient";
+            systemName = "CLS";
         }
 
         public CLSInquiryCorporateClientContentOutputModel Execute(CLSInquiryCorporateClientInputModel input)

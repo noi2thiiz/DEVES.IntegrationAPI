@@ -43,6 +43,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 
         protected const string appName = "xrmAPI"; // Application
         protected string serviceName = "";
+        protected string systemName = "";
+        
         protected const string activity = "consume"; // Activity
         protected string user = ""; // User
         protected string machineName = Environment.MachineName; // Machine
@@ -145,7 +147,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
                 //T2 output = (T2)typeof(T1).GetProperty("content").GetValue(ewiRes);
                 resBody = ewiRes.Result;
                 resTime = DateTime.Now;
-               // Console.WriteLine(resBody);
+                Console.WriteLine(resBody);
               
                
             
@@ -153,14 +155,69 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
               
                 result.Content = ewiRes.Result;
                 result.StatusCode = response.StatusCode;
+
+                var responseContent = JObject.Parse(ewiRes.Result);
+                if (responseContent["responseCode"] != null)
+                {
+                    if (responseContent["responseCode"].ToString() != "EWI-0000I")
+                    {
+                        throw new BuzErrorException(
+                            responseContent["responseCode"].ToString(),
+                            $"{systemName} Error:{responseContent["responseMessage"]}",
+                            $"Error on execute '{serviceName}'",
+                            systemName,
+                            GlobalTransactionID);
+                    }
+
+
+                    
+                }
+                var content = responseContent["content"];
+                if (content?["success"] != null)
+                {
+                    if((bool)content?["success"] == false)
+                    {
+                        var code = content["code"]?.ToString()??"500";
+                        var message = content["message"]?.ToString();
+                        var description = content["description"]?.ToString();
+                        throw new BuzErrorException(
+                            code,
+                            $"{systemName} Error:{message}",
+                            $"Error on execute '{serviceName}':{description}",
+                            systemName,
+                            GlobalTransactionID);
+                    }
+
+                }else
+                if (content?["code"] != null)
+                {
+                    var code = content["code"]?.ToString();
+                    var message = content["message"]?.ToString();
+                    var description = content["description"]?.ToString();
+
+                    if (code!= "200")
+                    {
+                        throw new BuzErrorException(
+                            code,
+                            $"{systemName} Error:{message}",
+                            $"Error on execute '{serviceName}':{description}",
+                            systemName,
+                            GlobalTransactionID);
+                    }
+                }
                 return result;
             }
             catch (Exception e)
             {
-                LogAsync(request);
-                Console.WriteLine(e.Message+":"+e.StackTrace);
-                throw;
-
+                    LogAsync(request);
+               
+                    throw new BuzErrorException(
+                        "500",
+                        $"{systemName} Error:{e.Message}",
+                        $"Error on execute '{serviceName}'",
+                        systemName,
+                        GlobalTransactionID);
+                
             }
             
         }

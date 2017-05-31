@@ -20,7 +20,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             switch (contentModel.conditionHeader.clientType)
             {
                 case "P":
-                    cmd = new buzCrmInquiryPersonalClientMaster();
+                    cmd = new BuzInquiryCrmClientMaster(); /*buzCrmInquiryPersonalClientMaster*/
                     cmd.TransactionId = TransactionId;
                     break;
                 case "C":

@@ -74,6 +74,16 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
                     GlobalTransactionID);
             }
 
+            if (!string.IsNullOrEmpty(contentObj?.content?.error))
+            {
+                throw new BuzErrorException(
+                    contentObj?.content?.result_code,
+                    $"SAP Error:{contentObj?.content?.error}",
+                    "Error on execute 'COMP_SAPInquiryVendor'",
+                    "SAP",
+                    GlobalTransactionID);
+            }
+
             return contentObj?.content;
         }
     }

@@ -35,12 +35,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
         #endregion
         public MOTORInquiryMasterASRH() : base("")
         {
-            serviceName = "MOTORInquiryMasterASRH";
+            serviceName = "MOTOR_InquiryMasterASRH";
+            systemName = "ASRH";
         }
 
         public MOTORInquiryMasterASRH(string globalTransactionID, string controllerName = "") : base(globalTransactionID, controllerName)
         {
-            serviceName = "MOTORInquiryMasterASRH";
+            serviceName = "MOTOR_InquiryMasterASRH";
+            systemName = "ASRH";
         }
 
         public InquiryMasterASRHContentModel Execute(InquiryMasterASRHDataInputModel input)

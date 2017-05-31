@@ -14,7 +14,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services.Tests
     public class MotorInquiryAparPayeeListTests
     {
         [TestMethod()]
-        public void MotorInquiryAparPayeeListExecuteTest()
+        public void Execute_MotorInquiryAparPayeeListTest()
         {
             AppConfig.Instance.StartupForUnitTest();
             var result = MotorInquiryAparPayeeList.Instance.Execute(new InquiryAPARPayeeListInputModel
