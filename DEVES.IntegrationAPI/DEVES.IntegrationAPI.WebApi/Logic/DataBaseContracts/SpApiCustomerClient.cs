@@ -84,7 +84,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.DataBaseContracts
             {
                 cus = new CustomerClientEntity
                 {
-                    Id = row["ContactId"],
+                  
                     CrmClientId = "" + row["pfc_crm_person_id"],
                     Name1 = "" + row["FirstName"],
                     Name2 = "" + row["LastName"]
@@ -96,7 +96,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.DataBaseContracts
             {
                 cus = new CustomerClientEntity
                 {
-                    Id = row["AccountId"],
+                  
                     CrmClientId = "" + row["AccountNumber"],
                     Name1 = "" + row["pfc_long_giving_name"],
                     Name2 = "" + row["pfc_long_surname"]
@@ -112,7 +112,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.DataBaseContracts
 
     public class CustomerClientEntity
     {
-        public string Id { get; set; }
+      
         public string CrmClientId { get; set; }
         public string Name1 { get; set; }
         public string Name2 { get; set; }
