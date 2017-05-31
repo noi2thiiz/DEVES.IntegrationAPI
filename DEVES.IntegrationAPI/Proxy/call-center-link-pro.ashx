@@ -1,8 +1,7 @@
-<%@ WebHandler Language="C#" Class="proxyLink" %>
+<%@ WebHandler Language="C#" Class="proxyLinkPro" %>
 
 /*
  * DotNet proxy client.
-
  */
 
 #define TRACE
@@ -18,14 +17,14 @@ using System.Net;
 using System.Text;
 using System.Xml;
 
-public class proxyLink : IHttpHandler {
+public class proxyLinkPro : IHttpHandler {
 
     public void ProcessRequest(HttpContext context)
     {
 
 
         WebClient objWebClient = new WebClient();
-        String strURL = @"http://192.168.10.33/NewProduct.asp?token=INi9SdhXRvpZO7mYI0ViUlflmqc9I9GO";
+        String strURL = @"http://192.168.10.3/NewProduct.asp?token=INi9SdhXRvpZO7mYI0ViUlflmqc9I9GO";
         String strRequest;
 
         UTF8Encoding objUTF8 = new UTF8Encoding ();

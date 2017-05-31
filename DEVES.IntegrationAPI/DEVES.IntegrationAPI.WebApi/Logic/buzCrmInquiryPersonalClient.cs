@@ -76,7 +76,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                                                                                     (CommonConstant.ewiEndpointKeyCLSInquiryPersonalClient, clsPersonalInput);
 
             //++ If Found records in Cleansing(CLS) then pour the data from Cleansing to contentOutputModel
-            if (retCLSInqPersClient.success)
+            if (!retCLSInqPersClient.success)
             {
                 throw new BuzErrorException(
                     retCLSInqPersClient.code,

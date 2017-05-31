@@ -98,7 +98,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                 //+ If Success then pour the data from Cleansing to contentOutputModel
 
-                if (retCLSInqCorpClient.success )
+                if (!retCLSInqCorpClient.success )
                 {
                     throw new BuzErrorException(
                         retCLSInqCorpClient.code,

@@ -65,9 +65,10 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="call-center-link.ashx" />
     <Content Include="packages.config" />
     <Content Include="json.ashx" />
-    <Content Include="call-center-link.ashx" />
+    <Content Include="call-center-link-pro.ashx" />
     <None Include="json.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -76,7 +77,6 @@
     <Content Include="README.md" />
     <Content Include="soap.ashx" />
     <Content Include="xml.ashx" />
-    <Content Include="redirect.ashx" />
     <None Include="xml.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -86,9 +86,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="redirect.ashx.cs">
-      <DependentUpon>redirect.ashx</DependentUpon>
-    </Compile>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
