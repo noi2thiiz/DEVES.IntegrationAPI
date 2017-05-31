@@ -210,7 +210,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
         internal bool IsSearchFound(CLSInquiryPersonalClientContentOutputModel content)
         {
-            if (null == content)
+            if (null == content?.data)
             {
                 return false;
             }
