@@ -5,33 +5,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web.Script.Serialization;
 using DEVES.IntegrationAPI.Model.InquiryClientMaster;
-using DEVES.IntegrationAPI.Model.InquiryCRMPayeeList;
-using DEVES.IntegrationAPI.WebApi.Templates;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
 {
     [TestClass()]
-    public class buzCrmInquiryPersonalClientMasterTests
+    public class BuzInquiryCrmClientMasterTests
     {
-       
         [TestMethod()]
-        public void ExecuteBuzInquiryCrmClientMasterTest()
+        public void ExecuteInputTest()
         {
             AppConfig.Instance.StartupForUnitTest();
 
-            var cmd = new buzCrmInquiryPersonalClientMaster();
+            var cmd = new BuzInquiryCrmClientMaster();
             var result = cmd.Execute(new InquiryClientMasterInputModel
             {
                 conditionHeader = new ConditionHeaderModel
                 {
                     clientType = "P",
-                    roleCode  ="G"
+                    roleCode = "G"
                 },
-                conditionDetail=new ConditionDetailModel
+                conditionDetail = new ConditionDetailModel
                 {
-                    clientFullname= "พรชัย"
+                    clientFullname = "พรชัย"
                 }
             });
 

@@ -8,6 +8,7 @@ using DEVES.IntegrationAPI.Model.EWI;
 using DEVES.IntegrationAPI.Model.Polisy400;
 using DEVES.IntegrationAPI.WebApi.Core.DataAdepter;
 using DEVES.IntegrationAPI.WebApi.Templates;
+using DEVES.IntegrationAPI.WebApi.Templates.Exceptions;
 using Microsoft.IdentityModel.Protocols.WSIdentity;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic.Services
@@ -73,6 +74,19 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
             }
             var jss = new JavaScriptSerializer();
             var contentObj = jss.Deserialize<COMPInquiryClientNoByCleansingIdOutputModel>(result.Content);
+
+            if (true != contentObj.success)
+            {
+                throw new BuzErrorException(
+                    contentObj.responseCode,
+                    $"COMP Error:{contentObj.responseMessage}",
+                    "Error on execute 'COMP_InquiryClientNoByCleansingId'",
+                    "COMP",
+                    GlobalTransactionID);
+
+
+            }
+
             var clientListCollection = contentObj?.content?.itemListCollection;
             //เลือกรายการที่มีค่า clientNumber มากที่สุด
             var selecetedResult = clientListCollection?.OrderByDescending(r => r.itemList.clntnum).First();

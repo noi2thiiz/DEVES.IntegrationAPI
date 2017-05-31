@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Script.Serialization;
+using DEVES.IntegrationAPI.WebApi.Templates.Exceptions;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 {
@@ -57,9 +58,26 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 
             var jss = new JavaScriptSerializer();
             var contentObj = jss.Deserialize<EWIResCLSInquiryPersonalClient>(result.Content);
-            if (false == contentObj.success)
+            if (true != contentObj.success)
             {
-                throw new Exception($"CLS Error {contentObj.responseCode}: {contentObj.responseMessage}");
+                throw new BuzErrorException(
+                    contentObj.responseCode,
+                    $"CLS Error:{contentObj.responseMessage}",
+                    "Error on execute 'CLS_InquiryPersonalClient'",
+                    "CLS",
+                    GlobalTransactionID);
+
+             
+            }
+            if (true != contentObj?.content?.success)
+            {
+                throw new BuzErrorException(
+                    contentObj?.content?.code,
+                    $"CLS Error:{contentObj?.content?.message}",
+                    contentObj?.content?.description,
+                    "CLS",
+                    GlobalTransactionID);
+
             }
 
 

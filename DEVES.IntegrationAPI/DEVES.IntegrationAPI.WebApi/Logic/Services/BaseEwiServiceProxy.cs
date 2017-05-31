@@ -417,7 +417,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
             return System.Configuration.ConfigurationManager.AppSettings[key].ToString();
         }
 
-        public string GetTransactionId(HttpRequestMessage Request)
+        public string GetTransactionId(HttpRequestMessage Request=null)
         {
             
             return GlobalTransactionIdGenerator.Instance.GetNewGuid(GlobalTransactionID);

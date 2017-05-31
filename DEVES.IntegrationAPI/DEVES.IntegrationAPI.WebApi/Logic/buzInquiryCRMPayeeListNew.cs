@@ -351,7 +351,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     searchResult = service.Execute(sapSearchCondition);
                 }
 
-                if (searchResult != null && searchResult.VendorInfo.Any()) 
+                if (searchResult?.VendorInfo != null &&  searchResult.VendorInfo.Any()) 
                 {
 
                     CRMInquiryPayeeContentOutputModel tmpCrmInqPayeeOut =

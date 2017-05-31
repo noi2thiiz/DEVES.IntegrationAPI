@@ -71,6 +71,7 @@
     <Compile Include="DataAccessService\Mastes\ProvinceMasterDataTests.cs" />
     <Compile Include="DataAccessService\Mastes\SubDistrictMasterDataTests.cs" />
     <Compile Include="Logic\buzCrmInquiryPersonalClientMasterTests.cs" />
+    <Compile Include="Logic\BuzInquiryCrmClientMasterTests.cs" />
     <Compile Include="Logic\buzInquiryCRMPayeeListNewTests.cs" />
     <Compile Include="Logic\DataAccess\Adapter\DevesServiceProxyAdapterTests.cs" />
     <Compile Include="Logic\DataBaseContracts\SpApiCustomerClientTests.cs" />

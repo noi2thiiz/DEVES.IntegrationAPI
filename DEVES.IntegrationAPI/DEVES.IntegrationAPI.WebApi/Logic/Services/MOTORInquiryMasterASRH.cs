@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Script.Serialization;
+using DEVES.IntegrationAPI.WebApi.Templates.Exceptions;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 {
@@ -57,9 +58,16 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 
             var jss = new JavaScriptSerializer();
             var contentObj = jss.Deserialize<InquiryMasterASRHOutputModel>(result.Content);
-            if (false == contentObj.success)
+            if (true != contentObj.success)
             {
-                throw new Exception($"ASRH Error {contentObj.responseCode}: {contentObj.responseMessage}");
+                throw new BuzErrorException(
+                    contentObj.responseCode,
+                    $"ASRH Error:{contentObj.responseMessage}",
+                    "Error on execute 'MOTOR_InquiryMasterASRH'",
+                    "ASRH",
+                    GlobalTransactionID);
+
+
             }
 
             return contentObj?.content;

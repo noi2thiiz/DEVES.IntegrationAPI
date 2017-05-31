@@ -21,6 +21,7 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
     public class ApiLogHandler : DelegatingHandler
     {
         System.Diagnostics.Stopwatch timer = new Stopwatch();
+        string[] AllowMethod = { "POST", "GET", "PUT", "DELETE" };
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
             CancellationToken cancellationToken)
         {
@@ -29,7 +30,14 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
             timer.Start();
 
             // Gen TransactionID
-            var transactionId = GlobalTransactionIdGenerator.Instance.GetNewGuid();
+            var transactionId = "";
+           
+            if (AllowMethod.Contains(request?.Method?.Method))
+            {
+                transactionId =  GlobalTransactionIdGenerator.Instance.GetNewGuid();
+            }
+            
+           
             if (!request.Properties.ContainsKey("TransactionID"))
             {
                 request.Properties["TransactionID"] = transactionId;
@@ -94,7 +102,13 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
 
                     apiLogEntry.ResponseTimeTotalMilliseconds = (float)t.TotalMilliseconds;
                     Debug.WriteLine("timer Stop="+t.TotalMilliseconds);
-                    InMemoryLogData.Instance.AddLogEntry(apiLogEntry);
+
+                    if (AllowMethod.Contains(request?.Method?.Method))
+                    {
+                        InMemoryLogData.Instance.AddLogEntry(apiLogEntry);
+                    }
+
+                   
                    
                     GlobalTransactionIdGenerator.Instance.ClearGlobalId(apiLogEntry.TransactionID);
 

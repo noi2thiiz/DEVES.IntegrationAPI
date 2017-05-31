@@ -470,13 +470,14 @@
     <Compile Include="Logic\buzCreateCrmPayeePersonal.cs" />
     <Compile Include="Logic\buzCrmInquiryClientMaster.cs" />
     <Compile Include="Logic\buzCrmInquiryCorporateClientMaster.cs" />
-    <Compile Include="Logic\buzCrmInquiryPersonalClient.cs" />
+    <Compile Include="Logic\BuzInquiryCrmClientMaster.cs" />
     <Compile Include="Logic\buzCRMRegClientCorporate.cs" />
     <Compile Include="Logic\buzCRMRegClientPersonal.cs" />
     <Compile Include="Logic\buzCRMRegPayeeCorporate.cs" />
     <Compile Include="Logic\buzCRMRegPayeePersonal.cs" />
     <Compile Include="Logic\buzInquiryCRMPayeeList.cs" />
     <Compile Include="Logic\buzInquiryCRMPayeeListNew.cs" />
+    <Compile Include="Logic\buzInquryCRMClientMaster.cs" />
     <Compile Include="Logic\buzReqClsId.cs" />
     <Compile Include="Logic\buzSendSMS.cs" />
     <Compile Include="Logic\CommonConstant.cs" />
@@ -634,6 +635,7 @@
     <None Include="Properties\PublishProfiles\FolderProfile2.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile3.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile4.pubxml" />
+    <None Include="Properties\PublishProfiles\FolderProfile5.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

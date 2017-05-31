@@ -8,6 +8,7 @@ using DEVES.IntegrationAPI.Model;
 using DEVES.IntegrationAPI.Model.APAR;
 using DEVES.IntegrationAPI.Model.CLS;
 using DEVES.IntegrationAPI.WebApi.Templates;
+using DEVES.IntegrationAPI.WebApi.Templates.Exceptions;
 using Microsoft.IdentityModel.Protocols.WSIdentity;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic.Services
@@ -73,12 +74,20 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
         
             var jss = new JavaScriptSerializer();
             var contentObj = jss.Deserialize<InquiryAPARPayeeOutputModel>(result.Content);
-            if (false == contentObj.success)
+            
+            if (true != contentObj.success)
             {
-                throw new Exception($"APAR Error {contentObj.responseCode}: {contentObj.responseMessage}");
+                throw new BuzErrorException(
+                    contentObj.responseCode,
+                    $"APAR Error:{contentObj.responseMessage}",
+                    "Error on execute 'MOTOR_InquiryAPARPayeeList'",
+                    "APAR",
+                    GlobalTransactionID);
+
+
             }
 
-          
+
 
             return contentObj?.content;
         }

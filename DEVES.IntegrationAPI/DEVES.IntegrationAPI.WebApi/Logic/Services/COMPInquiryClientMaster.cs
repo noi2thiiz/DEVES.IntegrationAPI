@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Script.Serialization;
+using DEVES.IntegrationAPI.WebApi.Templates.Exceptions;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 {
@@ -59,10 +60,19 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 
             var jss = new JavaScriptSerializer();
             var contentObj = jss.Deserialize<COMPInquiryClientMasterOutputModel>(result.Content);
-            if (false == contentObj.success)
+
+            if (true != contentObj.success)
             {
-                throw new Exception($"COMP Error {contentObj.responseCode}: {contentObj.responseMessage}");
+                throw new BuzErrorException(
+                    contentObj.responseCode,
+                    $"COMP Error:{contentObj.responseMessage}",
+                    "Error on execute 'COMP_InquiryClientMaster'",
+                    "COMP",
+                    GlobalTransactionID);
+
+
             }
+            
 
 
 
