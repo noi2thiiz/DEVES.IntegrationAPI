@@ -97,13 +97,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                                                                                         (CommonConstant.ewiEndpointKeyCLSInquiryCorporateClient, clsCorpInput, uid);
 
                 //+ If Success then pour the data from Cleansing to contentOutputModel
-
-                if (!retCLSInqCorpClient.success )
+                // 
+                if (true  != retCLSInqCorpClient?.success && retCLSInqCorpClient?.code !=AppConst.CODE_CLS_NOTFOUND )
                 {
+              
                     throw new BuzErrorException(
-                        retCLSInqCorpClient.code,
-                        $"CLS Error:{retCLSInqCorpClient.message}",
-                        retCLSInqCorpClient.description,
+                        retCLSInqCorpClient?.code,
+                        $"CLS Error:{retCLSInqCorpClient?.message}",
+                        retCLSInqCorpClient?.description,
                         "CLS",
                         TransactionId);
                 }

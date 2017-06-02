@@ -72,7 +72,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 
 
             }
-            if (true != contentObj?.content?.success)
+            if (true != contentObj?.content?.success && contentObj?.content?.code != AppConst.CODE_CLS_NOTFOUND)
             {
                 throw new BuzErrorException(
                     contentObj?.content?.code,

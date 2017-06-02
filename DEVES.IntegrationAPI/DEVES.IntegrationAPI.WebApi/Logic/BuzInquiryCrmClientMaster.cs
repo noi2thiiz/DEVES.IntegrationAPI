@@ -76,12 +76,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                                                                                     (CommonConstant.ewiEndpointKeyCLSInquiryPersonalClient, clsPersonalInput);
 
             //++ If Found records in Cleansing(CLS) then pour the data from Cleansing to contentOutputModel
-            if (!retCLSInqPersClient.success)
+            if (true != retCLSInqPersClient?.success && retCLSInqPersClient?.code != AppConst.CODE_CLS_NOTFOUND)
             {
+
                 throw new BuzErrorException(
-                    retCLSInqPersClient.code,
-                    $"CLS Error:{retCLSInqPersClient.message}",
-                    retCLSInqPersClient.description,
+                    retCLSInqPersClient?.code,
+                    $"CLS Error:{retCLSInqPersClient?.message}",
+                    retCLSInqPersClient?.description,
                     "CLS",
                     TransactionId);
             }

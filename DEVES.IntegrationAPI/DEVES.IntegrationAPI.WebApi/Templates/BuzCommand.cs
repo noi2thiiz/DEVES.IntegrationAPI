@@ -49,6 +49,11 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                     stackTrace = e.StackTrace
                 };
 
+                if (string.IsNullOrEmpty(e.Code))
+                {
+                    regFail.code = e.Code;
+                }
+
                 if (e.SourceData != null)
                 {
                     regFail.data = e.SourceData;
@@ -91,13 +96,15 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                     regFail.message = e.message;
                 }
 
-            
-      
+               
+
 
                 if (string.IsNullOrEmpty(regFail.description))
                 {
                     regFail.description = e.fieldMessage;
                 }
+
+                
 
                 if (string.IsNullOrEmpty(regFail.description))
                 {

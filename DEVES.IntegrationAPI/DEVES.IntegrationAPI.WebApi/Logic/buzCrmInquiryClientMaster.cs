@@ -20,18 +20,25 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             switch (contentModel.conditionHeader.clientType)
             {
                 case "P":
-                    cmd = new BuzInquiryCrmClientMaster(); /*buzCrmInquiryPersonalClientMaster*/
+                    cmd = new buzCrmInquiryPersonalClientMaster(); 
                     cmd.TransactionId = TransactionId;
                     break;
                 case "C":
                     cmd = new buzCrmInquiryCorporateClientMaster();
                     cmd.TransactionId = TransactionId;
                     break;
+                case "A":
+                    /*fortest*/
+                    contentModel.conditionHeader.clientType = "P";
+                    cmd = new BuzInquiryCrmClientMaster();
+                    cmd.TransactionId = TransactionId;
+                    break;
+
                 default:
                     break;
             }
 
-            BaseContentJsonProxyOutputModel res = (BaseContentJsonProxyOutputModel)cmd.Execute(input);
+            BaseDataModel res = (BaseDataModel)cmd.Execute(input);
             return res;
         }
     }
