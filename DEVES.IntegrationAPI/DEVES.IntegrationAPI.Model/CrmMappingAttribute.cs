@@ -22,44 +22,7 @@ namespace DEVES.IntegrationAPI.Model
         [JsonIgnore]
         public string DateTimeCustomFormat = "yyyy-MM-dd HH:mm:ss";
 
-        [JsonProperty(Order = 2000)]
-        public List<DataModelDebugInfo> _debugInfo { get; set; }
-
-        public void AddDebugInfo(string message , dynamic info)
-        {
-            if (_debugInfo == null)
-            {
-                _debugInfo = new List<DataModelDebugInfo>();
-                _debugInfo.Add(new DataModelDebugInfo
-                {
-                    message = "warning",
-                    info="_debugInfo will be remove on production!!"
-                });
-            }
-            _debugInfo.Add(new DataModelDebugInfo
-            {
-                message = message,
-                info = info
-            });
-        }
-
-        public void AddListDebugInfo(List<DataModelDebugInfo> debugInfo)
-        {
-            if (!debugInfo.Any())
-            {
-                return;
-            }
-            if (_debugInfo == null)
-            {
-                _debugInfo = new List<DataModelDebugInfo>();
-                _debugInfo.Add(new DataModelDebugInfo
-                {
-                    message = "warning",
-                    info = "_debugInfo will be remove on production!!"
-                });
-            }
-            _debugInfo.AddRange(debugInfo);
-        }
+       
 
         public string ToJson()
         {

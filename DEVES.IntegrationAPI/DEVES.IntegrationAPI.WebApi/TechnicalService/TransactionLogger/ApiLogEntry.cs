@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
+using DEVES.IntegrationAPI.Model;
+using DEVES.IntegrationAPI.WebApi.Templates;
 
 namespace DEVES.IntegrationAPI.WebApi.TechnicalService
 {
@@ -51,5 +55,49 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
         public float ResponseTimeTotalMilliseconds { get; set; } = 0;
         public HttpRequestMessage Request { get; set; }
         public HttpResponseMessage Response { get; set; }
+
+
+        public List<DataModelDebugInfo> _debugInfo { get; set; }
+
+        public void AddDebugInfo(string message, dynamic info)
+        {
+            if (_debugInfo == null)
+            {
+                _debugInfo = new List<DataModelDebugInfo>();
+               
+            }
+            _debugInfo.Add(new DataModelDebugInfo
+            {
+                message = message,
+                info = info
+            });
+        }
+
+        public void AddListDebugInfo(List<DataModelDebugInfo> debugInfo)
+        {
+            if (!debugInfo.Any())
+            {
+                return;
+            }
+            if (_debugInfo == null)
+            {
+                _debugInfo = new List<DataModelDebugInfo>();
+                _debugInfo.Add(new DataModelDebugInfo
+                {
+                    message = "warning",
+                    info = "_debugInfo will be remove on production!!"
+                });
+            }
+            _debugInfo.AddRange(debugInfo);
+        }
+
+        public void BuildDebugLog()
+        {
+            if (_debugInfo!= null && _debugInfo.Any())
+            {
+                DebugLog = _debugInfo.ToJson();
+            }
+            
+        }
     }
 }

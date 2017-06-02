@@ -108,6 +108,7 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService.TransactionLogger
             {
                 Debug.WriteLine("142" + e.Message);
             }
+           
             LogData.Add(log);
         }
 

@@ -38,17 +38,19 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
         public SAPInquiryVendor() : base("")
         {
             serviceName = "SAPInquiryVendor";
+            systemName = "SAP";
 
         }
 
         public SAPInquiryVendor(string globalTransactionID, string controllerName = "") : base(globalTransactionID, controllerName)
         {
             serviceName = "SAPInquiryVendor";
+            systemName = "SAP";
         }
 
         public EWIResSAPInquiryVendorContentModel Execute(SAPInquiryVendorInputModel input)
         {
-           
+
 
 
             string endpoint = AppConfig.Instance.Get(CommonConstant.ewiEndpointKeySAPInquiryVendor);
@@ -57,7 +59,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 
             if (result.StatusCode != HttpStatusCode.OK)
             {
-
+               
                 throw new InternalErrorException(result.Message);
             }
 

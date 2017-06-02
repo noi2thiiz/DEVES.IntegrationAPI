@@ -100,7 +100,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 // 
                 if (true  != retCLSInqCorpClient?.success && retCLSInqCorpClient?.code !=AppConst.CODE_CLS_NOTFOUND )
                 {
-              
+                    AddDebugInfo($"CLS Error {retCLSInqCorpClient?.code}:{retCLSInqCorpClient?.message}", retCLSInqCorpClient);
                     throw new BuzErrorException(
                         retCLSInqCorpClient?.code,
                         $"CLS Error:{retCLSInqCorpClient?.message}",
@@ -136,7 +136,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         
                         catch (Exception e)
                         {
-                            debugInfo.AddDebugInfo("Error on search crmClientId", "Error: " + e.Message + "--" + e.StackTrace);
+                           AddDebugInfo("Error on search crmClientId", "Error: " + e.Message + "--" + e.StackTrace);
                         }
 
                         try
@@ -157,7 +157,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         }
                         catch (Exception e)
                         {
-                            debugInfo.AddDebugInfo("Error on search polisyClientId by Cleansing id", e.Message);
+                            AddDebugInfo("Error on search polisyClientId by Cleansing id", e.Message);
                         }
 
                        

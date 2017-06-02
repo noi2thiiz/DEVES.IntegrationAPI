@@ -12,7 +12,9 @@ using System.Web.Http;
 using System.Web.Http.ExceptionHandling;
 using DEVES.IntegrationAPI.Core.Helper;
 using DEVES.IntegrationAPI.Model;
+using DEVES.IntegrationAPI.WebApi.TechnicalService.TransactionLogger;
 using DEVES.IntegrationAPI.WebApi.Templates;
+using System.Threading.Tasks;
 
 namespace DEVES.IntegrationAPI.WebApi.TechnicalService.TraceExceptionLogger
 {
@@ -34,12 +36,16 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService.TraceExceptionLogger
 
 
 
-            public string transactionDateTime { get; set; } ="";
-   
- 
+            public string transactionDateTime { get; set; } = "";
+            public string stackTrace { get; set; } ="";
+
+            
+
+
         }
         public override void Log(ExceptionLoggerContext context)
         {
+            string message = "";
             var guid = GetTransactionId(context.ExceptionContext.Request) ?? Guid.NewGuid().ToString();
             var regFail = new FatalErrorModel
             {
@@ -47,7 +53,9 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService.TraceExceptionLogger
                 message = "An error occurred",
                 transactionId = guid,
                 transactionDateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),//2017-05-15 02:32:18
-                description = context?.Exception?.Message
+                description = context?.Exception?.Message,
+                stackTrace = ""+ context?.Exception?.InnerException
+
 
             };
 
@@ -65,10 +73,11 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService.TraceExceptionLogger
                    
                 }
 
-              
+                Task<string> ewiRes = context?.Request?.Content?.ReadAsStringAsync();
+                string requestContextBody = ewiRes?.Result??"";
 
 
-                string message = "";
+
                     message += "TransactionId:" + guid;
                 message += "" + Environment.NewLine;
                 message += "MachineName:" + Environment.MachineName + Environment.NewLine;
@@ -93,7 +102,7 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService.TraceExceptionLogger
                 message += "------------------------------------" + Environment.NewLine;
                 message += "Request Context" + Environment.NewLine;
                 message += "------------------------------------" + Environment.NewLine;
-                message += context?.RequestContext + Environment.NewLine;
+                message += requestContextBody?.ToString()+ Environment.NewLine;
                 message += "" + Environment.NewLine;
                 message += "" + Environment.NewLine;
                 message += "------------------------------------" + Environment.NewLine;
@@ -127,8 +136,9 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService.TraceExceptionLogger
                 
 
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                message += "Error On Log " + e.Message + ":" + e.StackTrace;
                 // ignored
             }
             context.Request.CreateResponse(regFail);
@@ -140,6 +150,25 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService.TraceExceptionLogger
                 StatusCode = HttpStatusCode.OK,
 
             };
+
+            // Log to DataBAse
+            try
+            {
+                var log = TraceDebugLogger.Instance.GetLogEntry(guid);
+                if (log != null)
+                {
+                    log.ErrorLog = log.StackTrace + Environment.NewLine+ message;
+                    log.ResponseContentBody = regFail.ToString();
+                    log.Remark = "Log By TraceExceptionLogger";
+                   // InMemoryLogData.Instance.AddLogEntry(log);
+                    //GlobalTransactionIdGenerator.Instance.ClearGlobalId(guid);
+                }
+            }
+            catch (Exception e)
+            {
+                //do nothing
+                Debug.WriteLine(e.Message+e.StackTrace);
+            }
             throw new HttpResponseException(resp);
 
         }

@@ -31,7 +31,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
 
             trgtContent.data = new List<InquiryCrmPayeeListDataModel>();
-            trgtContent.AddDebugInfo("Transformer", "TransformAPARInquiryAPARPayeeListContentOutputModel_to_InquiryCRMPayeeListDataOutputModel");
+           // trgtContent.AddDebugInfo("Transformer", "TransformAPARInquiryAPARPayeeListContentOutputModel_to_InquiryCRMPayeeListDataOutputModel");
 
             foreach (var aparPayeeListDataModel in srcContent.aparPayeeListCollection)
             {

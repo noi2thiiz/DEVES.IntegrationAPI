@@ -170,41 +170,18 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
                     }
 
 
-                    
-                }
-                var content = responseContent["content"];
-                if (content?["success"] != null)
-                {
-                    if((bool)content?["success"] == false)
-                    {
-                        var code = content["code"]?.ToString()??"500";
-                        var message = content["message"]?.ToString();
-                        var description = content["description"]?.ToString();
-                        throw new BuzErrorException(
-                            code,
-                            $"{systemName} Error:{message}",
-                            $"Error on execute '{serviceName}':{description}",
-                            systemName,
-                            GlobalTransactionID);
-                    }
 
-                }else
-                if (content?["code"] != null)
-                {
-                    var code = content["code"]?.ToString();
-                    var message = content["message"]?.ToString();
-                    var description = content["description"]?.ToString();
-
-                    if (code!= "200")
-                    {
-                        throw new BuzErrorException(
-                            code,
-                            $"{systemName} Error:{message}",
-                            $"Error on execute '{serviceName}':{description}",
-                            systemName,
-                            GlobalTransactionID);
-                    }
                 }
+                else
+                {
+                    throw new BuzErrorException(
+                        "500",
+                        $"{systemName} Error: Error on execute '{serviceName}',The request failed or the service did not respond",
+                        $"Error on execute '{serviceName}',The request failed or the service did not respond",
+                        systemName,
+                        GlobalTransactionID);
+                }
+                
                 return result;
             }
             catch (Exception e)
@@ -213,8 +190,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
                
                     throw new BuzErrorException(
                         "500",
-                        $"{systemName} Error:{e.Message}",
-                        $"Error on execute '{serviceName}'",
+                        $"{systemName} Error: Error on  execute {serviceName}, the request failed or the service did not respond",
+                        $"Error on execute '{serviceName}', {e.Message}",
                         systemName,
                         GlobalTransactionID);
                 

@@ -68,17 +68,17 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             CLSInquiryPersonalClientInputModel clsPersonalInput = new CLSInquiryPersonalClientInputModel();
             clsPersonalInput = (CLSInquiryPersonalClientInputModel)TransformerFactory.TransformModel(contentModel, clsPersonalInput);
-            crmInqContent.AddDebugInfo("Start Search", clsPersonalInput);
+            //crmInqContent.AddDebugInfo("Start Search", clsPersonalInput);
 
             //++ Call CLS_InquiryCLSPersonalClient through ServiceProxy
-            debugInfo.AddDebugInfo("Call CLS_InquiryCLSPersonalClient through ServiceProxy", clsPersonalInput);
+           AddDebugInfo("Call CLS_InquiryCLSPersonalClient through ServiceProxy", clsPersonalInput);
             CLSInquiryPersonalClientContentOutputModel retCLSInqPersClient = CallDevesServiceProxy<EWIResCLSInquiryPersonalClient, CLSInquiryPersonalClientContentOutputModel>
                                                                                     (CommonConstant.ewiEndpointKeyCLSInquiryPersonalClient, clsPersonalInput);
 
             //++ If Found records in Cleansing(CLS) then pour the data from Cleansing to contentOutputModel
             if (true != retCLSInqPersClient?.success && retCLSInqPersClient?.code != AppConst.CODE_CLS_NOTFOUND)
             {
-
+                AddDebugInfo($"CLS Error {retCLSInqPersClient?.code}:{retCLSInqPersClient?.message}", retCLSInqPersClient);
                 throw new BuzErrorException(
                     retCLSInqPersClient?.code,
                     $"CLS Error:{retCLSInqPersClient?.message}",
@@ -89,12 +89,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             if (IsSearchFound(retCLSInqPersClient))
             {
-                debugInfo.AddDebugInfo(" Found records in Cleansing(CLS) ", retCLSInqPersClient);
+                AddDebugInfo(" Found records in Cleansing(CLS) ", retCLSInqPersClient);
                 // Console.WriteLine(retCLSInqPersClient.ToJson());
                 crmInqContent = (CRMInquiryClientContentOutputModel)TransformerFactory.TransformModel(retCLSInqPersClient, crmInqContent);
 
                 foreach(CRMInquiryClientOutputDataModel temp in crmInqContent.data) {
-                    debugInfo.AddDebugInfo("loop foreach temp in crmInqContent.data", temp);
+                    AddDebugInfo("loop foreach temp in crmInqContent.data", temp);
                     string crmPolisyClientId = "";
                     string crmClientId = "";
                     try
@@ -116,7 +116,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     catch (Exception e)
                     {
                        
-                        debugInfo.AddDebugInfo("Error on search crmClientId", "Error: "+e.Message+"--"+e.StackTrace);
+                        AddDebugInfo("Error on search crmClientId", "Error: "+e.Message+"--"+e.StackTrace);
                     }
 
                     // ดึงค่าจาก Polisy มาเติมในกรณีที่ข้อมูลสร้างใหม่ CLS จะยังไม่มีเลข Polisy
@@ -126,7 +126,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         if (string.IsNullOrEmpty(temp.generalHeader.polisyClientId) ||
                             temp.generalHeader.polisyClientId.Equals("0"))
                         {
-                            debugInfo.AddDebugInfo("Find Polisy for new client  " + temp.generalHeader.polisyClientId,
+                           AddDebugInfo("Find Polisy for new client  " + temp.generalHeader.polisyClientId,
                                 "");
 
 
@@ -138,13 +138,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                             if (lstPolisyClient?.cleansingId != null)
                             {
 
-                                debugInfo.AddDebugInfo("found Polisy for new client =" + lstPolisyClient.clientNumber,
+                               AddDebugInfo("found Polisy for new client =" + lstPolisyClient.clientNumber,
                                     "");
                                 temp.generalHeader.polisyClientId = lstPolisyClient.clientNumber;
                             }
                             else
                             {
-                                debugInfo.AddDebugInfo(" not found Polisy for new client =", "");
+                               AddDebugInfo(" not found Polisy for new client =", "");
                             }
                             if (temp.generalHeader.polisyClientId == "0")
                             {
@@ -155,18 +155,18 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     }
                     catch (Exception e)
                     {
-                        debugInfo.AddDebugInfo("Error on search polisyClientId by Cleansing id",e.Message);
+                       AddDebugInfo("Error on search polisyClientId by Cleansing id",e.Message);
                     }
                 }
                 
-                debugInfo.AddDebugInfo("endregion Search Client from Cleansing", "");
+                AddDebugInfo("endregion Search Client from Cleansing", "");
             }
            
             #endregion Search Client from Cleansing
             else //+ If not records found in Cleansing(CLS), then Search from Polisy400 
             #region Search client from Polisy400
             {
-                debugInfo.AddDebugInfo("region Search client from Polisy400", "");
+                AddDebugInfo("region Search client from Polisy400", "");
                 try
                 {
                     COMPInquiryClientMasterInputModel compInqClientInput = new COMPInquiryClientMasterInputModel();
@@ -179,7 +179,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     //Found in Polisy400
                     if (retCOMPInqClient.clientListCollection != null)
                     {
-                        debugInfo.AddDebugInfo("Found in Polisy400", retCOMPInqClient);
+                       AddDebugInfo("Found in Polisy400", retCOMPInqClient);
                         crmInqContent = (CRMInquiryClientContentOutputModel)TransformerFactory.TransformModel(retCOMPInqClient, crmInqContent);
                     }
                     
@@ -187,7 +187,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 }
                 catch (Exception e)
                 {
-                    debugInfo.AddDebugInfo("error in Polisy400", e.Message);
+                   AddDebugInfo("error in Polisy400", e.Message);
                     throw;
                 }
 
@@ -214,8 +214,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             {
                 crmInqContent.data = crmInqContent.data.Where(row => row?.profileInfo?.name1.Trim() != "" || row?.profileInfo?.fullName.Trim() != "").ToList();
             }
-            crmInqContent.AddDebugInfo("Output","");
-            crmInqContent._debugInfo.AddRange(debugInfo._debugInfo);
+           // crmInqContent.AddDebugInfo("Output","");
+           
             return crmInqContent;
         }
 
