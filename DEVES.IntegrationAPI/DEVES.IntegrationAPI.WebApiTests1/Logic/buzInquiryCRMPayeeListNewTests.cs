@@ -5,8 +5,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DEVES.IntegrationAPI.Model;
 using DEVES.IntegrationAPI.Model.InquiryCRMPayeeList;
+using DEVES.IntegrationAPI.WebApi.Logic.Services;
 using DEVES.IntegrationAPI.WebApi.Templates;
+using DEVES.IntegrationAPI.WebApi.Templates.Exceptions;
+using Newtonsoft.Json.Linq;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
 {
@@ -235,7 +239,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
                 polisyClientId = "0"
             });
             var cmd = new buzInquiryCRMPayeeListNew();
-            var result =cmd.FixEmptyPolisyClientId( listSearchResult,"P");
+            var result = cmd.FixEmptyPolisyClientId(listSearchResult, "P");
 
             Console.WriteLine(result.ToJson());
             Assert.IsNotNull(result);
@@ -243,6 +247,353 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
             Assert.AreEqual("16962218", result[1].polisyClientId);
             Assert.AreEqual("16962218", result[2].polisyClientId);
             Assert.AreEqual("", result[3].polisyClientId);
+
+        }
+
+        [TestMethod()]
+        public void Execute_buzInquiryCRMPayeeList_LimitOutputTest()
+        {
+            AppConfig.Instance.StartupForUnitTest();
+            try
+            {
+                var cmd = new buzInquiryCRMPayeeListNew();
+                var result = cmd.ExecuteInput(new InquiryCRMPayeeListInputModel
+                {
+                    requester = "MC",
+                    clientType = "P",
+                    roleCode = "G",
+                    fullname = "พรชัย"
+                });
+                Console.WriteLine(result.ToJson());
+                Assert.IsNotNull(result);
+            }
+            catch (BuzErrorException e)
+            {
+                Assert.IsNotNull("คุณระบุเงื่อนไขในการสืบค้นน้อยเกินไป", e.Message);
+            }
+           
+           
+        }
+
+        [TestMethod()]
+        public void Execute_buzInquiryCRMPayeeList_SearchByFullnameTest()
+        {
+            AppConfig.Instance.StartupForUnitTest();
+            try
+            {
+                var cmd = new buzInquiryCRMPayeeListNew();
+                var result = cmd.ExecuteInput(new InquiryCRMPayeeListInputModel
+                {
+                    requester = "MC",
+                    clientType = "P",
+                    roleCode = "G",
+                    fullname = "พรชัย ลือถาวร"
+                });
+                Console.WriteLine("==============result=============");
+                Console.WriteLine(result.ToJson());
+                Assert.IsNotNull(result);
+                var ewiResponse = (CRMInquiryPayeeContentOutputModel)result;
+
+             
+                Assert.AreEqual("200", ewiResponse.code);
+                Assert.AreEqual(true, ewiResponse.data.Any());
+                Assert.AreEqual("14555916", ewiResponse.data[0].polisyClientId);
+                Assert.AreEqual("SAP", ewiResponse.data[0].sourceData);
+
+            }
+            catch (BuzErrorException e)
+            {
+
+                Assert.Fail();
+            }
+
+
+        }
+
+        [TestMethod()]
+        public void Execute_buzInquiryCRMPayeeList_SearchBypolisyClientIdTest()
+        {
+            AppConfig.Instance.StartupForUnitTest();
+            try
+            {
+                var cmd = new buzInquiryCRMPayeeListNew();
+                var result = cmd.ExecuteInput(new InquiryCRMPayeeListInputModel
+                {
+                    requester = "MC",
+                    clientType = "P",
+                    roleCode = "G",
+                   
+                    polisyClientId = "14555916"
+                });
+                Console.WriteLine("==============result=============");
+                Console.WriteLine(result.ToJson());
+                Assert.IsNotNull(result);
+                var ewiResponse = (CRMInquiryPayeeContentOutputModel)result;
+
+
+                Assert.AreEqual("200", ewiResponse.code);
+                Assert.AreEqual(true, ewiResponse.data.Any());
+                Assert.AreEqual("14555916", ewiResponse.data[0].polisyClientId);
+                Assert.AreEqual("SAP", ewiResponse.data[0].sourceData);
+
+            }
+            catch (BuzErrorException e)
+            {
+
+                Assert.Fail();
+            }
+
+
+        }
+
+        [TestMethod()]
+        public void Execute_buzInquiryCRMPayeeList_SearchBypolisyClientId_ShouldNotFoundTest()
+        {
+            AppConfig.Instance.StartupForUnitTest();
+            try
+            {
+                var cmd = new buzInquiryCRMPayeeListNew();
+                var result = cmd.ExecuteInput(new InquiryCRMPayeeListInputModel
+                {
+                    requester = "MC",
+                    clientType = "P",
+                    roleCode = "G",
+
+                    polisyClientId = "999999999"
+                });
+                Console.WriteLine("==============result=============");
+                Console.WriteLine(result.ToJson());
+                Assert.IsNotNull(result);
+                var ewiResponse = (CRMInquiryPayeeContentOutputModel)result;
+
+
+                Assert.AreEqual("200", ewiResponse.code);
+                Assert.AreEqual(false, ewiResponse.data.Any());
+               
+
+            }
+            catch (BuzErrorException e)
+            {
+
+                Assert.Fail();
+            }
+
+
+        }
+
+        [TestMethod()]
+        public void Execute_buzInquiryCRMPayeeList_SearchByTaxNoTest()
+        {
+            AppConfig.Instance.StartupForUnitTest();
+            try
+            {
+                var cmd = new buzInquiryCRMPayeeListNew();
+                var result = cmd.ExecuteInput(new InquiryCRMPayeeListInputModel
+                {
+                    requester = "MC",
+                    clientType = "P",
+                    roleCode = "G",
+
+                    taxNo = "3100500595490"
+                });
+                Console.WriteLine("==============result=============");
+                Console.WriteLine(result.ToJson());
+                Assert.IsNotNull(result);
+                var ewiResponse = (CRMInquiryPayeeContentOutputModel)result;
+
+
+                Assert.AreEqual("200", ewiResponse.code);
+                Assert.AreEqual(true, ewiResponse.data.Any());
+                Assert.AreEqual("14555916", ewiResponse.data[0].polisyClientId);
+                Assert.AreEqual("SAP", ewiResponse.data[0].sourceData);
+
+            }
+            catch (BuzErrorException e)
+            {
+
+                Assert.Fail();
+            }
+
+
+        }
+
+        [TestMethod()]
+        public void Execute_buzInquiryCRMPayeeList_SearchByTaxNo_ShouldNotFoundTest()
+        {
+            AppConfig.Instance.StartupForUnitTest();
+            try
+            {
+                var cmd = new buzInquiryCRMPayeeListNew();
+                var result = cmd.ExecuteInput(new InquiryCRMPayeeListInputModel
+                {
+                    requester = "MC",
+                    clientType = "P",
+                    roleCode = "G",
+
+                    taxNo = "9900500595990"
+                });
+                Console.WriteLine("==============result=============");
+                Console.WriteLine(result.ToJson());
+                Assert.IsNotNull(result);
+                var ewiResponse = (CRMInquiryPayeeContentOutputModel)result;
+
+
+                Assert.AreEqual("200", ewiResponse.code);
+                Assert.AreEqual(false, ewiResponse.data.Any());
+              
+
+            }
+            catch (BuzErrorException e)
+            {
+
+                Assert.Fail();
+            }
+
+
+        }
+
+
+        [TestMethod()]
+        public void Execute_buzInquiryCRMPayeeList_SearchRoleCodeA()
+        {
+            AppConfig.Instance.StartupForUnitTest();
+            try
+            {
+                var cmd = new buzInquiryCRMPayeeListNew();
+                var result = cmd.ExecuteInput(new InquiryCRMPayeeListInputModel
+                {
+                    requester = "MC",
+                    clientType = "C",
+                    roleCode = "A",
+
+                    fullname = "พรชัยประเสริฐ"
+                });
+                Console.WriteLine("==============result=============");
+                Console.WriteLine(result.ToJson());
+                Assert.IsNotNull(result);
+                var ewiResponse = (CRMInquiryPayeeContentOutputModel)result;
+
+
+                Assert.AreEqual("200", ewiResponse.code);
+                Assert.AreEqual(true, ewiResponse.data.Any());
+                Assert.AreEqual("13884834", ewiResponse.data[0].polisyClientId);
+                Assert.AreEqual("SAP", ewiResponse.data[0].sourceData);
+
+            }
+            catch (BuzErrorException e)
+            {
+
+                Assert.Fail();
+            }
+
+
+        }
+
+        [TestMethod()]
+        public void Execute_buzInquiryCRMPayeeList_SearchRoleCodeS()
+        {
+            AppConfig.Instance.StartupForUnitTest();
+            try
+            {
+                var cmd = new buzInquiryCRMPayeeListNew();
+                var result = cmd.ExecuteInput(new InquiryCRMPayeeListInputModel
+                {
+                    requester = "MC",
+                    clientType = "C",
+                    roleCode = "S",
+
+                    fullname = "พรชัยประเสริฐ"
+                });
+                Console.WriteLine("==============result=============");
+                Console.WriteLine(result.ToJson());
+                Assert.IsNotNull(result);
+                var ewiResponse = (CRMInquiryPayeeContentOutputModel)result;
+
+
+                Assert.AreEqual("200", ewiResponse.code);
+                Assert.AreEqual(true, ewiResponse.data.Any());
+                Assert.AreEqual("13884834", ewiResponse.data[0].polisyClientId);
+                Assert.AreEqual("SAP", ewiResponse.data[0].sourceData);
+
+            }
+            catch (BuzErrorException e)
+            {
+
+                Assert.Fail();
+            }
+
+
+        }
+
+        [TestMethod()]
+        public void Execute_buzInquiryCRMPayeeList_SearchRoleCodeR()
+        {
+            AppConfig.Instance.StartupForUnitTest();
+            try
+            {
+                var cmd = new buzInquiryCRMPayeeListNew();
+                var result = cmd.ExecuteInput(new InquiryCRMPayeeListInputModel
+                {
+                    requester = "MC",
+                    clientType = "C",
+                    roleCode = "R",
+
+                    fullname = "พรชัยประเสริฐ"
+                });
+                Console.WriteLine("==============result=============");
+                Console.WriteLine(result.ToJson());
+                Assert.IsNotNull(result);
+                var ewiResponse = (CRMInquiryPayeeContentOutputModel)result;
+
+
+                Assert.AreEqual("200", ewiResponse.code);
+                Assert.AreEqual(true, ewiResponse.data.Any());
+                Assert.AreEqual("13884834", ewiResponse.data[0].polisyClientId);
+                Assert.AreEqual("SAP", ewiResponse.data[0].sourceData);
+
+            }
+            catch (BuzErrorException e)
+            {
+
+                Assert.Fail();
+            }
+
+
+        }
+
+        [TestMethod()]
+        public void Execute_buzInquiryCRMPayeeList_SearchRoleCodeH()
+        {
+            AppConfig.Instance.StartupForUnitTest();
+            try
+            {
+                var cmd = new buzInquiryCRMPayeeListNew();
+                var result = cmd.ExecuteInput(new InquiryCRMPayeeListInputModel
+                {
+                    requester = "MC",
+                    clientType = "C",
+                    roleCode = "H",
+
+                    fullname = "พรชัยประเสริฐ"
+                });
+                Console.WriteLine("==============result=============");
+                Console.WriteLine(result.ToJson());
+                Assert.IsNotNull(result);
+                var ewiResponse = (CRMInquiryPayeeContentOutputModel)result;
+
+
+                Assert.AreEqual("200", ewiResponse.code);
+                Assert.AreEqual(true, ewiResponse.data.Any());
+                Assert.AreEqual("13884834", ewiResponse.data[0].polisyClientId);
+                Assert.AreEqual("SAP", ewiResponse.data[0].sourceData);
+
+            }
+            catch (BuzErrorException e)
+            {
+
+                Assert.Fail();
+            }
+
 
         }
     }

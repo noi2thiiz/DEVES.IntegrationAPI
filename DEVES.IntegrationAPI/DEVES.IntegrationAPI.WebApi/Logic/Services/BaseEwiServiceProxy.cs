@@ -147,7 +147,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
                 //T2 output = (T2)typeof(T1).GetProperty("content").GetValue(ewiRes);
                 resBody = ewiRes.Result;
                 resTime = DateTime.Now;
-                Console.WriteLine(resBody);
+               // Console.WriteLine(resBody);
               
                
             

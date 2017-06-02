@@ -21,7 +21,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services.Tests
         }
 
         [TestMethod()]
-        public void ExecuteTest()
+        public void Execute_MOTORInquiryMasterASRHTest()
         {
             AppConfig.Instance.StartupForUnitTest();
             var service = new MOTORInquiryMasterASRH();

@@ -18,7 +18,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services.Tests
             AppConfig.Instance.StartupForUnitTest();
             var result = SAPInquiryVendor.Instance.Execute(new SAPInquiryVendorInputModel
             {
-                PREVACC = "14645096"
+                PREVACC = "14555916"
             });
             Console.WriteLine("==============result===============");
             Console.WriteLine(result.ToJson());
