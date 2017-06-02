@@ -151,7 +151,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
               
                
             
-                LogAsync(request, response, timeTaken);
+                LogRequest(request, response, timeTaken);
               
                 result.Content = ewiRes.Result;
                 result.StatusCode = response.StatusCode;
@@ -186,7 +186,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
             }
             catch (Exception e)
             {
-                    LogAsync(request);
+                    LogRequest(request);
                
                     throw new BuzErrorException(
                         "500",
@@ -199,7 +199,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
             
         }
       
-        protected void LogAsync(HttpRequestMessage req, HttpResponseMessage res, TimeSpan t)
+        protected void LogRequest(HttpRequestMessage req, HttpResponseMessage res, TimeSpan t)
         {
             var responseTime = "";
             float responseTimeTotalMilliseconds=0 ;
@@ -241,31 +241,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
                     resHeader = res.Headers.ToString();
                 }
 
-                var ewiResponse = JObject.Parse(resBody);
-                var responseCode = ewiResponse["responseCode"] ?? "";
-                var responseMessage = ewiResponse["responseMessage"] ?? "";
-                var responseContent = ewiResponse["content"] ?? "";
-
-                var responseContentCode =  "";
-                var responseContentMessage ="";
-                var responseContentDescription= "";
-                var responseContentId = "";
-                var responseContentDateTime = "";
-                var totalrecord = "";
-                if (responseContent!=null)
-                {
-                    responseContentCode = responseContent["code"]?.ToString() ?? "";
-                    responseContentMessage = responseContent["message"]?.ToString() ?? "";
-                    responseContentDescription = responseContent["description"]?.ToString() ?? "";
-                    responseContentId = responseContent["transactionId"]?.ToString() ?? "";
-                    responseContentDateTime = responseContent["transactionDateTime"]?.ToString() ?? "";
-
-                    totalrecord = responseContent["totalrecord"]?.ToString() ?? "";
-
-                    
-                }
-
-
+              
 
                 var apiLogEntry = new ApiLogEntry
                 {
@@ -291,13 +267,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
                     ResponseStatusCode = res?.StatusCode.ToString(),
                     ResponseHeaders = res?.Headers.ToJson(),
                     ResponseTimestamp = resTime,
-                    EWICode = responseCode.ToString(),
-                    EWIMessage = responseMessage.ToString(),
-                    ContentCode = responseContentCode,
-                    ContentMessage  = responseContentMessage,
-                    ContentDescription = responseContentDescription,
-                    ContentTransactionId = responseContentId,
-                    ContentTransactionDateTime = responseContentDateTime,
+                   
                     ResponseTime = responseTime,
                     ResponseTimeTotalMilliseconds= responseTimeTotalMilliseconds
 
@@ -305,14 +275,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 
                 };
 
-                try
-                {
-                    apiLogEntry.TotalRecord = Int32.Parse(totalrecord);
-                }
-                catch (Exception)
-                {
-                    
-                }
+               
                 InMemoryLogData.Instance.AddLogEntry(apiLogEntry);
 
 
@@ -323,7 +286,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
             }
         }
 
-        protected void LogAsync(HttpRequestMessage req)
+        protected void LogRequest(HttpRequestMessage req)
         {
             try
             {
