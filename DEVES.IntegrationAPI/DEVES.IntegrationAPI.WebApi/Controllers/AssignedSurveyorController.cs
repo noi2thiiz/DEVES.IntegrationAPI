@@ -27,10 +27,10 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         OrganizationServiceProxy _serviceProxy;
         private Guid _accountId;
 
-        private Guid _transactionId;
+        private Guid _transactionId = new Guid();
         public object Post([FromBody]object value)
         {
-            _transactionId = new Guid();
+            _transactionId = Guid.NewGuid();
 
             _log.InfoFormat("IP ADDRESS: {0}, HttpMethod: POST", CommonHelper.GetIpAddress());
 

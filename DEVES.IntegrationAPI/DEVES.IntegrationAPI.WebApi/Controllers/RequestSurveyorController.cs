@@ -26,7 +26,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         private QueryInfo q = new QueryInfo();
         private System.Data.DataTable dt = new System.Data.DataTable();
 
-        private Guid _transactionId;
+        private Guid _transactionId = new Guid();
 
         protected string isStringNull(string a)
         {
@@ -263,7 +263,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         // For testing
         public object Post([FromBody]object value)
         {
-            _transactionId = new Guid();
+            _transactionId = Guid.NewGuid();
 
             _log.InfoFormat("IP ADDRESS: {0}, HttpMethod: Post", CommonHelper.GetIpAddress());
 

@@ -23,10 +23,10 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         OrganizationServiceProxy _serviceProxy;
         private Guid _accountId;
 
-        private Guid _transactionId;
+        private Guid _transactionId = new Guid();
         public object Post([FromBody]object value)
         {
-            _transactionId = new Guid();
+            _transactionId = Guid.NewGuid();
 
             _log.InfoFormat("IP ADDRESS: {0}, HttpMethod: POST", CommonHelper.GetIpAddress());
 
@@ -239,7 +239,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
 
             _log.Info("HandleMessage");
             try
-            {
+            {  
                 var UpdateClaimNoOutput = new UpdateClaimNoDataOutputModel_Pass();
 
                 var connection = new CrmServiceClient(ConfigurationManager.ConnectionStrings["CRM_DEVES"].ConnectionString);
@@ -251,19 +251,39 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                             select c;
 
                 Incident getGuidIncident = queryCase.FirstOrDefault<Incident>();
+
                 // Incident GUID
                 _accountId = new Guid(getGuidIncident.IncidentId.ToString());
 
                 Guid claimId = new Guid();
+
+                bool isCreate = false;
                 // Create
                 try
                 {
-                    pfc_claim claim = new pfc_claim();
-                    claim.pfc_claim_number = content.claimNo;
-                    claim.pfc_zrepclmno = content.claimNotiNo;
-                    claim.pfc_ref_caseId = new Microsoft.Xrm.Sdk.EntityReference(pfc_claim.EntityLogicalName, _accountId);
+                    var queryClaim = from c in svcContext.pfc_claimSet
+                                     where c.pfc_claim_number == content.claimNo
+                                     select c;
 
-                    claimId = _serviceProxy.Create(claim);
+                    pfc_claim claim = new pfc_claim();
+
+                    if (queryClaim.FirstOrDefault<pfc_claim>() == null)
+                    {
+
+                        claim.pfc_claim_number = content.claimNo;
+                        claim.pfc_zrepclmno = content.claimNotiNo;
+                        claim.pfc_ref_caseId = new Microsoft.Xrm.Sdk.EntityReference(pfc_claim.EntityLogicalName, _accountId);
+                        claim.pfc_policy_additional = new Microsoft.Xrm.Sdk.EntityReference(Incident.EntityLogicalName, getGuidIncident.pfc_policy_additionalId.Id);
+
+                        claimId = _serviceProxy.Create(claim);
+
+                        isCreate = true;
+                    }
+                    else
+                    {
+                        isCreate = false;
+                    }
+     
                 }
                 catch (Exception e)
                 {
@@ -279,28 +299,31 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 // Update
                 try
                 {
-                    
-                    var query = from c in svcContext.IncidentSet
-                                where c.TicketNumber == content.ticketNo && c.pfc_claim_noti_number == content.claimNotiNo
-                                select c;
 
-                    Incident incident = query.FirstOrDefault<Incident>();
+                    if (isCreate)
+                    {
+                        var query = from c in svcContext.IncidentSet
+                                    where c.TicketNumber == content.ticketNo && c.pfc_claim_noti_number == content.claimNotiNo
+                                    select c;
 
-                    _accountId = new Guid(incident.IncidentId.ToString());
-                    Incident retrievedIncident = (Incident)_serviceProxy.Retrieve(Incident.EntityLogicalName, _accountId, new Microsoft.Xrm.Sdk.Query.ColumnSet(true));
+                        Incident incident = query.FirstOrDefault<Incident>();
 
-                    string DB_claimNumber = retrievedIncident.pfc_claim_number;
-                    string DB_claimId = retrievedIncident.pfc_locus_claim_id;
-                    string DB_claimStatusCode = retrievedIncident.pfc_locus_claim_status_code;
-                    string DB_claimStatusDesc = retrievedIncident.pfc_locus_claim_status_desc;
+                        _accountId = new Guid(incident.IncidentId.ToString());
+                        Incident retrievedIncident = (Incident)_serviceProxy.Retrieve(Incident.EntityLogicalName, _accountId, new Microsoft.Xrm.Sdk.Query.ColumnSet(true));
 
-                    retrievedIncident.pfc_claim_number = content.claimNo;
-                    retrievedIncident.pfc_locus_claim_id = content.claimId; 
-                    retrievedIncident.pfc_locus_claim_status_code = content.claimStatusCode;
-                    retrievedIncident.pfc_locus_claim_status_desc = content.claimStatusDesc;
-                    retrievedIncident.pfc_locus_claim_status_on = DateTime.Now;
+                        string DB_claimNumber = retrievedIncident.pfc_claim_number;
+                        string DB_claimId = retrievedIncident.pfc_locus_claim_id;
+                        string DB_claimStatusCode = retrievedIncident.pfc_locus_claim_status_code;
+                        string DB_claimStatusDesc = retrievedIncident.pfc_locus_claim_status_desc;
 
-                    _serviceProxy.Update(retrievedIncident);
+                        retrievedIncident.pfc_claim_number = content.claimNo;
+                        retrievedIncident.pfc_locus_claim_id = content.claimId;
+                        retrievedIncident.pfc_locus_claim_status_code = content.claimStatusCode;
+                        retrievedIncident.pfc_locus_claim_status_desc = content.claimStatusDesc;
+                        retrievedIncident.pfc_locus_claim_status_on = DateTime.Now;
+
+                        _serviceProxy.Update(retrievedIncident);
+                    }
 
                 }
                 catch (Exception e)

@@ -431,6 +431,7 @@
     <Compile Include="Controllers\RequestCleansingIdController.cs" />
     <Compile Include="Controllers\RequestSurveyorController.cs" />
     <Compile Include="Controllers\SendSMSController.cs" />
+    <Compile Include="Controllers\SubmitSurveyAssessmentResultController.cs" />
     <Compile Include="Controllers\TestAccountController.cs" />
     <Compile Include="Controllers\UpdateClaimInfoController.cs" />
     <Compile Include="Controllers\UpdateClaimNoController.cs" />
