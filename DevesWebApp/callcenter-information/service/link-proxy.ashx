@@ -35,6 +35,10 @@ public class proxyLink : IHttpHandler {
         {
             remoteHost = "http://192.168.10.3";
         }
+        if (linkType=="Information")
+        {
+            remoteHost = "http://192.168.10.33";
+        }
         var strURL = remoteHost+"/"+linkType+".asp?token="+token;
         string strRequest;
 

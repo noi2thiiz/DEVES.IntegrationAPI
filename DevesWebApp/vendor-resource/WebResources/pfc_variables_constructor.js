@@ -47,6 +47,7 @@ function initvariable(){
             window.top.callCenterLinkProxyPart = "service/link-proxy.ashx";
             break;
     }
+
     window.top.callCenterLinkToken = "INi9SdhXRvpZO7mYI0ViUlflmqc9I9GO";
     window.top.callCenterLinkNewProductPart = window.top.callCenterLinkHostname+"/NewProduct.asp?token="+window.top.callCenterLinkToken;
     window.top.callCenterLinkInformationPart = window.top.callCenterLinkHostname+"/Information.asp?token="+window.top.callCenterLinkToken;

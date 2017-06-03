@@ -14,6 +14,7 @@ app.controller('mainController', ['$scope', '$rootScope', 'dialog', '$loading', 
     var linkInformationUrl = window.top.callCenterLinkInformationPart;
 
     var linkHostname = window.top.callCenterLinkHostname;
+    var InfomationlinkHostname = "http://192.168.10.33";
 
     var linkProxy = window.top.callCenterLinkProxyPart;
     var linkProxyToken = window.top.callCenterLinkToken;
@@ -199,11 +200,13 @@ app.controller('mainController', ['$scope', '$rootScope', 'dialog', '$loading', 
 
                          var $img = $(a).parent("td").find("img");
                          var openType = getFileType($(a).attr("href"));
+                         var sourceUrl = $(a).attr("href");
+                         var href =(sourceUrl.indexOf("http") != -1)? sourceUrl : linkHostname+"/"+sourceUrl;
                         $scope.menuItems.push({
                             id: 100+i,
                             title: $.trim($(a).text()),
                             imgSrc: $.trim($img.attr("src")),
-                            link: linkHostname+"/"+$(a).attr("href"),
+                            link: href,
                             category:"product",
                             openType:openType,
                             active: false
@@ -247,12 +250,13 @@ console.log($scope.menuItems);
 
                         var $img = $(a).parent("td").find("img");
                         var openType = getFileType($(a).attr("href"));
-
+                        var sourceUrl = $(a).attr("href");
+                        var href =(sourceUrl.indexOf("http") != -1)? sourceUrl : InfomationlinkHostname+"/"+sourceUrl;
                         $scope.menuItems.push({
                             id: 200+i,
                             title: (i+1)+". "+$.trim($(a).text()),
                             imgSrc: $.trim($img.attr("src")),
-                            link: linkHostname+"/"+$(a).attr("href"),
+                            link: href,
                             category:"information",
                             openType:openType,
                             active: false
