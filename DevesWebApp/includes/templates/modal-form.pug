@@ -1,0 +1,26 @@
+//
+   Created by patiw on 29/4/2560.
+block setting
+    - var modalId = "modal-form"
+    - var modalTitle = "Form"
+div(dw-loading='form',dw-loading-options="{text:'Processing...', spinner: true}")
+    div.modal.fade.bs-example-modal-lg(
+        id=modalId,tabindex='-1',
+        role='dialog',
+        style='display: none',
+        aria-labelledby='myModalLabel'
+        )
+        .modal-dialog.modal-lg(role='document')
+            .modal-content
+                .modal-header
+                    button.close(type='button', data-dismiss='modal', aria-label='Close')
+                        span(aria-hidden='true') &times;
+                    h4.modal-title=modalTitle
+
+                .modal-body
+                    block modalBody
+
+                .modal-footer
+                    block modalFooter
+                        button.btn.btn-default(type='button', data-dismiss='modal') Close
+

@@ -1,0 +1,86 @@
+extends src/template
+
+block headTitle
+    title CRM-KM
+block body
+
+    #wrapper
+        #sidebar-wrapper.col-md-3.col-lg-2
+            #sidebar
+                .page-header#page-menu-header
+                    ul.nav.nav-tabs
+                        li(role="presentation",data-ng-click="activeCategory='product'",ng-class="{'active':activeCategory=='product'}")
+                            a Products
+                        li(role="presentation",data-ng-click="activeCategory='information'",ng-class="{'active':activeCategory=='information'}")
+                            a Information
+                    #custom-search-input
+                        .input-group.col-md-12
+                            input.form-control.input-sm(type='text', placeholder='search menu',ng-model="searchMenu")
+                            span.input-group-btn
+                                a.btn.btn-sm(type='button',data-ng-click="searchMenu=''")
+                                    i.glyphicon.glyphicon-refresh
+                .page-body#menuContents
+                    ul.nav.list-group
+                        li(ng-repeat="item in menuItems |filter:{title:searchMenu,category:activeCategory}")
+                            a.list-group-item(ng-if="item.openType=='page'",target="iframeContent",data-ng-click="openMenuItem(item)")
+                                | {{item.title}}
+                                img(ng-if="item.imgSrc!=''",ng-src="{{item.imgSrc}}")
+                            a.list-group-item(ng-if="item.openType=='download'",ng-href="{{item.link}}")
+                                | {{item.title}}
+                                img(ng-if="item.imgSrc!=''",ng-src="{{item.imgSrc}}")
+                                i.glyphicon.glyphicon-paperclip.pull-right(ng-if="item.openType=='download'")
+                |<iframe  id="iframeMenu" frameborder="0" ></iframe>
+        #main-wrapper.col-md-9.col-lg-10.pull-right
+            #main
+                .page-header
+                    ul#tabs.nav.nav-tabs
+                        li(ng-repeat="itemTab in menuTabs",ng-class="{'active':(menuSelectedItem.id==itemTab.id)}")
+                            a(data-ng-click="openLink(itemTab)")
+
+                                | {{itemTab.title}}
+                                i.glyphicon.glyphicon-remove.pull-right.close(data-ng-click="removeTab(itemTab)")
+
+                        li#lastTab.pull-right(ng-show="moreTabs.length>0")
+                            a.btn.dropdown-toggle(data-toggle='dropdown', href='#')
+                                | More
+                                span.caret
+                            ul#collapsed.dropdown-menu
+                                li(ng-repeat="itemMoreTab in moreTabs ")
+                                    a(data-ng-click="openLinkInFirstTab(itemMoreTab)") {{itemMoreTab.title}}
+                .page-body(
+                dw-loading='iframe',
+                dw-loading-options="{text:'Loading...', spinner: true}"
+                )
+                    .row(ng-show="menuTabs.length>0")
+                        .col-sm-12
+                            nav.navbar.navbar-default#tabs-action-bar
+                                a.btn.btn-xs.btn-default.pull-right(data-ng-click="removeTab(menuSelectedItem)")
+                                    i.glyphicon.glyphicon-remove
+
+                                a.btn.btn-xs.btn-default.pull-right
+                                    i.glyphicon.glyphicon-refresh(data-ng-click="refreshTab(menuSelectedItem)")
+
+                                a.btn.btn-xs.btn-default.pull-right
+                                    i.glyphicon.glyphicon-new-window(data-ng-click="detachTab(menuSelectedItem)")
+
+                    .row
+                        .col-sm-12#tabContents
+            .col-md-12.footer
+
+
+block script
+    script(type='text/javascript').
+        initvariable();
+    script(type='text/javascript')
+        include src/modula.js
+        include src/run.js
+        include src/controller.js
+
+
+
+
+
+
+
+
+
