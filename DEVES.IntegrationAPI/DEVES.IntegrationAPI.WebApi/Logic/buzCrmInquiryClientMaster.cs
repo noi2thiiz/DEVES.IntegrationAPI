@@ -34,12 +34,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     cmd.TransactionId = TransactionId;
                     break;
 
-                default:
-                    break;
             }
 
-            BaseDataModel res = (BaseDataModel)cmd.Execute(input);
-            return res;
+            return  cmd.Execute(input);
+          
         }
     }
 }
