@@ -29,7 +29,8 @@ block body
                                 | {{item.title}}
                                 img(ng-if="item.imgSrc!=''",ng-src="{{item.imgSrc}}")
                                 i.glyphicon.glyphicon-paperclip.pull-right(ng-if="item.openType=='download'")
-                |<iframe  id="iframeMenu" frameborder="0" ></iframe>
+                |<iframe class="iframeMenu"  id="iframeMenu1" frameborder="0" ></iframe>
+                |<iframe class="iframeMenu"  id="iframeMenu2" frameborder="0" ></iframe>
         #main-wrapper.col-md-9.col-lg-10.pull-right
             #main
                 .page-header
@@ -51,6 +52,10 @@ block body
                 dw-loading='iframe',
                 dw-loading-options="{text:'Loading...', spinner: true}"
                 )
+                    .row(ng-show="menuTabs.length<=0")
+                        h5.text-center(style="padding-top:100px;").
+                            หากท่านเปิดหน้ารวมลิงก์ทิ้งไว้นานเกินไปโดยไม่ใช้งาน ระบบอาจจะตัดการเชื่อมต่อและจะแสดงหน้าจอให้ล็อกอิน ซึ่งท่านสามารถ refresh(F5) หน้านี้ใหม่เพื่อเข้าใช้งานระบบได้อีกครั้ง
+
                     .row(ng-show="menuTabs.length>0")
                         .col-sm-12
                             nav.navbar.navbar-default#tabs-action-bar

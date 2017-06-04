@@ -14,7 +14,7 @@ app.controller('mainController', ['$scope', '$rootScope', 'dialog', '$loading', 
     var linkInformationUrl = window.top.callCenterLinkInformationPart;
 
     var linkHostname = window.top.callCenterLinkHostname;
-    var InfomationlinkHostname = "http://192.168.10.33";
+    var InfomationlinkHostname = window.top.callCenterLinkHostname; //= "http://192.168.10.33";
 
     var linkProxy = window.top.callCenterLinkProxyPart;
     var linkProxyToken = window.top.callCenterLinkToken;
@@ -187,8 +187,8 @@ app.controller('mainController', ['$scope', '$rootScope', 'dialog', '$loading', 
         $loading.start('main');
 
 
-        $("#iframeMenu").attr("src",linkProductUrl);
-        $("#iframeMenu").load(function () {
+        $("#iframeMenu1").attr("src",linkProductUrl);
+        $("#iframeMenu1").load(function () {
 
             $http.get(linkProxy+"?token="+linkProxyToken+"&env="+env+"&linkType=NewProduct", {}).
             then(function successCallback(response) {
@@ -238,8 +238,8 @@ console.log($scope.menuItems);
         $loading.start('main');
 
 
-        $("#iframeMenu").attr("src",linkInformationUrl);
-        $("#iframeMenu").load(function () {
+        $("#iframeMenu2").attr("src",linkInformationUrl);
+        $("#iframeMenu2").load(function () {
 
             $http.get(linkProxy+"?token="+linkProxyToken+"&env="+env+"&linkType=Information", {}).
             then(function successCallback(response) {
@@ -282,15 +282,19 @@ console.log($scope.menuItems);
 
 
     };
-    $scope.loadProductMenu();
-    $scope.loadInformationMenu();
-    setTimeout(function () {
+
+    $scope.loadAllMenu = function(){
         $scope.loadProductMenu();
         $scope.loadInformationMenu();
+    }
+    $scope.loadAllMenu();
+    setTimeout(function () {
+        $scope.loadAllMenu();
+        $scope.loadAllMenu();
 
     }, 500000);
 
-    //$(window).on('resize', autocollapse);
+
 
 
 }]);

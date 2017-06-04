@@ -169,7 +169,7 @@ a{
 #custom-search-input .glyphicon-search {
     font-size: 16px;
 }
-#iframeMenu {
+.iframeMenu {
     max-width:0px; max-height: 0px;
 }
 a{
@@ -179,7 +179,9 @@ a{
 
 
 
-</style></head><body ng-app="crmApp" ng-controller="mainController as vm" dw-loading="main" dw-loading-options="{text:'Processing...', spinner: true}"><nav class="navbar navbar-default navbar-fixed-top" id="page-nav-header"><div class="container"><div class="navbar-header"><a class="navbar-brand" href="#"><img src="/vendor-resource/images/theme_navbarlogo.png"/></a></div><div class="pull-right" style="font-size: larger; margin-top: 15px; color: white">รวม Link</div></div></nav><div id="main-container" style="display: none"><div id="wrapper"><div class="col-md-3 col-lg-2" id="sidebar-wrapper"><div id="sidebar"><div class="page-header" id="page-menu-header"><ul class="nav nav-tabs"><li role="presentation" data-ng-click="activeCategory='product'" ng-class="{'active':activeCategory=='product'}"><a>Products</a></li><li role="presentation" data-ng-click="activeCategory='information'" ng-class="{'active':activeCategory=='information'}"><a>Information</a></li></ul><div id="custom-search-input"><div class="input-group col-md-12"><input class="form-control input-sm" type="text" placeholder="search menu" ng-model="searchMenu"/><span class="input-group-btn"><a class="btn btn-sm" type="button" data-ng-click="searchMenu=''"><i class="glyphicon glyphicon-refresh"></i></a></span></div></div></div><div class="page-body" id="menuContents"><ul class="nav list-group"><li ng-repeat="item in menuItems |filter:{title:searchMenu,category:activeCategory}"><a class="list-group-item" ng-if="item.openType=='page'" target="iframeContent" data-ng-click="openMenuItem(item)">{{item.title}}<img ng-if="item.imgSrc!=''" ng-src="{{item.imgSrc}}"/></a><a class="list-group-item" ng-if="item.openType=='download'" ng-href="{{item.link}}">{{item.title}}<img ng-if="item.imgSrc!=''" ng-src="{{item.imgSrc}}"/><i class="glyphicon glyphicon-paperclip pull-right" ng-if="item.openType=='download'"></i></a></li></ul></div><iframe  id="iframeMenu" frameborder="0" ></iframe></div></div><div class="col-md-9 col-lg-10 pull-right" id="main-wrapper"><div id="main"><div class="page-header"><ul class="nav nav-tabs" id="tabs"><li ng-repeat="itemTab in menuTabs" ng-class="{'active':(menuSelectedItem.id==itemTab.id)}"><a data-ng-click="openLink(itemTab)">{{itemTab.title}}<i class="glyphicon glyphicon-remove pull-right close" data-ng-click="removeTab(itemTab)"></i></a></li><li class="pull-right" id="lastTab" ng-show="moreTabs.length&gt;0"><a class="btn dropdown-toggle" data-toggle="dropdown" href="#">More<span class="caret"></span></a><ul class="dropdown-menu" id="collapsed"><li ng-repeat="itemMoreTab in moreTabs "><a data-ng-click="openLinkInFirstTab(itemMoreTab)">{{itemMoreTab.title}}</a></li></ul></li></ul></div><div class="page-body" dw-loading="iframe" dw-loading-options="{text:'Loading...', spinner: true}"><div class="row" ng-show="menuTabs.length&gt;0"><div class="col-sm-12"><nav class="navbar navbar-default" id="tabs-action-bar"><a class="btn btn-xs btn-default pull-right" data-ng-click="removeTab(menuSelectedItem)"><i class="glyphicon glyphicon-remove"></i></a><a class="btn btn-xs btn-default pull-right"><i class="glyphicon glyphicon-refresh" data-ng-click="refreshTab(menuSelectedItem)"></i></a><a class="btn btn-xs btn-default pull-right"><i class="glyphicon glyphicon-new-window" data-ng-click="detachTab(menuSelectedItem)"></i></a></nav></div></div><div class="row"><div class="col-sm-12" id="tabContents"></div></div></div></div><div class="col-md-12 footer"></div></div></div></div><script type="text/javascript">initvariable();</script><script type="text/javascript">
+</style></head><body ng-app="crmApp" ng-controller="mainController as vm" dw-loading="main" dw-loading-options="{text:'Processing...', spinner: true}"><nav class="navbar navbar-default navbar-fixed-top" id="page-nav-header"><div class="container"><div class="navbar-header"><a class="navbar-brand" href="#"><img src="/vendor-resource/images/theme_navbarlogo.png"/></a></div><div class="pull-right" style="font-size: larger; margin-top: 15px; color: white">รวม Link</div></div></nav><div id="main-container" style="display: none"><div id="wrapper"><div class="col-md-3 col-lg-2" id="sidebar-wrapper"><div id="sidebar"><div class="page-header" id="page-menu-header"><ul class="nav nav-tabs"><li role="presentation" data-ng-click="activeCategory='product'" ng-class="{'active':activeCategory=='product'}"><a>Products</a></li><li role="presentation" data-ng-click="activeCategory='information'" ng-class="{'active':activeCategory=='information'}"><a>Information</a></li></ul><div id="custom-search-input"><div class="input-group col-md-12"><input class="form-control input-sm" type="text" placeholder="search menu" ng-model="searchMenu"/><span class="input-group-btn"><a class="btn btn-sm" type="button" data-ng-click="searchMenu=''"><i class="glyphicon glyphicon-refresh"></i></a></span></div></div></div><div class="page-body" id="menuContents"><ul class="nav list-group"><li ng-repeat="item in menuItems |filter:{title:searchMenu,category:activeCategory}"><a class="list-group-item" ng-if="item.openType=='page'" target="iframeContent" data-ng-click="openMenuItem(item)">{{item.title}}<img ng-if="item.imgSrc!=''" ng-src="{{item.imgSrc}}"/></a><a class="list-group-item" ng-if="item.openType=='download'" ng-href="{{item.link}}">{{item.title}}<img ng-if="item.imgSrc!=''" ng-src="{{item.imgSrc}}"/><i class="glyphicon glyphicon-paperclip pull-right" ng-if="item.openType=='download'"></i></a></li></ul></div><iframe class="iframeMenu"  id="iframeMenu1" frameborder="0" ></iframe>
+<iframe class="iframeMenu"  id="iframeMenu2" frameborder="0" ></iframe></div></div><div class="col-md-9 col-lg-10 pull-right" id="main-wrapper"><div id="main"><div class="page-header"><ul class="nav nav-tabs" id="tabs"><li ng-repeat="itemTab in menuTabs" ng-class="{'active':(menuSelectedItem.id==itemTab.id)}"><a data-ng-click="openLink(itemTab)">{{itemTab.title}}<i class="glyphicon glyphicon-remove pull-right close" data-ng-click="removeTab(itemTab)"></i></a></li><li class="pull-right" id="lastTab" ng-show="moreTabs.length&gt;0"><a class="btn dropdown-toggle" data-toggle="dropdown" href="#">More<span class="caret"></span></a><ul class="dropdown-menu" id="collapsed"><li ng-repeat="itemMoreTab in moreTabs "><a data-ng-click="openLinkInFirstTab(itemMoreTab)">{{itemMoreTab.title}}</a></li></ul></li></ul></div><div class="page-body" dw-loading="iframe" dw-loading-options="{text:'Loading...', spinner: true}"><div class="row" ng-show="menuTabs.length&lt;=0"><h5 class="text-center" style="padding-top:100px">หากท่านเปิดหน้ารวมลิงก์ทิ้งไว้นานเกินไปโดยไม่ใช้งาน ระบบอาจจะตัดการเชื่อมต่อและจะแสดงหน้าจอให้ล็อกอิน ซึ่งท่านสามารถ refresh(F5) หน้านี้ใหม่เพื่อเข้าใช้งานระบบได้อีกครั้ง
+</h5></div><div class="row" ng-show="menuTabs.length&gt;0"><div class="col-sm-12"><nav class="navbar navbar-default" id="tabs-action-bar"><a class="btn btn-xs btn-default pull-right" data-ng-click="removeTab(menuSelectedItem)"><i class="glyphicon glyphicon-remove"></i></a><a class="btn btn-xs btn-default pull-right"><i class="glyphicon glyphicon-refresh" data-ng-click="refreshTab(menuSelectedItem)"></i></a><a class="btn btn-xs btn-default pull-right"><i class="glyphicon glyphicon-new-window" data-ng-click="detachTab(menuSelectedItem)"></i></a></nav></div></div><div class="row"><div class="col-sm-12" id="tabContents"></div></div></div></div><div class="col-md-12 footer"></div></div></div></div><script type="text/javascript">initvariable();</script><script type="text/javascript">
 var app = angular.module('crmApp', ["app.core", "darthwade.dwLoading",'ui.bootstrap',,"ngSanitize"]);app.run(['$window', '$location', '$loading', '$http', function ($window, $location, $loading, $http) {
 
 
@@ -201,7 +203,7 @@ var app = angular.module('crmApp', ["app.core", "darthwade.dwLoading",'ui.bootst
     var linkInformationUrl = window.top.callCenterLinkInformationPart;
 
     var linkHostname = window.top.callCenterLinkHostname;
-    var InfomationlinkHostname = "http://192.168.10.33";
+    var InfomationlinkHostname = window.top.callCenterLinkHostname; //= "http://192.168.10.33";
 
     var linkProxy = window.top.callCenterLinkProxyPart;
     var linkProxyToken = window.top.callCenterLinkToken;
@@ -374,8 +376,8 @@ var app = angular.module('crmApp', ["app.core", "darthwade.dwLoading",'ui.bootst
         $loading.start('main');
 
 
-        $("#iframeMenu").attr("src",linkProductUrl);
-        $("#iframeMenu").load(function () {
+        $("#iframeMenu1").attr("src",linkProductUrl);
+        $("#iframeMenu1").load(function () {
 
             $http.get(linkProxy+"?token="+linkProxyToken+"&env="+env+"&linkType=NewProduct", {}).
             then(function successCallback(response) {
@@ -425,8 +427,8 @@ console.log($scope.menuItems);
         $loading.start('main');
 
 
-        $("#iframeMenu").attr("src",linkInformationUrl);
-        $("#iframeMenu").load(function () {
+        $("#iframeMenu2").attr("src",linkInformationUrl);
+        $("#iframeMenu2").load(function () {
 
             $http.get(linkProxy+"?token="+linkProxyToken+"&env="+env+"&linkType=Information", {}).
             then(function successCallback(response) {
@@ -469,15 +471,19 @@ console.log($scope.menuItems);
 
 
     };
-    $scope.loadProductMenu();
-    $scope.loadInformationMenu();
-    setTimeout(function () {
+
+    $scope.loadAllMenu = function(){
         $scope.loadProductMenu();
         $scope.loadInformationMenu();
+    }
+    $scope.loadAllMenu();
+    setTimeout(function () {
+        $scope.loadAllMenu();
+        $scope.loadAllMenu();
 
     }, 500000);
 
-    //$(window).on('resize', autocollapse);
+
 
 
 }]);</script></body></html>

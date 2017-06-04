@@ -29,16 +29,16 @@ public class proxyLink : IHttpHandler {
 
         var linkType = context.Request.QueryString["linkType"];
         var env = context.Request.QueryString["env"];
-        var token = context.Request.QueryString["token"];
+        var token = "INi9SdhXRvpZO7mYI0ViUlflmqc9I9GO";//context.Request.QueryString["token"];
 
         if (env=="pro")
         {
             remoteHost = "http://192.168.10.3";
         }
-        if (linkType=="Information")
-        {
-            remoteHost = "http://192.168.10.33";
-        }
+        //if (linkType=="Information")
+        //{
+        //    remoteHost = "http://192.168.10.33";
+        //}
         var strURL = remoteHost+"/"+linkType+".asp?token="+token;
         string strRequest;
 
