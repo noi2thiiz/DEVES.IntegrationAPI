@@ -17,7 +17,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services.Tests
         [TestMethod()]
         public void Execute_CLSInquiryCLSPersonalClientTest()
         {
-            AppConfig.Instance.StartupForUnitTest();
+           
             var service = new CLSInquiryCLSPersonalClient();
             var result = service.Execute(new CLSInquiryPersonalClientInputModel
             {

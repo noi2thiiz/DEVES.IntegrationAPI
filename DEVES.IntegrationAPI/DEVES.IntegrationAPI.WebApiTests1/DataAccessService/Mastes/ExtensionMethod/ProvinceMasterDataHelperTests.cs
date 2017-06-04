@@ -15,7 +15,7 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.Mastes.ExtensionMethod.T
         [TestMethod()]
         public void ToProvinceNameTest()
         {
-            AppConfig.Instance.StartupForUnitTest();
+            
             ProvinceMasterData.Instance.InitData();
             
             Assert.AreEqual("กรุงเทพมหานคร", ("10").ToProvinceName());

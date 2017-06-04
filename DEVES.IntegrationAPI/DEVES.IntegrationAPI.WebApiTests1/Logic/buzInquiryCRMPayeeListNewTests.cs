@@ -20,7 +20,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
         [TestMethod()]
         public void Execute_InquiryAPARPayeeListTest()
         {
-            AppConfig.Instance.StartupForUnitTest();
+          
 
             var cmd = new buzInquiryCRMPayeeListNew();
             var result = cmd.InquiryAPARPayeeList(new InquiryCRMPayeeListInputModel
@@ -35,7 +35,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
         [TestMethod()]
         public void ExecuteInput_buzInquiryCRMPayeeListNewTest()
         {
-            AppConfig.Instance.StartupForUnitTest();
+            
 
             var cmd = new buzInquiryCRMPayeeListNew();
             var result = cmd.ExecuteInput(new InquiryCRMPayeeListInputModel
@@ -217,7 +217,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
         public void FixEmptyPolisyClientIdTest()
         {
 
-            AppConfig.Instance.StartupForUnitTest();
+           
             var listSearchResult = new List<InquiryCrmPayeeListDataModel>();
             listSearchResult.Add(new InquiryCrmPayeeListDataModel
             {
@@ -253,7 +253,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
         [TestMethod()]
         public void Execute_buzInquiryCRMPayeeList_LimitOutputTest()
         {
-            AppConfig.Instance.StartupForUnitTest();
+            
             try
             {
                 var cmd = new buzInquiryCRMPayeeListNew();
@@ -278,7 +278,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
         [TestMethod()]
         public void Execute_buzInquiryCRMPayeeList_SearchByFullnameTest()
         {
-            AppConfig.Instance.StartupForUnitTest();
+            
             try
             {
                 var cmd = new buzInquiryCRMPayeeListNew();
@@ -313,7 +313,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
         [TestMethod()]
         public void Execute_buzInquiryCRMPayeeList_SearchBypolisyClientIdTest()
         {
-            AppConfig.Instance.StartupForUnitTest();
+           
             try
             {
                 var cmd = new buzInquiryCRMPayeeListNew();
@@ -349,7 +349,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
         [TestMethod()]
         public void Execute_buzInquiryCRMPayeeList_SearchBypolisyClientId_ShouldNotFoundTest()
         {
-            AppConfig.Instance.StartupForUnitTest();
+         
             try
             {
                 var cmd = new buzInquiryCRMPayeeListNew();
@@ -384,7 +384,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
         [TestMethod()]
         public void Execute_buzInquiryCRMPayeeList_SearchByTaxNoTest()
         {
-            AppConfig.Instance.StartupForUnitTest();
+          
             try
             {
                 var cmd = new buzInquiryCRMPayeeListNew();
@@ -420,7 +420,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
         [TestMethod()]
         public void Execute_buzInquiryCRMPayeeList_SearchByTaxNo_ShouldNotFoundTest()
         {
-            AppConfig.Instance.StartupForUnitTest();
+           
             try
             {
                 var cmd = new buzInquiryCRMPayeeListNew();
@@ -456,7 +456,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
         [TestMethod()]
         public void Execute_buzInquiryCRMPayeeList_SearchRoleCodeA()
         {
-            AppConfig.Instance.StartupForUnitTest();
+            
             try
             {
                 var cmd = new buzInquiryCRMPayeeListNew();
@@ -492,7 +492,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
         [TestMethod()]
         public void Execute_buzInquiryCRMPayeeList_SearchRoleCodeS()
         {
-            AppConfig.Instance.StartupForUnitTest();
+           
             try
             {
                 var cmd = new buzInquiryCRMPayeeListNew();
@@ -528,7 +528,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
         [TestMethod()]
         public void Execute_buzInquiryCRMPayeeList_SearchRoleCodeR()
         {
-            AppConfig.Instance.StartupForUnitTest();
+          
             try
             {
                 var cmd = new buzInquiryCRMPayeeListNew();
@@ -564,7 +564,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
         [TestMethod()]
         public void Execute_buzInquiryCRMPayeeList_SearchRoleCodeH()
         {
-            AppConfig.Instance.StartupForUnitTest();
+          
             try
             {
                 var cmd = new buzInquiryCRMPayeeListNew();

@@ -16,7 +16,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services.Tests
         [TestMethod()]
         public void RemoveByCleansingIdTest()
         {
-            AppConfig.Instance.StartupForUnitTest();
+          
             var result = CleansingClientService.Instance.RemoveByCleansingId("C2017-100000343");
             Console.WriteLine(result);
             Console.WriteLine(result.ToJson());
@@ -27,7 +27,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services.Tests
         [TestMethod()]
         public void InquiryPersonalClientTest()
         {
-            AppConfig.Instance.StartupForUnitTest();
+           
             var input = new CLSInquiryPersonalClientInputModel
             {
 
@@ -55,7 +55,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services.Tests
         public void CreatePersonalClientTest()
         {
             //ทดสอบบน QA เท่านั้น
-            AppConfig.Instance.StartupForUnitTest();
+           
             var input = new CLSCreatePersonalClientInputModel
             {
                 roleCode = "G",

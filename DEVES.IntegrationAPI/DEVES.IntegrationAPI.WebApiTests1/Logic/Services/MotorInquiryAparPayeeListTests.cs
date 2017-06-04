@@ -16,7 +16,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services.Tests
         [TestMethod()]
         public void Execute_MotorInquiryAparPayeeListTest()
         {
-            AppConfig.Instance.StartupForUnitTest();
+            
             var result = MotorInquiryAparPayeeList.Instance.Execute(new InquiryAPARPayeeListInputModel
             {
                 fullName = "พรชัย",
@@ -30,7 +30,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services.Tests
         [TestMethod()]
         public void SearchByVendorCode()
         {
-            AppConfig.Instance.StartupForUnitTest();
+            
             var result = MotorInquiryAparPayeeList.Instance.Execute(new InquiryAPARPayeeListInputModel
             {
                 polisyClntnum = "16161629",
@@ -45,7 +45,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services.Tests
         [TestMethod()]
         public void SearchByTax()
         {
-            AppConfig.Instance.StartupForUnitTest();
+          
             var result = MotorInquiryAparPayeeList.Instance.Execute(new InquiryAPARPayeeListInputModel
             {
                 taxNo = "3100800445795",

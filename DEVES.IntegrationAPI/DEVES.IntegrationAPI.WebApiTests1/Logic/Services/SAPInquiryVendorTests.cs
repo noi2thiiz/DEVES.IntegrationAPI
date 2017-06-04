@@ -15,7 +15,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services.Tests
         [TestMethod()]
         public void Execute_SAPInquiryVendorTest()
         {
-            AppConfig.Instance.StartupForUnitTest();
+            
             var result = SAPInquiryVendor.Instance.Execute(new SAPInquiryVendorInputModel
             {
                 PREVACC = "14555916"

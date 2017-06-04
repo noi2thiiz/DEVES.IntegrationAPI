@@ -16,7 +16,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services.Tests
         [TestMethod()]
         public void ExecuteTest()
         {
-            AppConfig.Instance.StartupForUnitTest();
+           
             var service = new COMPInquiryClientMaster();
             var result = service.Execute(new COMPInquiryClientMasterInputModel
             {

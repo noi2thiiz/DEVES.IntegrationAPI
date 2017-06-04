@@ -86,13 +86,14 @@ namespace DEVES.IntegrationAPI.WebApi
            
         }
         private bool isStartTed = false;
-        public void StartupForUnitTest()
+        public void StartupUnitTest()
         {
             if (!isStartTed)
             {
                 updateConfig();
             }
         }
+
 
         private void updateConfig()
         {

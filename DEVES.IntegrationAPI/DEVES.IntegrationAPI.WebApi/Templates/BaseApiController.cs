@@ -17,14 +17,21 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
 
         public string GetTransactionId()
         {
-           
-            if (string.IsNullOrEmpty(Request.Properties["TransactionID"].ToStringOrEmpty()))
+            try
             {
+                if (string.IsNullOrEmpty(Request?.Properties["TransactionID"]?.ToStringOrEmpty()))
+                {
 
-                Request.Properties["TransactionID"] = GlobalTransactionIdGenerator.Instance.GetNewGuid();
+                    Request.Properties["TransactionID"] = GlobalTransactionIdGenerator.Instance.GetNewGuid();
+                }
+
+                return Request.Properties["TransactionID"].ToString();
             }
-
-            return Request.Properties["TransactionID"].ToString();
+            catch (Exception)
+            {
+                return  GlobalTransactionIdGenerator.Instance.GetNewGuid();
+            }
+            
             
         }
 
@@ -49,6 +56,8 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
 
 
             string contentText = value?.ToString();
+            //.Replace("=", ":"); ;
+            
             //TInput contentModel;
             try
             {
@@ -69,7 +78,20 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
           
 
             string outvalidate;
-            var filePath = HttpContext.Current.Server.MapPath("~/App_Data/JsonSchema/"+ schemaFileName);
+            var filePath = "";
+            try
+            {
+                 filePath = HttpContext.Current.Server.MapPath("~/App_Data/JsonSchema/" + schemaFileName);
+            }
+            catch (Exception)
+            {
+                //C:\Users\patiw\Source\Repos\Production1\DEVES.IntegrationAPI\DEVES.IntegrationAPI.WebApiTests1\bin\Release
+                string startupPath = Environment.CurrentDirectory?.Replace(@"Tests1\bin\Release","");
+               
+                filePath = startupPath+"/App_Data/JsonSchema/" +schemaFileName;
+            }
+
+           
 
             if (!JsonHelper.TryValidateJson(contentText, filePath, out outvalidate))
             {

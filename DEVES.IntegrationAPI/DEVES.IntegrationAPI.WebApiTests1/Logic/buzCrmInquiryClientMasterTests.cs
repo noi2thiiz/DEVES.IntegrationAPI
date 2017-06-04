@@ -18,7 +18,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
         [TestMethod()]
         public void Execute_buzCrmInquiryClientMasterTest()
         {
-            AppConfig.Instance.StartupForUnitTest();
+            
             try
             {
                 var cmd = new buzCrmInquiryClientMaster();
@@ -59,7 +59,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
         [TestMethod()]
         public void Execute_buzCrmInquiryClientMaster_SearchByFullnameTest()
         {
-            AppConfig.Instance.StartupForUnitTest();
+           
             try
             {
                 var cmd = new buzCrmInquiryClientMaster();
@@ -101,7 +101,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
         [TestMethod()]
         public void Execute_buzCrmInquiryClientMaster_SearchByFirstNameAndLastNameTest()
         {
-            AppConfig.Instance.StartupForUnitTest();
+           
             try
             {
                 var cmd = new buzCrmInquiryClientMaster();
@@ -144,7 +144,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
         [TestMethod()]
         public void Execute_buzCrmInquiryClientMaster_SearchBySubFullnameTest()
         {
-            AppConfig.Instance.StartupForUnitTest();
+           
             try
             {
                 var cmd = new buzCrmInquiryClientMaster();
@@ -187,7 +187,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
         [TestMethod()]
         public void Execute_buzCrmInquiryClientMaster_SearchBySubFullname_NotFoundTest()
         {
-            AppConfig.Instance.StartupForUnitTest();
+           
             try
             {
                 var cmd = new buzCrmInquiryClientMaster();
@@ -229,7 +229,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
         [TestMethod()]
         public void Execute_buzCrmInquiryClientMaster_SearchByPolisyClientId_NotFoundTest()
         {
-            AppConfig.Instance.StartupForUnitTest();
+           
             try
             {
                 var cmd = new buzCrmInquiryClientMaster();
@@ -271,7 +271,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
         [TestMethod()]
         public void Execute_buzCrmInquiryClientMaster_SearchByIdCardTest()
         {
-            AppConfig.Instance.StartupForUnitTest();
+            
             try
             {
                 var cmd = new buzCrmInquiryClientMaster();
@@ -313,7 +313,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
         [TestMethod()]
         public void Execute_buzCrmInquiryClientMaster_SearchByIdCard_Type_C_Test()
         {
-            AppConfig.Instance.StartupForUnitTest();
+            
             try
             {
                 var cmd = new buzCrmInquiryClientMaster();
@@ -355,7 +355,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
         [TestMethod()]
         public void Execute_buzCrmInquiryClientMaster_SearchByFullname_Type_C_Test()
         {
-            AppConfig.Instance.StartupForUnitTest();
+          
             try
             {
                 var cmd = new buzCrmInquiryClientMaster();
@@ -398,7 +398,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
         [TestMethod()]
         public void Execute_buzCrmInquiryClientMaster_SearchByPolisyClientId_Type_C_Test()
         {
-            AppConfig.Instance.StartupForUnitTest();
+            
             try
             {
                 var cmd = new buzCrmInquiryClientMaster();
@@ -440,7 +440,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
         [TestMethod()]
         public void Execute_buzCrmInquiryClientMaster_SearchByPolisyClientId_Type_C_NotfoundTest()
         {
-            AppConfig.Instance.StartupForUnitTest();
+            
             try
             {
                 var cmd = new buzCrmInquiryClientMaster();

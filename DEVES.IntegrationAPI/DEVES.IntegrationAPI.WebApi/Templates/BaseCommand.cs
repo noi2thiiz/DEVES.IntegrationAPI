@@ -444,7 +444,20 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             string validateResult = string.Empty;
             Type objType = typeof(T);
             string key = string.Format(CONST_JSON_SCHEMA_FILE, objType.Name );
-            var filePath = HttpContext.Current.Server.MapPath(GetAppConfigurationSetting(key));
+            var filePath = "";
+            try
+            {
+                filePath = HttpContext.Current.Server.MapPath(GetAppConfigurationSetting(key));
+            }
+            catch (Exception)
+            {
+                //C:\Users\patiw\Source\Repos\Production1\DEVES.IntegrationAPI\DEVES.IntegrationAPI.WebApiTests1\bin\Release
+                string startupPath = Environment.CurrentDirectory?.Replace(@"Tests1\bin\Release", "");
+
+                filePath = startupPath + "/App_Data/JsonSchema/" + GetAppConfigurationSetting(key).Replace("~/App_Data/JsonSchema/","");
+            }
+
+           // var filePath = HttpContext.Current.Server.MapPath(GetAppConfigurationSetting(key));
             Console.WriteLine(filePath);
             if (JsonHelper.TryValidateJson(contentText, filePath, out validateResult))
             {

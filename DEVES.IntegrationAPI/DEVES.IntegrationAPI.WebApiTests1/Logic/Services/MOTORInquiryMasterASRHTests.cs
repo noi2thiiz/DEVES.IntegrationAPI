@@ -15,7 +15,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services.Tests
         [TestMethod()]
         public void MOTORInquiryMasterASRHTest()
         {
-            AppConfig.Instance.StartupForUnitTest();
+            
             var service = new MOTORInquiryMasterASRH();
             Assert.IsNotNull(service);
         }
@@ -23,7 +23,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services.Tests
         [TestMethod()]
         public void Execute_MOTORInquiryMasterASRHTest()
         {
-            AppConfig.Instance.StartupForUnitTest();
+            
             var service = new MOTORInquiryMasterASRH();
             var result = service.Execute(new InquiryMasterASRHDataInputModel
             {
