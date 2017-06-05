@@ -138,40 +138,47 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 }
                 
             }
-
-            //กรณีไม่พบข้อมูล ให้ไปค้นที่ CLS
-            if (!AllSearchResult.Any())
+            // กรณีที่ input มีแต่ SapVendorCode จะข้าม CLS และ 400 ไป เพราะไม่มี input ให้ search
+            if (IsvalidCLSSearchCondition(searchCondition))
             {
-                if (inqCrmPayeeInput.clientType == "C")
+                //กรณีไม่พบข้อมูล ให้ไปค้นที่ CLS
+                if (!AllSearchResult.Any())
                 {
-                    CLSResult = InquiryCLSCorporateClient(searchCondition);
-                    if (CLSResult != null)
+                    if (inqCrmPayeeInput.clientType == "C")
                     {
+                        CLSResult = InquiryCLSCorporateClient(searchCondition);
+                        if (CLSResult != null)
+                        {
 
-                        AllSearchResult.AddRange(CLSResult);
+                            AllSearchResult.AddRange(CLSResult);
+                        }
                     }
-                }
-                else if (inqCrmPayeeInput.clientType == "P")
-                {
-                    CLSResult = InquiryCLSPersonalClient(searchCondition);
-                    if (CLSResult != null)
+                    else if (inqCrmPayeeInput.clientType == "P")
                     {
-                        AllSearchResult.AddRange(CLSResult);
+                        CLSResult = InquiryCLSPersonalClient(searchCondition);
+                        if (CLSResult != null)
+                        {
+                            AllSearchResult.AddRange(CLSResult);
+                        }
                     }
+                    // AllSearchResult.AddRange(CLSResult);
                 }
-                // AllSearchResult.AddRange(CLSResult);
+
+                //กรณีไม่พบข้อมูล ให้ไปค้นที่ 400
+                if (!AllSearchResult.Any())
+                {
+                    COMPResult = InquiryCompClientMaster(searchCondition);
+                    if (COMPResult != null)
+                    {
+                        AllSearchResult.AddRange(COMPResult);
+                    }
+                    //AllSearchResult.AddRange(COMPResult);
+                }
             }
 
-            //กรณีไม่พบข้อมูล ให้ไปค้นที่ 400
-            if (!AllSearchResult.Any())
-            {
-                COMPResult = InquiryCompClientMaster(searchCondition);
-                if (COMPResult != null)
-                {
-                    AllSearchResult.AddRange(COMPResult);
-                }
-                //AllSearchResult.AddRange(COMPResult);
-            }
+            
+
+            
 
             //ถ้าข้อมูลมากกว่า 100 รายการ จะ throw error
             if (AllSearchResult.Count> iRecordsLimit)
@@ -229,6 +236,17 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
            
 
             return crmInqPayeeOut;
+        }
+
+        private bool IsvalidCLSSearchCondition(InquiryCRMPayeeListInputModel searchCondition)
+        {
+            // ถ้ารายการอื่น นอกจาก SAP empty จะไม่สามารถไปค้นที่ CLS หรือ 400 ได้
+            var concatValue = inqCrmPayeeInput.polisyClientId 
+                + inqCrmPayeeInput.fullname 
+                + inqCrmPayeeInput.taxNo 
+                + inqCrmPayeeInput.taxBranchCode 
+                + inqCrmPayeeInput.emcsCode;
+            return !string.IsNullOrEmpty(concatValue.Trim());
         }
 
         public List<InquiryCrmPayeeListDataModel> ProcessDistinct(List<InquiryCrmPayeeListDataModel> sapResult)
