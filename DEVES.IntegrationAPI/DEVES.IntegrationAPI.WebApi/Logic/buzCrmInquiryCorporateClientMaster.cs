@@ -60,19 +60,23 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             //ลบ บริษัทออกจากชื่อ
             if (contentModel?.conditionDetail != null)
             {
+                contentModel.conditionDetail.clientFullname = contentModel?.conditionDetail?.clientFullname?.Replace("ห้างหุ้นส่วนจำกัด", "");
                 contentModel.conditionDetail.clientFullname = contentModel?.conditionDetail?.clientFullname?.Replace("บริษัท.", "");
                 contentModel.conditionDetail.clientFullname = contentModel?.conditionDetail?.clientFullname?.Replace("บริษัท", "");
                 contentModel.conditionDetail.clientFullname = contentModel?.conditionDetail?.clientFullname?.Replace("บ.", "");
-                contentModel.conditionDetail.clientFullname = contentModel?.conditionDetail?.clientFullname?.Replace("จำกัด", "");
+               // contentModel.conditionDetail.clientFullname = contentModel?.conditionDetail?.clientFullname?.Replace("จำกัด", "");
+                
 
                 contentModel.conditionDetail.clientFullname = contentModel.conditionDetail.clientFullname
                     .ReplaceMultiplSpacesWithSingleSpace();
 
+                contentModel.conditionDetail.clientName1 = contentModel?.conditionDetail?.clientName1?.Replace("ห้างหุ้นส่วนจำกัด", "");
+                contentModel.conditionDetail.clientName1 = contentModel?.conditionDetail?.clientName2?.Replace("ห้างหุ้นส่วนจำกัด", "");
                 contentModel.conditionDetail.clientName1 = contentModel?.conditionDetail?.clientName1?.Replace("บริษัท.", "");
                 contentModel.conditionDetail.clientName1 = contentModel?.conditionDetail?.clientName1?.Replace("บริษัท", "");
                 contentModel.conditionDetail.clientName1 = contentModel?.conditionDetail?.clientName1?.Replace("บ.", "");
-                contentModel.conditionDetail.clientName1 = contentModel?.conditionDetail?.clientName1?.Replace("จำกัด", "");
-                contentModel.conditionDetail.clientName2 = contentModel?.conditionDetail?.clientName2?.Replace("จำกัด", "");
+                //contentModel.conditionDetail.clientName1 = contentModel?.conditionDetail?.clientName1?.Replace("จำกัด", "");
+                //contentModel.conditionDetail.clientName2 = contentModel?.conditionDetail?.clientName2?.Replace("จำกัด", "");
 
 
                 contentModel.conditionDetail.clientName1 = contentModel?.conditionDetail?.clientName1
@@ -97,13 +101,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                                                                                         (CommonConstant.ewiEndpointKeyCLSInquiryCorporateClient, clsCorpInput, uid);
 
                 //+ If Success then pour the data from Cleansing to contentOutputModel
-
-                if (!retCLSInqCorpClient.success )
+                // 
+                if (true  != retCLSInqCorpClient?.success && retCLSInqCorpClient?.code !=AppConst.CODE_CLS_NOTFOUND )
                 {
+                    AddDebugInfo($"CLS Error {retCLSInqCorpClient?.code}:{retCLSInqCorpClient?.message}", retCLSInqCorpClient);
                     throw new BuzErrorException(
-                        retCLSInqCorpClient.code,
-                        $"CLS Error:{retCLSInqCorpClient.message}",
-                        retCLSInqCorpClient.description,
+                        retCLSInqCorpClient?.code,
+                        $"CLS Error:{retCLSInqCorpClient?.message}",
+                        retCLSInqCorpClient?.description,
                         "CLS",
                         TransactionId);
                 }
@@ -135,7 +140,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         
                         catch (Exception e)
                         {
-                            debugInfo.AddDebugInfo("Error on search crmClientId", "Error: " + e.Message + "--" + e.StackTrace);
+                           AddDebugInfo("Error on search crmClientId", "Error: " + e.Message + "--" + e.StackTrace);
                         }
 
                         try
@@ -156,7 +161,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         }
                         catch (Exception e)
                         {
-                            debugInfo.AddDebugInfo("Error on search polisyClientId by Cleansing id", e.Message);
+                            AddDebugInfo("Error on search polisyClientId by Cleansing id", e.Message);
                         }
 
                        
@@ -199,11 +204,19 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 {
                     if (string.IsNullOrEmpty(data?.generalHeader?.crmClientId))
                     {
-                        List<string> crmData = SearchCrmContactClientId(contentModel?.conditionDetail?.cleansingId);
-                        if (crmData != null && crmData.Count == 1)
+                        try
                         {
-                            data.generalHeader.crmClientId = crmData.First();
+                            List<string> crmData = SearchCrmContactClientId(contentModel?.conditionDetail?.cleansingId);
+                            if (crmData != null && crmData.Count == 1)
+                            {
+                                data.generalHeader.crmClientId = crmData.First();
+                            }
                         }
+                        catch (Exception e)
+                        {
+                            AddDebugInfo("Error on search crmClientId", "Error: " + e.Message + "--" + e.StackTrace);
+                        }
+
                     }
                 }
                 #endregion Search crmClientId by CleansingId

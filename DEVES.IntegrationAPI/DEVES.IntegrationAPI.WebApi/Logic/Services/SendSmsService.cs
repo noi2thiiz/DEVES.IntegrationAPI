@@ -37,6 +37,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
         public SendSmsService() : base("")
         {
             this.serviceName = "COMPSendSMS";
+            systemName = "COMP";
         }
 
         public SendSmsService(string globalTransactionID, string controllerName = "") : base(globalTransactionID, controllerName)

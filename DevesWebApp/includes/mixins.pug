@@ -1,0 +1,193 @@
+//
+   Created by patiw on 29/4/2560.
+mixin page-nav-header(title)
+    nav#page-nav-header.navbar.navbar-default.navbar-fixed-top
+        .container
+            .navbar-header
+                
+                a.navbar-brand(href='#')
+                    img(src='/vendor-resource/images/theme_navbarlogo.png')
+
+            .pull-right(style='font-size: larger; margin-top: 15px; color: white;')=title
+
+mixin input(cfg)
+    - var type = 'text'
+    - if(cfg.type != undefined) type = cfg.type
+    - var disabled = false;
+    - if(cfg.disabled != undefined) disabled = cfg.disabled
+    - var label = "";
+    - if(cfg.label != undefined) label = cfg.label
+    - else if(cfg.id != undefined) label = cfg.id
+    - var colSize = 1
+    - var colClass = 'col-sm-4',labelColClass='col-sm-5',inputColClass='col-sm-7'
+    - if(cfg.col != undefined) colSize = cfg.col ;
+    - if(colSize==1) colClass  = 'col-sm-4',labelColClass='col-sm-5',inputColClass='col-sm-7'
+    - else if(colSize==2) colClass  = 'col-sm-8',labelColClass='col-sm-3',inputColClass='col-sm-9'
+    - else if(colSize==3) colClass  = 'col-sm-12',labelColClass='col-sm-2',inputColClass='col-sm-10'
+
+    div(class=colClass,data-type="mixin-input",data-col-size=colSize)
+        .row
+            label(class=labelColClass,for=cfg.id)=label
+            div(class=inputColClass)
+                input.form-control.input-sm.pull-left(
+                id=cfg.id,type=type,
+                data-ng-model=cfg.model,
+                placeholder=cfg.id,
+                data-ng-disabled=disabled)
+mixin select-enum(cfg)
+    - var options = []
+    - if(cfg.options != undefined) options = cfg.options
+    - var disabled = false;
+    - if(cfg.disabled != undefined) disabled = cfg.disabled
+    - var label = "";
+    - if(cfg.label != undefined) label = cfg.label
+    - else if(cfg.id != undefined) label = cfg.id
+
+    - var colSize = 1
+    - if(cfg['col-size'] != undefined) colSize = cfg['col-size'] ;
+
+    .col-sm-4(data-type="mixin-select-enum")
+        .row
+            label.col-sm-5(for=cfg.id)=label
+            .col-sm-7
+                select.form-control.input-sm(
+                id=cfg.id,
+                data-ng-model=cfg.model,
+                placeholder=cfg.id,
+                data-ng-disabled=disabled)
+                    each opt in options
+                        option(value=opt)=opt
+mixin select(cfg)
+    - var options = []
+    - if(cfg.options != undefined) options = cfg.options
+    - var disabled = false;
+    - if(cfg.disabled != undefined) disabled = cfg.disabled
+    - var label = "";
+    - if(cfg.label != undefined) label = cfg.label
+    - else if(cfg.id != undefined) label = cfg.id
+    .col-sm-4(data-type="mixin-select")
+        .row
+            label.col-sm-5(for=cfg.id)=label
+
+            .col-sm-7
+                select.form-control.input-sm(
+                id=cfg.id,
+                data-ng-model=cfg.model,
+                placeholder=cfg.id,
+                data-ng-disabled=disabled)
+                    each opt in options
+                        option(value=opt.value)=opt.text
+
+mixin button-search(cfg)
+    - var create = false;
+    - if(cfg.create != undefined) create = cfg.create;
+    .col-sm-12(style='margin-top: 5px; border-top: solid 1px; padding-top: 5px;')
+        button.pull-right.btn-primary(type='submit')
+            i.glyphicon.glyphicon-ok
+            |  Search
+
+        button.pull-right(type='button',data-ng-click="reset()")
+            i.glyphicon.glyphicon-refresh
+            |  Reset
+        if(create == true)
+            button.pull-right(type='button',data-ng-click="openNewForm()")
+                i.glyphicon.glyphicon-plus-sign
+                |  New
+// - var cfg = {"id":"","label":"ประเภทความสัมพันธ์ของผุ้นำชุมชนกฟผ.","vm":"lvm","placeholder":"เลือกทั้งหมด" ,"defaultText":"ทั้งหมด","service":"LeaderLutRelNetworkTypeService","param":"PI_REL_NET_TYPE"}*/
+mixin button-submit(cfg)
+    - var create = false;
+    - if(cfg.create != undefined) create = cfg.create;
+    .col-sm-12(style='margin-top: 5px; border-top: solid 1px; padding-top: 5px;')
+        button.pull-right.btn-primary(type='submit')
+            i.glyphicon.glyphicon-ok
+            |  submit
+
+
+
+mixin select-lookup(cfg,col)
+    - var modelName = 'criteria'
+    - var deferred = 'vm.deferred'
+    - var filterText = cfg.vm + ".items | filter: $select.search"
+    - var disbledOnShow = false;
+    - var controller = "LookupSelectController as "+cfg.vm ;
+    - var placeholder = ''
+    - var defaultSelected = ''
+    - var dependOnParam = 'null';
+    - var dependToParam = 'null';
+    - var filter = 'null';
+
+
+    - var searchEnabled = true;
+    - var require = false;
+    if(cfg.require != undefined)
+        - var require = cfg.require
+        - var required = cfg.require
+    if(cfg.required != undefined)
+        - var require = cfg.require
+        - var required = cfg.require
+
+    if(cfg.dependToParam !=undefined)
+        - var dependToParam = cfg.dependToParam
+    if(cfg.searchEnabled ==false)
+        - var searchEnabled = false
+    if(cfg.dependOnParam !=undefined)
+        - var dependOnParam = cfg.dependOnParam
+
+    if(cfg.placeholder  !=undefined)
+        - var placeholder= ''
+    if(cfg.defaultSelected !=undefined )
+        - var defaultSelected= cfg.defaultSelected
+    if(cfg.disbledOnShow == true)
+        - var disbledOnShow= true
+    if(cfg.model == 'criteria')
+        - var modelName = 'criteria'
+    if(cfg.model == 'dataItem')
+        - var modelName = 'dataItem'
+    if(cfg.model != undefined)
+        - var modelName = cfg.model
+    if(cfg.masterVM !=undefined)
+        - var deferred = cfg.masterVM+'.deferred'
+
+
+    if(required != false)
+        - var defaultText = "กรุณาเลือก"
+    else
+        - var defaultText = "เลือกทั้งหมด"
+
+    if(cfg.defaultText !=undefined)
+        - var defaultText = cfg.defaultText
+
+
+    - var label = "";
+    - if(cfg.label != undefined) label = cfg.label
+
+    if(cfg.filter !=undefined)
+        - var filter = cfg.filter
+        - var filterText = "filteredItem=( "+cfg.vm + ".items | filter:("+cfg.filter+" ) ) |  filter: $select.search"
+
+
+
+    - var initText = cfg.vm + ".init("+deferred+",'" + cfg.service + "','" + cfg.param + "','" + placeholder + "','" + defaultSelected + "'," + disbledOnShow + ",'" + dependOnParam + "'," + modelName + ","+filter+","+dependToParam+","+required+")";
+    - var paramTmp = modelName+"."+cfg.filterParam
+
+    .col-sm-4(data-type="select-lookup",ng-controller=controller,ng-init=initText)
+        .row
+            label.col-sm-5(for=cfg.id)=label
+            .col-sm-7
+                select.form-control.input-sm(
+
+                search-enabled=searchEnabled,
+                on-select=cfg.vm + '.onSelected($item,' + modelName + ')',
+                placeholder=cfg.id,
+                ng-disabled=cfg.vm + '.disabled',
+                ng-model=cfg.vm + '.selected',
+                ng-change=cfg.model+"="+cfg.vm + '.selected.CODE'
+                ng-options="item as item.DESCR for item  in " + filterText
+                )
+
+/////////////////////////////////////////////////////////////////////
+mixin select-lookup-col-12(cfg)
+    +select-lookup(cfg,'12')
+
+mixin select-lookup-col-6(cfg)
+    +select-lookup(cfg,'6')

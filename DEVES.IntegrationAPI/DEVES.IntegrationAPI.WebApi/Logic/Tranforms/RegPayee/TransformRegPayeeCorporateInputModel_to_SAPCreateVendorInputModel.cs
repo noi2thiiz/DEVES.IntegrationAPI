@@ -149,11 +149,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             trgt.WHTCTRY = "TH";
             
             trgt.TITLE = "";
-
-            if (string.IsNullOrEmpty(trgt.RECPTYPE))
-            {
-                trgt.RECPTYPE = AppConst.DEFAULT_CORPORATE_RECPTYPE; // default for corporate
-            }
+            
+            // ทางเทเวศขอให้นำออก วันที่ 5/6/2560
+            //if (string.IsNullOrEmpty(trgt.RECPTYPE))
+            //{
+            //    trgt.RECPTYPE = AppConst.DEFAULT_CORPORATE_RECPTYPE; // default for corporate
+            //}
 
             if (!(string.IsNullOrEmpty(trgt.BANKCODE) &&
                  string.IsNullOrEmpty(trgt.BANKBRANCH) &&

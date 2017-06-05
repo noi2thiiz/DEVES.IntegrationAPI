@@ -410,7 +410,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             regPayeeCorporateOutput.data.Add(outputPass);
 
             //add debug info to model
-            regPayeeCorporateOutput.AddListDebugInfo(GetDebugInfoList());
+         
             return regPayeeCorporateOutput;
         }
 

@@ -3,32 +3,33 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using DEVES.IntegrationAPI.Model;
+using DEVES.IntegrationAPI.WebApi.TechnicalService;
 using DEVES.IntegrationAPI.WebApi.Templates.Exceptions;
 
 namespace DEVES.IntegrationAPI.WebApi.Templates
 {
     public abstract class BuzCommand:BaseCommand
     {
-        protected BaseDataModel debugInfo { get; set; } = new DebugInfoDataModel();
+      
 
         public void AddDebugInfo(string message, dynamic info)
         {
-            debugInfo.AddDebugInfo(message, info);
+            TraceDebugLogger.Instance.AddDebugLogInfo(TransactionId,message,info);
+           // debugInfo.AddDebugInfo(message, info);
         }
         public void AddDebugInfo(string message)
         {
-            debugInfo.AddDebugInfo(message, message);
+            TraceDebugLogger.Instance.AddDebugLogInfo(TransactionId, message, message);
+           // debugInfo.AddDebugInfo(message, message);
         }
-        public List<DataModelDebugInfo> GetDebugInfoList()
-        {
-            return debugInfo._debugInfo;
-        }
+        
         public override BaseDataModel Execute(object input)
         {
             try
             {
 
                 //for remove redundant  try catch
+                AddDebugInfo("ExecuteInput", input);
                 return ExecuteInput(input);
 
 
@@ -49,13 +50,18 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                     stackTrace = e.StackTrace
                 };
 
+                if (string.IsNullOrEmpty(e.Code))
+                {
+                    regFail.code = e.Code;
+                }
+
                 if (e.SourceData != null)
                 {
                     regFail.data = e.SourceData;
                 }
                 regFail.transactionId = !string.IsNullOrEmpty(e.TransactionId) ? e.TransactionId : TransactionId;
 
-               
+                AddDebugInfo("BuzErrorException", regFail);
                 return regFail;
             }
             catch (FieldValidationException e)
@@ -91,20 +97,22 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                     regFail.message = e.message;
                 }
 
-            
-      
+               
+
 
                 if (string.IsNullOrEmpty(regFail.description))
                 {
                     regFail.description = e.fieldMessage;
                 }
 
+                
+
                 if (string.IsNullOrEmpty(regFail.description))
                 {
                    regFail.description = AppConst.DESC_INVALID_INPUT;
                 }
 
-
+                AddDebugInfo("FieldValidationException", regFail);
                 return regFail;
             }
             catch (Exception e)
@@ -116,7 +124,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                     description = "",
                     stackTrace = e.StackTrace,
                 };
-
+                AddDebugInfo("Exception", regFail);
                 return regFail;
 
 

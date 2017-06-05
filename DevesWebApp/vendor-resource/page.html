@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<button id="btn-open-modal">OpenModal</button>
+<script src="init.js"></script>
+<script>
+    UIController([],function ($,cfg,util) {
+        $('#btn-open-modal').click(function(){
+
+            util.alert({
+
+            });
+            util.openWindow(
+                {
+                    href:"http://www.jacklmoore.com/colorbox/example1/",
+                    iframe:true,
+                    gtml:false,
+                    width:"80%", height:"80%"}
+            );
+
+        });
+    });
+
+
+
+</script>
+</body>
+</html>

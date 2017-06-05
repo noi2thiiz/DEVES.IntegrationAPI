@@ -30,7 +30,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 crmInqPayeeOut.data = new List<InquiryCrmPayeeListDataModel>();
             }
             #endregion
-            retCLSInqCorpClient.AddDebugInfo("tranformer", "Tranform_clsInqCorporateOut_to_crmInqPayeeOut");
+
+            //retCLSInqCorpClient.AddDebugInfo("tranformer", "Tranform_clsInqCorporateOut_to_crmInqPayeeOut");
             foreach (var clsData in retCLSInqCorpClient.data)
             {
                 string street1Text = "";
@@ -112,7 +113,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             }
 
-            crmInqPayeeOut.AddDebugInfo("Tranformer", "Tranform_clsInqPersonalOut_to_crmInqPayeeOut");
+           // crmInqPayeeOut.AddDebugInfo("Tranformer", "Tranform_clsInqPersonalOut_to_crmInqPayeeOut");
             return crmInqPayeeOut;
 
         }

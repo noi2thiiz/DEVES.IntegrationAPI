@@ -46,44 +46,40 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService.TransactionLogger
             }
             try
             {
-                var responseContent = JObject.Parse(log.ResponseContentBody);
+                var ewiResponse = JObject.Parse(log.ResponseContentBody);
 
-                var responseContentCode = "";
-                var responseContentMessage = "";
-                var responseContentDescription = "";
-                var responseContentId = "";
-                var responseContentDateTime = "";
-                if (responseContent != null)
+                var responseContent = ewiResponse["content"] ?? "";
+
+                log.EWICode = ewiResponse["responseCode"]?.ToString() ?? "";
+                log.EWIMessage = ewiResponse["responseMessage"]?.ToString() ?? "";
+                log.EWIToken = ewiResponse["token"]?.ToString() ?? "";
+
+                log.ContentCode = responseContent["code"]?.ToString() ?? "";
+                log.ContentMessage = responseContent["message"]?.ToString() ?? "";
+                log.ContentDescription = responseContent["description"]?.ToString() ?? "";
+                log.ContentTransactionId = responseContent["transactionId"]?.ToString() ?? "";
+                log.ContentTransactionDateTime =
+                    responseContent["transactionDateTime"]?.ToString() ?? "";
+
+                if (!string.IsNullOrEmpty(responseContent["data"]?.ToString()))
                 {
-                    log.ContentCode = responseContent["code"]?.ToString() ?? "";
-                    log.ContentMessage = responseContent["message"]?.ToString() ?? "";
-                    log.ContentDescription = responseContent["description"]?.ToString() ?? "";
-                    log.ContentTransactionId = responseContent["transactionId"]?.ToString() ?? "";
-                    log.ContentTransactionDateTime =
-                        responseContent["transactionDateTime"]?.ToString() ?? "";
 
-                    if (!string.IsNullOrEmpty(responseContent["data"]?.ToString()))
+                    var token = JToken.Parse(responseContent["data"].ToString());
+
+                    if (token is JArray)
                     {
-
-                        var token = JToken.Parse(responseContent["data"].ToString());
-
-                        if (token is JArray)
-                        {
-                            IEnumerable<object> items = token.ToObject<List<object>>();
-                            log.TotalRecord = items.Count();
-                        }
-                        else if (token is JObject)
-                        {
-                            log.TotalRecord = 1;
-                        }
-                        else
-                        {
-                            log.TotalRecord = 0;
-                        }
+                        IEnumerable<object> items = token.ToObject<List<object>>();
+                        log.TotalRecord = items.Count();
+                    }
+                    else if (token is JObject)
+                    {
+                        log.TotalRecord = 1;
+                    }
+                    else
+                    {
+                        log.TotalRecord = 0;
                     }
                 }
-
-
 
 
                 if (responseContent["_debugInfo"] != null)
@@ -108,6 +104,7 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService.TransactionLogger
             {
                 Debug.WriteLine("142" + e.Message);
             }
+           
             LogData.Add(log);
         }
 

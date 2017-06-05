@@ -14,7 +14,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.DataBaseContracts.Tests
         [TestMethod()]
         public void SearchCrmContactClientIdTest()
         {
-            AppConfig.Instance.StartupForUnitTest();
+          
          
 
 

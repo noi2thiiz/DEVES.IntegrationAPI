@@ -18,7 +18,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services.Tests
         [TestMethod()]
         public void CLSInquiryCLSCorporateClientTest()
         {
-            AppConfig.Instance.StartupForUnitTest();
+           
             service = new CLSInquiryCLSCorporateClient();
             Assert.IsNotNull(service);
         }
@@ -26,7 +26,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services.Tests
         [TestMethod()]
         public void Execute_CLSInquiryCLSCorporateClientTest()
         {
-            AppConfig.Instance.StartupForUnitTest();
+           
             service = new CLSInquiryCLSCorporateClient();
             var result = service.Execute(new CLSInquiryCorporateClientInputModel
             {

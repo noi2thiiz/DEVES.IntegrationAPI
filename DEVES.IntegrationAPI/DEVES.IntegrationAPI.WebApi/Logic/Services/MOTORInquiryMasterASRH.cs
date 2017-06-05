@@ -60,17 +60,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 
             var jss = new JavaScriptSerializer();
             var contentObj = jss.Deserialize<InquiryMasterASRHOutputModel>(result.Content);
-            if (true != contentObj.success)
-            {
-                throw new BuzErrorException(
-                    contentObj.responseCode,
-                    $"ASRH Error:{contentObj.responseMessage}",
-                    "Error on execute 'MOTOR_InquiryMasterASRH'",
-                    "ASRH",
-                    GlobalTransactionID);
-
-
-            }
+            
 
             return contentObj?.content;
         }

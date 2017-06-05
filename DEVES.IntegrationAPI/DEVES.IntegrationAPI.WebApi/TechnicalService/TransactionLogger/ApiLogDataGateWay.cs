@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Web.Configuration;
 using DEVES.IntegrationAPI.WebApi.Core.DataAdepter;
 using DEVES.IntegrationAPI.WebApi.DataAccessService.DataAdapter;
+using DEVES.IntegrationAPI.WebApi.TechnicalService.TransactionLogger;
 using DEVES.IntegrationAPI.WebApi.Templates;
 
 namespace DEVES.IntegrationAPI.WebApi.TechnicalService
@@ -19,7 +20,9 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
                 {
                     apiLogEntry.ServiceName = apiLogEntry.Controller;
                 }
-              
+
+
+                apiLogEntry.BuildDebugLog();
 
                 apiLogEntry.ServiceName = apiLogEntry.ServiceName.Replace("OutputModel", "");
                 Console.WriteLine("MachineName:"+ System.Environment.MachineName);
@@ -41,13 +44,20 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
                     CallWebService(apiLogEntry);
                 }
 
-
+                //ลบข้อมูลออกจาก Memmory
+                if (apiLogEntry.Activity == "provide")
+                {
+                    TraceDebugLogger.Instance.RemoveLog(apiLogEntry.GlobalTransactionID);
+                    GlobalTransactionIdGenerator.Instance.ClearGlobalId(apiLogEntry.GlobalTransactionID);
+                }
+               
 
             }
             catch (Exception e)
             {
                 Console.WriteLine("CANNOT SAVE: transactionLog"+e.Message );
                 Console.WriteLine("CANNOT SAVE: transactionLog" + e.StackTrace);
+              
 
             }
 

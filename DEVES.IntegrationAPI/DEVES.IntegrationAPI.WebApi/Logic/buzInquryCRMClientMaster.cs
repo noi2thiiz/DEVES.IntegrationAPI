@@ -114,7 +114,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             {
                 crmInqContent.data = crmInqContent.data.Where(row => row?.profileInfo?.name1.Trim() != "" || row?.profileInfo?.fullName.Trim() != "").ToList();
             }
-            crmInqContent.AddListDebugInfo(GetDebugInfoList());
+          
           
             return crmInqContent;
         }

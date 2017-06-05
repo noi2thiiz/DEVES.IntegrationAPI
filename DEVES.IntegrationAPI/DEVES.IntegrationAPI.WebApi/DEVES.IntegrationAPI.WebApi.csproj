@@ -36,13 +36,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
+    <DebugType>full</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\DEVES.IntegrationAPI.WebApi.xml</DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="HtmlAgilityPack, Version=1.4.9.5, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
@@ -566,6 +567,7 @@
     <Compile Include="TechnicalService\AppBootstrap.cs" />
     <Compile Include="TechnicalService\ConfigulationManager\AppConfig.cs" />
     <Compile Include="TechnicalService\GlobalTransactionId.cs" />
+    <Compile Include="TechnicalService\TraceDebugLogger\TraceDebugLogger.cs" />
     <Compile Include="TechnicalService\TraceExceptionLogger\GlobalExceptionHandler.cs" />
     <Compile Include="TechnicalService\TraceExceptionLogger\TraceExceptionLogger.cs" />
     <Compile Include="TechnicalService\TransactionLogger\ApiLogDataGateWay.cs" />
@@ -639,6 +641,10 @@
     <None Include="Properties\PublishProfiles\FolderProfile3.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile4.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile5.pubxml" />
+    <None Include="Properties\PublishProfiles\FolderProfile6.pubxml" />
+    <None Include="Properties\PublishProfiles\FolderProfile7.pubxml" />
+    <None Include="Properties\PublishProfiles\FolderProfile8.pubxml" />
+    <None Include="Properties\PublishProfiles\FolderProfile9.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -661,7 +667,9 @@
     </Content>
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\_references.js" />
-    <None Include="Web.config_For_Production.config" />
+    <None Include="Web.config_For_Production.config">
+      <SubType>Designer</SubType>
+    </None>
     <Content Include="Web_config_For_QA.config">
       <SubType>Designer</SubType>
     </Content>

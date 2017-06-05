@@ -1,0 +1,444 @@
+﻿<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\DEVES.IntegrationAPI\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\DEVES.IntegrationAPI\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="..\DEVES.IntegrationAPI\packages\Microsoft.Net.Compilers.1.3.2\build\Microsoft.Net.Compilers.props" Condition="Exists('..\DEVES.IntegrationAPI\packages\Microsoft.Net.Compilers.1.3.2\build\Microsoft.Net.Compilers.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{93A28C8F-C900-4AFB-A539-A000DF0744F2}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DevesWebApp</RootNamespace>
+    <AssemblyName>DevesWebApp</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\DEVES.IntegrationAPI\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
+    <Content Include="includes\local-head-2.pug" />
+    <Content Include="includes\local-head.pug" />
+    <Content Include="includes\mixins.pug" />
+    <Content Include="includes\page-nav-header.pug" />
+    <Content Include="includes\page-style.pug" />
+    <Content Include="includes\server-script.pug" />
+    <Content Include="includes\templates\modal-form.pug" />
+    <Content Include="vendor-resource\.idea\color-box.iml" />
+    <Content Include="vendor-resource\bootstrap\css\bootstrap-theme.css.map" />
+    <Content Include="vendor-resource\bootstrap\css\bootstrap-theme.min.css.map" />
+    <Content Include="vendor-resource\bootstrap\css\bootstrap.css.map" />
+    <Content Include="vendor-resource\bootstrap\css\bootstrap.min.css.map" />
+    <Content Include="vendor-resource\bootstrap\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="vendor-resource\bootstrap\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="vendor-resource\bootstrap\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="vendor-resource\bootstrap\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="vendor-resource\colorbox\bower.json" />
+    <Content Include="vendor-resource\colorbox\colorbox.ai" />
+    <Content Include="vendor-resource\colorbox\LICENSE.md" />
+    <Content Include="vendor-resource\colorbox\package.json" />
+    <Content Include="vendor-resource\colorbox\README.md" />
+    <Content Include="vendor-resource\font-awesome\fonts\fontawesome-webfont.eot" />
+    <Content Include="vendor-resource\font-awesome\fonts\fontawesome-webfont.ttf" />
+    <Content Include="vendor-resource\font-awesome\fonts\fontawesome-webfont.woff" />
+    <Content Include="vendor-resource\font-awesome\fonts\fontawesome-webfont.woff2" />
+    <Content Include="vendor-resource\font-awesome\fonts\FontAwesome.otf" />
+    <Content Include="vendor-resource\font-awesome\less\animated.less" />
+    <Content Include="vendor-resource\font-awesome\less\bordered-pulled.less" />
+    <Content Include="vendor-resource\font-awesome\less\core.less" />
+    <Content Include="vendor-resource\font-awesome\less\fixed-width.less" />
+    <Content Include="vendor-resource\font-awesome\less\font-awesome.less" />
+    <Content Include="vendor-resource\font-awesome\less\icons.less" />
+    <Content Include="vendor-resource\font-awesome\less\larger.less" />
+    <Content Include="vendor-resource\font-awesome\less\list.less" />
+    <Content Include="vendor-resource\font-awesome\less\mixins.less" />
+    <Content Include="vendor-resource\font-awesome\less\path.less" />
+    <Content Include="vendor-resource\font-awesome\less\rotated-flipped.less" />
+    <Content Include="vendor-resource\font-awesome\less\screen-reader.less" />
+    <Content Include="vendor-resource\font-awesome\less\stacked.less" />
+    <Content Include="vendor-resource\font-awesome\less\variables.less" />
+    <Content Include="vendor-resource\font-awesome\scss\font-awesome.scss" />
+    <Content Include="vendor-resource\font-awesome\scss\_animated.scss" />
+    <Content Include="vendor-resource\font-awesome\scss\_bordered-pulled.scss" />
+    <Content Include="vendor-resource\font-awesome\scss\_core.scss" />
+    <Content Include="vendor-resource\font-awesome\scss\_fixed-width.scss" />
+    <Content Include="vendor-resource\font-awesome\scss\_icons.scss" />
+    <Content Include="vendor-resource\font-awesome\scss\_larger.scss" />
+    <Content Include="vendor-resource\font-awesome\scss\_list.scss" />
+    <Content Include="vendor-resource\font-awesome\scss\_mixins.scss" />
+    <Content Include="vendor-resource\font-awesome\scss\_path.scss" />
+    <Content Include="vendor-resource\font-awesome\scss\_rotated-flipped.scss" />
+    <Content Include="vendor-resource\font-awesome\scss\_screen-reader.scss" />
+    <Content Include="vendor-resource\font-awesome\scss\_stacked.scss" />
+    <Content Include="vendor-resource\font-awesome\scss\_variables.scss" />
+    <Content Include="vendor-resource\jquery\.bower.json" />
+    <Content Include="vendor-resource\jquery\bower.json" />
+    <Content Include="vendor-resource\jquery\dist\jquery.min.map" />
+    <Content Include="vendor-resource\jquery\dist\jquery.slim.min.map" />
+    <Content Include="vendor-resource\jquery\README.md" />
+    <Content Include="vendor-resource\jquery\src\.jshintrc" />
+    <Content Include="vendor-resource\msgbox\bower.json" />
+    <Content Include="vendor-resource\WebResources\pfc_bootstrap_js" />
+    <Content Include="callcenter-information\index.pug" />
+    <Content Include="callcenter-information\src\template.pug" />
+    <Content Include="callcenter-information\service\link-proxy-pro.ashx" />
+    <Content Include="callcenter-information\service\link-proxy.ashx" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="callcenter-information\Picture\new.bmp" />
+    <Content Include="callcenter-information\src\controller.js" />
+    <Content Include="callcenter-information\src\modula.js" />
+    <Content Include="callcenter-information\src\run.js" />
+    <Content Include="callcenter-information\src\template.html" />
+    <Content Include="includes\local-head-2.html" />
+    <Content Include="includes\local-head.html" />
+    <Content Include="includes\mixins.html" />
+    <Content Include="includes\page-nav-header.html" />
+    <Content Include="includes\scripts\core\base-resourde.js" />
+    <Content Include="includes\scripts\core\crypto.service.js" />
+    <Content Include="includes\scripts\core\lookup-select.controller.js" />
+    <Content Include="includes\scripts\core\memory.service.js" />
+    <Content Include="includes\scripts\core\resource-manager.js" />
+    <Content Include="includes\scripts\core\service.constant.js" />
+    <Content Include="includes\scripts\core\storage.service.js" />
+    <Content Include="includes\scripts\filters\findAttr.js" />
+    <Content Include="includes\scripts\filters\json.js" />
+    <Content Include="includes\scripts\filters\serviceName.js" />
+    <Content Include="includes\scripts\service\AddressType.service.js" />
+    <Content Include="includes\scripts\service\Country.service.js" />
+    <Content Include="includes\scripts\service\District.service.js" />
+    <Content Include="includes\scripts\service\Nationality.service.js" />
+    <Content Include="includes\scripts\service\Occupation.service.js" />
+    <Content Include="includes\scripts\service\PersonalTitle.service.js" />
+    <Content Include="includes\scripts\service\Province.service.js" />
+    <Content Include="includes\scripts\service\SubDistrict.service.js" />
+    <Content Include="includes\server-script.html" />
+    <Content Include="includes\templates\modal-form.html" />
+    <Content Include="vendor-resource\.idea\modules.xml" />
+    <Content Include="vendor-resource\.idea\workspace.xml" />
+    <Content Include="vendor-resource\bootstrap\css\bootstrap-theme.css" />
+    <Content Include="vendor-resource\bootstrap\css\bootstrap-theme.min.css" />
+    <Content Include="vendor-resource\bootstrap\css\bootstrap.css" />
+    <Content Include="vendor-resource\bootstrap\css\bootstrap.min.css" />
+    <Content Include="vendor-resource\bootstrap\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="vendor-resource\bootstrap\js\bootstrap.js" />
+    <Content Include="vendor-resource\bootstrap\js\bootstrap.min.js" />
+    <Content Include="vendor-resource\bootstrap\js\npm.js" />
+    <Content Include="vendor-resource\colorbox\content\ajax.html" />
+    <Content Include="vendor-resource\colorbox\content\daisy%402x.jpg" />
+    <Content Include="vendor-resource\colorbox\content\daisy.jpg" />
+    <Content Include="vendor-resource\colorbox\content\homer.jpg" />
+    <Content Include="vendor-resource\colorbox\content\marylou.jpg" />
+    <Content Include="vendor-resource\colorbox\content\ohoopee1.jpg" />
+    <Content Include="vendor-resource\colorbox\content\ohoopee2.jpg" />
+    <Content Include="vendor-resource\colorbox\content\ohoopee3.jpg" />
+    <Content Include="vendor-resource\colorbox\example1\colorbox.css" />
+    <Content Include="vendor-resource\colorbox\example1\images\border.png" />
+    <Content Include="vendor-resource\colorbox\example1\images\controls.png" />
+    <Content Include="vendor-resource\colorbox\example1\images\loading.gif" />
+    <Content Include="vendor-resource\colorbox\example1\images\loading_background.png" />
+    <Content Include="vendor-resource\colorbox\example1\images\overlay.png" />
+    <Content Include="vendor-resource\colorbox\example1\index.html" />
+    <Content Include="vendor-resource\colorbox\example2\colorbox.css" />
+    <Content Include="vendor-resource\colorbox\example2\images\controls.png" />
+    <Content Include="vendor-resource\colorbox\example2\images\loading.gif" />
+    <Content Include="vendor-resource\colorbox\example2\index.html" />
+    <Content Include="vendor-resource\colorbox\example3\colorbox.css" />
+    <Content Include="vendor-resource\colorbox\example3\images\controls.png" />
+    <Content Include="vendor-resource\colorbox\example3\images\loading.gif" />
+    <Content Include="vendor-resource\colorbox\example3\index.html" />
+    <Content Include="vendor-resource\colorbox\example4\colorbox.css" />
+    <Content Include="vendor-resource\colorbox\example4\images\border1.png" />
+    <Content Include="vendor-resource\colorbox\example4\images\border2.png" />
+    <Content Include="vendor-resource\colorbox\example4\images\loading.gif" />
+    <Content Include="vendor-resource\colorbox\example4\index.html" />
+    <Content Include="vendor-resource\colorbox\example5\colorbox.css" />
+    <Content Include="vendor-resource\colorbox\example5\images\border.png" />
+    <Content Include="vendor-resource\colorbox\example5\images\controls.png" />
+    <Content Include="vendor-resource\colorbox\example5\images\loading.gif" />
+    <Content Include="vendor-resource\colorbox\example5\images\loading_background.png" />
+    <Content Include="vendor-resource\colorbox\example5\index.html" />
+    <Content Include="vendor-resource\colorbox\i18n\jquery.colorbox-ar.js" />
+    <Content Include="vendor-resource\colorbox\i18n\jquery.colorbox-bg.js" />
+    <Content Include="vendor-resource\colorbox\i18n\jquery.colorbox-bn.js" />
+    <Content Include="vendor-resource\colorbox\i18n\jquery.colorbox-ca.js" />
+    <Content Include="vendor-resource\colorbox\i18n\jquery.colorbox-cs.js" />
+    <Content Include="vendor-resource\colorbox\i18n\jquery.colorbox-da.js" />
+    <Content Include="vendor-resource\colorbox\i18n\jquery.colorbox-de.js" />
+    <Content Include="vendor-resource\colorbox\i18n\jquery.colorbox-es.js" />
+    <Content Include="vendor-resource\colorbox\i18n\jquery.colorbox-et.js" />
+    <Content Include="vendor-resource\colorbox\i18n\jquery.colorbox-fa.js" />
+    <Content Include="vendor-resource\colorbox\i18n\jquery.colorbox-fi.js" />
+    <Content Include="vendor-resource\colorbox\i18n\jquery.colorbox-fr.js" />
+    <Content Include="vendor-resource\colorbox\i18n\jquery.colorbox-gl.js" />
+    <Content Include="vendor-resource\colorbox\i18n\jquery.colorbox-gr.js" />
+    <Content Include="vendor-resource\colorbox\i18n\jquery.colorbox-he.js" />
+    <Content Include="vendor-resource\colorbox\i18n\jquery.colorbox-hr.js" />
+    <Content Include="vendor-resource\colorbox\i18n\jquery.colorbox-hu.js" />
+    <Content Include="vendor-resource\colorbox\i18n\jquery.colorbox-id.js" />
+    <Content Include="vendor-resource\colorbox\i18n\jquery.colorbox-it.js" />
+    <Content Include="vendor-resource\colorbox\i18n\jquery.colorbox-ja.js" />
+    <Content Include="vendor-resource\colorbox\i18n\jquery.colorbox-kr.js" />
+    <Content Include="vendor-resource\colorbox\i18n\jquery.colorbox-lt.js" />
+    <Content Include="vendor-resource\colorbox\i18n\jquery.colorbox-lv.js" />
+    <Content Include="vendor-resource\colorbox\i18n\jquery.colorbox-my.js" />
+    <Content Include="vendor-resource\colorbox\i18n\jquery.colorbox-nl.js" />
+    <Content Include="vendor-resource\colorbox\i18n\jquery.colorbox-no.js" />
+    <Content Include="vendor-resource\colorbox\i18n\jquery.colorbox-pl.js" />
+    <Content Include="vendor-resource\colorbox\i18n\jquery.colorbox-pt-BR.js" />
+    <Content Include="vendor-resource\colorbox\i18n\jquery.colorbox-ro.js" />
+    <Content Include="vendor-resource\colorbox\i18n\jquery.colorbox-ru.js" />
+    <Content Include="vendor-resource\colorbox\i18n\jquery.colorbox-si.js" />
+    <Content Include="vendor-resource\colorbox\i18n\jquery.colorbox-sk.js" />
+    <Content Include="vendor-resource\colorbox\i18n\jquery.colorbox-sr.js" />
+    <Content Include="vendor-resource\colorbox\i18n\jquery.colorbox-sv.js" />
+    <Content Include="vendor-resource\colorbox\i18n\jquery.colorbox-tr.js" />
+    <Content Include="vendor-resource\colorbox\i18n\jquery.colorbox-uk.js" />
+    <Content Include="vendor-resource\colorbox\i18n\jquery.colorbox-zh-CN.js" />
+    <Content Include="vendor-resource\colorbox\i18n\jquery.colorbox-zh-TW.js" />
+    <Content Include="vendor-resource\colorbox\jquery.colorbox-min.js" />
+    <Content Include="vendor-resource\colorbox\jquery.colorbox.js" />
+    <Content Include="vendor-resource\common\app_config.js" />
+    <Content Include="vendor-resource\common\common_util.js" />
+    <Content Include="vendor-resource\font-awesome\css\font-awesome.css" />
+    <Content Include="vendor-resource\font-awesome\css\font-awesome.min.css" />
+    <Content Include="vendor-resource\font-awesome\fonts\fontawesome-webfont.svg" />
+    <Content Include="vendor-resource\font-awesome\HELP-US-OUT.txt" />
+    <Content Include="vendor-resource\images\Theme_NavBarLogo.png" />
+    <Content Include="vendor-resource\index.html" />
+    <Content Include="vendor-resource\init.js" />
+    <Content Include="vendor-resource\jquery\AUTHORS.txt" />
+    <Content Include="vendor-resource\jquery\dist\jquery.js" />
+    <Content Include="vendor-resource\jquery\dist\jquery.min.js" />
+    <Content Include="vendor-resource\jquery\dist\jquery.slim.js" />
+    <Content Include="vendor-resource\jquery\dist\jquery.slim.min.js" />
+    <Content Include="vendor-resource\jquery\LICENSE.txt" />
+    <Content Include="vendor-resource\jquery\src\ajax.js" />
+    <Content Include="vendor-resource\jquery\src\ajax\jsonp.js" />
+    <Content Include="vendor-resource\jquery\src\ajax\load.js" />
+    <Content Include="vendor-resource\jquery\src\ajax\parseJSON.js" />
+    <Content Include="vendor-resource\jquery\src\ajax\parseXML.js" />
+    <Content Include="vendor-resource\jquery\src\ajax\script.js" />
+    <Content Include="vendor-resource\jquery\src\ajax\var\location.js" />
+    <Content Include="vendor-resource\jquery\src\ajax\var\nonce.js" />
+    <Content Include="vendor-resource\jquery\src\ajax\var\rquery.js" />
+    <Content Include="vendor-resource\jquery\src\ajax\xhr.js" />
+    <Content Include="vendor-resource\jquery\src\attributes.js" />
+    <Content Include="vendor-resource\jquery\src\attributes\attr.js" />
+    <Content Include="vendor-resource\jquery\src\attributes\classes.js" />
+    <Content Include="vendor-resource\jquery\src\attributes\prop.js" />
+    <Content Include="vendor-resource\jquery\src\attributes\support.js" />
+    <Content Include="vendor-resource\jquery\src\attributes\val.js" />
+    <Content Include="vendor-resource\jquery\src\callbacks.js" />
+    <Content Include="vendor-resource\jquery\src\core.js" />
+    <Content Include="vendor-resource\jquery\src\core\access.js" />
+    <Content Include="vendor-resource\jquery\src\core\DOMEval.js" />
+    <Content Include="vendor-resource\jquery\src\core\init.js" />
+    <Content Include="vendor-resource\jquery\src\core\parseHTML.js" />
+    <Content Include="vendor-resource\jquery\src\core\ready.js" />
+    <Content Include="vendor-resource\jquery\src\core\support.js" />
+    <Content Include="vendor-resource\jquery\src\core\var\rsingleTag.js" />
+    <Content Include="vendor-resource\jquery\src\css.js" />
+    <Content Include="vendor-resource\jquery\src\css\addGetHookIf.js" />
+    <Content Include="vendor-resource\jquery\src\css\adjustCSS.js" />
+    <Content Include="vendor-resource\jquery\src\css\curCSS.js" />
+    <Content Include="vendor-resource\jquery\src\css\defaultDisplay.js" />
+    <Content Include="vendor-resource\jquery\src\css\hiddenVisibleSelectors.js" />
+    <Content Include="vendor-resource\jquery\src\css\showHide.js" />
+    <Content Include="vendor-resource\jquery\src\css\support.js" />
+    <Content Include="vendor-resource\jquery\src\css\var\cssExpand.js" />
+    <Content Include="vendor-resource\jquery\src\css\var\getStyles.js" />
+    <Content Include="vendor-resource\jquery\src\css\var\isHidden.js" />
+    <Content Include="vendor-resource\jquery\src\css\var\rmargin.js" />
+    <Content Include="vendor-resource\jquery\src\css\var\rnumnonpx.js" />
+    <Content Include="vendor-resource\jquery\src\css\var\swap.js" />
+    <Content Include="vendor-resource\jquery\src\data.js" />
+    <Content Include="vendor-resource\jquery\src\data\accepts.js" />
+    <Content Include="vendor-resource\jquery\src\data\Data.js" />
+    <Content Include="vendor-resource\jquery\src\data\support.js" />
+    <Content Include="vendor-resource\jquery\src\data\var\acceptData.js" />
+    <Content Include="vendor-resource\jquery\src\data\var\dataPriv.js" />
+    <Content Include="vendor-resource\jquery\src\data\var\dataUser.js" />
+    <Content Include="vendor-resource\jquery\src\deferred.js" />
+    <Content Include="vendor-resource\jquery\src\deferred\exceptionHook.js" />
+    <Content Include="vendor-resource\jquery\src\deprecated.js" />
+    <Content Include="vendor-resource\jquery\src\dimensions.js" />
+    <Content Include="vendor-resource\jquery\src\effects.js" />
+    <Content Include="vendor-resource\jquery\src\effects\animatedSelector.js" />
+    <Content Include="vendor-resource\jquery\src\effects\support.js" />
+    <Content Include="vendor-resource\jquery\src\effects\Tween.js" />
+    <Content Include="vendor-resource\jquery\src\event.js" />
+    <Content Include="vendor-resource\jquery\src\event\ajax.js" />
+    <Content Include="vendor-resource\jquery\src\event\alias.js" />
+    <Content Include="vendor-resource\jquery\src\event\focusin.js" />
+    <Content Include="vendor-resource\jquery\src\event\support.js" />
+    <Content Include="vendor-resource\jquery\src\event\trigger.js" />
+    <Content Include="vendor-resource\jquery\src\exports\amd.js" />
+    <Content Include="vendor-resource\jquery\src\exports\global.js" />
+    <Content Include="vendor-resource\jquery\src\intro.js" />
+    <Content Include="vendor-resource\jquery\src\jquery.js" />
+    <Content Include="vendor-resource\jquery\src\manipulation.js" />
+    <Content Include="vendor-resource\jquery\src\manipulation\buildFragment.js" />
+    <Content Include="vendor-resource\jquery\src\manipulation\createSafeFragment.js" />
+    <Content Include="vendor-resource\jquery\src\manipulation\getAll.js" />
+    <Content Include="vendor-resource\jquery\src\manipulation\setGlobalEval.js" />
+    <Content Include="vendor-resource\jquery\src\manipulation\support.js" />
+    <Content Include="vendor-resource\jquery\src\manipulation\var\nodeNames.js" />
+    <Content Include="vendor-resource\jquery\src\manipulation\var\rcheckableType.js" />
+    <Content Include="vendor-resource\jquery\src\manipulation\var\rleadingWhitespace.js" />
+    <Content Include="vendor-resource\jquery\src\manipulation\var\rscriptType.js" />
+    <Content Include="vendor-resource\jquery\src\manipulation\var\rtagName.js" />
+    <Content Include="vendor-resource\jquery\src\manipulation\wrapMap.js" />
+    <Content Include="vendor-resource\jquery\src\manipulation\_evalUrl.js" />
+    <Content Include="vendor-resource\jquery\src\offset.js" />
+    <Content Include="vendor-resource\jquery\src\outro.js" />
+    <Content Include="vendor-resource\jquery\src\queue.js" />
+    <Content Include="vendor-resource\jquery\src\queue\delay.js" />
+    <Content Include="vendor-resource\jquery\src\selector-native.js" />
+    <Content Include="vendor-resource\jquery\src\selector-sizzle.js" />
+    <Content Include="vendor-resource\jquery\src\selector.js" />
+    <Content Include="vendor-resource\jquery\src\serialize.js" />
+    <Content Include="vendor-resource\jquery\src\support.js" />
+    <Content Include="vendor-resource\jquery\src\traversing.js" />
+    <Content Include="vendor-resource\jquery\src\traversing\findFilter.js" />
+    <Content Include="vendor-resource\jquery\src\traversing\var\dir.js" />
+    <Content Include="vendor-resource\jquery\src\traversing\var\rneedsContext.js" />
+    <Content Include="vendor-resource\jquery\src\traversing\var\siblings.js" />
+    <Content Include="vendor-resource\jquery\src\var\arr.js" />
+    <Content Include="vendor-resource\jquery\src\var\class2type.js" />
+    <Content Include="vendor-resource\jquery\src\var\concat.js" />
+    <Content Include="vendor-resource\jquery\src\var\deletedIds.js" />
+    <Content Include="vendor-resource\jquery\src\var\document.js" />
+    <Content Include="vendor-resource\jquery\src\var\documentElement.js" />
+    <Content Include="vendor-resource\jquery\src\var\hasOwn.js" />
+    <Content Include="vendor-resource\jquery\src\var\indexOf.js" />
+    <Content Include="vendor-resource\jquery\src\var\pnum.js" />
+    <Content Include="vendor-resource\jquery\src\var\push.js" />
+    <Content Include="vendor-resource\jquery\src\var\rcssNum.js" />
+    <Content Include="vendor-resource\jquery\src\var\rnotwhite.js" />
+    <Content Include="vendor-resource\jquery\src\var\slice.js" />
+    <Content Include="vendor-resource\jquery\src\var\support.js" />
+    <Content Include="vendor-resource\jquery\src\var\toString.js" />
+    <Content Include="vendor-resource\jquery\src\wrap.js" />
+    <Content Include="vendor-resource\msgbox\.gitattributes" />
+    <Content Include="vendor-resource\msgbox\.gitignore" />
+    <Content Include="vendor-resource\msgbox\examples\alert\index.html" />
+    <Content Include="vendor-resource\msgbox\images\alert.png" />
+    <Content Include="vendor-resource\msgbox\images\confirm.png" />
+    <Content Include="vendor-resource\msgbox\images\error.png" />
+    <Content Include="vendor-resource\msgbox\images\info.png" />
+    <Content Include="vendor-resource\msgbox\images\msgBoxBackGround.png" />
+    <Content Include="vendor-resource\msgbox\README.txt" />
+    <Content Include="vendor-resource\msgbox\scripts\jquery.msgBox.js" />
+    <Content Include="vendor-resource\msgbox\styles\msgBoxLight.css" />
+    <Content Include="vendor-resource\page.html" />
+    <Content Include="vendor-resource\WebResources\pfc_angular.css" />
+    <Content Include="vendor-resource\WebResources\pfc_angular.js" />
+    <Content Include="vendor-resource\WebResources\pfc_angular_modules.js" />
+    <Content Include="vendor-resource\WebResources\pfc_bootstrap.js" />
+    <Content Include="vendor-resource\WebResources\pfc_common_function.js" />
+    <Content Include="vendor-resource\WebResources\pfc_jquery.js" />
+    <Content Include="vendor-resource\WebResources\pfc_variables_constructor.js" />
+    <Content Include="Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="vendor-resource\node_modules\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>58910</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:58910/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\DEVES.IntegrationAPI\packages\Microsoft.Net.Compilers.1.3.2\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\DEVES.IntegrationAPI\packages\Microsoft.Net.Compilers.1.3.2\build\Microsoft.Net.Compilers.props'))" />
+    <Error Condition="!Exists('..\DEVES.IntegrationAPI\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\DEVES.IntegrationAPI\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

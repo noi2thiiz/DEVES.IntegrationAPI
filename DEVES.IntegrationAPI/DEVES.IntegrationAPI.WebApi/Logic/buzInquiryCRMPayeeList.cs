@@ -279,15 +279,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
            
             crmInqPayeeOut.transactionId = TransactionId;
             crmInqPayeeOut.transactionDateTime = DateTime.Now;
-            try
-            {
-                crmInqPayeeOut.AddListDebugInfo(GetDebugInfoList());
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Error"+e.Message+":"+e.StackTrace);
-            }
-            crmInqPayeeOut.AddListDebugInfo(GetDebugInfoList());
+           
             return crmInqPayeeOut;
         }
 

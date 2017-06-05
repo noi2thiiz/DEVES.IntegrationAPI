@@ -38,13 +38,13 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
             }
             
            
-            if (!request.Properties.ContainsKey("TransactionID"))
+            if (request != null && !request.Properties.ContainsKey("TransactionID"))
             {
                 request.Properties["TransactionID"] = transactionId;
             }
             else
             {
-                transactionId = request.Properties["TransactionID"].ToString();
+                if (request != null) transactionId = request.Properties["TransactionID"].ToString();
             }
            
 
@@ -55,6 +55,7 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
         {
             var apiLogEntry = CreateApiLogEntryWithRequestData(request);
             apiLogEntry.TransactionID = transactionId;
+            apiLogEntry.GlobalTransactionID = transactionId;
 
 
             // get  controllerSelector
@@ -75,11 +76,15 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
                 Debug.WriteLine(e);
             }
 
-
+           
             if (request.Content != null)
             {
                 await request.Content.ReadAsStringAsync()
-                    .ContinueWith(task => { apiLogEntry.RequestContentBody = task.Result; }, cancellationToken);
+                    .ContinueWith(task =>
+                    {
+                        apiLogEntry.RequestContentBody = task.Result;
+                        TraceDebugLogger.Instance.AddLogEntry(apiLogEntry);
+                    }, cancellationToken);
             }
 
             return await base.SendAsync(request, cancellationToken)
@@ -108,11 +113,19 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
                         InMemoryLogData.Instance.AddLogEntry(apiLogEntry);
                     }
 
-                   
-                   
-                    GlobalTransactionIdGenerator.Instance.ClearGlobalId(apiLogEntry.TransactionID);
+                    try
+                    {
+                        TraceDebugLogger.Instance.RemoveLog(apiLogEntry.GlobalTransactionID);
+                        GlobalTransactionIdGenerator.Instance.ClearGlobalId(apiLogEntry.GlobalTransactionID);
 
-                    
+                    }
+                    catch (Exception)
+                    {
+                        //donothing
+                    }
+
+
+
                     return response;
                 }, cancellationToken);
         }

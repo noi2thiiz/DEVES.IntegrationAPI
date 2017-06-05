@@ -423,7 +423,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             regPayeePersonalOutput.data.Add(outputPass);
             AddDebugInfo(" output ", outputPass);
-            regPayeePersonalOutput.AddListDebugInfo(GetDebugInfoList());
+           
             return regPayeePersonalOutput;
 
         }

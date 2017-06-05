@@ -14,7 +14,7 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.Mastes.ExtensionMethod.T
     {
         public PersonalTitleMasterDataHelperTests()
         {
-            AppConfig.Instance.StartupForUnitTest();
+           
             PersonalTitleMasterData.Instance.InitData();
         }
         [TestMethod()]

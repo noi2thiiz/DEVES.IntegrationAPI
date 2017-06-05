@@ -19,7 +19,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
         [TestMethod()]
         public void Execute_BuzInquiryCrmClientMasterTest()
         {
-            AppConfig.Instance.StartupForUnitTest();
+           
 
             var cmd = new buzCrmInquiryPersonalClientMaster();
             var result = cmd.Execute(new InquiryClientMasterInputModel

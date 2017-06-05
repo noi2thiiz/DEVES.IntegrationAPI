@@ -22,7 +22,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
 
             trgtContent.data = new List<InquiryCrmPayeeListDataModel>();
-            trgtContent.AddDebugInfo("transformer", "TransformCLSInquiryPersonalClientContentOutputModel_to_InquiryCRMPayeeListDataOutputModel");
+            //trgtContent.AddDebugInfo("transformer", "TransformCLSInquiryPersonalClientContentOutputModel_to_InquiryCRMPayeeListDataOutputModel");
 
 
 

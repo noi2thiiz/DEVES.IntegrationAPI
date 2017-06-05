@@ -13,8 +13,8 @@ namespace DEVES.IntegrationAPI.Model.InquiryClientMaster
     }
     public class ConditionHeaderModel : BaseDataModel
     {
-        public String clientType { set; get; }
-        public String roleCode { set; get; }
+        public string clientType { set; get; }
+        public string roleCode { set; get; }
     }
     public class ConditionDetailModel : BaseDataModel
     {

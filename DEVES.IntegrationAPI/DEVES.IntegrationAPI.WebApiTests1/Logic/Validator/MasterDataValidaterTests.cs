@@ -11,13 +11,13 @@ namespace DEVES.IntegrationAPI.WebApiTests1.Logic.Validator
     {
         public MasterDataValidaterTests()
         {
-            AppConfig.Instance.StartupForUnitTest();
+           
             AppBootstrap.Instance.Start();
         }
         [TestMethod()]
         public void TryConvertToPolisyCodeTest()
         {
-            AppConfig.Instance.StartupForUnitTest();
+          
             var validator = new MasterDataValidator();
             var policyCode = validator.TryConvertSalutationCode( "profileInfo.salutation", "0001");
             Console.WriteLine("profileInfo.salutation");
@@ -31,7 +31,7 @@ namespace DEVES.IntegrationAPI.WebApiTests1.Logic.Validator
         [TestMethod()]
         public void TryConvertToPolisyCodeWhenGiveNullTest()
         {
-            AppConfig.Instance.StartupForUnitTest();
+            
             var validator = new MasterDataValidator();
             var policyCode = validator.TryConvertSalutationCode( "profileInfo.salutation", null);
 
