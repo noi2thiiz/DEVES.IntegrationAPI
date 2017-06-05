@@ -150,10 +150,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             trgt.WHTCTRY = "TH";
             //trgt.TITLE = "";
 
-            if (string.IsNullOrEmpty(trgt.RECPTYPE))
-            {
-                trgt.RECPTYPE = AppConst.DEFAULT_PERSONAL_RECPTYPE; // default 03 for personal
-            }
+             // ทางเทเวศขอให้นำออก วันที่ 5/6/2560
+             //if (string.IsNullOrEmpty(trgt.RECPTYPE))
+             // {
+             //    trgt.RECPTYPE = AppConst.DEFAULT_PERSONAL_RECPTYPE; // default 03 for personal
+             //}
+
+
             //'Fix "TH" ก็ต่อเมื่อข้อมูลต่อไปนี้มีค่า  CTRY BANKCODE BANKBRANCH BANKACC
             if (!(string.IsNullOrEmpty(trgt.BANKCODE) &&
                  string.IsNullOrEmpty(trgt.BANKBRANCH) &&

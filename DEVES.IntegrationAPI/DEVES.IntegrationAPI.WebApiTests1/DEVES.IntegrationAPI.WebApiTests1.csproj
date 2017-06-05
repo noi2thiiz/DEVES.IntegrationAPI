@@ -71,6 +71,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Controllers\InquiryCRMPayeeListControllerTests.cs" />
     <Compile Include="Controllers\RegClientPersonalControllerTests.cs" />
     <Compile Include="Controllers\RequestCleansingIdControllerTests.cs" />
     <Compile Include="DataAccessService\DataAdapter\RESTClient\RESTClientTests.cs" />
