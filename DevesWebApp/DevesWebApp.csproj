@@ -65,6 +65,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="callcenter-information\Default.aspx" />
     <Content Include="packages.config" />
     <Content Include="includes\local-head-2.pug" />
     <Content Include="includes\local-head.pug" />

@@ -30,11 +30,12 @@ app.controller('mainController', ['$scope', '$rootScope', 'dialog', '$loading', 
         var pageNavHeaderHeight = $("#page-nav-header").height();
         var pageMenuHeaderHeight = $("#page-menu-header").height();
 
-        $("#tabContents").height($(window).innerHeight() - (pageNavHeaderHeight + pageMenuHeaderHeight + 50));
-        $("#menuContents").height($(window).innerHeight() - (pageNavHeaderHeight + pageMenuHeaderHeight + 50));
+        $("#tabContents").height($(window).innerHeight() - (pageNavHeaderHeight + pageMenuHeaderHeight + 70));
+        $("#menuContents").height($(window).innerHeight() - (pageNavHeaderHeight + pageMenuHeaderHeight + 70));
 
-        $('iframe').height($("#tabContents").innerHeight());
-        $('iframe').width($("#tabContents").innerWidth() - 20)
+        $("#tabContents").css("background-color","yellow");
+        $('.iframe-link').height($("#tabContents").innerHeight());
+        $('.iframe-link').width($("#tabContents").innerWidth() - 20)
 
         $("#menuContents").css("overflow-y", "auto");
     }
@@ -133,14 +134,14 @@ app.controller('mainController', ['$scope', '$rootScope', 'dialog', '$loading', 
             $iframe.attr('src', item.link);
             $iframe.show();
             $iframe.load(function () {
-
+                resize();
                 $loading.finish("main");
             });
 
             setTimeout(function () {
-                //$scope.$apply();
+                resize();
 
-            }, 100 + dl);
+            }, 1000 );
 
         } catch (e) {
 
