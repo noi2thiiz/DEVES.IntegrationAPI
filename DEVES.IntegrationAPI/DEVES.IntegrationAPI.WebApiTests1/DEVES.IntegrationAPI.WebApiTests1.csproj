@@ -98,6 +98,8 @@
     <Compile Include="Logic\DataBaseContracts\SpApiChkCustomerClientTests.cs" />
     <Compile Include="Logic\DataBaseContracts\SpApiCustomerClientTests.cs" />
     <Compile Include="Logic\Services\CleansingClientServiceTests.cs" />
+    <Compile Include="Logic\Services\CLIENTCreateCorporateClientAndAdditionalInfoTests.cs" />
+    <Compile Include="Logic\Services\CLSCreateCorporateClientTests.cs" />
     <Compile Include="Logic\Services\CLSInquiryCLSCorporateClientTests.cs" />
     <Compile Include="Logic\Services\CLSInquiryCLSPersonalClientTests.cs" />
     <Compile Include="Logic\Services\COMPInquiryClientMasterTests.cs" />

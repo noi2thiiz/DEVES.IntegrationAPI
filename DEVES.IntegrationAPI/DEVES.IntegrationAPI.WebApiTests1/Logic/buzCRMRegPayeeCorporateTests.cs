@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DEVES.IntegrationAPI.Core.Util;
+using DEVES.IntegrationAPI.Model;
 using DEVES.IntegrationAPI.Model.RegClientCorporate;
 using DEVES.IntegrationAPI.Model.RegPayeeCorporate;
 using AddressHeaderModel = DEVES.IntegrationAPI.Model.RegPayeeCorporate.AddressHeaderModel;
@@ -61,21 +62,31 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
 
             Assert.IsNotNull(resutl);
 
-            var model = (RegPayeeCorporateContentOutputModel)resutl;
+           
             Console.WriteLine("==========Result================");
             Console.WriteLine(resutl.ToJson());
+            try
+            {
+                var model = (RegPayeeCorporateContentOutputModel)resutl;
 
-            Assert.AreEqual("200", model.code);
-            Assert.AreEqual(true, model.data.Any());
+                Assert.AreEqual("200", model.code);
+                Assert.AreEqual(true, model.data.Any());
 
-            var data = (RegPayeeCorporateDataOutputModel_Pass) model.data[0];
+                var data = (RegPayeeCorporateDataOutputModel_Pass) model.data[0];
 
-            Assert.AreEqual(false, string.IsNullOrEmpty(data.cleansingId));
-            Assert.AreEqual(false, string.IsNullOrEmpty(data.polisyClientId));
-            Assert.AreEqual(false, string.IsNullOrEmpty(data.crmClientId));
-            Assert.AreEqual(false, string.IsNullOrEmpty(data.corporateName1));
-            Assert.AreEqual(false, string.IsNullOrEmpty(data.corporateName2));
-            Assert.AreEqual(false, string.IsNullOrEmpty(data.corporateBranch));
+                Assert.AreEqual(false, string.IsNullOrEmpty(data.cleansingId));
+                Assert.AreEqual(false, string.IsNullOrEmpty(data.polisyClientId));
+                Assert.AreEqual(false, string.IsNullOrEmpty(data.crmClientId));
+                Assert.AreEqual(false, string.IsNullOrEmpty(data.corporateName1));
+                Assert.AreEqual(false, string.IsNullOrEmpty(data.corporateName2));
+                Assert.AreEqual(false, string.IsNullOrEmpty(data.corporateBranch));
+            }
+            catch (Exception e)
+            {
+                var model = (OutputModelFail)resutl;
+                
+                Assert.Fail(model.message);
+            }
 
 
 
@@ -108,9 +119,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
                     postalCode = "10210"
                 }
             };
-            var cmdClient = new buzCRMRegPayeeCorporate();
-            var resutlClient = (RegPayeeCorporateContentOutputModel)cmdClient.Execute(inputClient);
-            var resutlClientData = (RegPayeeCorporateDataOutputModel_Pass) resutlClient.data[0];
+            var cmdClient = new buzCRMRegClientCorporate();
+            var resultClient = cmdClient.Execute(inputClient);
+            Console.WriteLine("==========RegClientCorporate. Result================");
+            Console.WriteLine(resultClient.ToJson());
+            var modelClient = (RegClientCorporateContentOutputModel)resultClient;
+            var resutlClientData = (RegClientCorporateDataOutputModel_Pass)modelClient.data[0];
 
             var cleansingId = resutlClientData.cleansingId;
             var polisyClientId = resutlClientData.polisyClientId;
@@ -119,7 +133,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
             Assert.AreEqual(false, string.IsNullOrEmpty(cleansingId));
             Assert.AreEqual(false, string.IsNullOrEmpty(polisyClientId));
 
-
+            Console.WriteLine("==========Start buzCRMRegPayeeCorporate ================");
             var input = new RegPayeeCorporateInputModel
                 {
                     generalHeader = new GeneralHeaderModel
@@ -160,25 +174,34 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
             var resutl = cmd.Execute(input);
 
             Assert.IsNotNull(resutl);
-
-            var model = (RegPayeeCorporateContentOutputModel)resutl;
             Console.WriteLine("==========Result================");
             Console.WriteLine(resutl.ToJson());
 
-            Assert.AreEqual("200", model.code);
-            Assert.AreEqual(true, model.data.Any());
+            try
+            {
+                var model = (RegPayeeCorporateContentOutputModel)resutl;
+                
 
-            var data = (RegPayeeCorporateDataOutputModel_Pass)model.data[0];
+                Assert.AreEqual("200", model.code);
+                Assert.AreEqual(true, model.data.Any());
+                var data = (RegPayeeCorporateDataOutputModel_Pass)model.data[0];
 
-            Assert.AreEqual(false, string.IsNullOrEmpty(data.cleansingId));
-            Assert.AreEqual(false, string.IsNullOrEmpty(data.polisyClientId));
-            Assert.AreEqual(false, string.IsNullOrEmpty(data.crmClientId));
-            Assert.AreEqual(false, string.IsNullOrEmpty(data.corporateName1));
-            Assert.AreEqual(false, string.IsNullOrEmpty(data.corporateName2));
-            Assert.AreEqual(false, string.IsNullOrEmpty(data.corporateBranch));
+                Assert.AreEqual(false, string.IsNullOrEmpty(data.cleansingId), " cleansingId Should  Not NullOrEmpty");
+                Assert.AreEqual(false, string.IsNullOrEmpty(data.polisyClientId), " polisyClientId Should  Not NullOrEmpty");
+                Assert.AreEqual(true, string.IsNullOrEmpty(data.crmClientId), " crmClientId Should   Null");
+                Assert.AreEqual(false, string.IsNullOrEmpty(data.corporateName1), " corporateName1 Should  Not NullOrEmpty");
+                Assert.AreEqual(false, string.IsNullOrEmpty(data.corporateName2), " corporateName2 Should  Not NullOrEmpty");
+                Assert.AreEqual(false, string.IsNullOrEmpty(data.corporateBranch), " corporateBranch Should  Not NullOrEmpty");
 
-            Assert.AreEqual(cleansingId, data.cleansingId);
-            Assert.AreEqual(polisyClientId, data.polisyClientId);
+                Assert.AreEqual(cleansingId, data.cleansingId);
+                Assert.AreEqual(polisyClientId, data.polisyClientId);
+            }
+            catch (Exception e)
+            {
+                
+                Assert.Fail("ExceptionException"+e.Message);
+            }
+            
 
 
 

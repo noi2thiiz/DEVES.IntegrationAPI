@@ -44,7 +44,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
         protected const string appName = "xrmAPI"; // Application
         protected string serviceName = "";
         protected string systemName = "";
-        
+        protected string serviceEndpoint = "";
+
         protected const string activity = "consume"; // Activity
         protected string user = ""; // User
         protected string machineName = Environment.MachineName; // Machine
@@ -155,6 +156,17 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
               
                 result.Content = ewiRes.Result;
                 result.StatusCode = response.StatusCode;
+
+                if (result.StatusCode != HttpStatusCode.OK)
+                {
+
+                    throw new BuzErrorException(
+                        "500",
+                        $"{systemName} Error: Error on execute '{serviceName}',The request failed or the service did not respond",
+                        $"Error on execute '{serviceName}',The request failed or the service did not respond",
+                        systemName,
+                        GlobalTransactionID);
+                }
 
                 var responseContent = JObject.Parse(ewiRes.Result);
                 if (responseContent["responseCode"] != null)

@@ -102,28 +102,36 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
 
             };
 
-            var cmd    = new buzCRMRegPayeePersonal();
-            var result = cmd.Execute(input);
+            try
+            {
+                var cmd = new buzCRMRegPayeePersonal();
+                var result = cmd.Execute(input);
 
-            Console.WriteLine(result.ToJson());
-            Assert.IsNotNull(result);
-            var model = (RegPayeePersonalContentOutputModel)result;
-            Assert.AreEqual("200", model.code);
-            Assert.AreEqual(true, model.data.Any());
+                Console.WriteLine(result.ToJson());
+                Assert.IsNotNull(result);
+                var model = (RegPayeePersonalContentOutputModel)result;
+                Assert.AreEqual("200", model.code);
+                Assert.AreEqual(true, model.data.Any());
 
-            var payeeData = (RegPayeePersonalDataOutputModel_Pass)model.data[0];
-            Assert.AreEqual(true, model.data.Any());
-            Assert.AreEqual(false, string.IsNullOrEmpty(payeeData.cleansingId)); 
-            Assert.AreEqual(false, string.IsNullOrEmpty(payeeData.crmClientId)); 
-            Assert.AreEqual(false, string.IsNullOrEmpty(payeeData.polisyClientId));
-            Assert.AreEqual(false, string.IsNullOrEmpty(payeeData.sapVendorCode));
-            Assert.AreEqual(false, string.IsNullOrEmpty(payeeData.sapVendorGroupCode));
+                var payeeData = (RegPayeePersonalDataOutputModel_Pass)model.data[0];
+                Assert.AreEqual(true, model.data.Any());
+                Assert.AreEqual(false, string.IsNullOrEmpty(payeeData.cleansingId));
+                Assert.AreEqual(false, string.IsNullOrEmpty(payeeData.crmClientId));
+                Assert.AreEqual(false, string.IsNullOrEmpty(payeeData.polisyClientId));
+                Assert.AreEqual(false, string.IsNullOrEmpty(payeeData.sapVendorCode));
+                Assert.AreEqual(false, string.IsNullOrEmpty(payeeData.sapVendorGroupCode));
+            }
+            catch (Exception e)
+            {
+               
+                Assert.Fail(e.Message);
+            }
 
         }
 
         [TestMethod()]
         // ทดสอบสร้าง Payee จาก Client โดยระบุเลข cleansingId และ polisyClientId
-        // จะต้องเกิดข้อมูลใน SAP แลพ CRM ด้วย
+        // จะต้องเกิดข้อมูลใน SAP ไม่เกิดข้อมูลใน CRM ด้วย
         public void Execute_buzCRMRegPayeePersonalInput_ConvertNonePayeeToPayee_Test()
         {
             // create new client
@@ -269,12 +277,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
             Assert.AreEqual(true, model.data.Any());
             var payeeData = (RegPayeePersonalDataOutputModel_Pass)model.data[0];
             Assert.AreEqual(true, model.data.Any());
-            Assert.AreEqual(false, string.IsNullOrEmpty(payeeData.cleansingId)); 
-            Assert.AreEqual(false, string.IsNullOrEmpty(payeeData.crmClientId)); 
-            Assert.AreEqual(polisyClientId, payeeData.polisyClientId);
+            Assert.AreEqual(false, string.IsNullOrEmpty(payeeData.cleansingId), " cleansingId Should  Not NullOrEmpty"); 
+            Assert.AreEqual(true, string.IsNullOrEmpty(payeeData.crmClientId), " crmClientId Should Null"); 
+            Assert.AreEqual(polisyClientId, payeeData.polisyClientId, " polisyClientId Should  Not NullOrEmpty");
             Assert.AreEqual(cleansingId, payeeData.cleansingId);
-            Assert.AreEqual(false, string.IsNullOrEmpty(payeeData.sapVendorCode));
-            Assert.AreEqual(false, string.IsNullOrEmpty(payeeData.sapVendorGroupCode));
+            Assert.AreEqual(false, string.IsNullOrEmpty(payeeData.sapVendorCode), " sapVendorCode Should  Not NullOrEmpty");
+            Assert.AreEqual(false, string.IsNullOrEmpty(payeeData.sapVendorGroupCode), " sapVendorGroupCode Should  Not NullOrEmpty");
         }
 
         [TestMethod()]

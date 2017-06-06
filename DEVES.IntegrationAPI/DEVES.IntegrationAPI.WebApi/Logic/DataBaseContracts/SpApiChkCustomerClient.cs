@@ -25,6 +25,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.DataBaseContracts
             }
         }
 
+        /// <summary>
+        /// return true if cleansingId is existing
+        /// </summary>
+        /// <param name="cleansingId"></param>
+        /// <returns></returns>
         public bool CheckByCleansingId(string cleansingId)
         {
             cleansingId = cleansingId.Trim().Replace(" ", "");
@@ -36,8 +41,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.DataBaseContracts
             {
                 if (result.Data.Any())
                 {
-
-                    return (Tranform(result.Data[0])).returnCheck == "Y";
+                    var model = (Tranform(result.Data[0]));
+                    Console.WriteLine(model.ToJson());
+                    return model.returnCheck == "Y";
                 }
             }
             return false;
