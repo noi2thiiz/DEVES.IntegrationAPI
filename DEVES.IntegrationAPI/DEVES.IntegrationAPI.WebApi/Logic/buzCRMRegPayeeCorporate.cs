@@ -11,6 +11,7 @@ using DEVES.IntegrationAPI.Model.CLS;
 using DEVES.IntegrationAPI.Model.Polisy400;
 using DEVES.IntegrationAPI.Model.RegPayeePersonal;
 using DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData;
+using DEVES.IntegrationAPI.WebApi.Logic.DataBaseContracts;
 using DEVES.IntegrationAPI.WebApi.Logic.Services;
 using DEVES.IntegrationAPI.WebApi.Logic.Validator;
 using DEVES.IntegrationAPI.WebApi.Templates.Exceptions;
@@ -210,10 +211,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         outputPass.polisyClientId = polCreatePayeeContent.clientID;
                     }
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
+                    Console.WriteLine("400 Error" + e.Message);
+                    AddDebugInfo("400 Error" + e.Message, e.StackTrace);
                     //@TODO adHoc fix Please fill recipient type  มัน return success เลยถ้าไม่ได้ดักไว้ 
-                    if(!string.IsNullOrEmpty(newCleansingId))
+                    if (!string.IsNullOrEmpty(newCleansingId))
                     {
                         AddDebugInfo("244:try rollback" + newCleansingId);
                         var deleteResult = CleansingClientService.Instance.RemoveByCleansingId(newCleansingId, "C");
@@ -284,6 +287,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 }
                 catch (Exception e)
                 {
+                    Console.WriteLine("SAP Error" + e.Message);
+                    AddDebugInfo("SAP Error" + e.Message,e.StackTrace);
                     //@TODO adHoc fix Please fill recipient type  มัน return success เลยถ้าไม่ได้ดักไว้ 
                     if (!string.IsNullOrEmpty(newCleansingId))
                     {
@@ -314,30 +319,37 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                 try
                 {
-                    if (!ignoreCrm && !string.IsNullOrEmpty(regPayeeCorporateInput.generalHeader.cleansingId))
+                    if (!ignoreCrm && !string.IsNullOrEmpty(regPayeeCorporateInput?.generalHeader?.cleansingId))
                     {
-                        AddDebugInfo("Create payee in CRM");
-                        buzCreateCrmPayeeCorporate cmdCreateCrmPayee = new buzCreateCrmPayeeCorporate();
-                        CreateCrmCorporateInfoOutputModel crmContentOutput =
-                            (CreateCrmCorporateInfoOutputModel)cmdCreateCrmPayee.Execute(regPayeeCorporateInput);
+                        if (false==SpApiChkCustomerClient.Instance.CheckByCleansingId(regPayeeCorporateInput.generalHeader.cleansingId))
+                        {
+                            AddDebugInfo("Create payee in CRM");
+                            buzCreateCrmPayeeCorporate cmdCreateCrmPayee = new buzCreateCrmPayeeCorporate();
+                            CreateCrmCorporateInfoOutputModel crmContentOutput =
+                                (CreateCrmCorporateInfoOutputModel)cmdCreateCrmPayee.Execute(regPayeeCorporateInput);
 
-                        if (crmContentOutput.code == CONST_CODE_SUCCESS)
-                        {
-                            //RegPayeeCorporateDataOutputModel_Pass dataOutPass = new RegPayeeCorporateDataOutputModel_Pass();
-                            //dataOutPass.polisyClientId = regPayeeCorporateInput.generalHeader.polisyClientId;
-                            //dataOutPass.sapVendorCode = regPayeeCorporateInput.sapVendorInfo.sapVendorCode;
-                            //dataOutPass.sapVendorGroupCode = regPayeeCorporateInput.sapVendorInfo.sapVendorGroupCode;
-                            //dataOutPass.personalName = regPayeeCorporateInput.profileInfo.personalName;
-                            //dataOutPass.personalSurname = regPayeeCorporateInput.profileInfo.personalSurname;
-                            outputPass.corporateBranch = regPayeeCorporateInput.profileHeader.corporateBranch;
-                            outputPass.sapVendorGroupCode = regPayeeCorporateInput.sapVendorInfo.sapVendorGroupCode;
-                            //regPayeeCorporateOutput.data.Add(dataOutPass);
-                        }
-                        else
-                        {
-                            regPayeeCorporateOutput.code = CONST_CODE_FAILED;
-                            regPayeeCorporateOutput.message = crmContentOutput.message;
-                            regPayeeCorporateOutput.description = crmContentOutput.description;
+                            if (crmContentOutput.code == CONST_CODE_SUCCESS)
+                            {
+                                //RegPayeeCorporateDataOutputModel_Pass dataOutPass = new RegPayeeCorporateDataOutputModel_Pass();
+                                //dataOutPass.polisyClientId = regPayeeCorporateInput.generalHeader.polisyClientId;
+                                //dataOutPass.sapVendorCode = regPayeeCorporateInput.sapVendorInfo.sapVendorCode;
+                                //dataOutPass.sapVendorGroupCode = regPayeeCorporateInput.sapVendorInfo.sapVendorGroupCode;
+                                //dataOutPass.personalName = regPayeeCorporateInput.profileInfo.personalName;
+                                //dataOutPass.personalSurname = regPayeeCorporateInput.profileInfo.personalSurname;
+
+                                outputPass.crmClientId = crmContentOutput?.crmClientId ?? "";
+                                outputPass.corporateBranch = regPayeeCorporateInput.profileHeader.corporateBranch;
+                                outputPass.sapVendorGroupCode = regPayeeCorporateInput.sapVendorInfo.sapVendorGroupCode;
+
+                                //regPayeeCorporateOutput.data.Add(dataOutPass);
+                            }
+                            else
+                            {
+                                AddDebugInfo("Cannot create Client in CRM :" + crmContentOutput.message, crmContentOutput);
+                                //regPayeeCorporateOutput.code = CONST_CODE_FAILED;
+                                //regPayeeCorporateOutput.message = crmContentOutput.message;
+                                //regPayeeCorporateOutput.description = crmContentOutput.description;
+                            }
                         }
                     }
                 }

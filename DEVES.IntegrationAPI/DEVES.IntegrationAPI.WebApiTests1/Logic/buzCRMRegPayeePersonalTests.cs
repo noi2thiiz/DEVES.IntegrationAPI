@@ -24,10 +24,6 @@ using PayeeAddressInfoModel = DEVES.IntegrationAPI.Model.RegPayeePersonal.Addres
 using PayeeContactInfoModel = DEVES.IntegrationAPI.Model.RegPayeePersonal.ContactInfoModel;
 
 
-
-
-    
-
 namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
 {
     [TestClass()]
@@ -128,7 +124,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
         [TestMethod()]
         // ทดสอบสร้าง Payee จาก Client โดยระบุเลข cleansingId และ polisyClientId
         // จะต้องเกิดข้อมูลใน SAP แลพ CRM ด้วย
-        public void Execute_buzCRMRegPayeePersonalInput_ConvertNonePayeeToPayeeFrom_Test()
+        public void Execute_buzCRMRegPayeePersonalInput_ConvertNonePayeeToPayee_Test()
         {
             // create new client
             var inputClient = new RegClientPersonalInputModel
@@ -284,7 +280,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
         [TestMethod()]
         // ทดสอบสร้าง Payee จาก Client โดยระบุเลข  polisyClientId
         // จะต้องเกิดข้อมูลใน SAP แต่ถ้าไม่มีเลข cleansingId ไม่ต้องเข้า CRM ด้วย
-        public void Execute_buzCRMRegPayeePersonalInput_ConvertNonePayeeToPayeeFrom_When_Give_Only_PolicyClientId_Test()
+        public void Execute_buzCRMRegPayeePersonalInput_ConvertNonePayeeToPayee_When_Give_Only_PolicyClientId_Test()
         {
             // create new client
             var inputClient = new RegClientPersonalInputModel

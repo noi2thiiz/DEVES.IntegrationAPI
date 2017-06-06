@@ -487,6 +487,7 @@
     <Compile Include="Logic\Converter\MasterDataConvertor.cs" />
     <Compile Include="Logic\Converter\OptionSetConvertor.cs" />
     <Compile Include="Logic\DataBaseContracts\BaseDataBaseContracts.cs" />
+    <Compile Include="Logic\DataBaseContracts\SpApiChkCustomerClient.cs" />
     <Compile Include="Logic\DataBaseContracts\SpApiCustomerClient.cs" />
     <Compile Include="Logic\DevesCrmAPIExceptions.cs" />
     <Compile Include="Logic\Services\BaseEwiServiceProxy.cs" />

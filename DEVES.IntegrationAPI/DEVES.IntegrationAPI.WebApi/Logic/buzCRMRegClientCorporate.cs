@@ -11,6 +11,7 @@ using DEVES.IntegrationAPI.Model.RegClientCorporate;
 using DEVES.IntegrationAPI.Model.CLS;
 using DEVES.IntegrationAPI.Model.Polisy400;
 using DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData;
+using DEVES.IntegrationAPI.WebApi.Logic.DataBaseContracts;
 using DEVES.IntegrationAPI.WebApi.Logic.Validator;
 using DEVES.IntegrationAPI.WebApi.Templates.Exceptions;
 using DEVES.IntegrationAPI.WebApi.Logic.Services;
@@ -484,32 +485,38 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                     try
                     {
-                        buzCreateCrmClientCorporate cmdCreateCrmClient = new buzCreateCrmClientCorporate();
-                        CreateCrmCorporateInfoOutputModel crmContentOutput =
-                            (CreateCrmCorporateInfoOutputModel) cmdCreateCrmClient.Execute(regClientCorporateInput);
-
-                        if (crmContentOutput.code == CONST_CODE_SUCCESS)
+                        if (!string.IsNullOrEmpty(regClientCorporateInput?.generalHeader?.cleansingId))
                         {
+                            if (false==SpApiChkCustomerClient.Instance.CheckByCleansingId(regClientCorporateInput?.generalHeader?.cleansingId))
+                            {
+                                buzCreateCrmClientCorporate cmdCreateCrmClient = new buzCreateCrmClientCorporate();
+                                CreateCrmCorporateInfoOutputModel crmContentOutput =
+                                    (CreateCrmCorporateInfoOutputModel)cmdCreateCrmClient.Execute(regClientCorporateInput);
 
-                            regClientCorporateOutput.code = CONST_CODE_SUCCESS;
-                            regClientCorporateOutput.message = AppConst.MESSAGE_SUCCESS;
-                            RegClientCorporateDataOutputModel_Pass dataOutPass =
-                                new RegClientCorporateDataOutputModel_Pass();
-                            dataOutPass.cleansingId = regClientCorporateInput.generalHeader.cleansingId;
-                            dataOutPass.polisyClientId = regClientCorporateInput.generalHeader.polisyClientId;
-                            dataOutPass.crmClientId = crmContentOutput.crmClientId;
-                            dataOutPass.corporateName1 = regClientCorporateInput.profileHeader.corporateName1;
-                            dataOutPass.corporateName2 = regClientCorporateInput.profileHeader.corporateName2;
-                            dataOutPass.corporateBranch = regClientCorporateInput.profileHeader.corporateBranch;
+                                if (crmContentOutput.code == CONST_CODE_SUCCESS)
+                                {
 
-                            regClientCorporateOutput.data.Add(dataOutPass);
-                        }
-                        else
-                        {
+                                    regClientCorporateOutput.code = CONST_CODE_SUCCESS;
+                                    regClientCorporateOutput.message = AppConst.MESSAGE_SUCCESS;
+                                    RegClientCorporateDataOutputModel_Pass dataOutPass =
+                                        new RegClientCorporateDataOutputModel_Pass();
+                                    dataOutPass.cleansingId = regClientCorporateInput.generalHeader.cleansingId;
+                                    dataOutPass.polisyClientId = regClientCorporateInput.generalHeader.polisyClientId;
+                                    dataOutPass.crmClientId = crmContentOutput.crmClientId;
+                                    dataOutPass.corporateName1 = regClientCorporateInput.profileHeader.corporateName1;
+                                    dataOutPass.corporateName2 = regClientCorporateInput.profileHeader.corporateName2;
+                                    dataOutPass.corporateBranch = regClientCorporateInput.profileHeader.corporateBranch;
 
-                            regClientCorporateOutput.code = CONST_CODE_FAILED;
-                            regClientCorporateOutput.message = crmContentOutput.message;
-                            regClientCorporateOutput.description = crmContentOutput.description;
+                                    regClientCorporateOutput.data.Add(dataOutPass);
+                                }
+                                else
+                                {
+                                    AddDebugInfo("Cannot create Client in CRM :" + crmContentOutput.message, crmContentOutput);
+                                    //regClientCorporateOutput.code = CONST_CODE_FAILED;
+                                    //regClientCorporateOutput.message = crmContentOutput.message;
+                                    //regClientCorporateOutput.description = crmContentOutput.description;
+                                }
+                            }
                         }
                     }
                     catch (Exception)

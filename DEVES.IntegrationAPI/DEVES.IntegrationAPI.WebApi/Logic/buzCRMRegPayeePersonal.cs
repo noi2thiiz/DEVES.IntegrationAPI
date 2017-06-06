@@ -11,6 +11,7 @@ using DEVES.IntegrationAPI.Model.RegPayeePersonal;
 using DEVES.IntegrationAPI.Model.CLS;
 using DEVES.IntegrationAPI.Model.Polisy400;
 using DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData;
+using DEVES.IntegrationAPI.WebApi.Logic.DataBaseContracts;
 using DEVES.IntegrationAPI.WebApi.Logic.Services;
 using DEVES.IntegrationAPI.WebApi.Logic.Validator;
 using DEVES.IntegrationAPI.WebApi.Templates.Exceptions;
@@ -330,21 +331,25 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 {
                     #region Create payee in CRM
 
-                    if (!ignoreCrm && !string.IsNullOrEmpty(RegPayeePersonalInput.generalHeader.cleansingId))
+                    if (!ignoreCrm && !string.IsNullOrEmpty(RegPayeePersonalInput?.generalHeader?.cleansingId))
                     {
-                      
-                        AddDebugInfo("Create payee in CRM ");
-                        buzCreateCrmPayeePersonal cmdCreateCrmPayee = new buzCreateCrmPayeePersonal();
-                        CreateCrmPersonInfoOutputModel crmContentOutput = (CreateCrmPersonInfoOutputModel)cmdCreateCrmPayee.Execute(RegPayeePersonalInput);
-                        if (crmContentOutput.code == CONST_CODE_SUCCESS)
+
+                        if (false == SpApiChkCustomerClient.Instance.CheckByCleansingId(RegPayeePersonalInput.generalHeader.cleansingId))
                         {
-                            outputPass.crmClientId = crmContentOutput?.crmClientId??"";
-                        }
-                        else
-                        {
-                            regPayeePersonalOutput.code = CONST_CODE_FAILED;
-                            regPayeePersonalOutput.message = crmContentOutput.message;
-                            regPayeePersonalOutput.description = crmContentOutput.description;
+                            AddDebugInfo("Create payee in CRM ");
+                            buzCreateCrmPayeePersonal cmdCreateCrmPayee = new buzCreateCrmPayeePersonal();
+                            CreateCrmPersonInfoOutputModel crmContentOutput = (CreateCrmPersonInfoOutputModel)cmdCreateCrmPayee.Execute(RegPayeePersonalInput);
+                            if (crmContentOutput.code == CONST_CODE_SUCCESS)
+                            {
+                                outputPass.crmClientId = crmContentOutput?.crmClientId ?? "";
+                            }
+                            else
+                            {
+                                AddDebugInfo("Cannot create Client in CRM :" + crmContentOutput.message, crmContentOutput);
+                                //regPayeePersonalOutput.code = CONST_CODE_FAILED;
+                                //regPayeePersonalOutput.message = crmContentOutput.message;
+                                //regPayeePersonalOutput.description = crmContentOutput.description;
+                            }
                         }
                     }
 

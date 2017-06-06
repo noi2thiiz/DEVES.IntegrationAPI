@@ -30,6 +30,9 @@ namespace DEVES.IntegrationAPI.Model.RegPayeeCorporate
     {
         public string cleansingId { get; set; } = "";
         public string polisyClientId { get; set; } = "";
+
+        public string crmClientId { get; set; } = "";
+
         public string sapVendorCode { get; set; } = "";
         public string sapVendorGroupCode { get; set; } = "";
         public string corporateName1 { get; set; } = "";
