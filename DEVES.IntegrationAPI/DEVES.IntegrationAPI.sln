@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DEVES.IntegrationAPI.WebApi", "DEVES.IntegrationAPI.WebApi\DEVES.IntegrationAPI.WebApi.csproj", "{9E53BD0D-3233-4320-8445-C575920EB7E6}"
 EndProject
@@ -14,28 +14,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DEVES.IntegrationAPI.CoreTests1", "DEVES.IntegrationAPI.CoreTests1\DEVES.IntegrationAPI.CoreTests1.csproj", "{EF302640-C4EC-4512-932A-52456B02C8E8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Proxy", "Proxy\Proxy.csproj", "{FAA9A191-FF3E-402B-8991-B278B49E9264}"
-EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "DEVES.CustomApp(1)", "..\DEVES.CustomApp\", "{965370EA-132B-4A67-9FFA-907C5788FACF}"
-	ProjectSection(WebsiteProperties) = preProject
-		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5.2"
-		Debug.AspNetCompiler.VirtualPath = "/localhost_63468"
-		Debug.AspNetCompiler.PhysicalPath = "..\DEVES.CustomApp\"
-		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_63468\"
-		Debug.AspNetCompiler.Updateable = "true"
-		Debug.AspNetCompiler.ForceOverwrite = "true"
-		Debug.AspNetCompiler.FixedNames = "false"
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.VirtualPath = "/localhost_63468"
-		Release.AspNetCompiler.PhysicalPath = "..\DEVES.CustomApp\"
-		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_63468\"
-		Release.AspNetCompiler.Updateable = "true"
-		Release.AspNetCompiler.ForceOverwrite = "true"
-		Release.AspNetCompiler.FixedNames = "false"
-		Release.AspNetCompiler.Debug = "False"
-		VWDPort = "63468"
-		SlnRelativePath = "..\DEVES.CustomApp\"
-		DefaultWebSiteLanguage = "Visual C#"
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -67,10 +45,6 @@ Global
 		{FAA9A191-FF3E-402B-8991-B278B49E9264}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FAA9A191-FF3E-402B-8991-B278B49E9264}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FAA9A191-FF3E-402B-8991-B278B49E9264}.Release|Any CPU.Build.0 = Release|Any CPU
-		{965370EA-132B-4A67-9FFA-907C5788FACF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{965370EA-132B-4A67-9FFA-907C5788FACF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{965370EA-132B-4A67-9FFA-907C5788FACF}.Release|Any CPU.ActiveCfg = Debug|Any CPU
-		{965370EA-132B-4A67-9FFA-907C5788FACF}.Release|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
