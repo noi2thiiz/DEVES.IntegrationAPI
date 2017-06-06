@@ -82,9 +82,12 @@
     <Compile Include="DataAccessService\Mastes\InMemoryDataStorageBaseTests.cs" />
     <Compile Include="DataAccessService\Mastes\ProvinceMasterDataTests.cs" />
     <Compile Include="DataAccessService\Mastes\SubDistrictMasterDataTests.cs" />
+    <Compile Include="Logic\buzCreateCrmClientCorporateTests.cs" />
+    <Compile Include="Logic\buzCreateCrmClientPersonalTests.cs" />
     <Compile Include="Logic\buzCrmInquiryClientMasterTests.cs" />
     <Compile Include="Logic\buzCrmInquiryPersonalClientMasterTests.cs" />
     <Compile Include="Logic\buzCRMRegClientPersonalTests.cs" />
+    <Compile Include="Logic\buzCRMRegPayeePersonalTests.cs" />
     <Compile Include="Logic\BuzInquiryCrmClientMasterTests.cs" />
     <Compile Include="Logic\buzInquiryCRMPayeeListNewTests.cs" />
     <Compile Include="Logic\DataAccess\Adapter\DevesServiceProxyAdapterTests.cs" />

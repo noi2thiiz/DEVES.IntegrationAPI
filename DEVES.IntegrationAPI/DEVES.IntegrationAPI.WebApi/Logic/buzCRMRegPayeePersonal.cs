@@ -209,10 +209,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                            
                     }
                     }
-                    catch (Exception)
+                    catch (Exception e)
                     {
-                        //เมื่อเกิด error ใด ๆ ใน service อื่นให้ลบ
-                        if (!string.IsNullOrEmpty(newCleansingId))
+                        Console.WriteLine("Error On Create 400 =" + e.Message);
+                        AddDebugInfo("Error On Create 400" + e.Message,e.StackTrace);
+                    //เมื่อเกิด error ใด ๆ ใน service อื่นให้ลบ
+                    if (!string.IsNullOrEmpty(newCleansingId))
                         {
                             AddDebugInfo("try rollback" + newCleansingId);
                             var deleteResult = CleansingClientService.Instance.RemoveByCleansingId(newCleansingId, "P");
@@ -294,8 +296,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 }
                     catch (Exception e)
                     {
+                       Console.WriteLine("Error On Create Sap ="+e.Message);
+                        AddDebugInfo("Error On Create Sap =" + e.Message+e.StackTrace);
                     //@TODO adHoc fix Please fill recipient type  มัน return success เลยถ้าไม่ได้ดักไว้ 
-                        if (!string.IsNullOrEmpty(newCleansingId))
+                    if (!string.IsNullOrEmpty(newCleansingId))
                         {
                             AddDebugInfo("rollback newCleansingId="+ newCleansingId);
                            
@@ -334,16 +338,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         CreateCrmPersonInfoOutputModel crmContentOutput = (CreateCrmPersonInfoOutputModel)cmdCreateCrmPayee.Execute(RegPayeePersonalInput);
                         if (crmContentOutput.code == CONST_CODE_SUCCESS)
                         {
-                            //RegPayeePersonalDataOutputModel_Pass dataOutPass = new RegPayeePersonalDataOutputModel_Pass();
-                            //dataOutPass.polisyClientId = regPayeePersonalInput.generalHeader.polisyClientId;
-                            //dataOutPass.sapVendorCode = regPayeePersonalInput.sapVendorInfo.sapVendorCode;
-
-
-                            //  dataOutPass.sapVendorGroupCode = regPayeePersonalInput.sapVendorInfo.sapVendorGroupCode;
-                            //dataOutPass.personalName = regPayeePersonalInput.profileInfo.personalName;
-                            //dataOutPass.personalSurname = regPayeePersonalInput.profileInfo.personalSurname;
-                            ////dataOutPass.corporateBranch = regPayeePersonalInput.profileInfo.corporateBranch;
-                            //regPayeePersonalOutput.data.Add(dataOutPass);
+                            outputPass.crmClientId = crmContentOutput?.crmClientId??"";
                         }
                         else
                         {
