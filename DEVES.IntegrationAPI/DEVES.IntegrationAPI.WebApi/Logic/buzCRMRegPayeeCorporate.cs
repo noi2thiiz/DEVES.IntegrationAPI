@@ -314,7 +314,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                 try
                 {
-                    if (!ignoreCrm)
+                    if (!ignoreCrm && !string.IsNullOrEmpty(regPayeeCorporateInput.generalHeader.cleansingId))
                     {
                         AddDebugInfo("Create payee in CRM");
                         buzCreateCrmPayeeCorporate cmdCreateCrmPayee = new buzCreateCrmPayeeCorporate();

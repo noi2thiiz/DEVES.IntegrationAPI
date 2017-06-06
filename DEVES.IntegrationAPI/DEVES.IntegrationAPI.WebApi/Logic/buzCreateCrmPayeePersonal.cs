@@ -39,12 +39,24 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             data.contactInfo = contentModel.contactInfo;
             data.addressInfo = contentModel.addressInfo;
 
+
             // Search ข้อมูลจาก cleansing มาเก็บภายใน List
             //List<string> crmData = SearchCrmContactPayeeId(data.generalHeader.cleansingId);
 
             CreateCrmPersonInfoOutputModel dataOutput = new CreateCrmPersonInfoOutputModel();
+
+            // if clsId == null or ""
+            if (string.IsNullOrEmpty(data.generalHeader.cleansingId))
+            {
+                dataOutput.code = AppConst.CODE_FAILED;
+                dataOutput.description = "ไม่มี CleansingID";
+                dataOutput.transactionId = TransactionId;
+                dataOutput.transactionDateTime = DateTime.Now;
+                return dataOutput;
+            }
+
             // dataOutput.data = new List<CreateCrmPersonInfoOutputModel>();
-    
+
             // Create new one and map input value to CRM
             using (OrganizationServiceProxy crmSvc = GetCrmServiceProxy())
             {
@@ -155,10 +167,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                                                           // contentModel.profileInfo.remark;
 
                         // contactInfo 
-                        contact.Telephone1 = contentModel.contactInfo.telephone1 + '#' + contentModel.contactInfo.telephone1Ext;
-                        contact.Telephone2 = contentModel.contactInfo.telephone2 + '#' + contentModel.contactInfo.telephone2Ext;
-                        contact.Telephone3 = contentModel.contactInfo.telephone3 + '#' + contentModel.contactInfo.telephone3Ext;
-                        contact.pfc_moblie_phone1 = contentModel.contactInfo.mobilePhone;
+                        contact.Telephone1 = TelephoneConvertor(contentModel.contactInfo.telephone1, contentModel.contactInfo.telephone1Ext);
+                    contact.Telephone2 = TelephoneConvertor(contentModel.contactInfo.telephone2, contentModel.contactInfo.telephone2Ext);
+                    contact.Telephone3 = TelephoneConvertor(contentModel.contactInfo.telephone3, contentModel.contactInfo.telephone3Ext);
+                    contact.pfc_moblie_phone1 = contentModel.contactInfo.mobilePhone;
                         contact.EMailAddress1 = contentModel.contactInfo.emailAddress;
                         contact.pfc_line_id = contentModel.contactInfo.lineID;
                         contact.pfc_facebook = contentModel.contactInfo.facebook;
@@ -260,6 +272,22 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 }
             }
 
+        }
+
+        public string TelephoneConvertor(string tel, string ext)
+        {
+            string telNum = "";
+
+            if (ext == null || ext.Equals(""))
+            {
+                telNum = tel;
+            }
+            else
+            {
+                telNum = tel + "#" + ext;
+            }
+
+            return telNum;
         }
 
         private enum ENUM_CLIENT_TYPE

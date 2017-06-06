@@ -42,12 +42,24 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             data.addressHeader = contentModel.addressHeader;
             //data.asrhHeader = contentModel.asrhHeader;
 
+            CreateCrmCorporateInfoOutputModel dataOutput = new CreateCrmCorporateInfoOutputModel();
+            // if clsId == null or ""
+            if (string.IsNullOrEmpty(data.generalHeader.cleansingId))
+            {
+                dataOutput.code = AppConst.CODE_FAILED;
+                dataOutput.description = "ไม่มี CleansingID";
+                dataOutput.transactionId = TransactionId;
+                dataOutput.transactionDateTime = DateTime.Now;
+
+                return dataOutput;
+            }
+
             using (OrganizationServiceProxy crmSvc = GetCrmServiceProxy())
             {
                 // Search ข้อมูลจาก cleansing มาเก็ยภายใน List
                 List<string> crmData = SearchCrmAccountPayeeId( crmSvc , data.generalHeader.cleansingId);
 
-                CreateCrmCorporateInfoOutputModel dataOutput = new CreateCrmCorporateInfoOutputModel();
+                
                 // dataOutput.data = new List<RegPayeeCorporateDataOutputModel_Pass>();
 
                 if (crmData.Count == 0) // Means List crmData is empty
@@ -129,9 +141,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                         // contactHeader 
 
-                        account.Telephone1 = contentModel.contactHeader.telephone1 + '#' + contentModel.contactHeader.telephone1Ext;
-                        account.Telephone2 = contentModel.contactHeader.telephone2 + '#' + contentModel.contactHeader.telephone2Ext;
-                        account.Telephone3 = contentModel.contactHeader.telephone3 + '#' + contentModel.contactHeader.telephone3Ext;
+                        account.Telephone1 = TelephoneConvertor( contentModel.contactHeader.telephone1 ,contentModel.contactHeader.telephone1Ext);
+                        account.Telephone2 = TelephoneConvertor(contentModel.contactHeader.telephone2, contentModel.contactHeader.telephone2Ext);
+                        account.Telephone3 = TelephoneConvertor(contentModel.contactHeader.telephone3, contentModel.contactHeader.telephone3Ext);
                         account.pfc_moblie_phone1 = contentModel.contactHeader.mobilePhone;
                         account.EMailAddress1 = contentModel.contactHeader.emailAddress;
                         account.pfc_line_id = contentModel.contactHeader.lineID;
@@ -250,6 +262,22 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 }
 
             }
+        }
+
+        public string TelephoneConvertor(string tel, string ext)
+        {
+            string telNum = "";
+
+            if (ext == null || ext.Equals(""))
+            {
+                telNum = tel;
+            }
+            else
+            {
+                telNum = tel + "#" + ext;
+            }
+
+            return telNum;
         }
 
         private List<string> SearchCrmAccountPayeeId(OrganizationServiceProxy crmSvc, string cleansingId)

@@ -449,7 +449,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             {
                 filePath = HttpContext.Current.Server.MapPath(GetAppConfigurationSetting(key));
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 //C:\Users\patiw\Source\Repos\Production1\DEVES.IntegrationAPI\DEVES.IntegrationAPI.WebApiTests1\bin\Release
                 string startupPath = Environment.CurrentDirectory?.Replace(@"Tests1\bin\Release", "");

@@ -325,7 +325,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 try
                 {
                     #region Create payee in CRM
-                    if (!ignoreCrm)
+
+                    if (!ignoreCrm && !string.IsNullOrEmpty(RegPayeePersonalInput.generalHeader.cleansingId))
                     {
                       
                         AddDebugInfo("Create payee in CRM ");

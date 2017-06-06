@@ -40,6 +40,16 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             List<string> crmData = SearchCrmContactClientId(data.generalHeader.cleansingId);
 
             CreateCrmPersonInfoOutputModel dataOutput = new CreateCrmPersonInfoOutputModel();
+
+            if (string.IsNullOrEmpty(data.generalHeader.cleansingId))
+            {
+                dataOutput.code = AppConst.CODE_FAILED;
+                dataOutput.description = "ไม่มี CleansingID";
+                dataOutput.transactionId = TransactionId;
+                dataOutput.transactionDateTime = DateTime.Now;
+
+                return dataOutput;
+            }
             // dataOutput.data = new List<CreateCrmPersonInfoOutputModel>();
 
             if (crmData.Count == 0) // Means List crmData is empty

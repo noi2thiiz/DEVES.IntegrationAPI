@@ -45,6 +45,16 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             dataOutput.transactionDateTime = DateTime.Now;
             // dataOutput.data = new List<RegClientCorporateDataOutputModel_Pass>();
 
+            if (string.IsNullOrEmpty(data.generalHeader.cleansingId))
+            {
+                dataOutput.code = AppConst.CODE_FAILED;
+                dataOutput.description = "ไม่มี CleansingID";
+                dataOutput.transactionId = TransactionId;
+                dataOutput.transactionDateTime = DateTime.Now;
+
+                return dataOutput;
+            }
+
             if (crmData.Count == 0) // Means List crmData is empty
             {
                 using (OrganizationServiceProxy crmSvc = GetCrmServiceProxy())

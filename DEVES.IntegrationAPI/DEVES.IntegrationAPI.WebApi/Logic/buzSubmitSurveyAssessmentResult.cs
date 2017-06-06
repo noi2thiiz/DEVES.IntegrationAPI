@@ -36,6 +36,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             if(query.FirstOrDefault<pfc_assessment>() == null)
             {
                 // WAITING FOR MAPPING DOCUMENT
+                output.code = AppConst.CODE_SUCCESS;
+                output.message = "รอ LOGIC จากพี่ไกด์";
+                output.description = "รอ LOGIC จากพี่ไกด์";
+                output.transactionId = TransactionId;
+                output.transactionDateTime = DateTime.Now.ToString();
+
                 return output;
             }
             // if already have ref_code in CRM -> RETURN message
