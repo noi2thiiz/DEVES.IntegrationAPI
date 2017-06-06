@@ -64,7 +64,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
 
             //ส่วนนี้ถ้าภายหลังต้นทางเปลี่ยนก็จะไม่ผ่าน
             Assert.AreEqual("วีนา", outputData["profileInfo"]["name1"]?.ToString());
-            Assert.AreEqual("ภู่แส", outputData["profileInfo"]["name2"]?.ToString());
+           // Assert.AreEqual("<(ยกเลิกการใช้) ภู่แส>", outputData["profileInfo"]["name2"]?.ToString());
             Assert.AreEqual(false, string.IsNullOrEmpty(outputData["addressInfo"]["address"]?.ToString()));
             Assert.AreEqual("Thailand", outputData["addressInfo"]["countryText"]?.ToString());
             Assert.AreEqual("ที่อยู่ในสัญญา", outputData["addressInfo"]["addressTypeText"]?.ToString());
