@@ -1,0 +1,41 @@
+.list-group
+    button.list-group-item.text-left(
+    data-option-id="{{currentSubQuestion.id}}",
+    type='button',
+    data-ng-click="selectQuestionValue(currentSubQuestion,1)",
+    ng-class="{'list-group-item-warning':currentSubQuestion.value==1}")
+        i.glyphicon.glyphicon-unchecked(ng-if="currentSubQuestion.value!=1")
+        i.glyphicon.glyphicon-check(ng-if="currentSubQuestion.value==1")
+        |  มากที่สุด
+    button.list-group-item.text-left(
+    data-option-id="{{currentSubQuestion.id}}",
+    type='button',
+    data-ng-click="selectQuestionValue(currentSubQuestion,2)",
+    ng-class="{'list-group-item-warning':currentSubQuestion.value==2}")
+        i.glyphicon.glyphicon-unchecked(ng-if="currentSubQuestion.value!=2")
+        i.glyphicon.glyphicon-check(ng-if="currentSubQuestion.value==2")
+        |  มาก
+    button.list-group-item.text-left(
+    data-option-id="{{currentSubQuestion.id}}",
+    type='button',
+    data-ng-click="selectQuestionValue(currentSubQuestion,3)",
+    ng-class="{'list-group-item-warning':currentSubQuestion.value==3}")
+        i.glyphicon.glyphicon-unchecked(ng-if="currentSubQuestion.value!=3")
+        i.glyphicon.glyphicon-check(ng-if="currentSubQuestion.value==3")
+        |  ปานกลาง
+    button.list-group-item.text-left(
+    data-option-id="{{currentSubQuestion.id}}",
+    type='button',
+    data-ng-click="selectQuestionValue(currentSubQuestion,4)",
+    ng-class="{'list-group-item-warning':currentSubQuestion.value==4}")
+        i.glyphicon.glyphicon-unchecked(ng-if="currentSubQuestion.value!=4")
+        i.glyphicon.glyphicon-check(ng-if="currentSubQuestion.value==4")
+        |  น้อย
+    button.list-group-item.text-left(
+    data-option-id="{{currentSubQuestion.id}}",
+    type='button',
+    data-ng-click="selectQuestionValue(currentSubQuestion,5)",
+    ng-class="{'list-group-item-warning':currentSubQuestion.value==5}")
+        i.glyphicon.glyphicon-unchecked(ng-if="currentSubQuestion.value!=5")
+        i.glyphicon.glyphicon-check(ng-if="currentSubQuestion.value==5")
+        |  น้อยที่สุด

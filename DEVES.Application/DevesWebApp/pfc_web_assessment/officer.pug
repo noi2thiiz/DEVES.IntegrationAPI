@@ -1,0 +1,63 @@
+extends src/template
+
+block headTitle
+    title CRM-KM
+block body
+    .row
+        .col-xs-10.col-xs-offset-1
+            label ความพึงพอใจเจ้าหน้าที่รับแจ้งอุบัติเหตุและเจ้าหน้าที่สำรวจภัย
+    .row
+        .col-xs-10.col-xs-offset-1
+            table.table.table-bordered.table-hover
+
+                thead
+                    tr
+                        th คำถาม
+                        th.text-center ไม่มีความเห็น
+                        th.text-center มากที่สุด
+                        th.text-center มาก
+                        th.text-center ปานกลาง
+                        th.text-center น้อย
+                        th.text-center น้อยที่สุด
+                tbody
+                    tr(ng-repeat="item in questions")
+                        td {{item.id}}) {{item.title}}
+                        td.text-center
+                            input(type="radio",ng-model="item.value",ng-value=0)
+                        td.text-center
+                            input(type="radio",ng-model="item.value",ng-value="5")
+                        td.text-center
+                            input(type="radio",ng-model="item.value",ng-value="4")
+                        td.text-center
+                            input(type="radio",ng-model="item.value",ng-value="3")
+                        td.text-center
+                            input(type="radio",ng-model="item.value",ng-value="2")
+                        td.text-center
+                            input(type="radio",ng-model="item.value",ng-value="1")
+    .row
+        .col-xs-10.col-xs-offset-1
+            label(for="textareaRemark") คำแนะนำอื่นๆ
+            textarea#textareaRemark.form-control(rows="3")
+
+
+    .row
+        .col-xs-10.col-xs-offset-1
+            hr
+            button.btn.btn-default.pull-right(data-ng-click="saveOfficer()") Save
+
+block script
+    script(type='text/javascript').
+        initvariable();
+    script(type='text/javascript')
+        include src/modula.js
+        include src/run.js
+        include src/controller.js
+
+
+
+
+
+
+
+
+

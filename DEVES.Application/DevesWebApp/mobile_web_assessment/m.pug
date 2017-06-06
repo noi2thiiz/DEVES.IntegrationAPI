@@ -1,0 +1,58 @@
+doctype html
+html(lang='en',ng-app='crmApp')
+    head
+        meta(charset='utf-8')
+        // utf-8 works for most cases
+        meta(name='viewport', content='width=device-width')
+        // Forcing initial-scale shouldn't be necessary
+        meta(http-equiv='X-UA-Compatible', content='IE=edge')
+        // Use the latest (edge) version of IE rendering engine
+        meta(name='x-apple-disable-message-reformatting')
+        // Disable auto-scale in iOS 10 Mail entirely
+        title
+        <!-- Web Font / @font-face : BEGIN -->
+        <!-- NOTE: If web fonts are not required, lines 10 - 27 can be safely removed. -->
+
+        <!-- Desktop Outlook chokes on web font references and defaults to Times New Roman, so we force a safe fallback font. -->
+        <!--[if mso]>
+
+        <![endif]-->
+
+        <!-- All other clients get the webfont reference; some will render the font and others will silently fail to the fallbacks. More on that here: http://stylecampaign.com/blog/2015/02/webfont-support-in-email/ -->
+        <!--[if !mso]><!-->
+        <!-- insert web font reference, eg: <link href='https://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'> -->
+        <!--<![endif]-->
+
+        <!-- Web Font / @font-face : END -->
+
+        <!-- CSS Reset -->
+        include icon
+        style
+         include style-home.css
+        | <!-- Latest compiled and minified CSS -->
+        | <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    body(ng-controller='mainController as vm',
+    dw-loading='main',
+    dw-loading-options="{text:'Processing...', spinner: false}",
+    width='100%', style='margin: 0; mso-line-height-rule: exactly;')
+        center#main-page(style='width: 100%;  text-align: left;')
+
+
+            div(style='display:none;font-size:1px;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;mso-hide:all;font-family: sans-serif;')
+                | (Optional) This text will appear in the inbox preview, but not the email body.
+
+            .email-container(style='max-width: 680px; margin: auto;')
+
+                table.email-container(role='presentation', aria-hidden='true', cellspacing='0', cellpadding='0', border='0', align='center', width='100%', style='max-width: 680px;')
+
+                    include home-page
+
+
+        include ../includes/local-head
+        script(type='text/javascript')
+            include module.js
+            include home-controller.js
+
+
+

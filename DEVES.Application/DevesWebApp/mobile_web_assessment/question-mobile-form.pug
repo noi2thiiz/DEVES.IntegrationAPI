@@ -1,0 +1,24 @@
+tr#question-mobile-form(style="display:none")
+    td(bgcolor='#ffffff')
+        table(role='presentation', aria-hidden='true', cellspacing='0', cellpadding='0', border='0', width='100%')
+            tr
+                td(style='padding: 40px 40px 20px; text-align: center;')
+                    h1(style='margin: 0; font-family: sans-serif; font-size: 16px; line-height: 16px; color: #333333; font-weight: normal;') {{currentQuestion.title}}
+            tr
+                td(style='padding: 0 40px 40px; font-family: sans-serif; font-size: 15px; line-height: 20px; color: #555555; text-align: center;')
+                    div
+                        .row
+                            .col-sm-12
+                                h5 {{currentSubQuestion.title}}
+                        .row
+                            .col-sm-12.text-left.sub-question-title
+                                h5 ระดับความพึงพอใจ
+                            .col-sm-12(
+                                dw-loading='options',
+                                dw-loading-options="{text:'Loading...', spinner: false}",)
+                                include select-option-mobile
+
+
+
+
+
