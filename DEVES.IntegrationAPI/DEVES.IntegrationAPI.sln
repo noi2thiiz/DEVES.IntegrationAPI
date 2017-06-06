@@ -17,7 +17,27 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Proxy", "Proxy\Proxy.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevesWebApp", "..\DevesWebApp\DevesWebApp.csproj", "{93A28C8F-C900-4AFB-A539-A000DF0744F2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DEVES.CustomApp", "DEVES.CustomApp\DEVES.CustomApp.csproj", "{5A9B2717-3FFA-4ADE-801E-DEBFF1987C9C}"
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "DEVES.CustomApp(1)", "..\DEVES.CustomApp\", "{965370EA-132B-4A67-9FFA-907C5788FACF}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5.2"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_63468"
+		Debug.AspNetCompiler.PhysicalPath = "..\DEVES.CustomApp\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_63468\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_63468"
+		Release.AspNetCompiler.PhysicalPath = "..\DEVES.CustomApp\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_63468\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "63468"
+		SlnRelativePath = "..\DEVES.CustomApp\"
+		DefaultWebSiteLanguage = "Visual C#"
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,10 +73,10 @@ Global
 		{93A28C8F-C900-4AFB-A539-A000DF0744F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{93A28C8F-C900-4AFB-A539-A000DF0744F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{93A28C8F-C900-4AFB-A539-A000DF0744F2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5A9B2717-3FFA-4ADE-801E-DEBFF1987C9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5A9B2717-3FFA-4ADE-801E-DEBFF1987C9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5A9B2717-3FFA-4ADE-801E-DEBFF1987C9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5A9B2717-3FFA-4ADE-801E-DEBFF1987C9C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{965370EA-132B-4A67-9FFA-907C5788FACF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{965370EA-132B-4A67-9FFA-907C5788FACF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{965370EA-132B-4A67-9FFA-907C5788FACF}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{965370EA-132B-4A67-9FFA-907C5788FACF}.Release|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
