@@ -482,6 +482,7 @@
     <Compile Include="Logic\buzInquryCRMClientMaster.cs" />
     <Compile Include="Logic\buzReqClsId.cs" />
     <Compile Include="Logic\buzSendSMS.cs" />
+    <Compile Include="Logic\buzSubmitSurveyAssessmentResult.cs" />
     <Compile Include="Logic\CommonConstant.cs" />
     <Compile Include="Logic\Converter\MasterDataConvertor.cs" />
     <Compile Include="Logic\Converter\OptionSetConvertor.cs" />
@@ -633,6 +634,7 @@
     <Content Include="App_Data\JsonSchema\RegClientCorporate_Input_Schema.json" />
     <Content Include="App_Data\JsonSchema\RegPayeeCorporate_Input_Schema.json" />
     <Content Include="App_Data\JsonSchema\SendSMS_Input_Schema.json" />
+    <Content Include="App_Data\JsonSchema\SubmitSurveyAssessmentResult_Input_Schema.json" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile2.pubxml" />

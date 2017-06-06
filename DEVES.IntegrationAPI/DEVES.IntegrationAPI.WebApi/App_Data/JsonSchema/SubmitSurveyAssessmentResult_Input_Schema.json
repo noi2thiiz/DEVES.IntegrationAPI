@@ -1,0 +1,36 @@
+﻿{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"properties": {
+    "assessmentrefcode": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 10
+    },
+    "assessmentClaimNotiScore": {
+      "type": "integer"
+    },
+    "assessmentClaimNotiComment": {
+      "type": "string",
+      "maxLength": 2000
+    },
+    "assessmentSurveyScore": {
+      "type": "integer"
+    },
+    "assessmentSurveySpeedScore": {
+      "type": "integer"
+    },
+    "assessmentSurveyComment": {
+      "type": "string",
+      "maxLength": 2000
+    },
+    "assessmentSurveyByUserid": {
+      "type": "string",
+      "maxLength": 50
+    }
+
+	},
+	"required": [
+    "assessmentrefcode"
+	]
+}
