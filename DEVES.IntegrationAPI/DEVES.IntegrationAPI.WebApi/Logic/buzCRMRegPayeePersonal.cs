@@ -11,6 +11,7 @@ using DEVES.IntegrationAPI.Model.RegPayeePersonal;
 using DEVES.IntegrationAPI.Model.CLS;
 using DEVES.IntegrationAPI.Model.Polisy400;
 using DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData;
+using DEVES.IntegrationAPI.WebApi.Logic.DataBaseContracts;
 using DEVES.IntegrationAPI.WebApi.Logic.Services;
 using DEVES.IntegrationAPI.WebApi.Logic.Validator;
 using DEVES.IntegrationAPI.WebApi.Templates.Exceptions;
@@ -209,10 +210,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                            
                     }
                     }
-                    catch (Exception)
+                    catch (Exception e)
                     {
-                        //เมื่อเกิด error ใด ๆ ใน service อื่นให้ลบ
-                        if (!string.IsNullOrEmpty(newCleansingId))
+                        Console.WriteLine("Error On Create 400 =" + e.Message);
+                        AddDebugInfo("Error On Create 400" + e.Message,e.StackTrace);
+                    //เมื่อเกิด error ใด ๆ ใน service อื่นให้ลบ
+                    if (!string.IsNullOrEmpty(newCleansingId))
                         {
                             AddDebugInfo("try rollback" + newCleansingId);
                             var deleteResult = CleansingClientService.Instance.RemoveByCleansingId(newCleansingId, "P");
@@ -294,8 +297,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 }
                     catch (Exception e)
                     {
+                       Console.WriteLine("Error On Create Sap ="+e.Message);
+                        AddDebugInfo("Error On Create Sap =" + e.Message+e.StackTrace);
                     //@TODO adHoc fix Please fill recipient type  มัน return success เลยถ้าไม่ได้ดักไว้ 
-                        if (!string.IsNullOrEmpty(newCleansingId))
+                    if (!string.IsNullOrEmpty(newCleansingId))
                         {
                             AddDebugInfo("rollback newCleansingId="+ newCleansingId);
                            
@@ -326,30 +331,25 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 {
                     #region Create payee in CRM
 
-                    if (!ignoreCrm && !string.IsNullOrEmpty(RegPayeePersonalInput.generalHeader.cleansingId))
+                    if (!ignoreCrm && !string.IsNullOrEmpty(RegPayeePersonalInput?.generalHeader?.cleansingId))
                     {
-                      
-                        AddDebugInfo("Create payee in CRM ");
-                        buzCreateCrmPayeePersonal cmdCreateCrmPayee = new buzCreateCrmPayeePersonal();
-                        CreateCrmPersonInfoOutputModel crmContentOutput = (CreateCrmPersonInfoOutputModel)cmdCreateCrmPayee.Execute(RegPayeePersonalInput);
-                        if (crmContentOutput.code == CONST_CODE_SUCCESS)
-                        {
-                            //RegPayeePersonalDataOutputModel_Pass dataOutPass = new RegPayeePersonalDataOutputModel_Pass();
-                            //dataOutPass.polisyClientId = regPayeePersonalInput.generalHeader.polisyClientId;
-                            //dataOutPass.sapVendorCode = regPayeePersonalInput.sapVendorInfo.sapVendorCode;
 
-
-                            //  dataOutPass.sapVendorGroupCode = regPayeePersonalInput.sapVendorInfo.sapVendorGroupCode;
-                            //dataOutPass.personalName = regPayeePersonalInput.profileInfo.personalName;
-                            //dataOutPass.personalSurname = regPayeePersonalInput.profileInfo.personalSurname;
-                            ////dataOutPass.corporateBranch = regPayeePersonalInput.profileInfo.corporateBranch;
-                            //regPayeePersonalOutput.data.Add(dataOutPass);
-                        }
-                        else
+                        if (false == SpApiChkCustomerClient.Instance.CheckByCleansingId(RegPayeePersonalInput.generalHeader.cleansingId))
                         {
-                            regPayeePersonalOutput.code = CONST_CODE_FAILED;
-                            regPayeePersonalOutput.message = crmContentOutput.message;
-                            regPayeePersonalOutput.description = crmContentOutput.description;
+                            AddDebugInfo("Create payee in CRM ");
+                            buzCreateCrmPayeePersonal cmdCreateCrmPayee = new buzCreateCrmPayeePersonal();
+                            CreateCrmPersonInfoOutputModel crmContentOutput = (CreateCrmPersonInfoOutputModel)cmdCreateCrmPayee.Execute(RegPayeePersonalInput);
+                            if (crmContentOutput.code == CONST_CODE_SUCCESS)
+                            {
+                                outputPass.crmClientId = crmContentOutput?.crmClientId ?? "";
+                            }
+                            else
+                            {
+                                AddDebugInfo("Cannot create Client in CRM :" + crmContentOutput.message, crmContentOutput);
+                                //regPayeePersonalOutput.code = CONST_CODE_FAILED;
+                                //regPayeePersonalOutput.message = crmContentOutput.message;
+                                //regPayeePersonalOutput.description = crmContentOutput.description;
+                            }
                         }
                     }
 

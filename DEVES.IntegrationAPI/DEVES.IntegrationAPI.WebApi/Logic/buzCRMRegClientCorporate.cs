@@ -11,6 +11,7 @@ using DEVES.IntegrationAPI.Model.RegClientCorporate;
 using DEVES.IntegrationAPI.Model.CLS;
 using DEVES.IntegrationAPI.Model.Polisy400;
 using DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData;
+using DEVES.IntegrationAPI.WebApi.Logic.DataBaseContracts;
 using DEVES.IntegrationAPI.WebApi.Logic.Validator;
 using DEVES.IntegrationAPI.WebApi.Templates.Exceptions;
 using DEVES.IntegrationAPI.WebApi.Logic.Services;
@@ -317,6 +318,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             regClientCorporateOutput.transactionId = TransactionId;
             regClientCorporateOutput.code = CONST_CODE_SUCCESS;
 
+            RegClientCorporateDataOutputModel_Pass dataOutPass =
+                new RegClientCorporateDataOutputModel_Pass();
 
             if (IsASRHValid(regClientCorporateInput))
             {
@@ -450,6 +453,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                             }
                             catch (Exception e)
                             {
+                                Console.WriteLine("400 Error"+e.Message);
+                                
                                 if (!string.IsNullOrEmpty(newCleansingId))
                                 {
                                     //เมื่อเกิด error ใด ๆ ใน service อื่นให้ลบ
@@ -475,45 +480,53 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                                     }
                                 }
 
-                                RegClientCorporateDataOutputModel_Fail dataOutFail =
-                                    new RegClientCorporateDataOutputModel_Fail();
-                                regClientCorporateOutput.data.Add(dataOutFail);
+                                
+                                regClientCorporateOutput.code = CONST_CODE_FAILED;
+                                regClientCorporateOutput.message = e.Message;
+                               
                             }
                         }
                     }
 
                     try
                     {
-                        buzCreateCrmClientCorporate cmdCreateCrmClient = new buzCreateCrmClientCorporate();
-                        CreateCrmCorporateInfoOutputModel crmContentOutput =
-                            (CreateCrmCorporateInfoOutputModel) cmdCreateCrmClient.Execute(regClientCorporateInput);
-
-                        if (crmContentOutput.code == CONST_CODE_SUCCESS)
+                        if (!string.IsNullOrEmpty(regClientCorporateInput?.generalHeader?.cleansingId))
                         {
+                            Console.WriteLine(" start create Client in CRM ");
+                            if (false == SpApiChkCustomerClient.Instance.CheckByCleansingId(regClientCorporateInput
+                                    ?.generalHeader?.cleansingId))
+                            {
+                                buzCreateCrmClientCorporate cmdCreateCrmClient = new buzCreateCrmClientCorporate();
+                                CreateCrmCorporateInfoOutputModel crmContentOutput =
+                                    (CreateCrmCorporateInfoOutputModel) cmdCreateCrmClient.Execute(
+                                        regClientCorporateInput);
 
-                            regClientCorporateOutput.code = CONST_CODE_SUCCESS;
-                            regClientCorporateOutput.message = AppConst.MESSAGE_SUCCESS;
-                            RegClientCorporateDataOutputModel_Pass dataOutPass =
-                                new RegClientCorporateDataOutputModel_Pass();
-                            dataOutPass.cleansingId = regClientCorporateInput.generalHeader.cleansingId;
-                            dataOutPass.polisyClientId = regClientCorporateInput.generalHeader.polisyClientId;
-                            dataOutPass.crmClientId = crmContentOutput.crmClientId;
-                            dataOutPass.corporateName1 = regClientCorporateInput.profileHeader.corporateName1;
-                            dataOutPass.corporateName2 = regClientCorporateInput.profileHeader.corporateName2;
-                            dataOutPass.corporateBranch = regClientCorporateInput.profileHeader.corporateBranch;
+                                if (crmContentOutput.code == CONST_CODE_SUCCESS)
+                                {
 
-                            regClientCorporateOutput.data.Add(dataOutPass);
-                        }
-                        else
-                        {
-
-                            regClientCorporateOutput.code = CONST_CODE_FAILED;
-                            regClientCorporateOutput.message = crmContentOutput.message;
-                            regClientCorporateOutput.description = crmContentOutput.description;
+                                    dataOutPass.crmClientId = crmContentOutput.crmClientId;
+                                }
+                                else
+                                {
+                                    AddDebugInfo("Cannot create Client in CRM :" + crmContentOutput.message,
+                                        crmContentOutput);
+                                    Console.WriteLine("Cannot create Client in CRM :" + crmContentOutput.message);
+                                    //regClientCorporateOutput.code = CONST_CODE_FAILED;
+                                    //regClientCorporateOutput.message = crmContentOutput.message;
+                                    //regClientCorporateOutput.description = crmContentOutput.description;
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine("cleansingId is already exist in  Client in CRM :");
+                            }
                         }
                     }
-                    catch (Exception)
+                    catch (Exception e)
                     {
+                        Console.WriteLine("Cannot create Client in CRM :" + e.Message+e.StackTrace);
+                        AddDebugInfo("Cannot create Client in CRM :" + e.Message,
+                            e.StackTrace);
                         //@TODO something 
                     }
 
@@ -533,6 +546,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             // แก้ตาม ที่ อาจารย์พรชัย บอก เพื่อให้เขาเอา เลข cleansingIdไปซ่อมข้อมูลได้
             if (regClientCorporateOutput.code != AppConst.CODE_SUCCESS)
             {
+
+
+
                 if (string.IsNullOrEmpty(regClientCorporateOutput.message))
                 {
                     regClientCorporateOutput.message = "Failed client registration did not complete";
@@ -540,7 +556,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 if (regClientCorporateOutput?.data == null || regClientCorporateOutput?.data.Count == 0)
                 {
                     regClientCorporateOutput.data = new List<RegClientCorporateDataOutputModel>();
-                    var dataOutPass =
+                    dataOutPass =
                         new RegClientCorporateDataOutputModel_Pass
                         {
                             cleansingId = regClientCorporateInput?.generalHeader?.cleansingId ?? "",
@@ -556,6 +572,20 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 }
                 //regClientCorporateOutput.data = new List<RegClientCorporateDataOutputModel>();
                 // regClientCorporateOutput.data.Add(regClientPersonDataOutput);
+            }
+            else
+            {
+                regClientCorporateOutput.code = CONST_CODE_SUCCESS;
+                regClientCorporateOutput.message = AppConst.MESSAGE_SUCCESS;
+
+                dataOutPass.cleansingId = regClientCorporateInput.generalHeader.cleansingId;
+                dataOutPass.polisyClientId = regClientCorporateInput.generalHeader.polisyClientId;
+
+                dataOutPass.corporateName1 = regClientCorporateInput.profileHeader.corporateName1;
+                dataOutPass.corporateName2 = regClientCorporateInput.profileHeader.corporateName2;
+                dataOutPass.corporateBranch = regClientCorporateInput.profileHeader.corporateBranch;
+
+                regClientCorporateOutput.data.Add(dataOutPass);
             }
 
             return regClientCorporateOutput;

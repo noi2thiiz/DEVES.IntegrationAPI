@@ -63,18 +63,18 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     crmSvc.EnableProxyTypes();
 
                     //Create Client Additional Records
-                    if (contentModel.generalHeader.clientAdditionalExistFlag.Equals("N"))
+                    if (contentModel?.generalHeader?.clientAdditionalExistFlag != "Y")
                     {
 
 
                         
                         // generalHeader
-                        contact.pfc_cleansing_cusormer_profile_code = contentModel.generalHeader.cleansingId;
-                        contact.pfc_polisy_client_id = contentModel.generalHeader.polisyClientId;
+                        contact.pfc_cleansing_cusormer_profile_code = contentModel?.generalHeader?.cleansingId;
+                        contact.pfc_polisy_client_id = contentModel?.generalHeader?.polisyClientId;
                         contact.pfc_crm_person_id = contentModel.generalHeader.crmClientId;
 
                         // profileInfo
-                        switch(contentModel.profileInfo.salutation)
+                        switch(contentModel?.profileInfo?.salutation)
                         {
                             case "0095": contact.Salutation = "นาย"; break;
                             case "0093": contact.Salutation = "นาง"; break;
@@ -84,11 +84,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                             case "0155": contact.Salutation = "พระ"; break;
                             default: contact.Salutation = "คุณ"; break;
                         }
-                        contact.FirstName = contentModel.profileInfo.personalName;
-                        contact.LastName = contentModel.profileInfo.personalSurname;
-                        Console.WriteLine(contentModel.profileInfo.sex.ToUpper());
-                        if (contentModel.profileInfo.sex == null) contentModel.profileInfo.sex = "U";
-                        switch (contentModel.profileInfo.sex.ToUpper())
+                        contact.FirstName = contentModel?.profileInfo?.personalName;
+                        contact.LastName = contentModel?.profileInfo?.personalSurname;
+                        Console.WriteLine(contentModel?.profileInfo?.sex?.ToUpper());
+                        if (contentModel?.profileInfo?.sex == null) contentModel.profileInfo.sex = "U";
+                        switch (contentModel?.profileInfo?.sex?.ToUpper())
                         {
                             case "M": contact.GenderCode = new OptionSetValue(1) ; break;
                             case "F": contact.GenderCode = new OptionSetValue(2) ; break;
@@ -111,7 +111,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                         contact.pfc_polisy_nationality_code = contentModel.profileInfo.nationality;
                         if (contentModel.profileInfo.language == null) contentModel.profileInfo.language = "";
-                        switch (contentModel.profileInfo.language.ToUpper())
+                        switch (contentModel?.profileInfo?.language?.ToUpper())
                         {
                             case "T": contact.pfc_language = new OptionSetValue(100000003) ; break;
                             case "E": contact.pfc_language = new OptionSetValue(100000001) ; break;
@@ -120,7 +120,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         }
 
                         if (contentModel.profileInfo.married == null) contentModel.profileInfo.married = "";
-                        switch (contentModel.profileInfo.married.ToUpper())
+                        switch (contentModel?.profileInfo?.married?.ToUpper())
                         {
                             case "S": contact.FamilyStatusCode = new OptionSetValue(1); break;
                             case "M": contact.FamilyStatusCode = new OptionSetValue(2); break;
@@ -131,13 +131,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                         //contact.pfc_occupation = new EntityReference(contact.pfc_occupation.LogicalName, contentModel.profileInfo.occupation);
 
-                        if (string.IsNullOrEmpty(contentModel.profileInfo.riskLevel))
+                        if (string.IsNullOrEmpty(contentModel?.profileInfo?.riskLevel))
                         {
                             // do nothing
                         }
                         else
                         {
-                            switch (contentModel.profileInfo.riskLevel.ToUpper())
+                            switch (contentModel?.profileInfo?.riskLevel?.ToUpper())
                             {
                                 case "A": contact.pfc_AMLO_flag = new OptionSetValue(100000001); break; // A
                                 case "B": contact.pfc_AMLO_flag = new OptionSetValue(100000002); break; // B
@@ -159,8 +159,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         
 
                         bool isVIP = false;
-                        if (contentModel.profileInfo.vipStatus == null) contentModel.profileInfo.vipStatus = "";
-                        if(contentModel.profileInfo.vipStatus.Equals("Y"))
+                        if (contentModel?.profileInfo?.vipStatus == null) contentModel.profileInfo.vipStatus = "";
+                        if(contentModel?.profileInfo?.vipStatus == "Y" )
                         {
                             isVIP = true;
                         }
@@ -198,8 +198,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     }
                     // Update Client Additional Records
 
-                    else if ( string.IsNullOrEmpty(contentModel.generalHeader.clientAdditionalExistFlag)
-                              && contentModel.generalHeader.clientAdditionalExistFlag.Equals("Y"))
+                    else if ( string.IsNullOrEmpty(contentModel?.generalHeader?.clientAdditionalExistFlag)
+                              && contentModel?.generalHeader?.clientAdditionalExistFlag =="Y")
                     {
                         // logic for update
                         /*

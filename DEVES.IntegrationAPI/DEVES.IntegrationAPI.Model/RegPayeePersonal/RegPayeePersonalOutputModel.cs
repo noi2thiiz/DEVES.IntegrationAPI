@@ -31,6 +31,7 @@ namespace DEVES.IntegrationAPI.Model.RegPayeePersonal
     {
         public string cleansingId { get; set; } = "";
         public string polisyClientId { get; set; } = "";
+        public string crmClientId { get; set; } = "";
         public string sapVendorCode { get; set; } = "";
         public string sapVendorGroupCode { get; set; } = "";
         public string personalName { get; set; } = "";

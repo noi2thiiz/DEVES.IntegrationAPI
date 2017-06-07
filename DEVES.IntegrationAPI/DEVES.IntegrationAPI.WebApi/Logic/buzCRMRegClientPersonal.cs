@@ -9,6 +9,7 @@ using DEVES.IntegrationAPI.WebApi.Logic.Services;
 using DEVES.IntegrationAPI.WebApi.Logic.Validator;
 using DEVES.IntegrationAPI.WebApi.Templates.Exceptions;
 using DEVES.IntegrationAPI.Core.Helper;
+using DEVES.IntegrationAPI.WebApi.Logic.DataBaseContracts;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
@@ -205,12 +206,16 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             {
                 if (!string.IsNullOrEmpty(cleansingId))
                 {
-                    crmClientId = CreateClientInCRM(RegClientPersonalInput, cleansingId, polisyClientId);
+                    if (false==SpApiChkCustomerClient.Instance.CheckByCleansingId(cleansingId))
+                    {
+                        crmClientId = CreateClientInCRM(RegClientPersonalInput, cleansingId, polisyClientId);
+                    }
+                   
                 }
             }
-            catch (Exception )
+            catch (Exception e)
             {
-                
+                AddDebugInfo("Cannot create Client in CRM :" + e.Message, e.StackTrace);
                 //@TODO so something
             }
            

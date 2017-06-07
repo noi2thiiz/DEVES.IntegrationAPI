@@ -39,6 +39,9 @@
     <Reference Include="CrmSvcUtil">
       <HintPath>..\..\..\DEVES.IntegrationAPI5\DEVES.IntegrationAPI\SDK\Bin\CrmSvcUtil.exe</HintPath>
     </Reference>
+    <Reference Include="dotMemory.Unit, Version=103.0.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <HintPath>..\packages\JetBrains.dotMemoryUnit.2.3.20160517.113140\lib\dotMemory.Unit.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Crm.Sdk.Proxy">
       <HintPath>..\..\..\DEVES.IntegrationAPI5\DEVES.IntegrationAPI\SDK\Bin\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
     </Reference>
@@ -82,14 +85,21 @@
     <Compile Include="DataAccessService\Mastes\InMemoryDataStorageBaseTests.cs" />
     <Compile Include="DataAccessService\Mastes\ProvinceMasterDataTests.cs" />
     <Compile Include="DataAccessService\Mastes\SubDistrictMasterDataTests.cs" />
+    <Compile Include="Logic\buzCreateCrmClientCorporateTests.cs" />
+    <Compile Include="Logic\buzCreateCrmClientPersonalTests.cs" />
     <Compile Include="Logic\buzCrmInquiryClientMasterTests.cs" />
     <Compile Include="Logic\buzCrmInquiryPersonalClientMasterTests.cs" />
     <Compile Include="Logic\buzCRMRegClientPersonalTests.cs" />
+    <Compile Include="Logic\buzCRMRegPayeeCorporateTests.cs" />
+    <Compile Include="Logic\buzCRMRegPayeePersonalTests.cs" />
     <Compile Include="Logic\BuzInquiryCrmClientMasterTests.cs" />
     <Compile Include="Logic\buzInquiryCRMPayeeListNewTests.cs" />
     <Compile Include="Logic\DataAccess\Adapter\DevesServiceProxyAdapterTests.cs" />
+    <Compile Include="Logic\DataBaseContracts\SpApiChkCustomerClientTests.cs" />
     <Compile Include="Logic\DataBaseContracts\SpApiCustomerClientTests.cs" />
     <Compile Include="Logic\Services\CleansingClientServiceTests.cs" />
+    <Compile Include="Logic\Services\CLIENTCreateCorporateClientAndAdditionalInfoTests.cs" />
+    <Compile Include="Logic\Services\CLSCreateCorporateClientTests.cs" />
     <Compile Include="Logic\Services\CLSInquiryCLSCorporateClientTests.cs" />
     <Compile Include="Logic\Services\CLSInquiryCLSPersonalClientTests.cs" />
     <Compile Include="Logic\Services\COMPInquiryClientMasterTests.cs" />
