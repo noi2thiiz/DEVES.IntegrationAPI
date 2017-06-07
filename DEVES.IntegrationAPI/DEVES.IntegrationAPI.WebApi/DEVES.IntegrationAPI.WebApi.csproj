@@ -638,7 +638,7 @@
     <Content Include="App_Data\JsonSchema\RegClientCorporate_Input_Schema.json" />
     <Content Include="App_Data\JsonSchema\RegPayeeCorporate_Input_Schema.json" />
     <Content Include="App_Data\JsonSchema\SendSMS_Input_Schema.json" />
-    <Content Include="App_Data\JsonSchema\JSON_SCHEMA_SubmitSurveyAssessmentResultInputModel.json" />
+    <Content Include="App_Data\JsonSchema\SubmitSurveyAssessmentResultInputModel.json" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile2.pubxml" />

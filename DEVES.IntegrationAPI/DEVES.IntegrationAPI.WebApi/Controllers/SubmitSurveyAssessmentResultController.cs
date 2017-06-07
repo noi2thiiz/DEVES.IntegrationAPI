@@ -18,13 +18,14 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
 
         public object Post([FromBody]object value)
         {
+            /*
             buzSubmitSurveyAssessmentResult buzCommand = new buzSubmitSurveyAssessmentResult();
             BaseDataModel output = buzCommand.Execute(value);
             SubmitSurveyAssessmentResultOutputModel_Pass outputData = (SubmitSurveyAssessmentResultOutputModel_Pass)output;
 
-            // return Request.CreateResponse<SubmitSurveyAssessmentResultOutputModel_Pass>(outputData);
-            return ProcessRequest<buzSubmitSurveyAssessmentResult, SubmitSurveyAssessmentResultInputModel>
-                (value, "SubmitSurveyAssessmentResult_Input_Schema.json");
+            return Request.CreateResponse<SubmitSurveyAssessmentResultOutputModel_Pass>(outputData);
+            */
+            return ProcessRequest<buzSubmitSurveyAssessmentResult, SubmitSurveyAssessmentResultInputModel> (value, "SubmitSurveyAssessmentResultInputModel.json");
         }
     }
 }

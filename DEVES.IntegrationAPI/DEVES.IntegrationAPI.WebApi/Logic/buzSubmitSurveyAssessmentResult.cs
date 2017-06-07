@@ -9,6 +9,7 @@ using Microsoft.Xrm.Tooling.Connector;
 using System.Configuration;
 using Microsoft.Xrm.Sdk.Client;
 using Microsoft.Xrm.Sdk;
+using Newtonsoft.Json;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
@@ -22,7 +23,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             output.data = new SubmitSurveyAssessmentResultDataModel_Pass();
 
             // Deserialize Input
-            SubmitSurveyAssessmentResultInputModel contentModel = DeserializeJson<SubmitSurveyAssessmentResultInputModel>(input.ToString());
+            // SubmitSurveyAssessmentResultInputModel contentModel = DeserializeJson<SubmitSurveyAssessmentResultInputModel>(input.ToString());
+            SubmitSurveyAssessmentResultInputModel contentModel = (SubmitSurveyAssessmentResultInputModel)input;
 
             // Connect SDK and query
             var connection = new CrmServiceClient(ConfigurationManager.ConnectionStrings["CRM_DEVES"].ConnectionString);
@@ -36,6 +38,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             // Condition check if ref_code don't have in CRM -> UPDATE
             if(query.FirstOrDefault<pfc_assessment>() == null)
             {
+                /*
                 pfc_assessment create = new pfc_assessment();
 
                 // assessment
@@ -53,7 +56,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
 
                 _serviceProxy.Create(create);
-
+                */
                 // WAITING FOR MAPPING DOCUMENT
                 output.code = AppConst.CODE_SUCCESS;
                 output.message = "รอ LOGIC จากพี่ไกด์";
