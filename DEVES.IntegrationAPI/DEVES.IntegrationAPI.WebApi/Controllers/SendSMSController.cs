@@ -9,12 +9,11 @@ using DEVES.IntegrationAPI.WebApi.Templates;
 
 namespace DEVES.IntegrationAPI.WebApi.Controllers
 {
-    [RoutePrefix("api/SMS")]
+   
     public class SendSMSController : BaseApiController
     {
 
         [HttpPost]
-        [Route("Send")]
         public object Post([FromBody]object value)
         {
 
@@ -34,6 +33,35 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
 
         }
 
-       
+    }
+
+    [RoutePrefix("api/SMS")]
+    public class SMSController : BaseApiController
+    {
+
+        [HttpPost]
+        [Route("Send")]
+        public object Post([FromBody]object value)
+        {
+
+
+            try
+            {
+                var result = ProcessRequest<buzSendSMS, SendSMSInputModel>
+                    (value, "SendSMS_Input_Schema.json");
+
+                return result;
+
+            }
+            catch (Exception e)
+            {
+                return InternalServerError(e);
+            }
+
+        }
+
+      
+
+
     }
 }

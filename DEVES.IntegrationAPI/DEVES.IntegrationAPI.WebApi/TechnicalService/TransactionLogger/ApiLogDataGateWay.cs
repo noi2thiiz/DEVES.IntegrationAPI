@@ -66,7 +66,7 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
         public static void ExecuteSql(ApiLogEntry apiLogEntry)
         {
 
-            var configurationString = "";
+            var configurationString = "CRM_CUSTOMAPP_DB_SERVER";
          
                 
             if (System.Environment.MachineName == "DESKTOP-Q30CAGJ")
@@ -177,14 +177,15 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
                     querySaveStaff.Parameters.Add("@ResponseTime", SqlDbType.NVarChar).Value = "" + apiLogEntry.ResponseTime;
                     querySaveStaff.Parameters.Add("@ResponseTimeTotalMilliseconds", SqlDbType.Float).Value =  apiLogEntry.ResponseTimeTotalMilliseconds;
 
-                    
+
+                    Console.WriteLine(" querySaveStaff.CommandText = " + querySaveStaff.CommandText);
 
 
-
-
+                   
                     openCon.Open();
                     var result = querySaveStaff.ExecuteReader();
                     Console.WriteLine("SAVE: transactionLog");
+                    
                 }
             }
         }
