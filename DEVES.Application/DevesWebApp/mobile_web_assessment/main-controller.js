@@ -124,4 +124,17 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q', 
     }
     $scope.startQuestion();
 
+    $scope.submitResult  = function(){
+        $("#question-header").hide();
+        $("#question-header").css("display","none");
+        $("#question-remark-form").css("display","none");
+        $("#question-mobile-form").hide();
+        $("#question-remark-form").hide();
+        $("#thank-page").css("display","block");
+
+        $("#footer-page").remove();
+
+
+        $("#thank-page").show();
+    }
 }]);

@@ -19,14 +19,33 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 return trgt;
             }
 
+           
+
             if (src.generalHeader != null)
             {
 
                 trgt.cleansingId = src.generalHeader.cleansingId ?? "";
-                trgt.assessorFlag = src.generalHeader.roleCode == "A" ? "Y" : "N";
-                trgt.solicitorFlag = src.generalHeader.roleCode == "S" ? "Y" : "N";
-                trgt.repairerFlag = src.generalHeader.roleCode == "R" ? "Y" : "N";
-                trgt.hospitalFlag = src.generalHeader.roleCode == "H" ? "Y" : "N";
+                trgt.assessorFlag = src.generalHeader.assessorFlag ?? "N";
+                trgt.solicitorFlag = src.generalHeader.solicitorFlag ?? "N";
+                trgt.repairerFlag = src.generalHeader.repairerFlag ?? "N";
+                trgt.hospitalFlag = src.generalHeader.hospitalFlag ?? "N";
+                switch (src?.generalHeader?.roleCode)
+                {
+                    case "A":
+                        trgt.assessorFlag = "Y";
+                        break;
+                    case "S":
+                        trgt.solicitorFlag = "Y";
+                        break;
+                    case "R":
+                        trgt.repairerFlag = "Y";
+                        break;
+                    case "H":
+                        trgt.hospitalFlag = "Y";
+                        break;
+                }
+
+               
 
             }
 

@@ -60,7 +60,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services.Tests
                 clientStatus = null,
                 postCode = "11110",
             
-                cleansingId = "C2019-"+RandomValueGenerator.RandomNumber(9),
+                cleansingId = "",
                 address5 = "จ.นนทบุรี",
                 address4 = "ต.บางบัวทอง อ.บางบัวทอง",
                 alientId = "",

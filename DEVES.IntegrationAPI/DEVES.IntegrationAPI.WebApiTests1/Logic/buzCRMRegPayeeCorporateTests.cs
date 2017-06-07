@@ -119,6 +119,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
                     postalCode = "10210"
                 }
             };
+            Console.WriteLine(inputClient.ToJson());
             var cmdClient = new buzCRMRegClientCorporate();
             var resultClient = cmdClient.Execute(inputClient);
             Console.WriteLine("==========RegClientCorporate. Result================");
