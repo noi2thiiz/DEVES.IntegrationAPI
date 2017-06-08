@@ -1,6 +1,6 @@
-html(lang='en',ng-app='crmApp')
+html(lang='en',data-ng-app='crmApp')
     head
-        meta(charset='utf-8')
+        meta(charset='UTF-8')
         meta(http-equiv='X-UA-Compatible', content='IE=edge')
         meta(name='viewport', content='width=device-width, initial-scale=1')
         // The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags
@@ -76,7 +76,7 @@ html(lang='en',ng-app='crmApp')
                         .row.rcorners2
                             .col-sm-12.text-left
                                 h5
-                                textarea(rows=10,style="width:100%",autofocus=true, ng-model="comment")
+                                textarea#textarea-comment(rows=10,style="width:100%",autofocus=true, ng-model="comment")
                                 .clearfix
                             .col-sm-12.text-center(style="margin-top:20px")
                                 a#btn-submitform.btn.btn-black.btn-lg(ng-click="submitQuestionResult()")
@@ -88,21 +88,25 @@ html(lang='en',ng-app='crmApp')
                         .row
                             .col-xs-8#thanks-page-body-left-panel.text-center
                                 .row
-                                    img#img-thanks-img(src="img/deves/thanks-img.png",style="width:90%")
-                                    #thanks-page-body-link
-                                        a#btn-thanks1(href="http://www.deves.co.th/service/GarageCheer.aspx")
-                                            img.deves-icon(src="img/deves/btn1_2.png",style="width:auto;height:150px")
+                                    .vertical-center
 
-                                        a#btn-thanks2(href="http://www.deves.co.th/service/Cgarage.aspx")
-                                            img.deves-icon(src="img/deves/btn2_2.png",style="width:auto;height:150px")
+                                        img#img-thanks-img(src="img/deves/thanks-img.png",style="width:95%")
+                                        div#deves-icon-container
+                                            a#btn-thanks1(href="http://www.deves.co.th/service/GarageCheer.aspx")
+                                                img.deves-icon(src="img/deves/btn1_2.png",style="width:auto;height:150px")
 
-                                        a#btn-thanks3(href="http://www.deves.co.th/Content/View/303")
-                                            img.deves-icon(src="img/deves/btn3_2.png",style="width:7auto;height:150px")
+                                            a#btn-thanks2(href="http://www.deves.co.th/service/Cgarage.aspx")
+                                                img.deves-icon(src="img/deves/btn2_2.png",style="width:auto;height:150px")
+
+                                            a#btn-thanks3(href="http://www.deves.co.th/Content/View/303")
+                                                img.deves-icon(src="img/deves/btn3_2.png",style="width:7auto;height:150px")
+
 
 
                             .col-xs-4#thanks-page-body-right-panel
 
                                 img#img-deves-logo(src="img/deves/deves_logo.png",style="height:70px")
+
                                 img#img-deves-line(src="img/deves/deves_line.png",style="height:200px")
                                 img#img-deves-socail(src="img/deves/social.png",style="height:100px")
                                 //

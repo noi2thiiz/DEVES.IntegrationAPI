@@ -1,5 +1,12 @@
 
-
+body,.container{
+    min-height: 200px !important;
+    min-width: 300px !important;
+    width: auto !important;
+}
+#thanks-page-body{
+    min-height: 200px !important;
+}
 .circleBase {
     border-radius: 50%;
     margin-left: 5px;
@@ -96,21 +103,7 @@
     height:  calc(100% - 150px);
 }
 */
-#btn-thanks1{
 
-    width: 100px;
-    height: 100px;
-}
-#btn-thanks2{
-
-    width: 100px;
-    height: 100px;
-}
-#btn-thanks3{
-
-    width: 100px;
-    height: 100px;
-}
 
 footer.footer{
    background: white;
@@ -156,6 +149,9 @@ footer.footer .text-muted{
     float: right;
 }
 
+#thanks-page-body{
+    background: url("../../img/deves/left_panel_bg.png");
+}
 #thanks-page-body-left-panel{
     background: url("../../img/deves/left_panel_bg.png");
     height: 100%;
@@ -166,13 +162,12 @@ footer.footer .text-muted{
     text-align: center;
 
 }
-#thanks-page-body-right-panel img.deves-icon{
+img.deves-icon{
     vertical-align: middle;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 50%;
     width: auto;
-    height:200px;
+
 }
 #thanks-page-body,#thanks-page-body-left-panel,#thanks-page-body-right-panel{
     height:  100%;
@@ -190,295 +185,28 @@ a img:hover{
 
     position: absolute;
     right: 20px;
-    bottom: 1px;
+    width: 90%;
+    bottom: 20px;
 }
 #img-deves-line{
-    margin-top: 50%;
+    margin-top: 50px;
+    height: 150px
 }
 
 #thanks-page-body-link{
-    position: absolute;
+   /* position: absolute;*/
+    background-color: #e85741;
 
-    bottom: 1px;
+    /*bottom: 20px;*/
 }
+
 #img-thanks-img{
     margin-right: auto;
     margin-left: auto;
-}
-@media screen and (max-width: 900px) {
-
-    .screenInfo{
-        background-color: #2e6da4;
-    }
-    #thanks-page-body,#thanks-page-body-left-panel,#thanks-page-body-right-panel{
-        height:  100%;
-    }
-    #img-deves-logo{
-        height: 20px;
-    }
-
-    #img-deves-logo{
-        height: 50px !important;
-    }
-    #img-deves-line{
-        margin-top: 150px!important;
-        height: 150px !important;
-    }
-    #img-deves-socail{
-
-        height: 60px !important;
-        width: auto!important;
-    }
-
-    .deves-icon{
-        vertical-align: middle;
-        margin-left: auto;
-        margin-right: auto;
-        margin-top: 100px;
-        width: auto;
-        height:100px !important;
-    }
-
-
-}
-@media screen and (max-width: 700px) {
-
-    .screenInfo{
-        background-color: lavenderblush;
-    }
-    #thanks-page-body,#thanks-page-body-left-panel,#thanks-page-body-right-panel{
-        height:  100%;
-    }
-    #img-deves-logo{
-        height: 20px;
-    }
-
-    #img-deves-logo{
-        height: 50px !important;
-    }
-    #img-deves-line{
-        margin-top: 150px!important;
-        height: 150px !important;
-    }
-    #img-deves-socail{
-
-        height: 60px !important;
-        width: auto!important;
-    }
-
-    .deves-icon{
-        vertical-align: middle;
-        margin-left: auto;
-        margin-right: auto;
-        margin-top: 100px;
-        width: auto;
-        height:100px !important;
-    }
-
-
-}
-@media screen and (max-width: 600px) {
-
-    .screenInfo{
-        color: #e8cc48;
-    }
-    #thanks-page-body,#thanks-page-body-left-panel,#thanks-page-body-right-panel{
-        height:  90%;
-    }
-    #img-deves-logo{
-        height: 20px;
-    }
-
-    #img-deves-logo{
-        height: 50px !important;
-    }
-    #img-deves-line{
-        margin-top: 150px!important;
-        height: 150px !important;
-    }
-    #img-deves-socail{
-
-        height: 60px !important;
-        width: auto!important;
-    }
-
-    .deves-icon{
-        vertical-align: middle;
-        margin-left: auto;
-        margin-right: auto;
-        margin-top: 100px;
-        width: auto;
-        height:100px !important;
-    }
-
+    vertical-align: middle;
 
 }
 
-
-@media screen and (max-width: 480px) {
-
-    .screenInfo{
-        color: #4cae4c;
-    }
-    #thanks-page-body,#thanks-page-body-left-panel,#thanks-page-body-right-panel{
-        height:  70%;
-    }
-    #img-deves-logo{
-        height: 50px !important;
-    }
-    #img-deves-line{
-        margin-top: 100px!important;
-        height: 90px !important;
-    }
-    #img-deves-socail{
-
-        height: 30px !important;
-        width: auto!important;
-    }
-
-    img.deves-icon{
-        vertical-align: middle;
-        margin-left: auto;
-        margin-right: auto;
-        margin-top: 100px;
-        width: auto;
-        height:60px !important;
-    }
-
-
-}
-
-
-@media screen and (width: 360px) {
-     body{
-         min-height: 600px !important;
-     }
-    .screenInfo{
-        color: #8a6d3b;
-
-    }
-    #thanks-page-body,#thanks-page-body-left-panel,#thanks-page-body-right-panel{
-        height:  300px;
-    }
-    #img-deves-logo{
-        height: 50px !important;
-    }
-    #img-deves-line{
-        margin-top: 100px!important;
-        height: 90px !important;
-    }
-    #img-deves-socail{
-
-        height: 30px !important;
-        width: auto!important;
-    }
-
-    img.deves-icon{
-        vertical-align: middle;
-        margin-left: auto;
-        margin-right: auto;
-        margin-top: 100px;
-        width: auto;
-        height:60px !important;
-    }
-
-
-}
-
-@media screen and (max-width: 320px) {
-
-    .screenInfo{
-        color: #2aabd2;
-    }
-    #thanks-page-body,#thanks-page-body-left-panel,#thanks-page-body-right-panel{
-        height:  80%;
-    }
-    #img-deves-logo{
-        height: 50px !important;
-    }
-    #img-deves-line{
-        margin-top: 100px!important;
-        height: 90px !important;
-    }
-    #img-deves-socail{
-
-        height: 30px !important;
-        width: auto!important;
-    }
-
-    img.deves-icon{
-        vertical-align: middle;
-        margin-left: auto;
-        margin-right: auto;
-        margin-top: 100px;
-        width: auto;
-        height:60px !important;
-    }
-
-
-}
-@media screen and (min-width: 900px) {
-    .screenInfo{
-        color: #e84f2d;
-    }
-    #thanks-page-body,#thanks-page-body-left-panel,#thanks-page-body-right-panel{
-        height:  80%;
-    }
-    #img-deves-logo{
-        height: 50px !important;
-    }
-    #img-deves-line{
-        margin-top: 250px!important;
-        height: 200px !important;
-    }
-    #img-deves-socail{
-
-        height: 100px !important;
-        width: auto!important;
-    }
-
-    #img-thanks-img{
-        height: 70% !important;
-        width: auto !important;;
-    }
-}
-
-@media screen and (min-height: 700px) {
-
-    .screenInfo{
-        color: black;
-    }
-    #thanks-page-body,#thanks-page-body-left-panel,#thanks-page-body-right-panel{
-        height:  90%;
-    }
-    #img-deves-logo{
-        height: 20px;
-    }
-
-    #img-deves-logo{
-        height: 50px !important;
-    }
-    #img-deves-line{
-        margin-top: 150px!important;
-        height: 150px !important;
-    }
-    #img-deves-socail{
-
-        height: 60px !important;
-        width: auto!important;
-    }
-
-    .deves-icon{
-        vertical-align: middle;
-        margin-left: auto;
-        margin-right: auto;
-        margin-top: 100px;
-        width: auto;
-        height:100px !important;
-    }
-
-
-}
 .screenInfo{
     position: absolute;
     top:0;
@@ -487,3 +215,4 @@ a img:hover{
     width: 100px;
     font-size: small;
 }
+
