@@ -1,0 +1,489 @@
+
+
+.circleBase {
+    border-radius: 50%;
+    margin-left: 5px;
+    margin-right: auto;
+    float: left;
+    margin-top: 0px;
+    padding-top: 0px;
+
+
+
+}
+
+.type1 {
+    width: 30px;
+    height: 30px;
+    background-image: url("../../img/icon/ok-button-md.png");
+    background-size: 29px 29px;
+    border: 1px solid #000;
+}
+.type2 {
+    width: 30px;
+    height: 30px;
+    background-color: rgba(229,229,227,0.74);
+    border: 1px solid rgba(229,229,227,0.9);
+
+}
+.type3 {
+    width: 500px;
+    height: 500px;
+    background: aqua;
+    border: 30px solid blue;
+}
+
+.rcorners0 {
+    /*
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    background-image: url("../../img/deves/bg_y2.png");
+    */
+    padding: 0px;
+    width: 100%;
+    height: 100px;
+    color: black;
+    font-weight: 100;
+}
+
+.header-container{
+    /*
+    background-image: url("../../img/deves/bg_assess.png") ;
+    background-repeat: no-repeat;
+    background-size: 70px 70px;
+    background-position: right top;
+    background-position-x: 95%;
+    */
+    margin-top: 3px;
+    margin-right: 3px;
+}
+.rcorners2{/*
+    background-color: #E1E1E1;
+    border: 1px solid rgba(229,229,227,0.9);
+    */
+    height:  calc(100% - 200px);
+    vertical-align: middle;
+
+}
+.rcorners1{
+
+    color: rgb(56,23,107);
+   text-align: center;
+    height: 100px;
+    margin-top: 20px;
+    font-weight: 300;
+}
+.row {
+     margin-right: 0px;
+     margin-left: 0px;
+}
+.page-header{
+    margin-bottom: 2px;
+}
+#btn-submitform{
+    background: rgba(36,67,97,0.94);
+}
+/*
+#thanks-page{
+    background: url("../../img/deves/thanks-bg.png") repeat-y;
+    height:  calc(100% - 150px);
+}
+
+#thanks-page-body{
+    background: url("../../img/deves/ThanksPage_02.jpg") no-repeat ;
+    background-size:cover;
+    width: 100%;
+    height:  calc(100% - 150px);
+}
+*/
+#btn-thanks1{
+
+    width: 100px;
+    height: 100px;
+}
+#btn-thanks2{
+
+    width: 100px;
+    height: 100px;
+}
+#btn-thanks3{
+
+    width: 100px;
+    height: 100px;
+}
+
+footer.footer{
+   background: white;
+    color: white;
+}
+footer.footer .text-muted{
+    color: white !important;
+}
+
+#footer-deves-logo {
+    height: auto;
+    max-width: 100%;
+    width: 150px;
+    vertical-align: middle;
+}
+
+#footer-deves-line-qr{
+    height: auto;
+    width: 60px;
+    vertical-align: middle;
+}
+.container{
+    padding-left: 0px;
+    padding-right: 0px;
+    height: 100%;
+}
+.btn-black{
+    background-color: black;
+    color: white;
+    font-weight: 200;
+    margin-right: auto;
+    margin-left: auto;
+}
+.page-header {
+    padding-bottom: 9px;
+    margin: 5px 0 5px;
+    border-bottom: 1px solid #eee;
+}
+#thanks-page-body-link{
+    float: left;
+}
+#thanks-page-body-social{
+    float: right;
+}
+
+#thanks-page-body-left-panel{
+    background: url("../../img/deves/left_panel_bg.png");
+    height: 100%;
+}
+#thanks-page-body-right-panel{
+    background: url("../../img/deves/right_panel_bg.png");
+    height: 100%;
+    text-align: center;
+
+}
+#thanks-page-body-right-panel img.deves-icon{
+    vertical-align: middle;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 50%;
+    width: auto;
+    height:200px;
+}
+#thanks-page-body,#thanks-page-body-left-panel,#thanks-page-body-right-panel{
+    height:  100%;
+}
+a img:hover{
+    border-radius: 5px;
+    border: 1px solid rgba(200,229,227,0.9);
+}
+#img-deves-logo{
+    position: absolute;
+    top: 0px;
+    right: 5px;
+}
+#img-deves-socail{
+
+    position: absolute;
+    right: 20px;
+    bottom: 1px;
+}
+#img-deves-line{
+    margin-top: 50%;
+}
+
+#thanks-page-body-link{
+    position: absolute;
+
+    bottom: 1px;
+}
+#img-thanks-img{
+    margin-right: auto;
+    margin-left: auto;
+}
+@media screen and (max-width: 900px) {
+
+    .screenInfo{
+        background-color: #2e6da4;
+    }
+    #thanks-page-body,#thanks-page-body-left-panel,#thanks-page-body-right-panel{
+        height:  100%;
+    }
+    #img-deves-logo{
+        height: 20px;
+    }
+
+    #img-deves-logo{
+        height: 50px !important;
+    }
+    #img-deves-line{
+        margin-top: 150px!important;
+        height: 150px !important;
+    }
+    #img-deves-socail{
+
+        height: 60px !important;
+        width: auto!important;
+    }
+
+    .deves-icon{
+        vertical-align: middle;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 100px;
+        width: auto;
+        height:100px !important;
+    }
+
+
+}
+@media screen and (max-width: 700px) {
+
+    .screenInfo{
+        background-color: lavenderblush;
+    }
+    #thanks-page-body,#thanks-page-body-left-panel,#thanks-page-body-right-panel{
+        height:  100%;
+    }
+    #img-deves-logo{
+        height: 20px;
+    }
+
+    #img-deves-logo{
+        height: 50px !important;
+    }
+    #img-deves-line{
+        margin-top: 150px!important;
+        height: 150px !important;
+    }
+    #img-deves-socail{
+
+        height: 60px !important;
+        width: auto!important;
+    }
+
+    .deves-icon{
+        vertical-align: middle;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 100px;
+        width: auto;
+        height:100px !important;
+    }
+
+
+}
+@media screen and (max-width: 600px) {
+
+    .screenInfo{
+        color: #e8cc48;
+    }
+    #thanks-page-body,#thanks-page-body-left-panel,#thanks-page-body-right-panel{
+        height:  90%;
+    }
+    #img-deves-logo{
+        height: 20px;
+    }
+
+    #img-deves-logo{
+        height: 50px !important;
+    }
+    #img-deves-line{
+        margin-top: 150px!important;
+        height: 150px !important;
+    }
+    #img-deves-socail{
+
+        height: 60px !important;
+        width: auto!important;
+    }
+
+    .deves-icon{
+        vertical-align: middle;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 100px;
+        width: auto;
+        height:100px !important;
+    }
+
+
+}
+
+
+@media screen and (max-width: 480px) {
+
+    .screenInfo{
+        color: #4cae4c;
+    }
+    #thanks-page-body,#thanks-page-body-left-panel,#thanks-page-body-right-panel{
+        height:  70%;
+    }
+    #img-deves-logo{
+        height: 50px !important;
+    }
+    #img-deves-line{
+        margin-top: 100px!important;
+        height: 90px !important;
+    }
+    #img-deves-socail{
+
+        height: 30px !important;
+        width: auto!important;
+    }
+
+    img.deves-icon{
+        vertical-align: middle;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 100px;
+        width: auto;
+        height:60px !important;
+    }
+
+
+}
+
+
+@media screen and (width: 360px) {
+     body{
+         min-height: 600px !important;
+     }
+    .screenInfo{
+        color: #8a6d3b;
+
+    }
+    #thanks-page-body,#thanks-page-body-left-panel,#thanks-page-body-right-panel{
+        height:  300px;
+    }
+    #img-deves-logo{
+        height: 50px !important;
+    }
+    #img-deves-line{
+        margin-top: 100px!important;
+        height: 90px !important;
+    }
+    #img-deves-socail{
+
+        height: 30px !important;
+        width: auto!important;
+    }
+
+    img.deves-icon{
+        vertical-align: middle;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 100px;
+        width: auto;
+        height:60px !important;
+    }
+
+
+}
+
+@media screen and (max-width: 320px) {
+
+    .screenInfo{
+        color: #2aabd2;
+    }
+    #thanks-page-body,#thanks-page-body-left-panel,#thanks-page-body-right-panel{
+        height:  80%;
+    }
+    #img-deves-logo{
+        height: 50px !important;
+    }
+    #img-deves-line{
+        margin-top: 100px!important;
+        height: 90px !important;
+    }
+    #img-deves-socail{
+
+        height: 30px !important;
+        width: auto!important;
+    }
+
+    img.deves-icon{
+        vertical-align: middle;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 100px;
+        width: auto;
+        height:60px !important;
+    }
+
+
+}
+@media screen and (min-width: 900px) {
+    .screenInfo{
+        color: #e84f2d;
+    }
+    #thanks-page-body,#thanks-page-body-left-panel,#thanks-page-body-right-panel{
+        height:  80%;
+    }
+    #img-deves-logo{
+        height: 50px !important;
+    }
+    #img-deves-line{
+        margin-top: 250px!important;
+        height: 200px !important;
+    }
+    #img-deves-socail{
+
+        height: 100px !important;
+        width: auto!important;
+    }
+
+    #img-thanks-img{
+        height: 70% !important;
+        width: auto !important;;
+    }
+}
+
+@media screen and (min-height: 700px) {
+
+    .screenInfo{
+        color: black;
+    }
+    #thanks-page-body,#thanks-page-body-left-panel,#thanks-page-body-right-panel{
+        height:  90%;
+    }
+    #img-deves-logo{
+        height: 20px;
+    }
+
+    #img-deves-logo{
+        height: 50px !important;
+    }
+    #img-deves-line{
+        margin-top: 150px!important;
+        height: 150px !important;
+    }
+    #img-deves-socail{
+
+        height: 60px !important;
+        width: auto!important;
+    }
+
+    .deves-icon{
+        vertical-align: middle;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 100px;
+        width: auto;
+        height:100px !important;
+    }
+
+
+}
+.screenInfo{
+    position: absolute;
+    top:0;
+    right: 0;
+    height: 10px;
+    width: 100px;
+    font-size: small;
+}

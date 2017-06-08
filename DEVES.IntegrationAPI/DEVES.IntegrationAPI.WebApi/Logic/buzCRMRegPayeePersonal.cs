@@ -366,8 +366,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 }
                 else
                 {
+                    //return success with existing SAP Vendor
                     AddDebugInfo(" found existing SAP Vendor ", sapInfo);
-                //regPayeePersonalInput.sapVendorInfo.sapVendorCode = SAPInqVendorContentOut.VCODE;
+                   //regPayeePersonalInput.sapVendorInfo.sapVendorCode = SAPInqVendorContentOut.VCODE;
                     outputPass.sapVendorCode = sapInfo?.VCODE;
                     outputPass.sapVendorGroupCode = sapInfo?.VGROUP;
                     newSapVendorCode = sapInfo?.VCODE;

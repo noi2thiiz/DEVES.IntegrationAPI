@@ -174,12 +174,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             else
             {
+                
                 #region IF inqCrmPayeeListIn.roleCode == {A,S,R,H} -> Master.InquiryMasterASRH
                 // Search in MASTER: MOTOR_InquiryMasterASRH()
                 InquiryMasterASRHDataInputModel inqASRHIn = (InquiryMasterASRHDataInputModel)DataModelFactory.GetModel(typeof(InquiryMasterASRHDataInputModel));
                 inqASRHIn = (InquiryMasterASRHDataInputModel)TransformerFactory.TransformModel(contentModel, inqASRHIn);
                 InquiryMasterASRHContentModel inqASRHOut = CallDevesServiceProxy<InquiryMasterASRHOutputModel, InquiryMasterASRHContentModel>(CommonConstant.ewiEndpointKeyMOTORInquiryMasterASRH, inqASRHIn);
-
+                AddDebugInfo("InquiryMasterASRH);", inqASRHIn);
                 clientType = "C";
                 roleCode = inqASRHIn.asrhType;
 
@@ -187,12 +188,22 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 {
                     if (inqASRHOut.ASRHListCollection.Count > 0)
                     {
-                        crmInqContent = (CRMInquiryClientContentOutputModel)TransformerFactory.TransformModel(inqASRHOut, crmInqContent);
+                        crmInqContent =
+                            (CRMInquiryClientContentOutputModel) TransformerFactory.TransformModel(inqASRHOut,
+                                crmInqContent);
                         bFoundIn_APAR_or_Master = true;
-
+                        AddDebugInfo(" found in InquiryMasterASRH);");
+                    }
+                    else
+                    {
+                        AddDebugInfo("not found in InquiryMasterASRH);");
                     }
 
 
+                }
+                else
+                {
+                    AddDebugInfo("not found in InquiryMasterASRH);");
                 }
                 #endregion inqCrmPayeeListIn.roleCode == {A,S,R,H} -> Master.InquiryMasterASRH
             }
@@ -223,10 +234,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             }
             else
             {
+                
                 #region Call COMP_Inquiry through ServiceProxy
                 COMPInquiryClientMasterInputModel compInqClientInput = new COMPInquiryClientMasterInputModel();
                 compInqClientInput = (COMPInquiryClientMasterInputModel)TransformerFactory.TransformModel(contentModel, compInqClientInput);
-
+                AddDebugInfo("Call COMP_Inquiry);", compInqClientInput);
                 //+ Call CLS_InquiryCLSPersonalClient through ServiceProxy
                 EWIResCOMPInquiryClientMasterContentModel retCOMPInqClient = CallDevesServiceProxy<COMPInquiryClientMasterOutputModel, EWIResCOMPInquiryClientMasterContentModel>
                                                                                         (CommonConstant.ewiEndpointKeyCOMPInquiryClient, compInqClientInput);
@@ -234,7 +246,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 //Found in Polisy400
                 if (retCOMPInqClient.clientListCollection != null)
                 {
-                    crmInqContent = (CRMInquiryClientContentOutputModel)TransformerFactory.TransformModel(retCOMPInqClient, crmInqContent);
+                    crmInqContent =
+                        (CRMInquiryClientContentOutputModel) TransformerFactory.TransformModel(retCOMPInqClient,
+                            crmInqContent);
+                }
+                else
+                {
+                    AddDebugInfo("not found COMP_Inquiry);");
                 }
 
 
