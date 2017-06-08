@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace DEVES.IntegrationAPI.Model.UpdateCompliantStatus
 {
-    public class UpdateCompliantStatusOutputModel_Fail { 
-        public int code { get; set; }
+    public class UpdateCompliantStatusOutputModel_Fail : BaseDataModel
+    {  
+        public string code { get; set; }
         public string message { get; set; }
         public string description { get; set; }
         public string transactionId { get; set; }
@@ -16,12 +17,12 @@ namespace DEVES.IntegrationAPI.Model.UpdateCompliantStatus
     }
 
 
-    public class UpdateCompliantStatusDataOutputModel_Fail
+    public class UpdateCompliantStatusDataOutputModel_Fail : BaseDataModel
     {
         public UpdateCompliantStatusFieldErrorOutputModel_Fail fieldError { get; set; }
     }
 
-    public class UpdateCompliantStatusFieldErrorOutputModel_Fail
+    public class UpdateCompliantStatusFieldErrorOutputModel_Fail : BaseDataModel
     {
         public string name { get; set; }
         public string message { get; set; }

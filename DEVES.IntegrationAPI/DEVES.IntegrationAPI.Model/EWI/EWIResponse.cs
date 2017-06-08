@@ -91,6 +91,10 @@ namespace DEVES.IntegrationAPI.Model.EWI
         public string ticketNumber { get; set; }
 
         public string EventID { get; set; }
+
+        public string comp_id { get; set; }
+        public string case_no { get; set; }
+        public string errorMessage { get; set; }
     }
 
     public class EWIResponse_ReqSur

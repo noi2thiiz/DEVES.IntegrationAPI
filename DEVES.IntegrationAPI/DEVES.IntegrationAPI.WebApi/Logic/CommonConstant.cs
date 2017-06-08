@@ -31,8 +31,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         public const string EWI_ENDPOINT_CLSDeleteCLSPersonalClient = "EWI_ENDPOINT_CLSDeleteCLSPersonalClient";
         public const string EWI_ENDPOINT_CLSDeleteCLSCorporateClient = "EWI_ENDPOINT_CLSDeleteCLSCorporateClient";
 
-        
+        public const string EWI_ENDPOINT_RequestRegComplaint = "EWI_ENDPOINT_RequestRegComplaint";
+
+
         public const string sqlcmd_Get_RegClaimInfo = "sp_CustomApp_RegClaimInfo_Incident";
+        public const string sqlcmd_Get_RegComplaintInfo = "sp_CustomApp_RegComplaintInfo_Incident";
 
 
         public const string CONST_SYSTEM_POLISY400 = "POLISY400";

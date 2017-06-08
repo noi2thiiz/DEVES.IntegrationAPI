@@ -427,6 +427,7 @@
     <Compile Include="Controllers\RegClaimRequestFromRVPController.cs" />
     <Compile Include="Controllers\RegClientCorporateController.cs" />
     <Compile Include="Controllers\RegClientPersonalController.cs" />
+    <Compile Include="Controllers\RegComplaintController.cs" />
     <Compile Include="Controllers\RegPayeeCorporateController.cs" />
     <Compile Include="Controllers\RegPayeePersonalController.cs" />
     <Compile Include="Controllers\RequestCleansingIdController.cs" />
@@ -480,9 +481,11 @@
     <Compile Include="Logic\buzInquiryCRMPayeeList.cs" />
     <Compile Include="Logic\buzInquiryCRMPayeeListNew.cs" />
     <Compile Include="Logic\buzInquryCRMClientMaster.cs" />
+    <Compile Include="Logic\buzRegComplaint.cs" />
     <Compile Include="Logic\buzReqClsId.cs" />
     <Compile Include="Logic\buzSendSMS.cs" />
     <Compile Include="Logic\buzSubmitSurveyAssessmentResult.cs" />
+    <Compile Include="Logic\buzUpdateCompliantStatus.cs" />
     <Compile Include="Logic\CommonConstant.cs" />
     <Compile Include="Logic\Converter\MasterDataConvertor.cs" />
     <Compile Include="Logic\Converter\OptionSetConvertor.cs" />
@@ -617,7 +620,7 @@
     <Content Include="App_Data\JsonSchema\ClaimRegistration_Input_Schema.json" />
     <Content Include="App_Data\JsonSchema\UpdateSurveyStatus_Input_Schema.json" />
     <Content Include="App_Data\JsonSchema\AccidentPrilimSurveyorReport_Input_Schema.json" />
-    <Content Include="App_Data\JsonSchema\UpdateCompliantStatus_Input_Schema.json" />
+    <Content Include="App_Data\JsonSchema\UpdateCompliantStatusInputModel.json" />
     <Content Include="App_Data\JsonSchema\LOCUS_Integration_Input_Schema.json" />
     <Content Include="App_Data\JsonSchema\RequestSurveyor_Input_Schema.json" />
     <Content Include="App_Data\JsonSchema\AssignedSurveyorInfo_Input_Schema.json" />
@@ -639,6 +642,7 @@
     <Content Include="App_Data\JsonSchema\RegPayeeCorporate_Input_Schema.json" />
     <Content Include="App_Data\JsonSchema\SendSMS_Input_Schema.json" />
     <Content Include="App_Data\JsonSchema\SubmitSurveyAssessmentResultInputModel.json" />
+    <Content Include="App_Data\JsonSchema\RegComplaintInputModel.json" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile2.pubxml" />
