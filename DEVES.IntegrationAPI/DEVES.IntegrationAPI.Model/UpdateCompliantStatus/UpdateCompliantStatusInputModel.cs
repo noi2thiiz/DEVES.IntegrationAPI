@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DEVES.IntegrationAPI.Model.UpdateCompliantStatus
 {
-    public class UpdateCompliantStatusInputModel
+    public class UpdateCompliantStatusInputModel : BaseDataModel
     {
         public string caseNo { get; set; }
         public int tempID { get; set; }

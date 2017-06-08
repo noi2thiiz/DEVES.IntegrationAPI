@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace DEVES.IntegrationAPI.Model.UpdateCompliantStatus
 {
-    public class UpdateCompliantStatusOutputModel_Pass
+    public class UpdateCompliantStatusOutputModel_Pass : BaseDataModel
     {
-        public int code { get; set; }
+        public string code { get; set; }
         public string message { get; set; }
         public string description { get; set; }
         public string transactionId { get; set; }
@@ -16,7 +16,7 @@ namespace DEVES.IntegrationAPI.Model.UpdateCompliantStatus
         public UpdateCompliantStatusDataOutputModel_Pass data { get; set; }
     }
 
-    public class UpdateCompliantStatusDataOutputModel_Pass
+    public class UpdateCompliantStatusDataOutputModel_Pass : BaseDataModel
     {
         public string message { get; set; }
     }

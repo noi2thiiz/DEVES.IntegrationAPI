@@ -1,7 +1,11 @@
 ﻿{
 	"$schema": "http://json-schema.org/draft-04/schema#",
 	"type": "object",
-	"properties": {
+  "properties": {
+    "assessmentType": {
+      "type": "integer",
+      "minLength": 1
+    },
     "assessmentrefcode": {
       "type": "string",
       "minLength": 1,
@@ -20,17 +24,38 @@
     "assessmentSurveySpeedScore": {
       "type": "integer"
     },
+    "assessmentSurveyTimeUsageScore": {
+      "type": "integer"
+    },
     "assessmentSurveyComment": {
       "type": "string",
-      "maxLength": 2000
+      "maxLength": 4000
     },
     "assessmentSurveyByUserid": {
       "type": "string",
       "maxLength": 50
+    },
+    "assessmentGarageServiceScore": {
+      "type": "integer"
+    },
+    "assessmentGarageCommitScore": {
+      "type": "integer"
+    },
+    "assessmentGarageRepairScore": {
+      "type": "integer"
+    },
+    "assessmentGarageComment": {
+      "type": "string",
+      "maxLength": 4000
+    },
+    "assessmentGarageByUserid": {
+      "type": "string",
+      "maxLength": 50
     }
 
-	},
-	"required": [
+  },
+  "required": [
+    "assessmentType",
     "assessmentrefcode"
-	]
+  ]
 }

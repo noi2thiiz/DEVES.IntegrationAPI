@@ -138,6 +138,8 @@
     <Compile Include="RegClientPersonal\CRMRegClientPersonalOutputModel.cs" />
     <Compile Include="RegClientPersonal\RegClientPersonalInputModel.cs" />
     <Compile Include="RegClientPersonal\RegClientPersonalOutputModel.cs" />
+    <Compile Include="RegComplaint\RegComplaintInputModel.cs" />
+    <Compile Include="RegComplaint\ReqComplaintOutputModel.cs" />
     <Compile Include="RegPayeeCorporate\RegPayeeCorporateInputModel.cs" />
     <Compile Include="RegPayeeCorporate\RegPayeeCorporateOutputModel.cs" />
     <Compile Include="RegPayeePersonal\RegPayeePersonalInputModel.cs" />
