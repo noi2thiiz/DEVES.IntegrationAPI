@@ -24,7 +24,7 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q', 
             title:" ข้อ 1/3",
             group:1,
             subQuestions: [
-                {id:1, group:2,title: "1) กริยามารยาทและการให้คำแนะนำคำปรึกษาของเจ้าหน้าที่รับแจ้งอุบัติเหตุทางโทรศัพท์",value:0}
+                {id:1, group:2,title: "1) การบริการของเจ้าหน้าที่รับแจ้งอุบัติเหตุ มีความพึงพอใจระดับใด",value:0}
 
            ]
         },
@@ -32,7 +32,7 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q', 
             title:" ข้อ 2/3",
             group:2,
             subQuestions: [
-                {id:1, group:2,title: "2) กริยามารยาทและการให้คำแนะนำคำปรึกษาของเจ้าหน้าที่สำรวจภัย",value:0}
+                {id:1, group:2,title: "2)  การเดินทางถึงที่เกิดเหตุของเจ้าหน้าที่สำรวจภัย มีความพึงพอใจระดับใด",value:0}
 
             ]
         },
@@ -40,7 +40,7 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q', 
             title:"ข้อ 3/3",
             group:3,
             subQuestions: [
-                {id:1,group:3,title: "3) ระยะเวลาที่เจ้าหน้าที่สำรวจภัยเดินทางถึงที่เกิดเหตุ" ,value:0}
+                {id:1,group:3,title: "3) การบริการและความรวดเร็วในการช่วยเหลือท่านของเจ้าหน้าที่สำรวจภัย มีความพึงพอใจระดับใด" ,value:0}
             ]
         },
 
@@ -124,4 +124,17 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q', 
     }
     $scope.startQuestion();
 
+    $scope.submitResult  = function(){
+        $("#question-header").hide();
+        $("#question-header").css("display","none");
+        $("#question-remark-form").css("display","none");
+        $("#question-mobile-form").hide();
+        $("#question-remark-form").hide();
+        $("#thank-page").css("display","block");
+
+        $("#footer-page").remove();
+
+
+        $("#thank-page").show();
+    }
 }]);

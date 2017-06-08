@@ -12,12 +12,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services.Tests
     [TestClass()]
     public class CLSInquiryCLSPersonalClientTests
     {
-      
+
 
         [TestMethod()]
         public void Execute_CLSInquiryCLSPersonalClientTest()
         {
-           
+
             var service = new CLSInquiryCLSPersonalClient();
             var result = service.Execute(new CLSInquiryPersonalClientInputModel
             {
@@ -26,6 +26,23 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services.Tests
             Console.WriteLine("==================result================");
             Console.WriteLine(result.ToJson());
             Assert.AreEqual(true, result.data.Any());
+        }
+
+        [TestMethod()]
+        //ทดสอบ salutl ต้องเป็นระบบ MaterCode
+        public void Execute_CLSInquiryCLSPersonalClient_salutl_Should_InFormat_400Code_Test()
+        {
+            var service = new CLSInquiryCLSPersonalClient();
+            var result = service.Execute(new CLSInquiryPersonalClientInputModel
+            {
+                 clientId = "16962833",
+                 roleCode= "G"
+            });
+            Console.WriteLine("==================result================");
+            Console.WriteLine(result.ToJson());
+            Assert.AreEqual(true, result.data.Any());
+            
+            Assert.AreEqual("0001", result.data[0].salutl);
         }
     }
 }

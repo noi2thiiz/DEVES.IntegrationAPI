@@ -12,14 +12,21 @@ body {
 }
     body,center{
      background: url("img/bg.png") repeat ;
+     margin: 0;
+     padding: 0;
 
 
 }
+    .float-right{
+        float: right !important;
+    }
 
 /* What it does: Stops email clients resizing small text. */
 * {
     -ms-text-size-adjust: 100%;
     -webkit-text-size-adjust: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 /* What it does: Centers email on Android 4.4 */

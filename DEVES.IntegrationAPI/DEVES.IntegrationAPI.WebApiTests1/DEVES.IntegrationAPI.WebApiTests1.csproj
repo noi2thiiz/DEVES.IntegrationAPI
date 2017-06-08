@@ -78,6 +78,8 @@
     <Compile Include="Controllers\InquiryCRMPayeeListControllerTests.cs" />
     <Compile Include="Controllers\RegClientPersonalControllerTests.cs" />
     <Compile Include="Controllers\RequestCleansingIdControllerTests.cs" />
+    <Compile Include="Controllers\SendSMSControllerTests.cs" />
+    <Compile Include="Controllers\SubmitSurveyAssessmentResultControllerTests.cs" />
     <Compile Include="DataAccessService\DataAdapter\RESTClient\RESTClientTests.cs" />
     <Compile Include="DataAccessService\Mastes\DistricMasterDataTests.cs" />
     <Compile Include="DataAccessService\Mastes\ExtensionMethod\PersonalTitleMasterDataHelperTests.cs" />

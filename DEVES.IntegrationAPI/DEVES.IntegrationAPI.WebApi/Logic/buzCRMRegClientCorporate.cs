@@ -265,7 +265,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             //3 create crm CleinInfo in CRM เพื่อเก็บ cleansingId   แต่ให้ค้นก่อนถ้าพบจะไม่สร้างซ้ำ
             if (!string.IsNullOrEmpty(cleansingId))
             {
-                crmClientId = CreateClientInCRM(regClientCorporateInput, cleansingId, polisyClientId);
+                if (false == SpApiChkCustomerClient.Instance.CheckByCleansingId(cleansingId))
+                {
+                    
+                    crmClientId = CreateClientInCRM(regClientCorporateInput, cleansingId, polisyClientId);
+                }
+               
             }
 
 
@@ -300,9 +305,51 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             throw new NotImplementedException();
         }
 
-        private string CreateClientInCRM(RegClientCorporateInputModel regClientCorporateInputModel, string s, string polisyClientId1)
+       
+
+        public string CreateClientInCRM(RegClientCorporateInputModel regClientPersonalInput, string cleansingId,
+            string polisyClientId)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(cleansingId))
+            {
+                return null;
+            }
+            //RegClientPersonalInputModel regClientPersonalInput = ObjectCopier.Clone(input);
+            regClientPersonalInput.generalHeader.cleansingId = cleansingId;
+            regClientPersonalInput.generalHeader.polisyClientId = polisyClientId;
+            Console.WriteLine(regClientPersonalInput.ToJson());
+            try
+            {
+                buzCreateCrmClientCorporate cmdCreateCrmClient = new buzCreateCrmClientCorporate();
+                CreateCrmCorporateInfoOutputModel crmContentOutput =
+                    (CreateCrmCorporateInfoOutputModel)cmdCreateCrmClient.Execute(regClientPersonalInput);
+
+                if (crmContentOutput.code != AppConst.CODE_SUCCESS)
+                {
+                    throw new BuzErrorException(
+                        "500",
+                        "CRM Error:" + crmContentOutput.message,
+                        crmContentOutput.description,
+                        "CRM",
+                        TransactionId);
+                    //throw new Exception(String.Format("Error:{0}, Message:{1}", ewiRes.responseCode , ewiRes.responseMessage));
+                }
+
+                return crmContentOutput.crmClientId;
+            }
+            catch (BuzErrorException)
+            {
+                throw;
+            }
+            catch (Exception e)
+            {
+                throw new BuzErrorException(
+                    "500",
+                    "CRM Error:" + e.Message,
+                    e.StackTrace,
+                    "CRM",
+                    TransactionId);
+            }
         }
 
         private string CreateCorporateClientAndAdditionalInfoInPolisy400(RegClientCorporateInputModel p0, string p1)
@@ -323,10 +370,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             if (IsASRHValid(regClientCorporateInput))
             {
-
-                if (string.IsNullOrEmpty(regClientCorporateInput.generalHeader.cleansingId))
+                // create CLS if cleansingId and polisyClientId is null
+                if (string.IsNullOrEmpty(regClientCorporateInput.generalHeader.cleansingId) && string.IsNullOrEmpty(regClientCorporateInput?.generalHeader?.polisyClientId))
                 {
-
+                    AddDebugInfo("create CLS" );
+                    Console.WriteLine("create CLS");
                     BaseDataModel clsCreateCorporateIn = DataModelFactory.GetModel(typeof(CLSCreateCorporateClientInputModel));
                     clsCreateCorporateIn = TransformerFactory.TransformModel(regClientCorporateInput, clsCreateCorporateIn);
                     CLSCreateCorporateClientContentOutputModel clsCreateClientContent = CallDevesServiceProxy<CLSCreateCorporateClientOutputModel, CLSCreateCorporateClientContentOutputModel>
@@ -336,10 +384,33 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     {
                         //TODO เอา ค่าที่ได้ไปเป็น output
                         newCleansingId = clsCreateClientContent.data.cleansingId;
+                        AddDebugInfo("create CLS newCleansingId = "+ newCleansingId);
+
+
+                        //กรณีมาจากหน้าจอ CRM  notCreatePolisyClientFlag == Y ไม่ต้องไปสร้างใน polisyClientId
+                        if (regClientCorporateInput.generalHeader.notCreatePolisyClientFlag != "Y")
+                        {
+                            AddDebugInfo(
+                                @"string.IsNullOrEmpty(regClientCorporateInput.generalHeader.polisyClientId)&& !string.IsNullOrEmpty(regClientCorporateInput.generalHeader.cleansingId) ");
+
+                            BaseDataModel polCreateCorporateIn =
+                                DataModelFactory.GetModel(typeof(CLIENTCreateCorporateClientAndAdditionalInfoInputModel));
+                            polCreateCorporateIn =
+                                TransformerFactory.TransformModel(regClientCorporateInput, polCreateCorporateIn);
+                            CLIENTCreateCorporateClientAndAdditionalInfoContentModel polCreateClientContent =
+                                CallDevesServiceProxy<CLIENTCreateCorporateClientAndAdditionalInfoOutputModel
+                                        , CLIENTCreateCorporateClientAndAdditionalInfoContentModel>
+                                    (CommonConstant.ewiEndpointKeyCLIENTCreateCorporateClient, polCreateCorporateIn);
+                            regClientCorporateInput =
+                                (RegClientCorporateInputModel)TransformerFactory.TransformModel(polCreateClientContent,
+                                    regClientCorporateInput);
+                        }
+
                     }
 
                     else
                     {
+                        AddDebugInfo("create CLS error  = " + clsCreateClientContent.message, clsCreateClientContent);
                         throw new BuzErrorException(
                             clsCreateClientContent.code,
                             $"CLS Error:{clsCreateClientContent.message}",
@@ -352,185 +423,176 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     regClientCorporateInput = (RegClientCorporateInputModel)TransformerFactory.TransformModel(clsCreateClientContent, regClientCorporateInput);
                 }
 
-                if (string.IsNullOrEmpty(regClientCorporateInput.generalHeader.polisyClientId)
-                    && !string.IsNullOrEmpty(regClientCorporateInput.generalHeader.cleansingId))
+                // กรณีไม่มี เลข polisyClientId  แต่มี cleansingId ให้สร้างเฉพาะ 400
+                else if (string.IsNullOrEmpty(regClientCorporateInput?.generalHeader?.polisyClientId) )
                 {
-
-                    BaseDataModel polCreateCorporateIn = DataModelFactory.GetModel(typeof(CLIENTCreateCorporateClientAndAdditionalInfoInputModel));
-                    polCreateCorporateIn = TransformerFactory.TransformModel(regClientCorporateInput, polCreateCorporateIn);
-                    CLIENTCreateCorporateClientAndAdditionalInfoContentModel polCreateClientContent = CallDevesServiceProxy<CLIENTCreateCorporateClientAndAdditionalInfoOutputModel
-                            , CLIENTCreateCorporateClientAndAdditionalInfoContentModel>
-                        (CommonConstant.ewiEndpointKeyCLIENTCreateCorporateClient, polCreateCorporateIn);
-                    regClientCorporateInput = (RegClientCorporateInputModel)TransformerFactory.TransformModel(polCreateClientContent, regClientCorporateInput);
-                }
-                //กรณีมาจากหน้าจอ CRM  notCreatePolisyClientFlag == Y ไม่ต้องไปสร้างใน polisyClientId
-
-
-
-                if (!string.IsNullOrEmpty(regClientCorporateInput.generalHeader.polisyClientId))
-                {
-
-                    if ((regClientCorporateInput.generalHeader.assessorFlag == "Y"
-                         || regClientCorporateInput.generalHeader.solicitorFlag == "Y"
-                         || regClientCorporateInput.generalHeader.repairerFlag == "Y"
-                         || regClientCorporateInput.generalHeader.hospitalFlag == "Y"))
+                    //กรณีมาจากหน้าจอ CRM  notCreatePolisyClientFlag == Y ไม่ต้องไปสร้างใน polisyClientId
+                    if (regClientCorporateInput.generalHeader.notCreatePolisyClientFlag != "Y")
                     {
-                        if (regClientCorporateInput.generalHeader.notCreatePolisyClientFlag != "Y")
-                        {
-                            try
-                            {
-                                COMPInquiryClientMasterInputModel compInqClientInput =
-                                    new COMPInquiryClientMasterInputModel();
-                                compInqClientInput =
-                                    (COMPInquiryClientMasterInputModel)TransformerFactory.TransformModel(
-                                        regClientCorporateInput, compInqClientInput);
+                        AddDebugInfo(
+                            @"string.IsNullOrEmpty(regClientCorporateInput.generalHeader.polisyClientId)&& !string.IsNullOrEmpty(regClientCorporateInput.generalHeader.cleansingId) ");
 
-                                EWIResCOMPInquiryClientMasterContentModel retCOMPInqClient =
-                                    CallDevesServiceProxy<COMPInquiryClientMasterOutputModel,
-                                            EWIResCOMPInquiryClientMasterContentModel>
-                                        (CommonConstant.ewiEndpointKeyCOMPInquiryClient, compInqClientInput);
-                                //Found in Polisy400
-                                if (retCOMPInqClient.clientListCollection != null &&
-                                    retCOMPInqClient.clientListCollection.Count == 1)
-                                {
-
-                                    COMPInquiryClientMasterContentClientListModel inqClientPolisy400Out =
-                                        retCOMPInqClient.clientListCollection.First();
-
-                                    CLIENTUpdateCorporateClientAndAdditionalInfoInputModel
-                                        updateClientPolisy400In =
-                                            (CLIENTUpdateCorporateClientAndAdditionalInfoInputModel)
-                                            DataModelFactory
-                                                .GetModel(
-                                                    typeof(
-                                                        CLIENTUpdateCorporateClientAndAdditionalInfoInputModel
-                                                    ));
-
-                                    if (inqClientPolisy400Out.clientList.additionalExistFlag == "Y")
-                                    {
-
-                                        updateClientPolisy400In =
-                                            (CLIENTUpdateCorporateClientAndAdditionalInfoInputModel)
-                                            TransformerFactory.TransformModel(inqClientPolisy400Out,
-                                                updateClientPolisy400In);
-                                        updateClientPolisy400In.checkFlag = "UPDATE";
-                                    }
-                                    else if (inqClientPolisy400Out.clientList.additionalExistFlag == "N")
-                                    {
-
-                                        updateClientPolisy400In =
-                                            (CLIENTUpdateCorporateClientAndAdditionalInfoInputModel)
-                                            TransformerFactory.TransformModel(regClientCorporateInput,
-                                                updateClientPolisy400In);
-                                        updateClientPolisy400In.checkFlag = "CREATE";
-                                    }
-                                    updateClientPolisy400In.assessorFlag =
-                                        string.IsNullOrEmpty(regClientCorporateInput.generalHeader.assessorFlag)
-                                            ? updateClientPolisy400In.assessorFlag
-                                            : regClientCorporateInput.generalHeader.assessorFlag;
-                                    updateClientPolisy400In.solicitorFlag =
-                                        string.IsNullOrEmpty(
-                                            regClientCorporateInput.generalHeader.solicitorFlag)
-                                            ? updateClientPolisy400In.solicitorFlag
-                                            : regClientCorporateInput.generalHeader.solicitorFlag;
-                                    updateClientPolisy400In.repairerFlag =
-                                        string.IsNullOrEmpty(regClientCorporateInput.generalHeader.repairerFlag)
-                                            ? updateClientPolisy400In.repairerFlag
-                                            : regClientCorporateInput.generalHeader.repairerFlag;
-                                    updateClientPolisy400In.hospitalFlag =
-                                        string.IsNullOrEmpty(regClientCorporateInput.generalHeader.hospitalFlag)
-                                            ? updateClientPolisy400In.hospitalFlag
-                                            : regClientCorporateInput.generalHeader.hospitalFlag;
-
-                                    CallDevesServiceProxy<
-                                        CLIENTUpdateCorporateClientAndAdditionalInfoOutputModel,
-                                        CLIENTUpdateCorporateClientAndAdditionalInfoContentModel>(
-                                        CommonConstant.ewiEndpointKeyCLIENTUpdateCorporateClient,
-                                        updateClientPolisy400In);
-
-                                    //CLIENTUpdateCorporateClientAndAdditionalInfoContentModel updateClientPolisy400Out = CallDevesServiceProxy<CLIENTUpdateCorporateClientAndAdditionalInfoOutputModel, CLIENTUpdateCorporateClientAndAdditionalInfoContentModel>(CommonConstant.ewiEndpointKeyCLIENTUpdateCorporateClient, updateClientPolisy400In);
-                                }
-                            }
-                            catch (Exception e)
-                            {
-                                Console.WriteLine("400 Error"+e.Message);
-                                
-                                if (!string.IsNullOrEmpty(newCleansingId))
-                                {
-                                    //เมื่อเกิด error ใด ๆ ใน service อื่นให้ลบ
-                                    
-                                    AddDebugInfo("try rollback" + newCleansingId);
-
-                                    var deleteResult = CleansingClientService.Instance.RemoveByCleansingId(newCleansingId, "C");
-
-                                    regClientCorporateOutput.code = CONST_CODE_FAILED;
-                                    regClientCorporateOutput.message = e.Message;
-                                    if (!deleteResult.success)
-                                    {
-                                        AddDebugInfo(
-                                            "Failed to complete the transaction, and it does not rollback");
-                                        regClientCorporateOutput.description =
-                                            "Failed to complete the transaction, and it does not rollback";
-
-                                    }
-                                    else
-                                    {
-
-                                        regClientCorporateOutput.description = "";
-                                    }
-                                }
-
-                                
-                                regClientCorporateOutput.code = CONST_CODE_FAILED;
-                                regClientCorporateOutput.message = e.Message;
-                               
-                            }
-                        }
+                        BaseDataModel polCreateCorporateIn =
+                            DataModelFactory.GetModel(typeof(CLIENTCreateCorporateClientAndAdditionalInfoInputModel));
+                        polCreateCorporateIn =
+                            TransformerFactory.TransformModel(regClientCorporateInput, polCreateCorporateIn);
+                        CLIENTCreateCorporateClientAndAdditionalInfoContentModel polCreateClientContent =
+                            CallDevesServiceProxy<CLIENTCreateCorporateClientAndAdditionalInfoOutputModel
+                                    , CLIENTCreateCorporateClientAndAdditionalInfoContentModel>
+                                (CommonConstant.ewiEndpointKeyCLIENTCreateCorporateClient, polCreateCorporateIn);
+                        regClientCorporateInput =
+                            (RegClientCorporateInputModel) TransformerFactory.TransformModel(polCreateClientContent,
+                                regClientCorporateInput);
                     }
+                }
 
+                //กรณี มี polisyClientId ให้ update
+                else if (!string.IsNullOrEmpty(regClientCorporateInput?.generalHeader?.polisyClientId))
+                {
+                    
+                        AddDebugInfo(" to update ");
                     try
                     {
-                        if (!string.IsNullOrEmpty(regClientCorporateInput?.generalHeader?.cleansingId))
+                        COMPInquiryClientMasterInputModel compInqClientInput =
+                            new COMPInquiryClientMasterInputModel();
+                        compInqClientInput =
+                            (COMPInquiryClientMasterInputModel) TransformerFactory.TransformModel(
+                                regClientCorporateInput, compInqClientInput);
+
+                        EWIResCOMPInquiryClientMasterContentModel retCOMPInqClient =
+                            CallDevesServiceProxy<COMPInquiryClientMasterOutputModel,
+                                    EWIResCOMPInquiryClientMasterContentModel>
+                                (CommonConstant.ewiEndpointKeyCOMPInquiryClient, compInqClientInput);
+                        //Found in Polisy400
+                        if (retCOMPInqClient != null)
                         {
-                            Console.WriteLine(" start create Client in CRM ");
-                            if (false == SpApiChkCustomerClient.Instance.CheckByCleansingId(regClientCorporateInput
-                                    ?.generalHeader?.cleansingId))
+
+                            COMPInquiryClientMasterContentClientListModel inqClientPolisy400Out =
+                                retCOMPInqClient.clientListCollection.First();
+
+                            CLIENTUpdateCorporateClientAndAdditionalInfoInputModel
+                                updateClientPolisy400In =
+                                    (CLIENTUpdateCorporateClientAndAdditionalInfoInputModel)
+                                    DataModelFactory
+                                        .GetModel(
+                                            typeof(
+                                                CLIENTUpdateCorporateClientAndAdditionalInfoInputModel
+                                            ));
+
+                            if (true == retCOMPInqClient?.clientListCollection.Any())
                             {
-                                buzCreateCrmClientCorporate cmdCreateCrmClient = new buzCreateCrmClientCorporate();
-                                CreateCrmCorporateInfoOutputModel crmContentOutput =
-                                    (CreateCrmCorporateInfoOutputModel) cmdCreateCrmClient.Execute(
-                                        regClientCorporateInput);
 
-                                if (crmContentOutput.code == CONST_CODE_SUCCESS)
-                                {
-
-                                    dataOutPass.crmClientId = crmContentOutput.crmClientId;
-                                }
-                                else
-                                {
-                                    AddDebugInfo("Cannot create Client in CRM :" + crmContentOutput.message,
-                                        crmContentOutput);
-                                    Console.WriteLine("Cannot create Client in CRM :" + crmContentOutput.message);
-                                    //regClientCorporateOutput.code = CONST_CODE_FAILED;
-                                    //regClientCorporateOutput.message = crmContentOutput.message;
-                                    //regClientCorporateOutput.description = crmContentOutput.description;
-                                }
+                                updateClientPolisy400In =
+                                    (CLIENTUpdateCorporateClientAndAdditionalInfoInputModel)
+                                    TransformerFactory.TransformModel(inqClientPolisy400Out,
+                                        updateClientPolisy400In);
+                                updateClientPolisy400In.checkFlag = "UPDATE";
                             }
                             else
                             {
-                                Console.WriteLine("cleansingId is already exist in  Client in CRM :");
+
+                                updateClientPolisy400In =
+                                    (CLIENTUpdateCorporateClientAndAdditionalInfoInputModel)
+                                    TransformerFactory.TransformModel(regClientCorporateInput,
+                                        updateClientPolisy400In);
+                                updateClientPolisy400In.checkFlag = "CREATE";
                             }
+                            if (regClientCorporateInput?.generalHeader?.assessorFlag == "Y")
+                            {
+                                updateClientPolisy400In.assessorFlag = "Y";
+                                updateClientPolisy400In.assessorBlackListFlag = regClientCorporateInput.asrhHeader.assessorBlackListFlag;
+                                updateClientPolisy400In.assessorDelistFlag = regClientCorporateInput.asrhHeader.assessorDelistFlag;
+                                updateClientPolisy400In.assessorOregNum = regClientCorporateInput.asrhHeader.assessorOregNum;
+                                updateClientPolisy400In.assessorTerminateDate = regClientCorporateInput.asrhHeader.assessorTerminateDate; ;
+                            }
+
+                            if (regClientCorporateInput?.generalHeader?.solicitorFlag == "Y")
+                            {
+                                updateClientPolisy400In.solicitorFlag = "Y";
+                                updateClientPolisy400In.solicitorBlackListFlag = regClientCorporateInput.asrhHeader.solicitorBlackListFlag;
+                                updateClientPolisy400In.solicitorDelistFlag = regClientCorporateInput.asrhHeader.solicitorDelistFlag;
+                                updateClientPolisy400In.solicitorOregNum = regClientCorporateInput.asrhHeader.solicitorOregNum;
+                                updateClientPolisy400In.solicitorTerminateDate = regClientCorporateInput.asrhHeader.solicitorTerminateDate; ;
+
+                            }
+
+                            if (regClientCorporateInput?.generalHeader?.repairerFlag == "Y")
+                            {
+                                updateClientPolisy400In.repairerFlag = "Y";
+                                updateClientPolisy400In.repairerBlackListFlag = regClientCorporateInput.asrhHeader.repairerBlackListFlag;
+                                updateClientPolisy400In.repairerDelistFlag = regClientCorporateInput.asrhHeader.repairerDelistFlag;
+                                updateClientPolisy400In.repairerOregNum = regClientCorporateInput.asrhHeader.repairerOregNum;
+                                updateClientPolisy400In.repairerTerminateDate = regClientCorporateInput.asrhHeader.repairerTerminateDate; ;
+
+                            }
+
+                            if (regClientCorporateInput?.generalHeader?.hospitalFlag == "Y")
+                            {
+                                updateClientPolisy400In.hospitalFlag = "Y";
+                              
+                            }
+
+                            CallDevesServiceProxy<
+                                CLIENTUpdateCorporateClientAndAdditionalInfoOutputModel,
+                                CLIENTUpdateCorporateClientAndAdditionalInfoContentModel>(
+                                CommonConstant.ewiEndpointKeyCLIENTUpdateCorporateClient,
+                                updateClientPolisy400In);
+
+
+                        }
+                        else
+                        {
+                            regClientCorporateOutput.code = CONST_CODE_FAILED;
+                            regClientCorporateOutput.message = "Your Policy Client  Id  cannot be found";
+                           
                         }
                     }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine("Cannot create Client in CRM :" + e.Message+e.StackTrace);
-                        AddDebugInfo("Cannot create Client in CRM :" + e.Message,
-                            e.StackTrace);
-                        //@TODO something 
-                    }
+                 
+                        catch (Exception e)
+                        {
+                            Console.WriteLine("400 Error" + e.Message);
 
+                            if (!string.IsNullOrEmpty(newCleansingId))
+                            {
+                                //เมื่อเกิด error ใด ๆ ใน service อื่นให้ลบ
+
+                                AddDebugInfo("try rollback" + newCleansingId);
+
+                                var deleteResult =
+                                    CleansingClientService.Instance.RemoveByCleansingId(newCleansingId, "C");
+
+                                regClientCorporateOutput.code = CONST_CODE_FAILED;
+                                regClientCorporateOutput.message = e.Message;
+                                if (!deleteResult.success)
+                                {
+                                    AddDebugInfo(
+                                        "Failed to complete the transaction, and it does not rollback");
+                                    regClientCorporateOutput.description =
+                                        "Failed to complete the transaction, and it does not rollback";
+
+                                }
+                                else
+                                {
+
+                                    regClientCorporateOutput.description = "";
+                                }
+                            }
+
+
+                            regClientCorporateOutput.code = CONST_CODE_FAILED;
+                            regClientCorporateOutput.message = e.Message;
+
+                        }
+
+
+                    
                 }
+                else
+                {
+                    AddDebugInfo(" not Create PolisyClient ");
+                }
+
+               
 
             }
             else
@@ -539,6 +601,20 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 regClientCorporateOutput.code = AppConst.CODE_INVALID_INPUT;
                 regClientCorporateOutput.message = "There is some conflicts among the arguments Look between roleCode and {assessorFlag ,solicitorFlag ,repairerFlag or hospitalFlag}";
                 regClientCorporateOutput.description = "";
+            }
+
+            //3 create crm CleinInfo in CRM เพื่อเก็บ cleansingId   แต่ให้ค้นก่อนถ้าพบจะไม่สร้างซ้ำ
+            polisyClientId =  regClientCorporateInput?.generalHeader?.polisyClientId ?? "";
+            cleansingId    =  newCleansingId ?? regClientCorporateInput?.generalHeader?.cleansingId;
+            Console.WriteLine(polisyClientId+":"+cleansingId);
+            if (!string.IsNullOrEmpty(cleansingId))
+            {
+                if (false == SpApiChkCustomerClient.Instance.CheckByCleansingId(cleansingId))
+                {
+
+                    crmClientId = CreateClientInCRM(regClientCorporateInput, cleansingId, polisyClientId);
+                }
+
             }
 
 
@@ -587,8 +663,26 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                 regClientCorporateOutput.data.Add(dataOutPass);
             }
-
+           
             return regClientCorporateOutput;
+        }
+
+        private bool IsShouldToUpdate(RegClientCorporateInputModel regClientCorporateInput)
+        {
+            if (!string.IsNullOrEmpty(regClientCorporateInput?.generalHeader?.polisyClientId))
+            {
+                AddDebugInfo("polisyClientId != null");
+
+                if ((regClientCorporateInput?.generalHeader?.assessorFlag == "Y"
+                     || regClientCorporateInput?.generalHeader?.solicitorFlag == "Y"
+                     || regClientCorporateInput?.generalHeader?.repairerFlag == "Y"
+                     || regClientCorporateInput?.generalHeader?.hospitalFlag == "Y"))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         bool IsASRHValid(RegClientCorporateInputModel input)
