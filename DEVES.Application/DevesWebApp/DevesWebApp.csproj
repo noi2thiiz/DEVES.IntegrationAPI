@@ -68,6 +68,7 @@
     <Content Include="callcenter-information\Default.aspx" />
     <Content Include="callcenter-information\index-src.html" />
     <Content Include="callcenter-information\index.html" />
+    <Content Include="mobile_web_assessment\Default.aspx" />
     <Content Include="mobile_web_assessment\footer.html" />
     <Content Include="mobile_web_assessment\heading-baner.html" />
     <Content Include="mobile_web_assessment\heading-logo.html" />
@@ -109,7 +110,6 @@
     <Content Include="mobile_web_assessment\img\ms-icon-150x150.png" />
     <Content Include="mobile_web_assessment\img\ms-icon-310x310.png" />
     <Content Include="mobile_web_assessment\img\ms-icon-70x70.png" />
-    <Content Include="mobile_web_assessment\index.html" />
     <Content Include="mobile_web_assessment\m-2.html" />
     <Content Include="mobile_web_assessment\m.html" />
     <Content Include="mobile_web_assessment\main-controller.js" />
