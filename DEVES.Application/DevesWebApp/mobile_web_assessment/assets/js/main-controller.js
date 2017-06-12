@@ -39,6 +39,7 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
             title: "Error",
             content: "ขออภัยรหัสอ้างอิงแบบประเมินนี้ไม่ถูกต้อง"
         });
+
     }
 
     var usuerGid = $.trim(getParameterByName("uid"));
@@ -51,7 +52,7 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
     if(usuerGid==""){
         usuerGid = $.trim(getParameterByName("userGuid"));
     }
-   
+
 
     var ref = refCode.substr(0,10);
 
@@ -96,7 +97,7 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
                     {
                         id: 1, group: 2,
                         ref: 'assessmentGarageServiceScore',
-                        title: "การให้บริการและการต้อนรับของอู่",
+                        title: "การให้บริการและการต้อนรับของอู่มีความพึงพอใจในระดับใด",
                         value: 0
                     }
 
@@ -110,7 +111,7 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
                 subQuestions: [
                     {
                         id: 1, ref: 'assessmentGarageCommitScore',
-                        group: 2, title: "ระยะเวลาที่ใช้ในการจัดซ่อมเหมาะสม", value: 0
+                        group: 2, title: "ระยะเวลาที่ใช้ในการจัดซ่อมมีความพึงพอใจในระดับใด", value: 0
                     }
 
                 ]
@@ -124,7 +125,7 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
                     {
                         id: 1, group: 3,
                         ref: 'assessmentGarageRepairScore',
-                        title: "ความเรียบร้อยของงานซ่อมและความสะอาดตอนส่งมอบได้มาตรฐาน", value: 0
+                        title: "ผลงานการจัดซ่อมของอู่มีความพึงพอใจในระดับใด", value: 0
                     }
                 ]
             }
@@ -406,23 +407,32 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
     };
 
     $scope.startQuestion = function () {
-        try{
-            $("#home-page").hide();
-            showPage("question-page");
+        if(refCode.length!=11){
+            dialog.alert({
+                title: "Error",
+                content: "ขออภัยรหัสอ้างอิงแบบประเมินนี้ไม่ถูกต้อง"
+            });
 
-            if(window.innerHeight<=500){
-                $("#home-page .page-header").hide();
-                $("#textarea-comment").attr("rows",5);
-                $("#page-footer").hide();
-            }else{
-                $("#page-footer").show();
+        }else{
+            try{
+                $("#home-page").hide();
+                showPage("question-page");
+
+                if(window.innerHeight<=500){
+                    $("#home-page .page-header").hide();
+                    $("#textarea-comment").attr("rows",5);
+                    $("#page-footer").hide();
+                }else{
+                    $("#page-footer").show();
+                }
+
+                $scope.selectQuestion(0,0);
+            }catch (e){
+                console.warn(e)
+
             }
-
-            $scope.selectQuestion(0,0);
-        }catch (e){
-            console.warn(e)
-
         }
+
 
     };
 
@@ -441,13 +451,14 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
         var assessmentGarageRepairScore = scoreData['assessmentGarageRepairScore'];
 
         var assessmentGarageComment = "";
-
+        var assessmentSurveyComment="";
+        var assessmentClaimNotiComment = "";
 
         if(assessmentType==1){
-            var assessmentSurveyComment = $scope.comment;
-            var assessmentClaimNotiComment = $scope.comment;
+             assessmentSurveyComment = $scope.comment;
+             assessmentClaimNotiComment = $scope.comment;
         }else if(assessmentType==2){
-            var assessmentGarageComment = $scope.comment;;
+             assessmentGarageComment = $scope.comment;;
         }
 
         var submitData = {
@@ -467,7 +478,7 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
             "assessmentGarageByUserid": $.trim(assessmentGarageByUserid)
         };
 
-        var apiEndpoint =  "https://crmappqa.deves.co.th/xrmapi/api/SubmitSurveyAssessmentResult";
+        var apiEndpoint =  "/csat-service/api/SubmitSurveyAssessmentResult";
         var valid = true;
         if (!valid) {
             dialog.alert({
@@ -487,16 +498,20 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
                 // when the response is available
                 if (response.data.code == '200') {
 
-                    $loading.finish("main");
-                    var message = response.data.message;
-                    if($.trim(message)==""){
-                        message = "เพิ่มข้อมูลเรียบร้อยแล้ว"
+                    //$loading.finish("main");
 
-                    }
                     //success
                     $cookies.put('assessmentStatus_'+refCode,"complete");
-                    showPage("thanks-page");
-                    location.href = "";
+                    if($.trim(usuerGid)!="" && window.opener){
+                        window.close();
+
+
+                    }else{
+
+                        showPage("thanks-page");
+                        location.href = "";
+                    }
+
 
 
                 } else {
@@ -507,39 +522,35 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
 
                     console.log(error.data);
                     var message = "Server Error";
-                    var title = "Server Error";
-                    if(error.code=="500"){
-                        if(error.data.message){
-                            message +=error.data.data.message;
-                        }
+                    var title = "ผลการส่งคะแนนประเมิน";
 
-                    }else {
-                        title += ":"+ error.code
-
-                        if(error.message){
+                        if($.trim(error.description) != "" && $.trim(error.message) != ""){
+                            title = error.message;
+                            message = error.description;
+                        }else
+                        if($.trim(error.message) != ""){
                             message = error.message;
-
+                         }
+                         else{
+                            message = "มีข้อผิดพลาดเกิดขึ้น โปรดลองใหม่อีกครั้งในภายหลัง";
                         }
-                        if(error.description){
-                            message = error.message+":"+error.description;
-                        }
 
-                    }
+
 
                     dialog.alert({
                         title: title,
                         content: message
                     });
-                    showPage("home-page");
+                    //showPage("home-page");
                 }
-                console.log(response)
+                //console.log(response)
             }, function errorCallback(response) {
                 $loading.finish("main");
                 dialog.alert({
                     title: "Server Error",
-                    content: response.statusText
+                    content: "มีข้อผิดพลาดเกิดขึ้น โปรดลองใหม่อีกครั้งในภายหลัง"
                 });
-                showPage("home-page");
+                //showPage("home-page");
             });
         }
 
@@ -547,17 +558,17 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
 
     }
     $("textarea").on("focus",function () {
-        if(window.innerHeight<500) {
+        //if(window.innerHeight<500) {
             $("#page-footer").hide();
-            $(".rcorners1").height(50);
-        }
+            //$(".rcorners1").height(50);
+        //}
 
     });
 
     $("textarea").on("blur",function () {
         if(window.innerHeight>=500){
             $("#page-footer").show();
-            $(".rcorners1").height(100);
+            //$(".rcorners1").height(100);
         }
 
     });

@@ -33,7 +33,7 @@ app.controller('mainController', ['$scope', '$rootScope', 'dialog', '$loading', 
         $("#tabContents").height($(window).innerHeight() - (pageNavHeaderHeight + pageMenuHeaderHeight + 70));
         $("#menuContents").height($(window).innerHeight() - (pageNavHeaderHeight + pageMenuHeaderHeight + 70));
 
-        $("#tabContents").css("background-color","yellow");
+
         $('.iframe-link').height($("#tabContents").innerHeight());
         $('.iframe-link').width($("#tabContents").innerWidth() - 20)
 

@@ -473,7 +473,7 @@
     <Compile Include="Logic\buzCreateCrmPayeePersonal.cs" />
     <Compile Include="Logic\buzCrmInquiryClientMaster.cs" />
     <Compile Include="Logic\buzCrmInquiryCorporateClientMaster.cs" />
-    <Compile Include="Logic\BuzInquiryCrmClientMaster.cs" />
+    <Compile Include="Logic\buzCrmInquiryPersonalClientMaster.cs" />
     <Compile Include="Logic\buzCRMRegClientCorporate.cs" />
     <Compile Include="Logic\buzCRMRegClientPersonal.cs" />
     <Compile Include="Logic\buzCRMRegPayeeCorporate.cs" />
@@ -646,6 +646,7 @@
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile10.pubxml" />
+    <None Include="Properties\PublishProfiles\FolderProfile11.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile2.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile3.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile4.pubxml" />

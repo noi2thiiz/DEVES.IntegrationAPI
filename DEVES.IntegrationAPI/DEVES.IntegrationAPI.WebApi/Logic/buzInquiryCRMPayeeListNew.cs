@@ -186,25 +186,23 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 throw new  BuzErrorException("500", "คุณระบุเงื่อนไขในการสืบค้นน้อยเกินไป", "คุณระบุเงื่อนไขในการสืบค้นน้อยเกินไป ทำให้พบข้อมูลจำนวนมากเกินกว่าที่ระบบอนุญาต กรุณาระบุเงื่อนไขที่ชัดเจนมากขึ้น เช่นการระบุชื่อและนามสกุล");
             }
 
-            //กรณีที่ไม่พบข้อมูล
+            //กรณีที่พบข้อมูล
             if (AllSearchResult.Any())
             {
                 // throw new BuzErrorException("200", "ไม่พบข้อมูล", " กรุณาตรวจสอบเงื่อนไขในการค้นหาอีกครั้ง หรือใช้เงื่อนไขอื่นในการค้นหา ข้อควรระวัง ไม่ควรค้นจากการระบุเงื่อนไขหลายๆอย่างพร้อมกัน เช่นการค้นทั้งชื่อนามสกุลพร้อมกับเลขประจำตัวประชาชน");
 
-                //ซ่อมข้อมูล  Client ID 
+                //ซ่อมข้อมูล  Polisy Client ID 
                 AllSearchResult = FixEmptyPolisyClientId(AllSearchResult, inqCrmPayeeInput.clientType);
 
 
                 //กรณีที่พบข้อมูลค้นหาต่อที่ SAP
                 SAPResult = InquerySapVandor(AllSearchResult);
 
-                // ค้นข้อมูลใน CRM เพื่อเอาเลข CRM Client ID มาเติม ??? ต้องทำมัย
+              
 
 
                 // remove duplicate data 
                 // ตัวที่อยู่ใน search condition ทั้งหมดจะต้องไม่ซ้ำกันเลย
-
-
                 //order by vcode,cleasing id desc
                 var distinctResult = ProcessDistinct(SAPResult);
                 FinalSearchResult = ProcessOrderBy(distinctResult);
@@ -231,10 +229,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
            
            
 
-
-
-           
-
+            //output
             return crmInqPayeeOut;
         }
 
