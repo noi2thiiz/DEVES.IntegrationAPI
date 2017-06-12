@@ -10,6 +10,7 @@ namespace DEVES.IntegrationAPI.Model.RegComplaint
     {
         private EWI.EWIResponseContentData _data;
 
+        /*
         public ReqComplaintOutputModel()
         {
             comp_id = null;
@@ -21,6 +22,7 @@ namespace DEVES.IntegrationAPI.Model.RegComplaint
             this.comp_id = data.comp_id;
             this.case_no = data.case_no;
         }
+        */
 
         public string comp_id { get; set; }
         public string case_no { get; set; }

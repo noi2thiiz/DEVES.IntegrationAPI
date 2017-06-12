@@ -6,56 +6,54 @@
       "type": "integer",
       "minLength": 1
     },
+    "assessmentquestionnireid": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 40
+    },
     "assessmentrefcode": {
       "type": "string",
       "minLength": 1,
       "maxLength": 10
     },
-    "assessmentClaimNotiScore": {
+    "assessmentScore1": {
       "type": "integer"
     },
-    "assessmentClaimNotiComment": {
-      "type": "string",
-      "maxLength": 2000
-    },
-    "assessmentSurveyScore": {
+    "assessmentScore2": {
       "type": "integer"
     },
-    "assessmentSurveySpeedScore": {
+    "assessmentScore3": {
       "type": "integer"
     },
-    "assessmentSurveyTimeUsageScore": {
+    "assessmentScore4": {
       "type": "integer"
     },
-    "assessmentSurveyComment": {
-      "type": "string",
-      "maxLength": 4000
-    },
-    "assessmentSurveyByUserid": {
-      "type": "string",
-      "maxLength": 50
-    },
-    "assessmentGarageServiceScore": {
+    "assessmentScore5": {
       "type": "integer"
     },
-    "assessmentGarageCommitScore": {
+    "assessmentScore6": {
       "type": "integer"
     },
-    "assessmentGarageRepairScore": {
+    "assessmentScore7": {
       "type": "integer"
     },
-    "assessmentGarageComment": {
+    "assessmentScore8": {
+      "type": "integer"
+    },
+    "assessmentScore9": {
+      "type": "integer"
+    },
+    "assessmentScore10": {
+      "type": "integer"
+    },
+    "assessmentComment": {
       "type": "string",
       "maxLength": 4000
-    },
-    "assessmentGarageByUserid": {
-      "type": "string",
-      "maxLength": 50
     }
-
   },
   "required": [
     "assessmentType",
+    "assessmentquestionnireid",
     "assessmentrefcode"
   ]
 }

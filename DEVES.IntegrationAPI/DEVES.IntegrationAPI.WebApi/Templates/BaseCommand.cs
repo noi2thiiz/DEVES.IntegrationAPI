@@ -165,7 +165,6 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             BaseContentJsonProxyOutputModel output =  (BaseContentJsonProxyOutputModel)typeof(T1).GetProperty("content").GetValue(ewiRes);
             if(output.message == null)
             {
-
                 output.message = typeof(T1).GetProperty("responseCode").GetValue(ewiRes).ToString() + ": " + typeof(T1).GetProperty("responseMessage").GetValue(ewiRes).ToString();
             }
             return output;

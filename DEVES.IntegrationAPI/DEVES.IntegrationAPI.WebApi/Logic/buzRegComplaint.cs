@@ -49,7 +49,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             // Call Service through EWI
             Model.EWI.EWIResponseContent ret = (Model.EWI.EWIResponseContent)CallDevesJsonProxy<Model.EWI.EWIResponse>(CommonConstant.EWI_ENDPOINT_RequestRegComplaint, inputData, new Guid().ToString());
             // Get Response and check it!
-            if (ret.data == null)
+            if (ret.case_no == null && ret.comp_id == null)
             {
                 ReqComplaintOutputModel contentOutput = new ReqComplaintOutputModel();
                 contentOutput.comp_id = null;
@@ -60,9 +60,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             }
             else
             {
-                ReqComplaintOutputModel output = new ReqComplaintOutputModel(ret.data);
+                // ReqComplaintOutputModel output = new ReqComplaintOutputModel(ret.data);
+                ReqComplaintOutputModel contentOutput = new ReqComplaintOutputModel();
+                contentOutput.comp_id = ret.comp_id;
+                contentOutput.case_no = ret.case_no;
+                contentOutput.errorMessage = ret.message;
 
-                return output;
+                return contentOutput;
             }
 
         }
