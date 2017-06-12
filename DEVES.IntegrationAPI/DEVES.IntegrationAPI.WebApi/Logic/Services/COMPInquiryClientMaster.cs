@@ -8,6 +8,7 @@ using System.Net;
 using System.Web;
 using System.Web.Script.Serialization;
 using DEVES.IntegrationAPI.WebApi.Templates.Exceptions;
+using DEVES.IntegrationAPI.Model.InquiryClientMaster;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 {
@@ -53,32 +54,21 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 
             var result = SendRequest(input, endpoint);
 
-            if (result.StatusCode != HttpStatusCode.OK)
-            {
-
-                throw new InternalErrorException(result.Message);
-            }
-
 
             var jss = new JavaScriptSerializer();
             var contentObj = jss.Deserialize<COMPInquiryClientMasterOutputModel>(result.Content);
 
-            if (true != contentObj.success)
-            {
-                throw new BuzErrorException(
-                    contentObj.responseCode,
-                    $"COMP Error:{contentObj.responseMessage}",
-                    "Error on execute 'COMP_InquiryClientMaster'",
-                    "COMP",
-                    GlobalTransactionID);
-
-
-            }
-            
-
-
-
             return contentObj?.content;
+        }
+
+        public BaseTransformer COMPInputTransform = new TransformCRMInquiryCRMClientMasterInput_to_COMPInquiryClientMasterInput();
+        public EWIResCOMPInquiryClientMasterContentModel Execute(InquiryClientMasterInputModel searchCondition)
+        {
+            var compSearchCondition = (COMPInquiryClientMasterInputModel)
+                COMPInputTransform.TransformModel(searchCondition, new COMPInquiryClientMasterInputModel());
+
+            return Execute(compSearchCondition);
+
         }
     }
 }

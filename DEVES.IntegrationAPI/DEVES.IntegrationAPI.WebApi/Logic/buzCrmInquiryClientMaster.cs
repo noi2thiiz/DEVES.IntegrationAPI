@@ -17,25 +17,18 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             //+ Deserialize Input
             InquiryClientMasterInputModel contentModel = (InquiryClientMasterInputModel)input;
             BaseCommand cmd = new NullCommand();
-            switch (contentModel.conditionHeader.clientType)
-            {
-                case "P":
-                    cmd = new buzCrmInquiryPersonalClientMaster(); 
-                    cmd.TransactionId = TransactionId;
-                    break;
-                case "C":
-                    cmd = new buzCrmInquiryCorporateClientMaster();
-                    cmd.TransactionId = TransactionId;
-                    break;
-                case "A":
-                    /*fortest*/
-                    contentModel.conditionHeader.clientType = "P";
-                    cmd = new BuzInquiryCrmClientMaster();
-                    cmd.TransactionId = TransactionId;
-                    break;
 
+            if (contentModel.conditionHeader.roleCode == "G")
+            { 
+                cmd = new BuzInquiryCrmGeneralClient();
+                cmd.TransactionId = TransactionId;
             }
-
+            else /*ASRH*/
+            {
+                cmd = new BuzInquiryCrmAsrhClientMaster();
+                cmd.TransactionId = TransactionId;
+            }
+            
             return  cmd.Execute(input);
           
         }

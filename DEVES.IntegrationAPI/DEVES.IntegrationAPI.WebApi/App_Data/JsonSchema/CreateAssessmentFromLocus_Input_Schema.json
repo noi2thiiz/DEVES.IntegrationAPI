@@ -1,0 +1,21 @@
+﻿{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "requestId": {
+      "type": "string",
+      "maxLength": 20
+    },
+    "sendSMS": {
+      "type": "boolean"
+    },
+    "backDay": {
+      "type": "integer",
+      "minimum": 1
+    }
+  },
+  "required": [
+    "requestId"
+  ]
+
+}

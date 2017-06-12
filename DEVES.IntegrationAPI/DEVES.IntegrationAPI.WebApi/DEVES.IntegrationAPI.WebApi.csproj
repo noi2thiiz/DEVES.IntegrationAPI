@@ -412,6 +412,7 @@
     <Compile Include="Controllers\AdminServiceController.cs" />
     <Compile Include="Controllers\AssignedSurveyorController.cs" />
     <Compile Include="Controllers\ClaimRegistrationController.cs" />
+    <Compile Include="Controllers\CreateAssessmentFromLocusController.cs" />
     <Compile Include="Controllers\CreateCRMCorporateClientMasterController.cs" />
     <Compile Include="Controllers\CreateCRMPersonalClientMasterController.cs" />
     <Compile Include="Controllers\CrmApiTestController.cs" />
@@ -466,13 +467,15 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Logic\buzClaimRegistration.cs" />
+    <Compile Include="Logic\buzCreateAssessmentFromLocus.cs" />
+    <Compile Include="Logic\BuzInquiryCrmAsrhClientMaster.cs" />
+    <Compile Include="Logic\buzCrmInquiryCorporateClientMaster.cs" />
     <Compile Include="Logic\buzCrmMasters.cs" />
     <Compile Include="Logic\buzCreateCrmClientCorporate.cs" />
     <Compile Include="Logic\buzCreateCrmClientPersonal.cs" />
     <Compile Include="Logic\buzCreateCrmPayeeCorporate.cs" />
     <Compile Include="Logic\buzCreateCrmPayeePersonal.cs" />
     <Compile Include="Logic\buzCrmInquiryClientMaster.cs" />
-    <Compile Include="Logic\buzCrmInquiryCorporateClientMaster.cs" />
     <Compile Include="Logic\buzCrmInquiryPersonalClientMaster.cs" />
     <Compile Include="Logic\buzCRMRegClientCorporate.cs" />
     <Compile Include="Logic\buzCRMRegClientPersonal.cs" />
@@ -480,7 +483,7 @@
     <Compile Include="Logic\buzCRMRegPayeePersonal.cs" />
     <Compile Include="Logic\buzInquiryCRMPayeeList.cs" />
     <Compile Include="Logic\buzInquiryCRMPayeeListNew.cs" />
-    <Compile Include="Logic\buzInquryCRMClientMaster.cs" />
+    <Compile Include="Logic\BuzInquiryCrmGeneralClient.cs" />
     <Compile Include="Logic\buzRegComplaint.cs" />
     <Compile Include="Logic\buzReqClsId.cs" />
     <Compile Include="Logic\buzSendSMS.cs" />
@@ -515,7 +518,7 @@
     <Compile Include="Logic\Tranforms\RegClient\TranformCLSCreateCorporateClientContentOutputModel_to_RegClientCorporateInputModel.cs" />
     <Compile Include="Logic\Tranforms\RegClient\TranformCLSCreatePersonalClientOutputModel_to_RegClientPersonalInputModel.cs" />
     <Compile Include="Logic\Tranforms\RegClient\TranformCRMRegClientPersonalOutputModel_to_CRMRegClientPersonalOutputModel.cs" />
-    <Compile Include="Logic\Tranforms\InquiryClient\TranformEWIResCOMPInquiryClientMasterContentModel_to_CLIENTUpdateCorporateClientAndAdditionalInfoInputModel.cs" />
+    <Compile Include="Logic\Tranforms\RegClient\TranformEWIResCOMPInquiryClientMasterContentModel_to_CLIENTUpdateCorporateClientAndAdditionalInfoInputModel.cs" />
     <Compile Include="Logic\Tranforms\InquiryClient\TranformInquiryCRMPayeeListInputModel_to_CLSInquiryCorporateClientInputModel.cs" />
     <Compile Include="Logic\Tranforms\InquiryPayee\TranformInquiryCRMPayeeListInputModel_to_CLSInquiryPersonalClientInputModel.cs" />
     <Compile Include="Logic\Tranforms\InquiryClient\TranformInquiryCRMPayeeListInputModel_to_COMPInquiryClientMasterInputModel.cs" />
@@ -538,8 +541,8 @@
     <Compile Include="Logic\Tranforms\InquiryPayee\transformCLSInquiryCorporateClientOutputModel_to_InquiryCRMPayeeListInputModel.cs" />
     <Compile Include="Logic\Tranforms\InquiryClient\transformCLSInquiryPersonalClientOutputModel_to_InquiryCRMPayeeListInputModel.cs" />
     <Compile Include="Logic\Tranforms\InquiryClient\TransformCLSInquiryPersonalClientContentOut_to_CrmInquiryClientMasterContentOut.cs" />
-    <Compile Include="Logic\Tranforms\InquiryClient\TransformCOMPInquiryClientMasterContentClientListModel_to_CLIENTUpdateCorporateClientAndAdditionalInfoInputModel.cs" />
-    <Compile Include="Logic\Tranforms\InquiryClient\transformCOMPInquiryClientMasterContentClientListModel_to_InquiryCRMPayeeListInputModel.cs" />
+    <Compile Include="Logic\Tranforms\RegClient\TransformCOMPInquiryClientMasterContentClientListModel_to_CLIENTUpdateCorporateClientAndAdditionalInfoInputModel.cs" />
+    <Compile Include="Logic\Tranforms\InquiryPayee\transformCOMPInquiryClientMasterContentClientListModel_to_InquiryCRMPayeeListInputModel.cs" />
     <Compile Include="Logic\Tranforms\InquiryClient\TransformCOMPInquiryClientMasterContentOutputModel_to_CrmInquiryClientMasterContentOut.cs" />
     <Compile Include="Logic\Tranforms\InquiryClient\TransformCRMInquiryCRMClientMasterInput_to_CLSInquiryCLSPersonalClientInput.cs" />
     <Compile Include="Logic\Tranforms\InquiryClient\TransformCRMInquiryCRMClientMasterInput_to_CLSInquiryCorporateClientInputModel.cs" />
@@ -602,6 +605,7 @@
     <Compile Include="Templates\TransfomerFactory.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\JsonSchema\InquiryClientMaster_Input_Schema.json" />
     <Content Include="App_Data\TEST_Response_CLSInquiryClientPersonal.txt" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
@@ -633,7 +637,6 @@
     <Content Include="App_Data\JsonSchema\InquiryCRMPayeeList_Input_Schema.json" />
     <Content Include="App_Data\JsonSchema\RegClientPersonal_Input_Schema.json" />
     <Content Include="App_Data\JsonSchema\RegPayeePersonal_Input_Schema.json" />
-    <Content Include="App_Data\JsonSchema\InquiryClientMaster_Input_Schema.json" />
     <Content Include="App_Data\JsonSchema\JSON_SCHEMA_InquiryClientMasterInputModel.json" />
     <Content Include="App_Data\TEST_Response_RegClientCorporate.json" />
     <Content Include="App_Data\TEST_Response_RegPayeeCorporate.json" />
@@ -643,6 +646,7 @@
     <Content Include="App_Data\JsonSchema\SendSMS_Input_Schema.json" />
     <Content Include="App_Data\JsonSchema\SubmitSurveyAssessmentResultInputModel.json" />
     <Content Include="App_Data\JsonSchema\RegComplaintInputModel.json" />
+    <Content Include="App_Data\JsonSchema\CreateAssessmentFromLocus_Input_Schema.json" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile10.pubxml" />

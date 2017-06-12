@@ -513,7 +513,7 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
                     $cookies.put('assessmentStatus_'+refCode,"complete");
                     if($.trim(openMode)=="user" && window.opener){
                         window.close();
-                        
+
                     }else{
 
                         showPage("thanks-page");
