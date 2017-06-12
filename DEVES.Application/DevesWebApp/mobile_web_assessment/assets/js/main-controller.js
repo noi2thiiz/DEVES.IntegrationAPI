@@ -34,6 +34,7 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
 
     var refCode = $.trim(getParameterByName("ref"));
 
+
     if(refCode.length!=11){
         dialog.alert({
             title: "Error",
@@ -55,13 +56,15 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
 
 
     var ref = refCode.substr(0,10);
+    var assessmentQuestionnaireId =""; //hard AdHoc
 
     var assessmentType = Number(refCode.substr(10,1));
     //set default
     if($.trim(assessmentType)==""){
         assessmentType = 1;
-    }
 
+    }
+    assessmentQuestionnaireId = window.appConfig.assessmentQuestionnaire[assessmentType];
     var assessmentSurveyByUserid = "";
     var assessmentGarageByUserid = "";
 
@@ -242,9 +245,9 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
 
             var rightWidth = $("#thanks-page-body-right-panel").width();
 
-            $("#img-deves-line").css("margin-top",bodyHeight/4);
+            $("#img-deves-line").css("margin-top",bodyHeight/5);
             $("#img-deves-line").height("auto");
-            $("#img-deves-line").width(rightWidth*0.95);
+            //$("#img-deves-line").width(rightWidth*0.95);
 
             if(window.innerHeight<=150) {
                 $("#img-thanks-img").height("50px").width("auto");
@@ -439,7 +442,11 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
 
     $scope.comment = "";
     $scope.submitQuestionResult  = function(){
-
+         if(ref=="xxxxxxxxxx"){
+             $cookies.put('assessmentStatus_'+refCode,"complete");
+             showPage("thanks-page");
+             location.href = "";
+         }
         var assessmentClaimNotiScore = scoreData['assessmentClaimNotiScore'];
 
         var assessmentSurveyScore = scoreData['assessmentSurveyScore'];
@@ -463,7 +470,8 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
 
         var submitData = {
             "assessmentType": assessmentType,
-            "assessmentrefcode": ""+ref,
+            "assessmentQuestionnaireId":assessmentQuestionnaireId,
+            "assessmentRefCode": ""+ref,
             "assessmentClaimNotiScore": assessmentClaimNotiScore,
             "assessmentClaimNotiComment": ""+assessmentClaimNotiComment,
             "assessmentSurveyScore": assessmentSurveyScore,
