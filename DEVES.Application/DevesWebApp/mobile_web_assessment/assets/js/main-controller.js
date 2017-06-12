@@ -33,6 +33,7 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
 
 
     var refCode = $.trim(getParameterByName("ref"));
+    var openMode = $.trim(getParameterByName("mode"));
 
 
     if(refCode.length!=11){
@@ -510,10 +511,9 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
 
                     //success
                     $cookies.put('assessmentStatus_'+refCode,"complete");
-                    if($.trim(usuerGid)!="" && window.opener){
+                    if($.trim(openMode)=="user" && window.opener){
                         window.close();
-
-
+                        
                     }else{
 
                         showPage("thanks-page");
