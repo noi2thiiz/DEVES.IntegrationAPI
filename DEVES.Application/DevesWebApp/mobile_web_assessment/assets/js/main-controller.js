@@ -56,6 +56,15 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
     }
 
 
+    if(openMode && openMode=="reset"){
+        $cookies.remove('assessmentStatus_'+refCode);
+        var url1 = (window.location.href).split("&");
+        
+        location.href=""+url1[0];
+
+    }
+
+
     var ref = refCode.substr(0,10);
     var assessmentQuestionnaireId =""; //hard AdHoc
 
@@ -296,7 +305,6 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
 
                 $(".deves-icon").height((bodywidth*0.9)/3);
                 if(bodyHeight-$(".vertical-center").innerHeight()>150){
-                    //alert(bodyHeight-$(".vertical-center").innerHeight());
 
 
                     $("#deves-icon-container").css("margin-top","50px");
@@ -310,14 +318,7 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
     }
         $("body").css("visibility","visible");
     }
-/*
-    var supportsOrientationChange = "onorientationchange" in window,
-        orientationEvent = supportsOrientationChange ? "orientationchange" : "resize";
 
-    window.addEventListener(orientationEvent, function() {
-        alert('HOLY ROTATING SCREENS BATMAN:' + window.orientation + " " + screen.width);
-    }, false);
-*/
     function showPage(pageId) {
 
         $("section").hide();
@@ -337,7 +338,8 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
         if(pageId=="thanks-page"){
            $(".page-header").remove();
             $("#page-footer").remove();
-            $("body").css("background",'url("img/deves/left_panel_bg.png")')
+            $("body").css("background",'url("img/deves/left_panel_bg.png")');
+
 
         }
         resize();
