@@ -24,20 +24,25 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             if (trgtContent ==null)
             {
                 trgtContent = new CRMInquiryClientContentOutputModel();
+               
+            }
+            if (trgtContent?.data == null)
+            {
                 trgtContent.data = new List<CRMInquiryClientOutputDataModel>();
             }
             if (srcContent?.data != null)
             {
                 foreach (CLS.CLSInquiryCorporateClientOutputModel src in srcContent.data)
                 {
-                    CRMInquiryClientOutputDataModel trgt = new CRMInquiryClientOutputDataModel();
-                    trgt.addressInfo = new CRMInquiryClientAddressInfoModel();
-                    trgt.asrhHeader = new CRMInquiryClientAsrhHeaderModel();
-                    trgt.contactInfo = new CRMInquiryClientContactInfoModel();
-                    trgt.generalHeader = new CRMInquiryClientGeneralHeaderModel();
-                    trgt.profileInfo = new CRMInquiryClientProfileInfoModel();
-
-                 
+                    CRMInquiryClientOutputDataModel trgt =
+                        new CRMInquiryClientOutputDataModel
+                        {
+                            addressInfo = new CRMInquiryClientAddressInfoModel(),
+                            asrhHeader = new CRMInquiryClientAsrhHeaderModel(),
+                            contactInfo = new CRMInquiryClientContactInfoModel(),
+                            generalHeader = new CRMInquiryClientGeneralHeaderModel(),
+                            profileInfo = new CRMInquiryClientProfileInfoModel()
+                        };
                     trgt.generalHeader.cleansingId = src?.cleansing_id?.Trim() ?? "";
                     trgt.generalHeader.polisyClientId = src?.clntnum?.Trim() ?? "";
                     trgt.generalHeader.sourceData = "CLS";
@@ -73,14 +78,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
 
                 
-                    trgt.contactInfo.telephone1 = src?.cltphone01.Trim() ?? "";
-                    trgt.contactInfo.telephone2 = src?.cltphone02.Trim() ?? "";
-                    trgt.contactInfo.fax = src?.cls_fax.Trim() ?? "";
-                    trgt.contactInfo.contactNumber = src?.cls_display_phone.Trim() ?? "";
-                    trgt.contactInfo.emailAddress = src?.email_1.Trim() ?? "";
+                    trgt.contactInfo.telephone1 = src?.cltphone01?.Trim() ?? "";
+                    trgt.contactInfo.telephone2 = src?.cltphone02?.Trim() ?? "";
+                    trgt.contactInfo.fax = src?.cls_fax?.Trim() ?? "";
+                    trgt.contactInfo.contactNumber = src?.cls_display_phone?.Trim() ?? "";
+                    trgt.contactInfo.emailAddress = src?.email_1?.Trim() ?? "";
                    
 
-                    var addrInfo = src.addressListsCollection.FirstOrDefault<Model.CLS.CLSAddressListsCollectionModel>();
+                    var addrInfo = src?.addressListsCollection?.FirstOrDefault<Model.CLS.CLSAddressListsCollectionModel>();
                     if (addrInfo != null)
                     {
                         trgt.addressInfo.address = string.Join(CONST_CONCAT, addrInfo.address_1
@@ -91,28 +96,31 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                                                                 , addrInfo.province_display
                                                                 , addrInfo.postal_code);
                         trgt.addressInfo.countryText = addrInfo?.cls_ctrycode_text?.Trim()??"";
-
+                      
                         try
                         {
-                            var master_addressType =
-                                AddressTypeMasterData.Instance.FindByCode(isNull(addrInfo.address_type_code), "01");
-                            trgt.addressInfo.addressTypeText = master_addressType.Name;
+                            var masterAddressType =
+                                AddressTypeMasterData.Instance.FindByCode(isNull(addrInfo?.address_type_code), "01");
+                            trgt.addressInfo.addressTypeText = masterAddressType?.Name;
                         }
                         catch (Exception e)
                         {
                             Console.WriteLine("104:"+e.Message);
                         }
-                        
-                        trgt.addressInfo.latitude = addrInfo.lattitude;
-                        trgt.addressInfo.longtitude = addrInfo.longtitude;
+                      
+                        trgt.addressInfo.latitude = addrInfo?.lattitude;
+                        trgt.addressInfo.longtitude = addrInfo?.longtitude;
                     }
-                   // trgt.AddDebugInfo("TransformCLSInquiryCorporateClientContentOut_to_CrmInquiryClientMasterContentOut", "");
-                   // trgt.AddDebugInfo("Source Data", src);
+                    // trgt.AddDebugInfo("TransformCLSInquiryCorporateClientContentOut_to_CrmInquiryClientMasterContentOut", "");
+                    // trgt.AddDebugInfo("Source Data", src);
+
+                  
                     trgtContent.data.Add(trgt);
                    
                 }
             }
-           // trgtContent.AddDebugInfo("TransformCLSInquiryCorporateClientContentOut_to_CrmInquiryClientMasterContentOut", "");
+            // trgtContent.AddDebugInfo("TransformCLSInquiryCorporateClientContentOut_to_CrmInquiryClientMasterContentOut", "");
+          
             return trgtContent;
         }
         public string isNull(string a)
