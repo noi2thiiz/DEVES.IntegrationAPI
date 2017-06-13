@@ -24,13 +24,6 @@ app.run(['$window', '$location', '$loading', '$http', '$cookies',function ($wind
 
 }]);
 app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','$cookies','$location', function ($scope, dialog, $loading, $http,$q,$cookies,$location) {
-   //debugger;
-    //var vm = this;
-    //vm.deferred = $q.defer();
-    //vm.deferred.resolve();
-
-    // $("#main-page").attr('disabled',true);
-
 
     var refCode = $.trim(getParameterByName("ref"));
     var openMode = $.trim(getParameterByName("mode"));
@@ -218,11 +211,6 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
 
             $("#home-page .page-header").hide();
             $("#page-footer").hide();
-            //$("#thanks-page-body").height(screen.height-200);
-
-            //  $("#thanks-page-body-link").css("margin-top",$("#thanks-page-body").height()-100);
-
-
 
         }else{
             $("#home-img-full").hide();
@@ -230,7 +218,6 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
 
             $("home-page .page-header").show();
             $("#page-footer").show();
-            //  $("#thanks-page-body").height($("body").innerHeight()-250);
 
         }
 
@@ -245,7 +232,8 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
             $("#home-page .page-header").hide();
             $("#textarea-comment").attr("rows",5);
             $("#page-footer").hide();
-        }
+        };
+
         var bodyHeight = window.innerHeight;
         var bodywidth = $("#thanks-page-body-left-panel").innerWidth();
 
@@ -269,8 +257,6 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
                 $(".deves-icon").height((bodywidth*0.8)/3.8);
 
             }else if(window.innerHeight<=300){
-
-
 
 
                 $("#img-deves-logo").height("10px");
@@ -467,7 +453,7 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
         var submitData = {
             assessmentType: assessmentType,
             assessmentQuestionnaireId:assessmentQuestionnaireId,
-            assessmentRefCode: ""+refCode,
+            assessmentRefCode: ""+ref,
             assessmentComment: ""+$scope.comment,
 
         };

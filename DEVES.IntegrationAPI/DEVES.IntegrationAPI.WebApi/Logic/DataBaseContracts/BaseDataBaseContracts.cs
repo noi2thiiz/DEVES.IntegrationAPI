@@ -33,7 +33,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.DataBaseContracts
 
         }
 
-        protected DbResult Excecute(Dictionary<string, string> reqParams)
+        public DbResult Excecute(Dictionary<string, string> reqParams)
         {
             try
             {
