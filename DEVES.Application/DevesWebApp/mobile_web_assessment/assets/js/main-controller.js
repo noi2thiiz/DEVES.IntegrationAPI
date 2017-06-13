@@ -59,7 +59,7 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
     if(openMode && openMode=="reset"){
         $cookies.remove('assessmentStatus_'+refCode);
         var url1 = (window.location.href).split("&");
-        
+
         location.href=""+url1[0];
 
     }
@@ -95,7 +95,12 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
 
     var queryString =  $location.search();
     console.log(queryString);
-    var scoreData = {};
+    var scoreData = {
+        "assessmentType": 0,
+        "assessmentQuestionnaireId":0,
+        "assessmentRefCode": "",
+        "assessmentComment": ""
+    };
     $scope.questions=[];
 
     if(assessmentType==2) {
@@ -109,7 +114,7 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
                 subQuestions: [
                     {
                         id: 1, group: 2,
-                        ref: 'assessmentGarageServiceScore',
+                        ref: 'assessmentScore1',
                         title: "การให้บริการและการต้อนรับของอู่มีความพึงพอใจในระดับใด",
                         value: 0
                     }
@@ -123,7 +128,7 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
 
                 subQuestions: [
                     {
-                        id: 1, ref: 'assessmentGarageCommitScore',
+                        id: 1, ref: 'assessmentScore2',
                         group: 2, title: "ระยะเวลาที่ใช้ในการจัดซ่อมมีความพึงพอใจในระดับใด", value: 0
                     }
 
@@ -137,7 +142,7 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
                 subQuestions: [
                     {
                         id: 1, group: 3,
-                        ref: 'assessmentGarageRepairScore',
+                        ref: 'assessmentScore3',
                         title: "ผลงานการจัดซ่อมของอู่มีความพึงพอใจในระดับใด", value: 0
                     }
                 ]
@@ -156,7 +161,7 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
                 subQuestions: [
                     {
                         id: 1, group: 2,
-                        ref: 'assessmentClaimNotiScore',
+                        ref: 'assessmentScore1',
                         title: "การบริการของเจ้าหน้าที่รับแจ้งอุบัติเหตุ มีความพึงพอใจระดับใด",
                         value: 0
                     }
@@ -170,7 +175,7 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
 
                 subQuestions: [
                     {
-                        id: 1, ref: 'assessmentSurveyScore',
+                        id: 1, ref: 'assessmentScore2',
                         group: 2, title: "การเดินทางถึงที่เกิดเหตุของเจ้าหน้าที่สำรวจภัย มีความพึงพอใจระดับใด", value: 0
                     }
 
@@ -184,7 +189,7 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
                 subQuestions: [
                     {
                         id: 1, group: 3,
-                        ref: 'assessmentSurveySpeedScore',
+                        ref: 'assessmentScore3',
                         title: "การบริการและความรวดเร็วในการทำงานของเจ้าหน้าที่สำรวจภัย มีความพึงพอใจระดับใด", value: 0
                     }
                 ]
@@ -450,44 +455,24 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
              showPage("thanks-page");
              location.href = "";
          }
-        var assessmentClaimNotiScore = scoreData['assessmentClaimNotiScore'];
 
-        var assessmentSurveyScore = scoreData['assessmentSurveyScore'];
-        var assessmentSurveySpeedScore = scoreData['assessmentSurveySpeedScore'];
-        var assessmentSurveyTimeUsageScore = scoreData['assessmentSurveyTimeUsageScore'];
-
-        var assessmentGarageServiceScore = scoreData['assessmentGarageServiceScore'];
-        var assessmentGarageCommitScore = scoreData['assessmentGarageCommitScore'];
-        var assessmentGarageRepairScore = scoreData['assessmentGarageRepairScore'];
-
-        var assessmentGarageComment = "";
-        var assessmentSurveyComment="";
-        var assessmentClaimNotiComment = "";
 
         if(assessmentType==1){
-             assessmentSurveyComment = $scope.comment;
-             assessmentClaimNotiComment = $scope.comment;
+            assessmentComment = $scope.comment;
+            assessmentComment = $scope.comment;
         }else if(assessmentType==2){
-             assessmentGarageComment = $scope.comment;;
+            assessmentComment = $scope.comment;;
         }
 
         var submitData = {
-            "assessmentType": assessmentType,
-            "assessmentQuestionnaireId":assessmentQuestionnaireId,
-            "assessmentRefCode": ""+ref,
-            "assessmentClaimNotiScore": assessmentClaimNotiScore,
-            "assessmentClaimNotiComment": ""+assessmentClaimNotiComment,
-            "assessmentSurveyScore": assessmentSurveyScore,
-            "assessmentSurveySpeedScore": assessmentSurveySpeedScore,
-            "assessmentSurveyTimeUsageScore": assessmentSurveyTimeUsageScore,
-            "assessmentSurveyComment": ""+assessmentSurveyComment,
-            "assessmentSurveyByUserid": $.trim(assessmentSurveyByUserid),
-            "assessmentGarageServiceScore": assessmentGarageServiceScore,
-            "assessmentGarageCommitScore": assessmentGarageCommitScore,
-            "assessmentGarageRepairScore": assessmentGarageRepairScore,
-            "assessmentGarageComment": ""+assessmentGarageComment,
-            "assessmentGarageByUserid": $.trim(assessmentGarageByUserid)
+            assessmentType: assessmentType,
+            assessmentQuestionnaireId:assessmentQuestionnaireId,
+            assessmentRefCode: ""+refCode,
+            assessmentComment: ""+$scope.comment,
+
         };
+       var  finalSubmitData = angular.merge(scoreData,submitData);
+
 
         var apiEndpoint =  "/csat-service/api/SubmitSurveyAssessmentResult";
         var valid = true;
@@ -497,11 +482,11 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
                 content: "กรุณาตอบคำถามให้ครบทุกข้อก่อนครับ"
             });
         } else {
-            console.log(JSON.stringify(submitData));
+            console.log(JSON.stringify(finalSubmitData));
             $loading.start('main');
             $http({
                 method: 'POST',
-                data: submitData,
+                data: finalSubmitData,
                 url: apiEndpoint
             }).then(function successCallback(response) {
                 $loading.finish('main');
