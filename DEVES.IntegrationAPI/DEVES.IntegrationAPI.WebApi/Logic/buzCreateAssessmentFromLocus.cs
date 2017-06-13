@@ -35,6 +35,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 ServiceContext svcContext = new ServiceContext(_serviceProxy);
 
                 var result = SpQueryGarageAssessmentFromLocus.Instance.Excecute(new Dictionary<string, string> { { "BACK_DAY", "30" } });
+                var smsUrl = ConfigurationManager.AppSettings["SMS_ASSESSMENT_URL"].ToString();
                 if (result.Data.Any())
                 {
                     foreach (var item in result.Data)
@@ -55,8 +56,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                             pfc_assessment_type = new OptionSetValue(100000001),
                             pfc_assessment_sms_name = model?.DriverFullname??"",
                             pfc_assessment_sms_number = model?.DriverMobile,
-                            pfc_assessment_sms_url = "https://csat-qa.deves.co.th/assessment/?ref=" + model?.AssessmentRefCode+"2",
-                            pfc_assessment_user_url = "https://csat-qa.deves.co.th/assessment/?ref=" + model?.AssessmentRefCode+"2",
+                            pfc_assessment_sms_url = $"{smsUrl}/?ref=" + model?.AssessmentRefCode+"2",
+                            pfc_assessment_user_url = $"{smsUrl}/?ref=" + model?.AssessmentRefCode+"2",
                             pfc_assessment_status = new OptionSetValue(100000000),
                             pfc_assessment_garage_status = new OptionSetValue(100000000),
 
