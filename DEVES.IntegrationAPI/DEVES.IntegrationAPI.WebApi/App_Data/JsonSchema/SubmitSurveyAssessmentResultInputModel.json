@@ -6,15 +6,15 @@
       "type": "integer",
       "minLength": 1
     },
-    "assessmentquestionnireid": {
+    "assessmentQuestionnaireId": {
       "type": "string",
       "minLength": 1,
       "maxLength": 40
     },
-    "assessmentrefcode": {
+    "assessmentRefCode": {
       "type": "string",
       "minLength": 1,
-      "maxLength": 10
+      "maxLength": 11
     },
     "assessmentScore1": {
       "type": "integer"
@@ -53,7 +53,7 @@
   },
   "required": [
     "assessmentType",
-    "assessmentquestionnireid",
-    "assessmentrefcode"
+    "assessmentQuestionnaireId",
+    "assessmentRefCode"
   ]
 }

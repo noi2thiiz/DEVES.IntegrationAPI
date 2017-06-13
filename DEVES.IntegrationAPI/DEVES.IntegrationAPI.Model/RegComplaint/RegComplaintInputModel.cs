@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -57,8 +59,23 @@ namespace DEVES.IntegrationAPI.Model.RegComplaint
         [CrmMapping(FieldName = "compAddr", Source = ENUMDataSource.srcSQL)]
         public string compAddr { get; set; } = "";
 
+        public string compDate
+        {
+            get
+            {
+                string s = "";
+                if (dtCompDate != null)
+                {
+                    CultureInfo enUS = new CultureInfo("en-US");
+                    s = dtCompDate.Value.ToString(DateTimeCustomFormat, enUS);
+
+                }
+                return s;
+            }
+        }
+        [JsonIgnore]
         [CrmMapping(FieldName = "compDate", Source = ENUMDataSource.srcSQL)]
-        public DateTime compDate { get; set; }
+        public DateTime? dtCompDate { get; set; }
 
         [CrmMapping(FieldName = "compType", Source = ENUMDataSource.srcSQL)]
         public string compType { get; set; } = "";
@@ -75,8 +92,23 @@ namespace DEVES.IntegrationAPI.Model.RegComplaint
         [CrmMapping(FieldName = "caseNo", Source = ENUMDataSource.srcSQL)]
         public string caseNo { get; set; } = "";
 
+        public string kpvDate
+        {
+            get
+            {
+                string s = "";
+                if (dtkpvDate != null)
+                {
+                    CultureInfo enUS = new CultureInfo("en-US");
+                    s = dtkpvDate.Value.ToString(DateTimeCustomFormat, enUS);
+
+                }
+                return s;
+            }
+        }
+        [JsonIgnore]
         [CrmMapping(FieldName = "kpvDate", Source = ENUMDataSource.srcSQL)]
-        public DateTime kpvDate { get; set; }
+        public DateTime? dtkpvDate { get; set; }
 
         [CrmMapping(FieldName = "compPhone", Source = ENUMDataSource.srcSQL)]
         public string compPhone { get; set; } = "";

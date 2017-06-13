@@ -26,13 +26,20 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
             // Act
             string input = @"
             {
-              'assessmentrefcode': 'ABC',
-              'assessmentClaimNotiScore': 10,
-              'assessmentClaimNotiComment': 'ABC',
-              'assessmentSurveyScore': 10,
-              'assessmentSurveySpeedScore': 10,
-              'assessmentSurveyComment': 'ABC',
-              'assessmentSurveyByUserid': 'ABC'
+                  'assessmentType': 1,
+                  'assessmentquestionnireid': 'D181A7B8-FA4C-E711-80DA-0050568D615F',
+                  'assessmentrefcode': 'fade8b2add',
+                  'assessmentScore1': 1,
+                  'assessmentScore2': 2,
+                  'assessmentScore3': 3,
+                  'assessmentScore4': 4,
+                  'assessmentScore5': 5,
+                  'assessmentScore6': 6,
+                  'assessmentScore7': 7,
+                  'assessmentScore8': 8,
+                  'assessmentScore9': 9,
+                  'assessmentScore10': 10,
+                  'assessmentComment': 'ABCD'
             }";
           
         //Assert

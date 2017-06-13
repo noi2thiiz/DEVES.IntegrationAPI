@@ -9,8 +9,8 @@ namespace DEVES.IntegrationAPI.Model.SubmitSurveyAssessmentResult
     public class SubmitSurveyAssessmentResultInputModel
     {
         public int assessmentType { get; set; }
-        public Guid assessmentquestionnireid { get; set; }
-        public string assessmentrefcode { get; set; }
+        public Guid assessmentQuestionnaireId { get; set; }
+        public string assessmentRefCode { get; set; }
         public int assessmentScore1 { get; set; }
         public int assessmentScore2 { get; set; }
         public int assessmentScore3 { get; set; }
