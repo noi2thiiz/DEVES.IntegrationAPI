@@ -35,7 +35,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 ServiceContext svcContext = new ServiceContext(_serviceProxy);
 
                 var result = SpQueryGarageAssessmentFromLocus.Instance.Excecute(new Dictionary<string, string> { { "BACK_DAY", "30" } });
-                var smsUrl = ConfigurationManager.AppSettings["SMS_ASSESSMENT_URL"].ToString();
+                var smsUrl = "https://csat-qa.deves.co.th/assessment"; 
+                //ConfigurationManager.AppSettings["SMS_ASSESSMENT_URL"].ToString();
                 if (result.Data.Any())
                 {
                     foreach (var item in result.Data)
@@ -82,7 +83,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             {
                 output.code = AppConst.CODE_FAILED;
                 output.message = e.Message;
-                output.description = "";
+                output.description = e.StackTrace;
                 output.transactionId = TransactionId;
                 output.transactionDateTime = DateTime.Now;
                 return output;
