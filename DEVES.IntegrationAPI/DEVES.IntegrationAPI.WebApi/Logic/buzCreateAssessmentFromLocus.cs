@@ -16,6 +16,7 @@ using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Client;
 using Microsoft.Xrm.Tooling.Connector;
 using System.Threading;
+using DEVES.IntegrationAPI.WebApi.Logic.Services;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
@@ -116,32 +117,47 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
     {
 
         private static readonly Timer timer = new Timer(OnTimerElapsed);
+        private static readonly Timer timerStart = new Timer(StartLoop);
         private static readonly LogJob logJob = new LogJob();
-
-        
+        private static int msUntilTime = 0;
+      
 
         public static void Start()
         {
-            // ให้ทำงานแค่เรื่องเดียว ไม่งั้นจะเกิดการสร้าง assessment ซ้ำซ้อน
-          
-                // Figure how much time until 7:00
-                double TimeOfExecution = 7;
-
-                DateTime now = DateTime.Now;
-                   Console.WriteLine(now.ToString());
-                DateTime sevenOClock = DateTime.Now.AddHours(TimeOfExecution);
             
+
+            // Figure how much time until 7:00
+            double TimeOfExecution = 7;
+
+            DateTime now = DateTime.Now;
+            Console.WriteLine(now.ToString());
+            DateTime sevenOClock = DateTime.Now.AddHours(TimeOfExecution);
+
             // If it's already past 7:00, wait until 7:00 tomorrow    
-               if (now > sevenOClock)
-                {
-                    sevenOClock = sevenOClock.AddDays(1.0);
-                }
-               Console.WriteLine("Set the timer to" + sevenOClock.ToString());
+            if (now > sevenOClock)
+            {
+                sevenOClock = sevenOClock.AddDays(1.0);
+            }
+            Console.WriteLine("Set the timer to" + sevenOClock.ToString());
 
-               int msUntilTime = (int)((sevenOClock - now).TotalMilliseconds);
+            msUntilTime = (int)((sevenOClock - now).TotalMilliseconds);
 
-                // Set the timer to elapse only once, at 7:00.
-                Console.WriteLine("Assessment Job Start");
+            // Set the timer to elapse only once, at 7:00.
+            Console.WriteLine("Assessment Job Start");
+            SendSmsService.Instance
+                .SendMessage("Set the Assessment timer to" + sevenOClock.ToString(),
+                    "0943481249");
+            timer.Change(msUntilTime, Timeout.Infinite);
+           // timer.Change(TimeSpan.Zero, TimeSpan.FromMilliseconds(msUntilTime));
+
+
+        }
+
+        public static void StartLoop(object sender)
+        {
+           
+            // Set the timer to elapse only once, at 7:00.
+                Console.WriteLine("Assessment Job Start Loop");
             //timer.Change(msUntilTime, Timeout.Infinite);
             timer.Change(TimeSpan.Zero, TimeSpan.FromMilliseconds(msUntilTime));
 
@@ -183,6 +199,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             {
                 processAssessment();
                 Console.WriteLine("Assessment Job DoWork");
+                SendSmsService.Instance
+                    .SendMessage("Assessment Job DoWork",
+                        "0943481249");
 
             });
         }

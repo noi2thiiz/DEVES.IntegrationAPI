@@ -42,12 +42,7 @@ namespace DEVES.IntegrationAPI.WebApi
             //start log job persis log
             LogJobHandle.Start();
 
-            //start log job
-            // start เครื่องเดียว
-            if (Environment.MachineName == AppConst.PRO2_SERVER_NAME || !AppConst.IS_SERVER)
-            {
-                AssessmentJobHandle.Start();
-            }
+           
             //load master data
             CountryMasterData.Instance.InitData();
             NationalityMasterData.Instance.InitData();

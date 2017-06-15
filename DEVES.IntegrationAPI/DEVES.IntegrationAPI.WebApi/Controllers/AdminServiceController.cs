@@ -74,7 +74,43 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             }
 
         }
+        [HttpGet]
+        [Route("get-application-host")]
+        public IHttpActionResult GetApplicationHost()
+        {
+            try
+            {
+             
+                var data = new Dictionary<string,string>();
+                data.Add("VirtualPath", System.Web.Hosting.HostingEnvironment.ApplicationHost.GetVirtualPath());
+                data.Add("siteID", System.Web.Hosting.HostingEnvironment.ApplicationHost.GetSiteID());
+                data.Add("Host", HttpContext.Current.Request.Url.Host);
+                data.Add("uri", HttpContext.Current.Request.Url.AbsolutePath);
+                return Ok(new OutputGenericDataModel<object>
+                {
+                    code = AppConst.CODE_SUCCESS,
+                    message = AppConst.MESSAGE_SUCCESS,
+                    transactionDateTime = DateTime.Now,
+                    transactionId = GetTransactionId(),
+                    data = data
 
+                });
+            }
+            catch (Exception e)
+            {
+                return Ok(new OutputGenericDataModel<object>
+                {
+                    code = AppConst.CODE_FAILED,
+                    message = e.Message,
+                    transactionDateTime = DateTime.Now,
+                    transactionId = GetTransactionId(),
+                    stackTrace = e.StackTrace
+
+                });
+            }
+
+        }
+        
         [HttpPost]
         [Route("change-ewi-configs")]
         public IHttpActionResult ChangeEwiConfigs([FromUri] EwiConfig ewiConfig)
