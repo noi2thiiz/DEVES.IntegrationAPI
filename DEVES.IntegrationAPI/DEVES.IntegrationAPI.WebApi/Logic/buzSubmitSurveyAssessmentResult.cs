@@ -56,11 +56,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     Guid guid = new Guid(firstQuery.Id.ToString());
                     pfc_assessment retrievedAssessment = (pfc_assessment)_serviceProxy.Retrieve(pfc_assessment.EntityLogicalName, guid, new Microsoft.Xrm.Sdk.Query.ColumnSet(true));
 
-                    if (firstQuery.pfc_assessment_survey_status.Value != 100000000)
+                    if (firstQuery.pfc_assessment_status.Value != 100000000)
                     {
                         output.code = AppConst.CODE_FAILED;
                         output.message = "ไม่สามารถบันทึกคะแนนได้";
-                        output.description = "สถานะไม่ถูกต้อง: (" + firstQuery.pfc_assessment_survey_status.Value + ")";
+                        output.description = "สถานะไม่ถูกต้อง: (" + firstQuery.pfc_assessment_status.Value + ")";
                         output.transactionId = TransactionId;
                         output.transactionDateTime = DateTime.Now;
 
