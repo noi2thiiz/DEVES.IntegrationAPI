@@ -36,8 +36,13 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
              Environment.MachineName == QA_SERVER_NAME || Environment.MachineName == PRO1_SERVER_NAME ||
                    Environment.MachineName == PRO2_SERVER_NAME;
 
+        public static bool IS_PRODUCTION =
 
-        
+            Environment.MachineName == PRO1_SERVER_NAME ||
+            Environment.MachineName == PRO2_SERVER_NAME;
+
+
+
     }
 
     public class TestAppConst

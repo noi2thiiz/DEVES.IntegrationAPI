@@ -53,7 +53,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 // ให้ทำงานแค่เรื่องเดียว ไม่งั้นจะเกิดการสร้าง assessment ซ้ำซ้อน
                 //start log job
                 // start เครื่องเดียว
-                if (Environment.MachineName == AppConst.PRO2_SERVER_NAME || !AppConst.IS_SERVER)
+                if (Environment.MachineName == AppConst.PRO2_SERVER_NAME || !AppConst.IS_PRODUCTION)
                 {
 
                    
