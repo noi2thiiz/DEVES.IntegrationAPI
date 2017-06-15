@@ -46,6 +46,8 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         [Route("invork")]
         public IHttpActionResult  Invork()
         {
+            var virtualPath = System.Web.Hosting.HostingEnvironment.ApplicationHost.GetVirtualPath() ?? "";
+            _isNotSsl = !HttpContext.Current.Request.Url.AbsoluteUri.Contains("https");
             if (_isStart != true)
             {
                 // ให้ทำงานแค่เรื่องเดียว ไม่งั้นจะเกิดการสร้าง assessment ซ้ำซ้อน
@@ -54,33 +56,50 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 if (Environment.MachineName == AppConst.PRO2_SERVER_NAME || !AppConst.IS_SERVER)
                 {
 
-                    var virtualPath = System.Web.Hosting.HostingEnvironment.ApplicationHost.GetVirtualPath() ?? "";
-                    _isNotSsl = !HttpContext.Current.Request.Url.AbsoluteUri.Contains("https");
+                   
                     if (_isNotSsl)
                     {
                         if (HttpContext.Current.Request.Url.Host == "localhost")
                         {
                             AssessmentJobHandle.Start();
+                            _isStart = true;
                         }
                         else if (HttpContext.Current.Request.Url.Host == "192.168.8.121" && virtualPath?.ToLower() == "/xrmapi")
                         {
                             AssessmentJobHandle.Start();
+                            _isStart = true;
                         }
                         else if (HttpContext.Current.Request.Url.Host == "api.deves.co.th" && virtualPath?.ToLower() == "/claim-service")
                         {
                             AssessmentJobHandle.Start();
+                            _isStart = true;
                         }
                     }
 
 
                 }
 
-                _isStart = true;
+                //_isStart = true;
                
             }
             
 
-            return Ok(_isStart);
+            return Ok(new OutputGenericDataModel<object>
+            {
+                code = AppConst.CODE_SUCCESS,
+                message = AppConst.MESSAGE_SUCCESS,
+                transactionDateTime = DateTime.Now,
+                transactionId = GetTransactionId(),
+                data = new
+                {
+                    _isStart,
+                    host =  HttpContext.Current.Request.Url.Host,
+                    virtualPath= virtualPath?.ToLower(),
+                    _isNotSsl,
+                    machineName=Environment.MachineName,
+                    absoluteUri= HttpContext.Current.Request.Url.AbsoluteUri
+                }
+            });
 
         }
 
