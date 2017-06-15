@@ -87,6 +87,7 @@
     <Compile Include="DataAccessService\Mastes\InMemoryDataStorageBaseTests.cs" />
     <Compile Include="DataAccessService\Mastes\ProvinceMasterDataTests.cs" />
     <Compile Include="DataAccessService\Mastes\SubDistrictMasterDataTests.cs" />
+    <Compile Include="Logic\buzCreateAssessmentFromLocusTests.cs" />
     <Compile Include="Logic\buzCreateCrmClientCorporateTests.cs" />
     <Compile Include="Logic\buzCreateCrmClientPersonalTests.cs" />
     <Compile Include="Logic\buzCrmInquiryClientMasterTests.cs" />
@@ -99,6 +100,7 @@
     <Compile Include="Logic\DataAccess\Adapter\DevesServiceProxyAdapterTests.cs" />
     <Compile Include="Logic\DataBaseContracts\SpApiChkCustomerClientTests.cs" />
     <Compile Include="Logic\DataBaseContracts\SpApiCustomerClientTests.cs" />
+    <Compile Include="Logic\DataBaseContracts\SpQueryGarageAssessmentFromLocusTests.cs" />
     <Compile Include="Logic\Services\CleansingClientServiceTests.cs" />
     <Compile Include="Logic\Services\CLIENTCreateCorporateClientAndAdditionalInfoTests.cs" />
     <Compile Include="Logic\Services\CLSCreateCorporateClientTests.cs" />

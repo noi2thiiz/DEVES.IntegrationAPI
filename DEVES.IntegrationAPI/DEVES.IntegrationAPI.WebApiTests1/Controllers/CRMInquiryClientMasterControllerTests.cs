@@ -252,7 +252,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
                 'crmClientId': '',
                 'clientName1': '',
                 'clientName2': '',
-                'clientFullname': 'ทดสอบ1LT1G1zriD',
+                'clientFullname': 'บมจ.เทเวศประกันภัย สาขาเชียงราย',
                 'idCard': '',
                 'corporateBranch': '',
                 'emcsCode': ''
@@ -280,7 +280,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
             Assert.AreEqual(false, string.IsNullOrEmpty(outputData["generalHeader"]["cleansingId"]?.ToString()));
 
             //ส่วนนี้ถ้าภายหลังต้นทางเปลี่ยนก็จะไม่ผ่าน
-            Assert.AreEqual("Test WTH Corp1", outputData["profileInfo"]["name1"]?.ToString());
+            Assert.AreEqual("บมจ.เทเวศประกันภัย สาขาเชียงราย", outputData["profileInfo"]["name2"]?.ToString());
            
 
         }
@@ -299,7 +299,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
             {
               'conditionDetail': {
                 'cleansingId': '',
-                'polisyClientId': '16962592',
+                'polisyClientId': '17243075',
                 'crmClientId': '',
                 'clientName1': '',
                 'clientName2': '',
@@ -331,7 +331,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
             Assert.AreEqual(false, string.IsNullOrEmpty(outputData["generalHeader"]["cleansingId"]?.ToString()));
 
             //ส่วนนี้ถ้าภายหลังต้นทางเปลี่ยนก็จะไม่ผ่าน
-            Assert.AreEqual("Test WTH Corp1", outputData["profileInfo"]["name1"]?.ToString());
+            Assert.AreEqual("17243075", outputData["generalHeader"]["polisyClientId"]?.ToString());
 
 
         }

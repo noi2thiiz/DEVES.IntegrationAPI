@@ -240,6 +240,7 @@
         }
     </style>
 </head>
+
 <body ng-app="crmApp" ng-controller="mainController as vm" dw-loading="main" dw-loading-options="{text:'Processing...', spinner: true}">
     <nav class="navbar navbar-default navbar-fixed-top" id="page-nav-header"><div class="container"><div class="navbar-header"><a class="navbar-brand" href="#"><img src="/vendor-resource/images/theme_navbarlogo.png" /></a></div><div class="pull-right" style="font-size: larger; margin-top: 15px; color: white">รวม Link</div></div></nav><div id="main-container" style="display: none">
         <div id="wrapper">
@@ -303,7 +304,7 @@ var app = angular.module('crmApp', ["app.core", "darthwade.dwLoading",'ui.bootst
         $("#tabContents").height($(window).innerHeight() - (pageNavHeaderHeight + pageMenuHeaderHeight + 70));
         $("#menuContents").height($(window).innerHeight() - (pageNavHeaderHeight + pageMenuHeaderHeight + 70));
 
-        $("#tabContents").css("background-color","yellow");
+
         $('.iframe-link').height($("#tabContents").innerHeight());
         $('.iframe-link').width($("#tabContents").innerWidth() - 20)
 

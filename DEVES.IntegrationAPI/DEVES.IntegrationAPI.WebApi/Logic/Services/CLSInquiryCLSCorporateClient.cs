@@ -8,6 +8,7 @@ using System.Net;
 using System.Web;
 using System.Web.Script.Serialization;
 using DEVES.IntegrationAPI.WebApi.Templates.Exceptions;
+using DEVES.IntegrationAPI.Model.InquiryClientMaster;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 {
@@ -61,17 +62,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 
             var jss = new JavaScriptSerializer();
             var contentObj = jss.Deserialize<EWIResCLSInquiryCorporateClient>(result.Content);
-            if (true != contentObj.success)
-            {
-                throw new BuzErrorException(
-                    contentObj.responseCode,
-                    $"CLS Error:{contentObj.responseMessage}",
-                    "Error on execute 'CLS_InquiryCorporateClient'",
-                    "CLS",
-                    GlobalTransactionID);
-
-
-            }
+           
             if (true != contentObj?.content?.success && contentObj?.content?.code != AppConst.CODE_CLS_NOTFOUND)
             {
                 throw new BuzErrorException(
@@ -83,10 +74,17 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 
             }
 
-
-
             return contentObj?.content;
         }
 
+        public BaseTransformer CLSCorporateInputTransform =
+            new TransformCRMInquiryCRMClientMasterInput_to_CLSInquiryCorporateClientInputModel();
+        public CLSInquiryCorporateClientContentOutputModel Execute(InquiryClientMasterInputModel searchCondition)
+        {
+
+            var clssearchCondition = (CLSInquiryCorporateClientInputModel)
+                CLSCorporateInputTransform.TransformModel(searchCondition, new CLSInquiryCorporateClientInputModel());
+            return Execute(clssearchCondition);
+        }
     }
 }

@@ -102,6 +102,7 @@
     <Compile Include="CreateCRMPersonalClientMaster\CreateCRMPersonalClientMasterInputModel.cs" />
     <Compile Include="CreateCRMPersonalClientMaster\CreateCRMPersonalClientMasterOutputModel.cs" />
     <Compile Include="CrmMappingAttribute.cs" />
+    <Compile Include="CRM\CreateAssessmentFromLocusModel.cs" />
     <Compile Include="CRM\CRM_MasterCountry.cs" />
     <Compile Include="CRM\CRM_MasterSalutation.cs" />
     <Compile Include="CRM\CRM_RequestCleansingIdDataModel.cs" />

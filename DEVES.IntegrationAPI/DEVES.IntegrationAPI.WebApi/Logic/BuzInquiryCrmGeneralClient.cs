@@ -20,19 +20,23 @@ using WebGrease.Css.Visitor;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
-    public class BuzInquiryCrmClientMaster : BuzCommand
+    public class BuzInquiryCrmGeneralClient : BuzCommand
     {
 
         public List<CRMInquiryClientOutputDataModel> AllSearchResult = new List<CRMInquiryClientOutputDataModel>();
         public List<CRMInquiryClientOutputDataModel> CLSResult = new List<CRMInquiryClientOutputDataModel>();
 
 
-        public BaseTransformer CLSPersonalInputTransform = new TransformCRMInquiryCRMClientMasterInput_to_CLSInquiryCLSPersonalClientInput();
+  
         public BaseTransformer CLSPersonalOutputTransform = new TransformCLSInquiryPersonalClientContentOut_to_CrmInquiryClientMasterContentOut();
 
-        public BaseTransformer CLSCorporateInputTransform =
-            new TransformCRMInquiryCRMClientMasterInput_to_CLSInquiryCorporateClientInputModel();
+      
         public BaseTransformer CLSCorporateOutputTransform = new TransformCLSInquiryCorporateClientContentOut_to_CrmInquiryClientMasterContentOut();
+
+      
+        public BaseTransformer COMPOutputTransform = new TransformCOMPInquiryClientMasterContentOutputModel_to_CrmInquiryClientMasterContentOut();
+
+
 
 
         public override BaseDataModel ExecuteInput(object input)
@@ -43,11 +47,6 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             crmInqContent.transactionDateTime = DateTime.Now;
             crmInqContent.transactionId = TransactionId;
             #endregion Prepare box for output 
-
-
-
-
-
 
 
             //++ Call CLS_InquiryCLSPersonalClient through ServiceProxy
@@ -75,8 +74,6 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             }
 
 
-
-
             //Search Client from Cleansing
 
             if (InputModel?.conditionHeader?.clientType == "C")
@@ -95,7 +92,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     AllSearchResult.AddRange(CLSResult);
                 }
             }
-
+            //ถ้าพบ จะซ่อม PolisyClientId เพราะ CLS อาจจะไม่มี PolisyClientId โดยเฉพาะ  รายการที่พึ่งสร้างใหม่
             if (AllSearchResult.Any())
             {
                 FulFillEmptyPolisyClientId(AllSearchResult, InputModel?.conditionHeader?.clientType);
@@ -105,14 +102,18 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             //ถ้าไม่พบให้ไปค้นหาต่อที่ 400
 
 
+
+            //output
             crmInqContent.code = AppConst.CODE_SUCCESS;
             crmInqContent.message = AppConst.MESSAGE_SUCCESS;
             crmInqContent.transactionDateTime = DateTime.Now;
             crmInqContent.transactionId = TransactionId;
             crmInqContent.data = AllSearchResult;
+
+            // ลบรายการ ที่ชื่อ(name1,name2,fullName) เป็น emtpy string ออกเพราะไม่มีประโยชน์
             if (crmInqContent.data != null)
             {
-                crmInqContent.data = crmInqContent.data.Where(row => row?.profileInfo?.name1.Trim() != "" || row?.profileInfo?.fullName.Trim() != "").ToList();
+                crmInqContent.data = crmInqContent.data.Where(row => row?.profileInfo?.name1?.Trim() != "" || row?.profileInfo?.name2?.Trim() != ""  || row?.profileInfo?.fullName?.Trim() != "").ToList();
             }
           
           
@@ -133,22 +134,16 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         {
             AddDebugInfo("call method InquiryCLSPersonalClient", searchCondition);
             var service = new CLSInquiryCLSPersonalClient(TransactionId, ControllerName);
-
-            var clssearchCondition = (CLSInquiryPersonalClientInputModel)
-                CLSPersonalInputTransform.TransformModel(searchCondition, new CLSInquiryPersonalClientInputModel());
-
-
-            var inqClsOutput = service.Execute(clssearchCondition);
+            var inqClsOutput = service.Execute(searchCondition);
 
 
             var crmInqOutput = new CRMInquiryClientContentOutputModel();
+
+            //Found in CLS
             if (inqClsOutput?.data != null)
             {
-
                 crmInqOutput =
                     (CRMInquiryClientContentOutputModel)CLSPersonalOutputTransform.TransformModel(inqClsOutput, crmInqOutput);
-
-
             }
 
             return crmInqOutput?.data;
@@ -158,24 +153,36 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         {
             AddDebugInfo("call method InquiryCLSCorporateClient", searchCondition);
             var service = new CLSInquiryCLSCorporateClient(TransactionId, ControllerName);
-
-            var clssearchCondition = (CLSInquiryCorporateClientInputModel)
-                CLSCorporateInputTransform.TransformModel(searchCondition, new CLSInquiryCorporateClientInputModel());
-
-
-            var inqClsOutput = service.Execute(clssearchCondition);
+            var inqClsOutput = service.Execute(searchCondition);
 
 
             var crmInqOutput = new CRMInquiryClientContentOutputModel();
+            //Found in CLS
             if (inqClsOutput?.data != null)
             {
-
                 crmInqOutput =
                     (CRMInquiryClientContentOutputModel)CLSCorporateOutputTransform.TransformModel(inqClsOutput, crmInqOutput);
-
-
             }
 
+            return crmInqOutput?.data;
+        }
+
+        private List<CRMInquiryClientOutputDataModel> InquiryCOMPClientMaster(InquiryClientMasterInputModel searchCondition)
+        {
+            AddDebugInfo("call method InquiryCOMPClientMaster", searchCondition);
+            var service = new COMPInquiryClientMaster(TransactionId, ControllerName);
+
+            var inqOutput = service.Execute(searchCondition);
+
+            var crmInqOutput = new CRMInquiryClientContentOutputModel();
+
+            //Found in Polisy400
+            if (inqOutput?.clientListCollection != null)
+            {
+                crmInqOutput =
+                    (CRMInquiryClientContentOutputModel)COMPOutputTransform.TransformModel(inqOutput, crmInqOutput);
+
+            }
             return crmInqOutput?.data;
         }
 

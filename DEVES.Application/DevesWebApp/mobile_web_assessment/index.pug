@@ -17,7 +17,7 @@ html(lang='en',data-ng-app='crmApp')
         // Custom styles for this template
         link(href='assets/css/sticky-footer.css', rel='stylesheet')
         link(rel='stylesheet', href='assets/resource/pfc_angular.css', crossorigin='anonymous')
-        link(href='assets/css/style.css', rel='stylesheet')
+        link(href='assets/css/style.css?v=13-6-1560', rel='stylesheet')
         // Just for debugging purposes. Don't actually copy these 2 lines!
         //if lt IE 9
           script(src='../../assets/js/ie8-responsive-file-warning.js')
@@ -27,6 +27,7 @@ html(lang='en',data-ng-app='crmApp')
         //if lt IE 9
           script(src='https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js')
           script(src='https://oss.maxcdn.com/respond/1.4.2/respond.min.js')
+
     body(ng-controller='mainController as vm',
         dw-loading='main',
         dw-loading-options="{text:'Processing...', spinner: false}",
@@ -44,7 +45,6 @@ html(lang='en',data-ng-app='crmApp')
                             img#home-img-full(src="img/deves/Questionaire1_Greeting.jpg",style="width:100%;background-color: white;display:none")
 
 
-
                 section#question-page(style="display:none")
                     .page-header.text-center
                         .circleBase.type2(ng-repeat="q in questions",data-id="circle-{{q.id}}")
@@ -55,7 +55,7 @@ html(lang='en',data-ng-app='crmApp')
                             .col-sm-12
                                 h4 {{currentQuestion.title}}
                             .col-sm-12
-                                h4 {{currentSubQuestion.title}}
+                                h4.question-text {{currentSubQuestion.title}}
                         .row.rcorners2
                             .col-sm-12.text-left.sub-question-title
                                 h5 ระดับความพึงพอใจ
@@ -72,7 +72,7 @@ html(lang='en',data-ng-app='crmApp')
                     .page-body
                         .row.rcorners1
                             .col-sm-12
-                                h4 ข้อแนะนำเพิ่มเติม
+                                h4.question-text ข้อแนะนำเพิ่มเติม
                         .row.rcorners2
                             .col-sm-12.text-left
                                 h5
@@ -107,7 +107,9 @@ html(lang='en',data-ng-app='crmApp')
 
                                 img#img-deves-logo(src="img/deves/deves_logo.png",style="height:70px")
 
-                                img#img-deves-line(src="img/deves/deves_line.png",style="height:200px")
+                                img#img-deves-line(src="img/deves/deves_line.png",style="width:98%;height:auto;")
+                                a(href="https://goo.gl/nrTbtA")
+                                    img#img-deves-line-add-friends(src="img/deves/icon-add-friends.jpg",style="width:90%;height:auto;")
                                 img#img-deves-socail(src="img/deves/social.png",style="height:100px")
                                 //
 
@@ -126,7 +128,8 @@ html(lang='en',data-ng-app='crmApp')
         script(src='assets/resource/pfc_jquery.js')
         script(src='assets/resource/pfc_angular.js')
         script(src='assets/resource/pfc_angular_modules.js')
-        script(src='assets/js/main-controller.js')
+        script(src='assets/js/config.js?v=13-6-1560')
+        script(src='assets/js/main-controller.js?v=13-6-1560')
 
 
 

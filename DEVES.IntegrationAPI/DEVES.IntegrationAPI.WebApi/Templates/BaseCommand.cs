@@ -614,15 +614,42 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
 
         internal string GetAppConfigurationSetting(string key)
         {
-            Console.WriteLine("==================key=================");
-            Console.WriteLine(key);
-            Console.WriteLine("==================End Key=================");
-            return System.Configuration.ConfigurationManager.AppSettings[key].ToString();
+            try
+            {
+                Console.WriteLine("==================key=================");
+                Console.WriteLine(key);
+                Console.WriteLine("==================End Key=================");
+                return !string.IsNullOrEmpty(AppConfig.Instance.Get(key))
+                    ? AppConfig.Instance.Get(key).ToString() : System.Configuration.ConfigurationManager.AppSettings[key]
+                          .ToString();
+
+            }
+            catch (Exception e)
+            {
+                return "";
+            }
+
+
         }
 
         string GetEWIEndpoint(string key)
         {
-            return System.Configuration.ConfigurationManager.AppSettings[key].ToString();
+            try
+            {
+                Console.WriteLine("==================key=================");
+                Console.WriteLine(key);
+                Console.WriteLine("==================End Key=================");
+                return !string.IsNullOrEmpty(AppConfig.Instance.Get(key))
+                    ? AppConfig.Instance.Get(key).ToString() : System.Configuration.ConfigurationManager.AppSettings[key]
+                        .ToString();
+
+            }
+            catch (Exception e)
+            {
+                return "";
+            }
+
+          
         }
 
         enum ENUM_f_GetSystemUserByFieldInfo_Attr

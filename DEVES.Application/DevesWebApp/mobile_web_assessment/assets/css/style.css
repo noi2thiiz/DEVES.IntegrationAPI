@@ -215,4 +215,9 @@ a img:hover{
     width: 100px;
     font-size: small;
 }
+.question-text{
+    color: #45077b !important;
+    font-weight: bold !important;
+    font-size: 1.2em !important;
+}
 

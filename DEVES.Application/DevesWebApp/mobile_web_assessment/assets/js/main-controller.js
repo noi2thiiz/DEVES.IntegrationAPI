@@ -24,21 +24,17 @@ app.run(['$window', '$location', '$loading', '$http', '$cookies',function ($wind
 
 }]);
 app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','$cookies','$location', function ($scope, dialog, $loading, $http,$q,$cookies,$location) {
-   //debugger;
-    //var vm = this;
-    //vm.deferred = $q.defer();
-    //vm.deferred.resolve();
-
-    // $("#main-page").attr('disabled',true);
-
 
     var refCode = $.trim(getParameterByName("ref"));
+    var openMode = $.trim(getParameterByName("mode"));
+
 
     if(refCode.length!=11){
         dialog.alert({
             title: "Error",
             content: "ขออภัยรหัสอ้างอิงแบบประเมินนี้ไม่ถูกต้อง"
         });
+
     }
 
     var usuerGid = $.trim(getParameterByName("uid"));
@@ -51,16 +47,27 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
     if(usuerGid==""){
         usuerGid = $.trim(getParameterByName("userGuid"));
     }
-   
+
+
+    if(openMode && openMode=="reset"){
+        $cookies.remove('assessmentStatus_'+refCode);
+        var url1 = (window.location.href).split("&");
+
+        location.href=""+url1[0];
+
+    }
+
 
     var ref = refCode.substr(0,10);
+    var assessmentQuestionnaireId =""; //hard AdHoc
 
     var assessmentType = Number(refCode.substr(10,1));
     //set default
     if($.trim(assessmentType)==""){
         assessmentType = 1;
-    }
 
+    }
+    assessmentQuestionnaireId = window.appConfig.assessmentQuestionnaire[assessmentType];
     var assessmentSurveyByUserid = "";
     var assessmentGarageByUserid = "";
 
@@ -81,7 +88,12 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
 
     var queryString =  $location.search();
     console.log(queryString);
-    var scoreData = {};
+    var scoreData = {
+        "assessmentType": 0,
+        "assessmentQuestionnaireId":0,
+        "assessmentRefCode": "",
+        "assessmentComment": ""
+    };
     $scope.questions=[];
 
     if(assessmentType==2) {
@@ -95,8 +107,8 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
                 subQuestions: [
                     {
                         id: 1, group: 2,
-                        ref: 'assessmentGarageServiceScore',
-                        title: "การให้บริการและการต้อนรับของอู่",
+                        ref: 'assessmentScore1',
+                        title: "การให้บริการและการต้อนรับของอู่มีความพึงพอใจในระดับใด",
                         value: 0
                     }
 
@@ -109,8 +121,8 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
 
                 subQuestions: [
                     {
-                        id: 1, ref: 'assessmentGarageCommitScore',
-                        group: 2, title: "ระยะเวลาที่ใช้ในการจัดซ่อมเหมาะสม", value: 0
+                        id: 1, ref: 'assessmentScore2',
+                        group: 2, title: "ระยะเวลาที่ใช้ในการจัดซ่อมมีความพึงพอใจในระดับใด", value: 0
                     }
 
                 ]
@@ -123,8 +135,8 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
                 subQuestions: [
                     {
                         id: 1, group: 3,
-                        ref: 'assessmentGarageRepairScore',
-                        title: "ความเรียบร้อยของงานซ่อมและความสะอาดตอนส่งมอบได้มาตรฐาน", value: 0
+                        ref: 'assessmentScore3',
+                        title: "ผลงานการจัดซ่อมของอู่มีความพึงพอใจในระดับใด", value: 0
                     }
                 ]
             }
@@ -142,7 +154,7 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
                 subQuestions: [
                     {
                         id: 1, group: 2,
-                        ref: 'assessmentClaimNotiScore',
+                        ref: 'assessmentScore1',
                         title: "การบริการของเจ้าหน้าที่รับแจ้งอุบัติเหตุ มีความพึงพอใจระดับใด",
                         value: 0
                     }
@@ -156,7 +168,7 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
 
                 subQuestions: [
                     {
-                        id: 1, ref: 'assessmentSurveyScore',
+                        id: 1, ref: 'assessmentScore2',
                         group: 2, title: "การเดินทางถึงที่เกิดเหตุของเจ้าหน้าที่สำรวจภัย มีความพึงพอใจระดับใด", value: 0
                     }
 
@@ -170,7 +182,7 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
                 subQuestions: [
                     {
                         id: 1, group: 3,
-                        ref: 'assessmentSurveySpeedScore',
+                        ref: 'assessmentScore3',
                         title: "การบริการและความรวดเร็วในการทำงานของเจ้าหน้าที่สำรวจภัย มีความพึงพอใจระดับใด", value: 0
                     }
                 ]
@@ -199,11 +211,6 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
 
             $("#home-page .page-header").hide();
             $("#page-footer").hide();
-            //$("#thanks-page-body").height(screen.height-200);
-
-            //  $("#thanks-page-body-link").css("margin-top",$("#thanks-page-body").height()-100);
-
-
 
         }else{
             $("#home-img-full").hide();
@@ -211,7 +218,6 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
 
             $("home-page .page-header").show();
             $("#page-footer").show();
-            //  $("#thanks-page-body").height($("body").innerHeight()-250);
 
         }
 
@@ -226,7 +232,8 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
             $("#home-page .page-header").hide();
             $("#textarea-comment").attr("rows",5);
             $("#page-footer").hide();
-        }
+        };
+
         var bodyHeight = window.innerHeight;
         var bodywidth = $("#thanks-page-body-left-panel").innerWidth();
 
@@ -241,17 +248,15 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
 
             var rightWidth = $("#thanks-page-body-right-panel").width();
 
-            $("#img-deves-line").css("margin-top",bodyHeight/4);
+            $("#img-deves-line").css("margin-top",bodyHeight/5);
             $("#img-deves-line").height("auto");
-            $("#img-deves-line").width(rightWidth*0.95);
+            //$("#img-deves-line").width(rightWidth*0.95);
 
             if(window.innerHeight<=150) {
                 $("#img-thanks-img").height("50px").width("auto");
                 $(".deves-icon").height((bodywidth*0.8)/3.8);
 
             }else if(window.innerHeight<=300){
-
-
 
 
                 $("#img-deves-logo").height("10px");
@@ -291,7 +296,6 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
 
                 $(".deves-icon").height((bodywidth*0.9)/3);
                 if(bodyHeight-$(".vertical-center").innerHeight()>150){
-                    //alert(bodyHeight-$(".vertical-center").innerHeight());
 
 
                     $("#deves-icon-container").css("margin-top","50px");
@@ -305,14 +309,7 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
     }
         $("body").css("visibility","visible");
     }
-/*
-    var supportsOrientationChange = "onorientationchange" in window,
-        orientationEvent = supportsOrientationChange ? "orientationchange" : "resize";
 
-    window.addEventListener(orientationEvent, function() {
-        alert('HOLY ROTATING SCREENS BATMAN:' + window.orientation + " " + screen.width);
-    }, false);
-*/
     function showPage(pageId) {
 
         $("section").hide();
@@ -332,7 +329,8 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
         if(pageId=="thanks-page"){
            $(".page-header").remove();
             $("#page-footer").remove();
-            $("body").css("background",'url("img/deves/left_panel_bg.png")')
+            $("body").css("background",'url("img/deves/left_panel_bg.png")');
+
 
         }
         resize();
@@ -406,68 +404,63 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
     };
 
     $scope.startQuestion = function () {
-        try{
-            $("#home-page").hide();
-            showPage("question-page");
+        if(refCode.length!=11){
+            dialog.alert({
+                title: "Error",
+                content: "ขออภัยรหัสอ้างอิงแบบประเมินนี้ไม่ถูกต้อง"
+            });
 
-            if(window.innerHeight<=500){
-                $("#home-page .page-header").hide();
-                $("#textarea-comment").attr("rows",5);
-                $("#page-footer").hide();
-            }else{
-                $("#page-footer").show();
+        }else{
+            try{
+                $("#home-page").hide();
+                showPage("question-page");
+
+                if(window.innerHeight<=500){
+                    $("#home-page .page-header").hide();
+                    $("#textarea-comment").attr("rows",5);
+                    $("#page-footer").hide();
+                }else{
+                    $("#page-footer").show();
+                }
+
+                $scope.selectQuestion(0,0);
+            }catch (e){
+                console.warn(e)
+
             }
-
-            $scope.selectQuestion(0,0);
-        }catch (e){
-            console.warn(e)
-
         }
+
 
     };
 
 
     $scope.comment = "";
     $scope.submitQuestionResult  = function(){
-
-        var assessmentClaimNotiScore = scoreData['assessmentClaimNotiScore'];
-
-        var assessmentSurveyScore = scoreData['assessmentSurveyScore'];
-        var assessmentSurveySpeedScore = scoreData['assessmentSurveySpeedScore'];
-        var assessmentSurveyTimeUsageScore = scoreData['assessmentSurveyTimeUsageScore'];
-
-        var assessmentGarageServiceScore = scoreData['assessmentGarageServiceScore'];
-        var assessmentGarageCommitScore = scoreData['assessmentGarageCommitScore'];
-        var assessmentGarageRepairScore = scoreData['assessmentGarageRepairScore'];
-
-        var assessmentGarageComment = "";
+         if(ref=="xxxxxxxxxx"){
+             $cookies.put('assessmentStatus_'+refCode,"complete");
+             showPage("thanks-page");
+             location.href = "";
+         }
 
 
         if(assessmentType==1){
-            var assessmentSurveyComment = $scope.comment;
-            var assessmentClaimNotiComment = $scope.comment;
+            assessmentComment = $scope.comment;
+            assessmentComment = $scope.comment;
         }else if(assessmentType==2){
-            var assessmentGarageComment = $scope.comment;;
+            assessmentComment = $scope.comment;;
         }
 
         var submitData = {
-            "assessmentType": assessmentType,
-            "assessmentrefcode": ""+ref,
-            "assessmentClaimNotiScore": assessmentClaimNotiScore,
-            "assessmentClaimNotiComment": ""+assessmentClaimNotiComment,
-            "assessmentSurveyScore": assessmentSurveyScore,
-            "assessmentSurveySpeedScore": assessmentSurveySpeedScore,
-            "assessmentSurveyTimeUsageScore": assessmentSurveyTimeUsageScore,
-            "assessmentSurveyComment": ""+assessmentSurveyComment,
-            "assessmentSurveyByUserid": $.trim(assessmentSurveyByUserid),
-            "assessmentGarageServiceScore": assessmentGarageServiceScore,
-            "assessmentGarageCommitScore": assessmentGarageCommitScore,
-            "assessmentGarageRepairScore": assessmentGarageRepairScore,
-            "assessmentGarageComment": ""+assessmentGarageComment,
-            "assessmentGarageByUserid": $.trim(assessmentGarageByUserid)
-        };
+            assessmentType: assessmentType,
+            assessmentQuestionnaireId:assessmentQuestionnaireId,
+            assessmentRefCode: ""+ref,
+            assessmentComment: ""+$scope.comment,
 
-        var apiEndpoint =  "https://crmappqa.deves.co.th/xrmapi/api/SubmitSurveyAssessmentResult";
+        };
+       var  finalSubmitData = angular.merge(scoreData,submitData);
+
+
+        var apiEndpoint =  "/csat-service/api/SubmitSurveyAssessmentResult";
         var valid = true;
         if (!valid) {
             dialog.alert({
@@ -475,11 +468,11 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
                 content: "กรุณาตอบคำถามให้ครบทุกข้อก่อนครับ"
             });
         } else {
-            console.log(JSON.stringify(submitData));
+            console.log(JSON.stringify(finalSubmitData));
             $loading.start('main');
             $http({
                 method: 'POST',
-                data: submitData,
+                data: finalSubmitData,
                 url: apiEndpoint
             }).then(function successCallback(response) {
                 $loading.finish('main');
@@ -487,16 +480,19 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
                 // when the response is available
                 if (response.data.code == '200') {
 
-                    $loading.finish("main");
-                    var message = response.data.message;
-                    if($.trim(message)==""){
-                        message = "เพิ่มข้อมูลเรียบร้อยแล้ว"
+                    //$loading.finish("main");
 
-                    }
                     //success
                     $cookies.put('assessmentStatus_'+refCode,"complete");
-                    showPage("thanks-page");
-                    location.href = "";
+                    if($.trim(openMode)=="user" && window.opener){
+                        window.close();
+
+                    }else{
+
+                        showPage("thanks-page");
+                        location.href = "";
+                    }
+
 
 
                 } else {
@@ -507,39 +503,35 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
 
                     console.log(error.data);
                     var message = "Server Error";
-                    var title = "Server Error";
-                    if(error.code=="500"){
-                        if(error.data.message){
-                            message +=error.data.data.message;
-                        }
+                    var title = "ผลการส่งคะแนนประเมิน";
 
-                    }else {
-                        title += ":"+ error.code
-
-                        if(error.message){
+                        if($.trim(error.description) != "" && $.trim(error.message) != ""){
+                            title = error.message;
+                            message = error.description;
+                        }else
+                        if($.trim(error.message) != ""){
                             message = error.message;
-
+                         }
+                         else{
+                            message = "มีข้อผิดพลาดเกิดขึ้น โปรดลองใหม่อีกครั้งในภายหลัง";
                         }
-                        if(error.description){
-                            message = error.message+":"+error.description;
-                        }
 
-                    }
+
 
                     dialog.alert({
                         title: title,
                         content: message
                     });
-                    showPage("home-page");
+                    //showPage("home-page");
                 }
-                console.log(response)
+                //console.log(response)
             }, function errorCallback(response) {
                 $loading.finish("main");
                 dialog.alert({
                     title: "Server Error",
-                    content: response.statusText
+                    content: "มีข้อผิดพลาดเกิดขึ้น โปรดลองใหม่อีกครั้งในภายหลัง"
                 });
-                showPage("home-page");
+                //showPage("home-page");
             });
         }
 
@@ -547,17 +539,17 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
 
     }
     $("textarea").on("focus",function () {
-        if(window.innerHeight<500) {
+        //if(window.innerHeight<500) {
             $("#page-footer").hide();
-            $(".rcorners1").height(50);
-        }
+            //$(".rcorners1").height(50);
+        //}
 
     });
 
     $("textarea").on("blur",function () {
         if(window.innerHeight>=500){
             $("#page-footer").show();
-            $(".rcorners1").height(100);
+            //$(".rcorners1").height(100);
         }
 
     });
