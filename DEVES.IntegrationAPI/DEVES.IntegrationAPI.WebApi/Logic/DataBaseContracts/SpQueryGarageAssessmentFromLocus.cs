@@ -42,7 +42,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.DataBaseContracts
         public string ClaimNotiNumber { get; set; }
         public string QuestionGuid { get; set; }
         public int QuestionType { get; set; }
+
+        public string AssesseeCode { get; set; }
+        public string AssesseeName { get; set; }
+        public string AssessmentOwnerGuid { get; set; }
         
+
 
     }
 }

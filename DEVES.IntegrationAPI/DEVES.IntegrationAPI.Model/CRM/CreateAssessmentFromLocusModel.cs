@@ -17,7 +17,7 @@ namespace DEVES.IntegrationAPI.Model.CRM
     }
     public class CreateAssessmentFromLocusOutputDataModel : BaseDataModel
     {
-        public bool status { get; set; }
+        public bool success { get; set; }
         public int totalRecord { get; set; }
     }
     

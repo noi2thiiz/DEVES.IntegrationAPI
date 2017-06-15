@@ -21,11 +21,17 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
                     apiLogEntry.ServiceName = apiLogEntry.Controller;
                 }
 
+                if (apiLogEntry.RequestRouteTemplate== "swagger/ui/{*assetPath}")
+                {
+                    return;
+                }
+
 
                 apiLogEntry.BuildDebugLog();
 
                 apiLogEntry.ServiceName = apiLogEntry.ServiceName.Replace("OutputModel", "");
                 Console.WriteLine("MachineName:"+ System.Environment.MachineName);
+                Console.WriteLine("Data:" + apiLogEntry.Controller+ apiLogEntry.ServiceName+ apiLogEntry.Activity+ apiLogEntry.RequestContentBody+apiLogEntry.ResponseContentBody);
                 if (AppConst.IS_SERVER)
                 {
                    Console.WriteLine("Execute Log By Sql");
@@ -178,7 +184,7 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
                     querySaveStaff.Parameters.Add("@ResponseTimeTotalMilliseconds", SqlDbType.Float).Value =  apiLogEntry.ResponseTimeTotalMilliseconds;
 
 
-                    Console.WriteLine(" querySaveStaff.CommandText = " + querySaveStaff.CommandText);
+                  //  Console.WriteLine(" querySaveStaff.CommandText = " + querySaveStaff.CommandText);
 
 
                    

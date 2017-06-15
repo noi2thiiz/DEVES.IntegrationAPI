@@ -25,6 +25,6 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
             Console.WriteLine(result.ToJson());
         }
 
-     
+       
     }
 }
