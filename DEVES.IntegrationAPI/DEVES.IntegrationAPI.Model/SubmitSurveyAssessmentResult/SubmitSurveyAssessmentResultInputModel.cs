@@ -22,6 +22,7 @@ namespace DEVES.IntegrationAPI.Model.SubmitSurveyAssessmentResult
         public int assessmentScore9 { get; set; }
         public int assessmentScore10 { get; set; }
         public string assessmentComment { get; set; }
-        
+        public string assesseeCode { get; set; }
+        public string assesseeName { get; set; }
     }
 }

@@ -49,6 +49,14 @@
     "assessmentComment": {
       "type": "string",
       "maxLength": 4000
+    },
+    "assesseeCode": {
+      "type": "string",
+      "maxLength": 20
+    },
+    "assesseeName": {
+      "type": "string",
+      "maxLength": 200
     }
   },
   "required": [

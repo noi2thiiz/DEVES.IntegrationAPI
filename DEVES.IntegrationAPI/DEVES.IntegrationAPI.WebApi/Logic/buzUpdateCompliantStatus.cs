@@ -47,8 +47,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             else
             {
                 Incident incident = query.FirstOrDefault<Incident>();
+                Guid guid = new Guid(incident.Id.ToString());
 
-                Incident retrievedIncident = (Incident)_serviceProxy.Retrieve(Incident.EntityLogicalName, incident.Id, new Microsoft.Xrm.Sdk.Query.ColumnSet(true));
+                Incident retrievedIncident = (Incident)_serviceProxy.Retrieve(Incident.EntityLogicalName, guid, new Microsoft.Xrm.Sdk.Query.ColumnSet(true));
                 string check = retrievedIncident.pfc_complaint_temp_id + "";
                 try
                 {
@@ -75,6 +76,19 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                     retrievedIncident.pfc_complaint_step_date = Convert.ToDateTime(contentInput.complaintStepdate);
 
+                    try
+                    {
+                        _serviceProxy.Update(retrievedIncident);
+                    }
+                    catch (Exception e)
+                    {
+                        output.code = AppConst.CODE_FAILED;
+                        output.message = "ไม่สามารถ Update ได้";
+                        output.description = e.Message;
+                        output.transactionId = TransactionId;
+                        output.transactionDateTime = DateTime.Now;
+                        return output;
+                    }
 
                     output.code = CONST_CODE_SUCCESS;
                     output.message = "Update Complaint Status เรียบร้อยแล้ว";

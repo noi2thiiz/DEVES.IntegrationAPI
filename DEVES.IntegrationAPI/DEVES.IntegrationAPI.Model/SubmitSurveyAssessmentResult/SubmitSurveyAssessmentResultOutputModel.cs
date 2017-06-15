@@ -6,13 +6,15 @@ using System.Threading.Tasks;
 
 namespace DEVES.IntegrationAPI.Model.SubmitSurveyAssessmentResult
 {
-    public class SubmitSurveyAssessmentResultOutputModel_Pass : BaseDataModel
+    public class SubmitSurveyAssessmentResultOutputModel_Pass : BaseContentJsonProxyOutputModel
     {
+        /*
         public string code { get; set; }
         public string message { get; set; }
         public string description { get; set; }
         public string transactionId { get; set; }
         public string transactionDateTime { get; set; }
+        */
         public SubmitSurveyAssessmentResultDataModel_Pass data { get; set; }
     }
 

@@ -45,7 +45,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     output.message = "ไม่สามารถบันทึกคะแนนได้";
                     output.description = "ไม่สามารถบันทึกคะแนนได้เนื่องจากไม่พบแบบสำรวจความพึงพอใจ";
                     output.transactionId = TransactionId;
-                    output.transactionDateTime = DateTime.Now.ToString();
+                    output.transactionDateTime = DateTime.Now;
 
                     return output;
                 }
@@ -62,7 +62,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         output.message = "ไม่สามารถบันทึกคะแนนได้";
                         output.description = "สถานะไม่ถูกต้อง: (" + firstQuery.pfc_assessment_survey_status.Value + ")";
                         output.transactionId = TransactionId;
-                        output.transactionDateTime = DateTime.Now.ToString();
+                        output.transactionDateTime = DateTime.Now;
 
                         return output;
                     }
@@ -78,7 +78,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                             output.message = "ไม่สามารถบันทึกคะแนนได้";
                             output.description = "ไม่สามารถบันทึกคะแนนได้เนื่องจากไม่พบแบบสำรวจความพึงพอใจ";
                             output.transactionId = TransactionId;
-                            output.transactionDateTime = DateTime.Now.ToString();
+                            output.transactionDateTime = DateTime.Now;
 
                             return output;
                         }
@@ -96,7 +96,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                             retrievedAssessment.pfc_assessment_score9 = contentModel.assessmentScore9;
                             retrievedAssessment.pfc_assessment_score10 = contentModel.assessmentScore10;
                             retrievedAssessment.pfc_assessment_comment = contentModel.assessmentComment;
-                            retrievedAssessment.pfc_assessment_survey_status = new OptionSetValue(100000001);
+                            retrievedAssessment.pfc_assessment_status = new OptionSetValue(100000001);
                             if (retrievedAssessment.pfc_assessment_by_userid == null)
                             {
                                 retrievedAssessment.pfc_assessment_by = new OptionSetValue(100000000);
@@ -106,6 +106,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                                 retrievedAssessment.pfc_assessment_by = new OptionSetValue(100000001);
                             }
                             retrievedAssessment.pfc_assessment_survey_ipaddress = HttpContext.Current.Request.UserHostAddress;
+                            retrievedAssessment.pfc_assessee_code = contentModel.assesseeCode;
+                            retrievedAssessment.pfc_assessee_name = contentModel.assesseeName;
 
                             try
                             {
@@ -117,7 +119,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                                 output.message = "ไม่สามารถบันทึกคะแนนได้";
                                 output.description = e.Message;
                                 output.transactionId = TransactionId;
-                                output.transactionDateTime = DateTime.Now.ToString();
+                                output.transactionDateTime = DateTime.Now;
                                 return output;
                             }
 
@@ -125,7 +127,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                             output.message = AppConst.MESSAGE_SUCCESS;
                             output.description = "บันทึกคะแนนเรียบร้อยแล้ว";
                             output.transactionId = TransactionId;
-                            output.transactionDateTime = DateTime.Now.ToString();
+                            output.transactionDateTime = DateTime.Now;
                             return output;
                         }
 
