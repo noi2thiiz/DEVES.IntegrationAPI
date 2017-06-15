@@ -39,8 +39,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 OrganizationServiceProxy _serviceProxy = connection.OrganizationServiceProxy;
                 ServiceContext svcContext = new ServiceContext(_serviceProxy);
 
-                string backDay =(string.IsNullOrEmpty(AppConfig.Instance.Get("SMS_ASSESSMENT_BACK_DAY"))) ? AppConfig.Instance.Get("SMS_ASSESSMENT_BACK_DAY") : "30";
-                string smsUrl  = (string.IsNullOrEmpty(AppConfig.Instance.Get("SMS_ASSESSMENT_URL"))) ? AppConfig.Instance.Get("SMS_ASSESSMENT_URL") : "https://csat-qa.deves.co.th/assessment";  
+                string backDay =(!string.IsNullOrEmpty(AppConfig.Instance.Get("SMS_ASSESSMENT_BACK_DAY"))) ? AppConfig.Instance.Get("SMS_ASSESSMENT_BACK_DAY") : "30";
+                string smsUrl  = (!string.IsNullOrEmpty(AppConfig.Instance.Get("SMS_ASSESSMENT_URL"))) ? AppConfig.Instance.Get("SMS_ASSESSMENT_URL") : "https://csat-qa.deves.co.th/assessment";  
 
 
                 var result = SpQueryGarageAssessmentFromLocus.Instance.Excecute(new Dictionary<string, string> { { "BACK_DAY", backDay } });
