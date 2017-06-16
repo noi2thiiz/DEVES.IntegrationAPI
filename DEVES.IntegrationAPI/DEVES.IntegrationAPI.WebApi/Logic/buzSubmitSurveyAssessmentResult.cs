@@ -59,8 +59,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     if (firstQuery.pfc_assessment_status.Value != 100000000)
                     {
                         output.code = AppConst.CODE_FAILED;
-                        output.message = "ไม่สามารถบันทึกคะแนนได้";
-                        output.description = "สถานะไม่ถูกต้อง: (" + firstQuery.pfc_assessment_status.Value + ")";
+                        output.message = "สถานะไม่ถูกต้อง: (" + firstQuery.pfc_assessment_status.Value + ")";
+                        output.description = "แบบสอบถามนี้ได้ถูกประเมินหรือพ้นช่วงเวลาประเมินแล้ว";
                         output.transactionId = TransactionId;
                         output.transactionDateTime = DateTime.Now;
 
