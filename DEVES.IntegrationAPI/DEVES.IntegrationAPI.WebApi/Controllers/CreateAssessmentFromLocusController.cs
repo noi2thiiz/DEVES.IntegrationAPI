@@ -11,11 +11,11 @@ using DEVES.IntegrationAPI.WebApi.Templates;
 namespace DEVES.IntegrationAPI.WebApi.Controllers
 {
     [RoutePrefix("api/CreateAssessmentFromLocus")]
-    public class CreateAssessmentFromLocusController:BaseApiController
+    public class CreateAssessmentFromLocusController : BaseApiController
     {
         [HttpPost]
         [Route("")]
-        public object Post([FromBody]object value)
+        public object Post([FromBody] object value)
         {
 
             return ProcessRequest<buzCreateAssessmentFromLocus, CreateAssessmentFromLocusInputModel>
@@ -30,7 +30,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         {
             var cmd = new buzCreateAssessmentFromLocus();
             cmd.TransactionId = GetTransactionId();
-            var result = (BaseContentJsonProxyOutputModel)cmd.Execute(new CreateAssessmentFromLocusInputModel
+            var result = (BaseContentJsonProxyOutputModel) cmd.Execute(new CreateAssessmentFromLocusInputModel
             {
                 requestId = "api"
             });
@@ -42,21 +42,22 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
 
         private static bool _isNotSsl;
         private static bool _isStart;
+
         [HttpGet]
         [Route("invork")]
-        public IHttpActionResult  Invork()
+        public IHttpActionResult Invork()
         {
             var virtualPath = System.Web.Hosting.HostingEnvironment.ApplicationHost.GetVirtualPath() ?? "";
             _isNotSsl = !HttpContext.Current.Request.Url.AbsoluteUri.Contains("https");
-            if (_isStart != true)
-            {
+            //if (_isStart != true)
+            //{
                 // ให้ทำงานแค่เรื่องเดียว ไม่งั้นจะเกิดการสร้าง assessment ซ้ำซ้อน
                 //start log job
                 // start เครื่องเดียว
                 if (Environment.MachineName == AppConst.PRO2_SERVER_NAME || !AppConst.IS_PRODUCTION)
                 {
 
-                   
+
                     if (_isNotSsl)
                     {
                         if (HttpContext.Current.Request.Url.Host == "localhost")
@@ -64,12 +65,14 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                             AssessmentJobHandle.Start();
                             _isStart = true;
                         }
-                        else if (HttpContext.Current.Request.Url.Host == "192.168.8.121" && virtualPath?.ToLower() == "/xrmapi")
+                        else if (HttpContext.Current.Request.Url.Host == "192.168.8.121" &&
+                                 virtualPath?.ToLower() == "/xrmapi")
                         {
                             AssessmentJobHandle.Start();
                             _isStart = true;
                         }
-                        else if (HttpContext.Current.Request.Url.Host == "api.deves.co.th" && virtualPath?.ToLower() == "/claim-service")
+                        else if (HttpContext.Current.Request.Url.Host == "api.deves.co.th" &&
+                                 virtualPath?.ToLower() == "/claim-service")
                         {
                             AssessmentJobHandle.Start();
                             _isStart = true;
@@ -80,9 +83,9 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 }
 
                 //_isStart = true;
-               
-            }
-            
+
+            //}
+
 
             return Ok(new OutputGenericDataModel<object>
             {
@@ -93,16 +96,37 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 data = new
                 {
                     _isStart,
-                    host =  HttpContext.Current.Request.Url.Host,
-                    virtualPath= virtualPath?.ToLower(),
+                    host = HttpContext.Current.Request.Url.Host,
+                    virtualPath = virtualPath?.ToLower(),
                     _isNotSsl,
-                    machineName=Environment.MachineName,
-                    absoluteUri= HttpContext.Current.Request.Url.AbsoluteUri
+                    machineName = Environment.MachineName,
+                    absoluteUri = HttpContext.Current.Request.Url.AbsoluteUri
                 }
             });
 
         }
 
 
+        [HttpGet]
+        [Route("Stop")]
+        public IHttpActionResult Stop()
+        {
+
+            AssessmentJobHandle.Stop();
+            _isStart = false;
+
+            return Ok(new OutputGenericDataModel<object>
+            {
+                code = AppConst.CODE_SUCCESS,
+                message = AppConst.MESSAGE_SUCCESS,
+                transactionDateTime = DateTime.Now,
+                transactionId = GetTransactionId(),
+                data = new
+                {
+                    _isStart
+
+                }
+            });
+        }
     }
 }

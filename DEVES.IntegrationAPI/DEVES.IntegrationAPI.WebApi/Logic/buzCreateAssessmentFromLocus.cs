@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Hosting;
@@ -118,62 +119,63 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
         private static readonly Timer timer = new Timer(OnTimerElapsed);
         private static readonly Timer timerStart = new Timer(StartLoop);
-        private static readonly LogJob logJob = new LogJob();
+        private static readonly AssessmentJob assessmentJob = new AssessmentJob();
         private static int msUntilTime = 0;
-      
+
 
         public static void Start()
         {
-            
+
 
             // Figure how much time until 7:00
             double TimeOfExecution = 7;
+            var cultureInfo = new CultureInfo("th-TH");
 
             DateTime now = DateTime.Now;
             Console.WriteLine(now.ToString());
-            DateTime sevenOClock = DateTime.Now.AddHours(TimeOfExecution);
+            DateTime sevenOClock = DateTime.Today.AddHours(TimeOfExecution);
 
             // If it's already past 7:00, wait until 7:00 tomorrow    
             if (now > sevenOClock)
             {
                 sevenOClock = sevenOClock.AddDays(1.0);
             }
-            Console.WriteLine("Set the timer to" + sevenOClock.ToString());
+            Console.WriteLine("Set the timer to" + sevenOClock.ToString(cultureInfo));
 
-            msUntilTime = (int)((sevenOClock - now).TotalMilliseconds);
+            msUntilTime = (int) ((sevenOClock - now).TotalMilliseconds);
 
             // Set the timer to elapse only once, at 7:00.
             Console.WriteLine("Assessment Job Start");
             SendSmsService.Instance
-                .SendMessage("Set the Assessment timer to" + sevenOClock.ToString(),
+                .SendMessage("Set the Assessment timer to" + sevenOClock.ToString(cultureInfo),
                     "0943481249");
             timer.Change(msUntilTime, Timeout.Infinite);
-           // timer.Change(TimeSpan.Zero, TimeSpan.FromMilliseconds(msUntilTime));
+            // timer.Change(TimeSpan.Zero, TimeSpan.FromMilliseconds(msUntilTime));
 
 
         }
 
         public static void StartLoop(object sender)
         {
-           
+
             // Set the timer to elapse only once, at 7:00.
-                Console.WriteLine("Assessment Job Start Loop");
+            Console.WriteLine("Assessment Job Start Loop");
             //timer.Change(msUntilTime, Timeout.Infinite);
             timer.Change(TimeSpan.Zero, TimeSpan.FromMilliseconds(msUntilTime));
 
 
         }
 
-        private static void  processAssessment()
+        private static void processAssessment()
         {
             countTry++;
-            if (countTry<=5)
+            if (countTry <= 5)
             {
                 try
                 {
-                    Console.WriteLine("processAssessment:"+ countTry);
+                    Console.WriteLine("processAssessment:" + countTry);
                     var cmd = new buzCreateAssessmentFromLocus();
-                    var result = (BaseContentJsonProxyOutputModel)cmd.Execute(new CreateAssessmentFromLocusInputModel
+                    var result = (BaseContentJsonProxyOutputModel) cmd.Execute(new CreateAssessmentFromLocusInputModel
                     {
                         requestId = "job"
                     });
@@ -187,15 +189,17 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     processAssessment();
                 }
 
-               
+
             }
-           
+
         }
+
         static int countTry = 0;
+
         private static void OnTimerElapsed(object sender)
         {
-            
-            logJob.DoWork(() =>
+
+            assessmentJob.DoWork(() =>
             {
                 processAssessment();
                 Console.WriteLine("Assessment Job DoWork");
@@ -205,7 +209,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             });
         }
+
+        public static void Stop()
+        {
+            assessmentJob.Stop(true);
+        }
     }
+
     public class AssessmentJob : System.Web.Hosting.IRegisteredObject
     {
         private readonly object _lock = new object();
