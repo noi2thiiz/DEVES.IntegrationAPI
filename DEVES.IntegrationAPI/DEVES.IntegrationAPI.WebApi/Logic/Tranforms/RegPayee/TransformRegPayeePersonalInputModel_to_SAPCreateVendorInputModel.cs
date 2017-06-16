@@ -28,7 +28,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             }
             if (src.profileInfo != null)
             {
-                trgt.TITLE = buzMasterSalutation.Instant.SalutationList.FirstOrDefault( t => t.titlePolisy == src.profileInfo.salutation).titleSAP ?? "";
+                trgt.TITLE = PersonalTitleMasterData.Instance.FindByPolisyCode(src.profileInfo.salutation)?.RefSap ?? "";
+                    //buzMasterSalutation.Instant.SalutationList.FirstOrDefault( t => t.titlePolisy == src.profileInfo.salutation).titleSAP ?? "";
 
 
                 var fullname = (src.profileInfo.personalName + " " + src.profileInfo.personalSurname).Trim();
@@ -119,7 +120,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 
                // trgt.CITY = src.addressInfo.provinceCode ?? "";
                 trgt.POSTCODE = src.addressInfo.postalCode ?? "";
-                trgt.COUNTRY = buzMasterCountry.Instant.CountryList.FirstOrDefault( c => c.ctryPolisy== src.addressInfo.country).ctrySAP??"";
+                trgt.COUNTRY = CountryMasterData.Instance.FindByPolisyCode(src.addressInfo.country)?.SapCode ?? "";
+                //buzMasterCountry.Instant.CountryList.FirstOrDefault( c => c.ctryPolisy== src.addressInfo.country).ctrySAP??"";
             }
             if (src.sapVendorInfo != null)
             {

@@ -87,9 +87,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                 // trgt.CITY = src.addressInfo.provinceCode ?? "";
                 trgt.POSTCODE = src.addressHeader.postalCode ?? "";
-                trgt.COUNTRY = buzMasterCountry.Instant.CountryList.FirstOrDefault(c => c.ctryPolisy == src.addressHeader.country).ctrySAP ?? "";
 
-               
+                trgt.COUNTRY = CountryMasterData.Instance.FindByPolisyCode(src.addressHeader.country)?.SapCode ?? "";
+
+                //buzMasterCountry.Instant.CountryList.FirstOrDefault(c => c.ctryPolisy == src.addressHeader.country).ctrySAP ?? "";
+
+
             }
             if (src.sapVendorInfo != null)
             {
