@@ -65,7 +65,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                             AssessmentJobHandle.Start();
                             _isStart = true;
                         }
-                        else if (HttpContext.Current.Request.Url.Host == "192.168.8.121" &&
+                        else if (HttpContext.Current.Request.Url.Host == "192.168.8.121" && 
                                  virtualPath?.ToLower() == "/xrmapi")
                         {
                             AssessmentJobHandle.Start();
@@ -105,7 +105,27 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             });
 
         }
+        [HttpGet]
+        [Route("Start")]
+        public IHttpActionResult Start()
+        {
 
+            AssessmentJobHandle.Start();
+            _isStart = true;
+
+            return Ok(new OutputGenericDataModel<object>
+            {
+                code = AppConst.CODE_SUCCESS,
+                message = AppConst.MESSAGE_SUCCESS,
+                transactionDateTime = DateTime.Now,
+                transactionId = GetTransactionId(),
+                data = new
+                {
+                    _isStart
+
+                }
+            });
+        }
 
         [HttpGet]
         [Route("Stop")]
