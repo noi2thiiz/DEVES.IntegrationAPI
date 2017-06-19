@@ -18,6 +18,7 @@ using Microsoft.Xrm.Sdk.Client;
 using Microsoft.Xrm.Tooling.Connector;
 using System.Threading;
 using DEVES.IntegrationAPI.WebApi.Logic.Services;
+using WebBackgrounder;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
@@ -128,7 +129,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
 
             // Figure how much time until 7:00
-            double TimeOfExecution = 7;
+            double TimeOfExecution = 8;
             var cultureInfo = new CultureInfo("th-TH");
 
             DateTime now = DateTime.Now;
@@ -144,13 +145,15 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             msUntilTime = (int) ((sevenOClock - now).TotalMilliseconds);
 
+            int sevenOClockTime = (int)((sevenOClock- DateTime.Today).TotalMilliseconds);
+
             // Set the timer to elapse only once, at 7:00.
             Console.WriteLine("Assessment Job Start");
             SendSmsService.Instance
                 .SendMessage("Set the Assessment timer to" + sevenOClock.ToString(cultureInfo),
                     "0943481249");
-            timer.Change(msUntilTime, Timeout.Infinite);
-            // timer.Change(TimeSpan.Zero, TimeSpan.FromMilliseconds(msUntilTime));
+            //timer.Change(msUntilTime, Timeout.Infinite);
+            timer.Change(TimeSpan.FromMilliseconds(msUntilTime), TimeSpan.FromMilliseconds(sevenOClockTime));
 
 
         }
@@ -162,6 +165,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             Console.WriteLine("Assessment Job Start Loop");
             //timer.Change(msUntilTime, Timeout.Infinite);
             timer.Change(TimeSpan.Zero, TimeSpan.FromMilliseconds(msUntilTime));
+            timerStart.Stop();
 
 
         }
@@ -201,11 +205,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             assessmentJob.DoWork(() =>
             {
-                processAssessment();
+               
                 Console.WriteLine("Assessment Job DoWork");
                 SendSmsService.Instance
                     .SendMessage("Assessment Job DoWork",
                         "0943481249");
+                processAssessment();
 
             });
         }
@@ -247,4 +252,5 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             }
         }
     }
+
 }
