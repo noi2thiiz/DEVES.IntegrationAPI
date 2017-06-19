@@ -42,6 +42,7 @@ namespace DEVES.IntegrationAPI.Model.CLS
                     CultureInfo enUS = new CultureInfo("en-US");
                     s = dtBirthDate.Value.ToString(DateTimeCustomFormat, enUS);
                 }
+                
                 return s;
             }
         }

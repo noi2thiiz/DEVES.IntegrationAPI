@@ -34,6 +34,11 @@ namespace DEVES.IntegrationAPI.WebApi
             {
                 writer.WriteValue("");
             }
+           // else 
+           // if ((string)value == "1900-01-01 00:00:00")
+            //{
+              //  writer.WriteValue("");
+            //}
             else
             {
                 writer.WriteValue(((DateTime)value).ToString(DateTimeCustomFormat, enUS));
