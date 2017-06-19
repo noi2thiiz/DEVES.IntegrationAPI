@@ -77,8 +77,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                             pfc_assessment_user_url = $"{smsUrl}/?ref=" + model?.AssessmentRefCode+"2",
                             pfc_assessment_status = new OptionSetValue(100000000),
                             pfc_assessment_garage_status = new OptionSetValue(100000000),
-                            // pfc_assessee_code = model?.AssesseeCode??"",
-                            // pfc_assessee_name = model?.AssesseeName ??"",
+                            pfc_assessee_code = model?.AssesseeCode??"",
+                            pfc_assessee_name = model?.AssesseeName ??"",
                             OwnerId = new EntityReference("team", new Guid(assessmentOwnerGuid)),
                             
                            
