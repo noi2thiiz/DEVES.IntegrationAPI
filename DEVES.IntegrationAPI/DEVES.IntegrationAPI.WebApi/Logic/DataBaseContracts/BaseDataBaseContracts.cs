@@ -14,11 +14,17 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.DataBaseContracts
         protected IDataReader DataReader { get; set; }
         protected string StoreName { get; set; }
 
+        protected string readerName { get; set; } = "auto";
+
         public BaseDataBaseContracts(string storeName)
         {
             StoreName = storeName;
 
-          
+            if (readerName == "Rest")
+            {
+                DataReader = new RestDataReader();
+
+            }else
             if (AppConst.IS_SERVER)
             {
                 var conectionString = AppConfig.Instance.GetCRMDBConfigurationString();
@@ -29,6 +35,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.DataBaseContracts
                 DataReader = new RestDataReader();
                
             }
+
+            
            
 
         }

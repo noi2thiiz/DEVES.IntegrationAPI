@@ -8,13 +8,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.DataBaseContracts
     public class SpQueryGarageAssessmentFromLocus : BaseDataBaseContracts<GarageAssessmentFromLocusEntity>
     {
         private static SpQueryGarageAssessmentFromLocus _instance;
+       
 
         public static SpQueryGarageAssessmentFromLocus Instance
         {
             get
             {
                 if (_instance != null) return _instance;
-                _instance = new SpQueryGarageAssessmentFromLocus("sp_Query_GarageAssessmentFromLocus");
+                _instance = new SpQueryGarageAssessmentFromLocus("sp_Query_GarageAssessmentFromLocus", "Rest");
                 return _instance;
             }
         }
@@ -22,6 +23,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.DataBaseContracts
         public SpQueryGarageAssessmentFromLocus(string storeName) : base(storeName)
         {
 
+        }
+
+        public SpQueryGarageAssessmentFromLocus(string storeName, string readerName) : this(storeName)
+        {
+            this.readerName = readerName;
         }
     }
 

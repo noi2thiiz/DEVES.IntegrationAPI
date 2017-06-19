@@ -45,7 +45,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 string backDay =(!string.IsNullOrEmpty(AppConfig.Instance.Get("SMS_ASSESSMENT_BACK_DAY"))) ? AppConfig.Instance.Get("SMS_ASSESSMENT_BACK_DAY") : "30";
                 string smsUrl  = (!string.IsNullOrEmpty(AppConfig.Instance.Get("SMS_ASSESSMENT_URL"))) ? AppConfig.Instance.Get("SMS_ASSESSMENT_URL") : "https://csat-qa.deves.co.th/assessment";  
 
-                var result = SpQueryGarageAssessmentFromLocus.Instance.Excecute(new Dictionary<string, string> { { "BACK_DAY", backDay } });
+                var result = SpQueryGarageAssessmentFromLocus.Instance.Excecute(new Dictionary<string, string> { { "BACK_DAY", "30" } });
                 
                 output.data.success = true;
                 
@@ -59,7 +59,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         var assessmentOwnerGuid = (!string.IsNullOrEmpty(model.AssessmentOwnerGuid))
                             ? model.AssessmentOwnerGuid
                             : "72FA6F77-5451-E711-80DA-0050568D615F";
-                        
+                        Console.WriteLine(model.ToJson());
                         var assessment = new pfc_assessment
                         {
                             
@@ -81,8 +81,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                             pfc_assessee_name = model?.AssesseeName ??"",
                             OwnerId = new EntityReference("team", new Guid(assessmentOwnerGuid)),
                             
-                           
-                         
+      
                         };
                         _serviceProxy.Create(assessment);
                     }
