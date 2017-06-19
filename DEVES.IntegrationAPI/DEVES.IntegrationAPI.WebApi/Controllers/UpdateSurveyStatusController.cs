@@ -227,6 +227,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 outputFail.description = "Some of your input is invalid. Please recheck again.";
                 outputFail.transactionId = _transactionId.ToString();
                 outputFail.transactionDateTime = DateTime.Now.ToString();
+                outputFail.errorMessage = errorMessage;
 
                 _log.Error(_logImportantMessage);
                 _log.ErrorFormat("ErrorCode: {0} {1} ErrorDescription: {1}", outputFail.code, Environment.NewLine, outputFail.description);
@@ -256,7 +257,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 _accountId = new Guid(incident.IncidentId.ToString());
 
                 int statusInput = Int32.Parse(content.iSurveyStatus);
-                int statusCRM = (incident.pfc_isurvey_status.Value % 100000000);
+                int statusCRM = incident.pfc_isurvey_status == null ? 0 : (incident.pfc_isurvey_status.Value % 100000000);
                 if (statusInput <= statusCRM)
                 {
                     output.code = "200";
