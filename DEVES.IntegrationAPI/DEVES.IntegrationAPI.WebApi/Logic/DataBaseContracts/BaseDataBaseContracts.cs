@@ -76,9 +76,29 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.DataBaseContracts
             {
                 var piName = pi.Name;
                 if (!pi.CanWrite) continue;
+
+               
                 try
                 {
-                    pi.SetValue(obj, item[piName], null);
+                    //AdHoc  Convert เฉพาะที่ใช้เท่านั้น
+                    Console.WriteLine(pi.PropertyType.Name);
+                    if (pi.PropertyType.Name == "System.String" && item[piName].GetType() == "System.Guid")
+                    {
+                        pi.SetValue(obj, ((Guid)item[piName]).ToString("D"), null);
+                    }
+                    else if (pi.PropertyType.Name == "System.Guid" && item[piName].GetType() == "System.String")
+                    {
+                        pi.SetValue(obj, new Guid(item[piName]?.ToString()), null);
+                    }
+                    else if (pi.PropertyType.Name == "System.String")
+                    {
+                        pi.SetValue(obj, new Guid(item[piName]?.ToString()), null);
+                    }
+                    else
+                    {
+                        pi.SetValue(obj, item[piName], null);
+                    }
+                    
                 }
                 catch (Exception e)
                 {
