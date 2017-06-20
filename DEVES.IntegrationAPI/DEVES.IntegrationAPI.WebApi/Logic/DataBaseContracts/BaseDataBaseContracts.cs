@@ -81,7 +81,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.DataBaseContracts
                 try
                 {
                     //AdHoc  Convert เฉพาะที่ใช้เท่านั้น
-                    Console.WriteLine(pi.PropertyType.Name);
+                    Console.WriteLine(pi.PropertyType.Name +" to "+ item[piName].GetType());
                     if (pi.PropertyType.Name == "System.String" && item[piName].GetType() == "System.Guid")
                     {
                         pi.SetValue(obj, ((Guid)item[piName]).ToString("D"), null);
