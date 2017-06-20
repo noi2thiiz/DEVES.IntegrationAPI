@@ -90,9 +90,15 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             
                 #region IF inqCrmPayeeListIn.roleCode == {A,S,R,H} -> Master.InquiryMasterASRH
                 // Search in MASTER: MOTOR_InquiryMasterASRH()
+                var service = new MOTORInquiryMasterASRH(TransactionId, ControllerName);
+           
                 InquiryMasterASRHDataInputModel inqASRHIn = (InquiryMasterASRHDataInputModel)DataModelFactory.GetModel(typeof(InquiryMasterASRHDataInputModel));
                 inqASRHIn = (InquiryMasterASRHDataInputModel)TransformerFactory.TransformModel(contentModel, inqASRHIn);
-                InquiryMasterASRHContentModel inqASRHOut = CallDevesServiceProxy<InquiryMasterASRHOutputModel, InquiryMasterASRHContentModel>(CommonConstant.ewiEndpointKeyMOTORInquiryMasterASRH, inqASRHIn);
+
+                InquiryMasterASRHContentModel inqASRHOut = service.Execute(inqASRHIn);
+
+               //InquiryMasterASRHContentModel inqASRHOut = CallDevesServiceProxy<InquiryMasterASRHOutputModel, InquiryMasterASRHContentModel>(CommonConstant.ewiEndpointKeyMOTORInquiryMasterASRH, inqASRHIn);
+
                 AddDebugInfo("InquiryMasterASRH);", inqASRHIn);
                 clientType = "C";
                 roleCode = inqASRHIn.asrhType;
@@ -149,12 +155,18 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             {
                 
                 #region Call COMP_Inquiry through ServiceProxy
+
+                var compService = new COMPInquiryClientMaster(TransactionId,ControllerName);
+               
                 COMPInquiryClientMasterInputModel compInqClientInput = new COMPInquiryClientMasterInputModel();
                 compInqClientInput = (COMPInquiryClientMasterInputModel)TransformerFactory.TransformModel(contentModel, compInqClientInput);
+               
+                EWIResCOMPInquiryClientMasterContentModel retCOMPInqClient = compService.Execute(compInqClientInput);
+
                 AddDebugInfo("Call COMP_Inquiry);", compInqClientInput);
                 //+ Call CLS_InquiryCLSPersonalClient through ServiceProxy
-                EWIResCOMPInquiryClientMasterContentModel retCOMPInqClient = CallDevesServiceProxy<COMPInquiryClientMasterOutputModel, EWIResCOMPInquiryClientMasterContentModel>
-                                                                                        (CommonConstant.ewiEndpointKeyCOMPInquiryClient, compInqClientInput);
+              //  EWIResCOMPInquiryClientMasterContentModel retCOMPInqClient = CallDevesServiceProxy<COMPInquiryClientMasterOutputModel, EWIResCOMPInquiryClientMasterContentModel>
+               //                                                                         (CommonConstant.ewiEndpointKeyCOMPInquiryClient, compInqClientInput);
 
                 //Found in Polisy400
                 if (retCOMPInqClient.clientListCollection != null)

@@ -97,9 +97,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                         }
                     }
-                    //  var assessment = new pfc_assessment();
 
-                    //
                 }
 
 
