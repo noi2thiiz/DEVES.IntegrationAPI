@@ -49,13 +49,15 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
         }
         protected void Load(string storeName, string fieldCodeName)
         {
+            Console.WriteLine("Load-->"+storeName);
             
             StoreName = storeName;
              FieldCodeName = fieldCodeName;
             
              if (System.Environment.MachineName == AppConst.QA_SERVER_NAME 
                  || System.Environment.MachineName == AppConst.PRO1_SERVER_NAME
-                 || System.Environment.MachineName == AppConst.PRO2_SERVER_NAME)
+                 || System.Environment.MachineName == AppConst.PRO2_SERVER_NAME
+                 || AppConst.IS_FORCE_TO_DB_READER)
              {
                  var connectionString = AppConfig.Instance.GetCRMDBConfigurationString();
                  DataReader = new StoreDataReader(connectionString);
@@ -79,26 +81,34 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
             var req = new DbRequest {StoreName = storeName};
             var result = reader.Execute(req);
                 DataResult = result;
-            //Console.WriteLine(result.ToJson());
+           // Console.WriteLine(result.ToJson());
             if (result.Count > 0)
             {
                 foreach (Dictionary<string, dynamic> item in result.Data)
                 {
                     // Console.WriteLine(item.ToJSON());
-                   
-                    var code = (string) item[fieldCodeName];
-                    if (string.IsNullOrEmpty(code)) continue;
-                   
-                    if (!DataListTmp1.ContainsKey(code))
+                    try
                     {
-                        DataListTmp1.Add(code.ToString(), item);
-                        if (item["Id"] is string)
+                        var code = (string)item[fieldCodeName];
+                        if (string.IsNullOrEmpty(code)) continue;
+
+                        if (!DataListTmp1.ContainsKey(code))
                         {
-                            item["Id"] = new Guid(item["Id"]);
+                            DataListTmp1.Add(code.ToString(), item);
+                            if (item["Id"] is string)
+                            {
+                                item["Id"] = new Guid(item["Id"]);
+                            }
+                            DataListTmp2.Add(((Guid)item["Id"]).ToString(), item);
+
                         }
-                        DataListTmp2.Add(((Guid)item["Id"]).ToString(), item);
-                        
                     }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                       // throw;
+                    }
+                    
                    
                 }
 

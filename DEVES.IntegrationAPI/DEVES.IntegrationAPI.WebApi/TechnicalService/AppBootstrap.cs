@@ -44,11 +44,21 @@ namespace DEVES.IntegrationAPI.WebApi
 
            
             //load master data
+            //CountryMasterData.Instance.InitData();
+            //NationalityMasterData.Instance.InitData();
+            //PersonalTitleMasterData.Instance.InitData();
+            //SubDistrictMasterData.Instance.InitData();
+            //DistricMasterData.Instance.InitData();
+
             CountryMasterData.Instance.InitData();
             NationalityMasterData.Instance.InitData();
             PersonalTitleMasterData.Instance.InitData();
             SubDistrictMasterData.Instance.InitData();
             DistricMasterData.Instance.InitData();
+            AddressTypeMasterData.Instance.InitData();
+            OccupationMasterData.Instance.InitData();
+            ProvinceMasterData.Instance.InitData();
+            TypeOfLossMasterData.Instance.InitData();
 
 
 

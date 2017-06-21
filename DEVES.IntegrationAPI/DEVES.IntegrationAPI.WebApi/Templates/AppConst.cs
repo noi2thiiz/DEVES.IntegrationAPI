@@ -31,6 +31,8 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
 
         public static string COMM_BACK_DAY = AppConfig.Instance.Get("SEARCH_POLISY_BACKDAY")??"5";
 
+        public static bool IS_FORCE_TO_DB_READER = true;
+
         public static bool IS_SERVER=
         
              Environment.MachineName == QA_SERVER_NAME || Environment.MachineName == PRO1_SERVER_NAME ||
