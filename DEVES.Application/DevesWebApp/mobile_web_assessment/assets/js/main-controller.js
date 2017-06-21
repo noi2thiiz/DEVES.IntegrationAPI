@@ -522,6 +522,11 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
                         title: title,
                         content: message
                     });
+                    if(error.message=="สถานะไม่ถูกต้อง: (100000001)"){
+                        $cookies.put('assessmentStatus_'+refCode,"complete");
+                        showPage("thanks-page");
+                        location.href = "";
+                    }
                     //showPage("home-page");
                 }
                 //console.log(response)

@@ -52,6 +52,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.DataBaseContracts
         public string AssesseeCode { get; set; }
         public string AssesseeName { get; set; }
         public string AssessmentOwnerGuid { get; set; }
+        public int SurveySmsOption { get; set; }
         
 
 

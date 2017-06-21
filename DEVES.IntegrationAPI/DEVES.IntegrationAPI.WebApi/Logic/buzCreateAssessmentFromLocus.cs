@@ -74,7 +74,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                                     pfc_claim_noti_number = model?.ClaimNotiNumber,
                                     pfc_assessment_ref_code = model.AssessmentRefCode ?? "",
                                     pfc_assessment_questionnaireid = new EntityReference("pfc_questionnair", new Guid(model?.QuestionGuid)),
-                                    pfc_assessment_survey_sms = new OptionSetValue(100000002),
+                                    pfc_assessment_survey_sms = new OptionSetValue(model.SurveySmsOption),
                                     pfc_assessment_expected_to_call_date = DateTime.Now,
                                     pfc_assessment_type = new OptionSetValue(100000001),
                                     pfc_assessment_sms_name = model?.DriverFullname ?? "",
