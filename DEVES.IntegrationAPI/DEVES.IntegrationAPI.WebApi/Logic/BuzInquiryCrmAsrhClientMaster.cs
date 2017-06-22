@@ -32,8 +32,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             crmInqContent.transactionId = TransactionId;
 
             bool bFoundIn_APAR_or_Master = false;
-            // try
-            // {
+
             //+ Deserialize Input
             InquiryClientMasterInputModel contentModel = (InquiryClientMasterInputModel)input;// DeserializeJson<InquiryClientMasterInputModel>(input.ToString());
 
@@ -97,7 +96,6 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                 InquiryMasterASRHContentModel inqASRHOut = service.Execute(inqASRHIn);
 
-               //InquiryMasterASRHContentModel inqASRHOut = CallDevesServiceProxy<InquiryMasterASRHOutputModel, InquiryMasterASRHContentModel>(CommonConstant.ewiEndpointKeyMOTORInquiryMasterASRH, inqASRHIn);
 
                 AddDebugInfo("InquiryMasterASRH);", inqASRHIn);
                 clientType = "C";
@@ -165,9 +163,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                 AddDebugInfo("Call COMP_Inquiry);", compInqClientInput);
                 //+ Call CLS_InquiryCLSPersonalClient through ServiceProxy
-              //  EWIResCOMPInquiryClientMasterContentModel retCOMPInqClient = CallDevesServiceProxy<COMPInquiryClientMasterOutputModel, EWIResCOMPInquiryClientMasterContentModel>
-               //                                                                         (CommonConstant.ewiEndpointKeyCOMPInquiryClient, compInqClientInput);
-
+     
                 //Found in Polisy400
                 if (retCOMPInqClient.clientListCollection != null)
                 {
@@ -190,15 +186,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 temp.generalHeader.roleCode = roleCode;
             }
 
-            crmInqContent.code = CONST_CODE_SUCCESS;
-            crmInqContent.message = "SUCCESS";
-            // }
-            // catch (Exception e)
-            // {
-            //     crmInqContent.code = CONST_CODE_FAILED;
-            //     crmInqContent.message = e.Message;
-            //     crmInqContent.description = e.StackTrace;
-            // }
+            crmInqContent.code = AppConst.CODE_SUCCESS;
+            crmInqContent.message = AppConst.MESSAGE_SUCCESS;
+            
+
             if (crmInqContent.data != null)
             {
                 crmInqContent.data = crmInqContent.data.Where(row => row?.profileInfo?.name1.Trim() != "" || row?.profileInfo?.fullName.Trim() != "" ).ToList();

@@ -481,7 +481,6 @@
     <Compile Include="Logic\buzCRMRegClientPersonal.cs" />
     <Compile Include="Logic\buzCRMRegPayeeCorporate.cs" />
     <Compile Include="Logic\buzCRMRegPayeePersonal.cs" />
-    <Compile Include="Logic\buzInquiryCRMPayeeList.cs" />
     <Compile Include="Logic\buzInquiryCRMPayeeListNew.cs" />
     <Compile Include="Logic\BuzInquiryCrmGeneralClient.cs" />
     <Compile Include="Logic\buzRegComplaint.cs" />

@@ -25,6 +25,12 @@ app.run(['$window', '$location', '$loading', '$http', '$cookies',function ($wind
 }]);
 app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','$cookies','$location', function ($scope, dialog, $loading, $http,$q,$cookies,$location) {
 
+    var now = new Date(),
+    // this will set the expiration to 24 months
+    exp = new Date(now.getFullYear()+2, now.getMonth(), now.getDate());
+
+
+    // $cookiesProvider.defaults.expires
     var refCode = $.trim(getParameterByName("ref"));
     var openMode = $.trim(getParameterByName("mode"));
 
@@ -437,7 +443,11 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
     $scope.comment = "";
     $scope.submitQuestionResult  = function(){
          if(ref=="xxxxxxxxxx"){
-             $cookies.put('assessmentStatus_'+refCode,"complete");
+             $cookies.put('assessmentStatus_'+refCode,"complete",{
+                 expires: exp
+             });
+
+
              showPage("thanks-page");
              location.href = "";
          }
@@ -483,7 +493,9 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
                     //$loading.finish("main");
 
                     //success
-                    $cookies.put('assessmentStatus_'+refCode,"complete");
+                    $cookies.put('assessmentStatus_'+refCode,"complete",{
+                        expires: exp
+                    });
                     if($.trim(openMode)=="user" && window.opener){
                         window.close();
 
@@ -523,7 +535,9 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
                         content: message
                     });
                     if(error.message=="สถานะไม่ถูกต้อง: (100000001)"){
-                        $cookies.put('assessmentStatus_'+refCode,"complete");
+                        $cookies.put('assessmentStatus_'+refCode,"complete",{
+                            expires: exp
+                        });
                         showPage("thanks-page");
                         location.href = "";
                     }

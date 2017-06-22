@@ -38,27 +38,5 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
 
     }
 
-    public class InquiryCRMPayeeListOldController : BaseApiController
-    {
-
-        // private string _logImportantMessage;
-        // private readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(InquiryCRMPayeeListController));
-
-        public object Post([FromBody]object value)
-        {
-            System.Diagnostics.Stopwatch timer = new Stopwatch();
-            timer.Start();
-           
-
-            var output = ProcessRequest<buzInquiryCRMPayeeList, InquiryCRMPayeeListInputModel>(value, "InquiryCRMPayeeList_Input_Schema.json");
-
-            timer.Stop();
-            TimeSpan t = timer.Elapsed;
-            System.Diagnostics.Debug.Write("ExecuteInput=" + t.TotalMilliseconds);
-            return output;
-
-        }
-
-
-    }
+   
 }
