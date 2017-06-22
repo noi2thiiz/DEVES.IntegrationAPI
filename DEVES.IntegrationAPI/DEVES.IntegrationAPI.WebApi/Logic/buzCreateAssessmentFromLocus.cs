@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Hosting;
 using DEVES.IntegrationAPI.Model;
@@ -66,29 +67,45 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                                 Console.WriteLine(model.ToJson());
                                 output.data.raw.Add(model);
 
-                                var assessment = new pfc_assessment
-                                {
+                                // string MobileNumber = "" + model?.DriverMobile;
+                                //         Regex rgx = new Regex("[^a-zA-Z0-9 -]");
+                                //       MobileNumber = rgx.Replace(MobileNumber, "");
+                             
+                                // if (MobileNumber.Length==10)
+                                //{
+                                    var assessment = new pfc_assessment
+                                    {
 
-                                    pfc_incidentId = new EntityReference("incident", new Guid(model.Id)),
-                                    pfc_ticketnumber = model?.TicketNumber ?? "",
-                                    pfc_claim_noti_number = model?.ClaimNotiNumber,
-                                    pfc_assessment_ref_code = model.AssessmentRefCode ?? "",
-                                    pfc_assessment_questionnaireid = new EntityReference("pfc_questionnair", new Guid(model?.QuestionGuid)),
-                                    pfc_assessment_survey_sms = new OptionSetValue(model.SurveySmsOption),
-                                    pfc_assessment_expected_to_call_date = DateTime.Now,
-                                    pfc_assessment_type = new OptionSetValue(100000001),
-                                    pfc_assessment_sms_name = model?.DriverFullname ?? "",
-                                    pfc_assessment_sms_number = model?.DriverMobile,
-                                    pfc_assessment_sms_url = $"{smsUrl}/?ref=" + model?.AssessmentRefCode + "2",
-                                    pfc_assessment_user_url = $"{smsUrl}/?ref=" + model?.AssessmentRefCode + "2",
-                                    pfc_assessment_status = new OptionSetValue(100000000),
-                                    pfc_assessment_garage_status = new OptionSetValue(100000000),
-                                    pfc_assessee_code = model?.AssesseeCode ?? "",
-                                    pfc_assessee_name = model?.AssesseeName ?? "",
-                                    OwnerId = new EntityReference("team", new Guid(assessmentOwnerGuid)),
+                                        pfc_incidentId = new EntityReference("incident", new Guid(model.Id)),
+                                        pfc_ticketnumber = model?.TicketNumber ?? "",
+                                        pfc_claim_noti_number = model?.ClaimNotiNumber,
 
-                                };
-                                _serviceProxy.Create(assessment);
+                                        pfc_assessment_ref_code = model.AssessmentRefCode ?? "",
+                                        pfc_assessment_questionnaireid = new EntityReference("pfc_questionnair", new Guid(model?.QuestionGuid)),
+                                        pfc_assessment_survey_sms = new OptionSetValue(model.SurveySmsOption),
+                                        pfc_assessment_expected_to_call_date = DateTime.Now,
+                                        pfc_assessment_type = new OptionSetValue(100000001),
+                                        pfc_assessment_sms_name = model?.DriverFullname ?? "",
+                                        pfc_assessment_sms_number = model?.DriverMobile,
+                                        pfc_assessment_sms_url = $"{smsUrl}/?ref=" + model?.AssessmentRefCode + "2",
+                                        pfc_assessment_user_url = $"{smsUrl}/?ref=" + model?.AssessmentRefCode + "2",
+                                        pfc_assessment_status = new OptionSetValue(100000000),
+                                        pfc_assessment_garage_status = new OptionSetValue(100000000),
+                                        pfc_assessee_code = model?.AssesseeCode ?? "",
+                                        pfc_assessee_name = model?.AssesseeName ?? "",
+                                        OwnerId = new EntityReference("team", new Guid(assessmentOwnerGuid)),
+
+                                    };
+                                    //Optional
+                                    if (string.IsNullOrEmpty(model?.PolicyGuid))
+                                    {
+                                        assessment.pfc_assessment_policy_additionalId =
+                                            new EntityReference("pfc_policy_addtional", new Guid(model?.PolicyGuid));
+                                    }
+
+                                    _serviceProxy.Create(assessment);
+                               // }
+                               
                             }
                             catch (Exception e)
                             {
