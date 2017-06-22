@@ -228,6 +228,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 outputFail.description = "Some of your input is invalid. Please recheck again.";
                 outputFail.transactionId = _transactionId.ToString();
                 outputFail.transactionDateTime = DateTime.Now.ToString();
+                outputFail.errorMessage = errorMessage;
 
                 _log.Error(_logImportantMessage);
                 // _log.ErrorFormat("ErrorCode: {0} {1} ErrorDescription: {1}", fieldError.name, Environment.NewLine, fieldError.message);

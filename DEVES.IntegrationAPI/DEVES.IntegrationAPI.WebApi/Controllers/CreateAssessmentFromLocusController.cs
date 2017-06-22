@@ -37,7 +37,12 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
 
             return Ok(result);
 
+
         }
 
+        private static bool _isNotSsl;
+        private static bool _isStart;
+
+        
     }
 }
