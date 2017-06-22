@@ -32,8 +32,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             crmInqContent.transactionId = TransactionId;
 
             bool bFoundIn_APAR_or_Master = false;
-            // try
-            // {
+
             //+ Deserialize Input
             InquiryClientMasterInputModel contentModel = (InquiryClientMasterInputModel)input;// DeserializeJson<InquiryClientMasterInputModel>(input.ToString());
 
@@ -90,9 +89,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             
                 #region IF inqCrmPayeeListIn.roleCode == {A,S,R,H} -> Master.InquiryMasterASRH
                 // Search in MASTER: MOTOR_InquiryMasterASRH()
+                var service = new MOTORInquiryMasterASRH(TransactionId, ControllerName);
+           
                 InquiryMasterASRHDataInputModel inqASRHIn = (InquiryMasterASRHDataInputModel)DataModelFactory.GetModel(typeof(InquiryMasterASRHDataInputModel));
                 inqASRHIn = (InquiryMasterASRHDataInputModel)TransformerFactory.TransformModel(contentModel, inqASRHIn);
-                InquiryMasterASRHContentModel inqASRHOut = CallDevesServiceProxy<InquiryMasterASRHOutputModel, InquiryMasterASRHContentModel>(CommonConstant.ewiEndpointKeyMOTORInquiryMasterASRH, inqASRHIn);
+
+                InquiryMasterASRHContentModel inqASRHOut = service.Execute(inqASRHIn);
+
+
                 AddDebugInfo("InquiryMasterASRH);", inqASRHIn);
                 clientType = "C";
                 roleCode = inqASRHIn.asrhType;
@@ -149,13 +153,17 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             {
                 
                 #region Call COMP_Inquiry through ServiceProxy
+
+                var compService = new COMPInquiryClientMaster(TransactionId,ControllerName);
+               
                 COMPInquiryClientMasterInputModel compInqClientInput = new COMPInquiryClientMasterInputModel();
                 compInqClientInput = (COMPInquiryClientMasterInputModel)TransformerFactory.TransformModel(contentModel, compInqClientInput);
+               
+                EWIResCOMPInquiryClientMasterContentModel retCOMPInqClient = compService.Execute(compInqClientInput);
+
                 AddDebugInfo("Call COMP_Inquiry);", compInqClientInput);
                 //+ Call CLS_InquiryCLSPersonalClient through ServiceProxy
-                EWIResCOMPInquiryClientMasterContentModel retCOMPInqClient = CallDevesServiceProxy<COMPInquiryClientMasterOutputModel, EWIResCOMPInquiryClientMasterContentModel>
-                                                                                        (CommonConstant.ewiEndpointKeyCOMPInquiryClient, compInqClientInput);
-
+     
                 //Found in Polisy400
                 if (retCOMPInqClient.clientListCollection != null)
                 {
@@ -178,15 +186,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 temp.generalHeader.roleCode = roleCode;
             }
 
-            crmInqContent.code = CONST_CODE_SUCCESS;
-            crmInqContent.message = "SUCCESS";
-            // }
-            // catch (Exception e)
-            // {
-            //     crmInqContent.code = CONST_CODE_FAILED;
-            //     crmInqContent.message = e.Message;
-            //     crmInqContent.description = e.StackTrace;
-            // }
+            crmInqContent.code = AppConst.CODE_SUCCESS;
+            crmInqContent.message = AppConst.MESSAGE_SUCCESS;
+            
+
             if (crmInqContent.data != null)
             {
                 crmInqContent.data = crmInqContent.data.Where(row => row?.profileInfo?.name1.Trim() != "" || row?.profileInfo?.fullName.Trim() != "" ).ToList();
