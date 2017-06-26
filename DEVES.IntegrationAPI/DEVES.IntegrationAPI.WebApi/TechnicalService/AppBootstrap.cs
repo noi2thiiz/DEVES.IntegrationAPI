@@ -44,21 +44,16 @@ namespace DEVES.IntegrationAPI.WebApi
 
            
             //load master data
-            //CountryMasterData.Instance.InitData();
-            //NationalityMasterData.Instance.InitData();
-            //PersonalTitleMasterData.Instance.InitData();
-            //SubDistrictMasterData.Instance.InitData();
-            //DistricMasterData.Instance.InitData();
 
-            CountryMasterData.Instance.InitData();
-            NationalityMasterData.Instance.InitData();
-            PersonalTitleMasterData.Instance.InitData();
-            SubDistrictMasterData.Instance.InitData();
-            DistricMasterData.Instance.InitData();
-            AddressTypeMasterData.Instance.InitData();
-            OccupationMasterData.Instance.InitData();
-            ProvinceMasterData.Instance.InitData();
-            TypeOfLossMasterData.Instance.InitData();
+            CountryMasterData.Instance.Init();
+            NationalityMasterData.Instance.Init();
+            PersonalTitleMasterData.Instance.Init();
+            SubDistrictMasterData.Instance.Init();
+            DistricMasterData.Instance.Init();
+            AddressTypeMasterData.Instance.Init();
+            OccupationMasterData.Instance.Init();
+            ProvinceMasterData.Instance.Init();
+            TypeOfLossMasterData.Instance.Init();
 
 
 

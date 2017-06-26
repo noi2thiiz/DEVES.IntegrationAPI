@@ -67,12 +67,7 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
             {
                 //Console.WriteLine("RestDataReader");
                 DataReader = new RestDataReader();
-           }
-
-
-
-
-
+            }
 
             // สร้าง tmp data เพื่อให้โหลดช้อมูลให้เรียบร้อยก่อน ก่อนที่จะนำไปใช้
             Dictionary<string, dynamic> DataListTmp1 = new Dictionary<string, dynamic>();
@@ -89,8 +84,14 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
                     // Console.WriteLine(item.ToJSON());
                     try
                     {
+                        Console.WriteLine(item[fieldCodeName]?.GetType()?.ToString());
+                        if (string.IsNullOrEmpty(fieldCodeName)) continue;
+                        if (item[fieldCodeName]?.GetType()?.ToString() == "System.DBNull") continue;
+
                         var code = (string)item[fieldCodeName];
                         if (string.IsNullOrEmpty(code)) continue;
+                        
+                      
 
                         if (!DataListTmp1.ContainsKey(code))
                         {
