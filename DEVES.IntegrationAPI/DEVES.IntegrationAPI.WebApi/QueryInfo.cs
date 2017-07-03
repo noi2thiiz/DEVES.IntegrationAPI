@@ -27,6 +27,13 @@ namespace DEVES.IntegrationAPI.WebApi
                                                     EXEC [dbo].[sp_API_InquiryPolicyMotorList] @policyNo,@chassisNo,@carRegisNo,@carRegisProve;";
 
         // DataTable
+        public static string SQL_searchPersonal = @"DECLARE @fullname nvarchar(50) = '{0}'
+                                                    DECLARE @czid nvarchar(13) = '{1}'
+                                                    DECLARE @phoneno nvarchar(10) = '{2}'
+                                                    DECLARE @clsid nvarchar(20) = '{3}'
+                                                    EXEC[dbo].[sp_Query_APIpersonal] @fullname,@czid,@phoneno,@clsid";
+
+
         public System.Data.DataTable Queryinfo_CallerId(string ticketNo, string uniqueID)
         {
             string strSql = string.Format(SQL_01, ticketNo);
@@ -35,7 +42,14 @@ namespace DEVES.IntegrationAPI.WebApi
             da.Fill(dt);
             return dt;
         }
-
+        public System.Data.DataTable Queryinfo_searchPerson(string value)
+        {
+            string strSql = string.Format(SQL_searchPersonal, value.Split('|')[0], value.Split('|')[1], value.Split('|')[2], value.Split('|')[3]);
+            System.Data.DataTable dt = new System.Data.DataTable();
+            System.Data.SqlClient.SqlDataAdapter da = new System.Data.SqlClient.SqlDataAdapter(strSql, System.Configuration.ConfigurationManager.AppSettings["CRMDB"].ToString());
+            da.Fill(dt);
+            return dt;
+        }
         /// <summary>
         /// Query data in [dbo].[sp_CustomApp_RequestSurveyor_Incident]
         /// Input = TicketNumber and CurrentUserCode (G001)

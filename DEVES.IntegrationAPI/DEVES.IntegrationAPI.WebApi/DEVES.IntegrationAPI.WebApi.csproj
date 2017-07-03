@@ -425,6 +425,7 @@
     <Compile Include="Controllers\InternalServiceController.cs" />
     <Compile Include="Controllers\InquiryDataServiceController.cs" />
     <Compile Include="Controllers\MasterDataServiceController.cs" />
+    <Compile Include="Controllers\personSearchController.cs" />
     <Compile Include="Controllers\RegClaimRequestFromRVPController.cs" />
     <Compile Include="Controllers\RegClientCorporateController.cs" />
     <Compile Include="Controllers\RegClientPersonalController.cs" />
@@ -483,6 +484,7 @@
     <Compile Include="Logic\buzCRMRegPayeePersonal.cs" />
     <Compile Include="Logic\buzInquiryCRMPayeeListNew.cs" />
     <Compile Include="Logic\BuzInquiryCrmGeneralClient.cs" />
+    <Compile Include="Logic\buzpersonSearch.cs" />
     <Compile Include="Logic\buzRegComplaint.cs" />
     <Compile Include="Logic\buzReqClsId.cs" />
     <Compile Include="Logic\buzSendSMS.cs" />
@@ -647,6 +649,7 @@
     <Content Include="App_Data\JsonSchema\SubmitSurveyAssessmentResultInputModel.json" />
     <Content Include="App_Data\JsonSchema\RegComplaintInputModel.json" />
     <Content Include="App_Data\JsonSchema\CreateAssessmentFromLocus_Input_Schema.json" />
+    <Content Include="App_Data\JsonSchema\personSearch_Input_Schema.json" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile10.pubxml" />
