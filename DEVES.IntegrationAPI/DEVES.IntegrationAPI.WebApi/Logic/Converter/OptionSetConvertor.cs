@@ -48,6 +48,19 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Converter
             }
         }
 
+        public static string GetSex(string Gender)
+        {
+            switch (Gender)
+            {
+                case "100000000": return "M";
+                case "100000001": return "F";
+                case "1": return "M";
+                case "2": return "F";
+                default: return "U";
+            }
+        }
+
+
         public static OptionSetValue GetIntegrationSourceDataOptionSetValue()
         {
            return  new OptionSetValue(100000003);

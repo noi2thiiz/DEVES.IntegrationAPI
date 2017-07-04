@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using DEVES.IntegrationAPI.Model;
 using DEVES.IntegrationAPI.Model.personSearchModel;
+using DEVES.IntegrationAPI.WebApi.Logic.Converter;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
@@ -15,10 +16,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         {
             personSearchInputModel personS = new personSearchInputModel();
             personS = (personSearchInputModel)input;
-            string jsonValue = string.Format("{0}|{1}|{2}|{3}", string.IsNullOrEmpty(personS.fullName) ? "" : personS.name1
-                   , string.IsNullOrEmpty(personS.citizenId) ? "" : personS.idCard
-                   , string.IsNullOrEmpty(personS.phoneNum) ? "" : personS.phoneNumber
-                   , string.IsNullOrEmpty(personS.clsId) ? "" : personS.cleansingId);
+            string jsonValue = string.Format("{0}|{1}|{2}|{3}", string.IsNullOrEmpty(personS.name1) ? "" : personS.name1
+                   , string.IsNullOrEmpty(personS.idCard) ? "" : personS.idCard
+                   , string.IsNullOrEmpty(personS.phoneNumber) ? "" : personS.phoneNumber
+                   , string.IsNullOrEmpty(personS.cleansingId) ? "" : personS.cleansingId);
 
 
             QueryInfo newQuery = new QueryInfo();
@@ -26,16 +27,34 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             personSearchOutputModel output = new personSearchOutputModel();
             output.data = new List<personSearchDataOutput>();
-            personSearchDataOutput data = new personSearchDataOutput();
+
             int datarow = dt.Rows.Count;
             //loop
             for (int i = 0; i < datarow; i++)
             {
-                data.fullName = dt.Rows[i]["FullName"].ToString();
-                data.citizenId = dt.Rows[i]["FullName"].ToString();
-                data.clsId = dt.Rows[i]["FullName"].ToString();
-                data.phoneNum = dt.Rows[i]["FullName"].ToString();
-                output.data.Add(data);
+                personSearchDataOutput dataOutput = new personSearchDataOutput();
+
+                dataOutput.fullName = dt.Rows[i]["FullName"].ToString();
+                dataOutput.idCard = dt.Rows[i]["CitizenID"].ToString();
+                dataOutput.cleansingId = dt.Rows[i]["cleansingID"].ToString();
+                dataOutput.crmClientId = dt.Rows[i]["CRMClientID"].ToString();
+                dataOutput.polisyClientId = dt.Rows[i]["PolisyClientID"].ToString();
+                dataOutput.mobilePhone = dt.Rows[i]["PhoneNumber"].ToString();
+                dataOutput.emailAddress = dt.Rows[i]["Email"].ToString();
+                dataOutput.salutationText = dt.Rows[i]["Salutation"].ToString();
+                dataOutput.sex = OptionSetConvertor.GetSex(dt.Rows[i]["Sex"].ToString());
+                dataOutput.idDriving = dt.Rows[i]["DriverId"].ToString();
+                string birthdatechk = dt.Rows[i]["Birth"].ToString();
+                string deathdatechk = dt.Rows[i]["Death"].ToString();
+                if (birthdatechk != null && birthdatechk != "")
+                {
+                    dataOutput.dateOfBirth = (DateTime)dt.Rows[i]["Birth"];
+                }
+                if (deathdatechk != null && deathdatechk != "")
+                {
+                    dataOutput.dateOfDeath = (DateTime)dt.Rows[i]["Death"];
+                }
+                output.data.Add(dataOutput);
             }
             
             //loop

@@ -5,15 +5,15 @@
     "name1": {
       "type": "string"
     },
-    "citizenId": {
+    "idCard": {
       "type": "string",
       "maxLength": 13
     },
-    "phoneNum": {
+    "phoneNumber": {
       "type": "string",
       "maxLength": 10
     },
-    "clsId": {
+    "cleansingId": {
       "type": "string"
     }
   }

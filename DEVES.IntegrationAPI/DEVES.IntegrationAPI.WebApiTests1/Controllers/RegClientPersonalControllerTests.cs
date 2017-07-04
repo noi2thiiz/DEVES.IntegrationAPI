@@ -93,6 +93,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
             var response = (HttpResponseMessage)controller.Post(JObject.Parse(input));
             Console.WriteLine("==============output==================");
             var output = response?.Content?.ReadAsStringAsync();
+
             Assert.IsNotNull(output?.Result);
             Console.WriteLine(output?.Result);
             var outputJson = JObject.Parse(output?.Result);
