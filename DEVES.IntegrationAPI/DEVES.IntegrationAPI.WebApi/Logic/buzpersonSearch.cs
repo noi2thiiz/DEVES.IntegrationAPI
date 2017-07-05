@@ -34,11 +34,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             {
                 personSearchDataOutput dataOutput = new personSearchDataOutput();
 
-                dataOutput.fullName = dt.Rows[i]["FullName"].ToString();
-                dataOutput.idCard = dt.Rows[i]["CitizenID"].ToString();
-                dataOutput.cleansingId = dt.Rows[i]["cleansingID"].ToString();
-                dataOutput.crmClientId = dt.Rows[i]["CRMClientID"].ToString();
-                dataOutput.polisyClientId = dt.Rows[i]["PolisyClientID"].ToString();
+                dataOutput.fullName = string.IsNullOrEmpty(dt.Rows[i]["FullName"].ToString()) ? "" : dt.Rows[i]["FullName"].ToString();
+                dataOutput.idCard = string.IsNullOrEmpty(dt.Rows[i]["CitizenID"].ToString()) ? "" : dt.Rows[i]["CitizenID"].ToString();
+                dataOutput.cleansingId = string.IsNullOrEmpty(dt.Rows[i]["cleansingID"].ToString()) ? "" : dt.Rows[i]["cleansingID"].ToString();
+                dataOutput.crmClientId = string.IsNullOrEmpty(dt.Rows[i]["CRMClientID"].ToString()) ? "" : dt.Rows[i]["CRMClientID"].ToString();
+                dataOutput.polisyClientId = string.IsNullOrEmpty(dt.Rows[i]["PolisyClientID"].ToString()) ? "" : dt.Rows[i]["PolisyClientID"].ToString();
                 dataOutput.mobilePhone = dt.Rows[i]["PhoneNumber"].ToString();
                 dataOutput.emailAddress = dt.Rows[i]["Email"].ToString();
                 dataOutput.salutationText = dt.Rows[i]["Salutation"].ToString();

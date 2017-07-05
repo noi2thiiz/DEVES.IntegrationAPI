@@ -6,13 +6,9 @@ using System.Threading.Tasks;
 
 namespace DEVES.IntegrationAPI.Model.personSearchModel
 {
-    public class personSearchOutputModel : BaseDataModel
+    public class personSearchOutputModel : BaseContentJsonProxyOutputModel
     {
-        public string code { get; set; }
-        public string message { get; set; }
-        public string description { get; set; }
-        public string transactionId { get; set; }
-        public DateTime transactionDateTime { get; set; }
+  
         public List<personSearchDataOutput> data { get; set; }
     }
 
