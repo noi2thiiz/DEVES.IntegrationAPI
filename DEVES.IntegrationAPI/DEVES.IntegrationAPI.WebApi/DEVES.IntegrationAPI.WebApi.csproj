@@ -498,6 +498,7 @@
     <Compile Include="Logic\DataBaseContracts\SpApiCustomerClient.cs" />
     <Compile Include="Logic\DataBaseContracts\SpQueryGarageAssessmentFromLocus.cs" />
     <Compile Include="Logic\DevesCrmAPIExceptions.cs" />
+    <Compile Include="Logic\Mepper\RecordSetToClassMapper.cs" />
     <Compile Include="Logic\Services\BaseEwiServiceProxy.cs" />
     <Compile Include="Logic\Services\BaseProxyService.cs" />
     <Compile Include="Logic\Services\CleansingService.cs" />
@@ -700,6 +701,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DataAccessService\Store\" />
+    <Folder Include="Logic\Tranforms\General\" />
     <Folder Include="NewFolder1\" />
     <Folder Include="Providers\" />
   </ItemGroup>
