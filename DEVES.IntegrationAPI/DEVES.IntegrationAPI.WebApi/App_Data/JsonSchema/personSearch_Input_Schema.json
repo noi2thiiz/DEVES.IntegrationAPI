@@ -15,7 +15,14 @@
     },
     "cleansingId": {
       "type": "string"
-    }
+    },
+    "crmClientId": {
+      "type": "string",
+      "maxLength": 20
+    },
+    "email": {
+      "type": "string"
+    } 
   }
 
 }

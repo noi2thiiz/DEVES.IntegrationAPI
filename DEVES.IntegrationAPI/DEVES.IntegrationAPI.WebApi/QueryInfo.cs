@@ -30,8 +30,10 @@ namespace DEVES.IntegrationAPI.WebApi
         public static string SQL_searchPersonal = @"DECLARE @fullname nvarchar(50) = '{0}'
                                                     DECLARE @czid nvarchar(13) = '{1}'
                                                     DECLARE @phoneno nvarchar(10) = '{2}'
-                                                    DECLARE @clsid nvarchar(20) = '{3}'
-                                                    EXEC[dbo].[sp_Query_APIpersonal] @fullname,@czid,@phoneno,@clsid";
+                                                    DECLARE @crmid nvarchar(20) = '{3}'
+                                                    DECLARE @clsid nvarchar(20) = '{4}'
+                                                    DECLARE @email nvarchar(50) = '{5}'
+                                                    EXEC[dbo].[sp_Query_APIpersonal] @fullname,@czid,@phoneno,@crmid,@clsid,@email";
 
 
         public System.Data.DataTable Queryinfo_CallerId(string ticketNo, string uniqueID)
@@ -44,7 +46,7 @@ namespace DEVES.IntegrationAPI.WebApi
         }
         public System.Data.DataTable Queryinfo_searchPerson(string value)
         {
-            string strSql = string.Format(SQL_searchPersonal, value.Split('|')[0], value.Split('|')[1], value.Split('|')[2], value.Split('|')[3]);
+            string strSql = string.Format(SQL_searchPersonal, value.Split('|')[0], value.Split('|')[1], value.Split('|')[2], value.Split('|')[4], value.Split('|')[3], value.Split('|')[5]);
             System.Data.DataTable dt = new System.Data.DataTable();
             System.Data.SqlClient.SqlDataAdapter da = new System.Data.SqlClient.SqlDataAdapter(strSql, System.Configuration.ConfigurationManager.AppSettings["CRMDB"].ToString());
             da.Fill(dt);
