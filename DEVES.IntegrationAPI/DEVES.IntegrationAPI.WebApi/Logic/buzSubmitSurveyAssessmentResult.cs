@@ -34,9 +34,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                 int type = 100000000 + contentModel.assessmentType - 1;
                 var query = from c in svcContext.pfc_assessmentSet
-                            where c.pfc_assessment_ref_code == contentModel.assessmentRefCode && c.pfc_assessment_type.Value == type
+                            where c.pfc_assessment_ref_code == contentModel.assessmentRefCode && c.pfc_assessment_type.Value == type && c.statecode == 0
                             select c;
-
 
                 // Condition check if ref_code don't have in CRM -> RETURN ERROR
                 if (query.FirstOrDefault<pfc_assessment>() == null)

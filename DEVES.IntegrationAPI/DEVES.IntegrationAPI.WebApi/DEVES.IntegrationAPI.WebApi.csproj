@@ -618,6 +618,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\JsonSchema\InquiryClientMaster_Input_Schema.json" />
+    <None Include="App_Data\JsonSchema\UpdateOpportunity_Input_Schema.json" />
     <Content Include="App_Data\TEST_Response_CLSInquiryClientPersonal.txt" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
@@ -659,6 +660,11 @@
     <Content Include="App_Data\JsonSchema\SubmitSurveyAssessmentResultInputModel.json" />
     <Content Include="App_Data\JsonSchema\RegComplaintInputModel.json" />
     <Content Include="App_Data\JsonSchema\CreateAssessmentFromLocus_Input_Schema.json" />
+    <Content Include="App_Data\JsonSchema\InquiryOpportunity_Input_Schema.json" />
+    <Content Include="App_Data\JsonSchema\MakeAppointment_Input_Schema.json" />
+    <Content Include="App_Data\JsonSchema\RegCase_Input_Schema.json" />
+    <Content Include="App_Data\JsonSchema\RegLead_Input_Schema.json" />
+    <Content Include="App_Data\JsonSchema\RegOpportunity_Input_Schema.json" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile10.pubxml" />

@@ -1,0 +1,62 @@
+﻿{
+
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+
+    "generalHeader": {
+      "type": "object",
+      "properties": {
+        "requester": {
+          "type": "string"
+        },
+        "cleansingId": {
+          "type": "string",
+          "maxLength": 10
+        },
+        "crmPolicyDetailId": {
+          "type": "string"
+        },
+        "parentCaseNo": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "requester",
+        "cleansingId"
+      ]
+    },
+    "caseInfo": {
+      "type": "object",
+      "properties": {
+        "caseTitle": {
+          "type": "string"
+        },
+        "caseType": {
+          "type": "string"
+        },
+        "category": {
+          "type": "string"
+        },
+        "subCategory": {
+          "type": "string"
+        },
+        "priority": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "caseTitle",
+        "caseType",
+        "category",
+        "description",
+        "priority",
+        "subCategory"
+      ]
+
+  }
+
+}

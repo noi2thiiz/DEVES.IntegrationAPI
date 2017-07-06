@@ -8,5 +8,12 @@ namespace DEVES.IntegrationAPI.Model.RegCase
 {
     public class RegCaseOutputModel : BaseContentJsonProxyOutputModel
     {
+        public RegCaseDataModel data { get; set; }
+    }
+
+    public class RegCaseDataModel
+    {
+        public string caseNo { get; set; }
+        public DateTime caseDate { get; set; }
     }
 }

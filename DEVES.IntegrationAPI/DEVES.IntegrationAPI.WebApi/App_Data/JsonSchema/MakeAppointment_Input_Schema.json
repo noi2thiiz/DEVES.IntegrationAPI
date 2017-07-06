@@ -1,0 +1,106 @@
+﻿{
+
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+
+    "generalHeader": {
+      "type": "object",
+      "properties": {
+        "requester": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "requester"
+      ]
+    },
+    "attendee": {
+      "type": "object",
+      "properties": {
+        "attendeeType": {
+          "type": "string",
+          "enum": [
+            "client",
+            "lead",
+            "opportunity"
+          ]
+        },
+        "attendeeId": {
+          "type": "string",
+          "maxLength": 20
+        }
+      },
+      "required": [
+        "attendeeType",
+        "attendeeId"
+      ]
+    },
+    "appointmentInfo": {
+      "type": "object",
+      "properties": {
+        "subject": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "startDateTime": {
+          "type": "string"
+        },
+        "duration": {
+          "type": "integer",
+          "maxLength": 10
+        },
+        "allDayEventFlag": {
+          "type": "string",
+          "enum": [
+            "Y",
+            "N"
+          ]
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "required": [
+        "subject",
+        "startDateTime"
+      ]
+    },
+    "contactInfo": {
+      "type": "object",
+      "properties": {
+        "fullName": {
+          "type": "string",
+          "maxLength": 140
+        },
+        "email": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "mobilePhone": {
+          "type": "string",
+          "maxLength": 10
+        },
+        "address": {
+          "type": "string",
+          "maxLength": 2000
+        },
+        "latitude": {
+          "type": "string",
+          "maxLength": 20
+        },
+        "longitude": {
+          "type": "string",
+          "maxLength": 20
+        }
+      },
+      "required": [
+        "fullName"
+      ]
+    }
+
+
+  }
+
+}

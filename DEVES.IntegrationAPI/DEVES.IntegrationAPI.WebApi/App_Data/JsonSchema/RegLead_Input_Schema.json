@@ -1,0 +1,138 @@
+﻿{
+
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+
+    "generalHeader": {
+      "type": "object",
+      "properties": {
+        "requester": {
+          "type": "string"
+        },
+        "topic": {
+          "type": "string",
+          "maxLength": 300
+        }
+      },
+      "required": [
+        "requester",
+        "topic"
+      ]
+    },
+    "contactInfo": {
+      "type": "object",
+      "properties": {
+        "salutation": {
+          "type": "string",
+          "enum": [
+            "0001",
+            "0002",
+            "0003",
+            "0005",
+            "0008"
+          ]
+        },
+        "sex": {
+          "type": "string",
+          "enum": [
+            "F",
+            "M",
+            "U"
+          ]
+        },
+        "firstName": {
+          "type": "string",
+          "maxLength": 70
+        },
+        "lastName": {
+          "type": "string",
+          "maxLength": 70
+        },
+        "email": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "mobilePhone": {
+          "type": "string",
+          "maxLength": 10
+        },
+        "businessPhone": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "fax": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "description": {
+          "type": "string"
+        },
+        "jobTitle": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "preferredMethodOfContact": {
+          "type": "string",
+          "enum": [
+            "Any",
+            "Email",
+            "Phone",
+            "Fax"
+          ]
+        },
+        "doNotAllowEmails": {
+          "type": "string",
+          "enum": [
+            "Y",
+            "N"
+          ]
+        },
+        "doNotAllowBulkEmails": {
+          "type": "string",
+          "enum": [
+            "Y",
+            "N"
+          ]
+        },
+        "doNotAllowPhone": {
+          "type": "string",
+          "enum": [
+            "Y",
+            "N"
+          ]
+        },
+        "doNotAllowMails": {
+          "type": "string",
+          "enum": [
+            "Y",
+            "N"
+          ]
+        }
+      },
+      "required": [
+        "firstName",
+        "lastName"
+      ]
+    },
+    "companyInfo": {
+      "type": "object",
+      "properties": {
+        "companyName": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "websiteUrl": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "address": {
+          "type": "string",
+          "maxLength": 1000
+        }
+      }
+    }
+
+  }
+
+}

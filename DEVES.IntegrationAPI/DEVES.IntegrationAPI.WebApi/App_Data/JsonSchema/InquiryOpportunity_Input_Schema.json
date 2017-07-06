@@ -1,0 +1,57 @@
+﻿{
+
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+
+    "generalHeader": {
+      "type": "object",
+      "properties": {
+        "requester": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "requester"
+      ]
+    },
+    "conditions": {
+      "type": "object",
+      "properties": {
+        "opprtunityId": {
+          "type": "string",
+          "maxLength": 15
+        },
+        "firstName": {
+          "type": "string",
+          "maxLength": 70
+        },
+        "lastName": {
+          "type": "string",
+          "maxLength": 70
+        },
+        "email": {
+          "type": "string"
+        },
+        "mobilePhone": {
+          "type": "string",
+          "maxLength": 10
+        },
+        "businessPhone": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "fax": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "productGroup": {
+          "type": "string"
+        }
+      }
+    }
+
+
+  }
+
+}
