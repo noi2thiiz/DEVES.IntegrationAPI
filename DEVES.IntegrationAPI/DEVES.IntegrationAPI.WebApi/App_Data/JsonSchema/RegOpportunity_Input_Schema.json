@@ -205,7 +205,10 @@
         "productLine"
       ]
     }
-  
-  }
+
+  },
+  "required": [
+    "generalHeader"
+  ]
 
 }

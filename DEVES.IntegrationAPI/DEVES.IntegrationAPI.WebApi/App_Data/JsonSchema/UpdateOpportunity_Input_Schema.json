@@ -22,10 +22,10 @@
       "required": [
         "requester",
         "topic",
-		"opportunityId"
+        "opportunityId"
       ]
     },
-	"contactInfo": {
+    "contactInfo": {
       "type": "object",
       "properties": {
         "salutation": {
@@ -186,7 +186,7 @@
         }
       }
     },
-	"productionInfo": {
+    "productionInfo": {
       "type": "object",
       "properties": {
         "productGroup": {
@@ -222,6 +222,9 @@
     }
 
 
-  }
+  },
+  "required": [
+    "generalHeader"
+  ]
 
 }

@@ -56,7 +56,12 @@
         "priority",
         "subCategory"
       ]
+    }
 
-  }
+  },
+  "required": [
+    "generalHeader",
+    "caseInfo"
+  ]
 
 }

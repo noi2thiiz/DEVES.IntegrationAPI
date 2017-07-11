@@ -101,6 +101,12 @@
     }
 
 
-  }
+  },
+  "required": [
+    "generalHeader",
+    "attendee",
+    "appointmentInfo",
+    "contactInfo"
+  ]
 
 }

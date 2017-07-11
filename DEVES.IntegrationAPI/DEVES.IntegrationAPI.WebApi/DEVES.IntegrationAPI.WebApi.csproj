@@ -427,13 +427,13 @@
     <Compile Include="Controllers\InquiryDataServiceController.cs" />
     <Compile Include="Controllers\MakeAppointmentController.cs" />
     <Compile Include="Controllers\MasterDataServiceController.cs" />
-    <Compile Include="Controllers\RegCase.cs" />
+    <Compile Include="Controllers\RegCaseController.cs" />
     <Compile Include="Controllers\RegClaimRequestFromRVPController.cs" />
     <Compile Include="Controllers\RegClientCorporateController.cs" />
     <Compile Include="Controllers\RegClientPersonalController.cs" />
     <Compile Include="Controllers\RegComplaintController.cs" />
     <Compile Include="Controllers\RegLeadController.cs" />
-    <Compile Include="Controllers\RegOpportunity.cs" />
+    <Compile Include="Controllers\RegOpportunityController.cs" />
     <Compile Include="Controllers\RegPayeeCorporateController.cs" />
     <Compile Include="Controllers\RegPayeePersonalController.cs" />
     <Compile Include="Controllers\RequestCleansingIdController.cs" />
