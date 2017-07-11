@@ -7,6 +7,7 @@ using DEVES.IntegrationAPI.Model;
 using DEVES.IntegrationAPI.Model.personSearchModel;
 using DEVES.IntegrationAPI.WebApi.Logic.Converter;
 using DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData;
+using DEVES.IntegrationAPI.WebApi.Templates;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
@@ -50,31 +51,58 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 dataOutput.idDriving =  string.IsNullOrEmpty(dt.Rows[i]["DriverId"].ToString()) ? "" : dt.Rows[i]["DriverId"].ToString();
                 dataOutput.idAlien = string.IsNullOrEmpty(dt.Rows[i]["AlienId"].ToString()) ? "" : dt.Rows[i]["AlienId"].ToString();
                 dataOutput.language = string.IsNullOrEmpty(dt.Rows[i]["Language"].ToString()) ? "" : dt.Rows[i]["Language"].ToString();
-                string occupationchk = dt.Rows[i]["Occupation"].ToString();
+                dataOutput.idPassport = string.IsNullOrEmpty(dt.Rows[i]["PassportId"].ToString()) ? "" : dt.Rows[i]["PassportId"].ToString();
+                dataOutput.fax = string.IsNullOrEmpty(dt.Rows[i]["Fax"].ToString()) ? "" : dt.Rows[i]["Fax"].ToString();
+                dataOutput.clientStatus = string.IsNullOrEmpty(dt.Rows[i]["clientStatus"].ToString()) ? "" : dt.Rows[i]["clientStatus"].ToString();
+                #region [condition data]
+                string occupationchk = dt.Rows[i]["Occupation"].ToString(); 
                 if (occupationchk != null && occupationchk != "")
                 {
                     dataOutput.occupationText = OccupationMasterData.Instance.Find(dt.Rows[i]["Occupation"].ToString())?.Name ?? "";
+                }  else
+                {
+                    dataOutput.occupationText = "";
                 }
+
                 string nationalchk = dt.Rows[i]["Nationality"].ToString();
                 if(nationalchk != null && nationalchk != "")
                 {
                     dataOutput.nationalityText = NationalityMasterData.Instance.Find(dt.Rows[i]["Nationality"].ToString())?.Name ?? "";
+                } else
+                {
+                    dataOutput.nationalityText = "";
                 }
+
                 string birthdatechk = dt.Rows[i]["Birth"].ToString();
-                string deathdatechk = dt.Rows[i]["Death"].ToString();
                 if (birthdatechk != null && birthdatechk != "")
                 {
                     dataOutput.dateOfBirth = (DateTime)dt.Rows[i]["Birth"];
                 }
+
+                string deathdatechk = dt.Rows[i]["Death"].ToString();             
                 if (deathdatechk != null && deathdatechk != "")
                 {
                     dataOutput.dateOfDeath = (DateTime)dt.Rows[i]["Death"];
                 }
+
+                string vipchk = dt.Rows[i]["VIP"].ToString();
+                if(vipchk == "VIP")
+                {
+                    dataOutput.vipStatus = "Y";
+                }else
+                {
+                    dataOutput.vipStatus = "N";
+                }
+                #endregion
                 output.data.Add(dataOutput);
             }
-            
-            //loop
 
+            //loop
+            output.code = AppConst.CODE_SUCCESS;
+            output.message = AppConst.MESSAGE_SUCCESS;
+            output.description = "";
+            output.transactionId = TransactionId;
+            output.transactionDateTime = DateTime.Now;
             return output;// newQuery.Queryinfo_searchPerson(jsonValue);
         }
     }
