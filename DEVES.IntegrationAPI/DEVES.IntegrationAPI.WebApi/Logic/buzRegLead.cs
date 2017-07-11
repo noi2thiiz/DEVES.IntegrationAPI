@@ -17,12 +17,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         {
             // Preparation Variable
             RegLeadOutputModel output = new RegLeadOutputModel();
-            // output.data = new SubmitSurveyAssessmentResultDataModel_Pass();
 
             // Deserialize Input
             RegLeadInputModel contentModel = (RegLeadInputModel)input;
 
-            // Connect SDK and query
+            // Connect SDK
             var connection = new CrmServiceClient(ConfigurationManager.ConnectionStrings["CRM_DEVES"].ConnectionString);
             OrganizationServiceProxy _serviceProxy = connection.OrganizationServiceProxy;
             ServiceContext svcContext = new ServiceContext(_serviceProxy);
@@ -32,6 +31,28 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 Lead lead = new Lead();
 
                 // Waiting for field to create
+                // generalHeader
+                lead.Subject = contentModel.generalHeader.topic;
+                // contactInfo
+                lead.Salutation = contentModel.contactInfo.salutation;
+                //lead. = contentModel.contactInfo.sex;
+                lead.FirstName = contentModel.contactInfo.firstName;
+                lead.LastName = contentModel.contactInfo.lastName;
+                lead.EMailAddress1 = contentModel.contactInfo.email;
+                lead.MobilePhone = contentModel.contactInfo.mobilePhone;
+                // lead. = contentModel.contactInfo.businessPhone;
+                lead.Fax = contentModel.contactInfo.fax;
+                lead.Description = contentModel.contactInfo.description;
+                lead.JobTitle = contentModel.contactInfo.jobTitle;
+                // lead.PreferredContactMethodCode = new Microsoft.Xrm.Sdk.OptionSetValue(Convert.ToInt32(contentModel.contactInfo.preferredMethodOfContact));
+                // lead.DoNotEMail = contentModel.contactInfo.doNotAllowEmails;
+                // lead.DoNotBulkEMail = contentModel.contactInfo.doNotAllowBulkEmails;
+                // lead.DoNotPhone = contentModel.contactInfo.doNotAllowPhone;
+                // lead.DoNotEMail = contentModel.contactInfo.doNotAllowEmails;
+                // companyInfo
+                lead.CompanyName = contentModel.companyInfo.companyName;
+                lead.WebSiteUrl = contentModel.companyInfo.websiteUrl;
+                // lead.Address1_Composite = contentModel.companyInfo.address; // Permission can get only
 
                 // _serviceProxy.Create(lead);
 
