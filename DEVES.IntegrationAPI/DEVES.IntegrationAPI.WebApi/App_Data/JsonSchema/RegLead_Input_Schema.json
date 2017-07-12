@@ -72,6 +72,10 @@
           "type": "string",
           "maxLength": 100
         },
+        "line": {
+          "type": "string",
+          "maxLength": 50
+        },
         "preferredMethodOfContact": {
           "type": "string",
           "enum": [
@@ -81,33 +85,9 @@
             "Fax"
           ]
         },
-        "doNotAllowEmails": {
+        "facebookId" {
           "type": "string",
-          "enum": [
-            "Y",
-            "N"
-          ]
-        },
-        "doNotAllowBulkEmails": {
-          "type": "string",
-          "enum": [
-            "Y",
-            "N"
-          ]
-        },
-        "doNotAllowPhone": {
-          "type": "string",
-          "enum": [
-            "Y",
-            "N"
-          ]
-        },
-        "doNotAllowMails": {
-          "type": "string",
-          "enum": [
-            "Y",
-            "N"
-          ]
+          "maxLength": 100
         }
       },
       "required": [
@@ -129,6 +109,87 @@
         "address": {
           "type": "string",
           "maxLength": 1000
+        }
+      }
+    },
+    "productInfo": {
+      "type": "object",
+      "properties": {
+        "groupCode": {
+          "type": "string",
+          "maxLength": 10
+        },
+        "groupName": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "productCode": {
+          "type": "string",
+          "maxLength": 10
+        },
+        "productName": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "categoryCode": {
+          "type": "string",
+          "maxLength": 10
+        },
+        "categoryName": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "price": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "groupCode",
+        "productCode",
+        "productName"
+      ]
+    },
+    "insuredInfo": {
+      "type": "object",
+      "properties": {
+        "insuredFullName": {
+          "type": "string",
+          "maxLength": 140
+        },
+        "insuredMobilePhone": {
+          "type": "string",
+          "maxLength": 10
+        },
+        "insuredIssueDate": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "insuredFullName"
+      ]
+    },
+    "vehicleInfo": {
+      "type": "object",
+      "properties": {
+        "brandCode": {
+          "type": "string",
+          "maxLength": 10
+        },
+        "brandName": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "modelCode": {
+          "type": "string",
+          "maxLength": 10
+        },
+        "modelName": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "year": {
+          "type": "integer",
+          "maxLength": 4
         }
       }
     }

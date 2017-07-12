@@ -31,28 +31,49 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 Lead lead = new Lead();
 
                 // Waiting for field to create
+
                 // generalHeader
+                // lead.LeadSourceCode = contentModel.generalHeader.requester;
                 lead.Subject = contentModel.generalHeader.topic;
+
                 // contactInfo
                 lead.Salutation = contentModel.contactInfo.salutation;
-                //lead. = contentModel.contactInfo.sex;
+                // lead.pfc_sex = contentModel.contactInfo.sex;
                 lead.FirstName = contentModel.contactInfo.firstName;
                 lead.LastName = contentModel.contactInfo.lastName;
                 lead.EMailAddress1 = contentModel.contactInfo.email;
                 lead.MobilePhone = contentModel.contactInfo.mobilePhone;
-                // lead. = contentModel.contactInfo.businessPhone;
+                lead.Telephone1 = contentModel.contactInfo.businessPhone;
                 lead.Fax = contentModel.contactInfo.fax;
                 lead.Description = contentModel.contactInfo.description;
                 lead.JobTitle = contentModel.contactInfo.jobTitle;
                 // lead.PreferredContactMethodCode = new Microsoft.Xrm.Sdk.OptionSetValue(Convert.ToInt32(contentModel.contactInfo.preferredMethodOfContact));
-                // lead.DoNotEMail = contentModel.contactInfo.doNotAllowEmails;
-                // lead.DoNotBulkEMail = contentModel.contactInfo.doNotAllowBulkEmails;
-                // lead.DoNotPhone = contentModel.contactInfo.doNotAllowPhone;
-                // lead.DoNotEMail = contentModel.contactInfo.doNotAllowEmails;
+                lead.pfc_line = contentModel.contactInfo.line;
+                lead.pfc_facebook = contentModel.contactInfo.facebookId;
+
                 // companyInfo
                 lead.CompanyName = contentModel.companyInfo.companyName;
                 lead.WebSiteUrl = contentModel.companyInfo.websiteUrl;
-                // lead.Address1_Composite = contentModel.companyInfo.address; // Permission can get only
+                // lead.Address1_Composite = contentModel.companyInfo.address;
+
+                // productInfo
+                lead.pfc_product_group_code = contentModel.productInfo.groupCode;
+                lead.pfc_product_group_name = contentModel.productInfo.groupName;
+                lead.pfc_product_category_code = contentModel.productInfo.categoryCode;
+                lead.pfc_product_category_name = contentModel.productInfo.categoryName;
+                // lead.pfc_product_price = contentModel.productInfo.price;
+
+                // insuredInfo
+                lead.pfc_insured_fullname = contentModel.insuredInfo.insuredFullName;
+                lead.pfc_insured_mobile = contentModel.insuredInfo.insuredMobilePhone;
+                lead.pfc_insured_issue_date = contentModel.insuredInfo.dtinsuredIssueDate;
+
+                // vehicleInfo
+                lead.pfc_brand_code = contentModel.vehicleInfo.brandCode;
+                lead.pfc_brand_name = contentModel.vehicleInfo.brandName;
+                lead.pfc_model_code = contentModel.vehicleInfo.modelCode;
+                lead.pfc_model_name = contentModel.vehicleInfo.modelName;
+                lead.pfc_vechicle_year = contentModel.vehicleInfo.year;
 
                 // _serviceProxy.Create(lead);
 

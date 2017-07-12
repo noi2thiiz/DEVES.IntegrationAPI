@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +12,9 @@ namespace DEVES.IntegrationAPI.Model.RegLead
         public GeneralHeaderModel generalHeader { get; set; }
         public ContactInfoModel contactInfo { get; set; }
         public CompanyInfoModel companyInfo { get; set; }
+        public ProductInfoModel productInfo { get; set; }
+        public InsuredInfoModel insuredInfo { get; set; }
+        public VehicleInfoModel vehicleInfo { get; set; }
     }
 
     public class GeneralHeaderModel
@@ -32,10 +36,8 @@ namespace DEVES.IntegrationAPI.Model.RegLead
         public string description { get; set; }
         public string jobTitle { get; set; }
         public string preferredMethodOfContact { get; set; }
-        public string doNotAllowEmails { get; set; }
-        public string doNotAllowBulkEmails { get; set; }
-        public string doNotAllowPhone { get; set; }
-        public string doNotAllowMails { get; set; }
+        public string line { get; set; }
+        public string facebookId { get; set; }
     }
 
     public class CompanyInfoModel
@@ -44,4 +46,46 @@ namespace DEVES.IntegrationAPI.Model.RegLead
         public string websiteUrl { get; set; }
         public string address { get; set; }
     }
+
+    public class ProductInfoModel
+    {
+        public string groupCode { get; set; }
+        public string groupName { get; set; }
+        public string productCode { get; set; }
+        public string productName { get; set; }
+        public string categoryCode { get; set; }
+        public string categoryName { get; set; }
+        public int price { get; set; }
+    }
+
+    public class InsuredInfoModel : BaseDataModel
+    {
+        public string insuredFullName { get; set; }
+        public string insuredMobilePhone { get; set; }
+        public string insuredIssueDate
+        {
+            get
+            {
+                string s = "";
+                if (dtinsuredIssueDate != null)
+                {
+                    CultureInfo enUS = new CultureInfo("en-US");
+                    s = dtinsuredIssueDate.Value.ToString(DateTimeCustomFormat, enUS);
+
+                }
+                return s;
+            }
+        }
+        public DateTime? dtinsuredIssueDate { get; set; }
+    }
+
+    public class VehicleInfoModel
+    {
+        public string brandCode { get; set; }
+        public string brandName { get; set; }
+        public string modelCode { get; set; }
+        public string modelName { get; set; }
+        public int year { get; set; }
+    }
+
 }
