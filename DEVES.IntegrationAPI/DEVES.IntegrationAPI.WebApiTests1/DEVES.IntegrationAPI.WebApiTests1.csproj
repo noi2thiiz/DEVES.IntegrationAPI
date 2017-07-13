@@ -76,6 +76,7 @@
   <ItemGroup>
     <Compile Include="Controllers\CRMInquiryClientMasterControllerTests.cs" />
     <Compile Include="Controllers\InquiryCRMPayeeListControllerTests.cs" />
+    <Compile Include="Controllers\personSearchControllerTests.cs" />
     <Compile Include="Controllers\RegClientPersonalControllerTests.cs" />
     <Compile Include="Controllers\RequestCleansingIdControllerTests.cs" />
     <Compile Include="Controllers\SendSMSControllerTests.cs" />

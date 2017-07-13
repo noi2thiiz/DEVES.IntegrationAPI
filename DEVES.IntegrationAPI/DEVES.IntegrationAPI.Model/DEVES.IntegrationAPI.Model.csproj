@@ -127,6 +127,8 @@
     <Compile Include="InquiryPolicyMotorList\InquiryPolicyMotorListInputModel.cs" />
     <Compile Include="InquiryPolicyMotorList\InquiryPolicyMotorListOutputModel.cs" />
     <Compile Include="MASTER\InquiryMasterASRHDataModel.cs" />
+    <Compile Include="personSearchModel\personSearchInputModel.cs" />
+    <Compile Include="personSearchModel\personSearchOutputModel.cs" />
     <Compile Include="Polisy400\CLIENT_CreateCorporateClientAndAdditionalInfoModels.cs" />
     <Compile Include="Polisy400\CLIENT_CreatePersonalClientAndAdditionalInfoModels.cs" />
     <Compile Include="Polisy400\CLIENT_UpdateCorporateClientAndAdditionalInfoModels.cs" />

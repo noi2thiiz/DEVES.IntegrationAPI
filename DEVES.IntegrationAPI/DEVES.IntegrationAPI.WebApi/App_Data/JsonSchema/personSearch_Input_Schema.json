@@ -1,0 +1,31 @@
+﻿{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "generalHeader" : {
+    "requester": "string"
+  },
+  "conditions": {
+    "name1": {
+      "type": "string"
+    },
+    "idCard": {
+      "type": "string",
+      "maxLength": 13
+    },
+    "phoneNumber": {
+      "type": "string",
+      "maxLength": 10
+    },
+    "cleansingId": {
+      "type": "string"
+    },
+    "crmClientId": {
+      "type": "string",
+      "maxLength": 20
+    },
+    "email": {
+      "type": "string"
+    } 
+  }
+
+}

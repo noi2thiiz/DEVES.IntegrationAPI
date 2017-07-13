@@ -428,6 +428,7 @@
     <Compile Include="Controllers\MakeAppointmentController.cs" />
     <Compile Include="Controllers\MasterDataServiceController.cs" />
     <Compile Include="Controllers\RegCaseController.cs" />
+    <Compile Include="Controllers\personSearchController.cs" />
     <Compile Include="Controllers\RegClaimRequestFromRVPController.cs" />
     <Compile Include="Controllers\RegClientCorporateController.cs" />
     <Compile Include="Controllers\RegClientPersonalController.cs" />
@@ -492,6 +493,7 @@
     <Compile Include="Logic\buzInquiryOpportunity.cs" />
     <Compile Include="Logic\buzMakeAppointment.cs" />
     <Compile Include="Logic\buzRegCase.cs" />
+    <Compile Include="Logic\buzpersonSearch.cs" />
     <Compile Include="Logic\buzRegComplaint.cs" />
     <Compile Include="Logic\buzRegLead.cs" />
     <Compile Include="Logic\buzRegOpportunity.cs" />
@@ -509,6 +511,7 @@
     <Compile Include="Logic\DataBaseContracts\SpQueryGarageAssessmentFromLocus.cs" />
     <Compile Include="Logic\DevesCrmAPIExceptions.cs" />
     <Compile Include="Logic\Model\OpportunityModel.cs" />
+    <Compile Include="Logic\Mepper\RecordSetToClassMapper.cs" />
     <Compile Include="Logic\Services\BaseEwiServiceProxy.cs" />
     <Compile Include="Logic\Services\BaseProxyService.cs" />
     <Compile Include="Logic\Services\CleansingService.cs" />
@@ -666,6 +669,7 @@
     <Content Include="App_Data\JsonSchema\RegCase_Input_Schema.json" />
     <Content Include="App_Data\JsonSchema\RegLead_Input_Schema.json" />
     <Content Include="App_Data\JsonSchema\RegOpportunity_Input_Schema.json" />
+    <Content Include="App_Data\JsonSchema\personSearch_Input_Schema.json" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile10.pubxml" />
@@ -716,6 +720,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DataAccessService\Store\" />
+    <Folder Include="Logic\Tranforms\General\" />
     <Folder Include="NewFolder1\" />
     <Folder Include="Providers\" />
   </ItemGroup>
