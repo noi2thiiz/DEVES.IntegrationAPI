@@ -13,9 +13,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Model
     {
         Opportunity opp;
 
-        object connection = new CrmServiceClient(ConfigurationManager.ConnectionStrings["CRM_DEVES"].ConnectionString);
-        //OrganizationServiceProxy _serviceProxy = connection.OrganizationServiceProxy;
-        //ServiceContext svcContext = new ServiceContext(_serviceProxy);
+        CrmServiceClient connection = new CrmServiceClient(ConfigurationManager.ConnectionStrings["CRM_DEVES"].ConnectionString);
+        // OrganizationServiceProxy _serviceProxy = connection.OrganizationServiceProxy;
+        OrganizationServiceProxy _serviceProxy;
+        // ServiceContext svcContext = new ServiceContext(_serviceProxy);
+        ServiceContext svcContext;
 
         public OpportunityModel()
         {
@@ -24,7 +26,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Model
 
         public void Create(RegOpportunityInputModel input)
         {
-
+            
         }
 
         // Query in XRM from oppId
@@ -36,7 +38,18 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Model
         // Method for save through XRM
         public void Save()
         {
+            _serviceProxy = connection.OrganizationServiceProxy;
+            svcContext = new ServiceContext(_serviceProxy);
 
+            if (String.IsNullOrEmpty(opp.OpportunityId.ToString()))
+            {
+                _serviceProxy.Create(opp);
+            }
+            else
+            {
+                _serviceProxy.Update(opp);
+            }
+            
         }
 
         public void Developed()
