@@ -30,6 +30,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         {
             // Preparation Variable
             CreateAssessmentFromLocusOutputModel output = new CreateAssessmentFromLocusOutputModel();
+
             try
             {
               
@@ -55,7 +56,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     {
                         foreach (var item in result.Data)
                         {
-
+                            Console.WriteLine("=================foreach==============");
                             output.data.totalRecord += 1;
                             try
                             {
@@ -64,16 +65,21 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                                 var assessmentOwnerGuid = (!string.IsNullOrEmpty(model.AssessmentOwnerGuid))
                                     ? model.AssessmentOwnerGuid
                                     : "72FA6F77-5451-E711-80DA-0050568D615F";
+
+                                Console.WriteLine("===================JSON======================");
                                 Console.WriteLine(model.ToJson());
+
+                                Console.WriteLine("===================ADD Raw======================");
                                 output.data.raw.Add(model);
 
                                 // string MobileNumber = "" + model?.DriverMobile;
                                 //         Regex rgx = new Regex("[^a-zA-Z0-9 -]");
                                 //       MobileNumber = rgx.Replace(MobileNumber, "");
-                             
+
                                 // if (MobileNumber.Length==10)
                                 //{
-                                    var assessment = new pfc_assessment
+                                Console.WriteLine("set pfc_assessment");
+                                var assessment = new pfc_assessment
                                     {
 
                                         pfc_incidentId = new EntityReference("incident", new Guid(model.Id)),
@@ -96,20 +102,25 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                                         OwnerId = new EntityReference("team", new Guid(assessmentOwnerGuid)),
 
                                     };
-                                    //Optional
-                                    if (string.IsNullOrEmpty(model?.PolicyGuid))
+                                //Optional
+                                Console.WriteLine("Set pfc_assessment_policy_additionalId");
+                                if (string.IsNullOrEmpty(model?.PolicyGuid))
                                     {
                                         assessment.pfc_assessment_policy_additionalId =
                                             new EntityReference("pfc_policy_addtional", new Guid(model?.PolicyGuid));
                                     }
 
                                     _serviceProxy.Create(assessment);
-                               // }
-                               
+                                     Console.WriteLine("Createed" + model?.ClaimNotiNumber);
+                                    AddDebugInfo("Createed" + model?.ClaimNotiNumber);
+                                // }
+
                             }
                             catch (Exception e)
                             {
                                 output.description += (e.Message + e.StackTrace);
+                                Console.WriteLine("Exception" + e.Message + e.StackTrace);
+                                AddDebugInfo("Exception"+ e.Message + e.StackTrace);
                             }
 
                         }

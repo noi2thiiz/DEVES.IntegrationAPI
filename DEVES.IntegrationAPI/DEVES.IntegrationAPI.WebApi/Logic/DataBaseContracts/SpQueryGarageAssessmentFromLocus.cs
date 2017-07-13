@@ -38,7 +38,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.DataBaseContracts
 
         public string PolicyGuid { get; set; }
         
-        public string DriverGuid { get; set; }
+      //  public string DriverGuid { get; set; }
         public string DriverFullname { get; set; }
         public string DriverMobile { get; set; }
         public string CurrentRegNum { get; set; }
