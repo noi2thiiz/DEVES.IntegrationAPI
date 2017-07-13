@@ -55,7 +55,7 @@ namespace DEVES.IntegrationAPI.Model.RegLead
         public string productName { get; set; }
         public string categoryCode { get; set; }
         public string categoryName { get; set; }
-        public int price { get; set; }
+        public int budgetAmount { get; set; }
     }
 
     public class InsuredInfoModel : BaseDataModel

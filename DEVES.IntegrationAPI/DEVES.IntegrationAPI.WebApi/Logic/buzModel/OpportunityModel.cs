@@ -7,7 +7,7 @@ using System.Configuration;
 using System.Linq;
 using System.Web;
 
-namespace DEVES.IntegrationAPI.WebApi.Logic.Model
+namespace DEVES.IntegrationAPI.WebApi.Logic.buzModel
 {
     public class OpportunityModel
     {

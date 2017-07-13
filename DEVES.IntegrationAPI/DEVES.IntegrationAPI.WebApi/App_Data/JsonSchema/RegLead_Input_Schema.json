@@ -139,7 +139,7 @@
           "type": "string",
           "maxLength": 100
         },
-        "price": {
+        "budgetAmount": {
           "type": "integer"
         }
       },

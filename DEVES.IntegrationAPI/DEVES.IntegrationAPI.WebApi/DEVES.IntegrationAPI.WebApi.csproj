@@ -510,7 +510,7 @@
     <Compile Include="Logic\DataBaseContracts\SpApiCustomerClient.cs" />
     <Compile Include="Logic\DataBaseContracts\SpQueryGarageAssessmentFromLocus.cs" />
     <Compile Include="Logic\DevesCrmAPIExceptions.cs" />
-    <Compile Include="Logic\Model\OpportunityModel.cs" />
+    <Compile Include="Logic\buzModel\OpportunityModel.cs" />
     <Compile Include="Logic\Mepper\RecordSetToClassMapper.cs" />
     <Compile Include="Logic\Services\BaseEwiServiceProxy.cs" />
     <Compile Include="Logic\Services\BaseProxyService.cs" />
