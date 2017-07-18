@@ -87,6 +87,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 // productInfo
                 lead.pfc_product_group_code = contentModel.productInfo.groupCode;
                 lead.pfc_product_group_name = contentModel.productInfo.groupName;
+                lead.pfc_product_code = contentModel.productInfo.productCode;
+                lead.pfc_product_name = contentModel.productInfo.productName;
                 lead.pfc_product_category_code = contentModel.productInfo.categoryCode;
                 lead.pfc_product_category_name = contentModel.productInfo.categoryName;
                 lead.BudgetAmount = new Money(contentModel.productInfo.budgetAmount);
@@ -94,7 +96,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 // insuredInfo
                 lead.pfc_insured_fullname = contentModel.insuredInfo.insuredFullName;
                 lead.pfc_insured_mobile = contentModel.insuredInfo.insuredMobilePhone;
-                lead.pfc_insured_issue_date = contentModel.insuredInfo.dtinsuredIssueDate;
+                // string dateString = contentModel.insuredInfo.insuredIssueDate;
+                lead.pfc_insured_issue_date = contentModel.insuredInfo.insuredIssueDate;
 
                 // vehicleInfo
                 lead.pfc_brand_code = contentModel.vehicleInfo.brandCode;

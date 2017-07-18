@@ -8,6 +8,7 @@ using DEVES.IntegrationAPI.Model.RegOpportunity;
 using System.Configuration;
 using Microsoft.Xrm.Tooling.Connector;
 using Microsoft.Xrm.Sdk.Client;
+using DEVES.IntegrationAPI.WebApi.Logic.buzModel;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
@@ -42,7 +43,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             // Create Opp
             try { 
-                Opportunity opp = new Opportunity();
+                OpportunityModel opp = new OpportunityModel();
+                // opp.Create(contentModel);
+                // opp.Save();
                 /*
                 // generalHeader
                 // opp.Subject = contentModel.generalHeader.topic;

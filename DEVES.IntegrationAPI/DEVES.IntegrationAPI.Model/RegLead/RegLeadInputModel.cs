@@ -62,6 +62,7 @@ namespace DEVES.IntegrationAPI.Model.RegLead
     {
         public string insuredFullName { get; set; }
         public string insuredMobilePhone { get; set; }
+        /*
         public string insuredIssueDate
         {
             get
@@ -76,7 +77,8 @@ namespace DEVES.IntegrationAPI.Model.RegLead
                 return s;
             }
         }
-        public DateTime? dtinsuredIssueDate { get; set; }
+        */
+        public DateTime? insuredIssueDate { get; set; }
     }
 
     public class VehicleInfoModel

@@ -53,6 +53,8 @@ namespace DEVES.IntegrationAPI.Core.Helper
             }
             catch (Exception ex)
             {
+                returnError.Add("Message: " + ex.ToString());
+                returnError.Add("StackTrace: " + ex.StackTrace);
                 _log.ErrorFormat(validatedText, ex.Message);
                 _log.ErrorFormat(validatedText, ex.StackTrace);
                 return false;
