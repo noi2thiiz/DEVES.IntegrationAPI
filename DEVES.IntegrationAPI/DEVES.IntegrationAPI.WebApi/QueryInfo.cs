@@ -35,6 +35,24 @@ namespace DEVES.IntegrationAPI.WebApi
                                                     DECLARE @email nvarchar(50) = '{5}'
                                                     EXEC[dbo].[sp_Query_APIpersonal] @fullname,@czid,@phoneno,@crmid,@clsid,@email";
 
+        public static string SQL_inquiryPolicy = @"DECLARE @topRecords nvarchar(100) = '10';
+                                                   DECLARE @Motor_NonMotor int ; --9: ALL, 0: Motor, 1: Non-Motor
+                                                   DECLARE @crmClientId nvarchar(15) = '{0}'
+                                                   DECLARE @cleansingId nvarchar(15) = '{1}'
+                                                   DECLARE @policyCarRegisterNo nvarchar(20) = '{2}'
+                                                   DECLARE @policyNo nvarchar(20) = '{3}'
+                                                   DECLARE @ChassisNo nvarchar(20) = '{4}'
+                                                   EXEC [dbo].[sp_Query_inquiryPolicy] @topRecords,@Motor_NonMotor,@crmClientId,@cleansingId,@policyCarRegisterNo,@policyNo,@ChassisNo";
+
+        public static string SQL_inquiryClaim = @"DECLARE @cleansingId nvarchar(20) = '{0}'
+                                                  DECLARE @claimNotiNo nvarchar(20) = '{1}'
+                                                  DECLARE @claimNo nvarchar(20) = '{2}'
+                                                  DECLARE @policyNo nvarchar(20) = '{3}'
+                                                  DECLARE @policyCarRegisterNo nvarchar(20) = '{4}'
+                                                  DECLARE @parentPolicyId nvarchar(50) = '{5}'
+                                                  EXEC [dbo].[sp_Query_inquiryClaim] @cleansingId,@claimNotiNo,@claimNo,@policyNo,@policyCarRegisterNo,@parentPolicyId";
+
+
 
         public System.Data.DataTable Queryinfo_CallerId(string ticketNo, string uniqueID)
         {
@@ -47,6 +65,22 @@ namespace DEVES.IntegrationAPI.WebApi
         public System.Data.DataTable Queryinfo_searchPerson(string value)
         {
             string strSql = string.Format(SQL_searchPersonal, value.Split('|')[0], value.Split('|')[1], value.Split('|')[2], value.Split('|')[4], value.Split('|')[3], value.Split('|')[5]);
+            System.Data.DataTable dt = new System.Data.DataTable();
+            System.Data.SqlClient.SqlDataAdapter da = new System.Data.SqlClient.SqlDataAdapter(strSql, System.Configuration.ConfigurationManager.AppSettings["CRMDB"].ToString());
+            da.Fill(dt);
+            return dt;
+        }
+        public System.Data.DataTable Queryinfo_inquiryPolicy(string value)
+        {
+            string strSql = string.Format(SQL_inquiryPolicy, value.Split('|')[0], value.Split('|')[1], value.Split('|')[2], value.Split('|')[3], value.Split('|')[4]);
+            System.Data.DataTable dt = new System.Data.DataTable();
+            System.Data.SqlClient.SqlDataAdapter da = new System.Data.SqlClient.SqlDataAdapter(strSql, System.Configuration.ConfigurationManager.AppSettings["CRMDB"].ToString());
+            da.Fill(dt);
+            return dt;
+        }
+        public System.Data.DataTable Queryinfo_inquiryClaim(string value)
+        {
+            string strSql = string.Format(SQL_inquiryClaim, value.Split('|')[0], value.Split('|')[1], value.Split('|')[2], value.Split('|')[3], value.Split('|')[4], value.Split('|')[5]);
             System.Data.DataTable dt = new System.Data.DataTable();
             System.Data.SqlClient.SqlDataAdapter da = new System.Data.SqlClient.SqlDataAdapter(strSql, System.Configuration.ConfigurationManager.AppSettings["CRMDB"].ToString());
             da.Fill(dt);

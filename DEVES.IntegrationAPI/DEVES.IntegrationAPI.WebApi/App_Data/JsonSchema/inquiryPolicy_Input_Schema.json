@@ -5,27 +5,22 @@
     "requester": "string"
   },
   "conditions": {
-    "fullName": {
-      "type": "string"
-    },
-    "idCard": {
-      "type": "string",
-      "maxLength": 13
-    },
-    "phoneNumber": {
-      "type": "string",
-      "maxLength": 10
-    },
-    "cleansingId": {
+     "cleansingId": {
       "type": "string"
     },
     "crmClientId": {
       "type": "string",
-      "maxLength": 20
+      "maxLength": 13
     },
-    "email": {
+    "policyCarRegisterNo": {
       "type": "string"
-    } 
+    },
+    "policyNo": {
+      "type": "string"
+    },
+    "chassisNo": {
+      "type": "string"
+    }
   }
 
 }

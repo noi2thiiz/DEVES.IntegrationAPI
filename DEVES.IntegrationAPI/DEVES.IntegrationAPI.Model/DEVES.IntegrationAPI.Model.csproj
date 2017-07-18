@@ -108,6 +108,8 @@
     <Compile Include="CRM\CRM_RequestCleansingIdDataModel.cs" />
     <Compile Include="DataModel.cs" />
     <Compile Include="DataModelFactory.cs" />
+    <Compile Include="InquiryPolicyModel\inquiryPolicyInputModel.cs" />
+    <Compile Include="InquiryPolicyModel\inquiryPolicyOutputModel.cs" />
     <Compile Include="ModelDatetimeConverter.cs" />
     <Compile Include="EWI\Enum.cs" />
     <Compile Include="EWI\EWIResponse.cs" />
