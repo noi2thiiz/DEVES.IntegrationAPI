@@ -55,11 +55,11 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
     }
 
 
-    if(openMode && openMode=="reset"){
+    if(openMode && (openMode=="reset" || openMode=="user")){
         $cookies.remove('assessmentStatus_'+refCode);
-        var url1 = (window.location.href).split("&");
+        //var url1 = (window.location.href).split("&");
 
-        location.href=""+url1[0];
+        //location.href=""+url1[0];
 
     }
 
@@ -488,6 +488,7 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
                 $loading.finish('main');
                 // this callback will be called asynchronously
                 // when the response is available
+
                 if (response.data.code == '200') {
 
                     //$loading.finish("main");
@@ -508,6 +509,7 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
 
 
                 } else {
+
                     $loading.finish("main");
                     // {"code":"500","message":"Invalid Input(s)","description":"Some of your input is invalid. Please recheck again.","transactionId":"25b558af-0d26-47ab-b0a2-57ea00e6685a","transactionDateTime":"4/29/2017 10:24:42 PM","data":{"fieldErrors":[{"name":"profileInfo.salutation","message":"Required field must not be null"}]}}
 
@@ -530,17 +532,33 @@ app.controller('mainController', ['$scope', 'dialog', '$loading', '$http','$q','
 
 
 
-                    dialog.alert({
-                        title: title,
-                        content: message
-                    });
                     if(error.message=="สถานะไม่ถูกต้อง: (100000001)"){
                         $cookies.put('assessmentStatus_'+refCode,"complete",{
                             expires: exp
                         });
-                        showPage("thanks-page");
-                        location.href = "";
+
                     }
+
+                        dialog.alert({
+                        title: title,
+                        content: message,
+                        onClose:function () {
+
+                            if($.trim(openMode)=="user" && window.opener){
+                                window.close();
+
+                            }else{
+
+                                showPage("thanks-page");
+                                location.href = "";
+                            }
+                        }
+                    });
+
+/*
+
+*/
+
                     //showPage("home-page");
                 }
                 //console.log(response)

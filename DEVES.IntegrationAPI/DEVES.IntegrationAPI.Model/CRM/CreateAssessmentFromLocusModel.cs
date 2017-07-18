@@ -19,7 +19,7 @@ namespace DEVES.IntegrationAPI.Model.CRM
     {
         public bool success { get; set; }
         public int totalRecord { get; set; }
-        public List<dynamic> raw { get; set; }
+        public List<dynamic> raw { get; set; } = new List<dynamic>();
     }
     
 
