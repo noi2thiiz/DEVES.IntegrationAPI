@@ -30,6 +30,7 @@ namespace DEVES.IntegrationAPI.Core.Helper
             output = string.Empty;
             try
             {
+                // throw new Exception("test");
                 _log.InfoFormat(validatedText, string.Empty);
                 var schemaText = FileHelper.ReadTextFile(filePath);
                 var schema = JSchema.Parse(schemaText);

@@ -229,6 +229,30 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 outputFail.transactionDateTime = DateTime.Now.ToString();
                 outputFail.errorMessage = errorMessage;
 
+
+                bool isContain = false;
+
+                foreach (var text in outputFail.data.fieldError)
+                {
+                    if (String.IsNullOrEmpty(text.message) && String.IsNullOrEmpty(text.name))
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        isContain = true;
+                    }
+                }
+
+                if (isContain)
+                {
+                    outputPass = new UpdateSurveyStatusOutputModel_Pass();
+                    outputPass = HandleMessage(contentText, contentModel);
+                    outputPass.errorMessage = errorMessage;
+                    return Request.CreateResponse<UpdateSurveyStatusOutputModel_Pass>(outputPass);
+                }
+
+
                 _log.Error(_logImportantMessage);
                 _log.ErrorFormat("ErrorCode: {0} {1} ErrorDescription: {1}", outputFail.code, Environment.NewLine, outputFail.description);
                 return Request.CreateResponse<UpdateSurveyStatusOutputModel_Fail>(outputFail);

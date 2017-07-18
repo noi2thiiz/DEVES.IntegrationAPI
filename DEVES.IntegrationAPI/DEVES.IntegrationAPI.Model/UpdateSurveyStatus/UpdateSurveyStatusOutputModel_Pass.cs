@@ -13,6 +13,7 @@ namespace DEVES.IntegrationAPI.Model.UpdateSurveyStatus
         public string description { get; set; }
         public string transactionId { get; set; }
         public string transactionDateTime { get; set; }
+        public List<string> errorMessage { get; set; }
         public UpdateSurveyStatusDataOutputModel_Pass data { get; set; }
     }
 

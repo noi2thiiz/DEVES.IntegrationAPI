@@ -57,6 +57,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 outputFail.data.fieldError = new List<AssignedSurveyorFieldErrorOutputModel_Fail>();
 
                 List<string> errorMessage = JsonHelper.getReturnError();
+
                 foreach (var text in errorMessage)
                 {
                     string fieldMessage = "";
@@ -229,6 +230,28 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 outputFail.transactionId = _transactionId.ToString();
                 outputFail.transactionDateTime = DateTime.Now.ToString();
                 outputFail.errorMessage = errorMessage;
+
+                bool isContain = false;
+
+                foreach (var text in outputFail.data.fieldError)
+                {
+                    if(String.IsNullOrEmpty(text.message) && String.IsNullOrEmpty(text.name))
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        isContain = true;
+                    }
+                }
+
+                if (!isContain)
+                {
+                    outputPass = new AssignedSurveyorOutputModel_Pass();
+                    outputPass = HandleMessage(contentText, contentModel);
+                    outputPass.errorMessage = errorMessage;
+                    return Request.CreateResponse<AssignedSurveyorOutputModel_Pass>(outputPass);
+                }
 
                 _log.Error(_logImportantMessage);
                 // _log.ErrorFormat("ErrorCode: {0} {1} ErrorDescription: {1}", fieldError.name, Environment.NewLine, fieldError.message);
