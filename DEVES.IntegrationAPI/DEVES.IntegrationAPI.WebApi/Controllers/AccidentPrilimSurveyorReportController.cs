@@ -228,6 +228,26 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 outputFail.transactionId = _transactionId.ToString();
                 outputFail.transactionDateTime = DateTime.Now.ToString();
 
+                bool isContain = false;
+
+                foreach (var text in outputFail.data.fieldErrors)
+                {
+                    if (String.IsNullOrEmpty(text.message) && String.IsNullOrEmpty(text.name))
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        isContain = true;
+                    }
+                }
+
+                if (isContain)
+                {
+                    outputPass = HandleMessage(contentText, contentModel);
+                    outputPass.errorMessage = errorMessage;
+                    return Request.CreateResponse<AccidentPrilimSurveyorReportOutputModel_Pass>(outputPass);
+                }
 
                 _log.Error(_logImportantMessage);
                 _log.ErrorFormat("ErrorName: {0} {1} ErrorDescription: {1}", outputFail.message, Environment.NewLine, outputFail.description);
