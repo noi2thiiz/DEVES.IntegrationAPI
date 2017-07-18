@@ -12,9 +12,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 {
     public class buzCrmInquiryClientMaster:BaseCommand
     {
-        public override BaseDataModel Execute(object input)
+       
+        /*
+        public override BaseDataModel ExecuteNew(object input)
         {
-            //+ Deserialize Input
             InquiryClientMasterInputModel contentModel = (InquiryClientMasterInputModel)input;
             BaseCommand cmd = new NullCommand();
 
@@ -23,7 +24,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 cmd = new BuzInquiryCrmGeneralClient();
                 cmd.TransactionId = TransactionId;
             }
-            else /*ASRH*/
+            else 
             {
                 cmd = new BuzInquiryCrmAsrhClientMaster();
                 cmd.TransactionId = TransactionId;
@@ -31,6 +32,29 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             
             return  cmd.Execute(input);
           
+        }
+       */
+        public override BaseDataModel Execute(object input)
+        {
+            //+ Deserialize Input
+            InquiryClientMasterInputModel contentModel = (InquiryClientMasterInputModel)input;
+            BaseCommand cmd = new NullCommand();
+            switch (contentModel.conditionHeader.clientType)
+            {
+                case "P":
+                    cmd = new buzCrmInquiryPersonalClientMaster();
+                    cmd.TransactionId = TransactionId;
+                    break;
+                case "C":
+                    cmd = new buzCrmInquiryCorporateClientMaster();
+                    cmd.TransactionId = TransactionId;
+                    break;
+                default:
+                    break;
+            }
+
+
+            return cmd.Execute(input);
         }
     }
 }
