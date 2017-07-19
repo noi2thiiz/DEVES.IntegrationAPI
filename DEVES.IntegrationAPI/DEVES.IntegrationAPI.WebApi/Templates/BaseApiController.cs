@@ -283,7 +283,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                     //output model
                     outputFail.code = AppConst.CODE_INVALID_INPUT;
                     outputFail.message = AppConst.MESSAGE_INVALID_INPUT;
-                    outputFail.description = "Cannot parse JSON";
+                    outputFail.description = "Cannot parse JSON" + outvalidate;
                     outputFail.transactionId = GetTransactionId();
                     outputFail.transactionDateTime = DateTime.Now;
 

@@ -383,9 +383,17 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     if (clsCreateClientContent.code == CommonConstant.CODE_SUCCESS)
                     {
                         //TODO เอา ค่าที่ได้ไปเป็น output
-                        newCleansingId = clsCreateClientContent.data.cleansingId;
+                        if (!string.IsNullOrEmpty(clsCreateClientContent?.data?.cleansingId))
+                        {
+                            newCleansingId = clsCreateClientContent?.data?.cleansingId;
+                        }
+                        if (!string.IsNullOrEmpty(clsCreateClientContent?.data?.cleansingId))
+                        {
+                            newCleansingId = clsCreateClientContent?.data?.cleansingId;
+                        }
+                       
                         AddDebugInfo("create CLS newCleansingId = " + newCleansingId);
-
+                        regClientCorporateInput.generalHeader.cleansingId = newCleansingId;
 
                         //กรณีมาจากหน้าจอ CRM  notCreatePolisyClientFlag == Y ไม่ต้องไปสร้างใน polisyClientId
                         if (regClientCorporateInput.generalHeader.notCreatePolisyClientFlag != "Y")
@@ -397,6 +405,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                                 DataModelFactory.GetModel(typeof(CLIENTCreateCorporateClientAndAdditionalInfoInputModel));
                             polCreateCorporateIn =
                                 TransformerFactory.TransformModel(regClientCorporateInput, polCreateCorporateIn);
+                           
                             CLIENTCreateCorporateClientAndAdditionalInfoContentModel polCreateClientContent =
                                 CallDevesServiceProxy<CLIENTCreateCorporateClientAndAdditionalInfoOutputModel
                                         , CLIENTCreateCorporateClientAndAdditionalInfoContentModel>
