@@ -34,6 +34,7 @@ namespace DEVES.IntegrationAPI.Model.AccidentPrilimSurveyorReport
         public string description { get; set; }
         public string transactionId { get; set; }
         public string transactionDateTime { get; set; }
+        public List<string> errorMessage { get; set; }
         public AccidentPrilimSurveyorReportDataOutputModel_Fail data { get; set; }
     }
 

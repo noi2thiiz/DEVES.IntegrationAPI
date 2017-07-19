@@ -230,15 +230,12 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
 
                 bool isContain = false;
 
-                foreach (var text in outputFail.data.fieldErrors)
+                foreach (var text in errorMessage)
                 {
-                    if (String.IsNullOrEmpty(text.message) && String.IsNullOrEmpty(text.name))
-                    {
-                        break;
-                    }
-                    else
+                    if (text.Contains("free-quota limit"))
                     {
                         isContain = true;
+                        break;
                     }
                 }
 
@@ -248,11 +245,15 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                     outputPass.errorMessage = errorMessage;
                     return Request.CreateResponse<AccidentPrilimSurveyorReportOutputModel_Pass>(outputPass);
                 }
+                else
+                {
+                    _log.Error(_logImportantMessage);
+                    _log.ErrorFormat("ErrorName: {0} {1} ErrorDescription: {1}", outputFail.message, Environment.NewLine, outputFail.description);
 
-                _log.Error(_logImportantMessage);
-                _log.ErrorFormat("ErrorName: {0} {1} ErrorDescription: {1}", outputFail.message, Environment.NewLine, outputFail.description);
+                    return Request.CreateResponse<AccidentPrilimSurveyorReportOutputModel_Fail>(outputFail);
+                }
 
-                return Request.CreateResponse<AccidentPrilimSurveyorReportOutputModel_Fail>(outputFail);
+                
             }
         }
 

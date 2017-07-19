@@ -233,29 +233,29 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
 
                 bool isContain = false;
 
-                foreach (var text in outputFail.data.fieldError)
+                foreach (var text in errorMessage)
                 {
-                    if(String.IsNullOrEmpty(text.message) && String.IsNullOrEmpty(text.name))
-                    {
-                        break;
-                    }
-                    else
+                    if (text.Contains("free-quota limit"))
                     {
                         isContain = true;
+                        break;
                     }
                 }
 
-                if (!isContain)
+                if (isContain)
                 {
                     outputPass = new AssignedSurveyorOutputModel_Pass();
                     outputPass = HandleMessage(contentText, contentModel);
                     outputPass.errorMessage = errorMessage;
                     return Request.CreateResponse<AssignedSurveyorOutputModel_Pass>(outputPass);
                 }
-
-                _log.Error(_logImportantMessage);
-                // _log.ErrorFormat("ErrorCode: {0} {1} ErrorDescription: {1}", fieldError.name, Environment.NewLine, fieldError.message);
-                return Request.CreateResponse<AssignedSurveyorOutputModel_Fail>(outputFail);
+                else
+                {
+                    _log.Error(_logImportantMessage);
+                    // _log.ErrorFormat("ErrorCode: {0} {1} ErrorDescription: {1}", fieldError.name, Environment.NewLine, fieldError.message);
+                    return Request.CreateResponse<AssignedSurveyorOutputModel_Fail>(outputFail);
+                }
+                
             }
         }
 

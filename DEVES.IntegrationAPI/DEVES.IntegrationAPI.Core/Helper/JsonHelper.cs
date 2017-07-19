@@ -30,7 +30,7 @@ namespace DEVES.IntegrationAPI.Core.Helper
             output = string.Empty;
             try
             {
-                // throw new Exception("test");
+                // throw new Exception("Newtonsoft.Json.Schema.JSchemaException: The free-quota limit of 1000 schema validations per hour has been reached.");
                 _log.InfoFormat(validatedText, string.Empty);
                 var schemaText = FileHelper.ReadTextFile(filePath);
                 var schema = JSchema.Parse(schemaText);
