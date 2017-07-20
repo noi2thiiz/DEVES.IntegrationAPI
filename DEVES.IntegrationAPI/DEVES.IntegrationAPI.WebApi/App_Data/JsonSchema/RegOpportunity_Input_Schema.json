@@ -18,6 +18,15 @@
           "type": "string",
           "maxLength": 20
         },
+        "refId": {
+          "type": "string"
+        },
+        "crmClientId": {
+          "type": "string"
+        },
+        "cleansingId": {
+          "type": "string"
+        }
       },
       "required": [
         "requester",
@@ -83,34 +92,6 @@
             "Email",
             "Phone",
             "Fax"
-          ]
-        },
-        "doNotAllowEmails": {
-          "type": "string",
-          "enum": [
-            "Y",
-            "N"
-          ]
-        },
-        "doNotAllowBulkEmails": {
-          "type": "string",
-          "enum": [
-            "Y",
-            "N"
-          ]
-        },
-        "doNotAllowPhone": {
-          "type": "string",
-          "enum": [
-            "Y",
-            "N"
-          ]
-        },
-        "doNotAllowMails": {
-          "type": "string",
-          "enum": [
-            "Y",
-            "N"
           ]
         }
       },

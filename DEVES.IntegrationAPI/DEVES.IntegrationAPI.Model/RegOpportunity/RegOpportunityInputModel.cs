@@ -20,6 +20,9 @@ namespace DEVES.IntegrationAPI.Model.RegOpportunity
         public string requester { get; set; }
         public string topic { get; set; }
         public string leadId { get; set; }
+        public string refId { get; set; }
+        public string crmClientId { get; set; }
+        public string cleansingId { get; set; }
     }
 
     public class ContactInfoModel
@@ -35,10 +38,6 @@ namespace DEVES.IntegrationAPI.Model.RegOpportunity
         public string description { get; set; }
         public string jobTitle { get; set; }
         public string preferredMethodOfContact { get; set; }
-        public string doNotAllowEmails { get; set; }
-        public string doNotAllowBulkEmails { get; set; }
-        public string doNotAllowPhone { get; set; }
-        public string doNotAllowMails { get; set; }
     }
 
     public class OpportunityInfoModel
