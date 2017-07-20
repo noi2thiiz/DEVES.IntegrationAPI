@@ -112,6 +112,8 @@
     <Compile Include="InquiryOpportunity\InquiryOpportunityOutputModel.cs" />
     <Compile Include="MakeAppointment\MakeAppointmentInputModel.cs" />
     <Compile Include="MakeAppointment\MakeAppointmentOutputModel.cs" />
+    <Compile Include="InquiryPolicyModel\inquiryPolicyInputModel.cs" />
+    <Compile Include="InquiryPolicyModel\inquiryPolicyOutputModel.cs" />
     <Compile Include="ModelDatetimeConverter.cs" />
     <Compile Include="EWI\Enum.cs" />
     <Compile Include="EWI\EWIResponse.cs" />

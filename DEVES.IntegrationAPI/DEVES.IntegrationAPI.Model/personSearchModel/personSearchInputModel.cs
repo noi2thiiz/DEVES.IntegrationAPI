@@ -8,9 +8,19 @@ namespace DEVES.IntegrationAPI.Model.personSearchModel
 {
     public class personSearchInputModel
     {
+        public GeneralHeaderModel generalHeader { get; set; }
+        public ConditionModel conditions { get; set; }
+    }
+
+    public class GeneralHeaderModel
+    {
+        public string requester { get; set; }
+    }
+    public class ConditionModel
+    {
         public string fullName { get; set; }
         public string clsId { get; set; }
-        public string phoneNum { get; set;}
+        public string phoneNum { get; set; }
         public string citizenId { get; set; }
         public string name1 { get; set; }
         public string name2 { get; set; }
@@ -22,7 +32,8 @@ namespace DEVES.IntegrationAPI.Model.personSearchModel
         public string email { get; set; }
         public string phoneNumber { get; set; }
         public string customerType { get; set; }
-
     }
 
 }
+
+

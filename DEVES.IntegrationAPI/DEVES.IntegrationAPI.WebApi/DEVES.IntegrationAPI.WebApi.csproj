@@ -422,6 +422,7 @@
     <Compile Include="Controllers\InquiryConsultingHistoryController.cs" />
     <Compile Include="Controllers\InquiryCRMPayeeListController.cs" />
     <Compile Include="Controllers\InquiryOpportunityController.cs" />
+    <Compile Include="Controllers\InquiryPolicyController.cs" />
     <Compile Include="Controllers\InquiryPolicyMotorListClientController.cs" />
     <Compile Include="Controllers\InternalServiceController.cs" />
     <Compile Include="Controllers\InquiryDataServiceController.cs" />
@@ -493,6 +494,7 @@
     <Compile Include="Logic\buzInquiryOpportunity.cs" />
     <Compile Include="Logic\buzMakeAppointment.cs" />
     <Compile Include="Logic\buzRegCase.cs" />
+    <Compile Include="Logic\buzinquiryPolicy.cs" />
     <Compile Include="Logic\buzpersonSearch.cs" />
     <Compile Include="Logic\buzRegComplaint.cs" />
     <Compile Include="Logic\buzRegLead.cs" />
@@ -670,6 +672,7 @@
     <Content Include="App_Data\JsonSchema\RegLead_Input_Schema.json" />
     <Content Include="App_Data\JsonSchema\RegOpportunity_Input_Schema.json" />
     <Content Include="App_Data\JsonSchema\personSearch_Input_Schema.json" />
+    <Content Include="App_Data\JsonSchema\inquiryPolicy_Input_Schema.json" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile10.pubxml" />
