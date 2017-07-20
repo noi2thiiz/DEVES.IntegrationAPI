@@ -18,12 +18,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         {
             personSearchInputModel personS = new personSearchInputModel();
             personS = (personSearchInputModel)input;
-            string jsonValue = string.Format("{0}|{1}|{2}|{3}|{4}|{5}", string.IsNullOrEmpty(personS.name1) ? "" : personS.name1
-                   , string.IsNullOrEmpty(personS.idCard) ? "" : personS.idCard
-                   , string.IsNullOrEmpty(personS.phoneNumber) ? "" : personS.phoneNumber
-                   , string.IsNullOrEmpty(personS.cleansingId) ? "" : personS.cleansingId
-                   , string.IsNullOrEmpty(personS.crmClientId) ? "" : personS.crmClientId
-                   , string.IsNullOrEmpty(personS.email) ? "" : personS.email
+            string jsonValue = string.Format("{0}|{1}|{2}|{3}|{4}|{5}", string.IsNullOrEmpty(personS.conditions.fullName) ? "" : personS.conditions.fullName
+                   , string.IsNullOrEmpty(personS.conditions.idCard) ? "" : personS.conditions.idCard
+                   , string.IsNullOrEmpty(personS.conditions.phoneNumber) ? "" : personS.conditions.phoneNumber
+                   , string.IsNullOrEmpty(personS.conditions.cleansingId) ? "" : personS.conditions.cleansingId
+                   , string.IsNullOrEmpty(personS.conditions.crmClientId) ? "" : personS.conditions.crmClientId
+                   , string.IsNullOrEmpty(personS.conditions.email) ? "" : personS.conditions.email
                    );
          
 
