@@ -18,6 +18,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         {
             // Preparation Variable
             RegLeadOutputModel output = new RegLeadOutputModel();
+            output.data = new RegLeadDataModel();
 
             // Deserialize Input
             RegLeadInputModel contentModel = (RegLeadInputModel)input;
@@ -113,6 +114,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 output.description = "";
                 output.transactionId = TransactionId;
                 output.transactionDateTime = DateTime.Now;
+                output.data.firstName = contentModel.contactInfo.firstName;
+                output.data.lastName = contentModel.contactInfo.lastName;
+                //output.data.leadId = leadId;
 
                 return output;
             }
