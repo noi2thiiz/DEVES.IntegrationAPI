@@ -52,6 +52,9 @@ namespace DEVES.IntegrationAPI.WebApi
                                                   DECLARE @parentPolicyId nvarchar(50) = '{5}'
                                                   EXEC [dbo].[sp_Query_inquiryClaim] @cleansingId,@claimNotiNo,@claimNo,@policyNo,@policyCarRegisterNo,@parentPolicyId";
 
+        public static string SQL_inquiryCase = @"DECLARE @cleansingId nvarchar(20) = '{0}'
+                                                 DECLARE @ticketNo nvarchar(20) = '{1}'
+                                                 EXEC [dbo].[sp_Query_inquiryCase] @cleansingId,@ticketNo";
 
 
         public System.Data.DataTable Queryinfo_CallerId(string ticketNo, string uniqueID)
@@ -81,6 +84,14 @@ namespace DEVES.IntegrationAPI.WebApi
         public System.Data.DataTable Queryinfo_inquiryClaim(string value)
         {
             string strSql = string.Format(SQL_inquiryClaim, value.Split('|')[0], value.Split('|')[1], value.Split('|')[2], value.Split('|')[3], value.Split('|')[4], value.Split('|')[5]);
+            System.Data.DataTable dt = new System.Data.DataTable();
+            System.Data.SqlClient.SqlDataAdapter da = new System.Data.SqlClient.SqlDataAdapter(strSql, System.Configuration.ConfigurationManager.AppSettings["CRMDB"].ToString());
+            da.Fill(dt);
+            return dt;
+        }
+        public System.Data.DataTable Queryinfo_inquiryCase(string value)
+        {
+            string strSql = string.Format(SQL_inquiryCase, value.Split('|')[0], value.Split('|')[1]);
             System.Data.DataTable dt = new System.Data.DataTable();
             System.Data.SqlClient.SqlDataAdapter da = new System.Data.SqlClient.SqlDataAdapter(strSql, System.Configuration.ConfigurationManager.AppSettings["CRMDB"].ToString());
             da.Fill(dt);

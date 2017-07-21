@@ -108,6 +108,10 @@
     <Compile Include="CRM\CRM_RequestCleansingIdDataModel.cs" />
     <Compile Include="DataModel.cs" />
     <Compile Include="DataModelFactory.cs" />
+    <Compile Include="InquiryCaseModel\inquiryCaseInputModel.cs" />
+    <Compile Include="InquiryCaseModel\inquiryCaseOutputModel.cs" />
+    <Compile Include="inquiryClaimModel\inquiryClaimInputModel.cs" />
+    <Compile Include="inquiryClaimModel\inquiryClaimOutputModel.cs" />
     <Compile Include="InquiryPolicyModel\inquiryPolicyInputModel.cs" />
     <Compile Include="InquiryPolicyModel\inquiryPolicyOutputModel.cs" />
     <Compile Include="ModelDatetimeConverter.cs" />
