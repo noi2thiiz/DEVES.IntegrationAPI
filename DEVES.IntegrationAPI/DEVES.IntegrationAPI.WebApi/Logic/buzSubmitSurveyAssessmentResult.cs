@@ -106,8 +106,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                                 retrievedAssessment.pfc_assessment_by = new OptionSetValue(100000001);
                             }
                             retrievedAssessment.pfc_assessment_survey_ipaddress = HttpContext.Current.Request.UserHostAddress;
-                            retrievedAssessment.pfc_assessee_code = contentModel.assesseeCode;
-                            retrievedAssessment.pfc_assessee_name = contentModel.assesseeName;
+                            //retrievedAssessment.pfc_assessee_code = contentModel.assesseeCode;
+                            //retrievedAssessment.pfc_assessee_name = contentModel.assesseeName;
 
                             try
                             {
