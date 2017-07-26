@@ -30,7 +30,13 @@
     },
     "email": {
       "type": "string"
-    } 
+    },
+    "customerType": {
+      "type": "string",
+      "enum": [
+        "P",
+        "C"
+      ]
+    }
   }
-
 }

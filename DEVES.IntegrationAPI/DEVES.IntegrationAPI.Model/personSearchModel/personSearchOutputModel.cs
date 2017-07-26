@@ -9,7 +9,8 @@ namespace DEVES.IntegrationAPI.Model.personSearchModel
     public class personSearchOutputModel : BaseContentJsonProxyOutputModel
     {
   
-        public List<personSearchDataOutput> data { get; set; }
+        public List<personSearchDataOutput> Persondata { get; set; }
+        public List<corpSearchDataOutput>  Corpdata { get; set; }
     }
 
     public class personSearchDataOutput : BaseDataModel
@@ -46,4 +47,18 @@ namespace DEVES.IntegrationAPI.Model.personSearchModel
         public string polisyClientId { get; set; }
 
     }
+
+    public class corpSearchDataOutput : BaseDataModel
+    {
+        public string fullName { get; set; }
+        public string  idRegCorp { get; set; }
+        public string idTax { get; set; }
+        public string corporateBranch { get; set; }
+        public DateTime corporateDate { get; set; }
+        public string riskLevelText { get; set; }
+        public string language { get; set; }
+        public string clientStatus { get; set; }
+        public string vipStatus { get; set; }
+    }
+
 }

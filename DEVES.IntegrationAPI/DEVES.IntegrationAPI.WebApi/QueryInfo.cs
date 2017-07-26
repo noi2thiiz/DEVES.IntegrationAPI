@@ -33,7 +33,8 @@ namespace DEVES.IntegrationAPI.WebApi
                                                     DECLARE @crmid nvarchar(20) = '{3}'
                                                     DECLARE @clsid nvarchar(20) = '{4}'
                                                     DECLARE @email nvarchar(50) = '{5}'
-                                                    EXEC[dbo].[sp_Query_APIpersonal] @fullname,@czid,@phoneno,@crmid,@clsid,@email";
+                                                    DECLARE @customerType nvarchar(10) = '{6}'
+                                                    EXEC[dbo].[sp_Query_APIpersonal] @fullname,@czid,@phoneno,@crmid,@clsid,@email,@customerType";
 
         public static string SQL_inquiryPolicy = @"DECLARE @topRecords nvarchar(100) = '10';
                                                    DECLARE @Motor_NonMotor int ; --9: ALL, 0: Motor, 1: Non-Motor
@@ -67,7 +68,7 @@ namespace DEVES.IntegrationAPI.WebApi
         }
         public System.Data.DataTable Queryinfo_searchPerson(string value)
         {
-            string strSql = string.Format(SQL_searchPersonal, value.Split('|')[0], value.Split('|')[1], value.Split('|')[2], value.Split('|')[4], value.Split('|')[3], value.Split('|')[5]);
+            string strSql = string.Format(SQL_searchPersonal, value.Split('|')[0], value.Split('|')[1], value.Split('|')[2], value.Split('|')[4], value.Split('|')[3], value.Split('|')[5],value.Split('|')[6]);
             System.Data.DataTable dt = new System.Data.DataTable();
             System.Data.SqlClient.SqlDataAdapter da = new System.Data.SqlClient.SqlDataAdapter(strSql, System.Configuration.ConfigurationManager.AppSettings["CRMDB"].ToString());
             da.Fill(dt);
