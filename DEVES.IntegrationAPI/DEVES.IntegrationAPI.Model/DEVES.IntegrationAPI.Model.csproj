@@ -112,6 +112,10 @@
     <Compile Include="InquiryOpportunity\InquiryOpportunityOutputModel.cs" />
     <Compile Include="MakeAppointment\MakeAppointmentInputModel.cs" />
     <Compile Include="MakeAppointment\MakeAppointmentOutputModel.cs" />
+    <Compile Include="InquiryCaseModel\inquiryCaseInputModel.cs" />
+    <Compile Include="InquiryCaseModel\inquiryCaseOutputModel.cs" />
+    <Compile Include="inquiryClaimModel\inquiryClaimInputModel.cs" />
+    <Compile Include="inquiryClaimModel\inquiryClaimOutputModel.cs" />
     <Compile Include="InquiryPolicyModel\inquiryPolicyInputModel.cs" />
     <Compile Include="InquiryPolicyModel\inquiryPolicyOutputModel.cs" />
     <Compile Include="ModelDatetimeConverter.cs" />

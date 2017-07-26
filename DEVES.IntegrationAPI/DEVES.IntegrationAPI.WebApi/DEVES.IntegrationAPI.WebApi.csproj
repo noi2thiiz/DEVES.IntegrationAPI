@@ -418,6 +418,8 @@
     <Compile Include="Controllers\CrmApiTestController.cs" />
     <Compile Include="Controllers\CRMInquiryClientMasterController.cs" />
     <Compile Include="Controllers\EwiServiceProxyController.cs" />
+    <Compile Include="Controllers\inquiryCaseController.cs" />
+    <Compile Include="Controllers\inquiryClaimController.cs" />
     <Compile Include="Controllers\InquiryClientMasterController.cs" />
     <Compile Include="Controllers\InquiryConsultingHistoryController.cs" />
     <Compile Include="Controllers\InquiryCRMPayeeListController.cs" />
@@ -476,6 +478,8 @@
     </Compile>
     <Compile Include="Logic\buzClaimRegistration.cs" />
     <Compile Include="Logic\buzCreateAssessmentFromLocus.cs" />
+    <Compile Include="Logic\buzinquiryCase.cs" />
+    <Compile Include="Logic\buzinquiryClaim.cs" />
     <Compile Include="Logic\BuzInquiryCrmAsrhClientMaster.cs" />
     <Compile Include="Logic\buzCrmInquiryCorporateClientMaster.cs" />
     <Compile Include="Logic\buzCrmMasters.cs" />
@@ -673,6 +677,8 @@
     <Content Include="App_Data\JsonSchema\RegOpportunity_Input_Schema.json" />
     <Content Include="App_Data\JsonSchema\personSearch_Input_Schema.json" />
     <Content Include="App_Data\JsonSchema\inquiryPolicy_Input_Schema.json" />
+    <Content Include="App_Data\JsonSchema\inquiryClaim_Input_Schema.json" />
+    <Content Include="App_Data\JsonSchema\inquiryCase_Input_Schema.json" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile10.pubxml" />

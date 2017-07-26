@@ -59,7 +59,6 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 dataOutput.claims = new List<inquiryPolicyDataOutputClaims>();
                 dataOutput.policyGuid = string.IsNullOrEmpty(dt.Rows[i]["crmPolicyDetailId"].ToString()) ? "" : dt.Rows[i]["crmPolicyDetailId"].ToString();
                 dataOutput.rawData = dt.Rows[i];
-
                 dataOutput.policyInfo.crmPolicyDetailId = string.IsNullOrEmpty(dt.Rows[i]["crmPolicyDetailId"].ToString()) ? "" : dt.Rows[i]["crmPolicyDetailId"].ToString();
                 dataOutput.policyInfo.policyNo = string.IsNullOrEmpty(dt.Rows[i]["PolicyNo"].ToString()) ? "" : dt.Rows[i]["PolicyNo"].ToString();
                 dataOutput.policyInfo.renewalNo = string.IsNullOrEmpty(dt.Rows[i]["renewalNo"].ToString()) ? "" : dt.Rows[i]["renewalNo"].ToString();

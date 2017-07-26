@@ -18,7 +18,7 @@ namespace DEVES.IntegrationAPI.Model.personSearchModel
     }
     public class ConditionModel
     {
-        public string fullName { get; set; }
+        public string fullName { get; set; }                                                                                                                     
         public string name1 { get; set; }
         public string name2 { get; set; }
         public string idCard { get; set; }
@@ -28,7 +28,7 @@ namespace DEVES.IntegrationAPI.Model.personSearchModel
         public string cleansingId { get; set; }
         public string email { get; set; }
         public string phoneNumber { get; set; }
-        public string customerType { get; set; } = "C";
+        public string customerType { get; set; }
     }
 
 }
