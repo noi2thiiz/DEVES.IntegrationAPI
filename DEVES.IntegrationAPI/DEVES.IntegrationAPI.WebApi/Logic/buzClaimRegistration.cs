@@ -152,7 +152,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     pfc_locus_claim_status_on = DateTime.Now,
                     pfc_locus_claim_status_code = "1",
                     pfc_locus_claim_status_desc = "ลงทะเบียนสินไหมแล้ว",
-                    pfc_claim_number = locusClaimRegOutput.claimNo
+                    pfc_claim_number = locusClaimRegOutput.claimNo,
+                    pfc_register_claim_by = new Microsoft.Xrm.Sdk.EntityReference(Incident.EntityLogicalName, contentModel.CurrentUserId),
+                    pfc_register_claim_on = DateTime.Now
                 };
 
                 ExecuteTransactionRequest tranReq = new ExecuteTransactionRequest()

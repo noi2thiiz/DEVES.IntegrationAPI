@@ -647,6 +647,7 @@
     <Content Include="App_Data\JsonSchema\SubmitSurveyAssessmentResultInputModel.json" />
     <Content Include="App_Data\JsonSchema\RegComplaintInputModel.json" />
     <Content Include="App_Data\JsonSchema\CreateAssessmentFromLocus_Input_Schema.json" />
+    <Content Include="App_Data\JsonSchema\UpdateClaimInfo_Input_Schema.json" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile10.pubxml" />
