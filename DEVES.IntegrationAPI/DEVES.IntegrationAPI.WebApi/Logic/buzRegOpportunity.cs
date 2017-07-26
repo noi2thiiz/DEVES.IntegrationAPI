@@ -35,6 +35,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             inputSearch.generalHeader = new DEVES.IntegrationAPI.Model.personSearchModel.GeneralHeaderModel();
             inputSearch.conditions = new DEVES.IntegrationAPI.Model.personSearchModel.ConditionModel();
 
+            inputSearch.conditions.customerType = "P";
+
             // Output from Inquiry
             personSearchOutputModel outputSearch = new personSearchOutputModel();
 
@@ -48,7 +50,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             }
 
             // check that search by cleansingId or crmClientId is empty or not?  
-            if (outputSearch.data.Count == 0) // don't have data -> it's empty
+            if (outputSearch.Persondata.Count == 0) // don't have data -> it's empty
             {
                 inputSearch.conditions.crmClientId = null;
                 inputSearch.conditions.cleansingId = null;
@@ -72,7 +74,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             }
 
             // If have only 1 data -> do nothing
-            if (outputSearch.data.Count == 1)
+            if (outputSearch.Persondata.Count == 1)
             {
                 // do nothing
             }
