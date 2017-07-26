@@ -32,23 +32,44 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             // Inquiry Personal
             buzpersonSearch personSearch = new buzpersonSearch();
             personSearchInputModel inputSearch = new personSearchInputModel();
-            // TRANSFORM INPUT
-            // GeneralHeader
-            inputSearch.generalHeader.requester = contentModel.generalHeader.requester;
-            // Condition
-            inputSearch.conditions.fullName = contentModel.contactInfo.firstName + " " + contentModel.contactInfo.lastName;
-            inputSearch.conditions.name1 = contentModel.contactInfo.firstName;
-            inputSearch.conditions.name2 = contentModel.contactInfo.lastName;
-            // inputSearch.conditions.idCard = contentModel.generalHeader.requester;
-            // inputSearch.conditions.crmClientId = contentModel.contactInfo.;
-            // inputSearch.conditions.line = contentModel.contactInfo.;
-            // inputSearch.conditions.facebook = contentModel.generalHeader.requester;
-            // inputSearch.conditions.cleansingId = contentModel.generalHeader.requester;
-            inputSearch.conditions.email = contentModel.contactInfo.email;
-            inputSearch.conditions.phoneNumber = contentModel.contactInfo.mobilePhone;
-            // inputSearch.conditions.customerType = contentModel.generalHeader.requester;
+            inputSearch.generalHeader = new DEVES.IntegrationAPI.Model.personSearchModel.GeneralHeaderModel();
+            inputSearch.conditions = new DEVES.IntegrationAPI.Model.personSearchModel.ConditionModel();
 
-            personSearchOutputModel outputSearch = (personSearchOutputModel)personSearch.ExecuteInput(inputSearch);
+            // Output from Inquiry
+            personSearchOutputModel outputSearch = new personSearchOutputModel();
+
+            // TRANSFORM INPUT
+            if ( String.IsNullOrEmpty(contentModel.generalHeader.cleansingId) || String.IsNullOrEmpty(contentModel.generalHeader.crmClientId) )
+            {
+                inputSearch.conditions.crmClientId = contentModel.generalHeader.crmClientId;
+                inputSearch.conditions.cleansingId = contentModel.generalHeader.cleansingId;
+
+                outputSearch = (personSearchOutputModel)personSearch.ExecuteInput(inputSearch);
+            }
+
+            // check that search by cleansingId or crmClientId is empty or not?  
+            if (outputSearch.data.Count == 0) // don't have data -> it's empty
+            {
+                inputSearch.conditions.crmClientId = null;
+                inputSearch.conditions.cleansingId = null;
+
+                // GeneralHeader
+                inputSearch.generalHeader.requester = contentModel.generalHeader.requester;
+                // Condition
+                inputSearch.conditions.fullName = contentModel.contactInfo.firstName + " " + contentModel.contactInfo.lastName;
+                inputSearch.conditions.name1 = contentModel.contactInfo.firstName;
+                inputSearch.conditions.name2 = contentModel.contactInfo.lastName;
+                // inputSearch.conditions.idCard = contentModel.generalHeader.requester;
+                // inputSearch.conditions.crmClientId = contentModel.contactInfo.;
+                // inputSearch.conditions.line = contentModel.contactInfo.;
+                // inputSearch.conditions.facebook = contentModel.generalHeader.requester;
+                // inputSearch.conditions.cleansingId = contentModel.generalHeader.requester;
+                inputSearch.conditions.email = contentModel.contactInfo.email;
+                inputSearch.conditions.phoneNumber = contentModel.contactInfo.mobilePhone;
+                // inputSearch.conditions.customerType = contentModel.generalHeader.requester;
+
+                outputSearch = (personSearchOutputModel)personSearch.ExecuteInput(inputSearch);
+            }
 
             // If have only 1 data -> do nothing
             if (outputSearch.data.Count == 1)

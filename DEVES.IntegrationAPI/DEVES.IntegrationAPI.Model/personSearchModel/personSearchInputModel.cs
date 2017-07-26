@@ -28,7 +28,7 @@ namespace DEVES.IntegrationAPI.Model.personSearchModel
         public string cleansingId { get; set; }
         public string email { get; set; }
         public string phoneNumber { get; set; }
-        public string customerType { get; set; }
+        public string customerType { get; set; } = "C";
     }
 
 }
