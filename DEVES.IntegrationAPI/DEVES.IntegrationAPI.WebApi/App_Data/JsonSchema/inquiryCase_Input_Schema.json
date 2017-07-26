@@ -13,17 +13,7 @@
      "cleansingId": {
       "type": "string"
     },
-    "crmClientId": {
-      "type": "string",
-      "maxLength": 13
-    },
-    "policyCarRegisterNo": {
-      "type": "string"
-    },
-    "policyNo": {
-      "type": "string"
-    },
-    "chassisNo": {
+    "ticketNo": {
       "type": "string"
     }
   }

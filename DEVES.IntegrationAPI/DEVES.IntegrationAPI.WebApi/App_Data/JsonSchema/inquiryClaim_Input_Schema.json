@@ -1,0 +1,32 @@
+﻿{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "generalHeader" : {
+    "requester": {
+      "type": "string",
+        "enum": [
+        "WEB"
+      ]
+    }
+  },
+  "cleansingId": {
+    "type": "string",
+    "maxLenght": 15
+  },
+  "claimNotiNo": {
+    "type": "string"
+  },
+  "claimNo": {
+    "type": "string"
+  },
+  "policyNo": {
+    "type": "string"
+  },
+  "policyCarRegisterNo": {
+    "type": "string"
+  },
+  "parentPolicyId": {
+    "type": "string"
+  }
+
+}
