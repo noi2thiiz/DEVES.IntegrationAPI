@@ -72,10 +72,6 @@
           "type": "string",
           "maxLength": 100
         },
-        "line": {
-          "type": "string",
-          "maxLength": 50
-        },
         "preferredMethodOfContact": {
           "type": "string",
           "enum": [
@@ -85,7 +81,11 @@
             "Fax"
           ]
         },
-        "facebookId" {
+        "line": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "facebookId": {
           "type": "string",
           "maxLength": 100
         }
@@ -139,7 +139,7 @@
           "type": "string",
           "maxLength": 100
         },
-        "price": {
+        "budgetAmount": {
           "type": "integer"
         }
       },
@@ -161,7 +161,8 @@
           "maxLength": 10
         },
         "insuredIssueDate": {
-          "type": "string"
+          "type": "string",
+          "pattern": "^20[0-9]{2}-[0-1]{1}[0-9]{1}-[0-3]{1}[0-9]{1} [0-9]{2}:[0-9]{2}:[0-9]{2}$"
         }
       },
       "required": [

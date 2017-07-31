@@ -8,6 +8,8 @@ using DEVES.IntegrationAPI.Model.RegOpportunity;
 using System.Configuration;
 using Microsoft.Xrm.Tooling.Connector;
 using Microsoft.Xrm.Sdk.Client;
+using DEVES.IntegrationAPI.WebApi.Logic.buzModel;
+using DEVES.IntegrationAPI.Model.personSearchModel;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
@@ -28,11 +30,53 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
 
             // Inquiry Personal
+            buzpersonSearch personSearch = new buzpersonSearch();
+            personSearchInputModel inputSearch = new personSearchInputModel();
+            inputSearch.generalHeader = new DEVES.IntegrationAPI.Model.personSearchModel.GeneralHeaderModel();
+            inputSearch.conditions = new DEVES.IntegrationAPI.Model.personSearchModel.ConditionModel();
+
+            inputSearch.conditions.customerType = "P";
+
+            // Output from Inquiry
+            personSearchOutputModel outputSearch = new personSearchOutputModel();
+
+            // TRANSFORM INPUT
+            if ( String.IsNullOrEmpty(contentModel.generalHeader.cleansingId) || String.IsNullOrEmpty(contentModel.generalHeader.crmClientId) )
+            {
+                inputSearch.conditions.crmClientId = contentModel.generalHeader.crmClientId;
+                inputSearch.conditions.cleansingId = contentModel.generalHeader.cleansingId;
+
+                outputSearch = (personSearchOutputModel)personSearch.ExecuteInput(inputSearch);
+            }
+
+            // check that search by cleansingId or crmClientId is empty or not?  
+            if (outputSearch.Persondata.Count == 0) // don't have data -> it's empty
+            {
+                inputSearch.conditions.crmClientId = null;
+                inputSearch.conditions.cleansingId = null;
+
+                // GeneralHeader
+                inputSearch.generalHeader.requester = contentModel.generalHeader.requester;
+                // Condition
+                inputSearch.conditions.fullName = contentModel.contactInfo.firstName + " " + contentModel.contactInfo.lastName;
+                inputSearch.conditions.name1 = contentModel.contactInfo.firstName;
+                inputSearch.conditions.name2 = contentModel.contactInfo.lastName;
+                // inputSearch.conditions.idCard = contentModel.generalHeader.requester;
+                // inputSearch.conditions.crmClientId = contentModel.contactInfo.;
+                // inputSearch.conditions.line = contentModel.contactInfo.;
+                // inputSearch.conditions.facebook = contentModel.generalHeader.requester;
+                // inputSearch.conditions.cleansingId = contentModel.generalHeader.requester;
+                inputSearch.conditions.email = contentModel.contactInfo.email;
+                inputSearch.conditions.phoneNumber = contentModel.contactInfo.mobilePhone;
+                // inputSearch.conditions.customerType = contentModel.generalHeader.requester;
+
+                outputSearch = (personSearchOutputModel)personSearch.ExecuteInput(inputSearch);
+            }
 
             // If have only 1 data -> do nothing
-            if (false)
+            if (outputSearch.Persondata.Count == 1)
             {
-
+                // do nothing
             }
             // else (0 data or more than 1) -> create personal in cls
             else
@@ -42,31 +86,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             // Create Opp
             try { 
-                Opportunity opp = new Opportunity();
-                /*
-                // generalHeader
-                // opp.Subject = contentModel.generalHeader.topic;
-                // contactInfo
-                opp.Salutation = contentModel.contactInfo.salutation;
-                //opp. = contentModel.contactInfo.sex;
-                opp.FirstName = contentModel.contactInfo.firstName;
-                opp.LastName = contentModel.contactInfo.lastName;
-                opp.EMailAddress1 = contentModel.contactInfo.email;
-                opp.MobilePhone = contentModel.contactInfo.mobilePhone;
-                // opp. = contentModel.contactInfo.businessPhone;
-                opp.Fax = contentModel.contactInfo.fax;
-                opp.Description = contentModel.contactInfo.description;
-                opp.JobTitle = contentModel.contactInfo.jobTitle;
-                // opp.PreferredContactMethodCode = new Microsoft.Xrm.Sdk.OptionSetValue(Convert.ToInt32(contentModel.contactInfo.preferredMethodOfContact));
-                // opp.DoNotEMail = contentModel.contactInfo.doNotAllowEmails;
-                // opp.DoNotBulkEMail = contentModel.contactInfo.doNotAllowBulkEmails;
-                // opp.DoNotPhone = contentModel.contactInfo.doNotAllowPhone;
-                // opp.DoNotEMail = contentModel.contactInfo.doNotAllowEmails;
-                // companyInfo
-                opp.CompanyName = contentModel.companyInfo.companyName;
-                opp.WebSiteUrl = contentModel.companyInfo.websiteUrl;
-                // opp.Address1_Composite = contentModel.companyInfo.address; // Permission can get only
-                */
+                OpportunityModel opp = new OpportunityModel();
+                opp.Create(contentModel);
+                opp.Save();
+                
                 // _serviceProxy.Create(opp);
 
             }
@@ -98,6 +121,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 {
                     // not update
                 }
+
             }
 
             output.code = AppConst.CODE_SUCCESS;
