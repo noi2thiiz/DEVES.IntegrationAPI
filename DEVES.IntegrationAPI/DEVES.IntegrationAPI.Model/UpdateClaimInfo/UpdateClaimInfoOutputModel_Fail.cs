@@ -15,6 +15,7 @@ namespace DEVES.IntegrationAPI.Model.UpdateClaimInfo
         public string transactionDateTime { get; set; }
 
         public UpdateClaimInfoDataOutputModel_Fail data { get; set; }
+        public List<string> errorMessage { get; set; }
     }
 
     public class UpdateClaimInfoDataOutputModel_Fail
