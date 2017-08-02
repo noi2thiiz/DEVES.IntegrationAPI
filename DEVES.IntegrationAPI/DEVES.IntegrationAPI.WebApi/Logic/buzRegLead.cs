@@ -109,6 +109,23 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                 _serviceProxy.Create(lead);
 
+                var query = from c in svcContext.LeadSet
+                            where c.FirstName == contentModel.contactInfo.firstName && c.LastName == contentModel.contactInfo.lastName && c.Subject == contentModel.generalHeader.topic
+                            select c;
+                Lead getLead = new Lead();
+                try {
+                    getLead = query.FirstOrDefault<Lead>();
+                } 
+                catch(Exception)
+                {
+                    output.code = AppConst.CODE_FAILED;
+                    output.message = AppConst.MESSAGE_INTERNAL_ERROR;
+                    output.description = "ไม่สามารถ get ค่า LeadId ได้";
+                    output.transactionId = TransactionId;
+                    output.transactionDateTime = DateTime.Now;
+                }
+
+
                 output.code = AppConst.CODE_SUCCESS;
                 output.message = AppConst.MESSAGE_SUCCESS;
                 output.description = "";
@@ -116,7 +133,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 output.transactionDateTime = DateTime.Now;
                 output.data.firstName = contentModel.contactInfo.firstName;
                 output.data.lastName = contentModel.contactInfo.lastName;
-                //output.data.leadId = leadId;
+                output.data.leadId = getLead.pfc_lead_id;
 
                 return output;
             }

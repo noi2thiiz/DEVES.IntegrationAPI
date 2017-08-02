@@ -27,29 +27,29 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.buzModel
         public void Create(RegOpportunityInputModel input)
         {
             /*
-                // generalHeader
-                // opp.Subject = contentModel.generalHeader.topic;
-                // contactInfo
-                opp.Salutation = contentModel.contactInfo.salutation;
-                //opp. = contentModel.contactInfo.sex;
-                opp.FirstName = contentModel.contactInfo.firstName;
-                opp.LastName = contentModel.contactInfo.lastName;
-                opp.EMailAddress1 = contentModel.contactInfo.email;
-                opp.MobilePhone = contentModel.contactInfo.mobilePhone;
-                // opp. = contentModel.contactInfo.businessPhone;
-                opp.Fax = contentModel.contactInfo.fax;
-                opp.Description = contentModel.contactInfo.description;
-                opp.JobTitle = contentModel.contactInfo.jobTitle;
-                // opp.PreferredContactMethodCode = new Microsoft.Xrm.Sdk.OptionSetValue(Convert.ToInt32(contentModel.contactInfo.preferredMethodOfContact));
-                // opp.DoNotEMail = contentModel.contactInfo.doNotAllowEmails;
-                // opp.DoNotBulkEMail = contentModel.contactInfo.doNotAllowBulkEmails;
-                // opp.DoNotPhone = contentModel.contactInfo.doNotAllowPhone;
-                // opp.DoNotEMail = contentModel.contactInfo.doNotAllowEmails;
-                // companyInfo
-                opp.CompanyName = contentModel.companyInfo.companyName;
-                opp.WebSiteUrl = contentModel.companyInfo.websiteUrl;
-                // opp.Address1_Composite = contentModel.companyInfo.address; // Permission can get only
-                */
+            // generalHeader
+            // opp.Subject = contentModel.generalHeader.topic;
+            // contactInfo
+            opp.Salutation = contentModel.contactInfo.salutation;
+            //opp. = contentModel.contactInfo.sex;
+            opp.FirstName = contentModel.contactInfo.firstName;
+            opp.LastName = contentModel.contactInfo.lastName;
+            opp.EMailAddress1 = contentModel.contactInfo.email;
+            opp.MobilePhone = contentModel.contactInfo.mobilePhone;
+            // opp. = contentModel.contactInfo.businessPhone;
+            opp.Fax = contentModel.contactInfo.fax;
+            opp.Description = contentModel.contactInfo.description;
+            opp.JobTitle = contentModel.contactInfo.jobTitle;
+            // opp.PreferredContactMethodCode = new Microsoft.Xrm.Sdk.OptionSetValue(Convert.ToInt32(contentModel.contactInfo.preferredMethodOfContact));
+            // opp.DoNotEMail = contentModel.contactInfo.doNotAllowEmails;
+            // opp.DoNotBulkEMail = contentModel.contactInfo.doNotAllowBulkEmails;
+            // opp.DoNotPhone = contentModel.contactInfo.doNotAllowPhone;
+            // opp.DoNotEMail = contentModel.contactInfo.doNotAllowEmails;
+            // companyInfo
+            opp.CompanyName = contentModel.companyInfo.companyName;
+            opp.WebSiteUrl = contentModel.companyInfo.websiteUrl;
+            // opp.Address1_Composite = contentModel.companyInfo.address; // Permission can get only
+            */
         }
 
         // Query in XRM from oppId
