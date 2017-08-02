@@ -262,6 +262,24 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                                 }
                             }
                         }
+                        else if (text.Contains("JSON does not match any schemas"))
+                        {
+                            int startIndex = "JSON does not match any schemas from 'anyOf'. Path '".Length;
+                            int startName = startIndex;
+                            int endName = 0;
+
+                            for (int i = startIndex; i < text.Length - 1; i++)
+                            {
+                                if (text.Substring(i, 1).Equals("'"))
+                                {
+                                    endName = i;
+                                    break;
+                                }
+                            }
+
+                            fieldName = text.Substring(startName, endName - startName).Trim();
+                            fieldMessage = "Currency is invalid format (must has 2 floating digits)";
+                        }
 
                         if (!text.Contains("Required properties"))
                         {

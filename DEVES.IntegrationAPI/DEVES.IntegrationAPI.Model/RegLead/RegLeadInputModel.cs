@@ -55,7 +55,7 @@ namespace DEVES.IntegrationAPI.Model.RegLead
         public string productName { get; set; }
         public string categoryCode { get; set; }
         public string categoryName { get; set; }
-        public int budgetAmount { get; set; }
+        public decimal? budgetAmount { get; set; }
     }
 
     public class InsuredInfoModel : BaseDataModel
@@ -87,7 +87,7 @@ namespace DEVES.IntegrationAPI.Model.RegLead
         public string brandName { get; set; }
         public string modelCode { get; set; }
         public string modelName { get; set; }
-        public int year { get; set; }
+        public int? year { get; set; }
     }
 
 }

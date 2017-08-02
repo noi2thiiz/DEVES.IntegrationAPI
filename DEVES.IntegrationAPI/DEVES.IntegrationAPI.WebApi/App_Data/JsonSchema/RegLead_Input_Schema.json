@@ -30,7 +30,8 @@
             "0002",
             "0003",
             "0005",
-            "0008"
+            "0008",
+            ""
           ]
         },
         "sex": {
@@ -38,7 +39,8 @@
           "enum": [
             "F",
             "M",
-            "U"
+            "U",
+            ""
           ]
         },
         "firstName": {
@@ -55,10 +57,19 @@
         },
         "mobilePhone": {
           "type": "string",
+          "anyOf": [
+              {
+                "pattern": "^[0-9]{10}$"
+              },
+              {
+                "pattern": "^%"
+              }
+          ],
           "maxLength": 10
         },
         "businessPhone": {
           "type": "string",
+          "pattern": "^[0-9]{10}$",
           "maxLength": 50
         },
         "fax": {
@@ -78,7 +89,8 @@
             "Any",
             "Email",
             "Phone",
-            "Fax"
+            "Fax",
+            ""
           ]
         },
         "line": {
@@ -140,7 +152,10 @@
           "maxLength": 100
         },
         "budgetAmount": {
-          "type": "integer"
+          "type": [ "number", "null"],
+          "multipleOf": 0.01,
+          "minimum": 0,
+          "maximum": 1000000000000
         }
       },
       "required": [
@@ -162,7 +177,14 @@
         },
         "insuredIssueDate": {
           "type": "string",
-          "pattern": "^20[0-9]{2}-[0-1]{1}[0-9]{1}-[0-3]{1}[0-9]{1} [0-9]{2}:[0-9]{2}:[0-9]{2}$"
+          "anyOf": [
+              {
+                "pattern": "^20[0-9]{2}-[0-1]{1}[0-9]{1}-[0-3]{1}[0-9]{1} [0-9]{2}:[0-9]{2}:[0-9]{2}$"
+              },
+              {
+                "pattern": ""
+              }
+          ]
         }
       },
       "required": [
@@ -189,7 +211,14 @@
           "maxLength": 100
         },
         "year": {
-          "type": "integer",
+          "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+          ],
           "maxLength": 4
         }
       }

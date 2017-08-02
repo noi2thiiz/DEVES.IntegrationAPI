@@ -271,8 +271,8 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 catch (Exception e)
                 {
                     output.code = "501";
-                    output.message = "False";
-                    output.description = "Update data PROBLEM";
+                    output.message = "Update data PROBLEM";
+                    output.description = e.Message;
                     output.transactionId = _transactionId.ToString();
                     output.transactionDateTime = DateTime.Now.ToString();
                     output.data = null;
