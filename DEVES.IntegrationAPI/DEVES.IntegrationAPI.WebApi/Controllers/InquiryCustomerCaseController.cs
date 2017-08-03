@@ -10,16 +10,15 @@ using DEVES.IntegrationAPI.WebApi.Templates;
 using DEVES.IntegrationAPI.WebApi.Logic;
 using Swashbuckle.Swagger.Annotations;
 using System.Net;
-using DEVES.IntegrationAPI.Model.inquiryClaimModel;
-
+using DEVES.IntegrationAPI.Model.InquiryCaseModel;
 
 namespace DEVES.IntegrationAPI.WebApi.Controllers
 {
-    public class inquiryClaimController : BaseApiController
+    public class InquiryCustomerCaseController :BaseApiController
     {
         public object Post([FromBody]object value)
-        {           
-            return ProcessRequest<buzinquiryClaim, inquiryClaimInputModel>(value, "inquiryClaim_Input_Schema.json");
+        {
+            return ProcessRequest<buzinquiryCase, inquiryCaseInputModel>(value, "inquiryCase_Input_Schema.json");
         }
     }
 }

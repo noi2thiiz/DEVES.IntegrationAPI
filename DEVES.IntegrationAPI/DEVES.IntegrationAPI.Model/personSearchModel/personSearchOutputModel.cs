@@ -9,8 +9,8 @@ namespace DEVES.IntegrationAPI.Model.personSearchModel
     public class personSearchOutputModel : BaseContentJsonProxyOutputModel
     {
   
-        public List<personSearchDataOutput> Persondata { get; set; }
-        public List<corpSearchDataOutput>  Corpdata { get; set; }
+        public List<personSearchDataOutput> profileInfo { get; set; }
+        public List<corpSearchDataOutput>  companyInfo { get; set; }
     }
 
     public class personSearchDataOutput : BaseDataModel

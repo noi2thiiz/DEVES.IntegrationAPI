@@ -17,7 +17,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
         [TestMethod()]
         public void PostTest()
         {
-            var controller = new personSearchController();
+            var controller = new InquiryCustomerController();
             controller.Request = new HttpRequestMessage();
             controller.Configuration = new HttpConfiguration();
 

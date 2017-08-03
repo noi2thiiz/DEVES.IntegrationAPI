@@ -24,13 +24,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                    , string.IsNullOrEmpty(personS.conditions.cleansingId) ? "" : personS.conditions.cleansingId
                    , string.IsNullOrEmpty(personS.conditions.crmClientId) ? "" : personS.conditions.crmClientId
                    , string.IsNullOrEmpty(personS.conditions.email) ? "" : personS.conditions.email
-                   , string.IsNullOrEmpty(personS.conditions.customerType) ? "" : personS.conditions.customerType
+                   , string.IsNullOrEmpty(personS.conditions.customerType) ? "P" : personS.conditions.customerType
                    );
              
             personSearchOutputModel output = new personSearchOutputModel();
             if (personS.conditions.customerType == "P")
             {
-                output.Persondata = new List<personSearchDataOutput>();
+                output.profileInfo = new List<personSearchDataOutput>();
                 QueryInfo newQuery = new QueryInfo();
                 dt = newQuery.Queryinfo_searchPerson(jsonValue);
                 int datarow = dt.Rows.Count;
@@ -96,7 +96,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         dataOutput.vipStatus = "N";
                     }
                     #endregion
-                    output.Persondata.Add(dataOutput);
+                    output.profileInfo.Add(dataOutput);
                 }
 
                 //loop
@@ -108,7 +108,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             }
             else if (personS.conditions.customerType == "C")
             {
-                output.Corpdata = new List<corpSearchDataOutput>();
+                output.companyInfo = new List<corpSearchDataOutput>();
                 QueryInfo newQuery = new QueryInfo();
                 dt = newQuery.Queryinfo_searchPerson(jsonValue);
                 int datarow = dt.Rows.Count;
@@ -139,7 +139,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         dataOutput.vipStatus = "N";
                     }
                     #endregion
-                    output.Corpdata.Add(dataOutput);
+                    output.companyInfo.Add(dataOutput);
                 }
 
                 //loop

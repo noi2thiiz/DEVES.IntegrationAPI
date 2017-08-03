@@ -14,7 +14,7 @@ using DEVES.IntegrationAPI.Model.InquiryPolicyModel;
 
 namespace DEVES.IntegrationAPI.WebApi.Controllers
 {
-    public class InquiryPolicyController : BaseApiController
+    public class InquiryCustomerPolicyController : BaseApiController
     {
         public object Post([FromBody]object value)
         {

@@ -15,7 +15,7 @@ using System.Net;
 namespace DEVES.IntegrationAPI.WebApi.Controllers
 {
     //[RoutePrefix("api/personSearch")]
-    public class personSearchController : BaseApiController
+    public class InquiryCustomerController : BaseApiController
 
     {
 
