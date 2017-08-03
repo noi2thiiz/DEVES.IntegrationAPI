@@ -271,8 +271,8 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 catch (Exception e)
                 {
                     output.code = "501";
-                    output.message = "False";
-                    output.description = "Update data PROBLEM";
+                    output.message = "False: Update Problem";
+                    output.description = e.Message;
                     output.transactionId = _transactionId.ToString();
                     output.transactionDateTime = DateTime.Now.ToString();
                     output.data = null;
@@ -298,8 +298,8 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             catch (System.ServiceModel.FaultException e)
             {
                 output.code = "500";
-                output.message = "False";
-                output.description = "CRM PROBLEM";
+                output.message = "False: CRM PROBLEM";
+                output.description = e.Message;
                 output.transactionId = _transactionId.ToString();
                 output.transactionDateTime = DateTime.Now.ToString();
                 output.data = null;
@@ -321,8 +321,8 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 _log.Error(errorMessage);
 
                 output.code = "400";
-                output.message = "False";
-                output.description = "ไม่พบ claimNotiNo";
+                output.message = "False: ไม่พบ claimNotiNo";
+                output.description = e.Message;
                 output.transactionId = _transactionId.ToString();
                 output.transactionDateTime = DateTime.Now.ToString();
                 output.data = null;
