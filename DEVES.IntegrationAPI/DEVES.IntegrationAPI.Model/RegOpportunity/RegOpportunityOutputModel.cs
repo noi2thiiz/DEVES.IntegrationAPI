@@ -16,7 +16,7 @@ namespace DEVES.IntegrationAPI.Model.RegOpportunity
         public string opportunityId { get; set; }
         public string crmClientId { get; set; }
         public string cleansingId { get; set; }
-        public string leadId { get; set; }
         public string firstName { get; set; }
+        public string lastName { get; set; }
     }
 }

@@ -202,6 +202,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             output.transactionId = TransactionId;
             output.transactionDateTime = DateTime.Now;
 
+            output.data = new RegOpportunityDataModel();
+            output.data.opportunityId = "";
+            output.data.crmClientId = "";
+            output.data.cleansingId = "";
+            output.data.firstName = contentModel.contactInfo.firstName;
+            output.data.lastName = contentModel.contactInfo.lastName;
+
             return output;
         }
     }
