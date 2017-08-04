@@ -200,6 +200,75 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                                 }
                             }
                         }
+                        else if (text.Contains("exceeds maximum value"))
+                        {
+                            bool isMessage = false;
+                            int endMessage = 0;
+                            int startName = 0;
+                            int endName = 0;
+                            for (int i = 0; i < text.Length - 4; i++)
+                            {
+                                if (text.Substring(i, 4).Equals("Path"))
+                                {
+                                    fieldMessage = text.Substring(0, i - 1);
+                                    isMessage = true;
+                                    endMessage = i + "Path".Length;
+                                }
+                                if (isMessage)
+                                {
+                                    if (text.Substring(i, 1).Equals("'"))
+                                    {
+                                        if (startName == 0)
+                                        {
+                                            startName = i + 1;
+                                        }
+                                        else if (endName == 0)
+                                        {
+                                            endName = i - 1;
+                                        }
+                                    }
+                                    if (startName != 0 && endName != 0)
+                                    {
+                                        fieldName = text.Substring(startName, i - startName).Trim();
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        else if (text.Contains("minimum value"))
+                        {
+                            bool isMessage = false;
+                            int startName = 0;
+                            int endName = 0;
+                            for (int i = 0; i < text.Length - 7; i++)
+                            {
+                                string check = text.Substring(i, 7);
+                                if (text.Substring(i, 7).Equals("minimum"))
+                                {
+                                    fieldMessage = "The value is less than the minimum value";
+                                    isMessage = true;
+                                }
+                                if (isMessage)
+                                {
+                                    if (text.Substring(i, 1).Equals("'"))
+                                    {
+                                        if (startName == 0)
+                                        {
+                                            startName = i + 1;
+                                        }
+                                        else if (endName == 0)
+                                        {
+                                            endName = i - 1;
+                                        }
+                                    }
+                                    if (startName != 0 && endName != 0)
+                                    {
+                                        fieldName = text.Substring(startName, i - startName).Trim();
+                                        break;
+                                    }
+                                }
+                            }
+                        }
                         else if (text.Contains("Invalid type."))
                         {
                             int startIndex = "Invalid type.".Length;
@@ -278,7 +347,43 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                             }
 
                             fieldName = text.Substring(startName, endName - startName).Trim();
-                            fieldMessage = "Currency is invalid format (must has 2 floating digits)";
+                            fieldMessage = "Incorrect input format";
+                        }
+                        else if (text.Contains("not a multiple of"))
+                        {
+                            int getSingle = 0;
+                            bool isPath = false;
+                            int startName = 0;
+                            int endName = 0;
+
+                            for (int i = 0; i < text.Length - 1; i++)
+                            {
+                                if(isPath)
+                                {
+
+                                }
+
+                                if (text.Substring(i, 1).Equals("'"))
+                                {
+                                    if(getSingle == 0)
+                                    {
+                                        startName = i;
+                                    }
+                                    else if (getSingle == 1)
+                                    {
+                                        endName = i;
+                                    }
+                                    getSingle++;
+                                }
+
+                                if(getSingle == 2)
+                                {
+                                    break;
+                                }
+                            }
+
+                            fieldName = text.Substring(startName, endName - startName).Trim();
+                            fieldMessage = "Input floating point is invalid";
                         }
 
                         if (!text.Contains("Required properties"))
