@@ -61,7 +61,8 @@ namespace DEVES.IntegrationAPI.Model.RegOpportunity
 
     public class ProductionInfoModel
     {
-        public string productGroup { get; set; }
+        public string productGroupCode { get; set; }
+        public string productGroupName { get; set; }
         public List<ProductLineModel> productLine { get; set; }
     }
 

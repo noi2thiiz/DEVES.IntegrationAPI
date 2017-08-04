@@ -43,7 +43,8 @@
             "0002",
             "0003",
             "0005",
-            "0008"
+            "0008",
+            ""
           ]
         },
         "sex": {
@@ -51,7 +52,8 @@
           "enum": [
             "F",
             "M",
-            "U"
+            "U",
+            ""
           ]
         },
         "firstName": {
@@ -91,7 +93,8 @@
             "Any",
             "Email",
             "Phone",
-            "Fax"
+            "Fax",
+            ""
           ]
         }
       },
@@ -104,7 +107,10 @@
       "type": "object",
       "properties": {
         "budgetAmount": {
-          "type": "integer"
+          "type": [ "number", "null"],
+          "multipleOf": 0.01,
+          "minimum": 0,
+          "maximum": 1000000000000
         },
         "purchaseProcess": {
           "type": "string"
@@ -130,7 +136,8 @@
             "Qualify",
             "Develop",
             "Propose",
-            "Close"
+            "Close",
+            ""
           ]
         }
       }
@@ -155,34 +162,52 @@
     "productionInfo": {
       "type": "object",
       "properties": {
-        "productGroup": {
-          "type": "string"
+        "productGroupCode": {
+          "type": "string",
+          "maxLength": 10
+        },
+        "productGroupName": {
+          "type": "string",
+          "maxLength": 100
         },
         "productLine": {
           "type": "array",
           "properties": {
-            "code": {
-              "type": "string"
+            "productCode": {
+              "type": "string",
+              "maxLength": 10
             },
-            "name": {
-              "type": "string"
+            "productName": {
+              "type": "string",
+              "maxLength": 100
             },
-            "category": {
-              "type": "string"
+            "categoryCode": {
+              "type": "string",
+              "maxLength": 10
             },
-            "price": {
-              "type": "integer"
+            "categoryName": {
+              "type": "string",
+              "maxLength": 100
+            },
+            "productPrice": {
+              "type": [ "number", "null"],
+              "multipleOf": 0.01,
+              "minimum": 0,
+              "maximum": 1000000000000
             }
           },
           "required": [
-            "name",
-            "category",
-            "price"
+            "productCode",
+            "productName",
+            "categoryCode",
+            "categoryName",
+            "productPrice"
           ]
         }
       },
       "required": [
-        "productGroup",
+        "productGroupCode",
+        "productGroupName",
         "productLine"
       ]
     }

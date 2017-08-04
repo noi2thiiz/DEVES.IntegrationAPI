@@ -175,10 +175,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     lead.pfc_vechicle_year = y;
                 }
 
-                _serviceProxy.Create(lead);
+                Guid leadId = _serviceProxy.Create(lead);
 
                 var query = from c in svcContext.LeadSet
-                            where c.FirstName == contentModel.contactInfo.firstName && c.LastName == contentModel.contactInfo.lastName && c.Subject == contentModel.generalHeader.topic
+                            where c.LeadId == leadId
                             select c;
                 Lead getLead = new Lead();
                 try {
