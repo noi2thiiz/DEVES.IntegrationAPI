@@ -47,6 +47,11 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
         {
             this.fieldErrorData = fieldErrorData;
         }
+        public FieldValidationException(OutputModelFailData fieldErrorData, string message)
+        {
+            this.fieldErrorData = fieldErrorData;
+            this.message = message;
+        }
 
         public FieldValidationException(OutputModelFailDataFieldErrors fieldErrorData, string message)
         {
