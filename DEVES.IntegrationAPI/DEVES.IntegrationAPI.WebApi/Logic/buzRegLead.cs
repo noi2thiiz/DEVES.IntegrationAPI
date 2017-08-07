@@ -191,6 +191,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     output.description = "ไม่สามารถ get ค่า LeadId ได้";
                     output.transactionId = TransactionId;
                     output.transactionDateTime = DateTime.Now;
+
+                    return output;
                 }
 
 
