@@ -8,10 +8,17 @@ using DEVES.IntegrationAPI.Core.Helper;
 using DEVES.IntegrationAPI.Model;
 using DEVES.IntegrationAPI.Model.InquiryCRMPayeeList;
 using DEVES.IntegrationAPI.WebApi.TechnicalService;
+using Miscellaneous.Attributes.Controller;
 using Newtonsoft.Json;
 
 namespace DEVES.IntegrationAPI.WebApi.Templates
 {
+    [FilterIP(
+        ConfigurationKeyAllowedSingleIPs = "AllowedSingleIPs",
+        ConfigurationKeyAllowedMaskedIPs = "AllowedMaskedIPs",
+        ConfigurationKeyDeniedSingleIPs = "DeniedSingleIPs",
+        ConfigurationKeyDeniedMaskedIPs = "DeniedMaskedIPs"
+    )]
     public class BaseApiController:ApiController
     {
 

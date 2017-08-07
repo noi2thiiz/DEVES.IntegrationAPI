@@ -33,7 +33,12 @@ namespace DEVES.IntegrationAPI.WebApi
             config.Filters.Add(new HostAuthenticationFilter(OAuthDefaults.AuthenticationType));
 
             // Web API configuration and services 
-            var cors = new EnableCorsAttribute("*", "*", "*");
+            var origins = System.Configuration.ConfigurationManager.AppSettings["CRM_CUSTOMAPP_DB"]??"*";
+            if (origins== "")
+            {
+                origins = "*";
+            }
+            var cors = new EnableCorsAttribute(origins, "*", "*");
             config.EnableCors(cors);
 
             // Web API routes
