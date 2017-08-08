@@ -109,6 +109,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
                 new EWIDatetimeConverter(JSON.DateTimeCustomFormat));
 
             client = new HttpClient();
+            Console.WriteLine("Timeout default is: " + client.Timeout);
+            client.Timeout = new System.TimeSpan(0, 0, AppConst.HTTP_CLIENT_TIMEOUT_IN_MINUTES, AppConst.HTTP_CLIENT_TIMEOUT_IN_SECONDS);
+            Console.WriteLine("Timeout is set to: " + client.Timeout);
 
             client.DefaultRequestHeaders.Accept.Clear();
             var media = new MediaTypeWithQualityHeaderValue("application/json") { CharSet = "utf-8" };

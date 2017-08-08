@@ -43,8 +43,9 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             Environment.MachineName == PRO1_SERVER_NAME ||
             Environment.MachineName == PRO2_SERVER_NAME;
 
-
-
+        // สองค่านี้จะเอาไปรวมกัน เช่น 1 minutes 2 seconds
+        public static int HTTP_CLIENT_TIMEOUT_IN_MINUTES = 5;
+        public static int HTTP_CLIENT_TIMEOUT_IN_SECONDS = 0; 
     }
 
     public class TestAppConst

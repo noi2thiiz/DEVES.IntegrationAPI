@@ -117,57 +117,69 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
 
         internal BaseContentJsonProxyOutputModel CallDevesJsonProxy<T1>(string EWIendpointKey, BaseDataModel JSON, string UID=CONST_DEFAULT_UID) where T1 : BaseEWIResponseModel 
         {
-            EWIRequest reqModel = new EWIRequest()
+            try
             {
-                //user & password must be switch to get from calling k.Ton's API rather than fixed values.
-                username = AppConfig.GetEwiUsername(),
-                password = AppConfig.GetEwiPassword(),
-                uid = AppConfig.GetEwiUid(),
-                gid = AppConfig.GetEwiGid(),
-                token = GetLatestToken(),
-                content = JSON
-            };
+                EWIRequest reqModel = new EWIRequest()
+                {
+                    //user & password must be switch to get from calling k.Ton's API rather than fixed values.
+                    username = AppConfig.GetEwiUsername(),
+                    password = AppConfig.GetEwiPassword(),
+                    uid = AppConfig.GetEwiUid(),
+                    gid = AppConfig.GetEwiGid(),
+                    token = GetLatestToken(),
+                    content = JSON
+                };
 
-            jsonReqModel = JsonConvert.SerializeObject(reqModel, Formatting.Indented, new EWIDatetimeConverter());
+                jsonReqModel = JsonConvert.SerializeObject(reqModel, Formatting.Indented, new EWIDatetimeConverter());
 
-            HttpClient client = new HttpClient();
+                HttpClient client = new HttpClient();
+                Console.WriteLine("Timeout default is: " + client.Timeout);
+                client.Timeout = new System.TimeSpan(0, 0, AppConst.HTTP_CLIENT_TIMEOUT_IN_MINUTES, AppConst.HTTP_CLIENT_TIMEOUT_IN_SECONDS);
+                Console.WriteLine("Timeout is set to: " + client.Timeout);
+                client.DefaultRequestHeaders.Accept.Clear();
+                var media = new MediaTypeWithQualityHeaderValue("application/json") {CharSet = "utf-8"};
+                client.DefaultRequestHeaders.Accept.Add(media);
+                client.DefaultRequestHeaders.Add("Accept-Encoding", "utf-8");
 
-            client.DefaultRequestHeaders.Accept.Clear();
-            var media = new MediaTypeWithQualityHeaderValue("application/json") { CharSet = "utf-8" };
-            client.DefaultRequestHeaders.Accept.Add(media);
-            client.DefaultRequestHeaders.Add("Accept-Encoding", "utf-8");
+                // + ENDPOINT
+                string EWIendpoint = CommonConstant.PROXY_ENDPOINT + GetEWIEndpoint(EWIendpointKey);
+                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, EWIendpoint);
+                request.Content = new StringContent(jsonReqModel, System.Text.Encoding.UTF8, "application/json");
+                //request.Headers.Add("ContentType", "application/json; charset=UTF-8");
+                // เช็ค check reponse 
+                LogAsync(request);
+                HttpResponseMessage response = client.SendAsync(request).Result;
+                response.EnsureSuccessStatusCode();
 
-            // + ENDPOINT
-            string EWIendpoint = CommonConstant.PROXY_ENDPOINT+ GetEWIEndpoint(EWIendpointKey);
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, EWIendpoint);
-            request.Content = new StringContent(jsonReqModel, System.Text.Encoding.UTF8, "application/json");
-            //request.Headers.Add("ContentType", "application/json; charset=UTF-8");
-            // เช็ค check reponse 
-            LogAsync(request);
-            HttpResponseMessage response = client.SendAsync(request).Result;
-            response.EnsureSuccessStatusCode();
-           
-            //  Console.WriteLine("==========jsonReqModel========");
-            // Console.WriteLine(EWIendpoint);
-            //Console.WriteLine(jsonReqModel.ToJson());
+                //  Console.WriteLine("==========jsonReqModel========");
+                // Console.WriteLine(EWIendpoint);
+                //Console.WriteLine(jsonReqModel.ToJson());
 
-            T1 ewiRes = response.Content.ReadAsAsync<T1>().Result;
-            resBody = ewiRes.ToJson();
-            var sv = EWIendpoint.Split('/');
-            serviceName = sv[sv.Length - 1];
+                T1 ewiRes = response.Content.ReadAsAsync<T1>().Result;
+                resBody = ewiRes.ToJson();
+                var sv = EWIendpoint.Split('/');
+                serviceName = sv[sv.Length - 1];
 
-            LogAsync(request, response);
+                LogAsync(request, response);
 
 
-            // Console.WriteLine("==========response========");
-            // Console.WriteLine(ewiRes.ToJson());
+                // Console.WriteLine("==========response========");
+                // Console.WriteLine(ewiRes.ToJson());
 
-            BaseContentJsonProxyOutputModel output =  (BaseContentJsonProxyOutputModel)typeof(T1).GetProperty("content").GetValue(ewiRes);
-            if(output.message == null)
-            {
-                output.message = typeof(T1).GetProperty("responseCode").GetValue(ewiRes).ToString() + ": " + typeof(T1).GetProperty("responseMessage").GetValue(ewiRes).ToString();
+                BaseContentJsonProxyOutputModel output =
+                    (BaseContentJsonProxyOutputModel) typeof(T1).GetProperty("content").GetValue(ewiRes);
+                if (output.message == null)
+                {
+                    output.message = typeof(T1).GetProperty("responseCode").GetValue(ewiRes).ToString() + ": " +
+                                     typeof(T1).GetProperty("responseMessage").GetValue(ewiRes).ToString();
+                }
+                return output;
             }
-            return output;
+            catch (Exception e)
+            {
+               // LogAsync(request, response);
+                throw;
+            }
         }
 
         internal T2 CallDevesServiceProxy<T1, T2>(string EWIendpointKey, BaseDataModel JSON, string UID = CONST_DEFAULT_UID) 
@@ -204,7 +216,9 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                         new EWIDatetimeConverter(JSON.DateTimeCustomFormat));
 
                     client = new HttpClient();
-
+                        Console.WriteLine("Timeout default is: " + client.Timeout);
+                    client.Timeout = new System.TimeSpan(0,0,AppConst.HTTP_CLIENT_TIMEOUT_IN_MINUTES,AppConst.HTTP_CLIENT_TIMEOUT_IN_SECONDS);
+                    Console.WriteLine("Timeout is set to: " + client.Timeout);
                     client.DefaultRequestHeaders.Accept.Clear();
                     var media = new MediaTypeWithQualityHeaderValue("application/json") {CharSet = "utf-8"};
                     client.DefaultRequestHeaders.Accept.Add(media);
@@ -247,7 +261,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                     }
                     else
                     {
-                        //CLSCreateCorporateClientOutputModel
+                     
                         throw new BuzErrorException(
                             "500",
                             $"Error:{ewiRes.responseCode}, Message:{ewiRes.responseMessage}",
