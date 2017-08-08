@@ -109,6 +109,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     AllSearchResult.AddRange(COMPResult);
                 }
             }
+            //ซ่อม Role Code เนื่องจาก Source  ไม่มี field นี้
+
+            foreach (CRMInquiryClientOutputDataModel temp in crmInqContent.data)
+            {
+         
+                temp.generalHeader.roleCode = "G";
+            }
 
 
 

@@ -47,7 +47,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     var ASRHList = ASRHListCollection?.ASRHList;
                     var dataItem = new InquiryCrmPayeeListDataModel
                     {
-                        sourceData = "MASTER_ASHR",
+                        sourceData = CommonConstant.CONST_SYSTEM_MASTER_ASRH,
 
                         polisyClientId = ASRHList.polisyClntnum,
                         sapVendorCode = ASRHList.vendorCode,

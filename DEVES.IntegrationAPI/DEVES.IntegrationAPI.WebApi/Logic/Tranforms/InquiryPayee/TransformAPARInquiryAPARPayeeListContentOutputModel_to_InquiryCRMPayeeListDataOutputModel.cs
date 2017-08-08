@@ -42,7 +42,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         var aparPayeeList = aparPayeeListDataModel.aparPayeeList;
                         var model = new InquiryCrmPayeeListDataModel
                         {
-                            sourceData = "APAR",
+                            sourceData = CommonConstant.CONST_SYSTEM_APAR,
                             cleansingId = "",
                             polisyClientId = aparPayeeList?.polisyClntnum ?? "",
                             sapVendorCode = aparPayeeList?.vendorCode ?? "",
