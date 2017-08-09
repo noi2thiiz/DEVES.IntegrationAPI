@@ -466,6 +466,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Logic\buzAccidentPrilimSurveyorReport.cs" />
+    <Compile Include="Logic\buzAssignedSurveyor.cs" />
     <Compile Include="Logic\buzClaimRegistration.cs" />
     <Compile Include="Logic\buzCreateAssessmentFromLocus.cs" />
     <Compile Include="Logic\BuzInquiryCrmAsrhClientMaster.cs" />
@@ -485,9 +487,13 @@
     <Compile Include="Logic\BuzInquiryCrmGeneralClient.cs" />
     <Compile Include="Logic\buzRegComplaint.cs" />
     <Compile Include="Logic\buzReqClsId.cs" />
+    <Compile Include="Logic\buzRequestSurveyor.cs" />
     <Compile Include="Logic\buzSendSMS.cs" />
     <Compile Include="Logic\buzSubmitSurveyAssessmentResult.cs" />
+    <Compile Include="Logic\buzUpdateClaimInfo.cs" />
+    <Compile Include="Logic\buzUpdateClaimNo.cs" />
     <Compile Include="Logic\buzUpdateCompliantStatus.cs" />
+    <Compile Include="Logic\buzUpdateSurveyStatus.cs" />
     <Compile Include="Logic\CommonConstant.cs" />
     <Compile Include="Logic\Converter\MasterDataConvertor.cs" />
     <Compile Include="Logic\Converter\OptionSetConvertor.cs" />
