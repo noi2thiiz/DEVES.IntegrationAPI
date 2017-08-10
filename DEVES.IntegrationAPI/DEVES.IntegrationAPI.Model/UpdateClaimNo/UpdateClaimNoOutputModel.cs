@@ -10,7 +10,7 @@ namespace DEVES.IntegrationAPI.Model.UpdateClaimNo
     {
     }
 
-    public class UpdateClaimNoOutputModel_Pass
+    public class UpdateClaimNoOutputModel_Pass : BaseDataModel
     {
         public string code { get; set; }
         public string message { get; set; }
