@@ -35,8 +35,17 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         }
         public override BaseDataModel ExecuteInput(object input)
         {
+            
             inquiryPolicyInputModel policyS = new inquiryPolicyInputModel();
             policyS = (inquiryPolicyInputModel)input;
+
+            if (string.IsNullOrEmpty(policyS.conditions.cleansingId) && string.IsNullOrEmpty(policyS.conditions.crmClientId)) 
+                {
+                    var data = new OutputModelFailData();
+                    data.AddFieldError("conditions.cleansingId", "cleansingId cannot null or empty");
+                    data.AddFieldError("conditions.crmCleintId", "crmClientId cannot null or empty");
+                    throw new FieldValidationException(data);
+                }
             string jsonValue = string.Format("{0}|{1}|{2}|{3}|{4}", string.IsNullOrEmpty(policyS.conditions.crmClientId) ? "" : policyS.conditions.crmClientId
                    , string.IsNullOrEmpty(policyS.conditions.cleansingId) ? "" : policyS.conditions.cleansingId
                    , string.IsNullOrEmpty(policyS.conditions.policyCarRegisterNo) ? "" : policyS.conditions.policyCarRegisterNo

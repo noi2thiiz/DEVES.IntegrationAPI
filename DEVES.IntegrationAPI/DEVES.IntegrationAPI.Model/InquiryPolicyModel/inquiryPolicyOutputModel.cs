@@ -37,9 +37,9 @@ namespace DEVES.IntegrationAPI.Model.InquiryPolicyModel
         public string contractType { get; set; }
         public string policyProductTypeCode { get; set; }
         public string policyProductTypeName { get; set; }
-        public DateTime policyIssueDate { get; set; }
-        public DateTime policyEffectiveDate { get; set; }
-        public DateTime policyExpiryDate { get; set; }
+        public DateTime? policyIssueDate { get; set; }
+        public DateTime? policyEffectiveDate { get; set; }
+        public DateTime? policyExpiryDate { get; set; }
         public string policyGarageFlag { get; set; }
         public string policyPaymentStatus { get; set; }
         public string policyCarRegisterNo { get; set; }
