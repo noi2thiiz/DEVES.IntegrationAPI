@@ -98,13 +98,16 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             string isOptionalEmpty = inqCrmPayeeInput.polisyClientId + inqCrmPayeeInput.sapVendorCode + inqCrmPayeeInput.fullname + inqCrmPayeeInput.taxNo + inqCrmPayeeInput.taxBranchCode + inqCrmPayeeInput.emcsCode;
             if (string.IsNullOrEmpty(isOptionalEmpty.Trim()))
             {
-                crmInqPayeeOut.code = CONST_CODE_FAILED;
-                crmInqPayeeOut.message = "Please fill at least 1 condition";
-                crmInqPayeeOut.description = "";
-                crmInqPayeeOut.transactionId = TransactionId;
-                crmInqPayeeOut.transactionDateTime = DateTime.Now;
+                var data = new OutputModelFailData();
+                data.AddFieldError("polisyClientId", "Please fill at least 1 condition");
+                data.AddFieldError("sapVendorCode", "Please fill at least 1 condition");
+                data.AddFieldError("fullname", "Please fill at least 1 condition");
+                data.AddFieldError("taxNo", "Please fill at least 1 condition");
+                data.AddFieldError("taxBranchCode", "Please fill at least 1 condition");
+                data.AddFieldError("emcsCode", "Please fill at least 1 condition");
 
-                return crmInqPayeeOut;
+                throw new FieldValidationException(data, "Please fill at least 1 condition");
+               
             }
 
 

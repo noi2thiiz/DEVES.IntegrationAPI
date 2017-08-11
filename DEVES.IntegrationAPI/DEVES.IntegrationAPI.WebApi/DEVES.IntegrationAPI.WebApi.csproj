@@ -647,6 +647,7 @@
     <Content Include="App_Data\JsonSchema\SubmitSurveyAssessmentResultInputModel.json" />
     <Content Include="App_Data\JsonSchema\RegComplaintInputModel.json" />
     <Content Include="App_Data\JsonSchema\CreateAssessmentFromLocus_Input_Schema.json" />
+    <Content Include="App_Data\JsonSchema\UpdateClaimInfo_Input_Schema.json" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile10.pubxml" />
@@ -668,6 +669,7 @@
     <None Include="Properties\PublishProfiles\FolderProfile7.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile8.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile9.pubxml" />
+    <None Include="Properties\PublishProfiles\XrmAPI.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

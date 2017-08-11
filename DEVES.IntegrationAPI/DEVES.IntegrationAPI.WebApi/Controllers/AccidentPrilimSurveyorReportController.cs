@@ -341,7 +341,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 catch(Exception e)
                 {
                     output.code = "501";
-                    output.message = "Update Entity Incident PROBLEM"; ;
+                    output.message = "False: Update Entity Incident PROBLEM"; ;
                     output.description = e.ToString();
                     output.transactionId = _transactionId.ToString();
                     output.transactionDateTime = DateTime.Now.ToString();
@@ -413,7 +413,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 catch (Exception e)
                 {
                     output.code = "501";
-                    output.message = "Update Entity Motor Accident PROBLEM";
+                    output.message = "False: Update Entity Motor Accident PROBLEM";
                     output.description = e.ToString();
                     output.transactionId = _transactionId.ToString();
                     output.transactionDateTime = DateTime.Now.ToString();
@@ -509,7 +509,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                         catch (Exception e)
                         {
                             output.code = "501";
-                            output.message = "Create Entity (Case/Motor) PROBLEM";
+                            output.message = "False: Create Entity (Case/Motor) PROBLEM";
                             output.description = e.ToString();
                             output.transactionId = _transactionId.ToString();
                             output.transactionDateTime = DateTime.Now.ToString();
@@ -524,7 +524,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 catch (Exception e)
                 {
                     output.code = "501";
-                    output.message = "Create Entity Motor Accident Parties PROBLEM";
+                    output.message = "False: Create Entity Motor Accident Parties PROBLEM";
                     output.description = e.ToString();
                     output.transactionId = _transactionId.ToString();
                     output.transactionDateTime = DateTime.Now.ToString();
@@ -568,7 +568,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 catch (Exception e)
                 {
                     output.code = "501";
-                    output.message = "Create Entity Motor Accident Part PROBLEM";
+                    output.message = "False: Create Entity Motor Accident Part PROBLEM";
                     output.description = e.ToString();
                     output.transactionId = _transactionId.ToString();
                     output.transactionDateTime = DateTime.Now.ToString();
@@ -593,7 +593,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             catch (System.ServiceModel.FaultException e)
             {
                 output.code = "500";
-                output.message = "CRM PROBLEM";
+                output.message = "False: CRM PROBLEM";
                 output.description = e.ToString();
                 output.transactionId = _transactionId.ToString();
                 output.transactionDateTime = DateTime.Now.ToString();
@@ -616,8 +616,8 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
                 _log.Error(errorMessage);
 
                 output.code = "400";
-                output.message = "False";
-                output.description = "ไม่พบ claimNotiNo";
+                output.message = "False: ไม่พบ claimNotiNo";
+                output.description = e.Message;
                 output.transactionId = "Claim Noti No: null";
                 output.transactionDateTime = DateTime.Now.ToString();
                 output.data = new AccidentPrilimSurveyorReportDataOutputModel_Pass();
