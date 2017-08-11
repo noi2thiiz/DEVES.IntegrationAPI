@@ -226,8 +226,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             SAPInqVendorIn.TAX3 = regPayeeCorporateInput.profileHeader.idTax ?? "";
         
             SAPInqVendorIn.TAX4 = regPayeeCorporateInput.profileHeader.corporateBranch ?? "";
-            SAPInqVendorIn.PREVACC = regPayeeCorporateInput.sapVendorInfo.sapVendorCode ?? "";
-            SAPInqVendorIn.VCODE = regPayeeCorporateInput.generalHeader.polisyClientId ?? "";
+            SAPInqVendorIn.PREVACC = regPayeeCorporateInput.generalHeader.polisyClientId ?? ""; 
+            SAPInqVendorIn.VCODE = regPayeeCorporateInput.sapVendorInfo.sapVendorCode ?? "";
 
             var sapService = new SAPInquiryVendor(TransactionId, ControllerName);
             var sapInqVendorContentOut = sapService.Execute(SAPInqVendorIn);
