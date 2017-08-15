@@ -576,6 +576,9 @@
     <Compile Include="Startup.cs" />
     <Compile Include="TechnicalService\AppBootstrap.cs" />
     <Compile Include="TechnicalService\ConfigulationManager\AppConfig.cs" />
+    <Compile Include="TechnicalService\Connection\ConnectionThreadSafe.cs" />
+    <Compile Include="TechnicalService\Connection\DeviceIdManager.cs" />
+    <Compile Include="TechnicalService\Connection\ServerConnection.cs" />
     <Compile Include="TechnicalService\GlobalTransactionId.cs" />
     <Compile Include="TechnicalService\TraceDebugLogger\TraceDebugLogger.cs" />
     <Compile Include="TechnicalService\TraceExceptionLogger\GlobalExceptionHandler.cs" />
