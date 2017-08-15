@@ -23,9 +23,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             UpdateSurveyStatusOutputModel_Pass output = new UpdateSurveyStatusOutputModel_Pass();
 
             // Preparation Linq query to CRM
-            var connection = new CrmServiceClient(ConfigurationManager.ConnectionStrings["CRM_DEVES"].ConnectionString);
-            OrganizationServiceProxy _serviceProxy = connection.OrganizationServiceProxy;
-            ServiceContext svcContext = new ServiceContext(_serviceProxy);
+            ServiceContext svcContext;
+            var _serviceProxy = GetOrganizationServiceProxy(out svcContext);
 
             var query = from c in svcContext.IncidentSet
                         where c.pfc_claim_noti_number == contentInput.claimNotiNo

@@ -23,9 +23,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             AssignedSurveyorOutputModel_Pass output = new AssignedSurveyorOutputModel_Pass();
 
             // Preparation Linq query to CRM
-            var connection = new CrmServiceClient(ConfigurationManager.ConnectionStrings["CRM_DEVES"].ConnectionString);
-            OrganizationServiceProxy _serviceProxy = connection.OrganizationServiceProxy;
-            ServiceContext svcContext = new ServiceContext(_serviceProxy);
+            ServiceContext svcContext;
+            var _serviceProxy = GetOrganizationServiceProxy(out svcContext);
 
             // Incident incident = new earlybound.Incident();
             var query = from c in svcContext.IncidentSet

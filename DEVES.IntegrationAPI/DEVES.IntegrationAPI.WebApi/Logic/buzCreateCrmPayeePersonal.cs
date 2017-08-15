@@ -58,7 +58,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             // dataOutput.data = new List<CreateCrmPersonInfoOutputModel>();
 
             // Create new one and map input value to CRM
-            using (OrganizationServiceProxy crmSvc = GetCrmServiceProxy())
+            ServiceContext svcContext;
+            using (OrganizationServiceProxy crmSvc = GetOrganizationServiceProxy(out svcContext))
             {
                 crmSvc.EnableProxyTypes();
                 List<string> crmData = SearchCrmContactPayeeId(crmSvc, data.generalHeader.cleansingId);

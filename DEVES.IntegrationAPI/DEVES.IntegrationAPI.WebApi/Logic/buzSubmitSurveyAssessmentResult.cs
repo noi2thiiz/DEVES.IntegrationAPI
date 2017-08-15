@@ -28,9 +28,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 SubmitSurveyAssessmentResultInputModel contentModel = (SubmitSurveyAssessmentResultInputModel)input;
 
                 // Connect SDK and query
-                var connection = new CrmServiceClient(ConfigurationManager.ConnectionStrings["CRM_DEVES"].ConnectionString);
-                OrganizationServiceProxy _serviceProxy = connection.OrganizationServiceProxy;
-                ServiceContext svcContext = new ServiceContext(_serviceProxy);
+                ServiceContext svcContext;
+                var _serviceProxy = GetOrganizationServiceProxy(out svcContext);
 
                 int type = 100000000 + contentModel.assessmentType - 1;
                 var query = from c in svcContext.pfc_assessmentSet

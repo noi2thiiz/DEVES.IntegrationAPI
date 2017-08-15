@@ -12,7 +12,7 @@ using Microsoft.Xrm.Sdk;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
-    public class buzReqClsId 
+    public class buzReqClsId :BuzCommand
     {
 
         OrganizationServiceProxy _serviceProxy;
@@ -29,18 +29,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         {
             try
             {
-                var connection = new CrmServiceClient(ConfigurationManager.ConnectionStrings["CRM_DEVES"]
-                    .ConnectionString);
+               
 
-                bool check = connection.IsReady;
-                if (!check) // check is ready = true
-                {
-                    return false; // should return something that notice system about CRM is not connect properly
-                }
-
-
-                _serviceProxy = connection.OrganizationServiceProxy;
-                ServiceContext svcContext = new ServiceContext(_serviceProxy);
+                // Connect SDK 
+                ServiceContext svcContext;
+                 _serviceProxy = GetOrganizationServiceProxy(out svcContext);
+              
 
                 if (string.IsNullOrEmpty(guid))
                 {
@@ -138,6 +132,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             return "";
 
+        }
+
+        public override BaseDataModel ExecuteInput(object input)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -22,9 +22,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             UpdateClaimNoOutputModel_Pass output = new UpdateClaimNoOutputModel_Pass();
 
             // Preparation Linq query to CRM
-            var connection = new CrmServiceClient(ConfigurationManager.ConnectionStrings["CRM_DEVES"].ConnectionString);
-            OrganizationServiceProxy _serviceProxy = connection.OrganizationServiceProxy;
-            ServiceContext svcContext = new ServiceContext(_serviceProxy);
+            ServiceContext svcContext;
+            var _serviceProxy = GetOrganizationServiceProxy(out svcContext);
 
             var queryCase = from c in svcContext.IncidentSet
                             where c.TicketNumber == contentInput.ticketNo

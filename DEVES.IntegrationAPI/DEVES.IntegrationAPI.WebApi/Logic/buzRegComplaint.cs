@@ -31,9 +31,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             BaseDataModel inputData = reqModel;
 
             // SQL for getting IncidentId
-            var connection = new CrmServiceClient(ConfigurationManager.ConnectionStrings["CRM_DEVES"].ConnectionString);
-            OrganizationServiceProxy _serviceProxy = connection.OrganizationServiceProxy;
-            ServiceContext svcContext = new ServiceContext(_serviceProxy);
+            // Connect SDK 
+            ServiceContext svcContext;
+            var _serviceProxy = GetOrganizationServiceProxy(out svcContext);
+
+ 
 
             var query = from c in svcContext.IncidentSet
                         where c.TicketNumber == contentModel.Ticketnumber
