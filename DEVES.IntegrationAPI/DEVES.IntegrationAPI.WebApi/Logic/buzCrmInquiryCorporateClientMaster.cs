@@ -49,13 +49,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             string isOptionalEmpty = var1 + var2 + var3 + var4 + var5 + var6 + var7 + var8 + var9;
             if (string.IsNullOrEmpty(isOptionalEmpty.Trim()))
             {
-                crmInqContent.code = AppConst.CODE_INVALID_INPUT;
-                crmInqContent.message = "Please fill at least 1 condition";
-                crmInqContent.description = "";
-                crmInqContent.transactionId = TransactionId;
-                crmInqContent.transactionDateTime = DateTime.Now;
-
-                return crmInqContent;
+                var data = new OutputModelFailData();
+                data.AddFieldError("conditionDetail", "Please fill at least 1 condition");
+                throw new FieldValidationException(data, "Please fill at least 1 condition");
             }
             //ลบ บริษัทออกจากชื่อ
             if (contentModel?.conditionDetail != null)
