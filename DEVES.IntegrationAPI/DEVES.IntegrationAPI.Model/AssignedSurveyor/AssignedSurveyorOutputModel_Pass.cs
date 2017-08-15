@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace DEVES.IntegrationAPI.Model.AssignedSurveyor
 {
-    public class AssignedSurveyorOutputModel_Pass
+    public class AssignedSurveyorOutputModel_Pass : BaseDataModel
     {
         public string code { get; set; }
         public string message { get; set; }

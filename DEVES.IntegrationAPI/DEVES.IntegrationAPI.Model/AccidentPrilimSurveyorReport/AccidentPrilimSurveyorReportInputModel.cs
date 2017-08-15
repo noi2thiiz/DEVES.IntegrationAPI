@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace DEVES.IntegrationAPI.Model.AccidentPrilimSurveyorReport
 {
-    public class AccidentPrilimSurveyorReportInputModel
+    public class AccidentPrilimSurveyorReportInputModel : BaseDataModel
     {
         public string ticketNo { get; set; }
         public string claimNotiNo { get; set; }

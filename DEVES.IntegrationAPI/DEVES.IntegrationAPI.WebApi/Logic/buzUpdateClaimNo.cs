@@ -120,8 +120,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             output.data.message = "ticketNo: " + contentInput.ticketNo
                 + " claimNotiNo: " + contentInput.claimNotiNo
                 + " claimNo: " + contentInput.claimNo;
-            
-            return output
+
+            return output;
         }
     }
 }

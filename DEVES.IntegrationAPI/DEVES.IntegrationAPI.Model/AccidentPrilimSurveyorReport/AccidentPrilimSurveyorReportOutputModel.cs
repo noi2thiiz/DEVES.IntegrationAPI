@@ -11,7 +11,7 @@ namespace DEVES.IntegrationAPI.Model.AccidentPrilimSurveyorReport
     {
 
     }
-    public class AccidentPrilimSurveyorReportOutputModel_Pass
+    public class AccidentPrilimSurveyorReportOutputModel_Pass : BaseDataModel
     {
         public string code { get; set; }
         public string message { get; set; }
