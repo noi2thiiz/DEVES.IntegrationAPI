@@ -3,14 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DEVES.IntegrationAPI.Model.CLS;
+using DEVES.IntegrationAPI.Model.EWI;
+using Newtonsoft.Json;
 
 namespace DEVES.IntegrationAPI.Model.ClaimRegistration
 {
+
+   
     public class ClaimRegistrationContentOutputModel : BaseContentJsonProxyOutputModel
     {
-        public List<ClaimRegistrationOutputModel> data { set; get; }
+        public List<ClaimRegistrationDataOutputModel> data { set; get; }
     }
-    public class ClaimRegistrationOutputModel: BaseDataModel
+    public class ClaimRegistrationDataOutputModel : BaseDataModel
     {
         [CrmMapping(FieldName = "claimId", Source = ENUMDataSource.srcEWI)]
         public string claimID { get; set; }
@@ -21,11 +26,25 @@ namespace DEVES.IntegrationAPI.Model.ClaimRegistration
         public string errorMessage { get; set; }
     }
 
+
+    public class LocusClaimRegistrationOutputModel : BaseEWIResponseModel
+    {
+        [JsonProperty(Order = 1)]
+        public LocusClaimRegistrationContentOutputModel content { set; get; }
+    }
+
+    public class LocusClaimRegistrationContentOutputModel : BaseContentJsonProxyOutputModel
+    {
+        [JsonProperty(Order = 2)]
+        public LocusClaimRegistrationDataOutputModel data { set; get; }
+    }
+
     public class LocusClaimRegistrationDataOutputModel: BaseDataModel
     {
-        private EWI.EWIResponseContentData _data;
+        private LocusClaimRegistrationDataOutputModel _data;
 
-        public LocusClaimRegistrationDataOutputModel(EWI.EWIResponseContentData data)
+    
+        public LocusClaimRegistrationDataOutputModel(LocusClaimRegistrationDataOutputModel data)
         {
             _data = data;
             this.claimId = data.claimId;

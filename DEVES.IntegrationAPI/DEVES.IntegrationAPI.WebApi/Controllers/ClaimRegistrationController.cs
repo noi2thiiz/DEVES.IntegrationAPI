@@ -266,8 +266,8 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             BuzClaimRegistrationCommand buzCommand = new BuzClaimRegistrationCommand();
             BaseDataModel output = buzCommand.Execute(value);
             ClaimRegistrationContentOutputModel outputData = (ClaimRegistrationContentOutputModel)output;
-            ClaimRegistrationOutputModel locusOutput = (ClaimRegistrationOutputModel)outputData.data[0];
-            return Request.CreateResponse<ClaimRegistrationOutputModel>(locusOutput);
+            ClaimRegistrationDataOutputModel locusOutput = (ClaimRegistrationDataOutputModel)outputData.data[0];
+            return Request.CreateResponse<ClaimRegistrationDataOutputModel>(locusOutput);
 
         }
 

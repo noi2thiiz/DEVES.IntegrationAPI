@@ -10,14 +10,15 @@ using Microsoft.Xrm.Sdk.Messages;
 
 using DEVES.IntegrationAPI.Model;
 using DEVES.IntegrationAPI.Model.ClaimRegistration;
+using DEVES.IntegrationAPI.WebApi.Logic.Services;
 using DEVES.IntegrationAPI.WebApi.Templates;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
-    public class BuzClaimRegistrationCommand: BaseCommand
+    public class BuzClaimRegistrationCommand: BuzCommand
     {
 
-        public override BaseDataModel Execute(object input)
+        public override BaseDataModel ExecuteInput(object input)
         {
             //+ Deserialize Input
             ClaimRegistrationInputModel contentModel = DeserializeJson<ClaimRegistrationInputModel>(input.ToString());
@@ -81,17 +82,23 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
              Console.WriteLine("---contentModel----");
             Console.WriteLine("---contentModel----");
             string uid = GetDomainName(contentModel.CurrentUserId);
-            Model.EWI.EWIResponseContent ret = (Model.EWI.EWIResponseContent)CallDevesJsonProxy<Model.EWI.EWIResponse>(CommonConstant.ewiEndpointKeyLOCUSClaimRegistration, inputData, uid);
+
+            var service = new LOCUSClaimRegistrationService(TransactionId, ControllerName);
+            var ret = service.Execute(inputData);
+            
+         //   Model.EWI.EWIResponseContent ret = (Model.EWI.EWIResponseContent)CallDevesJsonProxy<Model.EWI.EWIResponse>
+         //       (CommonConstant.ewiEndpointKeyLOCUSClaimRegistration, inputData, uid);
             Console.WriteLine("---ret---");
             Console.WriteLine("---ret---");
             Console.WriteLine(ret.ToJson());
+         
             if (ret.data == null)
             {
                 
                 //+ Response
                 ClaimRegistrationContentOutputModel contentOutputFail = new ClaimRegistrationContentOutputModel();
-                contentOutputFail.data = new List<ClaimRegistrationOutputModel>();
-                ClaimRegistrationOutputModel outputFail = new ClaimRegistrationOutputModel();
+                contentOutputFail.data = new List<ClaimRegistrationDataOutputModel>();
+                ClaimRegistrationDataOutputModel outputFail = new ClaimRegistrationDataOutputModel();
                 outputFail.claimID = null;
                 outputFail.claimNo = null;
                 outputFail.errorMessage = ret.message;
@@ -107,8 +114,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             {
                 //+ Response
                 ClaimRegistrationContentOutputModel contentOutputFail = new ClaimRegistrationContentOutputModel();
-                contentOutputFail.data = new List<ClaimRegistrationOutputModel>();
-                ClaimRegistrationOutputModel outputFail = new ClaimRegistrationOutputModel();
+                contentOutputFail.data = new List<ClaimRegistrationDataOutputModel>();
+                ClaimRegistrationDataOutputModel outputFail = new ClaimRegistrationDataOutputModel();
                 outputFail.claimID = locusClaimRegOutput.claimId;
                 outputFail.claimNo = locusClaimRegOutput.claimNo;
                 outputFail.errorMessage = ret.message;
@@ -181,8 +188,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             //+ Response
             ClaimRegistrationContentOutputModel contentOutput = new ClaimRegistrationContentOutputModel();
-            contentOutput.data = new List<ClaimRegistrationOutputModel>();
-            ClaimRegistrationOutputModel output = new ClaimRegistrationOutputModel();
+            contentOutput.data = new List<ClaimRegistrationDataOutputModel>();
+            ClaimRegistrationDataOutputModel output = new ClaimRegistrationDataOutputModel();
             output.claimID = locusClaimRegOutput.claimId;
             output.claimNo = locusClaimRegOutput.claimNo;
             output.errorMessage = null;

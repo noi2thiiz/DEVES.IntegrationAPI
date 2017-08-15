@@ -510,6 +510,7 @@
     <Compile Include="Logic\Services\CLSInquiryCLSCorporateClient.cs" />
     <Compile Include="Logic\Services\CLSInquiryCLSPersonalClient.cs" />
     <Compile Include="Logic\Services\COMPInquiryClientMaster.cs" />
+    <Compile Include="Logic\Services\LOCUSClaimRegistrationService.cs" />
     <Compile Include="Logic\Services\MOTORInquiryAPARPayeeList.cs" />
     <Compile Include="Logic\Services\MOTORInquiryMasterASRH.cs" />
     <Compile Include="Logic\Services\PolisyClientService.cs" />

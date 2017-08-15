@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace DEVES.IntegrationAPI.Model.ClaimRegistration
 {
 
-    public class ClaimRegistrationInputModel
+    public class ClaimRegistrationInputModel : BaseDataModel
     {
         [CrmMapping(FieldName = "caseNo", Source = ENUMDataSource.srcSQL)]
         public string caseNo { get; set; }
