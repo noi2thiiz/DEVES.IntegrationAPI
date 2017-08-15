@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DEVES.IntegrationAPI.Model.AssignedSurveyor
 {
-    public class AssignedSurveyorOutputModel_Fail
+    public class AssignedSurveyorOutputModel_Fail : BaseDataModel
     {
         public string code { get; set; }
         public string message { get; set; }
