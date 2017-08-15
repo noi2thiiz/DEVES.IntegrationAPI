@@ -582,6 +582,9 @@
     <Compile Include="Startup.cs" />
     <Compile Include="TechnicalService\AppBootstrap.cs" />
     <Compile Include="TechnicalService\ConfigulationManager\AppConfig.cs" />
+    <Compile Include="TechnicalService\Connection\ConnectionThreadSafe.cs" />
+    <Compile Include="TechnicalService\Connection\DeviceIdManager.cs" />
+    <Compile Include="TechnicalService\Connection\ServerConnection.cs" />
     <Compile Include="TechnicalService\GlobalTransactionId.cs" />
     <Compile Include="TechnicalService\TraceDebugLogger\TraceDebugLogger.cs" />
     <Compile Include="TechnicalService\TraceExceptionLogger\GlobalExceptionHandler.cs" />
@@ -674,6 +677,7 @@
     <None Include="Properties\PublishProfiles\FolderProfile7.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile8.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile9.pubxml" />
+    <None Include="Properties\PublishProfiles\XrmAPI.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
