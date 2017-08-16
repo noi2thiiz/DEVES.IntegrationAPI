@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DEVES.IntegrationAPI.Model.ClaimRegistration;
+using DEVES.IntegrationAPI.Model.EWI;
+using Newtonsoft.Json;
 
 namespace DEVES.IntegrationAPI.Model.RequestSurveyor
 {
@@ -37,18 +40,30 @@ namespace DEVES.IntegrationAPI.Model.RequestSurveyor
     }
     */
 
+
+    public class ISurvey_RequestSurveyoOutputModel : BaseEWIResponseModel
+    {
+        [JsonProperty(Order = 1)]
+        public ISurvey_RequestSurveyorContentOutputModel content { set; get; }
+    }
+
+    public class ISurvey_RequestSurveyorContentOutputModel : BaseContentJsonProxyOutputModel
+    {
+        [JsonProperty(Order = 2)]
+        public ISurvey_RequestSurveyorContentDataOutputModel data { set; get; }
+    }
+
     public class ISurvey_RequestSurveyorContentDataOutputModel
     {
-        
-        private EWI.EWIResponseContentData _data;
+        private EWIResponseContentData _data;
 
-        
-        public ISurvey_RequestSurveyorContentDataOutputModel(EWI.EWIResponseContentData contentData)
+
+        public ISurvey_RequestSurveyorContentDataOutputModel(EWIResponseContentData contentData)
         {
             _data = contentData;
             this.eventid = contentData.EventID;
         }
-        
+
         public string eventid { get; set; }
     }
 

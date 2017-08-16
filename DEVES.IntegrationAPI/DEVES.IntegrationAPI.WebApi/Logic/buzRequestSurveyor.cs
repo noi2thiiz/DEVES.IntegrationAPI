@@ -9,6 +9,7 @@ using DEVES.IntegrationAPI.Model.EWI;
 using Newtonsoft.Json;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using DEVES.IntegrationAPI.WebApi.Logic.Services;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
@@ -35,6 +36,17 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         private EWIResponseContent_ReqSur RequestSurveyorOniSurvey(string incidentId, string currentUserId)
         {
             RequestSurveyorInputModel iSurveyInputModel = Mapping(incidentId, currentUserId);
+            var service = new MOTORRequestSurveyor(TransactionId, ControllerName);
+            var ewiRes = service.Execute(iSurveyInputModel);
+
+            EWIResponseContent_ReqSur iSurveyOutput = new EWIResponseContent_ReqSur();
+           
+            return iSurveyOutput;
+        }
+
+        private EWIResponseContent_ReqSur RequestSurveyorOniSurveyOld(string incidentId, string currentUserId)
+        {
+            RequestSurveyorInputModel iSurveyInputModel = Mapping(incidentId, currentUserId);
 
             EWIRequest reqModel = new EWIRequest()
             {
@@ -55,7 +67,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             // reqTime = DateTime.Now;
             var crmEndpoint = CommonConstant.PROXY_ENDPOINT;
             var ewiEndpoint = crmEndpoint +
-                System.Configuration.ConfigurationManager.AppSettings["API_ENDPOINT_EWIPROXY_SERVICE"] + "MOTOR_RequestSurveyor";
+                              System.Configuration.ConfigurationManager.AppSettings["API_ENDPOINT_EWIPROXY_SERVICE"] + "MOTOR_RequestSurveyor";
             Console.WriteLine(ewiEndpoint);
 
 
@@ -78,7 +90,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             EWIResponse_ReqSur ewiRes = response.Content.ReadAsAsync<EWIResponse_ReqSur>().Result;
             // EWIResponseContent_ReqSur iSurveyOutput = (EWIResponseContent_ReqSur)ewiRes.content;
-            // resBody = ewiRes.ToJson();
+            //resBody = ewiRes.ToJson();
             // resTime = DateTime.Now;
 
             EWIResponseContent_ReqSur iSurveyOutput = new EWIResponseContent_ReqSur();

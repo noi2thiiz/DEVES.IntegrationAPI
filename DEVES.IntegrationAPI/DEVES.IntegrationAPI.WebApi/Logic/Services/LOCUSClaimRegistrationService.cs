@@ -29,7 +29,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
             return contentObj?.content;
         }
 
-        internal LocusClaimRegistrationContentOutputModel Execute(BaseDataModel inputData)
+        public LocusClaimRegistrationContentOutputModel Execute(BaseDataModel inputData)
         {
            return Execute((LocusClaimRegistrationInputModel)inputData);
         }

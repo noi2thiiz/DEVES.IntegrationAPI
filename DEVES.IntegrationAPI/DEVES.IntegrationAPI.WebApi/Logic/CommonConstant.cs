@@ -27,7 +27,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         public const string ewiEndpointKeyCLIENTCreateCorporateClient = "EWI_ENDPOINT_CLIENTCreateCorporateClient";
         public const string ewiEndpointKeyCLIENTUpdateCorporateClient = "EWI_ENDPOINT_CLIENTUpdateCorporateClient";
 
+        public const string ewiEndpointKeyMOTORRequestSurveyor = "EWI_ENDPOINT_MOTORRequestSurveyor";
 
+        
         public const string EWI_ENDPOINT_CLSDeleteCLSPersonalClient = "EWI_ENDPOINT_CLSDeleteCLSPersonalClient";
         public const string EWI_ENDPOINT_CLSDeleteCLSCorporateClient = "EWI_ENDPOINT_CLSDeleteCLSCorporateClient";
 

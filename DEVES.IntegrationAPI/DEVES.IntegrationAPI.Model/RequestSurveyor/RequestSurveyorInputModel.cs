@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 namespace DEVES.IntegrationAPI.Model.RequestSurveyor
 {
 
-    public class RequestSurveyorInputModel_WebService
+    public class RequestSurveyorInputModel_WebService : BaseDataModel
     {
         public string incidentId { get; set; }
         public string currentUserId { get; set; }
     }
-    public class RequestSurveyorInputModel
+    public class RequestSurveyorInputModel:BaseDataModel
     {
         public string CaseID { get; set; }
         public string claimNotiNo { get; set; }
