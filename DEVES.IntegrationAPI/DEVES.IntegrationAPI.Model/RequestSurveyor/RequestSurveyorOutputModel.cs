@@ -9,6 +9,18 @@ using Newtonsoft.Json;
 
 namespace DEVES.IntegrationAPI.Model.RequestSurveyor
 {
+    public class RequestSurveyorOutputModel : BaseEWIResponseModel
+    {
+        [JsonProperty(Order = 1)]
+        public RequestSurveyorContentOutputModel content { set; get; }
+    }
+
+    public class RequestSurveyorContentOutputModel : BaseDataModel
+    {
+        public string eventId { get; set; }
+        public string errorMessage { get; set; }
+    }
+
     /*
     public class RequestSurveyorOutputModel
     {
