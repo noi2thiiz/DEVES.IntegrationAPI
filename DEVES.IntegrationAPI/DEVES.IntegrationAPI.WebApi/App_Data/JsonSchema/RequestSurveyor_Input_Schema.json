@@ -1,140 +1,17 @@
 ﻿{
-  "$schema": "http://json-schema.org/draft-04/schema#",
-  "type": "object",
-  "properties": {
-    "CaseID": {
-      "type": "string",
-      "maxLength": 50
-    },
-    "claimNotiNo": {
-      "type": "string",
-      "maxLength": 15
-    },
-    "claimNotirefer": {
-      "type": "string",
-      "maxLength": 8
-    },
-    "insureID": {
-      "type": "string",
-      "maxLength": 8
-    },
-    "rskNo": {
-      "type": "string",
-      "maxLength": 4
-    },
-    "tranNo": {
-      "type": "string",
-      "maxLength": 5
-    },
-    "notifyName": {
-      "type": "string",
-      "maxLength": 100
-    },
-    "mobile": {
-      "type": "string",
-      "maxLength": 30
-    },
-    "driver": {
-      "type": "string",
-      "maxLength": 100
-    },
-    "driverTel": {
-      "type": "string",
-      "maxLength": 30
-    },
-    "currentVehicleLicense": {
-      "type": "string",
-      "maxLength": 20
-    },
-    "currentProvinse": {
-      "type": "string",
-      "maxLength": 20
-    },
-    "eventDate": {
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"properties": {
+    "incidentId": {
       "type": "string"
     },
-    "activityDate": {
+    "currentUserId": 
+    {
       "type": "string"
-    },
-    "eventDetail": {
-      "type": "string",
-      "maxLength": 2000
-    },
-    "isCasualty": {
-      "type": "string"
-    },
-    "eventLocation": {
-      "type": "string",
-      "maxLength": 2000
-    },
-    "accidentLocation": {
-      "type": "string"
-    },
-    "accidentLat": {
-      "type": "string"
-    },
-    "accidentLng": {
-      "type": "string"
-    },
-    "ISVIP": {
-      "type": "string",
-      "maxLength": 1
-    },
-    "remark": {
-      "type": "string",
-      "maxLength": 2000
-    },
-    "claimTypeID": {
-      "type": "string"
-    },
-    "subClaimtypeID": {
-      "type": "string"
-    },
-    "empCode": {
-      "type": "string",
-      "maxLength": 20
-    },
-    "appointLat": {
-      "type": "string"
-    },
-    "appointLong": {
-      "type": "string"
-    },
-    "appointLocation": {
-      "type": "string",
-      "maxLength": 2000
-    },
-    "appointDate": {
-      "type": "string"
-    },
-    "appointName": {
-      "type": "string"
-    },
-    "appointPhone": {
-      "type": "string"
-    },
-    "contractName": {
-      "type": "string"
-    },
-    "contractPhone": {
-      "type": "string"
-    },
-    "surveyTeam": {
-      "type": "string",
-      "maxLength": 10
     }
-  },
-  "required": [
-    "CaseID",
-    "claimNotiNo",
-    "notifyName",
-    "mobile",
-    "driver",
-    "driverTel",
-    "currentVehicleLicence",
-    "currentProvinse",
-    "claimTypeID",
-    "subClaimtypeID",
-    "empCode"
-  ]
+	},
+	"required": [
+    "incidentId",
+    "currentUserId"
+	]
 }

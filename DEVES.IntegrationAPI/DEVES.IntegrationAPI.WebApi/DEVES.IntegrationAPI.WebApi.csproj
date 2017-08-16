@@ -425,6 +425,7 @@
     <Compile Include="Controllers\InternalServiceController.cs" />
     <Compile Include="Controllers\InquiryDataServiceController.cs" />
     <Compile Include="Controllers\MasterDataServiceController.cs" />
+    <Compile Include="Controllers\QuerySQLController.cs" />
     <Compile Include="Controllers\RegClaimRequestFromRVPController.cs" />
     <Compile Include="Controllers\RegClientCorporateController.cs" />
     <Compile Include="Controllers\RegClientPersonalController.cs" />
@@ -466,6 +467,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Logic\buzAccidentPrilimSurveyorReport.cs" />
+    <Compile Include="Logic\buzAssignedSurveyor.cs" />
     <Compile Include="Logic\buzClaimRegistration.cs" />
     <Compile Include="Logic\buzCreateAssessmentFromLocus.cs" />
     <Compile Include="Logic\BuzInquiryCrmAsrhClientMaster.cs" />
@@ -485,9 +488,13 @@
     <Compile Include="Logic\BuzInquiryCrmGeneralClient.cs" />
     <Compile Include="Logic\buzRegComplaint.cs" />
     <Compile Include="Logic\buzReqClsId.cs" />
+    <Compile Include="Logic\buzRequestSurveyor.cs" />
     <Compile Include="Logic\buzSendSMS.cs" />
     <Compile Include="Logic\buzSubmitSurveyAssessmentResult.cs" />
+    <Compile Include="Logic\buzUpdateClaimInfo.cs" />
+    <Compile Include="Logic\buzUpdateClaimNo.cs" />
     <Compile Include="Logic\buzUpdateCompliantStatus.cs" />
+    <Compile Include="Logic\buzUpdateSurveyStatus.cs" />
     <Compile Include="Logic\CommonConstant.cs" />
     <Compile Include="Logic\Converter\MasterDataConvertor.cs" />
     <Compile Include="Logic\Converter\OptionSetConvertor.cs" />
@@ -504,8 +511,10 @@
     <Compile Include="Logic\Services\CLSInquiryCLSCorporateClient.cs" />
     <Compile Include="Logic\Services\CLSInquiryCLSPersonalClient.cs" />
     <Compile Include="Logic\Services\COMPInquiryClientMaster.cs" />
+    <Compile Include="Logic\Services\LOCUSClaimRegistrationService.cs" />
     <Compile Include="Logic\Services\MOTORInquiryAPARPayeeList.cs" />
     <Compile Include="Logic\Services\MOTORInquiryMasterASRH.cs" />
+    <Compile Include="Logic\Services\MOTORRequestSurveyor.cs" />
     <Compile Include="Logic\Services\PolisyClientService.cs" />
     <Compile Include="Logic\Services\SAPCreateVendor.cs" />
     <Compile Include="Logic\Services\SAPInquiryVendor.cs" />
@@ -576,6 +585,9 @@
     <Compile Include="Startup.cs" />
     <Compile Include="TechnicalService\AppBootstrap.cs" />
     <Compile Include="TechnicalService\ConfigulationManager\AppConfig.cs" />
+    <Compile Include="TechnicalService\Connection\ConnectionThreadSafe.cs" />
+    <Compile Include="TechnicalService\Connection\DeviceIdManager.cs" />
+    <Compile Include="TechnicalService\Connection\ServerConnection.cs" />
     <Compile Include="TechnicalService\GlobalTransactionId.cs" />
     <Compile Include="TechnicalService\TraceDebugLogger\TraceDebugLogger.cs" />
     <Compile Include="TechnicalService\TraceExceptionLogger\GlobalExceptionHandler.cs" />
@@ -648,6 +660,7 @@
     <Content Include="App_Data\JsonSchema\RegComplaintInputModel.json" />
     <Content Include="App_Data\JsonSchema\CreateAssessmentFromLocus_Input_Schema.json" />
     <Content Include="App_Data\JsonSchema\UpdateClaimInfo_Input_Schema.json" />
+    <Content Include="App_Data\JsonSchema\QuerySQL_Input_Schema.json" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile10.pubxml" />

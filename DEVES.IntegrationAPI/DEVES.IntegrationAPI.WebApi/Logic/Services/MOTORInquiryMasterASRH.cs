@@ -43,6 +43,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
         {
             serviceName = "MOTOR_InquiryMasterASRH";
             systemName = "ASRH";
+            serviceEndpoint = AppConfig.Instance.Get(CommonConstant.ewiEndpointKeyMOTORInquiryMasterASRH);
         }
 
         public InquiryMasterASRHContentModel Execute(InquiryMasterASRHDataInputModel input)

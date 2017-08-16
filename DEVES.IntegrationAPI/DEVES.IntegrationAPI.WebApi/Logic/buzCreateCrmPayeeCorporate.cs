@@ -53,8 +53,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                 return dataOutput;
             }
-
-            using (OrganizationServiceProxy crmSvc = GetCrmServiceProxy())
+            // Connect SDK 
+            ServiceContext svcContext;
+          
+            using (OrganizationServiceProxy crmSvc = GetOrganizationServiceProxy(out svcContext))
             {
                 // Search ข้อมูลจาก cleansing มาเก็ยภายใน List
                 List<string> crmData = SearchCrmAccountPayeeId( crmSvc , data.generalHeader.cleansingId);

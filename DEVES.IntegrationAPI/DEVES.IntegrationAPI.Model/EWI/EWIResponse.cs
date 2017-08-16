@@ -142,7 +142,7 @@ namespace DEVES.IntegrationAPI.Model.EWI
         private EWIResponseCode? responseCode_ENUM = null;
     }
 
-    public class EWIResponseContent_ReqSur
+    public class EWIResponseContent_ReqSur : BaseDataModel
     {
         public string eventid { get; set; }
         public string errorMessage { get; set; }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DEVES.IntegrationAPI.Model.UpdateClaimInfo
 {
-    public class UpdateClaimInfoOutputModel_Pass
+    public class UpdateClaimInfoOutputModel_Pass : BaseDataModel
     {
         public string code { get; set; }
         public string message { get; set; }

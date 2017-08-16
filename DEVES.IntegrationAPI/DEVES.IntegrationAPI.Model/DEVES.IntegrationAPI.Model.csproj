@@ -129,6 +129,8 @@
     <Compile Include="Polisy400\COMPInquiryClientMasterDataModel.cs" />
     <Compile Include="Polisy400\COMP_InquiryClientNoByCleansingIdDataModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuerySQL\QuerySQLInputModel.cs" />
+    <Compile Include="QuerySQL\QuerySQLOutputModel.cs" />
     <Compile Include="RegClaimRequestFromClaimDi\RegClaimRequestFromClaimDiInputModel.cs" />
     <Compile Include="RegClaimRequestFromClaimDi\RegClaimRequestFromClaimDiOutputModel.cs" />
     <Compile Include="RegClaimRequestFromRVP\RegClaimRequestFromRVPInputModel.cs" />

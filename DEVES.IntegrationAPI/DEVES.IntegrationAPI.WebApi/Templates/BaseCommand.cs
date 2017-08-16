@@ -23,6 +23,7 @@ using Microsoft.Xrm.Sdk.Client;
 using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Tooling.Connector;
 using System.Threading.Tasks;
+using DEVES.IntegrationAPI.WebApi.ConnectCRM;
 using DEVES.IntegrationAPI.WebApi.Logic;
 using DEVES.IntegrationAPI.WebApi.Logic.DataBaseContracts;
 using DEVES.IntegrationAPI.WebApi.TechnicalService.TransactionLogger;
@@ -591,20 +592,16 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
 
         internal OrganizationServiceProxy GetCrmServiceProxy()
         {
-            using (var connection = new CrmServiceClient(ConfigurationManager.ConnectionStrings["CRM_DEVES"].ConnectionString))
-            { 
-                using (_serviceProxy = connection.OrganizationServiceProxy)
+     
+                using (_serviceProxy = ConnectionThreadSafe.GetOrganizationProxy())
                 {
                     // This statement is required to enable early-bound type support.
                     _serviceProxy.EnableProxyTypes();
 
-                    //_service = (IOrganizationService)_serviceProxy;
-                    //ServiceContext svcContext = new ServiceContext(_serviceProxy);
 
                     return _serviceProxy;
                 }
-            }
-            //throw new NotImplementedException();
+  
         }
 
         string GetLatestToken()
@@ -808,6 +805,14 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                 return lstCrmClientId;
             }
 
+        }
+
+        protected OrganizationServiceProxy GetOrganizationServiceProxy(out ServiceContext svcContext)
+        {
+          //  var connection = new CrmServiceClient(ConfigurationManager.ConnectionStrings["CRM_DEVES"].ConnectionString);
+            OrganizationServiceProxy _serviceProxy = ConnectionThreadSafe.GetOrganizationProxy();
+            svcContext = new ServiceContext(_serviceProxy);
+            return _serviceProxy;
         }
 
     }

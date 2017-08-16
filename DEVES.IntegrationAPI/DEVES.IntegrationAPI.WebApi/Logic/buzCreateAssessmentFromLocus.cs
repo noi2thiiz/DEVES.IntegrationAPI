@@ -40,9 +40,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
 
                 // Connect SDK 
-                var connection = new CrmServiceClient(ConfigurationManager.ConnectionStrings["CRM_DEVES"].ConnectionString);
-                OrganizationServiceProxy _serviceProxy = connection.OrganizationServiceProxy;
-                ServiceContext svcContext = new ServiceContext(_serviceProxy);
+                ServiceContext svcContext;
+                var _serviceProxy = GetOrganizationServiceProxy(out svcContext);
 
                 string backDay =(!string.IsNullOrEmpty(AppConfig.Instance.Get("SMS_ASSESSMENT_BACK_DAY"))) ? AppConfig.Instance.Get("SMS_ASSESSMENT_BACK_DAY") : "30";
                 string smsUrl  = (!string.IsNullOrEmpty(AppConfig.Instance.Get("SMS_ASSESSMENT_URL"))) ? AppConfig.Instance.Get("SMS_ASSESSMENT_URL") : "https://csat-qa.deves.co.th/assessment";  
