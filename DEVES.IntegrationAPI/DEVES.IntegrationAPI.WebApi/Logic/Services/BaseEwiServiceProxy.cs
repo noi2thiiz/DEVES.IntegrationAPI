@@ -132,12 +132,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 
             try
             {
-               
-          
+
+
                 HttpResponseMessage response = client.SendAsync(request).Result;
                 resTime = DateTime.Now;
 
-            
+
 
                 response.EnsureSuccessStatusCode();
                 timer.Stop();
@@ -148,12 +148,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
                 //T2 output = (T2)typeof(T1).GetProperty("content").GetValue(ewiRes);
                 resBody = ewiRes.Result;
                 resTime = DateTime.Now;
-               // Console.WriteLine(resBody);
-              
-               
-            
+                // Console.WriteLine(resBody);
+
+
+
                 LogRequest(request, response, timeTaken);
-              
+
                 result.Content = ewiRes.Result;
                 result.StatusCode = response.StatusCode;
 
@@ -171,7 +171,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
                 var responseContent = JObject.Parse(ewiRes.Result);
                 if (responseContent["responseCode"] != null)
                 {
-                    if (responseContent["responseCode"].ToString() != "EWI-0000I")
+                    if (responseContent["responseCode"].ToString() != "EWI-0000I" && responseContent["responseCode"].ToString() != "EWI-1000E")
                     {
                         throw new BuzErrorException(
                             responseContent["responseCode"].ToString(),
@@ -193,20 +193,24 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
                         systemName,
                         GlobalTransactionID);
                 }
-                
+
                 return result;
+            }
+            catch (BuzErrorException e)
+            {
+                throw;
             }
             catch (Exception e)
             {
-                    LogRequest(request);
-               
-                    throw new BuzErrorException(
-                        "500",
-                        $"{systemName} Error: Error on  execute {serviceName}, the request failed or the service did not respond",
-                        $"Error on execute '{serviceName}', {e.Message}",
-                        systemName,
-                        GlobalTransactionID);
-                
+                LogRequest(request);
+
+                throw new BuzErrorException(
+                    "500",
+                    $"{systemName} Error: Error on  execute {serviceName}, the request failed or the service did not respond",
+                    $"Error on execute '{serviceName}', {e.Message}",
+                    systemName,
+                    GlobalTransactionID);
+
             }
             
         }

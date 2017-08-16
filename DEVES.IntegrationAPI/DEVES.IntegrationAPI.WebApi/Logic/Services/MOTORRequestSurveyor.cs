@@ -20,18 +20,29 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
             serviceEndpoint = AppConfig.Instance.Get(CommonConstant.ewiEndpointKeyMOTORRequestSurveyor);
         }
 
-        public ISurvey_RequestSurveyorContentOutputModel Execute(RequestSurveyorInputModel input)
+        public RequestSurveyorContentOutputModel Execute(RequestSurveyorInputModel input)
         {
 
             var result = SendRequest(input, serviceEndpoint);
 
 
             var jss = new JavaScriptSerializer();
-            var contentObj = jss.Deserialize<ISurvey_RequestSurveyoOutputModel>(result.Content);
+            var contentObj = jss.Deserialize<RequestSurveyorOutputModel>(result.Content);
             return contentObj?.content;
         }
 
-        public ISurvey_RequestSurveyorContentOutputModel Execute(BaseDataModel inputData)
+        public RequestSurveyorOutputModel ExecuteEWI(RequestSurveyorInputModel input)
+        {
+
+            var result = SendRequest(input, serviceEndpoint);
+
+
+            var jss = new JavaScriptSerializer();
+            var contentObj = jss.Deserialize<RequestSurveyorOutputModel>(result.Content);
+            return contentObj;
+        }
+
+        public RequestSurveyorContentOutputModel Execute(BaseDataModel inputData)
         {
             return Execute((RequestSurveyorInputModel)inputData);
         }

@@ -22,7 +22,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
     {
         public object Post([FromBody]object value)
         {
-            return ProcessRequest<buzRequestSurveyor, RequestSurveyorInputModel>(value, "RequestSurveyor_Input_Schema.json");
+            return ProcessRequest<buzRequestSurveyor, RequestSurveyorInputModel_WebService>(value, "RequestSurveyor_Input_Schema.json");
         }
 
     }

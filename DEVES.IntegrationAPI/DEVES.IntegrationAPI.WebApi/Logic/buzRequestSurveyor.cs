@@ -37,9 +37,25 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         {
             RequestSurveyorInputModel iSurveyInputModel = Mapping(incidentId, currentUserId);
             var service = new MOTORRequestSurveyor(TransactionId, ControllerName);
-            var ewiRes = service.Execute(iSurveyInputModel);
+            var ewiRes = service.ExecuteEWI(iSurveyInputModel);
 
             EWIResponseContent_ReqSur iSurveyOutput = new EWIResponseContent_ReqSur();
+
+            if (ewiRes.content.ToString().Equals("{}"))
+            {
+                iSurveyOutput.eventid = "";
+                iSurveyOutput.errorMessage = ewiRes.responseMessage;
+            }
+            else if (ewiRes.responseCode != "EWI-0000I")
+            {
+                iSurveyOutput.eventid = "";
+                iSurveyOutput.errorMessage = "ส่งข้อมูลเข้า i-Survey ไม่สำเร็จ: " + ewiRes.responseMessage.ToString();
+            }
+            else
+            {
+                iSurveyOutput.eventid = ewiRes.content.eventId;
+                iSurveyOutput.errorMessage = null;
+            }
            
             return iSurveyOutput;
         }
