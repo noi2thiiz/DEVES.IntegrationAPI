@@ -13,7 +13,7 @@ namespace DEVES.IntegrationAPI.Model.AssignedSurveyor
         public string message { get; set; }
         public string description { get; set; }
         public string transactionId { get; set; }
-        public string transactionDateTime { get; set; }
+        public DateTime transactionDateTime { get; set; }
         public List<string> errorMessage { get; set; }
         public AssignedSurveyorDataOutputModel_Pass data { get; set; }
     }

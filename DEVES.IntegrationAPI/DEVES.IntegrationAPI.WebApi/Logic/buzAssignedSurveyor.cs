@@ -25,7 +25,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             // Preparation Linq query to CRM
             ServiceContext svcContext;
             var _serviceProxy = GetOrganizationServiceProxy(out svcContext);
-
+          
             // Incident incident = new earlybound.Incident();
             var query = from c in svcContext.IncidentSet
                         where c.pfc_claim_noti_number == contentInput.claimNotiNo
@@ -33,11 +33,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             if (query.FirstOrDefault<Incident>() == null)
             {
+                AddDebugInfo("Error on query Incident: claimNotiNo ไม่มีในระบบ CRM"+ contentInput.claimNotiNo);
                 output.code = CONST_CODE_FAILED;
                 output.message = "ไม่สามารถ Update ได้";
                 output.description = "claimNotiNo ไม่มีในระบบ CRM";
                 output.transactionId = TransactionId;
-                output.transactionDateTime = DateTime.Now.ToString();
+                output.transactionDateTime = DateTime.Now;
 
                 return output;
             }
@@ -72,20 +73,21 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 }
                 catch(Exception e)
                 {
+                    AddDebugInfo("Error on update Incident:"+e.Message,e);
                     output.code = CONST_CODE_FAILED;
                     output.message = "ไม่สามารถ Update ได้";
                     output.description = e.Message;
                     output.transactionId = TransactionId;
-                    output.transactionDateTime = DateTime.Now.ToString();
+                    output.transactionDateTime = DateTime.Now;
 
                     return output;
                 }
 
-                output.code = "200";
-                output.message = "Success";
+                output.code = AppConst.CODE_SUCCESS;
+                output.message = AppConst.MESSAGE_SUCCESS;
                 output.description = "Assigning surveyor is done!";
                 output.transactionId = TransactionId;
-                output.transactionDateTime = DateTime.Now.ToString();
+                output.transactionDateTime = DateTime.Now;
                 output.data = new AssignedSurveyorDataOutputModel_Pass();
                 output.data.message = "ClaimNoti Number: " + contentInput.claimNotiNo +
                     ", Survey type: " + contentInput.surveyType +
