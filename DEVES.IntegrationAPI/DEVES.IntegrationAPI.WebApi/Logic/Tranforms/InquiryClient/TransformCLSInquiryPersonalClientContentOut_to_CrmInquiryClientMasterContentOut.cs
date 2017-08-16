@@ -48,7 +48,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                     trgt.generalHeader.cleansingId = src?.cleansing_id?.Trim() ?? "";
                     trgt.generalHeader.polisyClientId = src?.clntnum?.Trim() ?? "";
-                    trgt.generalHeader.sourceData = "CLS";
+                    trgt.generalHeader.sourceData = CommonConstant.CONST_SYSTEM_CLS;
 
 
                     trgt.profileInfo.name1 = src?.lgivname?.Trim() ?? "";

@@ -20,7 +20,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         public InquiryCrmPayeeListDataModel TransformDataModel(SAPInquiryVendorContentVendorInfoModel input,
             InquiryCrmPayeeListDataModel output)
         {
-            output.sourceData = "SAP";
+            output.sourceData = CommonConstant.CONST_SYSTEM_SAP;
             output.polisyClientId = input.PREVACC;
             output.sapVendorCode = input.VCODE;
             output.sapVendorAccountCode = input.PREVACC;

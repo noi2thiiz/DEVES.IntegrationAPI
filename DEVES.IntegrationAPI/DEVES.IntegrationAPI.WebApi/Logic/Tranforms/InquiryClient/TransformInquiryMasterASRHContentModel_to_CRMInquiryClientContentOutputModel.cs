@@ -5,6 +5,7 @@ using DEVES.IntegrationAPI.Model.MASTER;
 using DEVES.IntegrationAPI.Model.InquiryClientMaster;
 using DEVES.IntegrationAPI.WebApi.Templates;
 using System;
+using System.Collections.Generic;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
@@ -15,6 +16,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             InquiryMasterASRHContentModel src = (InquiryMasterASRHContentModel)input;
             CRMInquiryClientContentOutputModel trgt = (CRMInquiryClientContentOutputModel)output;
 
+            if(trgt.data == null)
+            {
+                trgt.data=new List<CRMInquiryClientOutputDataModel>();
+            }
+
             foreach (var asrh in src.ASRHListCollection)
             {
                 CRMInquiryClientOutputDataModel data = new CRMInquiryClientOutputDataModel();
@@ -22,6 +28,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 data.generalHeader.polisyClientId = asrh.ASRHList.polisyClntnum;
                 data.generalHeader.emcsMemHeadId = asrh.ASRHList.emcsMemHeadId;
                 data.generalHeader.emcsMemId = asrh.ASRHList.emcsMemId;
+                data.generalHeader.sourceData = CommonConstant.CONST_SYSTEM_MASTER_ASRH;
 
                 data.profileInfo = new CRMInquiryClientProfileInfoModel();
                 data.profileInfo.fullName = asrh.ASRHList.fullName;

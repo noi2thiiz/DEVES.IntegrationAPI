@@ -25,9 +25,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
         public List<CRMInquiryClientOutputDataModel> AllSearchResult = new List<CRMInquiryClientOutputDataModel>();
         public List<CRMInquiryClientOutputDataModel> CLSResult = new List<CRMInquiryClientOutputDataModel>();
+        public List<CRMInquiryClientOutputDataModel> COMPResult = new List<CRMInquiryClientOutputDataModel>();
 
 
-  
+
         public BaseTransformer CLSPersonalOutputTransform = new TransformCLSInquiryPersonalClientContentOut_to_CrmInquiryClientMasterContentOut();
 
       
@@ -100,6 +101,21 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
 
             //ถ้าไม่พบให้ไปค้นหาต่อที่ 400
+            if (!AllSearchResult.Any())
+            {
+                COMPResult = InquiryCOMPClientMaster(InputModel);
+                if (COMPResult != null)
+                {
+                    AllSearchResult.AddRange(COMPResult);
+                }
+            }
+            //ซ่อม Role Code เนื่องจาก Source  ไม่มี field นี้
+
+            foreach (CRMInquiryClientOutputDataModel temp in crmInqContent.data)
+            {
+         
+                temp.generalHeader.roleCode = "G";
+            }
 
 
 

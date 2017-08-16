@@ -180,10 +180,40 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 #endregion Call COMP_Inquiry through ServiceProxy
             }
 
-            foreach (CRMInquiryClientOutputDataModel temp in crmInqContent.data)
+            foreach (CRMInquiryClientOutputDataModel temp in AllSearchResult)
             {
-                temp.generalHeader.clientType = clientType;
-                temp.generalHeader.roleCode = roleCode;
+                // temp.generalHeader.clientType = InputModel?.conditionHeader?.clientType;
+                if (temp.generalHeader.clientType == "P")
+                {
+                    temp.generalHeader.roleCode = "G";
+                }
+                else
+                if (temp.asrhHeader.assessorFlag == "N" && temp.asrhHeader.solicitorFlag == "N" && temp.asrhHeader.repairerFlag == "N" && temp.asrhHeader.hospitalFlag == "N")
+                {
+                    temp.generalHeader.roleCode = "G";
+                }
+                else
+                if (temp.asrhHeader.assessorFlag == "Y" && temp.asrhHeader.solicitorFlag == "N" && temp.asrhHeader.repairerFlag == "N" && temp.asrhHeader.hospitalFlag == "N")
+                {
+                    temp.generalHeader.roleCode = "A";
+                }
+                else
+                if (temp.asrhHeader.assessorFlag == "N" && temp.asrhHeader.solicitorFlag == "Y" && temp.asrhHeader.repairerFlag == "N" && temp.asrhHeader.hospitalFlag == "N")
+                {
+                    temp.generalHeader.roleCode = "S";
+                }
+                else
+                if (temp.asrhHeader.assessorFlag == "N" && temp.asrhHeader.solicitorFlag == "N" && temp.asrhHeader.repairerFlag == "Y" && temp.asrhHeader.hospitalFlag == "N")
+                {
+                    temp.generalHeader.roleCode = "R";
+                }
+                else
+                if (temp.asrhHeader.assessorFlag == "N" && temp.asrhHeader.solicitorFlag == "N" && temp.asrhHeader.repairerFlag == "N" && temp.asrhHeader.hospitalFlag == "Y")
+                {
+                    temp.generalHeader.roleCode = "H";
+                }
+                // กรณีอื่นๆ ระบุไม่ได้ บางตัวมีมากกว่า 1 role code
+              
             }
 
             crmInqContent.code = AppConst.CODE_SUCCESS;

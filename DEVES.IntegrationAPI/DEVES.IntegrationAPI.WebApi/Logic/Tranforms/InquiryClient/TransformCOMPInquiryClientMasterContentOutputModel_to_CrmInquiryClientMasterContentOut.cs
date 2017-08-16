@@ -25,10 +25,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             EWIResCOMPInquiryClientMasterContentModel srcContent = (EWIResCOMPInquiryClientMasterContentModel)input;
             CRMInquiryClientContentOutputModel trgtContent = (CRMInquiryClientContentOutputModel)output;
+            if (trgtContent.data == null)
+            {
+                trgtContent.data = new List<CRMInquiryClientOutputDataModel>();
+            }
 
-           // Console.WriteLine(" >>>>>>>>>>>>>>>>>>>>>>srcContent>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-           // Console.WriteLine(srcContent.ToJson());
-           // Console.WriteLine("   >>>>>>>>>>>>>>>>>>trgtContent>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+            // Console.WriteLine(" >>>>>>>>>>>>>>>>>>>>>>srcContent>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+            // Console.WriteLine(srcContent.ToJson());
+            // Console.WriteLine("   >>>>>>>>>>>>>>>>>>trgtContent>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 
             //Console.WriteLine(trgtContent.ToJson());
             if (srcContent.clientListCollection != null)
@@ -46,6 +50,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     trgt.generalHeader.cleansingId = src.clientList.cleansingId;
                     trgt.generalHeader.polisyClientId = src.clientList.clientNumber;
                     trgt.generalHeader.clientAdditionalExistFlag = src.clientList.additionalExistFlag;
+                  
+                    trgt.generalHeader.sourceData = CommonConstant.CONST_SYSTEM_POLISY400;
+
 
                     trgt.profileInfo.name1 = src.clientList.name1;
                     trgt.profileInfo.name2 = src.clientList.name2;
@@ -94,13 +101,16 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     trgt.asrhHeader.assessorFlag = src.clientList.assessorFlag;
                     trgt.asrhHeader.solicitorFlag = src.clientList.solicitorFlag;
                     trgt.asrhHeader.repairerFlag = src.clientList.repairerFlag;
-                    trgt.asrhHeader.hospitalFlag = src.clientList.hospitalFlag;
+                    trgt.asrhHeader.hospitalFlag = src.clientList.hospitalFlag?.ToUpper() == "Y" ? "Y" : "N";
 
                     if (trgt.generalHeader.clientType=="P")
                     {
                         trgt.profileInfo.salutationText = "";
                         trgt.profileInfo.sex = "U";
                     }
+
+                   
+
                     trgtContent.data.Add(trgt);
                 }
             }

@@ -20,7 +20,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 oup = new InquiryCRMPayeeListInputModel();
             else
                 oup = (InquiryCRMPayeeListInputModel)output;
-
+            
             oup.assessorFlag = "";
             oup.clientType = "";
             oup.emcsCode = "";

@@ -31,7 +31,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 var model = new InquiryCrmPayeeListDataModel
                 {
 
-                    sourceData = "CLS",
+                    sourceData = CommonConstant.CONST_SYSTEM_CLS,
                     cleansingId = clsData.cleansing_id,
                     polisyClientId = clsData.clntnum,
                     sapVendorCode = "",

@@ -10,6 +10,7 @@ using DEVES.IntegrationAPI.WebApi;
 using DEVES.IntegrationAPI.Model.RegPayeePersonal;
 using DEVES.IntegrationAPI.Model.CLS;
 using DEVES.IntegrationAPI.Model.Polisy400;
+using DEVES.IntegrationAPI.Model.SAP;
 using DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData;
 using DEVES.IntegrationAPI.WebApi.Logic.DataBaseContracts;
 using DEVES.IntegrationAPI.WebApi.Logic.Services;
@@ -141,41 +142,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             //ถ้าส่ง polisyClientId มาจะข้ามไปสร้าง SAP เลย  ไม่ต้องส่ง Cleansing มาก็ได้ แต่ user ไม่ควรทำได้เอง ระบบควรทำให้
             if (string.IsNullOrEmpty(RegPayeePersonalInput?.generalHeader?.polisyClientId))
+            {
+                if (string.IsNullOrEmpty(RegPayeePersonalInput?.generalHeader?.cleansingId))
                 {
-                    if (string.IsNullOrEmpty(RegPayeePersonalInput?.generalHeader?.cleansingId))
-                    {
-                        #region Create Payee in Cleansing
-                        BaseDataModel clsCreatePersonalIn = DataModelFactory.GetModel(typeof(CLSCreatePersonalClientInputModel));
-                        clsCreatePersonalIn = TransformerFactory.TransformModel(RegPayeePersonalInput, clsCreatePersonalIn);
-                        CLSCreatePersonalClientContentOutputModel clsCreatePayeeContent = CallDevesServiceProxy<CLSCreatePersonalClientOutputModel, CLSCreatePersonalClientContentOutputModel>
-                                                                                            (CommonConstant.ewiEndpointKeyCLSCreatePersonalClient, clsCreatePersonalIn);
-                        //regPayeePersonalInput = (RegPayeePersonalInputModel)TransformerFactory.TransformModel(clsCreatePayeeContent, regPayeePersonalInput);
-                        if (clsCreatePayeeContent?.code == CONST_CODE_SUCCESS)
-                        {
-                            newCleansingId = clsCreatePayeeContent.data?.cleansingId;
-                            RegPayeePersonalInput.generalHeader.cleansingId = clsCreatePayeeContent.data?.cleansingId ?? "";
+                    #region Create Payee in Cleansing
 
-                            outputPass.cleansingId = clsCreatePayeeContent.data?.cleansingId;
-                            outputPass.polisyClientId = clsCreatePayeeContent.data?.clientId;
-                            outputPass.personalName = clsCreatePayeeContent.data?.personalName;
-                            outputPass.personalSurname = clsCreatePayeeContent.data?.personalSurname;
-                        }
-                        else
-                        {
-                            regPayeePersonalOutput.code = clsCreatePayeeContent?.code??AppConst.CODE_FAILED;
-                            regPayeePersonalOutput.message = $"CLS Error:{clsCreatePayeeContent?.message}";
-                            regPayeePersonalOutput.description = clsCreatePayeeContent?.description;
-                            outputPass.cleansingId = clsCreatePayeeContent?.data?.cleansingId ?? "";
-                            outputPass.polisyClientId = clsCreatePayeeContent?.data?.clientId ?? "";
-                            outputPass.personalName = clsCreatePayeeContent?.data?.personalName??"";
-                            outputPass.personalSurname = clsCreatePayeeContent?.data?.personalSurname??"";
-                            outputPass.sapVendorCode = "";
-                            outputPass.sapVendorGroupCode = "";
-                         
+                    CreatePayeeInCleansing(regPayeePersonalOutput);
 
-                        regPayeePersonalOutput.data.Add(outputPass);
-                            throw new BuzErrorException(regPayeePersonalOutput, "CLS");
-                        }
                     #endregion Create Payee in Cleansing
                 }
 
@@ -184,47 +157,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 #region Create Payee in Polisy400
                
                 //regPayeePersonalInput = (RegPayeePersonalInputModel)TransformerFactory.TransformModel(polCreatePayeeContent, regPayeePersonalInput);
-                    try
-                {
-                    BaseDataModel polCreatePersonalIn = DataModelFactory.GetModel(typeof(CLIENTCreatePersonalClientAndAdditionalInfoInputModel));
-                    polCreatePersonalIn = TransformerFactory.TransformModel(RegPayeePersonalInput, polCreatePersonalIn);
-                    CLIENTCreatePersonalClientAndAdditionalInfoContentModel polCreatePayeeContent= CallDevesServiceProxy<CLIENTCreatePersonalClientAndAdditionalInfoOutputModel
-                                , CLIENTCreatePersonalClientAndAdditionalInfoContentModel>
-                            (CommonConstant.ewiEndpointKeyCLIENTCreatePersonalClient, polCreatePersonalIn);
-
-                    if (polCreatePayeeContent != null)
-                        {
-                            RegPayeePersonalInput.generalHeader.polisyClientId = polCreatePayeeContent.clientID;
-
-                            newPolisyClientId = polCreatePayeeContent?.clientID??"";
-                            outputPass.polisyClientId = polCreatePayeeContent.clientID;
-                        }
-                        else
-                        {
-                        //เมื่อเกิด error ใด ๆ ใน service อื่นให้ลบ
-                            if (!string.IsNullOrEmpty(newCleansingId))
-                            {
-                                AddDebugInfo("try rollback" + newCleansingId);
-                                var deleteResult = CleansingClientService.Instance.RemoveByCleansingId(newCleansingId, "P");
-                            }
-                           
-                    }
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine("Error On Create 400 =" + e.Message);
-                        AddDebugInfo("Error On Create 400" + e.Message,e.StackTrace);
-                    //เมื่อเกิด error ใด ๆ ใน service อื่นให้ลบ
-                    if (!string.IsNullOrEmpty(newCleansingId))
-                        {
-                            AddDebugInfo("try rollback" + newCleansingId);
-                            var deleteResult = CleansingClientService.Instance.RemoveByCleansingId(newCleansingId, "P");
-                        }
-                       
-                        throw;
-
-                    }
-
+                CreatePayeeInPolisy400();
 
                 #endregion Create Payee in Polisy400
             }
@@ -242,90 +175,16 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             #region Search Payee in SAP
 
-            Model.SAP.SAPInquiryVendorInputModel SAPInqVendorIn = (Model.SAP.SAPInquiryVendorInputModel)DataModelFactory.GetModel(typeof(Model.SAP.SAPInquiryVendorInputModel));
-                //SAPInqVendorIn = TransformerFactory.TransformModel(regPayeePersonalInput, SAPInqVendorIn);
+            var sapInfo = SearchPayeeInSap();
 
-                SAPInqVendorIn.TAX3 = RegPayeePersonalInput.profileInfo.idCitizen??"";
-                SAPInqVendorIn.TAX4 = "";
-                SAPInqVendorIn.PREVACC = RegPayeePersonalInput.sapVendorInfo.sapVendorCode ?? "";
-                SAPInqVendorIn.VCODE = RegPayeePersonalInput.generalHeader.polisyClientId ?? "";
-
-               
-
-                AddDebugInfo("Search Payee in SAP", SAPInqVendorIn);
-
-                var SAPInqVendorContentOut = CallDevesServiceProxy<Model.SAP.SAPInquiryVendorOutputModel, Model.SAP.EWIResSAPInquiryVendorContentModel>(CommonConstant.ewiEndpointKeySAPInquiryVendor, SAPInqVendorIn);
-                #endregion Search Payee in SAP
-
-                var sapInfo = SAPInqVendorContentOut?.VendorInfo?.FirstOrDefault();
-
-                if (string.IsNullOrEmpty(sapInfo?.VCODE))
-               {   //implement rollback
+            if (string.IsNullOrEmpty(sapInfo?.VCODE))
+                {
+                    //implement rollback
                 #region Create Payee in SAP
                 //BaseDataModel SAPCreateVendorIn = DataModelFactory.GetModel(typeof(Model.SAP.SAPCreateVendorInputModel));
-                try
-                    {
-                        if (!ignoreSap)
-                        {
-                              Model.SAP.SAPCreateVendorInputModel SAPCreateVendorIn =
-                                new Model.SAP.SAPCreateVendorInputModel();
-                            SAPCreateVendorIn =
-                                (Model.SAP.SAPCreateVendorInputModel)TransformerFactory.TransformModel(
-                                    RegPayeePersonalInput, SAPCreateVendorIn);
+                    CreatePayeeInSap();
 
-                            AddDebugInfo(" create SAP Vendor ", SAPCreateVendorIn);
-
-                            var SAPCreateVendorContentOut =
-                                CallDevesServiceProxy<Model.SAP.SAPCreateVendorOutputModel,
-                                    Model.SAP.SAPCreateVendorContentOutputModel>(
-                                    CommonConstant.ewiEndpointKeySAPCreateVendor, SAPCreateVendorIn);
-
-                            if (string.IsNullOrEmpty(SAPCreateVendorContentOut?.VCODE))
-                            {
-                                throw new Exception(SAPCreateVendorContentOut?.Message);
-                            }
-
-                            RegPayeePersonalInput.sapVendorInfo.sapVendorCode = SAPCreateVendorContentOut?.VCODE;
-                            outputPass.sapVendorCode = SAPCreateVendorContentOut?.VCODE;
-                            outputPass.sapVendorGroupCode = RegPayeePersonalInput?.sapVendorInfo?.sapVendorGroupCode;
-
-                            newSapVendorCode = SAPCreateVendorContentOut?.VCODE;
-                            newSapVendorGroupCode = RegPayeePersonalInput?.sapVendorInfo?.sapVendorGroupCode;
-                    }
-                   
-
-                }
-                    catch (Exception e)
-                    {
-                       Console.WriteLine("Error On Create Sap ="+e.Message);
-                        AddDebugInfo("Error On Create Sap =" + e.Message+e.StackTrace);
-                    //@TODO adHoc fix Please fill recipient type  มัน return success เลยถ้าไม่ได้ดักไว้ 
-                    if (!string.IsNullOrEmpty(newCleansingId))
-                        {
-                            AddDebugInfo("rollback newCleansingId="+ newCleansingId);
-                           
-                            var deleteResult = CleansingClientService.Instance.RemoveByCleansingId(newCleansingId, "P");
-
-                        }
-
-                    List<OutputModelFailDataFieldErrors> fieldError = MessageBuilder.Instance.ExtractSapCreateVendorFieldError<RegPayeePersonalInputModel>(e.Message,RegPayeePersonalInput);
-                    if (fieldError.Any())
-                    {
-                        AddDebugInfo("FieldValidationException" + "SAP Error:" + e.Message);
-
-
-                        throw new FieldValidationException(fieldError, "Cannot create SAP Vendor:" + MessageBuilder.Instance.ConvertMessageSapToCrm(e.Message), "");
-
-                    }
-                    else
-                    {
-                        throw new FieldValidationException(fieldError, "SAP Error:" + MessageBuilder.Instance.ConvertMessageSapToCrm(e.Message), "");
-
-                    }
-                }
-
-
-                #endregion Create Payee in SAP
+                    #endregion Create Payee in SAP
 
                 try
                 {
@@ -361,8 +220,6 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     //do not thing
                     AddDebugInfo("Cannot create Client in CRM :" + e.Message, e.StackTrace);
                 }
-
-
                 }
                 else
                 {
@@ -378,6 +235,20 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             //@TODO adHoc fix if fullname in null
 
+            FinalizeOurput();
+
+
+            // RegPayeePersonalInput?.sapVendorInfo?.sapVendorGroupCode;
+
+            regPayeePersonalOutput.data.Add(outputPass);
+            AddDebugInfo(" output ", outputPass);
+           
+            return regPayeePersonalOutput;
+
+        }
+
+        private void FinalizeOurput()
+        {
             if (!string.IsNullOrEmpty(newCleansingId))
             {
                 outputPass.cleansingId = newCleansingId;
@@ -385,7 +256,6 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             if (!string.IsNullOrEmpty(newPolisyClientId))
             {
-                
                 outputPass.polisyClientId = newPolisyClientId;
 
                 AddDebugInfo(" outputPass.polisyClientId 1", outputPass.polisyClientId);
@@ -404,30 +274,188 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             // ถ้า output ยัง null
 
             if (string.IsNullOrEmpty(outputPass.personalName))
+            {
+                outputPass.personalName = RegPayeePersonalInput?.profileInfo.personalName;
+                outputPass.personalSurname = RegPayeePersonalInput?.profileInfo.personalSurname;
+            }
+
+            if (string.IsNullOrEmpty(outputPass.polisyClientId))
+            {
+                outputPass.polisyClientId = RegPayeePersonalInput?.generalHeader?.polisyClientId;
+                AddDebugInfo(" RegPayeePersonalInput?.generalHeader?.polisyClientId", outputPass.polisyClientId);
+            }
+
+            if (string.IsNullOrEmpty(outputPass.cleansingId))
+            {
+                outputPass.cleansingId = RegPayeePersonalInput?.generalHeader?.cleansingId;
+            }
+        }
+
+        private SAPInquiryVendorContentVendorInfoModel SearchPayeeInSap()
+        {
+            Model.SAP.SAPInquiryVendorInputModel SAPInqVendorIn =
+                (Model.SAP.SAPInquiryVendorInputModel) DataModelFactory.GetModel(typeof(Model.SAP.SAPInquiryVendorInputModel));
+            //SAPInqVendorIn = TransformerFactory.TransformModel(regPayeePersonalInput, SAPInqVendorIn);
+
+            SAPInqVendorIn.TAX3 = RegPayeePersonalInput.profileInfo.idCitizen ?? "";
+            SAPInqVendorIn.TAX4 = "";
+            SAPInqVendorIn.PREVACC = RegPayeePersonalInput.generalHeader.polisyClientId ?? ""; 
+            SAPInqVendorIn.VCODE   = RegPayeePersonalInput.sapVendorInfo.sapVendorCode ?? "";
+
+
+            AddDebugInfo("Search Payee in SAP", SAPInqVendorIn);
+
+            var SAPInqVendorContentOut =
+                CallDevesServiceProxy<Model.SAP.SAPInquiryVendorOutputModel, Model.SAP.EWIResSAPInquiryVendorContentModel>(
+                    CommonConstant.ewiEndpointKeySAPInquiryVendor, SAPInqVendorIn);
+
+            #endregion Search Payee in SAP
+
+            var sapInfo = SAPInqVendorContentOut?.VendorInfo?.FirstOrDefault();
+            return sapInfo;
+        }
+
+        private void CreatePayeeInSap()
+        {
+            try
+            {
+                if (!ignoreSap)
                 {
-                    outputPass.personalName = RegPayeePersonalInput?.profileInfo.personalName;
-                    outputPass.personalSurname = RegPayeePersonalInput?.profileInfo.personalSurname;
+                    Model.SAP.SAPCreateVendorInputModel SAPCreateVendorIn =
+                        new Model.SAP.SAPCreateVendorInputModel();
+                    SAPCreateVendorIn =
+                        (Model.SAP.SAPCreateVendorInputModel) TransformerFactory.TransformModel(
+                            RegPayeePersonalInput, SAPCreateVendorIn);
+
+                    AddDebugInfo(" create SAP Vendor ", SAPCreateVendorIn);
+
+                    var SAPCreateVendorContentOut =
+                        CallDevesServiceProxy<Model.SAP.SAPCreateVendorOutputModel,
+                            Model.SAP.SAPCreateVendorContentOutputModel>(
+                            CommonConstant.ewiEndpointKeySAPCreateVendor, SAPCreateVendorIn);
+
+                    if (string.IsNullOrEmpty(SAPCreateVendorContentOut?.VCODE))
+                    {
+                        throw new Exception(SAPCreateVendorContentOut?.Message);
+                    }
+
+                    RegPayeePersonalInput.sapVendorInfo.sapVendorCode = SAPCreateVendorContentOut?.VCODE;
+                    outputPass.sapVendorCode = SAPCreateVendorContentOut?.VCODE;
+                    outputPass.sapVendorGroupCode = RegPayeePersonalInput?.sapVendorInfo?.sapVendorGroupCode;
+
+                    newSapVendorCode = SAPCreateVendorContentOut?.VCODE;
+                    newSapVendorGroupCode = RegPayeePersonalInput?.sapVendorInfo?.sapVendorGroupCode;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error On Create Sap =" + e.Message);
+                AddDebugInfo("Error On Create Sap =" + e.Message + e.StackTrace);
+                //@TODO adHoc fix Please fill recipient type  มัน return success เลยถ้าไม่ได้ดักไว้ 
+                if (!string.IsNullOrEmpty(newCleansingId))
+                {
+                    AddDebugInfo("rollback newCleansingId=" + newCleansingId);
+
+                    var deleteResult = CleansingClientService.Instance.RemoveByCleansingId(newCleansingId, "P");
                 }
 
-                if (string.IsNullOrEmpty(outputPass.polisyClientId))
+                List<OutputModelFailDataFieldErrors> fieldError =
+                    MessageBuilder.Instance.ExtractSapCreateVendorFieldError<RegPayeePersonalInputModel>(e.Message,
+                        RegPayeePersonalInput);
+                if (fieldError.Any())
                 {
-                   outputPass.polisyClientId = RegPayeePersonalInput?.generalHeader?.polisyClientId;
-                    AddDebugInfo(" RegPayeePersonalInput?.generalHeader?.polisyClientId", outputPass.polisyClientId);
+                    AddDebugInfo("FieldValidationException" + "SAP Error:" + e.Message);
+
+
+                    throw new FieldValidationException(fieldError,
+                        "Cannot create SAP Vendor:" + MessageBuilder.Instance.ConvertMessageSapToCrm(e.Message), "");
+                }
+                else
+                {
+                    throw new FieldValidationException(fieldError,
+                        "SAP Error:" + MessageBuilder.Instance.ConvertMessageSapToCrm(e.Message), "");
+                }
+            }
+        }
+
+        private void CreatePayeeInCleansing(RegPayeePersonalContentOutputModel regPayeePersonalOutput)
+        {
+            BaseDataModel clsCreatePersonalIn = DataModelFactory.GetModel(typeof(CLSCreatePersonalClientInputModel));
+            clsCreatePersonalIn = TransformerFactory.TransformModel(RegPayeePersonalInput, clsCreatePersonalIn);
+            CLSCreatePersonalClientContentOutputModel clsCreatePayeeContent =
+                CallDevesServiceProxy<CLSCreatePersonalClientOutputModel, CLSCreatePersonalClientContentOutputModel>
+                    (CommonConstant.ewiEndpointKeyCLSCreatePersonalClient, clsCreatePersonalIn);
+            //regPayeePersonalInput = (RegPayeePersonalInputModel)TransformerFactory.TransformModel(clsCreatePayeeContent, regPayeePersonalInput);
+            if (clsCreatePayeeContent?.code == CONST_CODE_SUCCESS)
+            {
+                newCleansingId = clsCreatePayeeContent.data?.cleansingId;
+                RegPayeePersonalInput.generalHeader.cleansingId = clsCreatePayeeContent.data?.cleansingId ?? "";
+
+                outputPass.cleansingId = clsCreatePayeeContent.data?.cleansingId;
+                outputPass.polisyClientId = clsCreatePayeeContent.data?.clientId;
+                outputPass.personalName = clsCreatePayeeContent.data?.personalName;
+                outputPass.personalSurname = clsCreatePayeeContent.data?.personalSurname;
+            }
+            else
+            {
+                regPayeePersonalOutput.code = clsCreatePayeeContent?.code ?? AppConst.CODE_FAILED;
+                regPayeePersonalOutput.message = $"CLS Error:{clsCreatePayeeContent?.message}";
+                regPayeePersonalOutput.description = clsCreatePayeeContent?.description;
+                outputPass.cleansingId = clsCreatePayeeContent?.data?.cleansingId ?? "";
+                outputPass.polisyClientId = clsCreatePayeeContent?.data?.clientId ?? "";
+                outputPass.personalName = clsCreatePayeeContent?.data?.personalName ?? "";
+                outputPass.personalSurname = clsCreatePayeeContent?.data?.personalSurname ?? "";
+                outputPass.sapVendorCode = "";
+                outputPass.sapVendorGroupCode = "";
+
+
+                regPayeePersonalOutput.data.Add(outputPass);
+                throw new BuzErrorException(regPayeePersonalOutput, "CLS");
+            }
+        }
+
+        private void CreatePayeeInPolisy400()
+        {
+            try
+            {
+                BaseDataModel polCreatePersonalIn =
+                    DataModelFactory.GetModel(typeof(CLIENTCreatePersonalClientAndAdditionalInfoInputModel));
+                polCreatePersonalIn = TransformerFactory.TransformModel(RegPayeePersonalInput, polCreatePersonalIn);
+                CLIENTCreatePersonalClientAndAdditionalInfoContentModel polCreatePayeeContent =
+                    CallDevesServiceProxy<CLIENTCreatePersonalClientAndAdditionalInfoOutputModel
+                            , CLIENTCreatePersonalClientAndAdditionalInfoContentModel>
+                        (CommonConstant.ewiEndpointKeyCLIENTCreatePersonalClient, polCreatePersonalIn);
+
+                if (polCreatePayeeContent != null)
+                {
+                    RegPayeePersonalInput.generalHeader.polisyClientId = polCreatePayeeContent.clientID;
+
+                    newPolisyClientId = polCreatePayeeContent?.clientID ?? "";
+                    outputPass.polisyClientId = polCreatePayeeContent.clientID;
+                }
+                else
+                {
+                    //เมื่อเกิด error ใด ๆ ใน service อื่นให้ลบ
+                    if (!string.IsNullOrEmpty(newCleansingId))
+                    {
+                        AddDebugInfo("try rollback" + newCleansingId);
+                        var deleteResult = CleansingClientService.Instance.RemoveByCleansingId(newCleansingId, "P");
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error On Create 400 =" + e.Message);
+                AddDebugInfo("Error On Create 400" + e.Message, e.StackTrace);
+                //เมื่อเกิด error ใด ๆ ใน service อื่นให้ลบ
+                if (!string.IsNullOrEmpty(newCleansingId))
+                {
+                    AddDebugInfo("try rollback" + newCleansingId);
+                    var deleteResult = CleansingClientService.Instance.RemoveByCleansingId(newCleansingId, "P");
                 }
 
-                if (string.IsNullOrEmpty(outputPass.cleansingId))
-                {
-                    outputPass.cleansingId = RegPayeePersonalInput?.generalHeader?.cleansingId;
-                }
-
-
-            // RegPayeePersonalInput?.sapVendorInfo?.sapVendorGroupCode;
-
-            regPayeePersonalOutput.data.Add(outputPass);
-            AddDebugInfo(" output ", outputPass);
-           
-            return regPayeePersonalOutput;
-
+                throw;
+            }
         }
     }
 }
