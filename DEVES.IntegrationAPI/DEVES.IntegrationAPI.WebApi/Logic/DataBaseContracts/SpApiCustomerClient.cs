@@ -38,10 +38,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.DataBaseContracts
                     {
                         searchResult.Add(Tranform(item)?.CrmClientId);
                     }
-                    
-                  
+
+
                 }
-                
+
+            }
+            else
+            {
+                throw new Exception("SearchCrmContactClientId Error:" + result.Message);
             }
             return searchResult;
         }
@@ -50,7 +54,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.DataBaseContracts
         {
             clientId = clientId.Trim().Replace(" ", "");
             var result = Excecute(new Dictionary<string, string> { { "clientType", clientType }, { "clientId", clientId } });
-            Console.WriteLine(result.ToJson());
+            
             var searchResult = "";
             if (result.Success)
             {
@@ -61,6 +65,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.DataBaseContracts
 
                 }
 
+            }
+            else
+            {
+                throw new Exception("SearchCrmContactClientId Error:" + result.Message);
             }
             return searchResult;
         }

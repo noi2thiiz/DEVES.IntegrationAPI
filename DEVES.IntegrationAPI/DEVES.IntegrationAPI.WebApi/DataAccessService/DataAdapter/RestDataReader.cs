@@ -34,8 +34,9 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.DataAdapter
                             .AppSettings["API_ENDPOINT_INTERNAL_SERVICE"].ToString();
                     }
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
+                    Console.WriteLine(e.Message+":"+e.StackTrace);
                     //do not thing
                 }
                 
@@ -61,7 +62,7 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.DataAdapter
                 
 
                 Console.WriteLine("Load  Data Store : " + endpoint);
-               // Console.WriteLine(req.ToJson());
+                Console.WriteLine(req.ToJson());
                 var client = new RESTClient(endpoint);
                 var result = client.Execute(req);
               
@@ -80,6 +81,7 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.DataAdapter
                 dbResult.Count = 0;
                // dbResult.Data = ;
                 dbResult.Success = false;
+                dbResult.Message = e.Message;
                 Console.WriteLine(e.Message+"|"+e.StackTrace);
 
                 return dbResult;

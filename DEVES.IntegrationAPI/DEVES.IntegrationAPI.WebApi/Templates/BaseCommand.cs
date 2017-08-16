@@ -710,7 +710,12 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
 
             // Console.WriteLine("SearchCrmContactClientId");
             // For performance, until we found the way to cache the ServiceProxy, we prefer SQL rather than Crm
-            return SpApiCustomerClient.Instance.SearchCrmContactClientId("P", cleansingId);
+           
+            
+                return SpApiCustomerClient.Instance.SearchCrmContactClientId("P", cleansingId);
+            
+            
+           
             /*
             using (OrganizationServiceProxy sp = GetCrmServiceProxy())
             {

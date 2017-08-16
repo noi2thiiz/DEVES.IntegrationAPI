@@ -43,8 +43,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.DataBaseContracts
 
         public DbResult Excecute(Dictionary<string, string> reqParams)
         {
-            try
-            {
+           
                
                 var req = new DbRequest()
                 {
@@ -61,12 +60,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.DataBaseContracts
                 DbResult result = DataReader.Execute(req);
 
                 return result;
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
+           
         }
 
         public TEntityClass Tranform(dynamic item)

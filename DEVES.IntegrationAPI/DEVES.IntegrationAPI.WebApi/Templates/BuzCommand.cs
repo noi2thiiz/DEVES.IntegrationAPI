@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using DEVES.IntegrationAPI.Model;
+using DEVES.IntegrationAPI.WebApi.Logic.DataBaseContracts;
 using DEVES.IntegrationAPI.WebApi.TechnicalService;
 using DEVES.IntegrationAPI.WebApi.Templates.Exceptions;
 
@@ -132,6 +133,63 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
 
            
         }
+
+        public List<string> SearchCrmContactClientId(string cleansingId)
+        {
+
+            // Console.WriteLine("SearchCrmContactClientId");
+            // For performance, until we found the way to cache the ServiceProxy, we prefer SQL rather than Crm
+            List<string> result = new List<string>();
+            try
+            {
+                result= SpApiCustomerClient.Instance.SearchCrmContactClientId("P", cleansingId);
+            }
+            catch (Exception e)
+            {
+                AddDebugInfo(e.Message);
+            }
+            return result;
+
+        }
+        internal List<string> SearchCrmAccountClientId(string cleansingId)
+        {
+
+
+            // For performance, until we found the way to cache the ServiceProxy, we prefer SQL rather than Crm
+            List<string> result = new List<string>();
+            try
+            {
+                result = SpApiCustomerClient.Instance.SearchCrmContactClientId("C", cleansingId);
+            }
+            catch (Exception e)
+            {
+                AddDebugInfo(e.Message);
+            }
+            return result;
+
+
+        }
+        internal List<string> SearchCrmClientId(string cleansingId, string clienType)
+        {
+
+
+            // For performance, until we found the way to cache the ServiceProxy, we prefer SQL rather than Crm
+            List<string> result = new List<string>();
+            try
+            {
+                
+                result = SpApiCustomerClient.Instance.SearchCrmContactClientId(clienType, cleansingId);
+            }
+            catch (Exception e)
+            {
+                AddDebugInfo(e.Message);
+            }
+            return result;
+
+
+        }
+        
+
         public abstract Model.BaseDataModel ExecuteInput(object input);
     }
 }

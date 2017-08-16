@@ -111,11 +111,40 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             }
             //ซ่อม Role Code เนื่องจาก Source  ไม่มี field นี้
 
-            foreach (CRMInquiryClientOutputDataModel temp in crmInqContent.data)
+            foreach (CRMInquiryClientOutputDataModel temp in AllSearchResult)
             {
          
                 temp.generalHeader.roleCode = "G";
+
+                #region Search crmClientId by CleansingId
+
+                if (!string.IsNullOrEmpty(temp.generalHeader.cleansingId))
+                {
+                    try
+                    {
+                        List<string> crmData = SearchCrmClientId(temp.generalHeader.cleansingId, InputModel.conditionHeader.clientType);
+                        if (crmData != null && crmData.Count == 1)
+                        {
+                            temp.generalHeader.crmClientId = crmData.First();
+                        }
+                        else
+                        {
+                            AddDebugInfo("Error on search crmClientId: cleansingId ("+ temp.generalHeader.cleansingId + ")not found");
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        AddDebugInfo("Error on search crmClientId", "Error: " + e.Message + "--" + e.StackTrace);
+                    }
+
+                }
+                else
+                {
+                    AddDebugInfo("Error on search crmClientId: cleansingId is null");
+                }
+                #endregion Search crmClientId by CleansingId
             }
+
 
 
 
