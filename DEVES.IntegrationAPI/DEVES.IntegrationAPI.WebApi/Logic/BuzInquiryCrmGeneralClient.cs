@@ -115,7 +115,27 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             {
          
                 temp.generalHeader.roleCode = "G";
+
+                #region Search crmClientId by CleansingId
+                if (!string.IsNullOrEmpty(temp.generalHeader.cleansingId))
+                {
+                    try
+                    {
+                        List<string> crmData = SearchCrmContactClientId(temp.generalHeader.cleansingId);
+                        if (crmData != null && crmData.Count == 1)
+                        {
+                            temp.generalHeader.crmClientId = crmData.First();
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        AddDebugInfo("Error on search crmClientId", "Error: " + e.Message + "--" + e.StackTrace);
+                    }
+
+                }
+                #endregion Search crmClientId by CleansingId
             }
+
 
 
 

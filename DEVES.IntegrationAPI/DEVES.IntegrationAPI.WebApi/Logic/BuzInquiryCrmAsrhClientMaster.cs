@@ -213,7 +213,28 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     temp.generalHeader.roleCode = "H";
                 }
                 // กรณีอื่นๆ ระบุไม่ได้ บางตัวมีมากกว่า 1 role code
-              
+
+
+
+                #region Search crmClientId by CleansingId
+                if (!string.IsNullOrEmpty(temp.generalHeader.cleansingId))
+                {
+                    try
+                    {
+                        List<string> crmData = SearchCrmContactClientId(temp.generalHeader.cleansingId);
+                        if (crmData != null && crmData.Count == 1)
+                        {
+                            temp.generalHeader.crmClientId = crmData.First();
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        AddDebugInfo("Error on search crmClientId", "Error: " + e.Message + "--" + e.StackTrace);
+                    }
+
+                }
+                #endregion Search crmClientId by CleansingId
+
             }
 
             crmInqContent.code = AppConst.CODE_SUCCESS;
