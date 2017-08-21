@@ -20,13 +20,21 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             var contentModel = JsonConvert.DeserializeObject<QuerySQLInputModel>(contentText);
 
             string dbName = "";
-            if(contentModel.databaseName.Equals("CRMQA_MSCRM")) 
+            if(contentModel.databaseName.Equals("CRMQA_MSCRM")) // STORED_QA
             {
                 dbName = "CRMDB";
             }
-            else if(contentModel.databaseName.Equals("CRM_CUSTOMAPP"))
+            else if(contentModel.databaseName.Equals("CRM_CUSTOM_APP")) // LOG_QA
             {
-                dbName = "CRM_CUSTOMAPP_DB_NORTH";
+                dbName = "CRM_CUSTOMAPP_DB";
+            }
+            else if (contentModel.databaseName.Equals("CRM_MSCRM")) // STORED_PRODUCTION
+            {
+                dbName = "CRMDB_PRO";
+            }
+            else if (contentModel.databaseName.Equals("CRM_CUSTOM_APP_PRO")) // LOG_QA
+            {
+                dbName = "CRM_CUSTOMAPP_DB_PRO";
             }
             else
             {

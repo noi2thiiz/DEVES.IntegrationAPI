@@ -817,6 +817,8 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
           //  var connection = new CrmServiceClient(ConfigurationManager.ConnectionStrings["CRM_DEVES"].ConnectionString);
             OrganizationServiceProxy _serviceProxy = ConnectionThreadSafe.GetOrganizationProxy();
             svcContext = new ServiceContext(_serviceProxy);
+            _serviceProxy.EnableProxyTypes();
+
             return _serviceProxy;
         }
 
