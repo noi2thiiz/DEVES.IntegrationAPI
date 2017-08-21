@@ -27,7 +27,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         public object Post([FromBody]object value)
         {
 
-            return ProcessRequest<buzAccidentPrilimSurveyorReport, ClaimRegistrationInputModel>(value, "LOCUS_Integration_Input_Schema.json");
+            return ProcessRequest<BuzClaimRegistrationCommand, ClaimRegistrationInputModel>(value, "LOCUS_Integration_Input_Schema.json");
 
         }
 

@@ -21,7 +21,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         public override BaseDataModel ExecuteInput(object input)
         {
             //+ Deserialize Input
-            ClaimRegistrationInputModel contentModel = DeserializeJson<ClaimRegistrationInputModel>(input.ToString());
+            ClaimRegistrationInputModel contentModel = (ClaimRegistrationInputModel)input;
 
             //+ Prepare input data model
             LocusClaimRegistrationInputModel data = new LocusClaimRegistrationInputModel();
