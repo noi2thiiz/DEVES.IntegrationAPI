@@ -1,0 +1,577 @@
+﻿<!--Created by patiw on 29/4/2560.--><!--Created by patiw on 29/4/2560.--><!-- - var cfg = {"id":"","label":"ประเภทความสัมพันธ์ของผุ้นำชุมชนกฟผ.","vm":"lvm","placeholder":"เลือกทั้งหมด" ,"defaultText":"ทั้งหมด","service":"LeaderLutRelNetworkTypeService","param":"PI_REL_NET_TYPE"}*/--><!--///////////////////////////////////////////////////////////////////-->
+<html>
+<head><title>CRM-Customer Portal</title>
+    <meta charset="UTF-8"/>
+
+    <!-- FOR SERVER
+
+    <link rel="stylesheet" href="/vendor-resource/font-awesome/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="/vendor-resource/bootstrap/css/bootstrap.min.css" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="/vendor-resource/bootstrap/css/bootstrap-theme.min.css" crossorigin="anonymous"/>
+    <link href="/WebResources/pfc_angular_css" rel="stylesheet" crossorigin="anonymous"/>
+    <script src="/WebResources/pfc_jquery" type="text/javascript" crossorigin="anonymous"></script>
+    <script src="/WebResources/pfc_angular_js" type="text/javascript"></script>
+    <script src="/WebResources/pfc_angular_modules_js" type="text/javascript"></script>
+    <script src="/WebResources/pfc_bootstrap_js" type="text/javascript"></script>
+    <script src="/WebResources/pfc_variables_constructor" type="text/javascript"></script>
+    -->
+
+    <!-- FOR DEV -->
+    <link rel="stylesheet" href="../vendor-resource/font-awesome/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="../vendor-resource/bootstrap/css/bootstrap.min.css" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="../vendor-resource/bootstrap/css/bootstrap-theme.min.css" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="../vendor-resource/WebResources/pfc_angular.css" crossorigin="anonymous"/>
+    <script src="../vendor-resource/WebResources/pfc_jquery.js" type="text/javascript" crossorigin="anonymous"></script>
+    <script src="../vendor-resource/WebResources/pfc_angular.js" type="text/javascript"></script>
+    <script src="../vendor-resource/WebResources/pfc_angular_modules.js" type="text/javascript"></script>
+    <script src="../vendor-resource/WebResources/pfc_bootstrap.js" type="text/javascript"></script>
+    <script src="../vendor-resource/WebResources/pfc_variables_constructor.js" type="text/javascript"></script>
+
+
+    <!--Created by patiw on 29/4/2560.-->
+    <style>
+        body {
+            padding-top: 60px;
+            font-size: 12px !important;
+        }
+
+        .image-icon {
+            width: 30px;
+            height: 30px;
+            background-color: transparent;
+            background-repeat: no-repeat;
+            background-position: left top;
+            background-size: 30px 30px;
+        }
+
+        .navbar-brand {
+            padding-top: 5px;
+        }
+
+        input.form-control {
+            width: 15px;
+            webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0) !important;
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0) !important;
+        }
+
+        td {
+            vertical-align: middle !important;
+            font-size: 12px !important;
+        }
+
+        .action-bar {
+            margin-left: 0px;
+            padding-top: 2px;
+            margin-right: 2px;
+        }
+
+        #page-nav-header {
+            background-repeat: repeat-x;
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAB+CAIAAACWFscAAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAJOgAACToAYJjBRwAAACiSURBVEhLbcexCQAhFECxP4ojOaw43xUHrwhCmsw992lm7TcfHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx//W/sDH7DGkBRJg0cAAAAASUVORK5CYII=');
+        }
+
+        .click-able {
+            cursor: pointer;
+        }
+
+        .click-able:hover {
+            background-color: #DFDFDF;
+        }
+
+        input.form-control {
+            width: auto;
+        }
+
+        .container {
+            width: 95% !important;
+        }
+
+        .input-sm {
+            height: 25px !important;
+            width: 95% !important;
+        }
+
+        .label {
+            font-weight: 200;
+        }
+
+        .page-info-value {
+            color: blue;
+            border-bottom: 1px solid rgba(133, 144, 136, 0.42);
+            min-height: 25px;
+        }
+
+        legend {
+            font-size: 13px;
+            font-weight: 200;
+
+        }
+
+        .form-horizontal .col-sm-9 {
+            padding-left: 0 !important;
+        }
+
+        .form-horizontal .col-sm-3 {
+            width: 23.5% !important;
+        }
+
+        .form-horizontal .col-sm-2 {
+            width: 14% !important;
+        }
+
+        input, select, option {
+            color: blue !important;
+        }
+
+        pre.json {
+            outline: 1px solid #ccc;
+            padding: 5px;
+            margin: 5px;
+        }
+
+        .string {
+            color: green;
+        }
+
+        .number {
+            color: darkorange;
+        }
+
+        .boolean {
+            color: blue;
+        }
+
+        .null {
+            color: magenta;
+        }
+
+        .key {
+            color: red;
+        }
+
+        .hide {
+            display: none;
+        }
+
+        .navbar-header {
+            max-width: 200px;
+        }
+
+        a {
+            cursor: pointer;
+        }
+
+        .page-header {
+            padding-bottom: 0px;
+            margin: 10px 0 10px;
+            border-bottom: 0px solid #eee;
+        }
+
+        .close {
+            font-size: 12px;
+        }</style>
+</head>
+<body ng-app="crmApp" style="word-wrap: break-word">
+
+<nav class="navbar navbar-default navbar-fixed-top" id="page-nav-header">
+    <div class="container">
+        <div class="navbar-header"><a class="navbar-brand" href="#"><img
+                src="/vendor-resource/images/theme_navbarlogo.png"/></a></div>
+        <div class="pull-right" style="font-size: larger; margin-top: 15px; color: white">Customer Portal</div>
+    </div>
+</nav>
+
+<div class="container-fluid" id="main-container" ng-controller="mainController as vm" dw-loading="main"
+     dw-loading-options="{text:'Processing...', spinner: true}" style="display: none">
+    <!-- SEARCH FORM -->
+    <div class="row navbar navbar-default action-bar"><!-- form ระบุเงื่อนไขการสืบค้น-->
+        <form class="form-horizontal" role="form" data-ng-submit="submit(model)">
+            <fieldset>
+                <legend>Inquiry Client Master</legend>
+                <div class="col-md-offset-4 col-sm-4">
+                    <div class="row"><label class="col-sm-5" for="clientType">Client Type</label>
+                        <div class="col-sm-7"><select class="form-control input-sm" id="clientType"
+                                                      data-ng-options="option.name for option in props.clientType.options track by option.id"
+                                                      ng-model="props.clientType.selected"
+                                                      placeholder="roleCode"></select></div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="row"><label class="col-sm-5" for="roleCode">Role Code</label>
+                        <div class="col-sm-7"><select class="form-control input-sm" id="roleCode"
+                                                      data-ng-options="option.name for option in props.roleCode.options track by option.id"
+                                                      ng-model="props.roleCode.selected"
+                                                      data-ng-disabled="props.clientType.selected.id =='P'"
+                                                      placeholder="roleCode"></select></div>
+                    </div>
+                </div>
+                <div class="col-sm-4" data-type="mixin-input" data-col-size="1">
+                    <div class="row"><label class="col-sm-5" for="cleansingId">Cleansing Id</label>
+                        <div class="col-sm-7"><input class="form-control input-sm pull-left" id="cleansingId"
+                                                     type="text" data-ng-model="model.conditionDetail.cleansingId"
+                                                     placeholder="cleansingId"/></div>
+                    </div>
+                </div>
+                <div class="col-sm-4" data-type="mixin-input" data-col-size="1">
+                    <div class="row"><label class="col-sm-5" for="polisyClientId">Polisy Id</label>
+                        <div class="col-sm-7"><input class="form-control input-sm pull-left" id="polisyClientId"
+                                                     type="text" data-ng-model="model.conditionDetail.polisyClientId"
+                                                     placeholder="polisyClientId"/></div>
+                    </div>
+                </div>
+                <div class="col-sm-4" data-type="mixin-input" data-col-size="1">
+                    <div class="row"><label class="col-sm-5" for="crmClientId">Crm Id</label>
+                        <div class="col-sm-7"><input class="form-control input-sm pull-left" id="crmClientId"
+                                                     type="text" data-ng-model="model.conditionDetail.crmClientId"
+                                                     placeholder="crmClientId"/></div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="row"><label class="col-sm-5" for="clientName1"
+                                            data-ng-show="props.clientType.selected.id =='P'">&#xE0A;&#xE37;&#xE48;&#xE2D;</label><label
+                            class="col-sm-5" for="clientName1" data-ng-show="props.clientType.selected.id !='P'">&#xE0A;&#xE37;&#xE48;&#xE2D;&#xE1A;&#xE23;&#xE34;&#xE29;&#xE31;&#xE17;
+                        (&#xE1A;&#xE23;&#xE23;&#xE17;&#xE31;&#xE14;&#xE17;&#xE35;&#xE48;2)</label>
+                        <div class="col-sm-7"><input class="form-control input-sm" id="clientName1" type="text"
+                                                     data-ng-model="model.conditionDetail.clientName1"
+                                                     placeholder="clientName1"/></div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="row"><label class="col-sm-5" for="clientName2"
+                                            data-ng-show="props.clientType.selected.id =='P'">&#xE19;&#xE32;&#xE21;&#xE2A;&#xE01;&#xE38;&#xE25;</label><label
+                            class="col-sm-5" for="clientName2" data-ng-show="props.clientType.selected.id !='P'">&#xE0A;&#xE37;&#xE48;&#xE2D;&#xE1A;&#xE23;&#xE34;&#xE29;&#xE31;&#xE17;
+                        (&#xE1A;&#xE23;&#xE23;&#xE17;&#xE31;&#xE14;&#xE17;&#xE35;&#xE48;1)</label>
+                        <div class="col-sm-7"><input class="form-control input-sm" id="clientName2" type="text"
+                                                     data-ng-model="model.conditionDetail.clientName2"
+                                                     placeholder="clientName2"/></div>
+                    </div>
+                </div>
+                <div class="col-sm-4" data-type="mixin-input" data-col-size="1">
+                    <div class="row"><label class="col-sm-5" for="clientFullname">ชื่อเต็ม (Full name)</label>
+                        <div class="col-sm-7"><input class="form-control input-sm pull-left" id="clientFullname"
+                                                     type="text" data-ng-model="model.conditionDetail.clientFullname"
+                                                     placeholder="clientFullname"/></div>
+                    </div>
+                </div>
+                <div class="col-sm-4" data-type="mixin-input" data-col-size="1">
+                    <div class="row"><label class="col-sm-5" for="idCard">{{idCardLabel}}</label>
+                        <div class="col-sm-7"><input class="form-control input-sm pull-left" id="idCard" type="text"
+                                                     data-ng-model="model.conditionDetail.idCard" placeholder="idCard"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4" data-type="mixin-input" data-col-size="1">
+                    <div class="row"><label class="col-sm-5" for="corporateBranch">รหัสสาขา</label>
+                        <div class="col-sm-7"><input class="form-control input-sm pull-left" id="corporateBranch"
+                                                     type="text" data-ng-model="model.conditionDetail.corporateBranch"
+                                                     placeholder="corporateBranch"
+                                                     data-ng-disabled="props.clientType.selected.id !='C'"/></div>
+                    </div>
+                </div>
+                <div class="col-sm-4" data-type="mixin-input" data-col-size="1">
+                    <div class="row"><label class="col-sm-5" for="emcsCode">Emcs Code</label>
+                        <div class="col-sm-7"><input class="form-control input-sm pull-left" id="emcsCode" type="text"
+                                                     data-ng-model="model.conditionDetail.emcsCode"
+                                                     placeholder="emcsCode"
+                                                     data-ng-disabled="props.clientType.selected.id !='C'"/></div>
+                    </div>
+                </div>
+                <div class="col-sm-12" style="margin-top: 5px; border-top: solid 1px; padding-top: 5px">
+                    <button class="pull-right btn-primary" type="submit"><i class="glyphicon glyphicon-ok"></i> Search
+                    </button>
+                    <button class="pull-right" type="button" data-ng-click="reset()"><i
+                            class="glyphicon glyphicon-refresh"></i> Reset
+                    </button>
+
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <!--END  SEARCH FORM -->
+    <div class="row" style="padding: 10px">
+        <!-- DATA TABLE -->
+        <table class="table table-responsive table-sm table-bordered table-hover">
+            <caption ng-show="clients.length&gt;0">Page:{{currentPage}}/{{pages.length}} : {{clients.length}} record
+            </caption>
+            <thead>
+            <tr>
+                <th>Customer Name</th>
+                <th>Customer Client ID</th>
+                <th>cleansing ID</th>
+                <th>Polisy Client ID</th>
+                <th>Customer VIP</th>
+                <th>Contact Type</th>
+                <th>View</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr data-ng-repeat="item in clients">
+                <td>{{item.profileInfo.fullName}}</td>
+                <td>{{item.generalHeader.crmClientId}}</td>
+                <td>{{item.generalHeader.cleansingId}}</td>
+                <td>{{item.generalHeader.polisyClientId}}</td>
+                <td>{{showVipStatus(item.profileInfo.vipStatus)}}</td>
+                <td>{{showClientType(item.generalHeader.clientType)}}</td>
+                <td>
+                    <button class="btn btn-primary btn-xs bin-delete-item" data-ng-click="showInfo(item)"><i
+                            class="glyphicon glyphicon-new-window"></i></button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <!-- END DATA TABLE -->
+
+        <!-- MODAL  -->
+        <div class="modal fade bs-example-modal-lg" id="clientInfoModal" tabindex="-1" role="dialog"
+             style="display: none" aria-labelledby="myModalLabel">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="clientInfoModalLabel">Client Info</h4></div>
+                    <div class="modal-body">
+                        <fieldset>
+                            <legend>General Header</legend>
+                            <div class="col-sm-4" data-ng-repeat="(key, value) in selectedItem.generalHeader">
+                                <div class="row"><label class="col-sm-6">{{showKey(key)}}</label>
+                                    <div class="col-sm-6 page-info-value">{{value}}</div>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-default" type="button" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END MODAL  -->
+    </div>
+</div>
+<script type="text/javascript">// APP START
+// -----------------------------------
+(function () {
+
+    String.prototype.replaceAll = function (search, replacement) {
+        var target = this;
+        return target.replace(new RegExp(search, 'g'), replacement);
+    };
+
+    'use strict';
+    angular
+        .module('app.core')
+        .service('crypto', crypto);
+
+    crypto.$inject = [];
+
+    // memory service
+    function crypto() {
+        return {
+            getHash: function (str) {
+                var hash = 0, i, chr, len;
+                if (str.length === 0) return hash;
+                for (i = 0, len = str.length; i < len; i++) {
+                    chr = str.charCodeAt(i);
+                    hash = ((hash << 5) - hash) + chr;
+                    hash |= 0; // Convert to 32bit integer
+                }
+                return hash;
+            }
+        }
+    }
+
+})();
+
+
+initvariable();
+var app = angular.module('crmApp', ["app.core", "darthwade.dwLoading", "ngResource"]);
+app.run(['$window', '$location', '$loading', '$http', function ($window, $location, $loading, $http) {
+    //ป้องกันการเปิด link โดยตร
+    if ($location.host() != "localhost") {
+        try {
+            window.opener.parent.Xrm.Page.context.getClientUrl();
+        } catch (e) {
+            $("body").html("<div style='text-align: center'><h1 >คุณเข้าสู่ระบบอย่างไม่ถูกต้อง</h1><a class='btn btn-default' href='/'>เข้าสู่ระบบ</a></div>");
+            return false;
+        }
+    }
+    // $loading.start('main');
+    //calibrate ui size
+    var resize = function () {
+        $("#left-panel").css("height", screen.height - 250);
+        $("#right-panel").css("height", screen.height - 220);
+    }
+    $(window).resize(resize);
+    resize();
+    $("#main-container").show();
+}]);
+app.controller('mainController', ['$scope', 'dialog', '$loading', '$http', '$q', function ($scope, dialog, $loading, $http, $q) {
+    var vm = this;
+    vm.deferred = $q.defer();
+    vm.deferred.resolve();
+    $scope.clients = [];
+
+
+    $scope.selectedItem = {};
+    // init ui
+    $scope.props = {
+        clientType: {
+            "type": "select",
+            "name": "clientType",
+            "selected": {id: "P", name: "Personal"},
+            "options": [
+                {id: "P", name: "Personal"},
+                {id: "C", name: "Corporate"}
+            ]
+        },
+        roleCode: {
+            "type": "select",
+            "name": "roleCode",
+            "selected": {id: "G", name: "General Client", P: true, C: true},
+            "options": [
+                {id: "G", name: "General Client", P: true, C: true},
+                {id: "A", name: "Assessor", P: false, C: true},
+                {id: "S", name: "Solicitor", P: false, C: true},
+                {id: "R", name: "Repairer", P: false, C: true},
+                {id: "H", name: "Hospital", P: false, C: true}
+            ]
+        }
+    };
+    $scope.model = {
+        conditionHeader: {
+            clientType: "C",
+            roleCode: "G"
+        },
+        conditionDetail: {
+            cleansingId: "",
+            polisyClientId: "",
+            crmClientId: "",
+            clientName1: "",
+            clientName2: "",
+            clientFullname: "",
+            idCard: "",
+            corporateBranch: "",
+            emcsCode: ""
+        }
+    };
+
+    var master = angular.copy($scope.model);
+
+    $scope.reset = function () {
+        $scope.model = angular.copy(master);
+
+        $scope.clients = [];
+        $scope.pages = [];
+        $scope.curentPage = 1;
+        $scope.selectedItem = {};
+
+    }
+
+
+    // ajax
+    $scope.submit = function (model) {
+        // reset result
+        $scope.clients = [];
+
+        // validate input
+        var valid = false;
+        angular.forEach(model.conditionDetail, function (val, key) {
+            if ($.trim(val) != "") {
+                valid = true;
+            }
+        });
+
+
+        if (!valid) {
+            dialog.alert({
+                title: "Alert",
+                content: "กรุณาระบุเงื่อนไข"
+            });
+        } else {
+            // process request
+
+            console.log(JSON.stringify(model));
+            $loading.start('main');
+
+            //AJAX request
+            $http({
+                method: 'POST',
+                data: model,
+                url: window.top.CRMInquiryClientMasterAPI
+            }).then(function successCallback(response) {
+                $loading.finish('main');
+                // this callback will be called asynchronously
+                // when the response is available
+                if (response.data.code == '200') {
+                    var total = response.data.data.length;
+
+
+                    $scope.clients = response.data.data;
+
+
+                    setTimeout(function () {
+                        $scope.$apply();
+                    }, 100);
+
+                } else {
+                    $loading.finish("main");
+                    dialog.alert({
+                        title: "Error",
+                        content: response.data.message
+                    });
+                }
+                console.log(response)
+            }, function errorCallback(response) {
+                $loading.finish("main");
+                dialog.alert({
+                    title: "Server Error",
+                    content: response.statusText
+                });
+            });
+        }
+    };
+
+
+    // show info in modal window
+    $scope.selectedItem = {};
+    $scope.showInfo = function (item) {
+        $scope.selectedItem = item;
+        $('#clientInfoModal').modal('show');
+        setTimeout(function () {
+            $scope.$apply();
+        }, 50);
+    }
+
+
+    // ui helper
+    function capitalizeFirstLetter(string) {
+        string = string.replace(/([A-Z])/g, ' $1')
+        // uppercase the first character
+        string = string.replace(/^./, function (str) {
+            return str.toUpperCase();
+        })
+        string = string.replace("Text", "");
+        return string;
+    }
+
+    $scope.showKey = function (key) {
+        return "" + capitalizeFirstLetter(key);
+    }
+
+    $scope.showVipStatus = function (value) {
+        if (!value) {
+            return "N/A";
+        }
+        return value;
+    }
+    $scope.showClientType = function (value) {
+        if (!value) {
+            return "N/A";
+        }
+        return value;
+    }
+}]);</script>
+</body>
+</html>
