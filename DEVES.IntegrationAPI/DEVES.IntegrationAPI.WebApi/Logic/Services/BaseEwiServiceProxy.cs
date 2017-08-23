@@ -171,14 +171,21 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
                 var responseContent = JObject.Parse(ewiRes.Result);
                 if (responseContent["responseCode"] != null)
                 {
-                    if (responseContent["responseCode"].ToString() != "EWI-0000I" && responseContent["responseCode"].ToString() != "EWI-1000E")
+                    if (responseContent["responseCode"].ToString() != "EWI-0000I")
                     {
-                        throw new BuzErrorException(
+                        if(responseContent["responseCode"].ToString() == "EWI-1000E")
+                        {
+
+                        }
+                        else
+                        {
+                            throw new BuzErrorException(
                             responseContent["responseCode"].ToString(),
                             $"{systemName} Error:{responseContent["responseMessage"]}",
                             $"Error on execute '{serviceName}'",
                             systemName,
                             GlobalTransactionID);
+                        }
                     }
 
 

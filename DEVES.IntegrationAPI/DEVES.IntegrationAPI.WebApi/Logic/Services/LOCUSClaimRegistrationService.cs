@@ -6,6 +6,7 @@ using System.Web.Script.Serialization;
 using DEVES.IntegrationAPI.Model;
 using DEVES.IntegrationAPI.Model.ClaimRegistration;
 using DEVES.IntegrationAPI.Model.CLS;
+using DEVES.IntegrationAPI.WebApi.Templates.Exceptions;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 {
@@ -20,6 +21,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 
         public LocusClaimRegistrationContentOutputModel Execute(LocusClaimRegistrationInputModel input)
         {
+            throw new BuzErrorException(
+                        "500",
+                        $"{systemName} Error: Error on execute '{serviceName}',The request failed or the service did not respond",
+                        $"Error on execute '{serviceName}',The request failed or the service did not respond",
+                        systemName,
+                        GlobalTransactionID);
 
             var result = SendRequest(input, serviceEndpoint);
 
