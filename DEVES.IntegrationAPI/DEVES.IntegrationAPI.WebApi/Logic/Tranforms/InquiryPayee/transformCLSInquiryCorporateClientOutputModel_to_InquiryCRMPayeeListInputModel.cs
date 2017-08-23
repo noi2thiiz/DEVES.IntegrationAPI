@@ -35,7 +35,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             oup.sapVendorCode = "";
             oup.solicitorFlag = "";
             oup.taxNo = inp.cls_tax_no_new?? "";
-            oup.taxBranchCode = "";
+            oup.taxBranchCode = inp.corporate_staff_no;
             oup.cleansingId = inp.cleansing_id ?? "";
 
             return oup;

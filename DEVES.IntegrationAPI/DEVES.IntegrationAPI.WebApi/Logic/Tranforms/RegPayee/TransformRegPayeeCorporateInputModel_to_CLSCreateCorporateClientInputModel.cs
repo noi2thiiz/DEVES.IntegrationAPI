@@ -24,58 +24,58 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             if (src.generalHeader != null)
             {
-                trgt.roleCode = src.generalHeader.roleCode;
-                trgt.clientId = src.generalHeader.polisyClientId;
-                trgt.crmPersonId = src.generalHeader.crmClientId;
-                trgt.cleansingId = src.generalHeader.cleansingId;
+                trgt.roleCode = src.generalHeader.roleCode?.Trim()??"";
+                trgt.clientId = src.generalHeader.polisyClientId?.Trim() ?? "";
+                trgt.crmPersonId = src.generalHeader.crmClientId?.Trim() ?? "";
+                trgt.cleansingId = src.generalHeader.cleansingId?.Trim() ?? "";
             }
             if (src.profileHeader != null)
             {
-                trgt.corporateName1 = src.profileHeader.corporateName1;
-                trgt.corporateName2 = src.profileHeader.corporateName2;
-                trgt.contactPerson = src.profileHeader.contactPerson;
-                trgt.idRegCorp = src.profileHeader.idRegCorp;
-                trgt.idTax = src.profileHeader.idTax;
+                trgt.corporateName1 = src.profileHeader.corporateName1?.Trim() ?? "";
+                trgt.corporateName2 = src.profileHeader.corporateName2?.Trim() ?? "";
+                trgt.contactPerson = src.profileHeader.contactPerson?.Trim() ?? "";
+                trgt.idRegCorp = src.profileHeader.idRegCorp?.Trim() ?? "";
+                trgt.idTax = src.profileHeader.idTax?.Trim() ?? "";
                 //{
                 //    CultureInfo usaCulture = new CultureInfo("en-US");
                 //    var dateString = src.profileHeader.dateInCorporate.ToString("yyyyMMdd", usaCulture);
                 //    trgt.dateInCorporate = dateString;
                 //}
                 trgt.dateInCorporate = src.profileHeader.dateInCorporate;
-                trgt.corporateStaffNo = src.profileHeader.corporateBranch;
-                trgt.corporateBranch = src.profileHeader.corporateBranch;
-                trgt.econActivity = src.profileHeader.econActivity;
-                trgt.language = src.profileHeader.language;
-                trgt.vipStatus = src.profileHeader.vipStatus;
+                trgt.corporateStaffNo = src.profileHeader.corporateBranch?.Trim() ?? "";
+                trgt.corporateBranch = src.profileHeader.corporateBranch?.Trim() ?? "";
+                trgt.econActivity = src.profileHeader.econActivity?.Trim() ?? "";
+                trgt.language = src.profileHeader.language?.Trim() ?? "";
+                trgt.vipStatus = src.profileHeader.vipStatus?.Trim() ?? "";
 
             }
             if  (src.contactHeader != null)
             {
-                trgt.telephone1 = src.contactHeader.telephone1;
-                trgt.telephone1Ext = src.contactHeader.telephone1Ext;
-                trgt.telephone2 = src.contactHeader.telephone2;
-                trgt.telephone2Ext = src.contactHeader.telephone2Ext;
-                trgt.telNo = src.contactHeader.telephone3;
-                trgt.telNoExt = src.contactHeader.telephone3Ext;
-                trgt.mobilePhone = src.contactHeader.mobilePhone;
-                trgt.fax = src.contactHeader.fax;
-                trgt.emailAddress = src.contactHeader.emailAddress;
-                trgt.lineID = src.contactHeader.lineID;
-                trgt.facebook = src.contactHeader.facebook;
+                trgt.telephone1 = src.contactHeader.telephone1?.Trim() ?? "";
+                trgt.telephone1Ext = src.contactHeader.telephone1Ext?.Trim() ?? "";
+                trgt.telephone2 = src.contactHeader.telephone2?.Trim() ?? "";
+                trgt.telephone2Ext = src.contactHeader.telephone2Ext?.Trim() ?? "";
+                trgt.telNo = src.contactHeader.telephone3?.Trim() ?? "";
+                trgt.telNoExt = src.contactHeader.telephone3Ext?.Trim() ?? "";
+                trgt.mobilePhone = src.contactHeader.mobilePhone?.Trim() ?? "";
+                trgt.fax = src.contactHeader.fax?.Trim() ?? "";
+                trgt.emailAddress = src.contactHeader.emailAddress?.Trim() ?? "";
+                trgt.lineID = src.contactHeader.lineID?.Trim() ?? "";
+                trgt.facebook = src.contactHeader.facebook?.Trim() ?? "";
             }
             if (src.addressHeader != null)
             {
-                trgt.address1 = src.addressHeader.address1;
-                trgt.address2 = src.addressHeader.address2;
-                trgt.address3 = src.addressHeader.address3;
-                trgt.subDistrictCode = src.addressHeader.subDistrictCode;
-                trgt.districtCode = src.addressHeader.districtCode;
-                trgt.provinceCode = src.addressHeader.provinceCode;
-                trgt.postalCode = src.addressHeader.postalCode;
-                trgt.country = src.addressHeader.country;
-                trgt.addressType = src.addressHeader.addressType;
-                trgt.latitude = src.addressHeader.latitude;
-                trgt.longigude = src.addressHeader.longtitude;
+                trgt.address1 = src.addressHeader.address1?.Trim() ?? "";
+                trgt.address2 = src.addressHeader.address2?.Trim() ?? "";
+                trgt.address3 = src.addressHeader.address3?.Trim() ?? "";
+                trgt.subDistrictCode = src.addressHeader.subDistrictCode?.Trim() ?? "";
+                trgt.districtCode = src.addressHeader.districtCode?.Trim() ?? "";
+                trgt.provinceCode = src.addressHeader.provinceCode?.Trim() ?? "";
+                trgt.postalCode = src.addressHeader.postalCode?.Trim() ?? "";
+                trgt.country = src.addressHeader.country?.Trim() ?? "";
+                trgt.addressType = src.addressHeader.addressType?.Trim() ?? "";
+                trgt.latitude = src.addressHeader.latitude?.Trim() ?? "";
+                trgt.longigude = src.addressHeader.longtitude?.Trim() ?? "";
             }
             trgt.isPayee = "Y";
             trgt.OregNum = "";

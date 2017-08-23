@@ -26,7 +26,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             if (string.IsNullOrEmpty(trgt.fullName))
             {
-                trgt.fullName = src.conditionDetail.clientName1 + " " + src.conditionDetail.clientName2;
+                trgt.fullName = src.conditionDetail.clientName1?.Trim() ?? "" + " " + src.conditionDetail.clientName2?.Trim() ?? "";
             }
 
             return trgt;

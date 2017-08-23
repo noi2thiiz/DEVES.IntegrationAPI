@@ -49,6 +49,9 @@ namespace DEVES.IntegrationAPI.Model.CLS
         public DateTime? cls_start_date { set; get; }
         public String crm_ref_code1 { set; get; }
 
+        public String corporate_staff_no { set; get; }
+        
+
         public List<CLSAddressListsCollectionModel> addressListsCollection { set; get; }
     }
     public class CLSAddressListsCollectionModel : BaseDataModel

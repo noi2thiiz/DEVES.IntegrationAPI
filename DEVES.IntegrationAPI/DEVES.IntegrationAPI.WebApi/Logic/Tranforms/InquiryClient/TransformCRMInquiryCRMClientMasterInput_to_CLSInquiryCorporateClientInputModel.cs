@@ -16,18 +16,21 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             InquiryClientMasterInputModel src = (InquiryClientMasterInputModel)input;
             CLSInquiryCorporateClientInputModel trgt = (CLSInquiryCorporateClientInputModel)output;
 
-            trgt.roleCode = src?.conditionHeader?.roleCode;
-            trgt.clientId = src?.conditionDetail?.polisyClientId??"";
-            trgt.corporateFullName = src?.conditionDetail?.clientFullname??"";
-            trgt.taxNo = src?.conditionDetail?.idCard??"";
+            trgt.roleCode = src?.conditionHeader?.roleCode?.Trim() ?? "";
+            trgt.clientId = src?.conditionDetail?.polisyClientId?.Trim() ?? "";
+            trgt.corporateFullName = src?.conditionDetail?.clientFullname?.Trim() ?? "";
+            trgt.taxNo = src?.conditionDetail?.idCard?.Trim() ?? "";
+            //trgt.corporateBranch = "" + src.conditionDetail.corporateBranch;
+            //trgt.taxBranch = "" + src.conditionDetail.corporateBranch;
+            trgt.corporateStaffNo = "" + src.conditionDetail.corporateBranch?.Trim() ?? "";
             trgt.telephone = ""; 
             trgt.emailAddress = "";
             trgt.backDay = AppConst.COMM_BACK_DAY.ToString();
             if (string.IsNullOrEmpty(trgt.corporateFullName))
             {
-                trgt.corporateFullName = src?.conditionDetail?.clientName1 + " " + src?.conditionDetail?.clientName2;
+                trgt.corporateFullName = src?.conditionDetail?.clientName1?.Trim() ?? "" + " " + src?.conditionDetail?.clientName2?.Trim() ?? "";
             }
-            trgt.corporateFullName = trgt.corporateFullName.Trim();
+            trgt.corporateFullName = trgt.corporateFullName?.Trim()??"";
 
             return trgt;
         }

@@ -12,11 +12,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             InquiryCRMPayeeListInputModel src = (InquiryCRMPayeeListInputModel)input;
             CLSInquiryCorporateClientInputModel trgt = (CLSInquiryCorporateClientInputModel)output;
 
-            trgt.clientId = ""+src.polisyClientId;
-            trgt.roleCode = ""+src.roleCode;
+            trgt.clientId = src.polisyClientId?.Trim() ?? "";
+            trgt.roleCode = src.roleCode?.Trim() ?? "";
 
-            trgt.corporateFullName = ""+src.fullname;
-            trgt.taxNo = ""+src.taxNo;
+            trgt.corporateFullName = src.fullname?.Trim() ?? "";
+            trgt.taxNo = src.taxNo?.Trim() ?? "";
+            trgt.corporateStaffNo = src.taxBranchCode?.Trim() ?? "";
+            //  trgt.taxBranch = "" + src.taxBranchCode;
+
             trgt.backDay = AppConst.COMM_BACK_DAY.ToString();
              trgt.telephone = "";
             trgt.emailAddress= "";

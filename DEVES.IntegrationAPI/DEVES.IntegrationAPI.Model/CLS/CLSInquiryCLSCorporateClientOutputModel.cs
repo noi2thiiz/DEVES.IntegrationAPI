@@ -48,6 +48,7 @@ namespace DEVES.IntegrationAPI.Model.CLS
         public String cls_occpcode { set; get; } = "";
         public DateTime? cls_start_date { set; get; } 
         public String crm_ref_code1 { set; get; } = "";
+        public String corporate_staff_no { get; set; } = "";
 
         public List<CLSAddressListsCollectionModel> addressListsCollection { set; get; } = new List<CLSAddressListsCollectionModel>();
     }

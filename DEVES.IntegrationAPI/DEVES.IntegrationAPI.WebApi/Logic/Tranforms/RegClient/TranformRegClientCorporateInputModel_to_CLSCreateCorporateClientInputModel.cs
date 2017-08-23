@@ -52,11 +52,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             trgt.idRegCorp = src.profileHeader.idRegCorp ?? "";
             trgt.idTax = src.profileHeader.idTax ?? "";
             trgt.dateInCorporate = src.profileHeader.dateInCorporate ;
+
             trgt.corporateBranch = src.profileHeader.corporateBranch ?? "";
+            trgt.corporateStaffNo = src.profileHeader.corporateBranch ?? "";
+
             trgt.econActivity = src.profileHeader.econActivity ?? "";
             trgt.language = src.profileHeader.language ?? "";
             trgt.vipStatus = src.profileHeader.vipStatus ?? "";
-            trgt.corporateStaffNo = src.profileHeader.corporateBranch ?? "";
+           
 
             //contactHeader
             trgt.telephone1 = src.contactHeader.telephone1 ?? "";

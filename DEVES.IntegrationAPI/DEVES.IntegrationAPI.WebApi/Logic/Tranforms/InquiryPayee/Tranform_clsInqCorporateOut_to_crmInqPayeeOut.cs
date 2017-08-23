@@ -60,12 +60,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     {
                         if (clsAddress.sequence_id == lastSeq)
                         {
-                            street1Text = clsAddress.address_1;
-                            street2Text = clsAddress.address_2;
-                            districtText = clsAddress.district_text;
-                            provinceText = clsAddress.province_text;
-                            postalCode = clsAddress.postal_code;
-                            countryText = clsAddress.cls_ctrycode_text;
+                            street1Text = clsAddress.address_1?.Trim() ?? "";
+                            street2Text = clsAddress.address_2?.Trim() ?? "";
+                            districtText = clsAddress.district_text?.Trim() ?? "";
+                            provinceText = clsAddress.province_text?.Trim() ?? "";
+                            postalCode = clsAddress.postal_code?.Trim() ?? "";
+                            countryText = clsAddress.cls_ctrycode_text?.Trim() ?? "";
                             ctrymastercode = CountryMasterData.Instance.FindByPolisyCode(clsAddress?.ctrycode)?.CountryCode ?? "";
                             fullAddressText = clsAddress.full_original_address;
 
@@ -78,32 +78,36 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 {
 
                     sourceData = CommonConstant.CONST_SYSTEM_CLS,
-                    cleansingId = clsData.cleansing_id,
-                    polisyClientId = clsData.clntnum,
+                    cleansingId = clsData.cleansing_id?.Trim() ?? "",
+                    polisyClientId = clsData.clntnum?.Trim() ?? "",
                     sapVendorCode = "",
                     title = "",
-                    name1 = clsData.lgivname,
-                    name2 = clsData.lsurname,
+                    name1 = clsData.lgivname?.Trim() ?? "",
+                    name2 = clsData.lsurname?.Trim() ?? "",
                     // countryCode = clsData.c
-                    telephone1 = clsData?.cltphone01,
-                    telephone2 = clsData?.cltphone02,
-                    contactNumber = clsData?.cls_display_phone,
+                    telephone1 = clsData?.cltphone01?.Trim() ?? "",
+                    telephone2 = clsData?.cltphone02?.Trim() ?? "",
+                    contactNumber = clsData?.cls_display_phone?.Trim() ?? "",
 
 
-                    fullName = clsData.cls_full_name,
-                    taxNo = clsData.cls_tax_no_new,
+                    fullName = clsData.cls_full_name?.Trim() ?? "",
+                    taxNo = clsData.cls_tax_no_new?.Trim() ?? "",
+                    //taxBranchCode = clsData.crm_ref_code1,
+                    taxBranchCode = clsData.corporate_staff_no?.Trim() ?? "",
+
+
 
                     emcsMemHeadId = "",
                     emcsMemId = "",
-                    street1 = street1Text,
-                    street2 = street2Text,
-                    district = districtText,
-                    city = provinceText,
+                    street1 = street1Text?.Trim() ?? "",
+                    street2 = street2Text?.Trim() ?? "",
+                    district = districtText?.Trim() ?? "",
+                    city = provinceText?.Trim() ?? "",
 
-                    postalCode = postalCode,
-                    countryCode = ctrymastercode,
-                    countryCodeDesc = countryText,
-                    address = fullAddressText,
+                    postalCode = postalCode?.Trim() ?? "",
+                    countryCode = ctrymastercode?.Trim() ?? "",
+                    countryCodeDesc = countryText?.Trim() ?? "",
+                    address = fullAddressText?.Trim() ?? "",
 
 
                 };
