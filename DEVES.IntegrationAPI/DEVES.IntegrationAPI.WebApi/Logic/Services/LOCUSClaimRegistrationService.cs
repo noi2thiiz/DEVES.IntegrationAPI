@@ -21,13 +21,6 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 
         public LocusClaimRegistrationContentOutputModel Execute(LocusClaimRegistrationInputModel input)
         {
-            throw new BuzErrorException(
-                        "500",
-                        $"{systemName} Error: Error on execute '{serviceName}',The request failed or the service did not respond",
-                        $"Error on execute '{serviceName}',The request failed or the service did not respond",
-                        systemName,
-                        GlobalTransactionID);
-
             var result = SendRequest(input, serviceEndpoint);
 
 
