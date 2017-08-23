@@ -6,6 +6,7 @@ using System.Web.Script.Serialization;
 using DEVES.IntegrationAPI.Model;
 using DEVES.IntegrationAPI.Model.ClaimRegistration;
 using DEVES.IntegrationAPI.Model.CLS;
+using DEVES.IntegrationAPI.WebApi.Templates.Exceptions;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 {
@@ -20,7 +21,6 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 
         public LocusClaimRegistrationContentOutputModel Execute(LocusClaimRegistrationInputModel input)
         {
-
             var result = SendRequest(input, serviceEndpoint);
 
 
