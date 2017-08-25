@@ -9,6 +9,7 @@ using DEVES.IntegrationAPI.Core.Helper;
 using DEVES.IntegrationAPI.Model;
 using DEVES.IntegrationAPI.Model.InquiryCRMPayeeList;
 using DEVES.IntegrationAPI.WebApi.TechnicalService;
+using DEVES.IntegrationAPI.WebApi.TechnicalService.Envelonment;
 using Newtonsoft.Json;
 
 namespace DEVES.IntegrationAPI.WebApi.Templates
@@ -60,11 +61,14 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                 var descriptor = controllerSelector.SelectController(Request);
                
                 cmd.ControllerName = "" + descriptor.ControllerName;
+                cmd.ApplicationName = AppEnvironment.Instance.GetApplicationName();
+                cmd.SiteName = AppEnvironment.Instance.GetSiteName();
+                
 
             }
             catch (Exception e)
             {
-                //do
+                throw;
             }
 
             
@@ -116,10 +120,6 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                 try
                 {
                  
-
-
-
-
                     List<string> errorMessage = JsonHelper.getReturnError();
                     foreach (var text in errorMessage)
                     {

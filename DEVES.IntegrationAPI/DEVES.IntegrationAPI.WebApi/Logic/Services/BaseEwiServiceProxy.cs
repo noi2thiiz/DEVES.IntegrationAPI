@@ -17,6 +17,7 @@ using DEVES.IntegrationAPI.Model.CLS;
 using DEVES.IntegrationAPI.Model.EWI;
 using DEVES.IntegrationAPI.WebApi.Core.DataAdepter;
 using DEVES.IntegrationAPI.WebApi.TechnicalService;
+using DEVES.IntegrationAPI.WebApi.TechnicalService.Envelonment;
 using DEVES.IntegrationAPI.WebApi.TechnicalService.TransactionLogger;
 using DEVES.IntegrationAPI.WebApi.Templates;
 using DEVES.IntegrationAPI.WebApi.Templates.Exceptions;
@@ -41,7 +42,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
         // variables after this line will be contained in LOG
         protected HttpClient client = new HttpClient();
 
-        protected const string appName = "xrmAPI"; // Application
+        protected string appName = "xrmAPI"; // Application
+
+        protected string siteName = ""; // Application
+        protected string physicalPath = ""; // Application
+
         protected string serviceName = "";
         protected string systemName = "";
         protected string serviceEndpoint = "";
@@ -71,6 +76,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
         {
             SetGlobalTransactionID(globalTransactionID);
             SetControllerName(controllerName);
+            appName = AppEnvironment.Instance.GetApplicationName();
+            siteName = AppEnvironment.Instance.GetSiteName();
+            physicalPath = AppEnvironment.Instance.GetSiteName();
+            
         }
 
         public void SetGlobalTransactionID(string id)
@@ -275,6 +284,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
                     ServiceName = serviceName,
                     Activity = "consume",
                     User = user,
+                    SiteName = siteName,
+                    PhysicalPath = physicalPath,
                     Machine = machineName,
                     RequestIpAddress = ip,
                     RequestContentType = req.Headers.Accept.ToString(),/*reqHeader*/
@@ -345,6 +356,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
                     ServiceName = serviceName,
                     Activity = "consume:Send request",
                     User = user,
+                    SiteName = siteName,
+                    PhysicalPath = physicalPath,
                     Machine = machineName,
                     RequestIpAddress = ip,
                     RequestContentType = client.DefaultRequestHeaders?.Accept.ToString(),

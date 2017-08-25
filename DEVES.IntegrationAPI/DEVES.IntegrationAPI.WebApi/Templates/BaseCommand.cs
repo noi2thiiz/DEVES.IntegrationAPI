@@ -46,12 +46,16 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
         public string TransactionId { get; set; } = "";
         public string ControllerName { get; set; } = "";
         public string ActionName { get; set; } = "";
-        
+        public string ApplicationName { get; set; }
+        public string SiteName { get; set; }
+
 
         private OrganizationServiceProxy _serviceProxy;
         private IOrganizationService _service;
 
         private Guid CurrentUserId { get; set; }
+       
+
 
         private const string CONST_JSON_SCHEMA_FILE = "JSON_SCHEMA_{0}";
 

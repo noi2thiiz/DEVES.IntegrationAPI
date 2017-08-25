@@ -11,6 +11,7 @@ using System.Web;
 using System.Web.Http;
 using System.Web.Http.Dispatcher;
 using System.Web.Http.Routing;
+using DEVES.IntegrationAPI.WebApi.TechnicalService.Envelonment;
 using DEVES.IntegrationAPI.WebApi.TechnicalService.TransactionLogger;
 using DEVES.IntegrationAPI.WebApi.Templates;
 using Newtonsoft.Json;
@@ -148,10 +149,12 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
 
             return new ApiLogEntry
             {
-                Application = "xrmAPI",
+                Application = AppEnvironment.Instance.GetApplicationName(),
                 Activity = "provide",
                 User = context.User.Identity.Name,
                 Machine = Environment.MachineName,
+                PhysicalPath = AppEnvironment.Instance.GetPhysicalPath(),
+                SiteName = AppEnvironment.Instance.GetSiteName(),
                 RequestContentType = context.Request.ContentType,
                 RequestRouteTemplate = routeTemplate,
                 RequestRouteData = requestRouteData,

@@ -33,6 +33,10 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
         public string Controller { get; set; } = "";
         public string ServiceName { get; set; } = "";
 
+        public string PhysicalPath { get; set; } = "";
+        public string SiteName { get; set; } = "";
+        
+
         public bool IsPersisted { get; set; } = false;
         public string GlobalTransactionID { get; set; }
 
