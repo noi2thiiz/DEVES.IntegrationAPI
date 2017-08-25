@@ -45,6 +45,8 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
 
         public string TransactionId { get; set; } = "";
         public string ControllerName { get; set; } = "";
+        public string ActionName { get; set; } = "";
+        
 
         private OrganizationServiceProxy _serviceProxy;
         private IOrganizationService _service;
