@@ -87,7 +87,7 @@ namespace DEVES.IntegrationAPI.Model.InquiryClientMaster
         public string countryText { get; set; } = "";
         public string addressTypeText { get; set; } = "";
         public string latitude { get; set; } = "";
-        public string longtitude { get; set; } = "";
+        public string longitude { get; set; } = "";
     }
 
     public class AsrhHeaderModel

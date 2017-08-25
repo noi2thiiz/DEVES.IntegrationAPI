@@ -46,6 +46,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     trgt.generalHeader.cleansingId = src?.cleansing_id?.Trim() ?? "";
                     trgt.generalHeader.polisyClientId = src?.clntnum?.Trim() ?? "";
                     trgt.generalHeader.sourceData = CommonConstant.CONST_SYSTEM_CLS;
+                    trgt.generalHeader.clientType = src?.clientType;
 
                     trgt.profileInfo.name1 = src?.lgivname?.Trim() ?? "";
                     trgt.profileInfo.name2 = src?.lsurname?.Trim() ?? "";
@@ -55,7 +56,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     trgt.profileInfo.sex = "";
                     trgt.profileInfo.salutationText = "";
 
-                    
+                    trgt.profileInfo.vipStatus = src?.cls_vip??"";
+                    trgt.profileInfo.clientStatus = src?.cltstat?.Trim().ToUpper() ?? "";
+
+
+
 
 
 
@@ -110,7 +115,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         }
                       
                         trgt.addressInfo.latitude = addrInfo?.lattitude?.Trim() ?? "";
-                        trgt.addressInfo.longtitude = addrInfo?.longtitude?.Trim() ?? "";
+                        trgt.addressInfo.longitude = addrInfo?.longitude?.Trim() ?? "";
                     }
                     // trgt.AddDebugInfo("TransformCLSInquiryCorporateClientContentOut_to_CrmInquiryClientMasterContentOut", "");
                     // trgt.AddDebugInfo("Source Data", src);

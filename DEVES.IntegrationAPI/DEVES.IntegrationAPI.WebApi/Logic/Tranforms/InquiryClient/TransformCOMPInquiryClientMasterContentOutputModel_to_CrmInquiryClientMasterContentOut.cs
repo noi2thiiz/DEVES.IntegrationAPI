@@ -96,17 +96,17 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     trgt.addressInfo.countryText = src.clientList.countryText;
                     trgt.addressInfo.addressTypeText = src.clientList.busResText;
                     trgt.addressInfo.latitude = src.clientList.latitude;
-                    trgt.addressInfo.longtitude = src.clientList.longtitude;
+                    trgt.addressInfo.longitude = src.clientList.longtitude;
 
                     trgt.asrhHeader.assessorFlag = src.clientList.assessorFlag;
                     trgt.asrhHeader.solicitorFlag = src.clientList.solicitorFlag;
                     trgt.asrhHeader.repairerFlag = src.clientList.repairerFlag;
                     trgt.asrhHeader.hospitalFlag = src.clientList.hospitalFlag?.ToUpper() == "Y" ? "Y" : "N";
 
-                    if (trgt.generalHeader.clientType=="P")
+                    if (trgt.generalHeader.clientType!="P")
                     {
                         trgt.profileInfo.salutationText = "";
-                        trgt.profileInfo.sex = "U";
+                        trgt.profileInfo.sex = "";
                     }
 
                    

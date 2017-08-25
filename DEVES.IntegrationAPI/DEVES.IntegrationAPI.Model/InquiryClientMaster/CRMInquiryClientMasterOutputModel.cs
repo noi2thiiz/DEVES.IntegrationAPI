@@ -89,7 +89,7 @@ namespace DEVES.IntegrationAPI.Model.InquiryClientMaster
         public String countryText { set; get; } = "";
         public String addressTypeText { set; get; } = "";
         public String latitude { set; get; } = "";
-        public String longtitude { set; get; } = "";
+        public String longitude { set; get; } = "";
     }
     public class CRMInquiryClientAsrhHeaderModel : BaseDataModel
     {

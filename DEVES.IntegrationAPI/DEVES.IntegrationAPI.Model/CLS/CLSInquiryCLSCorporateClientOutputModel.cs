@@ -24,7 +24,11 @@ namespace DEVES.IntegrationAPI.Model.CLS
     }
     public class CLSInquiryCorporateClientOutputModel : BaseDataModel
     {
+        //Extra Field
         public String sourceData { set; get; } = "CLS";
+        public String clientType { set; get; } = "C";
+
+        //cls field
         public String cleansing_id { set; get; } = "";
         public String clntnum { set; get; } = "";
         public String secuityno { set; get; } = "";
@@ -49,6 +53,14 @@ namespace DEVES.IntegrationAPI.Model.CLS
         public DateTime? cls_start_date { set; get; } 
         public String crm_ref_code1 { set; get; } = "";
         public String corporate_staff_no { get; set; } = "";
+
+        public String cltstat { get; set; } = "";
+        public String cls_stat_desc { get; set; } = "";
+
+        public String lattitude { get; set; } = "";
+        public String longitude { get; set; } = "";
+        
+            
 
         public List<CLSAddressListsCollectionModel> addressListsCollection { set; get; } = new List<CLSAddressListsCollectionModel>();
     }

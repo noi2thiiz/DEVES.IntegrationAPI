@@ -58,6 +58,7 @@ namespace DEVES.IntegrationAPI.Model.APAR
         public string polisyClntnum { get; set; }
         public string faxNo { get; set; }
         public string fullName { get; set; }
-
+        public string clientType { get; set; }
+        
     }
 }

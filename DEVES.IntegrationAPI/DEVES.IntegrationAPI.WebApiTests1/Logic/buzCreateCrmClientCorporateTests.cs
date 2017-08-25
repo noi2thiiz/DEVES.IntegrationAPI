@@ -71,7 +71,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
                     country = "",
                     addressType = "",
                     latitude = "",
-                    longtitude = ""
+                    longitude = ""
                 }
             };
             var cmd = new buzCreateCrmClientCorporate();

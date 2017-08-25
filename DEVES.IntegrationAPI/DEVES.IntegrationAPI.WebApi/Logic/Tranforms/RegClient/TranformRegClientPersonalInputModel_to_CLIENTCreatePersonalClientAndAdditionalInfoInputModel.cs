@@ -181,7 +181,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 //latitude    String	20	O
                 trgt.latitude = "" + src.addressInfo.latitude ;
                 //longtitude  String	20	O
-                trgt.longtitude = "" + src.addressInfo.longtitude ;
+                trgt.longtitude = "" + src.addressInfo.longitude ;
 
             }
 

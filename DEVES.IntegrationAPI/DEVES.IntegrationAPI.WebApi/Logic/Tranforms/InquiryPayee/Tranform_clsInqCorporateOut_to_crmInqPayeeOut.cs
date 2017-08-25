@@ -79,6 +79,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                     sourceData = CommonConstant.CONST_SYSTEM_CLS,
                     cleansingId = clsData.cleansing_id?.Trim() ?? "",
+                    clientType = clsData.clientType,
                     polisyClientId = clsData.clntnum?.Trim() ?? "",
                     sapVendorCode = "",
                     title = "",
@@ -93,6 +94,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     fullName = clsData.cls_full_name?.Trim() ?? "",
                     taxNo = clsData.cls_tax_no_new?.Trim() ?? "",
                     //taxBranchCode = clsData.crm_ref_code1,
+                    clientStatus =  clsData?.cltstat?.Trim().ToUpper() ?? "",
                     taxBranchCode = clsData.corporate_staff_no?.Trim() ?? "",
 
 
