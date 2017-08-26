@@ -4,10 +4,12 @@ using System.Linq;
 using System.Net.Http;
 using System.Web;
 using System.Web.Http;
+using System.Web.Http.Dispatcher;
 using DEVES.IntegrationAPI.Core.Helper;
 using DEVES.IntegrationAPI.Model;
 using DEVES.IntegrationAPI.Model.InquiryCRMPayeeList;
 using DEVES.IntegrationAPI.WebApi.TechnicalService;
+using DEVES.IntegrationAPI.WebApi.TechnicalService.Envelonment;
 using Newtonsoft.Json;
 
 namespace DEVES.IntegrationAPI.WebApi.Templates
@@ -49,8 +51,27 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             object instance = Activator.CreateInstance(type);
             BaseCommand cmd = (BaseCommand)instance;
             var outputFail = new OutputModelFail();
-
+          
             cmd.TransactionId = GetTransactionId();
+            try
+            {
+                //.Headers.Allow
+                var config = GlobalConfiguration.Configuration;
+                var controllerSelector = new DefaultHttpControllerSelector(config);
+                var descriptor = controllerSelector.SelectController(Request);
+               
+                cmd.ControllerName = "" + descriptor.ControllerName;
+                cmd.ApplicationName = AppEnvironment.Instance.GetApplicationName();
+                cmd.SiteName = AppEnvironment.Instance.GetSiteName();
+                
+
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+
+            
 
             #endregion
 
@@ -99,10 +120,6 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                 try
                 {
                  
-
-
-
-
                     List<string> errorMessage = JsonHelper.getReturnError();
                     foreach (var text in errorMessage)
                     {

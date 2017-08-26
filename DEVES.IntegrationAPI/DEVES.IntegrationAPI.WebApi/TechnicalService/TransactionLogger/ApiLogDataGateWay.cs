@@ -98,6 +98,8 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
                                             [TransactionID], [GlobalTransactionID],
                                             [Application],
                                             [User],
+                                            [SiteName],
+                                            [PhysicalPath],
                                             Machine,
                                             RequestIpAddress,
                                             RequestContentType,
@@ -113,7 +115,8 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
                                                     @ServiceName,
                                                     @Activity,
                                                     @TransactionID,@GlobalTransactionID,
-                                                    @Application,@User,@Machine,@RequestIpAddress,
+                                                    @Application,@User, @SiteName,@PhysicalPath,
+                                                    @Machine,@RequestIpAddress,
                                                     @RequestContentType,
                                                     @RequestContentBody,@RequestUri,@RequestMethod,
                                                     @RequestRouteTemplate,@RequestRouteData,@RequestHeaders,@RequestTimestamp,
@@ -144,6 +147,10 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
 
                     querySaveStaff.Parameters.Add("@Application",SqlDbType.NVarChar).Value =""+apiLogEntry.Application;
                     querySaveStaff.Parameters.Add("@User", SqlDbType.NVarChar).Value = "" + apiLogEntry.User;
+
+                    querySaveStaff.Parameters.Add("@PhysicalPath", SqlDbType.NVarChar).Value = "" + apiLogEntry.PhysicalPath;
+                    querySaveStaff.Parameters.Add("@SiteName", SqlDbType.NVarChar).Value = "" + apiLogEntry.SiteName;
+
                     querySaveStaff.Parameters.Add("@Machine", SqlDbType.NVarChar).Value = "" + apiLogEntry.Machine;
                     querySaveStaff.Parameters.Add("@RequestIpAddress", SqlDbType.NVarChar).Value = "" + apiLogEntry.RequestIpAddress;
                     querySaveStaff.Parameters.Add("@RequestContentType", SqlDbType.NVarChar).Value = "" + apiLogEntry.RequestContentType;
@@ -212,6 +219,11 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
             req.AddParam("ServiceName", ""+ apiLogEntry.ServiceName);
             req.AddParam("Activity", ""+ apiLogEntry.Activity);
             req.AddParam("User", ""+ apiLogEntry.User);
+
+            req.AddParam("PhysicalPath", "" + apiLogEntry.PhysicalPath);
+            req.AddParam("SiteName", "" + apiLogEntry.SiteName);
+
+         
             req.AddParam("Machine", ""+ apiLogEntry.Machine);
             req.AddParam("RequestIpAddress", ""+ apiLogEntry.RequestIpAddress);
             req.AddParam("RequestContentType", "" + apiLogEntry.RequestContentType);
