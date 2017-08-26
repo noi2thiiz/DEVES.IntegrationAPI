@@ -15,7 +15,7 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService.TransactionLogger
         public static void Start()
         {
             Debug.WriteLine("Log Job Start");
-            timer.Change(TimeSpan.Zero, TimeSpan.FromMinutes(1));
+            timer.Change(TimeSpan.Zero, TimeSpan.FromSeconds(10));
         }
 
         private static void OnTimerElapsed(object sender)

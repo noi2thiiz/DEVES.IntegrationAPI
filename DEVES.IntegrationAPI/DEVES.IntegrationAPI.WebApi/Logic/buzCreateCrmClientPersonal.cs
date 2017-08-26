@@ -230,6 +230,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 }
                 else
                 {
+                    AddDebugInfo("Error: Client CleansingId not found in CRM: ");
                     dataOutput.code = CONST_CODE_FAILED;
                     dataOutput.message = "Client CleansingId not found in CRM";
                     dataOutput.transactionId = TransactionId;
@@ -250,6 +251,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             }
             else
             {
+                AddDebugInfo("Return more than one row of client data from  cleansingId");
                 dataOutput.code =CONST_CODE_FAILED;
                 dataOutput.transactionId = TransactionId;
                 dataOutput.message = "Return more than one row of client data from  cleansingId";

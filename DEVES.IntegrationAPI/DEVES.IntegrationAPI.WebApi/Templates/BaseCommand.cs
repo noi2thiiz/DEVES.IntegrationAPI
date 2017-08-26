@@ -76,6 +76,16 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
         private string resHeader = ""; // ResponseHeaders
         private DateTime resTime = new DateTime(); // ResponseTimestamp
 
+        public void AddDebugInfo(string message, dynamic info)
+        {
+            TraceDebugLogger.Instance.AddDebugLogInfo(TransactionId, message, info);
+            // debugInfo.AddDebugInfo(message, info);
+        }
+        public void AddDebugInfo(string message)
+        {
+            TraceDebugLogger.Instance.AddDebugLogInfo(TransactionId, message, message);
+            // debugInfo.AddDebugInfo(message, message);
+        }
 
         //This is like the Main() function. And need to be implemented.
         public abstract Model.BaseDataModel Execute(object input);
@@ -118,6 +128,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
 
         internal BaseContentJsonProxyOutputModel CallDevesJsonProxy<T1>(string EWIendpointKey, BaseDataModel JSON, string UID=CONST_DEFAULT_UID) where T1 : BaseEWIResponseModel 
         {
+            AddDebugInfo("CallDevesServiceProxy <T1>:" + serviceName, JSON);
             EWIRequest reqModel = new EWIRequest()
             {
                 //user & password must be switch to get from calling k.Ton's API rather than fixed values.
@@ -175,6 +186,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                                         where T1 : BaseEWIResponseModel 
                                         //where T2 : BaseContentJsonProxyOutputModel, BaseContentJsonServiceOutputModel
         {
+            AddDebugInfo("CallDevesServiceProxy <T1, T2>:" + serviceName, JSON);
             var limitTry = 3;
             var countTry = 0;
            

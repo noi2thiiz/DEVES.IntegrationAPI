@@ -16,7 +16,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             trgt.asrType = ""+src.roleCode ?? "";
             trgt.clntnum =""+ src.polisyClientId ?? "";
             trgt.fullName = ""+src.fullname ?? "";
-
+            trgt.cleansingId = "" + src.cleansingId?.Trim() ?? "";
             trgt.idcard= ""+src.taxNo ?? "";
             trgt.branchCode= ""+src.taxBranchCode ?? "";
 

@@ -67,10 +67,22 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
         protected string GlobalTransactionID = "";
         protected string ControllerName = "";
 
+        public void AddDebugInfo(string message, dynamic info)
+        {
+            TraceDebugLogger.Instance.AddDebugLogInfo(GlobalTransactionID, message, info);
+            // debugInfo.AddDebugInfo(message, info);
+        }
+        public void AddDebugInfo(string message)
+        {
+            TraceDebugLogger.Instance.AddDebugLogInfo(GlobalTransactionID, message, message);
+            // debugInfo.AddDebugInfo(message, message);
+        }
+
         public BaseEwiServiceProxy(string globalTransactionID, string controllerName="")
         {
             SetGlobalTransactionID(globalTransactionID);
             SetControllerName(controllerName);
+           
         }
 
         public void SetGlobalTransactionID(string id)
@@ -85,6 +97,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 
         public RESTClientResult SendRequest(BaseDataModel JSON, string endpoint)
         {
+            AddDebugInfo("SendRequest:" + serviceName, JSON);
             System.Diagnostics.Stopwatch timer = new Stopwatch();
             timer.Start();
             resTime = DateTime.Now;
@@ -151,7 +164,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
                 // Console.WriteLine(resBody);
 
 
-
+                AddDebugInfo("SendRequest Success:" , response);
                 LogRequest(request, response, timeTaken);
 
                 result.Content = ewiRes.Result;
@@ -205,10 +218,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
             }
             catch (BuzErrorException e)
             {
+                AddDebugInfo("SendRequest BuzErrorException:" + e.Message, e.StackTrace);
                 throw;
             }
             catch (Exception e)
             {
+                AddDebugInfo("SendRequest Exception:" + e.Message, e.StackTrace);
                 LogRequest(request);
 
                 throw new BuzErrorException(

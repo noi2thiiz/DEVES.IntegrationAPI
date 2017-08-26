@@ -23,6 +23,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             //trgt.corporateBranch = "" + src.conditionDetail.corporateBranch;
             //trgt.taxBranch = "" + src.conditionDetail.corporateBranch;
             trgt.corporateStaffNo = "" + src.conditionDetail.corporateBranch?.Trim() ?? "";
+            trgt.cleansingId      = "" + src.conditionDetail.cleansingId?.Trim() ?? "";
             trgt.telephone = ""; 
             trgt.emailAddress = "";
             trgt.backDay = AppConst.COMM_BACK_DAY.ToString();

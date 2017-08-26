@@ -204,9 +204,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             catch (Exception e)
             {
                 Console.WriteLine(e.Message+e.StackTrace);
+                AddDebugInfo("buzCreateCrmClientCorporate Exception :" + e.Message, e.StackTrace);
                 CreateCrmCorporateInfoOutputModel dataOutput = new CreateCrmCorporateInfoOutputModel();
                 dataOutput.code = AppConst.CODE_FAILED;
-                dataOutput.description = "Error on Create CRM";
+                dataOutput.description = "Error on Create CRM"+ e.Message;
+                dataOutput.message = e.Message;
                 dataOutput.transactionId = TransactionId;
                 dataOutput.transactionDateTime = DateTime.Now;
 

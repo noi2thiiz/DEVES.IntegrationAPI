@@ -12,7 +12,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
     public abstract class BuzCommand:BaseCommand
     {
       
-
+        /*
         public void AddDebugInfo(string message, dynamic info)
         {
             TraceDebugLogger.Instance.AddDebugLogInfo(TransactionId,message,info);
@@ -23,6 +23,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             TraceDebugLogger.Instance.AddDebugLogInfo(TransactionId, message, message);
            // debugInfo.AddDebugInfo(message, message);
         }
+        */
         
         public override BaseDataModel Execute(object input)
         {

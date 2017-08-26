@@ -27,7 +27,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         protected string polisyClientId;
         protected string crmClientId;
 
-        public RegClientCorporateOutputModel_Fail regFail { get; set; } = new RegClientCorporateOutputModel_Fail();
+       
         protected RegClientCorporateInputModel regClientCorporateInput { get; set; }
 
         public void TranFormInput()
@@ -260,18 +260,27 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 }
             }
 
-
+            AddDebugInfo("cleansingId : " + cleansingId);
 
             //3 create crm CleinInfo in CRM เพื่อเก็บ cleansingId   แต่ให้ค้นก่อนถ้าพบจะไม่สร้างซ้ำ
-            if (!string.IsNullOrEmpty(cleansingId))
+            try
             {
-                if (false == SpApiChkCustomerClient.Instance.CheckByCleansingId(cleansingId))
+                if (!string.IsNullOrEmpty(cleansingId))
                 {
+                 
+                    if (false == SpApiChkCustomerClient.Instance.CheckByCleansingId(cleansingId))
+                    {
+                        AddDebugInfo("CheckByCleansingId == false  ");
+                        crmClientId = CreateClientInCRM(regClientCorporateInput, cleansingId, polisyClientId);
+                    }
 
-                    crmClientId = CreateClientInCRM(regClientCorporateInput, cleansingId, polisyClientId);
                 }
-
             }
+            catch (Exception e)
+            {
+                AddDebugInfo("Cannot create Client in CRM  : " + e.Message,e.StackTrace);
+            }
+           
 
 
 
@@ -321,11 +330,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             try
             {
                 buzCreateCrmClientCorporate cmdCreateCrmClient = new buzCreateCrmClientCorporate();
+                cmdCreateCrmClient.TransactionId = TransactionId;
                 CreateCrmCorporateInfoOutputModel crmContentOutput =
                     (CreateCrmCorporateInfoOutputModel)cmdCreateCrmClient.Execute(regClientPersonalInput);
 
                 if (crmContentOutput.code != AppConst.CODE_SUCCESS)
                 {
+                    AddDebugInfo("Create CRM Error BuzErrorException " + crmContentOutput.message, crmContentOutput.description);
                     throw new BuzErrorException(
                         "500",
                         "CRM Error:" + crmContentOutput.message,
@@ -343,6 +354,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             }
             catch (Exception e)
             {
+                AddDebugInfo("Create CRM Error Exception " + e.Message, e.StackTrace);
                 throw new BuzErrorException(
                     "500",
                     "CRM Error:" + e.Message,
@@ -398,7 +410,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         //กรณีมาจากหน้าจอ CRM  notCreatePolisyClientFlag == Y ไม่ต้องไปสร้างใน polisyClientId
                         if (regClientCorporateInput.generalHeader.notCreatePolisyClientFlag != "Y")
                         {
-                            AddDebugInfo(
+                            AddDebugInfo("กรณีมาจากหน้าจอ CRM  notCreatePolisyClientFlag == Y ไม่ต้องไปสร้างใน polisyClientId",
                                 @"string.IsNullOrEmpty(regClientCorporateInput.generalHeader.polisyClientId)&& !string.IsNullOrEmpty(regClientCorporateInput.generalHeader.cleansingId) ");
 
                             BaseDataModel polCreateCorporateIn =
@@ -438,7 +450,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     //กรณีมาจากหน้าจอ CRM  notCreatePolisyClientFlag == Y ไม่ต้องไปสร้างใน polisyClientId
                     if (regClientCorporateInput.generalHeader.notCreatePolisyClientFlag != "Y")
                     {
-                        AddDebugInfo(
+                        AddDebugInfo("กรณีไม่มี เลข polisyClientId  แต่มี cleansingId ให้สร้างเฉพาะ 400",
                             @"string.IsNullOrEmpty(regClientCorporateInput.generalHeader.polisyClientId)&& !string.IsNullOrEmpty(regClientCorporateInput.generalHeader.cleansingId) ");
 
                         BaseDataModel polCreateCorporateIn =
@@ -616,20 +628,27 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             polisyClientId = regClientCorporateInput?.generalHeader?.polisyClientId ?? "";
             cleansingId = newCleansingId ?? regClientCorporateInput?.generalHeader?.cleansingId;
             Console.WriteLine(polisyClientId + ":" + cleansingId);
+            AddDebugInfo("create crm CleinInfo in CRM เพื่อเก็บ cleansingId   แต่ให้ค้นก่อนถ้าพบจะไม่สร้างซ้ำ", polisyClientId + ":" + cleansingId);
             if (!string.IsNullOrEmpty(cleansingId))
             {
+                AddDebugInfo("เริ่มสร้าง crm ");
                 if (false == SpApiChkCustomerClient.Instance.CheckByCleansingId(cleansingId))
                 {
                     try
                     {
                         crmClientId = CreateClientInCRM(regClientCorporateInput, cleansingId, polisyClientId);
+                        AddDebugInfo("สร้างข้อมูลแล้ว ="+ crmClientId);
                     }
                     catch (Exception e)
                     {
-                        AddDebugInfo(e.Message, "CRM Error");
-                        throw;
+                        AddDebugInfo("CRM Error" + e.Message, e.StackTrace);
+
                     }
 
+                }
+                else
+                {
+                    AddDebugInfo("พบข้อมูลในระบบ crm อยู่แล้ว");
                 }
 
             }
@@ -672,7 +691,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                 dataOutPass.cleansingId = regClientCorporateInput.generalHeader.cleansingId;
                 dataOutPass.polisyClientId = regClientCorporateInput.generalHeader.polisyClientId;
-
+                dataOutPass.crmClientId = crmClientId;
                 dataOutPass.corporateName1 = regClientCorporateInput.profileHeader.corporateName1;
                 dataOutPass.corporateName2 = regClientCorporateInput.profileHeader.corporateName2;
                 dataOutPass.corporateBranch = regClientCorporateInput.profileHeader.corporateBranch;
