@@ -164,7 +164,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             }
             catch (Exception e)
             {
-                AddDebugInfo(e.Message);
+                AddDebugInfo("SearchCrmAccountClientId Error:"+e.Message,e.StackTrace);
             }
             return result;
 

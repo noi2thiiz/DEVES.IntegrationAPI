@@ -110,10 +110,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 }
             }
             //ซ่อม Role Code เนื่องจาก Source  ไม่มี field นี้
-
+            bool crmDbError = false;
             foreach (CRMInquiryClientOutputDataModel temp in AllSearchResult)
             {
-         
+                AddDebugInfo("search crmClientId: cleansingId (" +temp.generalHeader.cleansingId + ")");
                 temp.generalHeader.roleCode = "G";
 
                 #region Search crmClientId by CleansingId
@@ -122,18 +122,29 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 {
                     try
                     {
-                        List<string> crmData = SearchCrmClientId(temp.generalHeader.cleansingId, InputModel.conditionHeader.clientType);
-                        if (crmData != null && crmData.Count == 1)
+                        if (false == crmDbError)
                         {
-                            temp.generalHeader.crmClientId = crmData.First();
+                            List<string> crmData = SearchCrmClientId(temp.generalHeader.cleansingId,
+                                InputModel.conditionHeader.clientType);
+                            if (crmData != null && crmData.Count == 1)
+                            {
+                                temp.generalHeader.crmClientId = crmData.First();
+                            }
+                            else
+                            {
+                                AddDebugInfo("Error on search crmClientId: cleansingId (" +
+                                             temp.generalHeader.cleansingId + ")not found");
+                            }
+
                         }
                         else
                         {
-                            AddDebugInfo("Error on search crmClientId: cleansingId ("+ temp.generalHeader.cleansingId + ")not found");
+                            AddDebugInfo("xrmDbError:ป้องกันกรณีที่เกิด error จากฐานข้อมูล crm แล้วจะทำให้ api ช่าไปหมด จึงข้าม crm ไปทั้งหมดเลย ");
                         }
                     }
                     catch (Exception e)
                     {
+                        crmDbError = true;
                         AddDebugInfo("Error on search crmClientId", "Error: " + e.Message + "--" + e.StackTrace);
                     }
 

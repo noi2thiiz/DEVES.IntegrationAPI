@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using DEVES.IntegrationAPI.Model;
@@ -63,7 +64,7 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
 
         public List<DataModelDebugInfo> _debugInfo { get; set; }
 
-        public void AddDebugInfo(string message, dynamic info)
+        public void AddDebugInfo(string message, dynamic info, string memberName, string sourceFilePath, int sourceLineNumber)
         {
             if (_debugInfo == null)
             {
@@ -73,7 +74,11 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
             _debugInfo.Add(new DataModelDebugInfo
             {
                 message = message,
-                info = info
+                info = info,
+                line = sourceLineNumber,
+                methodName = memberName,
+                className = sourceFilePath
+
             });
         }
 

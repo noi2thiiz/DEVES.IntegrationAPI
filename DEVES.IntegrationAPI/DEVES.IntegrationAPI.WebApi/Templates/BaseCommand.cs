@@ -15,6 +15,7 @@ using System.Data.SqlClient;
 using System.Reflection;
 
 using System.Configuration;
+using System.Diagnostics;
 using System.ServiceModel.Description;
 using DEVES.IntegrationAPI.WebApi.TechnicalService;
 using Microsoft.Crm.Sdk.Messages;
@@ -82,14 +83,22 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
         private string resHeader = ""; // ResponseHeaders
         private DateTime resTime = new DateTime(); // ResponseTimestamp
 
-        public void AddDebugInfo(string message, dynamic info)
+        public void AddDebugInfo(string message, dynamic info, 
+            [System.Runtime.CompilerServices.CallerMemberName] string memberName = "",
+            [System.Runtime.CompilerServices.CallerFilePath] string sourceFilePath = "",
+            [System.Runtime.CompilerServices.CallerLineNumber] int sourceLineNumber = 0)
         {
-            TraceDebugLogger.Instance.AddDebugLogInfo(TransactionId, message, info);
+            //StackTrace stackTrace = new StackTrace();
+            TraceDebugLogger.Instance.AddDebugLogInfo(TransactionId, message, info, memberName, sourceFilePath, sourceLineNumber);
             // debugInfo.AddDebugInfo(message, info);
         }
-        public void AddDebugInfo(string message)
+        public void AddDebugInfo(string message,
+            [System.Runtime.CompilerServices.CallerMemberName] string memberName = "",
+            [System.Runtime.CompilerServices.CallerFilePath] string sourceFilePath = "",
+            [System.Runtime.CompilerServices.CallerLineNumber] int sourceLineNumber = 0)
         {
-            TraceDebugLogger.Instance.AddDebugLogInfo(TransactionId, message, message);
+            //StackTrace stackTrace = new StackTrace();
+            TraceDebugLogger.Instance.AddDebugLogInfo(TransactionId, message, message, memberName, sourceFilePath, sourceLineNumber);
             // debugInfo.AddDebugInfo(message, message);
         }
 

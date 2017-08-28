@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using DEVES.IntegrationAPI.Model;
@@ -55,12 +56,14 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
             }
         }
 
-        public void AddDebugLogInfo(string globalTransactionID, string message, dynamic info)
+        
+        public void AddDebugLogInfo(string globalTransactionID, string message, dynamic info, string memberName, string sourceFilePath,int sourceLineNumber)
         {
             if (LogData.ContainsKey(globalTransactionID))
             {
-                var log =  LogData[globalTransactionID];
-                log.AddDebugInfo( message,  info);
+               
+                var log = LogData[globalTransactionID];
+                log.AddDebugInfo(message, info, memberName, sourceFilePath, sourceLineNumber);
             }
         }
 

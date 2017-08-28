@@ -72,14 +72,22 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
         protected string GlobalTransactionID = "";
         protected string ControllerName = "";
 
-        public void AddDebugInfo(string message, dynamic info)
+        public void AddDebugInfo(string message, dynamic info,
+            [System.Runtime.CompilerServices.CallerMemberName] string memberName = "",
+            [System.Runtime.CompilerServices.CallerFilePath] string sourceFilePath = "",
+            [System.Runtime.CompilerServices.CallerLineNumber] int sourceLineNumber = 0)
         {
-            TraceDebugLogger.Instance.AddDebugLogInfo(GlobalTransactionID, message, info);
+           // StackTrace stackTrace = new StackTrace();
+            TraceDebugLogger.Instance.AddDebugLogInfo(GlobalTransactionID, message, info, memberName, sourceFilePath, sourceLineNumber);
             // debugInfo.AddDebugInfo(message, info);
         }
-        public void AddDebugInfo(string message)
+        public void AddDebugInfo(string message,
+            [System.Runtime.CompilerServices.CallerMemberName] string memberName = "",
+            [System.Runtime.CompilerServices.CallerFilePath] string sourceFilePath = "",
+            [System.Runtime.CompilerServices.CallerLineNumber] int sourceLineNumber = 0)
         {
-            TraceDebugLogger.Instance.AddDebugLogInfo(GlobalTransactionID, message, message);
+           // StackTrace stackTrace = new StackTrace();
+            TraceDebugLogger.Instance.AddDebugLogInfo(GlobalTransactionID, message, message,  memberName, sourceFilePath, sourceLineNumber);
             // debugInfo.AddDebugInfo(message, message);
         }
 

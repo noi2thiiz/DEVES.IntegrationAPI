@@ -56,7 +56,7 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.DataAdapter
                     while (reader.Read())
                     {
                         rowscount++;
-                      
+
                         fieldcount = reader.FieldCount;
                         Dictionary<string, object> item = new Dictionary<string, object>();
 
@@ -106,7 +106,7 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.DataAdapter
 
         public SqlDataReader ExecuteProcedure(string commandName, Dictionary<string, object> paras)
         {
-          
+
             SqlConnection conn = new SqlConnection(ConnectionString);
             conn.Open();
             SqlCommand comm = conn.CreateCommand();
