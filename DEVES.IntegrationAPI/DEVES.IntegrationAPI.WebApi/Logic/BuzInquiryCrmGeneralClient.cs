@@ -126,6 +126,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         {
                             List<string> crmData = SearchCrmClientId(temp.generalHeader.cleansingId,
                                 InputModel.conditionHeader.clientType);
+                            
                             if (crmData != null && crmData.Count == 1)
                             {
                                 temp.generalHeader.crmClientId = crmData.First();
@@ -133,7 +134,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                             else
                             {
                                 AddDebugInfo("Error on search crmClientId: cleansingId (" +
-                                             temp.generalHeader.cleansingId + ")not found");
+                                             temp.generalHeader.cleansingId + ")not found", crmData);
                             }
 
                         }

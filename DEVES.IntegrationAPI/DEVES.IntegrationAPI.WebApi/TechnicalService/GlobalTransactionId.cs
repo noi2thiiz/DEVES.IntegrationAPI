@@ -67,6 +67,7 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
             int seed = rnd.Next(1, 999);
             var globalId = appId + "-" + now +  time +"-"+ (logCount.ToString()).PadLeft(7, '0');
             globalIdList.Add(globalId,0);
+            HttpContext.Current.Items["GlobalTransactionID"] = globalId;
             return globalId;
         }
         Dictionary<string,int> globalIdList = new Dictionary<string, int>();

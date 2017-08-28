@@ -148,6 +148,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             catch (Exception e)
             {
                 AddDebugInfo(e.Message);
+                throw;
             }
             return result;
 
@@ -165,6 +166,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             catch (Exception e)
             {
                 AddDebugInfo("SearchCrmAccountClientId Error:"+e.Message,e.StackTrace);
+                throw;
             }
             return result;
 
@@ -180,10 +182,13 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             {
                 
                 result = SpApiCustomerClient.Instance.SearchCrmContactClientId(clienType, cleansingId);
+               
+               
             }
             catch (Exception e)
             {
-                AddDebugInfo(e.Message);
+                AddDebugInfo("SearchCrmClientId:"+e.Message,e.StackTrace);
+                throw;
             }
             return result;
 

@@ -26,12 +26,15 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
 
                     Request.Properties["TransactionID"] = GlobalTransactionIdGenerator.Instance.GetNewGuid();
                 }
-
+                HttpContext.Current.Items["GlobalTransactionID"] = Request.Properties["TransactionID"];
                 return Request.Properties["TransactionID"].ToString();
             }
             catch (Exception)
             {
-                return  GlobalTransactionIdGenerator.Instance.GetNewGuid();
+                var newId = GlobalTransactionIdGenerator.Instance.GetNewGuid();
+
+                HttpContext.Current.Items["GlobalTransactionID"] = newId;
+                return newId;
             }
             
             
