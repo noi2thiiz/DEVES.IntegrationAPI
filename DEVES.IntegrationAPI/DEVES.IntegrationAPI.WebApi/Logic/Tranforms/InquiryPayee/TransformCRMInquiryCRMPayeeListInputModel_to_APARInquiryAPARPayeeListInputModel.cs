@@ -21,6 +21,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             trgt.taxBranchCode = src.taxBranchCode ?? "";
             trgt.vendorCode = src.sapVendorCode ?? "";
 
+            trgt.cleansingId = "" + src.cleansingId?.Trim() ?? "";
+
             trgt.taxNo = src.taxNo ?? "";
             trgt.taxBranchCode  =  src.taxBranchCode ?? "";
 

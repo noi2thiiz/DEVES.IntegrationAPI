@@ -17,8 +17,7 @@ namespace DEVES.IntegrationAPI.Model.APAR
         public string taxBranchCode { get; set; } = "";
         public string clientType { get; set; } = "";
         public string requester { get; set; } = "";
-
-
+        public string cleansingId { get; set; } = "";
     }
 
     public class InquiryAPARPayeeOutputModel : BaseEWIResponseModel

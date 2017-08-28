@@ -34,6 +34,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             trgt.taxBranchCode = src.conditionDetail.corporateBranch ?? "";
             trgt.taxNo = src.conditionDetail.idCard ?? "";
             trgt.emcsCode = src.conditionDetail.emcsCode ?? "";
+            trgt.cleansingId = "" + src.conditionDetail.cleansingId?.Trim() ?? "";
 
             return trgt;
         }
