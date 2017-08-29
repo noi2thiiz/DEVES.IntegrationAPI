@@ -97,7 +97,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
             SetControllerName(controllerName);
             appName = AppEnvironment.Instance.GetApplicationName();
             siteName = AppEnvironment.Instance.GetSiteName();
-            physicalPath = AppEnvironment.Instance.GetSiteName();
+            physicalPath = AppEnvironment.Instance.GetPhysicalPath();
             
         }
 
@@ -325,7 +325,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
                     ResponseTimestamp = resTime,
                    
                     ResponseTime = responseTime,
-                    ResponseTimeTotalMilliseconds= responseTimeTotalMilliseconds
+                    ResponseTimeTotalMilliseconds= responseTimeTotalMilliseconds,
+                    Remark = "used BaseEwiServiceProxy"
 
 
 
@@ -374,7 +375,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
                 {
                     Application = appName,
                     TransactionID = GetTransactionId(req),
-                    Controller = "",
+                    Controller = ControllerName,
                     ServiceName = serviceName,
                     Activity = "consume:Send request",
                     User = user,
@@ -392,7 +393,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
                     RequestHeaders = reqHeader,
                     RequestTimestamp = reqTime,
 
-                    ResponseTimestamp = resTime
+                    ResponseTimestamp = resTime,
+                    Remark = "used BaseEwiServiceProxy"
 
                 };
                 InMemoryLogData.Instance.AddLogEntry(apiLogEntry);

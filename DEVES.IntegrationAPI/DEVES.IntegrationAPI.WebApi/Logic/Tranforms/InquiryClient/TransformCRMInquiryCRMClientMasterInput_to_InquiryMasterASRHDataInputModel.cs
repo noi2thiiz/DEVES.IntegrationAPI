@@ -13,13 +13,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             InquiryMasterASRHDataInputModel trgt = (InquiryMasterASRHDataInputModel)output;
 
             trgt.fullName = src.conditionDetail.clientFullname ?? "";
-            if (trgt.fullName.Equals(""))
+            if (string.IsNullOrEmpty(trgt.fullName))
             {
-                if(src.conditionDetail.clientName1.Equals(""))
+                if(string.IsNullOrEmpty(src.conditionDetail.clientName1))
                 {
                     trgt.fullName = src.conditionDetail.clientName2;
                 }
-                else if(src.conditionDetail.clientName2.Equals(""))
+                else if(string.IsNullOrEmpty(src.conditionDetail.clientName2))
                 {
 
                     trgt.fullName = src.conditionDetail.clientName1;

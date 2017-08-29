@@ -29,6 +29,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 data.generalHeader.emcsMemHeadId = asrh.ASRHList.emcsMemHeadId;
                 data.generalHeader.emcsMemId = asrh.ASRHList.emcsMemId;
                 data.generalHeader.sourceData = CommonConstant.CONST_SYSTEM_MASTER_ASRH;
+                data.generalHeader.clientType = "C";
 
                 data.profileInfo = new CRMInquiryClientProfileInfoModel();
                 data.profileInfo.fullName = asrh.ASRHList.fullName;
@@ -47,6 +48,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 data.asrhHeader.repairerFlag = asrh.ASRHList.repairerFlag;
                 data.asrhHeader.hospitalFlag = asrh.ASRHList.businessType.ToUpper() == "H" ? "Y" : "N";
 
+
+                //ตัด เบอร์โทร  "contactNumber": "T. 034845533 F. 034845533",
+
+                //ตัด "fullName": "บริษัท พระราม 2 เซอร์เวย์ จำกัด",
+                //ตัด "salutationText": "",
 
                 trgt.data.Add(data);
             }

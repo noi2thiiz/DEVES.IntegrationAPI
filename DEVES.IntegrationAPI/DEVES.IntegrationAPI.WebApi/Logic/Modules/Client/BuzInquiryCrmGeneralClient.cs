@@ -30,14 +30,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
 
         public BaseTransformer CLSPersonalOutputTransform = new TransformCLSInquiryPersonalClientContentOut_to_CrmInquiryClientMasterContentOut();
-
-      
         public BaseTransformer CLSCorporateOutputTransform = new TransformCLSInquiryCorporateClientContentOut_to_CrmInquiryClientMasterContentOut();
-
-      
         public BaseTransformer COMPOutputTransform = new TransformCOMPInquiryClientMasterContentOutputModel_to_CrmInquiryClientMasterContentOut();
-
-
 
 
         public override BaseDataModel ExecuteInput(object input)
@@ -96,7 +90,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             //ถ้าพบ จะซ่อม PolisyClientId เพราะ CLS อาจจะไม่มี PolisyClientId โดยเฉพาะ  รายการที่พึ่งสร้างใหม่
             if (AllSearchResult.Any())
             {
-                FulFillEmptyPolisyClientId(AllSearchResult, InputModel?.conditionHeader?.clientType);
+                FullFillEmptyPolisyClientId(AllSearchResult, InputModel?.conditionHeader?.clientType);
             }
 
 
@@ -249,7 +243,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         /// <param name="listSearchResult"></param>
         /// <param name="clientType">P or C</param>
         /// <returns></returns>
-        public List<CRMInquiryClientOutputDataModel> FulFillEmptyPolisyClientId(List<CRMInquiryClientOutputDataModel> listSearchResult,string clientType)
+        public List<CRMInquiryClientOutputDataModel> FullFillEmptyPolisyClientId(List<CRMInquiryClientOutputDataModel> listSearchResult,string clientType)
         {
 
             if (listSearchResult == null)
@@ -267,13 +261,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                     if (lstPolisyClient?.cleansingId != null)
                     {
-                        //debugInfo.AddDebugInfo("found Polisy for new client =" + lstPolisyClient.clientNumber, "");
+                        
                         if (temp?.generalHeader != null)
                             temp.generalHeader.polisyClientId = lstPolisyClient.clientNumber;
                     }
                     else
                     {
-                        AddDebugInfo(" not found Polisy client id", "");
+                        AddDebugInfo(" not found Polisy client id");
                     }
                     if (temp?.generalHeader != null && (temp.generalHeader.polisyClientId == "0"))
                     {

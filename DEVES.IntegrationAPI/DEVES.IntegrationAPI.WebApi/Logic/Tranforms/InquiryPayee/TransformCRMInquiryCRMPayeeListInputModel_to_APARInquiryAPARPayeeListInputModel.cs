@@ -25,7 +25,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             trgt.taxNo = src.taxNo ?? "";
             trgt.taxBranchCode  =  src.taxBranchCode ?? "";
-
+           
 
             // cannot map to trgt
             //src.emcsCode

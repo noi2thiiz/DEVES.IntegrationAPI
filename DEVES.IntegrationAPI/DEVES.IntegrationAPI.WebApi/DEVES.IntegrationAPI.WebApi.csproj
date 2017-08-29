@@ -465,25 +465,25 @@
     <Compile Include="Logic\buzAccidentPrilimSurveyorReport.cs" />
     <Compile Include="Logic\buzAssignedSurveyor.cs" />
     <Compile Include="Logic\buzClaimRegistration.cs" />
-    <Compile Include="Logic\buzCreateAssessmentFromLocus.cs" />
-    <Compile Include="Logic\BuzInquiryCrmAsrhClientMaster.cs" />
+    <Compile Include="Logic\Modules\Assessment\buzCreateAssessmentFromLocus.cs" />
+    <Compile Include="Logic\Modules\Client\BuzInquiryCrmAsrhClientMaster.cs" />
     <Compile Include="Logic\buzCrmMasters.cs" />
     <Compile Include="Logic\buzCreateCrmClientCorporate.cs" />
     <Compile Include="Logic\buzCreateCrmClientPersonal.cs" />
     <Compile Include="Logic\buzCreateCrmPayeeCorporate.cs" />
     <Compile Include="Logic\buzCreateCrmPayeePersonal.cs" />
-    <Compile Include="Logic\buzCrmInquiryClientMaster.cs" />
-    <Compile Include="Logic\buzCRMRegClientCorporate.cs" />
-    <Compile Include="Logic\buzCRMRegClientPersonal.cs" />
-    <Compile Include="Logic\buzCRMRegPayeeCorporate.cs" />
-    <Compile Include="Logic\buzCRMRegPayeePersonal.cs" />
-    <Compile Include="Logic\buzInquiryCRMPayeeListNew.cs" />
-    <Compile Include="Logic\BuzInquiryCrmGeneralClient.cs" />
+    <Compile Include="Logic\Modules\Client\buzCrmInquiryClientMaster.cs" />
+    <Compile Include="Logic\Modules\Client\buzCRMRegClientCorporate.cs" />
+    <Compile Include="Logic\Modules\Client\buzCRMRegClientPersonal.cs" />
+    <Compile Include="Logic\Modules\Client\buzCRMRegPayeeCorporate.cs" />
+    <Compile Include="Logic\Modules\Client\buzCRMRegPayeePersonal.cs" />
+    <Compile Include="Logic\Modules\Client\buzInquiryCRMPayeeListNew.cs" />
+    <Compile Include="Logic\Modules\Client\BuzInquiryCrmGeneralClient.cs" />
     <Compile Include="Logic\buzRegComplaint.cs" />
     <Compile Include="Logic\buzReqClsId.cs" />
     <Compile Include="Logic\buzRequestSurveyor.cs" />
     <Compile Include="Logic\buzSendSMS.cs" />
-    <Compile Include="Logic\buzSubmitSurveyAssessmentResult.cs" />
+    <Compile Include="Logic\Modules\Assessment\buzSubmitSurveyAssessmentResult.cs" />
     <Compile Include="Logic\buzUpdateClaimInfo.cs" />
     <Compile Include="Logic\buzUpdateClaimNo.cs" />
     <Compile Include="Logic\buzUpdateCompliantStatus.cs" />
@@ -711,14 +711,15 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DataAccessService\Store\" />
-    <Folder Include="Logic\Modules\Assessment\" />
-    <Folder Include="Logic\Modules\Client\" />
+    <Folder Include="Logic\Modules\Claim\" />
     <Folder Include="Logic\Modules\Common\" />
+    <Folder Include="Logic\Modules\Crm\" />
     <Folder Include="Logic\Modules\CustomerPortal\" />
-    <Folder Include="Logic\Modules\CustomerService\" />
+    <Folder Include="Logic\Modules\Internal\" />
     <Folder Include="Logic\Modules\Sales\" />
     <Folder Include="Logic\Modules\Survey\" />
     <Folder Include="Providers\" />
+    <Folder Include="TechnicalService\DebugLoger\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
