@@ -34,16 +34,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             if (string.IsNullOrEmpty(trgt.personalFullName))
             {
-                if (string.IsNullOrEmpty(src.conditionDetail.clientName1))
-                {
-                    trgt.personalFullName = src.conditionDetail.clientName2;
-                }
-                else 
-                {
+                trgt.personalFullName = src.conditionDetail.clientName1 + " " + src.conditionDetail.clientName2;
 
-                    trgt.personalFullName = src.conditionDetail.clientName1;
-                }
-               
             }
 
             trgt.personalFullName.ReplaceMultiplSpacesWithSingleSpace();

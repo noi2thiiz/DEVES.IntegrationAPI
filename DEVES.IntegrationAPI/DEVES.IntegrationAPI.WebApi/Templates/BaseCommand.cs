@@ -202,7 +202,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                                         //where T2 : BaseContentJsonProxyOutputModel, BaseContentJsonServiceOutputModel
         {
             AddDebugInfo("CallDevesServiceProxy <T1, T2>:" + serviceName, JSON);
-            var limitTry = 3;
+            var limitTry = 1;
             var countTry = 0;
            
                

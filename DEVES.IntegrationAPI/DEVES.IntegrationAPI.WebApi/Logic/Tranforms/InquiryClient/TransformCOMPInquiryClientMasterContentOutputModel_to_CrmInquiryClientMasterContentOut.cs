@@ -85,9 +85,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                     trgt.contactInfo.telephone1 = src.clientList.telephone1;
                     trgt.contactInfo.telephone2 = src.clientList.telephone2;
-                    trgt.contactInfo.telephone3 = src.clientList.telex;
-                    trgt.contactInfo.mobilePhone = src.clientList.telegram;
-                    trgt.contactInfo.fax = src.clientList.facsimile;
+                   
+                   
                     trgt.contactInfo.emailAddress = src.clientList.emailAddress;
                     trgt.contactInfo.lineID = src.clientList.lineId;
                     trgt.contactInfo.facebook = src.clientList.facebook;
@@ -114,7 +113,22 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         trgt.profileInfo.sex = "";
                     }
 
-                   
+                    if (src.clientList.clientType == "C")
+                    {
+                        trgt.contactInfo.mobilePhone = src.clientList.telegram;
+                        trgt.contactInfo.fax = src.clientList.facsimile;
+                        trgt.contactInfo.telephone3 = src.clientList.telex;
+                    }
+                    else
+                    {
+                        trgt.contactInfo.mobilePhone = src.clientList.mobilePhone;
+                        trgt.contactInfo.fax = src.clientList.fax;
+                        trgt.contactInfo.telephone3 = src.clientList.telNo;
+                    }
+                    
+
+
+
 
                     trgtContent.data.Add(trgt);
                 }

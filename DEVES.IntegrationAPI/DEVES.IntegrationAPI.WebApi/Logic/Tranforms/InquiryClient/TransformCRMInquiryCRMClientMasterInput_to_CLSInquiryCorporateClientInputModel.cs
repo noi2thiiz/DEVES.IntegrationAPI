@@ -26,23 +26,15 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             trgt.taxNo = src?.conditionDetail?.idCard?.Trim() ?? "";
             //trgt.corporateBranch = "" + src.conditionDetail.corporateBranch;
             //trgt.taxBranch = "" + src.conditionDetail.corporateBranch;
-            trgt.corporateStaffNo = "" + src.conditionDetail.corporateBranch?.Trim() ?? "";
-            trgt.cleansingId      = "" + src.conditionDetail.cleansingId?.Trim() ?? "";
+            trgt.corporateStaffNo = "" + src?.conditionDetail?.corporateBranch?.Trim() ?? "";
+            trgt.cleansingId      = "" + src?.conditionDetail?.cleansingId?.Trim() ?? "";
             trgt.telephone = ""; 
             trgt.emailAddress = "";
             trgt.backDay = AppConst.COMM_BACK_DAY.ToString();
             if (string.IsNullOrEmpty(trgt.corporateFullName))
             {
-                if (string.IsNullOrEmpty(src.conditionDetail.clientName1))
-                {
-                    trgt.corporateFullName = src.conditionDetail.clientName2;
-                }
-                else 
-                {
+                trgt.corporateFullName = src?.conditionDetail?.clientName1+" "+src?.conditionDetail?.clientName2;
 
-                    trgt.corporateFullName = src.conditionDetail.clientName1;
-                }
-                
             }
 
             trgt.corporateFullName.ReplaceMultiplSpacesWithSingleSpace();
