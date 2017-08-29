@@ -21,7 +21,6 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             return ProcessRequest<buzCreateAssessmentFromLocus, CreateAssessmentFromLocusInputModel>
                 (value, "CreateAssessmentFromLocus_Input_Schema.json");
 
-
         }
 
         [HttpGet]

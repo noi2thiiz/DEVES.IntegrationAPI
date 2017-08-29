@@ -413,12 +413,9 @@
     <Compile Include="Controllers\AssignedSurveyorController.cs" />
     <Compile Include="Controllers\ClaimRegistrationController.cs" />
     <Compile Include="Controllers\CreateAssessmentFromLocusController.cs" />
-    <Compile Include="Controllers\CreateCRMCorporateClientMasterController.cs" />
-    <Compile Include="Controllers\CreateCRMPersonalClientMasterController.cs" />
     <Compile Include="Controllers\CrmApiTestController.cs" />
     <Compile Include="Controllers\CRMInquiryClientMasterController.cs" />
     <Compile Include="Controllers\EwiServiceProxyController.cs" />
-    <Compile Include="Controllers\InquiryClientMasterController.cs" />
     <Compile Include="Controllers\InquiryConsultingHistoryController.cs" />
     <Compile Include="Controllers\InquiryCRMPayeeListController.cs" />
     <Compile Include="Controllers\InquiryPolicyMotorListClientController.cs" />
@@ -432,11 +429,9 @@
     <Compile Include="Controllers\RegComplaintController.cs" />
     <Compile Include="Controllers\RegPayeeCorporateController.cs" />
     <Compile Include="Controllers\RegPayeePersonalController.cs" />
-    <Compile Include="Controllers\RequestCleansingIdController.cs" />
     <Compile Include="Controllers\RequestSurveyorController.cs" />
     <Compile Include="Controllers\SendSMSController.cs" />
     <Compile Include="Controllers\SubmitSurveyAssessmentResultController.cs" />
-    <Compile Include="Controllers\TestAccountController.cs" />
     <Compile Include="Controllers\UpdateClaimInfoController.cs" />
     <Compile Include="Controllers\UpdateClaimNoController.cs" />
     <Compile Include="Controllers\UpdateCompliantStatusController.cs" />
@@ -472,14 +467,12 @@
     <Compile Include="Logic\buzClaimRegistration.cs" />
     <Compile Include="Logic\buzCreateAssessmentFromLocus.cs" />
     <Compile Include="Logic\BuzInquiryCrmAsrhClientMaster.cs" />
-    <Compile Include="Logic\buzCrmInquiryCorporateClientMaster.cs" />
     <Compile Include="Logic\buzCrmMasters.cs" />
     <Compile Include="Logic\buzCreateCrmClientCorporate.cs" />
     <Compile Include="Logic\buzCreateCrmClientPersonal.cs" />
     <Compile Include="Logic\buzCreateCrmPayeeCorporate.cs" />
     <Compile Include="Logic\buzCreateCrmPayeePersonal.cs" />
     <Compile Include="Logic\buzCrmInquiryClientMaster.cs" />
-    <Compile Include="Logic\buzCrmInquiryPersonalClientMaster.cs" />
     <Compile Include="Logic\buzCRMRegClientCorporate.cs" />
     <Compile Include="Logic\buzCRMRegClientPersonal.cs" />
     <Compile Include="Logic\buzCRMRegPayeeCorporate.cs" />
@@ -718,7 +711,13 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DataAccessService\Store\" />
-    <Folder Include="NewFolder1\" />
+    <Folder Include="Logic\Modules\Assessment\" />
+    <Folder Include="Logic\Modules\Client\" />
+    <Folder Include="Logic\Modules\Common\" />
+    <Folder Include="Logic\Modules\CustomerPortal\" />
+    <Folder Include="Logic\Modules\CustomerService\" />
+    <Folder Include="Logic\Modules\Sales\" />
+    <Folder Include="Logic\Modules\Survey\" />
     <Folder Include="Providers\" />
   </ItemGroup>
   <ItemGroup>
