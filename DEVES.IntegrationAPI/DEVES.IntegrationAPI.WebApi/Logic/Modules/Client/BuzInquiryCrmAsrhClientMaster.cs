@@ -57,7 +57,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 return crmInqContent;
             }
             //ลบ บริษัทออกจากชื่อ
-            if (contentModel?.conditionDetail != null)
+            AddDebugInfo("Input raw:", contentModel?.ToJson());
+            if (contentModel?.conditionDetail != null && contentModel?.conditionHeader.clientType=="C")
             {
                 contentModel.conditionDetail.clientFullname = contentModel?.conditionDetail?.clientFullname?.Replace("ห้างหุ้นส่วนจำกัด", "");
                 contentModel.conditionDetail.clientFullname = contentModel?.conditionDetail?.clientFullname?.Replace("บริษัท.", "");
@@ -70,9 +71,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     .ReplaceMultiplSpacesWithSingleSpace();
 
                 contentModel.conditionDetail.clientName1 = contentModel?.conditionDetail?.clientName1?.Replace("ห้างหุ้นส่วนจำกัด", "");
-                contentModel.conditionDetail.clientName1 = contentModel?.conditionDetail?.clientName2?.Replace("ห้างหุ้นส่วนจำกัด", "");
+                contentModel.conditionDetail.clientName2 = contentModel?.conditionDetail?.clientName2?.Replace("ห้างหุ้นส่วนจำกัด", "");
                 contentModel.conditionDetail.clientName1 = contentModel?.conditionDetail?.clientName1?.Replace("บริษัท.", "");
-                contentModel.conditionDetail.clientName1 = contentModel?.conditionDetail?.clientName1?.Replace("บริษัท", "");
+                contentModel.conditionDetail.clientName2 = contentModel?.conditionDetail?.clientName2?.Replace("บริษัท", "");
                 contentModel.conditionDetail.clientName1 = contentModel?.conditionDetail?.clientName1?.Replace("บ.", "");
                 //contentModel.conditionDetail.clientName1 = contentModel?.conditionDetail?.clientName1?.Replace("จำกัด", "");
                 //contentModel.conditionDetail.clientName2 = contentModel?.conditionDetail?.clientName2?.Replace("จำกัด", "");
@@ -84,7 +85,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 contentModel.conditionDetail.clientName2 = contentModel?.conditionDetail?.clientName2
                     .ReplaceMultiplSpacesWithSingleSpace();
             }
-
+            AddDebugInfo("Input after:", contentModel?.ToJson());
             //Start Process
             
                 #region IF inqCrmPayeeListIn.roleCode == {A,S,R,H} -> Master.InquiryMasterASRH

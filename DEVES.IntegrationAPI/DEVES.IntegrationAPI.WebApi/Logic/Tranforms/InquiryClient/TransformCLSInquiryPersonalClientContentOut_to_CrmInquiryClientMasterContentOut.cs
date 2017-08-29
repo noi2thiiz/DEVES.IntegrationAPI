@@ -8,6 +8,8 @@ using CLS = DEVES.IntegrationAPI.Model.CLS;
 using DEVES.IntegrationAPI.WebApi.Templates;
 using DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData;
 using DEVES.IntegrationAPI.Core.Helper;
+using DEVES.IntegrationAPI.WebApi.TechnicalService;
+
 //TODO เพิ่ม Source Data= Integration
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
@@ -24,6 +26,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             CLS.CLSInquiryPersonalClientContentOutputModel srcContent = (CLS.CLSInquiryPersonalClientContentOutputModel)input;
             CRMInquiryClientContentOutputModel trgtContent = (CRMInquiryClientContentOutputModel)output;
+            TraceDebugLogger.Instance.AddLog("TransformCLSInquiryPersonalClientContentOut_to_CrmInquiryClientMasterContentOut", input);
             if (trgtContent == null)
             {
                 trgtContent = new CRMInquiryClientContentOutputModel();

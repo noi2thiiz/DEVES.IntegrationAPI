@@ -521,9 +521,9 @@
     <Compile Include="Logic\Tranforms\RegClient\TranformCLSCreatePersonalClientOutputModel_to_RegClientPersonalInputModel.cs" />
     <Compile Include="Logic\Tranforms\RegClient\TranformCRMRegClientPersonalOutputModel_to_CRMRegClientPersonalOutputModel.cs" />
     <Compile Include="Logic\Tranforms\RegClient\TranformEWIResCOMPInquiryClientMasterContentModel_to_CLIENTUpdateCorporateClientAndAdditionalInfoInputModel.cs" />
-    <Compile Include="Logic\Tranforms\InquiryClient\TranformInquiryCRMPayeeListInputModel_to_CLSInquiryCorporateClientInputModel.cs" />
+    <Compile Include="Logic\Tranforms\InquiryPayee\TranformInquiryCRMPayeeListInputModel_to_CLSInquiryCorporateClientInputModel.cs" />
     <Compile Include="Logic\Tranforms\InquiryPayee\TranformInquiryCRMPayeeListInputModel_to_CLSInquiryPersonalClientInputModel.cs" />
-    <Compile Include="Logic\Tranforms\InquiryClient\TranformInquiryCRMPayeeListInputModel_to_COMPInquiryClientMasterInputModel.cs" />
+    <Compile Include="Logic\Tranforms\InquiryPayee\TranformInquiryCRMPayeeListInputModel_to_COMPInquiryClientMasterInputModel.cs" />
     <Compile Include="Logic\Tranforms\RegClient\TranformRegClientCorporateInputModel_to_CLIENTCreateCorporateClientAndAdditionalInfoInputModel.cs" />
     <Compile Include="Logic\Tranforms\RegClient\TranformRegClientCorporateInputModel_to_CLIENTUpdateCorporateClientAndAdditionalInfoInputModel.cs" />
     <Compile Include="Logic\Tranforms\RegClient\TranformRegClientCorporateInputModel_to_COMPInquiryClientMasterInputModel.cs" />
@@ -541,7 +541,7 @@
     <Compile Include="Logic\Tranforms\RegPayee\TransformCLSCreatePersonalClientInputModel_to_RegPayeePersonalInputModel.cs" />
     <Compile Include="Logic\Tranforms\InquiryClient\TransformCLSInquiryCorporateClientContentOut_to_CrmInquiryClientMasterContentOut.cs" />
     <Compile Include="Logic\Tranforms\InquiryPayee\transformCLSInquiryCorporateClientOutputModel_to_InquiryCRMPayeeListInputModel.cs" />
-    <Compile Include="Logic\Tranforms\InquiryClient\transformCLSInquiryPersonalClientOutputModel_to_InquiryCRMPayeeListInputModel.cs" />
+    <Compile Include="Logic\Tranforms\InquiryPayee\transformCLSInquiryPersonalClientOutputModel_to_InquiryCRMPayeeListInputModel.cs" />
     <Compile Include="Logic\Tranforms\InquiryClient\TransformCLSInquiryPersonalClientContentOut_to_CrmInquiryClientMasterContentOut.cs" />
     <Compile Include="Logic\Tranforms\RegClient\TransformCOMPInquiryClientMasterContentClientListModel_to_CLIENTUpdateCorporateClientAndAdditionalInfoInputModel.cs" />
     <Compile Include="Logic\Tranforms\InquiryPayee\transformCOMPInquiryClientMasterContentClientListModel_to_InquiryCRMPayeeListInputModel.cs" />
@@ -566,7 +566,7 @@
     <Compile Include="Logic\Tranforms\RegPayee\TransformRegPayeePersonalInputModel_to_SAPInquiryVendorInputModel.cs" />
     <Compile Include="Logic\Tranforms\RegPayee\TransformSAPCreateVendorInputModel_to_RegPayeeCorporateInputModel.cs" />
     <Compile Include="Logic\Tranforms\RegPayee\TransformSAPCreateVendorInputModel_to_RegPayeePersonalInputModel.cs" />
-    <Compile Include="Logic\Tranforms\InquiryPayee\TransformSAPInquiryVendorInputModel_to_RegPayeeCorporateInputModel.cs" />
+    <Compile Include="Logic\Tranforms\RegPayee\TransformSAPInquiryVendorInputModel_to_RegPayeeCorporateInputModel.cs" />
     <Compile Include="Logic\Tranforms\RegPayee\TransformSAPInquiryVendorInputModel_to_RegPayeePersonalInputModel.cs" />
     <Compile Include="Logic\Tranforms\InquiryPayee\TransformSAPInquiryVendorOutputModel_to_InquiryCRMPayeeListDataOutputModel.cs" />
     <Compile Include="Logic\Validator\MasterDataValidator.cs" />

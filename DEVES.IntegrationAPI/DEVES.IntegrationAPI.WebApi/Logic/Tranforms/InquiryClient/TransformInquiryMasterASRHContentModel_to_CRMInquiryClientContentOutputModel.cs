@@ -6,6 +6,7 @@ using DEVES.IntegrationAPI.Model.InquiryClientMaster;
 using DEVES.IntegrationAPI.WebApi.Templates;
 using System;
 using System.Collections.Generic;
+using DEVES.IntegrationAPI.WebApi.TechnicalService;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
@@ -16,7 +17,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             InquiryMasterASRHContentModel src = (InquiryMasterASRHContentModel)input;
             CRMInquiryClientContentOutputModel trgt = (CRMInquiryClientContentOutputModel)output;
 
-            if(trgt.data == null)
+            TraceDebugLogger.Instance.AddLog("TransformInquiryMasterASRHContentModel_to_CRMInquiryClientContentOutputModel", input);
+
+            if (trgt.data == null)
             {
                 trgt.data=new List<CRMInquiryClientOutputDataModel>();
             }
@@ -49,10 +52,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 data.asrhHeader.hospitalFlag = asrh.ASRHList.businessType.ToUpper() == "H" ? "Y" : "N";
 
 
-                //ตัด เบอร์โทร  "contactNumber": "T. 034845533 F. 034845533",
+                //ไม่ต้องตัด เบอร์โทร  คุณแอร์โร่บอกแล้ว
+                //เบอร์โทร  "contactNumber": "T. 034845533 F. 034845533",
 
-                //ตัด "fullName": "บริษัท พระราม 2 เซอร์เวย์ จำกัด",
-                //ตัด "salutationText": "",
+              
 
                 trgt.data.Add(data);
             }

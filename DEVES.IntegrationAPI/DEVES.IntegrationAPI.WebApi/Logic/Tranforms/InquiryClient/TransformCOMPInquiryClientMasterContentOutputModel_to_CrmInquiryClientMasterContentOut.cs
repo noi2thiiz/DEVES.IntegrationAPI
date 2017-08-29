@@ -5,6 +5,7 @@ using System.Web;
 using DEVES.IntegrationAPI.Model;
 using DEVES.IntegrationAPI.Model.InquiryClientMaster;
 using DEVES.IntegrationAPI.Model.Polisy400;
+using DEVES.IntegrationAPI.WebApi.TechnicalService;
 using DEVES.IntegrationAPI.WebApi.Templates;
 
 
@@ -15,7 +16,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         public override BaseDataModel TransformModel(BaseDataModel input, BaseDataModel output)
         {
 
-            Console.WriteLine("  process:TransformCOMPInquiryClientMasterContentOutputModel_to_CrmInquiryClientMasterContentOut");
+           
+           
             /*
              * ToDo:    Correct the case that there are many records input
              *          1. Loop through the input, 
@@ -25,6 +27,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             EWIResCOMPInquiryClientMasterContentModel srcContent = (EWIResCOMPInquiryClientMasterContentModel)input;
             CRMInquiryClientContentOutputModel trgtContent = (CRMInquiryClientContentOutputModel)output;
+
+            TraceDebugLogger.Instance.AddLog("TransformCOMPInquiryClientMasterContentOutputModel_to_CrmInquiryClientMasterContentOut", input);
+
             if (trgtContent.data == null)
             {
                 trgtContent.data = new List<CRMInquiryClientOutputDataModel>();

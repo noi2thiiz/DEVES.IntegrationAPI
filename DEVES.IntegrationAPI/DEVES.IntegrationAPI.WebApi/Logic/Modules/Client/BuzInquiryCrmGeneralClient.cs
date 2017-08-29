@@ -68,6 +68,34 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 return crmInqContent;
             }
 
+            if (InputModel?.conditionDetail != null && InputModel?.conditionHeader.clientType == "C")
+            {
+                InputModel.conditionDetail.clientFullname = InputModel?.conditionDetail?.clientFullname?.Replace("ห้างหุ้นส่วนจำกัด", "");
+                InputModel.conditionDetail.clientFullname = InputModel?.conditionDetail?.clientFullname?.Replace("บริษัท.", "");
+                InputModel.conditionDetail.clientFullname = InputModel?.conditionDetail?.clientFullname?.Replace("บริษัท", "");
+                InputModel.conditionDetail.clientFullname = InputModel?.conditionDetail?.clientFullname?.Replace("บ.", "");
+                // contentModel.conditionDetail.clientFullname = contentModel?.conditionDetail?.clientFullname?.Replace("จำกัด", "");
+
+
+                InputModel.conditionDetail.clientFullname = InputModel.conditionDetail.clientFullname
+                    .ReplaceMultiplSpacesWithSingleSpace();
+
+                InputModel.conditionDetail.clientName1 = InputModel?.conditionDetail?.clientName1?.Replace("ห้างหุ้นส่วนจำกัด", "");
+                InputModel.conditionDetail.clientName2 = InputModel?.conditionDetail?.clientName2?.Replace("ห้างหุ้นส่วนจำกัด", "");
+                InputModel.conditionDetail.clientName1 = InputModel?.conditionDetail?.clientName1?.Replace("บริษัท.", "");
+                InputModel.conditionDetail.clientName2 = InputModel?.conditionDetail?.clientName2?.Replace("บริษัท", "");
+                InputModel.conditionDetail.clientName1 = InputModel?.conditionDetail?.clientName1?.Replace("บ.", "");
+                //contentModel.conditionDetail.clientName1 = contentModel?.conditionDetail?.clientName1?.Replace("จำกัด", "");
+                //contentModel.conditionDetail.clientName2 = contentModel?.conditionDetail?.clientName2?.Replace("จำกัด", "");
+
+
+                InputModel.conditionDetail.clientName1 = InputModel?.conditionDetail?.clientName1
+                    .ReplaceMultiplSpacesWithSingleSpace();
+
+                InputModel.conditionDetail.clientName2 = InputModel?.conditionDetail?.clientName2
+                    .ReplaceMultiplSpacesWithSingleSpace();
+            }
+
 
             //Search Client from Cleansing
 
