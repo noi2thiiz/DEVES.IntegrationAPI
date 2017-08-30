@@ -435,6 +435,7 @@
     <Compile Include="Controllers\RequestCleansingIdController.cs" />
     <Compile Include="Controllers\RequestSurveyorController.cs" />
     <Compile Include="Controllers\SendSMSController.cs" />
+    <Compile Include="Controllers\StrategySQLController.cs" />
     <Compile Include="Controllers\SubmitSurveyAssessmentResultController.cs" />
     <Compile Include="Controllers\TestAccountController.cs" />
     <Compile Include="Controllers\UpdateClaimInfoController.cs" />
@@ -489,6 +490,7 @@
     <Compile Include="Logic\buzCRMRegPayeePersonal.cs" />
     <Compile Include="Logic\buzInquiryCRMPayeeListNew.cs" />
     <Compile Include="Logic\BuzInquiryCrmGeneralClient.cs" />
+    <Compile Include="Logic\buzQuerySQL.cs" />
     <Compile Include="Logic\buzRegComplaint.cs" />
     <Compile Include="Logic\buzReqClsId.cs" />
     <Compile Include="Logic\buzRequestSurveyor.cs" />
