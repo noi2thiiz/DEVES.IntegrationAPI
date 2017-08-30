@@ -98,11 +98,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 regClientCorporateInput?.addressHeader?.addressType
             );
 
-            //"addressHeader.addressType"
-            regClientCorporateInput.addressHeader.addressType = validator.TryConvertAddressTypeCode(
-                "addressInfo.addressType",
-                regClientCorporateInput?.addressHeader?.addressType
-            );
+        
 
             //"profileHeader.econActivity"
             regClientCorporateInput.profileHeader.econActivity = validator.TryConvertEconActivityCode(
