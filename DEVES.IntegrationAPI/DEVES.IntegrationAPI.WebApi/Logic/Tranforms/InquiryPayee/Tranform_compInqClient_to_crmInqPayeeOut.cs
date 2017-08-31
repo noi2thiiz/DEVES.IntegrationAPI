@@ -39,6 +39,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 {
                     sourceData = CommonConstant.CONST_SYSTEM_POLISY400,
                     cleansingId = client?.cleansingId,
+                    clientType = client?.clientType,
                     polisyClientId = client?.clientNumber,
                     sapVendorCode = "",
                     sapVendorGroupCode = "",

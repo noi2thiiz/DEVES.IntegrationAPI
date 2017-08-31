@@ -57,7 +57,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 return crmInqContent;
             }
             //ลบ บริษัทออกจากชื่อ
-            if (contentModel?.conditionDetail != null)
+            AddDebugInfo("Input raw:", contentModel?.ToJson());
+            if (contentModel?.conditionDetail != null && contentModel?.conditionHeader.clientType=="C")
             {
                 contentModel.conditionDetail.clientFullname = contentModel?.conditionDetail?.clientFullname?.Replace("ห้างหุ้นส่วนจำกัด", "");
                 contentModel.conditionDetail.clientFullname = contentModel?.conditionDetail?.clientFullname?.Replace("บริษัท.", "");
@@ -70,9 +71,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     .ReplaceMultiplSpacesWithSingleSpace();
 
                 contentModel.conditionDetail.clientName1 = contentModel?.conditionDetail?.clientName1?.Replace("ห้างหุ้นส่วนจำกัด", "");
-                contentModel.conditionDetail.clientName1 = contentModel?.conditionDetail?.clientName2?.Replace("ห้างหุ้นส่วนจำกัด", "");
+                contentModel.conditionDetail.clientName2 = contentModel?.conditionDetail?.clientName2?.Replace("ห้างหุ้นส่วนจำกัด", "");
                 contentModel.conditionDetail.clientName1 = contentModel?.conditionDetail?.clientName1?.Replace("บริษัท.", "");
-                contentModel.conditionDetail.clientName1 = contentModel?.conditionDetail?.clientName1?.Replace("บริษัท", "");
+                contentModel.conditionDetail.clientName2 = contentModel?.conditionDetail?.clientName2?.Replace("บริษัท", "");
                 contentModel.conditionDetail.clientName1 = contentModel?.conditionDetail?.clientName1?.Replace("บ.", "");
                 //contentModel.conditionDetail.clientName1 = contentModel?.conditionDetail?.clientName1?.Replace("จำกัด", "");
                 //contentModel.conditionDetail.clientName2 = contentModel?.conditionDetail?.clientName2?.Replace("จำกัด", "");
@@ -84,114 +85,40 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 contentModel.conditionDetail.clientName2 = contentModel?.conditionDetail?.clientName2
                     .ReplaceMultiplSpacesWithSingleSpace();
             }
-
+            AddDebugInfo("Input after:", contentModel?.ToJson());
             //Start Process
             
                 #region IF inqCrmPayeeListIn.roleCode == {A,S,R,H} -> Master.InquiryMasterASRH
-                // Search in MASTER: MOTOR_InquiryMasterASRH()
-                var service = new MOTORInquiryMasterASRH(TransactionId, ControllerName);
-           
-                InquiryMasterASRHDataInputModel inqASRHIn = (InquiryMasterASRHDataInputModel)DataModelFactory.GetModel(typeof(InquiryMasterASRHDataInputModel));
-                inqASRHIn = (InquiryMasterASRHDataInputModel)TransformerFactory.TransformModel(contentModel, inqASRHIn);
+                crmInqContent = InquiryMasterASRH(contentModel, crmInqContent, ref bFoundIn_APAR_or_Master);
 
-                InquiryMasterASRHContentModel inqASRHOut = service.Execute(inqASRHIn);
-
-
-                AddDebugInfo("InquiryMasterASRH);", inqASRHIn);
-                clientType = "C";
-                roleCode = inqASRHIn.asrhType;
-
-                if (inqASRHOut != null && inqASRHOut.ASRHListCollection != null)
-                {
-                    if (inqASRHOut.ASRHListCollection.Count > 0)
-                    {
-                        crmInqContent =
-                            (CRMInquiryClientContentOutputModel) TransformerFactory.TransformModel(inqASRHOut,
-                                crmInqContent);
-                        bFoundIn_APAR_or_Master = true;
-                        AddDebugInfo(" found in InquiryMasterASRH);");
-                    }
-                    else
-                    {
-                        AddDebugInfo("not found in InquiryMasterASRH);");
-                    }
-
-
-                }
-                else
-                {
-                    AddDebugInfo("not found in InquiryMasterASRH);");
-                }
                 #endregion inqCrmPayeeListIn.roleCode == {A,S,R,H} -> Master.InquiryMasterASRH
             
 
-            if (bFoundIn_APAR_or_Master)
+            //ถ้าไม่พยให้ไปค้นที่ 400
+            if(false==crmInqContent?.data?.Any())
             {
-                #region Search crmClientId by CleansingId
-                foreach (CRMInquiryClientOutputDataModel data in crmInqContent.data)
-                {
-                    if (string.IsNullOrEmpty(data?.generalHeader?.crmClientId))
-                    {
-                        try
-                        {
-                            List<string> crmData = SearchCrmContactClientId(contentModel?.conditionDetail?.cleansingId);
-                            if (crmData != null && crmData.Count == 1)
-                            {
-                                data.generalHeader.crmClientId = crmData.First();
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            AddDebugInfo("Error on search crmClientId", "Error: " + e.Message + "--" + e.StackTrace);
-                        }
-
-                    }
-                }
-                #endregion Search crmClientId by CleansingId
-            }
-            else
-            {
-                
                 #region Call COMP_Inquiry through ServiceProxy
 
-                var compService = new COMPInquiryClientMaster(TransactionId,ControllerName);
-               
-                COMPInquiryClientMasterInputModel compInqClientInput = new COMPInquiryClientMasterInputModel();
-                compInqClientInput = (COMPInquiryClientMasterInputModel)TransformerFactory.TransformModel(contentModel, compInqClientInput);
-               
-                EWIResCOMPInquiryClientMasterContentModel retCOMPInqClient = compService.Execute(compInqClientInput);
-
-                AddDebugInfo("Call COMP_Inquiry);", compInqClientInput);
-                //+ Call CLS_InquiryCLSPersonalClient through ServiceProxy
-     
-                //Found in Polisy400
-                if (retCOMPInqClient.clientListCollection != null)
-                {
-                    crmInqContent =
-                        (CRMInquiryClientContentOutputModel) TransformerFactory.TransformModel(retCOMPInqClient,
-                            crmInqContent);
-                }
-                else
-                {
-                    AddDebugInfo("not found COMP_Inquiry);");
-                }
-
+                crmInqContent = InquiryCOMPClientMaster(contentModel, crmInqContent);
 
                 #endregion Call COMP_Inquiry through ServiceProxy
             }
 
-            foreach (CRMInquiryClientOutputDataModel temp in AllSearchResult)
+            
+
+
+            bool crmDbError = false;
+            foreach (CRMInquiryClientOutputDataModel temp in crmInqContent.data)
             {
-                // temp.generalHeader.clientType = InputModel?.conditionHeader?.clientType;
+                #region map roleCode
+                temp.generalHeader.roleCode = contentModel?.conditionHeader?.roleCode?.ToUpper();
+
+                /* ส่วนการ map ตาม Flag นี้ได้เสนอแอรโรแล้วแต่ไม่ให้ทำ
                 if (temp.generalHeader.clientType == "P")
                 {
                     temp.generalHeader.roleCode = "G";
                 }
-                else
-                if (temp.asrhHeader.assessorFlag == "N" && temp.asrhHeader.solicitorFlag == "N" && temp.asrhHeader.repairerFlag == "N" && temp.asrhHeader.hospitalFlag == "N")
-                {
-                    temp.generalHeader.roleCode = "G";
-                }
+               
                 else
                 if (temp.asrhHeader.assessorFlag == "Y" && temp.asrhHeader.solicitorFlag == "N" && temp.asrhHeader.repairerFlag == "N" && temp.asrhHeader.hospitalFlag == "N")
                 {
@@ -207,13 +134,25 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 {
                     temp.generalHeader.roleCode = "R";
                 }
-                else
-                if (temp.asrhHeader.assessorFlag == "N" && temp.asrhHeader.solicitorFlag == "N" && temp.asrhHeader.repairerFlag == "N" && temp.asrhHeader.hospitalFlag == "Y")
+                else if (temp.asrhHeader.assessorFlag == "N" && temp.asrhHeader.solicitorFlag == "N" &&
+                         temp.asrhHeader.repairerFlag == "N" && temp.asrhHeader.hospitalFlag == "Y")
                 {
                     temp.generalHeader.roleCode = "H";
                 }
-                // กรณีอื่นๆ ระบุไม่ได้ บางตัวมีมากกว่า 1 role code
+                 else
+                 if (temp.asrhHeader.assessorFlag == "N" && temp.asrhHeader.solicitorFlag == "N" && temp.asrhHeader.repairerFlag == "N" && temp.asrhHeader.hospitalFlag == "N")
+                 {
+                     temp.generalHeader.roleCode = ""; 
+                 }
+                else
+                {
+                  
+                    temp.generalHeader.roleCode = contentModel?.conditionHeader?.roleCode?.ToUpper();
+                }
+                */
 
+
+                #endregion
 
 
                 #region Search crmClientId by CleansingId
@@ -222,18 +161,29 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 {
                     try
                     {
-                        List<string> crmData = SearchCrmClientId(temp.generalHeader.cleansingId, contentModel.conditionHeader.clientType);
-                        if (crmData != null && crmData.Count == 1)
+                        if (false == crmDbError)
                         {
-                            temp.generalHeader.crmClientId = crmData.First();
+                            // //AdHoc fix timeout: เพื่อป้องกันกรณีที่เกิด error จากฐานข้อมูล crm แล้วจะทำให้ api ช่าไปหมด
+                            List<string> crmData = SearchCrmClientId(temp.generalHeader.cleansingId,
+                                contentModel.conditionHeader.clientType);
+                            if (crmData != null && crmData.Count == 1)
+                            {
+                                temp.generalHeader.crmClientId = crmData.First();
+                            }
+                            else
+                            {
+                                AddDebugInfo("Error on search crmClientId: cleansingId (" +
+                                             temp.generalHeader.cleansingId + ") not found");
+                            }
                         }
                         else
                         {
-                            AddDebugInfo("Error on search crmClientId: cleansingId (" + temp.generalHeader.cleansingId + ") not found");
+                            AddDebugInfo("xrmDbError:ป้องกันกรณีที่เกิด error จากฐานข้อมูล crm แล้วจะทำให้ api ช่าไปหมด จึงข้าม crm ไปทั้งหมดเลย ");
                         }
                     }
                     catch (Exception e)
                     {
+                        crmDbError = true;
                         AddDebugInfo("Error on search crmClientId", "Error: " + e.Message + "--" + e.StackTrace);
                     }
 
@@ -255,6 +205,98 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 crmInqContent.data = crmInqContent.data.Where(row => row?.profileInfo?.name1.Trim() != "" || row?.profileInfo?.fullName.Trim() != "" ).ToList();
             }
 
+            return crmInqContent;
+        }
+
+        private CRMInquiryClientContentOutputModel InquiryMasterASRH(InquiryClientMasterInputModel contentModel,
+            CRMInquiryClientContentOutputModel crmInqContent, ref bool bFoundIn_APAR_or_Master)
+        {
+            string clientType;
+            string roleCode;
+            // Search in MASTER: MOTOR_InquiryMasterASRH()
+            var service = new MOTORInquiryMasterASRH(TransactionId, ControllerName);
+
+            InquiryMasterASRHDataInputModel inqASRHIn =
+                (InquiryMasterASRHDataInputModel) DataModelFactory.GetModel(typeof(InquiryMasterASRHDataInputModel));
+            inqASRHIn = (InquiryMasterASRHDataInputModel) TransformerFactory.TransformModel(contentModel, inqASRHIn);
+
+            InquiryMasterASRHContentModel inqASRHOut = service.Execute(inqASRHIn);
+
+
+            AddDebugInfo("InquiryMasterASRH);", inqASRHIn);
+            clientType = "C";
+            roleCode = inqASRHIn.asrhType;
+
+            if (inqASRHOut != null && inqASRHOut.ASRHListCollection != null)
+            {
+                if (inqASRHOut.ASRHListCollection.Count > 0)
+                {
+                    crmInqContent =
+                        (CRMInquiryClientContentOutputModel) TransformerFactory.TransformModel(inqASRHOut,
+                            crmInqContent);
+                    bFoundIn_APAR_or_Master = true;
+                    AddDebugInfo(" found in InquiryMasterASRH);");
+                }
+                else
+                {
+                    AddDebugInfo("not found in InquiryMasterASRH);");
+                }
+            }
+            else
+            {
+                AddDebugInfo("not found in InquiryMasterASRH);");
+            }
+            return crmInqContent;
+        }
+
+        private void FillCrmClientIdbyCleansingId(CRMInquiryClientContentOutputModel crmInqContent,
+            InquiryClientMasterInputModel contentModel)
+        {
+            foreach (CRMInquiryClientOutputDataModel data in crmInqContent.data)
+            {
+                if (string.IsNullOrEmpty(data?.generalHeader?.crmClientId))
+                {
+                    try
+                    {
+                        List<string> crmData = SearchCrmContactClientId(contentModel?.conditionDetail?.cleansingId);
+                        if (crmData != null && crmData.Count == 1)
+                        {
+                            data.generalHeader.crmClientId = crmData.First();
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        AddDebugInfo("Error on search crmClientId", "Error: " + e.Message + "--" + e.StackTrace);
+                    }
+                }
+            }
+        }
+
+        private CRMInquiryClientContentOutputModel InquiryCOMPClientMaster(InquiryClientMasterInputModel contentModel,
+            CRMInquiryClientContentOutputModel crmInqContent)
+        {
+            var compService = new COMPInquiryClientMaster(TransactionId, ControllerName);
+
+            COMPInquiryClientMasterInputModel compInqClientInput = new COMPInquiryClientMasterInputModel();
+            compInqClientInput =
+                (COMPInquiryClientMasterInputModel) TransformerFactory.TransformModel(contentModel, compInqClientInput);
+
+            EWIResCOMPInquiryClientMasterContentModel retCOMPInqClient = compService.Execute(compInqClientInput);
+
+            AddDebugInfo("Call COMP_Inquiry);", compInqClientInput);
+            //+ Call CLS_InquiryCLSPersonalClient through ServiceProxy
+
+            //Found in Polisy400
+            if (retCOMPInqClient.clientListCollection != null)
+            {
+                crmInqContent =
+                    (CRMInquiryClientContentOutputModel) TransformerFactory.TransformModel(retCOMPInqClient,
+                        crmInqContent);
+            }
+            else
+            {
+                AddDebugInfo("not found COMP_Inquiry);");
+            }
             return crmInqContent;
         }
 

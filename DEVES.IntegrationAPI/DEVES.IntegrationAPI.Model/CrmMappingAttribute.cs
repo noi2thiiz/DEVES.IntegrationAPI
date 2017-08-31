@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -37,11 +38,25 @@ namespace DEVES.IntegrationAPI.Model
     {
         
     }
-    public class DataModelDebugInfo
+    //StackTrace stackTrace = new StackTrace();
+
+    // Get calling method name
+   // Console.WriteLine(stackTrace.GetFrame(1).GetMethod().Name);
+    public class DataModelDebugInfo: BaseDataModel
     {
         public string message { get; set; }
+    
+        public string methodName { get; set; }
+        public string className { get; set; }
+        public int line { get; set; }
+       
+   
+        public string timestamp { get; set; } = DateTime.Now.ToString();
+
         public dynamic info { get; set; }
-}
+      
+
+    }
 
     public abstract class BaseContentJsonServiceOutputModel : BaseDataModel
     {

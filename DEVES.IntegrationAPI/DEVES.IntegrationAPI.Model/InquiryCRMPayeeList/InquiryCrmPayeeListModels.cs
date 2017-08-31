@@ -32,8 +32,10 @@ namespace DEVES.IntegrationAPI.Model.InquiryCRMPayeeList
     public class InquiryCrmPayeeListDataModel : BaseDataModel
     {
         public string sourceData { set; get; } = "";
+       
 
         public string cleansingId { set; get; }
+        public string clientType { set; get; }
 
         public string polisyClientId { set; get; } = "";
         public string sapVendorCode { set; get; } = "";
@@ -68,15 +70,22 @@ namespace DEVES.IntegrationAPI.Model.InquiryCRMPayeeList
         public string repairerFlag { set; get; } = "";
         public string hospitalFlag { set; get; } = "";
 
+        public string clientStatus { set; get; } = "";
+
+        
         [JsonProperty(Order = 30)]
         public List<bankInfoModel> bankInfo { set; get; } = new List<bankInfoModel>();
         [JsonProperty(Order = 31)]
         public List<withHoldingTaxInfoModel> withHoldingTaxInfo { set; get; } = new List<withHoldingTaxInfoModel>();
 
+     
         public string sapVendorAccountCode { get; set; }
+     
         public string sapVendorPayterm { get; set; }
 
+        [JsonIgnore]
         public List<InquiryCrmPayeeListDataModel>  sapResults { get; set; }
+        [JsonIgnore]
         public SAPInquiryVendorInputModel sapSearchCondition { get; set; }
     } 
     public class bankInfoModel : BaseDataModel

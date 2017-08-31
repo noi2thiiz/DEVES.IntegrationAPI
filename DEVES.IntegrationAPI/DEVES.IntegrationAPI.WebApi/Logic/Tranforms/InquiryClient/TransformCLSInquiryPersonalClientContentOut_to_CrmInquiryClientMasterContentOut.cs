@@ -8,6 +8,8 @@ using CLS = DEVES.IntegrationAPI.Model.CLS;
 using DEVES.IntegrationAPI.WebApi.Templates;
 using DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData;
 using DEVES.IntegrationAPI.Core.Helper;
+using DEVES.IntegrationAPI.WebApi.TechnicalService;
+
 //TODO เพิ่ม Source Data= Integration
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
@@ -24,6 +26,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             CLS.CLSInquiryPersonalClientContentOutputModel srcContent = (CLS.CLSInquiryPersonalClientContentOutputModel)input;
             CRMInquiryClientContentOutputModel trgtContent = (CRMInquiryClientContentOutputModel)output;
+            TraceDebugLogger.Instance.AddLog("TransformCLSInquiryPersonalClientContentOut_to_CrmInquiryClientMasterContentOut", input);
             if (trgtContent == null)
             {
                 trgtContent = new CRMInquiryClientContentOutputModel();
@@ -49,6 +52,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     trgt.generalHeader.cleansingId = src?.cleansing_id?.Trim() ?? "";
                     trgt.generalHeader.polisyClientId = src?.clntnum?.Trim() ?? "";
                     trgt.generalHeader.sourceData = CommonConstant.CONST_SYSTEM_CLS;
+                    trgt.generalHeader.clientType = src?.clientType;
+                    trgt.profileInfo.clientStatus = src?.cltstat?.Trim().ToUpper() ?? "";
 
 
                     trgt.profileInfo.name1 = src?.lgivname?.Trim() ?? "";
@@ -123,7 +128,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         }
                        
                         trgt.addressInfo.latitude = addrInfo.lattitude?.Trim() ?? "";
-                        trgt.addressInfo.longtitude = addrInfo.longtitude?.Trim() ?? "";
+                        trgt.addressInfo.longitude = addrInfo.longitude?.Trim() ?? "";
                     }
                     //trgt.AddDebugInfo("TransformCLSInquiryPersonalClientContentOut_to_CrmInquiryClientMasterContentOut","");
                    // trgt.AddDebugInfo("Source Data", src);

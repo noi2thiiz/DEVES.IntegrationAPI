@@ -55,7 +55,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 trgt.postCode = src.postCode ;
                 trgt.country = src.country ;
                 trgt.latitude = src.latitude ;
-                trgt.longtitude = src.longtitude ;
+                trgt.longtitude = src.longtitude;
 
                 trgt.assessorOregNum = src.assessorOregNum ;
                 trgt.assessorBlackListFlag = src.assessorBlackListFlag ;

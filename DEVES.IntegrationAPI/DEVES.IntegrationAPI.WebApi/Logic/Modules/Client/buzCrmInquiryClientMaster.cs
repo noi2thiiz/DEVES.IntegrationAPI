@@ -22,11 +22,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             if (contentModel.conditionHeader.roleCode == "G")
             { 
                 cmd = new BuzInquiryCrmGeneralClient();
+                cmd.ControllerName = ControllerName;
                 cmd.TransactionId = TransactionId;
             }
             else 
             {
                 cmd = new BuzInquiryCrmAsrhClientMaster();
+                cmd.ControllerName = ControllerName;
                 cmd.TransactionId = TransactionId;
             }
             

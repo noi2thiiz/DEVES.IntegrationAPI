@@ -43,6 +43,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             //generalHeader
             trgt.roleCode = src.generalHeader.roleCode ?? "";
             trgt.clientId = src.generalHeader.polisyClientId ?? "";
+            
             trgt.crmPersonId = src.generalHeader.crmClientId ?? "";
 
             //profileHeader
@@ -86,7 +87,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             trgt.country = src.addressHeader.country ?? "";
             trgt.addressType = src.addressHeader.addressType ?? "";
             trgt.latitude = src.addressHeader.latitude ?? "";
-            trgt.longigude = src.addressHeader.longtitude ?? "";
+            trgt.longigude = src.addressHeader.longitude ?? "";
 
 
             return trgt;

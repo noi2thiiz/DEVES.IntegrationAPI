@@ -30,7 +30,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.DataBaseContracts
             var result = Excecute(new Dictionary<string, string> { { "clientType", clientType }, { "clientId", clientId } });
             Console.WriteLine(result.ToJson());
             var searchResult = new List<string>();
-            if (result.Success)
+            if (true==result.Success)
             {
                 if (result.Data.Any())
                 {
@@ -41,13 +41,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.DataBaseContracts
 
 
                 }
-
+                return searchResult;
             }
             else
             {
                 throw new Exception("SearchCrmContactClientId Error:" + result.Message);
             }
-            return searchResult;
+           
         }
 
         public string GetCrmContactClientId(string clientType, string clientId)

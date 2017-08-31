@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using DEVES.IntegrationAPI.Model;
@@ -54,13 +55,28 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
                  LogData.Remove(globalTransactionID);
             }
         }
+     
 
-        public void AddDebugLogInfo(string globalTransactionID, string message, dynamic info)
+        public void AddDebugLogInfo(string globalTransactionID, string message, dynamic info, string memberName, string sourceFilePath,int sourceLineNumber)
         {
             if (LogData.ContainsKey(globalTransactionID))
             {
-                var log =  LogData[globalTransactionID];
-                log.AddDebugInfo( message,  info);
+               
+                var log = LogData[globalTransactionID];
+                log.AddDebugInfo(message, info, memberName, sourceFilePath, sourceLineNumber);
+            }
+        }
+        public void AddLog( string message, dynamic info,
+            [System.Runtime.CompilerServices.CallerMemberName] string memberName = "",
+            [System.Runtime.CompilerServices.CallerFilePath] string sourceFilePath = "",
+            [System.Runtime.CompilerServices.CallerLineNumber] int sourceLineNumber = 0)
+        {
+            var globalTransactionID = HttpContext.Current?.Items["GlobalTransactionID"]?.ToString()??"";
+            if (!string.IsNullOrEmpty(globalTransactionID) && LogData.ContainsKey(globalTransactionID))
+            {
+
+                var log = LogData[globalTransactionID];
+                log.AddDebugInfo(message, info, memberName, sourceFilePath, sourceLineNumber);
             }
         }
 

@@ -78,7 +78,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                     sourceData = CommonConstant.CONST_SYSTEM_CLS,
                     cleansingId = clsData?.cleansing_id,
+                    clientType = clsData.clientType,
                     polisyClientId = clsData?.clntnum,
+                    clientStatus =  clsData?.cltstat?.Trim().ToUpper() ?? "",
                     sapVendorCode = "",
                     sapVendorGroupCode = "",
 

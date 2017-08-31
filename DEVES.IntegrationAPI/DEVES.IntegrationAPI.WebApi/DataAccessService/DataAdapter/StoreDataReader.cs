@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
+using DEVES.IntegrationAPI.WebApi.TechnicalService;
 
 namespace DEVES.IntegrationAPI.WebApi.DataAccessService.DataAdapter
 {
@@ -22,9 +23,10 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.DataAdapter
 
         public DbResult Execute(DbRequest req)
         {
+            TraceDebugLogger.Instance.AddLog("Execute StoreDataReader input:", req);
             int fieldcount = 0;
             int rowscount = 0;
-
+            SqlConnection conn = new SqlConnection(ConnectionString);
             try
             {
 
@@ -41,28 +43,34 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.DataAdapter
                 List<object> fieldInfo = new List<object>();
 
 
-                using (SqlDataReader reader = ExecuteProcedure(req.StoreName, paras))
+              
+                conn.Open();
+
+                using (SqlDataReader reader = ExecuteProcedure(req.StoreName, paras, conn))
                 {
 
+
                     for (int index = 0; index < fieldcount; index++)
-                    { // iterate through all columns
+                    {
+                        // iterate through all columns
 
                         var fieldName = reader.GetName(index);
                         var fieldType = reader.GetFieldType(index);
-                        fieldInfo.Add(new { Name = fieldName });
+                        fieldInfo.Add(new {Name = fieldName});
 
                     }
 
                     while (reader.Read())
                     {
                         rowscount++;
-                      
+
                         fieldcount = reader.FieldCount;
                         Dictionary<string, object> item = new Dictionary<string, object>();
 
 
                         for (int index = 0; index < fieldcount; index++)
-                        { // iterate through all columns
+                        {
+                            // iterate through all columns
 
                             var fieldName = reader.GetName(index);
                             var fieldValue = reader[index];
@@ -75,8 +83,8 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.DataAdapter
 
                     }
                     //result.Add(rows);
-                }
 
+                }
 
                 var dbResult = new DbResult
                 {
@@ -90,34 +98,49 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.DataAdapter
                     FieldInfo = fieldInfo,
                     ReqParams = paras
                 };
+                TraceDebugLogger.Instance.AddLog("ExecuteProcedure StoreDataReader Success: (Success = true)",
+                    dbResult);
                 return dbResult;
             }
             catch (System.Exception e)
             {
+                TraceDebugLogger.Instance.AddLog("Execute StoreDataReader Exception: (Success = false)" + e.Message,
+                    e.StackTrace);
                 var dbResult = new DbResult();
                 dbResult.Success = false;
                 dbResult.Code = "0";
                 dbResult.Message = e.ToString();
                 return dbResult;
             }
+            finally
+            {
+                conn.Close();
+            }
 
 
         }
 
-        public SqlDataReader ExecuteProcedure(string commandName, Dictionary<string, object> paras)
+        public SqlDataReader ExecuteProcedure(string commandName, Dictionary<string, object> paras, SqlConnection conn)
         {
-          
-            SqlConnection conn = new SqlConnection(ConnectionString);
-            conn.Open();
-            SqlCommand comm = conn.CreateCommand();
-            comm.CommandType = CommandType.StoredProcedure;
-            comm.CommandText = commandName;
-            if (paras != null)
+            try
             {
-                foreach (KeyValuePair<string, object> kvp in paras)
-                    comm.Parameters.Add(new SqlParameter(kvp.Key, kvp.Value));
+               
+                SqlCommand comm = conn.CreateCommand();
+                comm.CommandType = CommandType.StoredProcedure;
+                comm.CommandText = commandName;
+                if (paras != null)
+                {
+                    foreach (KeyValuePair<string, object> kvp in paras)
+                        comm.Parameters.Add(new SqlParameter(kvp.Key, kvp.Value));
+                }
+                return comm.ExecuteReader(); //System.Data.CommandBehavior.CloseConnection
             }
-            return comm.ExecuteReader(); //System.Data.CommandBehavior.CloseConnection
+            catch (Exception e)
+            {
+                TraceDebugLogger.Instance.AddLog("ExecuteProcedure StoreDataReader Exception:" + e.Message, e.StackTrace);
+                throw;
+            }
+           
         }
 
         public DbResult Execute<T>(DbRequest req)

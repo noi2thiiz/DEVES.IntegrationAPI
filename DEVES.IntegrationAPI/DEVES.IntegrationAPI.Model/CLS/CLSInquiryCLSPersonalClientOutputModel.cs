@@ -24,7 +24,12 @@ namespace DEVES.IntegrationAPI.Model.CLS
     }
     public class CLSInquiryPersonalClientOutputModel : BaseDataModel
     {
-   
+        //Extra Field
+        public String sourceData { set; get; } = "CLS";
+        public String clientType { set; get; } = "P";
+
+        //cls field
+
         public String cleansing_id { set; get; }
         public String clntnum { set; get; }
         public String secuityno { set; get; }
@@ -50,7 +55,10 @@ namespace DEVES.IntegrationAPI.Model.CLS
         public String crm_ref_code1 { set; get; }
 
         public String corporate_staff_no { set; get; }
-        
+
+        public String cltstat { get; set; } = "";
+        public String cls_stat_desc { get; set; } = "";
+
 
         public List<CLSAddressListsCollectionModel> addressListsCollection { set; get; }
     }
@@ -74,7 +82,9 @@ namespace DEVES.IntegrationAPI.Model.CLS
         public String sub_district_display { set; get; }
         public String postal_code { set; get; }
         public String lattitude { set; get; }
-        public String longtitude { set; get; }
+        public String longitude { set; get; }
+        
+        
         public String full_original_address { set; get; }
         public String cltaddr01 { set; get; }
         public String cltaddr02 { set; get; }

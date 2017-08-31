@@ -5,6 +5,7 @@ using System.Web;
 using DEVES.IntegrationAPI.Model;
 using DEVES.IntegrationAPI.Model.InquiryClientMaster;
 using DEVES.IntegrationAPI.Model.Polisy400;
+using DEVES.IntegrationAPI.WebApi.TechnicalService;
 using DEVES.IntegrationAPI.WebApi.Templates;
 
 
@@ -15,7 +16,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         public override BaseDataModel TransformModel(BaseDataModel input, BaseDataModel output)
         {
 
-            Console.WriteLine("  process:TransformCOMPInquiryClientMasterContentOutputModel_to_CrmInquiryClientMasterContentOut");
+           
+           
             /*
              * ToDo:    Correct the case that there are many records input
              *          1. Loop through the input, 
@@ -25,6 +27,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             EWIResCOMPInquiryClientMasterContentModel srcContent = (EWIResCOMPInquiryClientMasterContentModel)input;
             CRMInquiryClientContentOutputModel trgtContent = (CRMInquiryClientContentOutputModel)output;
+
+            TraceDebugLogger.Instance.AddLog("TransformCOMPInquiryClientMasterContentOutputModel_to_CrmInquiryClientMasterContentOut", input);
+
             if (trgtContent.data == null)
             {
                 trgtContent.data = new List<CRMInquiryClientOutputDataModel>();
@@ -80,9 +85,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                     trgt.contactInfo.telephone1 = src.clientList.telephone1;
                     trgt.contactInfo.telephone2 = src.clientList.telephone2;
-                    trgt.contactInfo.telephone3 = src.clientList.telex;
-                    trgt.contactInfo.mobilePhone = src.clientList.telegram;
-                    trgt.contactInfo.fax = src.clientList.facsimile;
+                   
+                   
                     trgt.contactInfo.emailAddress = src.clientList.emailAddress;
                     trgt.contactInfo.lineID = src.clientList.lineId;
                     trgt.contactInfo.facebook = src.clientList.facebook;
@@ -96,20 +100,35 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     trgt.addressInfo.countryText = src.clientList.countryText;
                     trgt.addressInfo.addressTypeText = src.clientList.busResText;
                     trgt.addressInfo.latitude = src.clientList.latitude;
-                    trgt.addressInfo.longtitude = src.clientList.longtitude;
+                    trgt.addressInfo.longitude = src.clientList.longtitude;
 
                     trgt.asrhHeader.assessorFlag = src.clientList.assessorFlag;
                     trgt.asrhHeader.solicitorFlag = src.clientList.solicitorFlag;
                     trgt.asrhHeader.repairerFlag = src.clientList.repairerFlag;
                     trgt.asrhHeader.hospitalFlag = src.clientList.hospitalFlag?.ToUpper() == "Y" ? "Y" : "N";
 
-                    if (trgt.generalHeader.clientType=="P")
+                    if (trgt.generalHeader.clientType!="P")
                     {
                         trgt.profileInfo.salutationText = "";
-                        trgt.profileInfo.sex = "U";
+                        trgt.profileInfo.sex = "";
                     }
 
-                   
+                    if (src.clientList.clientType == "C")
+                    {
+                        trgt.contactInfo.mobilePhone = src.clientList.telegram;
+                        trgt.contactInfo.fax = src.clientList.facsimile;
+                        trgt.contactInfo.telephone3 = src.clientList.telex;
+                    }
+                    else
+                    {
+                        trgt.contactInfo.mobilePhone = src.clientList.mobilePhone;
+                        trgt.contactInfo.fax = src.clientList.fax;
+                        trgt.contactInfo.telephone3 = src.clientList.telNo;
+                    }
+                    
+
+
+
 
                     trgtContent.data.Add(trgt);
                 }

@@ -21,7 +21,7 @@ namespace DEVES.IntegrationAPI.Model.MASTER
         public string polisyClntnum { get; set; } = "";
         public string fullName { get; set; } = "";
         public string emcsCode { get; set; } = "";
-
+        public string cleansingId { get; set; } = "";
     }
 
     public class InquiryMasterASRHOutputModel : BaseEWIResponseModel

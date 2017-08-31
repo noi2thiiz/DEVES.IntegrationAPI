@@ -12,7 +12,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
     public abstract class BuzCommand:BaseCommand
     {
       
-
+        /*
         public void AddDebugInfo(string message, dynamic info)
         {
             TraceDebugLogger.Instance.AddDebugLogInfo(TransactionId,message,info);
@@ -23,6 +23,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             TraceDebugLogger.Instance.AddDebugLogInfo(TransactionId, message, message);
            // debugInfo.AddDebugInfo(message, message);
         }
+        */
         
         public override BaseDataModel Execute(object input)
         {
@@ -147,6 +148,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             catch (Exception e)
             {
                 AddDebugInfo(e.Message);
+                throw;
             }
             return result;
 
@@ -163,7 +165,8 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             }
             catch (Exception e)
             {
-                AddDebugInfo(e.Message);
+                AddDebugInfo("SearchCrmAccountClientId Error:"+e.Message,e.StackTrace);
+                throw;
             }
             return result;
 
@@ -179,10 +182,13 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             {
                 
                 result = SpApiCustomerClient.Instance.SearchCrmContactClientId(clienType, cleansingId);
+               
+               
             }
             catch (Exception e)
             {
-                AddDebugInfo(e.Message);
+                AddDebugInfo("SearchCrmClientId:"+e.Message,e.StackTrace);
+                throw;
             }
             return result;
 

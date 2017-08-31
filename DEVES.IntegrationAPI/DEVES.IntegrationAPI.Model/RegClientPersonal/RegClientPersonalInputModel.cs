@@ -72,6 +72,6 @@ namespace DEVES.IntegrationAPI.Model.RegClientPersonal
         public string country { get; set; } = "";
         public string addressType { get; set; } = "";
         public string latitude { get; set; } = "";
-        public string longtitude { get; set; } = "";
+        public string longitude { get; set; } = "";
     }
 }

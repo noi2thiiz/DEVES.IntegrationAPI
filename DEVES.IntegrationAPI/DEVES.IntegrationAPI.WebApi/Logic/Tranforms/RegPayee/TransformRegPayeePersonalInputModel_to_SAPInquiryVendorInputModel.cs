@@ -27,7 +27,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             if (src.generalHeader != null)
             {
                 trgt.PREVACC = src.generalHeader.polisyClientId;
-                trgt.VCODE = src.generalHeader.cleansingId;
+              //  trgt.TAX3 = src.sapVendorInfo.sapVendorCode;
+            //    trgt.TAX4 = src.profileInfo.;
+                //  SAPInqVendorIn.TAX3 = regPayeeCorporateInput.profileHeader.idTax ?? "";
+
+                //  SAPInqVendorIn.TAX4 = regPayeeCorporateInput.profileHeader.corporateBranch ?? "";
+                //  SAPInqVendorIn.PREVACC = regPayeeCorporateInput.generalHeader.polisyClientId ?? "";
+                //  SAPInqVendorIn.VCODE = regPayeeCorporateInput.sapVendorInfo.sapVendorCode ?? "";
+                trgt.VCODE = src.sapVendorInfo.sapVendorCode;
             }
 
 

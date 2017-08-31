@@ -97,7 +97,7 @@ namespace DEVES.IntegrationAPI.Model.Polisy400
         public string personalName { get; set; }
         // "directMail": "Y",
         public string directMail { get; set; }
-        //"longtitude": "1444.000",
+        //"longtitude": "1444.000"  สกดผิดตาม polisy 400,
         public string longtitude { get; set; }
         //"language": "T",
         public string language { get; set; }

@@ -190,7 +190,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
                     country = "",
                     addressType = "",
                     latitude = "",
-                    longtitude = ""
+                    longitude = ""
                 }
             };
             var cmdClient = new buzCRMRegClientPersonal();
@@ -346,7 +346,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
                     country = "",
                     addressType = "",
                     latitude = "",
-                    longtitude = ""
+                    longitude = ""
                 }
             };
             var cmdClient = new buzCRMRegClientPersonal();

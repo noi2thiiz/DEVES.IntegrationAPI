@@ -197,6 +197,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         {
                             AddDebugInfo("Create payee in CRM ");
                             buzCreateCrmPayeePersonal cmdCreateCrmPayee = new buzCreateCrmPayeePersonal();
+                            cmdCreateCrmPayee.TransactionId = TransactionId;
                             CreateCrmPersonInfoOutputModel crmContentOutput = (CreateCrmPersonInfoOutputModel)cmdCreateCrmPayee.Execute(RegPayeePersonalInput);
                             if (crmContentOutput.code == CONST_CODE_SUCCESS)
                             {

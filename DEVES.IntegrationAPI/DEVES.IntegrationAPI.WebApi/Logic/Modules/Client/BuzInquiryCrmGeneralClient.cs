@@ -30,14 +30,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
 
         public BaseTransformer CLSPersonalOutputTransform = new TransformCLSInquiryPersonalClientContentOut_to_CrmInquiryClientMasterContentOut();
-
-      
         public BaseTransformer CLSCorporateOutputTransform = new TransformCLSInquiryCorporateClientContentOut_to_CrmInquiryClientMasterContentOut();
-
-      
         public BaseTransformer COMPOutputTransform = new TransformCOMPInquiryClientMasterContentOutputModel_to_CrmInquiryClientMasterContentOut();
-
-
 
 
         public override BaseDataModel ExecuteInput(object input)
@@ -74,6 +68,34 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 return crmInqContent;
             }
 
+            if (InputModel?.conditionDetail != null && InputModel?.conditionHeader.clientType == "C")
+            {
+                InputModel.conditionDetail.clientFullname = InputModel?.conditionDetail?.clientFullname?.Replace("ห้างหุ้นส่วนจำกัด", "");
+                InputModel.conditionDetail.clientFullname = InputModel?.conditionDetail?.clientFullname?.Replace("บริษัท.", "");
+                InputModel.conditionDetail.clientFullname = InputModel?.conditionDetail?.clientFullname?.Replace("บริษัท", "");
+                InputModel.conditionDetail.clientFullname = InputModel?.conditionDetail?.clientFullname?.Replace("บ.", "");
+                // contentModel.conditionDetail.clientFullname = contentModel?.conditionDetail?.clientFullname?.Replace("จำกัด", "");
+
+
+                InputModel.conditionDetail.clientFullname = InputModel.conditionDetail.clientFullname
+                    .ReplaceMultiplSpacesWithSingleSpace();
+
+                InputModel.conditionDetail.clientName1 = InputModel?.conditionDetail?.clientName1?.Replace("ห้างหุ้นส่วนจำกัด", "");
+                InputModel.conditionDetail.clientName2 = InputModel?.conditionDetail?.clientName2?.Replace("ห้างหุ้นส่วนจำกัด", "");
+                InputModel.conditionDetail.clientName1 = InputModel?.conditionDetail?.clientName1?.Replace("บริษัท.", "");
+                InputModel.conditionDetail.clientName2 = InputModel?.conditionDetail?.clientName2?.Replace("บริษัท", "");
+                InputModel.conditionDetail.clientName1 = InputModel?.conditionDetail?.clientName1?.Replace("บ.", "");
+                //contentModel.conditionDetail.clientName1 = contentModel?.conditionDetail?.clientName1?.Replace("จำกัด", "");
+                //contentModel.conditionDetail.clientName2 = contentModel?.conditionDetail?.clientName2?.Replace("จำกัด", "");
+
+
+                InputModel.conditionDetail.clientName1 = InputModel?.conditionDetail?.clientName1
+                    .ReplaceMultiplSpacesWithSingleSpace();
+
+                InputModel.conditionDetail.clientName2 = InputModel?.conditionDetail?.clientName2
+                    .ReplaceMultiplSpacesWithSingleSpace();
+            }
+
 
             //Search Client from Cleansing
 
@@ -96,7 +118,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             //ถ้าพบ จะซ่อม PolisyClientId เพราะ CLS อาจจะไม่มี PolisyClientId โดยเฉพาะ  รายการที่พึ่งสร้างใหม่
             if (AllSearchResult.Any())
             {
-                FulFillEmptyPolisyClientId(AllSearchResult, InputModel?.conditionHeader?.clientType);
+                FullFillEmptyPolisyClientId(AllSearchResult, InputModel?.conditionHeader?.clientType);
             }
 
 
@@ -110,10 +132,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 }
             }
             //ซ่อม Role Code เนื่องจาก Source  ไม่มี field นี้
-
+            bool crmDbError = false;
             foreach (CRMInquiryClientOutputDataModel temp in AllSearchResult)
             {
-         
+                AddDebugInfo("search crmClientId: cleansingId (" +temp.generalHeader.cleansingId + ")");
                 temp.generalHeader.roleCode = "G";
 
                 #region Search crmClientId by CleansingId
@@ -122,18 +144,30 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 {
                     try
                     {
-                        List<string> crmData = SearchCrmClientId(temp.generalHeader.cleansingId, InputModel.conditionHeader.clientType);
-                        if (crmData != null && crmData.Count == 1)
+                        if (false == crmDbError)
                         {
-                            temp.generalHeader.crmClientId = crmData.First();
+                            List<string> crmData = SearchCrmClientId(temp.generalHeader.cleansingId,
+                                InputModel.conditionHeader.clientType);
+                            
+                            if (crmData != null && crmData.Count == 1)
+                            {
+                                temp.generalHeader.crmClientId = crmData.First();
+                            }
+                            else
+                            {
+                                AddDebugInfo("Error on search crmClientId: cleansingId (" +
+                                             temp.generalHeader.cleansingId + ")not found", crmData);
+                            }
+
                         }
                         else
                         {
-                            AddDebugInfo("Error on search crmClientId: cleansingId ("+ temp.generalHeader.cleansingId + ")not found");
+                            AddDebugInfo("xrmDbError:ป้องกันกรณีที่เกิด error จากฐานข้อมูล crm แล้วจะทำให้ api ช่าไปหมด จึงข้าม crm ไปทั้งหมดเลย ");
                         }
                     }
                     catch (Exception e)
                     {
+                        crmDbError = true;
                         AddDebugInfo("Error on search crmClientId", "Error: " + e.Message + "--" + e.StackTrace);
                     }
 
@@ -237,7 +271,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         /// <param name="listSearchResult"></param>
         /// <param name="clientType">P or C</param>
         /// <returns></returns>
-        public List<CRMInquiryClientOutputDataModel> FulFillEmptyPolisyClientId(List<CRMInquiryClientOutputDataModel> listSearchResult,string clientType)
+        public List<CRMInquiryClientOutputDataModel> FullFillEmptyPolisyClientId(List<CRMInquiryClientOutputDataModel> listSearchResult,string clientType)
         {
 
             if (listSearchResult == null)
@@ -255,13 +289,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                     if (lstPolisyClient?.cleansingId != null)
                     {
-                        //debugInfo.AddDebugInfo("found Polisy for new client =" + lstPolisyClient.clientNumber, "");
+                        
                         if (temp?.generalHeader != null)
                             temp.generalHeader.polisyClientId = lstPolisyClient.clientNumber;
                     }
                     else
                     {
-                        AddDebugInfo(" not found Polisy client id", "");
+                        AddDebugInfo(" not found Polisy client id");
                     }
                     if (temp?.generalHeader != null && (temp.generalHeader.polisyClientId == "0"))
                     {

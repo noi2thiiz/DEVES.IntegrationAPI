@@ -376,6 +376,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             try
             {
                 buzCreateCrmClientPersonal cmdCreateCrmClient = new buzCreateCrmClientPersonal();
+                cmdCreateCrmClient.TransactionId = TransactionId;
                 CreateCrmPersonInfoOutputModel crmContentOutput =
                     (CreateCrmPersonInfoOutputModel) cmdCreateCrmClient.Execute(regClientPersonalInput);
 

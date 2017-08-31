@@ -115,7 +115,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 trgt.country = src.addressHeader.country ?? "";
 
                 trgt.latitude = src.addressHeader.latitude ?? "";
-                trgt.longtitude = src.addressHeader.longtitude ?? "";
+                trgt.longtitude = src.addressHeader.longitude ?? "";
 
                 string districtName = "";
                 string subDistrictName = "";

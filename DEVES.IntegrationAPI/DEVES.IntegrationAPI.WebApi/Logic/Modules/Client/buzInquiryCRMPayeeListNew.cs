@@ -192,16 +192,17 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             //กรณีที่พบข้อมูล
             if (AllSearchResult.Any())
             {
+                AddDebugInfo("กรณีที่พบข้อมูล", AllSearchResult);
                 // throw new BuzErrorException("200", "ไม่พบข้อมูล", " กรุณาตรวจสอบเงื่อนไขในการค้นหาอีกครั้ง หรือใช้เงื่อนไขอื่นในการค้นหา ข้อควรระวัง ไม่ควรค้นจากการระบุเงื่อนไขหลายๆอย่างพร้อมกัน เช่นการค้นทั้งชื่อนามสกุลพร้อมกับเลขประจำตัวประชาชน");
 
                 //ซ่อมข้อมูล  Polisy Client ID 
                 AllSearchResult = FixEmptyPolisyClientId(AllSearchResult, inqCrmPayeeInput.clientType);
-
+                AddDebugInfo("หลัง fix FixEmptyPolisyClientId", AllSearchResult);
 
                 //กรณีที่พบข้อมูลค้นหาต่อที่ SAP
                 SAPResult = InquerySapVandor(AllSearchResult);
+                AddDebugInfo("หลัง  SAPResult", SAPResult);
 
-              
 
 
                 // remove duplicate data 
@@ -209,12 +210,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 //order by vcode,cleasing id desc
                 var distinctResult = ProcessDistinct(SAPResult);
                 FinalSearchResult = ProcessOrderBy(distinctResult);
-
+                AddDebugInfo("หลัง  FinalSearchResult", FinalSearchResult);
                 if (FinalSearchResult!= null && FinalSearchResult.Any())
                 {
                     crmInqPayeeOut.data.AddRange(FinalSearchResult);
 
                 }
+
+                
                 
             }
 
@@ -356,7 +359,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
 
                     }
-                    AddDebugInfo("searchResult 1", searchResult);
+                    AddDebugInfo("SAP searchResult 1", searchResult);
 
                     if ((searchResult?.VendorInfo == null || !searchResult.VendorInfo.Any()) && !string.IsNullOrEmpty(condition?.polisyClientId))
                     {
@@ -367,7 +370,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         condition.sapSearchCondition = sapSearchCondition;
                         searchResult = service.Execute(sapSearchCondition);
                     }
-                    AddDebugInfo("searchResult 2", searchResult);
+                    AddDebugInfo("SAP searchResult 2", searchResult);
                     if ((searchResult?.VendorInfo == null || !searchResult.VendorInfo.Any()) && !string.IsNullOrEmpty(condition?.taxNo))
                     {
                         var sapSearchCondition = new SAPInquiryVendorInputModel
@@ -396,6 +399,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                                 data.solicitorFlag = condition.solicitorFlag;
                                 data.repairerFlag = condition.repairerFlag;
                                 data.hospitalFlag = condition.hospitalFlag;
+                                data.clientType = condition.clientType;
+                                data.cleansingId = condition.cleansingId;
+                                data.clientStatus = condition.clientStatus;
+                               
                                 data.polisyClientId = (!string.IsNullOrEmpty(polisyClientId)
                                     ? polisyClientId
                                     : data.polisyClientId); // เอา  polisyClientId จากข้อมูลต้นทาง (APAR,ASHR ) มาใช้แทน
@@ -476,9 +483,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 var inqClsCorporateOut = service.Execute(new CLSInquiryCorporateClientInputModel
                 {
                     clientId = searchCondition?.polisyClientId ?? "",
+                    
                     roleCode = searchCondition?.roleCode ?? "",
                     corporateFullName = searchCondition?.fullname ?? "",
-                    taxNo = searchCondition?.taxNo ?? ""
+                    taxNo = searchCondition?.taxNo ?? "",
+                    corporateStaffNo= searchCondition?.taxBranchCode ?? ""
 
                     // telephone = searchCondition.tele,
                     // emailAddress = searchCondition.e,

@@ -46,6 +46,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             // if clsId == null or ""
             if (string.IsNullOrEmpty(data.generalHeader.cleansingId))
             {
+                AddDebugInfo("ไม่มี CleansingID");
                 dataOutput.code = AppConst.CODE_FAILED;
                 dataOutput.description = "ไม่มี CleansingID";
                 dataOutput.transactionId = TransactionId;
