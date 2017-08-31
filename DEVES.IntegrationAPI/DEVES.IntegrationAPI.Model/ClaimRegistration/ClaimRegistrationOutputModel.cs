@@ -13,7 +13,7 @@ namespace DEVES.IntegrationAPI.Model.ClaimRegistration
    
     public class ClaimRegistrationContentOutputModel : BaseContentJsonProxyOutputModel
     {
-        public List<ClaimRegistrationDataOutputModel> data { set; get; }
+        public ClaimRegistrationDataOutputModel data { set; get; }
     }
     public class ClaimRegistrationDataOutputModel : BaseDataModel
     {

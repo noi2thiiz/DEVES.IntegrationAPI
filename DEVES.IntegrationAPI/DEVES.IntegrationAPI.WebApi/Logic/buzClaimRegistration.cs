@@ -91,14 +91,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 
                 //+ Response
                 ClaimRegistrationContentOutputModel contentOutputFail = new ClaimRegistrationContentOutputModel();
-                contentOutputFail.data = new List<ClaimRegistrationDataOutputModel>();
+                contentOutputFail.data = new ClaimRegistrationDataOutputModel();
                 ClaimRegistrationDataOutputModel outputFail = new ClaimRegistrationDataOutputModel();
                 outputFail.claimID = null;
                 outputFail.claimNo = null;
                 outputFail.errorMessage = ret.message;
-                contentOutputFail.data.Add(outputFail);
+                // contentOutputFail.data.Add(outputFail);
 
-                return contentOutputFail;
+                return outputFail;
             }
 
             LocusClaimRegistrationDataOutputModel locusClaimRegOutput = new LocusClaimRegistrationDataOutputModel(ret.data);
@@ -108,7 +108,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             {
                 //+ Response
                 ClaimRegistrationContentOutputModel contentOutputFail = new ClaimRegistrationContentOutputModel();
-                contentOutputFail.data = new List<ClaimRegistrationDataOutputModel>();
+                contentOutputFail.data = new ClaimRegistrationDataOutputModel();
                 ClaimRegistrationDataOutputModel outputFail = new ClaimRegistrationDataOutputModel();
                 outputFail.claimID = locusClaimRegOutput.claimId;
                 outputFail.claimNo = locusClaimRegOutput.claimNo;
@@ -129,8 +129,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 }
                 */
 
-                contentOutputFail.data.Add(outputFail);
-                return contentOutputFail;
+                // contentOutputFail.data.Add(outputFail);
+                return outputFail;
             }
 
             //+ Update CRM
@@ -182,13 +182,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             //+ Response
             ClaimRegistrationContentOutputModel contentOutput = new ClaimRegistrationContentOutputModel();
-            contentOutput.data = new List<ClaimRegistrationDataOutputModel>();
+            contentOutput.data = new ClaimRegistrationDataOutputModel();
             ClaimRegistrationDataOutputModel output = new ClaimRegistrationDataOutputModel();
             output.claimID = locusClaimRegOutput.claimId;
             output.claimNo = locusClaimRegOutput.claimNo;
             output.errorMessage = null;
-            contentOutput.data.Add(output);
-            return contentOutput;
+            //contentOutput.data.Add(output);
+            return output;
         }
     }
 }
