@@ -71,12 +71,19 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
             [System.Runtime.CompilerServices.CallerFilePath] string sourceFilePath = "",
             [System.Runtime.CompilerServices.CallerLineNumber] int sourceLineNumber = 0)
         {
-            var globalTransactionID = HttpContext.Current?.Items["GlobalTransactionID"]?.ToString()??"";
-            if (!string.IsNullOrEmpty(globalTransactionID) && LogData.ContainsKey(globalTransactionID))
+            try
             {
+                var globalTransactionID = HttpContext.Current?.Items["GlobalTransactionID"]?.ToString() ?? "";
+                if (!string.IsNullOrEmpty(globalTransactionID) && LogData.ContainsKey(globalTransactionID))
+                {
 
-                var log = LogData[globalTransactionID];
-                log.AddDebugInfo(message, info, memberName, sourceFilePath, sourceLineNumber);
+                    var log = LogData[globalTransactionID];
+                    log.AddDebugInfo(message, info, memberName, sourceFilePath, sourceLineNumber);
+                }
+            }
+            catch (Exception e)
+            {
+                // do
             }
         }
 

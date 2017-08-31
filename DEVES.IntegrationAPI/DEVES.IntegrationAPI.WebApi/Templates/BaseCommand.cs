@@ -501,6 +501,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             {
                 Console.WriteLine("Validation Error!");
                 Console.WriteLine(validateResult.ToJson());
+                TraceDebugLogger.Instance.AddLog("JsonSerializationException" , filePath);
                 throw new JsonSerializationException("Validation Error!");
             }
         }

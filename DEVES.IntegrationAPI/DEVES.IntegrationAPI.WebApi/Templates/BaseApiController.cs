@@ -48,8 +48,8 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             // Console.WriteLine(value.ToJson());
 
             #region Initiate Command and Output Model
+            TraceDebugLogger.Instance.AddLog("ProcessRequest", value);
 
-            
             var type = typeof(TCommand);
             object instance = Activator.CreateInstance(type);
             BaseCommand cmd = (BaseCommand)instance;
@@ -71,6 +71,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             }
             catch (Exception e)
             {
+                TraceDebugLogger.Instance.AddLog("CreateInstance BuzCommand Exception" + e.Message, e.StackTrace);
                 throw;
             }
 
@@ -91,6 +92,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             catch (Exception e)
             {
                 //output model
+                TraceDebugLogger.Instance.AddLog("Cannot parse JSON" + e.Message+ contentText, e.StackTrace);
                 outputFail.code = AppConst.CODE_INVALID_INPUT;
                 outputFail.message = AppConst.MESSAGE_INVALID_INPUT;
                 outputFail.description = "Cannot parse JSON:"+e.Message+ contentText;
@@ -115,11 +117,12 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                 filePath = startupPath+"/App_Data/JsonSchema/" +schemaFileName;
             }
 
+               TraceDebugLogger.Instance.AddLog("schema filePath", filePath);
            
 
             if (!JsonHelper.TryValidateJson(contentText, filePath, out outvalidate))
             {
-               
+                TraceDebugLogger.Instance.AddLog("TryValidateJson1", outvalidate);
                 try
                 {
                  
@@ -153,6 +156,8 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                         }
                         else if (text.Contains("exceeds maximum length"))
                         {
+                            TraceDebugLogger.Instance.AddLog("exceeds maximum length", outvalidate);
+
                             bool isMessage = false;
                             int endMessage = 0;
                             int startName = 0;
@@ -298,14 +303,16 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
 
                     return Request.CreateResponse(outputFail);
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
                     //output model
+                    TraceDebugLogger.Instance.AddLog("Cannot parse JSON Exception" + e.Message + contentText, e.StackTrace);
                     outputFail.code = AppConst.CODE_INVALID_INPUT;
                     outputFail.message = AppConst.MESSAGE_INVALID_INPUT;
                     outputFail.description = "Cannot parse JSON" + outvalidate;
                     outputFail.transactionId = GetTransactionId();
                     outputFail.transactionDateTime = DateTime.Now;
+                    outputFail.stackTrace = e.StackTrace;
 
                     return Request.CreateResponse(outputFail);
                 }
@@ -315,8 +322,8 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                 var content = cmd.Execute(cmd.DeserializeJson<TInput>(value.ToString()));
                 return Request.CreateResponse(content);
             }
-
             
+
         }
 
    

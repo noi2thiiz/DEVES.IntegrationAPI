@@ -24,7 +24,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
     {
         public object Post([FromBody]object value)
         {
-            return ProcessRequest<buzAssignedSurveyor, AssignedSurveyorInputModel>(value, "AssignedSurveyor_Input_Schema.json");
+            return ProcessRequest<buzAssignedSurveyor, AssignedSurveyorInputModel>(value, "AssignedSurveyorInfo_Input_Schema.json");
         }
 
     }
