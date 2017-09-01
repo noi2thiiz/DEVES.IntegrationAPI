@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace DEVES.IntegrationAPI.Model.ClaimRegistration
 {
 
-    public class ClaimRegistrationInputModel : BaseDataModel
+    public class ClaimRegistrationInputModel : BaseEWIRequestContentModel
     {
         [CrmMapping(FieldName = "caseNo", Source = ENUMDataSource.srcSQL)]
         public string caseNo { get; set; }
@@ -19,7 +19,7 @@ namespace DEVES.IntegrationAPI.Model.ClaimRegistration
     }
 
     [CrmClassToMapData]
-    public class LocusClaimRegistrationInputModel: BaseDataModel
+    public class LocusClaimRegistrationInputModel: BaseEWIRequestContentModel
     {
         public LocusClaimheaderModel claimHeader { get; set; }
         public LocusClaiminformModel claimInform { get; set; }

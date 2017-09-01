@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace DEVES.IntegrationAPI.Model.CLS
 {
-    public class CLSCreatePersonalClientInputModel : BaseDataModel
+    public class CLSCreatePersonalClientInputModel : BaseEWIRequestContentModel
     {
       
         //roleCode String	5	M G : General Client

@@ -25,7 +25,7 @@ namespace DEVES.IntegrationAPI.Model.Polisy400
                    "backDay":""                
           }
 }*/
-    public class COMPInquiryClientMasterInputModel : BaseDataModel
+    public class COMPInquiryClientMasterInputModel : BaseEWIRequestContentModel
     {
         public String cltType { set; get; }
         public String asrType { set; get; }

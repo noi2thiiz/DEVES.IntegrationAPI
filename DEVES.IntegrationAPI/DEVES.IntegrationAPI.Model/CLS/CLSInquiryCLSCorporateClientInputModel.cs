@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DEVES.IntegrationAPI.Model.CLS
 {
-    public class CLSInquiryCorporateClientInputModel: BaseDataModel
+    public class CLSInquiryCorporateClientInputModel: BaseEWIRequestContentModel
     {
         public string clientId { set; get; } = "";
        

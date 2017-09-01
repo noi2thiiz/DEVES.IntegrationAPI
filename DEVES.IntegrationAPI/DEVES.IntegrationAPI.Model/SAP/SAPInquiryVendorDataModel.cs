@@ -11,7 +11,7 @@ namespace DEVES.IntegrationAPI.Model.SAP
     /// <summary>
     /// end point: http://192.168.3.194/ServiceProxy/ClaimMotor/jsonproxy/COMP_SAPInquiryVendor
     /// </summary>
-    public class SAPInquiryVendorInputModel : BaseDataModel
+    public class SAPInquiryVendorInputModel : BaseEWIRequestContentModel
     {
         // "TAX3": "123456789012",
         public string TAX3 { get; set; } = "";

@@ -11,7 +11,7 @@ using DEVES.IntegrationAPI.Model.EWI;
 namespace DEVES.IntegrationAPI.Model.Polisy400
 {
     //    class CLIENTUpdateCorporateClientAndAdditionalInfoModels
-    public class CLIENTUpdateCorporateClientAndAdditionalInfoInputModel : BaseDataModel
+    public class CLIENTUpdateCorporateClientAndAdditionalInfoInputModel : BaseEWIRequestContentModel
     {
         public CLIENTUpdateCorporateClientAndAdditionalInfoInputModel()
         {

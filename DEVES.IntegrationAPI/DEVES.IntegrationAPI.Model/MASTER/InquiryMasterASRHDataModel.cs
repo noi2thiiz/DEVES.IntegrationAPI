@@ -12,7 +12,7 @@ namespace DEVES.IntegrationAPI.Model.MASTER
     /// <summary>
     /// End Point: http://192.168.3.194/ServiceProxy/ClaimMotor/jsonservice/MOTOR_InquiryMasterASRH
     /// </summary>
-    public class InquiryMasterASRHDataInputModel : BaseDataModel
+    public class InquiryMasterASRHDataInputModel : BaseEWIRequestContentModel
     {
         public string vendorCode { get; set; } = "";
         public string taxNo { get; set; } = "";

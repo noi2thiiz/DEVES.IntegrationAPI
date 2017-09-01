@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -70,6 +71,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
         protected DateTime resTime = new DateTime(); // ResponseTimestamp
 
         protected string GlobalTransactionID = "";
+        private string TransactionID { get; set; }
         protected string ControllerName = "";
 
         public void AddDebugInfo(string message, dynamic info,
@@ -111,8 +113,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
             ControllerName = ctrlName;
         }
 
-        public RESTClientResult SendRequest(BaseDataModel JSON, string endpoint)
+        public RESTClientResult SendRequest(BaseEWIRequestContentModel JSON, string endpoint)
         {
+            TransactionID = GetTransactionId();
             AddDebugInfo("SendRequest:" + serviceName, JSON);
             System.Diagnostics.Stopwatch timer = new Stopwatch();
             timer.Start();
@@ -121,6 +124,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
             var sv = endpoint.Split('/');
 
             serviceName = sv[sv.Length - 1];
+            JSON.transactionHeader = new BaseEWIRequestContentTransactionHeaderModel();
+            JSON.transactionHeader.requestDateTime = DateTime.Now.ToString(AppConst.TRANSACTION_DATE_TIME_CUSTOM_FORMAT, new CultureInfo("en-US"));
+            JSON.transactionHeader.requestId = TransactionID;
+            JSON.transactionHeader.application = appName;
+            JSON.transactionHeader.service = ControllerName;
+          
             EWIRequest reqModel = new EWIRequest()
             {
                 //user & password must be switch to get from calling k.Ton's API rather than fixed values.
@@ -300,7 +309,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
                 var apiLogEntry = new ApiLogEntry
                 {
                     Application = appName,
-                    TransactionID = GetTransactionId(req),
+                    TransactionID = TransactionID??GetTransactionId(req),
                     GlobalTransactionID = GlobalTransactionID,
                     Controller = ControllerName,
                     ServiceName = serviceName,
@@ -374,7 +383,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
                 var apiLogEntry = new ApiLogEntry
                 {
                     Application = appName,
-                    TransactionID = GetTransactionId(req),
+                    TransactionID = TransactionID??GetTransactionId(req),
                     Controller = ControllerName,
                     ServiceName = serviceName,
                     Activity = "consume:Send request",

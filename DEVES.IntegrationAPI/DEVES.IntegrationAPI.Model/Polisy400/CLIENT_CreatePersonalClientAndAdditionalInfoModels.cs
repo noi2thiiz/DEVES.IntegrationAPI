@@ -10,7 +10,7 @@ using System.Globalization;
 
 namespace DEVES.IntegrationAPI.Model.Polisy400
 {
-    public class CLIENTCreatePersonalClientAndAdditionalInfoInputModel : BaseDataModel
+    public class CLIENTCreatePersonalClientAndAdditionalInfoInputModel : BaseEWIRequestContentModel
     {
         public CLIENTCreatePersonalClientAndAdditionalInfoInputModel()
         {

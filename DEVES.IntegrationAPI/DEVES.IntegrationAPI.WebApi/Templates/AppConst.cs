@@ -16,6 +16,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
         public const string MESSAGE_INVALID_INPUT = "Invalid input(s)";
         public const string DESC_INVALID_INPUT = "Some of your input is invalid. Please recheck again";
 
+        public const string TRANSACTION_DATE_TIME_CUSTOM_FORMAT = "yyyy-MM-dd HH:mm:ss.ffffff";
         //Create Payee
         public const string DEFAULT_CORPORATE_RECPTYPE = "53";//นิติบุคคล
         public const string DEFAULT_PERSONAL_RECPTYPE = "03";//บุคคล

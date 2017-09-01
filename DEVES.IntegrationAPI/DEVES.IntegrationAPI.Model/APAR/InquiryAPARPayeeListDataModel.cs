@@ -8,7 +8,7 @@ using DEVES.IntegrationAPI.Model.EWI;
 
 namespace DEVES.IntegrationAPI.Model.APAR
 {
-    public class InquiryAPARPayeeListInputModel : BaseDataModel
+    public class InquiryAPARPayeeListInputModel : BaseEWIRequestContentModel
     {
         public string polisyClntnum { get; set; } = "";
         public string vendorCode { get; set; } = "";
