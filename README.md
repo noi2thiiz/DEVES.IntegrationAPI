@@ -28,4 +28,3 @@ http://192.168.8.121/XrmApi/api/UpdateClaimNo | http://crmapi.deves.co.th/claim-
 † | † | † | † | CRM
 † | http://crmapp.deves.co.th/cti-integration-service/api/cti-web-dialer/MakeCall† („™È¿“¬„π√–∫∫ CRM ‡∑Ë“π—Èπ) | † | † | CRM
 http://192.168.8.121/cti-integration-test/api/CTIWebDialer/VoiceRecord | http://crmapi.deves.co.th/cti-integration-service/api/CTIWebDialer/VoiceRecord | † | † | CRM
-
