@@ -86,7 +86,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
          //       (CommonConstant.ewiEndpointKeyLOCUSClaimRegistration, inputData, uid);
         
          
-            if (ret.data == null)
+            if (ret?.data == null)
             {
                 
                 //+ Response

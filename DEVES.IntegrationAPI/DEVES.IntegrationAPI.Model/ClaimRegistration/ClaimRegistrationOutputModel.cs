@@ -27,6 +27,11 @@ namespace DEVES.IntegrationAPI.Model.ClaimRegistration
     }
 
 
+
+
+
+
+
     public class LocusClaimRegistrationOutputModel : BaseEWIResponseModel
     {
         [JsonProperty(Order = 1)]
@@ -36,14 +41,18 @@ namespace DEVES.IntegrationAPI.Model.ClaimRegistration
     public class LocusClaimRegistrationContentOutputModel : BaseContentJsonProxyOutputModel
     {
         [JsonProperty(Order = 2)]
-        public LocusClaimRegistrationDataOutputModel data { set; get; }
+        public LocusClaimRegistrationDataOutputModel data { set; get; } = new LocusClaimRegistrationDataOutputModel();
     }
 
     public class LocusClaimRegistrationDataOutputModel: BaseDataModel
     {
         private LocusClaimRegistrationDataOutputModel _data;
 
-    
+        public LocusClaimRegistrationDataOutputModel()
+        {
+           
+        }
+
         public LocusClaimRegistrationDataOutputModel(LocusClaimRegistrationDataOutputModel data)
         {
             _data = data;
