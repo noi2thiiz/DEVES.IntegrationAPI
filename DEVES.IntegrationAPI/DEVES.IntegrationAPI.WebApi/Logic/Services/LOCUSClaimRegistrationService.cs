@@ -24,10 +24,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
             var result = SendRequest(input, serviceEndpoint);
 
 
-            var jss = new JavaScriptSerializer();
-            var contentObj = jss.Deserialize<LocusClaimRegistrationOutputModel>(result.Content);
+             var jss = new JavaScriptSerializer();
+             var contentObj = jss.Deserialize<LocusClaimRegistrationOutputModel>(result.Content);
+           // var contentObj = new LocusClaimRegistrationOutputModel();
+           // contentObj.content = new LocusClaimRegistrationContentOutputModel();
             return contentObj?.content;
         }
+
+       
 
         public LocusClaimRegistrationContentOutputModel Execute(BaseDataModel inputData)
         {
