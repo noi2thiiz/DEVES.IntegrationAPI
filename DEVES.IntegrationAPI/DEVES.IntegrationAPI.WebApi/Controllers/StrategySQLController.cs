@@ -12,6 +12,9 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
 {
     public class StrategySQLController : ApiController
     {
+
+        private static string tpyeStrategy;
+
         public static string GetLocalIPAddress()
         {
             var host = Dns.GetHostEntry(Dns.GetHostName());
@@ -25,7 +28,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             throw new Exception("Local IP Address Not Found!");
         }
 
-        public object Get([FromBody]object value)
+        public object Get()
         {
             return GetLocalIPAddress();
         }
@@ -35,28 +38,43 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             var contentText = value.ToString();
             var contentModel = JsonConvert.DeserializeObject<QuerySQLInputModel>(contentText);
 
+            // string devesIP = "192.168.78.*";
             string devesIP = "192.168.78";
 
-            if(GetLocalIPAddress().Contains(devesIP))
+            if (String.IsNullOrEmpty(tpyeStrategy)) 
             {
-                string a = "abc";
-                // 
+                if(GetLocalIPAddress().Contains(devesIP))
+                {
+                    tpyeStrategy = "INTERNAL";
+                }
+                else
+                {
+                    tpyeStrategy = "ONLINE";
+                }
             }
 
-            if (GetLocalIPAddress().Equals(devesIP))
+
+            QuerySQLOutputModel output = new QuerySQLOutputModel();
+
+            if (tpyeStrategy.Equals("INTERNAL"))
             {
                 QuerySQLInternal sql = new QuerySQLInternal();
-                sql.GetQuery(contentModel.databaseName, contentModel.sqlCommand);
+                output = sql.GetQuery(contentModel.databaseName, contentModel.sqlCommand);
 
-                return "INTERNAL NETWORK (INTERNAL METHOD)";
+                return output;
+            }
+            else if(tpyeStrategy.Equals("ONLINE"))
+            {
+                QuerySQLOnline sql = new QuerySQLOnline();
+                output = sql.GetQuery(contentModel.databaseName, contentModel.sqlCommand);
+
+                return output;
             }
             else
             {
-                QuerySQLOnline sql = new QuerySQLOnline();
-                sql.GetQuery(contentModel.databaseName, contentModel.sqlCommand);
-
-                return "ONLINE NETWORK (ONLINE METHOD)";
+                return "NOT IN BOTH CONDITION";
             }
         }
+
     }
 }

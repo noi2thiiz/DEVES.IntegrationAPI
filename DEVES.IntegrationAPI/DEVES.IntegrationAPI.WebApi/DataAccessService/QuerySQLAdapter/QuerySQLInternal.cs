@@ -1,4 +1,5 @@
 ﻿using DEVES.IntegrationAPI.Model;
+using DEVES.IntegrationAPI.Model.QuerySQL;
 using DEVES.IntegrationAPI.WebApi.Controllers;
 using DEVES.IntegrationAPI.WebApi.Logic;
 using System;
@@ -10,7 +11,7 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.QuerySQLAdapter
 {
     public class QuerySQLInternal : QuerySQLStretagy
     {
-        public void GetQuery(string databaseName, string sqlCommand)
+        public QuerySQLOutputModel GetQuery(string databaseName, string sqlCommand)
         {
 
             QuerySQLController sql = new QuerySQLController();
@@ -57,6 +58,7 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.QuerySQLAdapter
 
             */
 
+            return (QuerySQLOutputModel)output;
         }
     }
 }

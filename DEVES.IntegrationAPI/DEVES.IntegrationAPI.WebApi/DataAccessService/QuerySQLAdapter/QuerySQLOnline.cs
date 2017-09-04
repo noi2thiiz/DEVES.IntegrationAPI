@@ -11,7 +11,7 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.QuerySQLAdapter
 {
     public class QuerySQLOnline : QuerySQLStretagy
     {
-        public void GetQuery(string databaseName, string sqlCommand)
+        public QuerySQLOutputModel GetQuery(string databaseName, string sqlCommand)
         {
 
             HttpClient client = new HttpClient();
@@ -35,7 +35,8 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.QuerySQLAdapter
 
             QuerySQLOutputModel output = new QuerySQLOutputModel();
             output = JsonConvert.DeserializeObject<QuerySQLOutputModel>(sql);
-            // return polisyOutput;
+
+            return output;
 
         }
     }
