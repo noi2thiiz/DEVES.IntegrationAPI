@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using DEVES.IntegrationAPI.WebApi.Logic.Services;
+using DEVES.IntegrationAPI.WebApi.Templates.Exceptions;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
@@ -26,9 +27,24 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             RequestSurveyorDataOutputModel output = new RequestSurveyorDataOutputModel();
 
             EWIResponseContent_ReqSur iSurveyOutput = new EWIResponseContent_ReqSur();
-            iSurveyOutput = RequestSurveyorOniSurvey(contentInput.incidentId, contentInput.currentUserId);
-            output.eventID = iSurveyOutput.eventid;
-            output.errorMessage = iSurveyOutput.errorMessage;
+            try
+            {
+               
+                iSurveyOutput = RequestSurveyorOniSurvey(contentInput.incidentId, contentInput.currentUserId);
+                output.eventID = iSurveyOutput.eventid;
+                output.errorMessage = iSurveyOutput.errorMessage;
+            }
+            catch (BuzErrorException e)
+            {
+                output.eventID = "";
+                output.errorMessage = e.Message;
+            }
+            catch (Exception e)
+            {
+                output.eventID = "";
+                output.errorMessage = e.Message;
+            }
+            
 
             return output;
         }
