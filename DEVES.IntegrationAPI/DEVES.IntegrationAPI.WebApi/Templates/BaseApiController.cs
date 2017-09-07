@@ -16,6 +16,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
 {
     public class BaseApiController:ApiController
     {
+       
 
         public string GetTransactionId()
         {
@@ -33,7 +34,15 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             {
                 var newId = GlobalTransactionIdGenerator.Instance.GetNewGuid();
 
-                HttpContext.Current.Items["GlobalTransactionID"] = newId;
+                try
+                {
+                    HttpContext.Current.Items["GlobalTransactionID"] = newId;
+                }
+                catch (Exception e)
+                {
+                    //do nothing
+                }
+                
                 return newId;
             }
             
@@ -72,7 +81,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             catch (Exception e)
             {
                 TraceDebugLogger.Instance.AddLog("CreateInstance BuzCommand Exception" + e.Message, e.StackTrace);
-                throw;
+               // throw;
             }
 
             
