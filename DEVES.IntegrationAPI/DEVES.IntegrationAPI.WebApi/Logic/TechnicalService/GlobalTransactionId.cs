@@ -67,25 +67,42 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
             int seed = rnd.Next(1, 999);
             var globalId = appId + "-" + now +  time +"-"+ (logCount.ToString()).PadLeft(7, '0');
             globalIdList.Add(globalId,0);
-            HttpContext.Current.Items["GlobalTransactionID"] = globalId;
+            try
+            {
+                HttpContext.Current.Items["GlobalTransactionID"] = globalId;
+            }
+            catch (Exception e)
+            {
+                //do nothing
+            }
+            
             return globalId;
         }
         Dictionary<string,int> globalIdList = new Dictionary<string, int>();
         public string GetNewGuid(string globalId)
         {
-            if (globalIdList.ContainsKey(globalId))
+            try
             {
-                globalIdList[globalId]++;
+                if (globalIdList.ContainsKey(globalId))
+                {
+                    globalIdList[globalId]++;
 
-                var lastId = globalIdList[globalId];
+                    var lastId = globalIdList[globalId];
 
-              return globalId + "-" + (lastId.ToString()).PadLeft(3, '0');
+                    return globalId + "-" + (lastId.ToString()).PadLeft(3, '0');
 
+                }
+                else
+                {
+                    return GetNewGuid();
+                }
             }
-            else
+            catch (Exception e)
             {
-                return GetNewGuid();
+                Console.WriteLine("Error On GetNewGuid:"+ e.Message);
+                return Guid.NewGuid().ToString();
             }
+           
         }
 
         public void ClearGlobalId(string globalId)

@@ -27,21 +27,24 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService.Envelonment
 
         public string GetApplicationName()
         {
-            return System.Web.Hosting.HostingEnvironment.ApplicationHost.GetVirtualPath()?.Replace("/", "");
+            
+                return System.Web.Hosting.HostingEnvironment.ApplicationHost?.GetVirtualPath()?.Replace("/", "")??"";
+            
+           
         }
 
         public string GetSiteName()
         {
-            return System.Web.Hosting.HostingEnvironment.ApplicationHost.GetSiteName();
+            return System.Web.Hosting.HostingEnvironment.ApplicationHost?.GetSiteName() ?? "";
         }
 
         public string GetVirtualPath()
         {
-            return System.Web.Hosting.HostingEnvironment.ApplicationHost.GetVirtualPath();
+            return System.Web.Hosting.HostingEnvironment.ApplicationHost?.GetVirtualPath() ?? "";
         }
         public string GetPhysicalPath()
         {
-            return System.Web.Hosting.HostingEnvironment.ApplicationHost.GetPhysicalPath();
+            return System.Web.Hosting.HostingEnvironment.ApplicationHost?.GetPhysicalPath() ?? "";
         }
     }
 }

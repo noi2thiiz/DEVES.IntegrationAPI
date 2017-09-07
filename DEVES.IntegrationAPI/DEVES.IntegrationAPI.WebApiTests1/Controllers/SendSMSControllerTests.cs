@@ -11,10 +11,10 @@ using Newtonsoft.Json.Linq;
 
 namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
 {
-    [TestClass()]
+   // [TestClass()]
     public class SendSMSControllerTests
     {
-        [TestMethod()]
+        //[TestMethod()]
         public void PostTest()
         {
             // Arrange
@@ -40,7 +40,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
             Console.WriteLine(output?.Result);
         }
 
-        [TestMethod()]
+        //[TestMethod()]
         public void Post_SendSMSTest()
         {
             // Arrange
