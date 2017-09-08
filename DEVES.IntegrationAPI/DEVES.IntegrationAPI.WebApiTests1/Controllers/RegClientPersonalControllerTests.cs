@@ -485,7 +485,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
                 Assert.AreEqual(false, string.IsNullOrEmpty(outputJson["transactionDateTime"]?.ToString()));
                 Assert.AreEqual(false, string.IsNullOrEmpty(outputJson["message"]?.ToString()));
 
-                Assert.AreEqual("Error:EWI-0010E, Message:Salut Sex not = Clnt Sex|", outputJson["message"]?.ToString());
+                Assert.AreEqual("COMP Error:Salut Sex not = Clnt Sex|", outputJson["message"]?.ToString());
 
             }
 

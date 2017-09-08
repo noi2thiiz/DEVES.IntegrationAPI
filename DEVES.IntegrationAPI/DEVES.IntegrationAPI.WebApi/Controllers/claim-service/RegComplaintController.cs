@@ -13,7 +13,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
     {
         public object Post([FromBody]object value)
         {
-            return ProcessRequest<buzRegComplaint, RegComplaintInputModel>(value, "RegComplaintInputModel.json");
+            return ProcessRequest<BuzRegComplaint, RegComplaintInputModel>(value, "RegComplaintInputModel.json");
         }
     }
 }

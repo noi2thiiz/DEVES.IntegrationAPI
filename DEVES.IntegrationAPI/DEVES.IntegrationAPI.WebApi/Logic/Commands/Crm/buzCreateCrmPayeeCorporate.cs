@@ -44,7 +44,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             CreateCrmCorporateInfoOutputModel dataOutput = new CreateCrmCorporateInfoOutputModel();
             // if clsId == null or ""
-            if (string.IsNullOrEmpty(data.generalHeader.cleansingId))
+            if (string.IsNullOrEmpty(data.generalHeader?.cleansingId))
             {
                 AddDebugInfo("ไม่มี CleansingID");
                 dataOutput.code = AppConst.CODE_FAILED;
@@ -60,7 +60,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             using (OrganizationServiceProxy crmSvc = GetOrganizationServiceProxy(out svcContext))
             {
                 // Search ข้อมูลจาก cleansing มาเก็ยภายใน List
-                List<string> crmData = SearchCrmAccountPayeeId( crmSvc , data.generalHeader.cleansingId);
+                List<string> crmData = SearchCrmAccountPayeeId( crmSvc , data.generalHeader?.cleansingId);
 
                 
                 // dataOutput.data = new List<RegPayeeCorporateDataOutputModel_Pass>();
@@ -74,50 +74,50 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     crmSvc.EnableProxyTypes();
 
                     //Create Payee Additional Records
-                    if (contentModel.generalHeader.clientAdditionalExistFlag.Equals("N"))
+                    if (contentModel.generalHeader?.clientAdditionalExistFlag?.ToString() == "N")
                     {
 
-                        // generalHeader
-                        account.pfc_cleansing_cusormer_profile_code = contentModel.generalHeader.cleansingId;
-                        account.pfc_polisy_client_id = contentModel.generalHeader.polisyClientId;
-                        // account.AccountNumber = contentModel.generalHeader.crmPayeeId;
+                        // generalHeader?
+                        account.pfc_cleansing_cusormer_profile_code = contentModel.generalHeader?.cleansingId;
+                        account.pfc_polisy_client_id = contentModel.generalHeader?.polisyClientId;
+                        // account.AccountNumber = contentModel.generalHeader?.crmPayeeId;
 
-                        // profileHeader
-                        //contentModel.profileHeader.corporateName1;
-                        //contentModel.profileHeader.corporateName2;
+                        // profileHeader?
+                        //contentModel.profileHeader?.corporateName1;
+                        //contentModel.profileHeader?.corporateName2;
 
-                        account.Name = contentModel.profileHeader.corporateName1 + " " + contentModel.profileHeader.corporateName2;
-                        account.pfc_long_surname = contentModel.profileHeader.corporateName1;
-                        account.pfc_long_giving_name = contentModel.profileHeader.corporateName2;
+                        account.Name = contentModel.profileHeader?.corporateName1 + " " + contentModel.profileHeader?.corporateName2;
+                        account.pfc_long_surname = contentModel.profileHeader?.corporateName1;
+                        account.pfc_long_giving_name = contentModel.profileHeader?.corporateName2;
 
-                        // contentModel.profileHeader.contactPerson; 
-                        account.pfc_register_no = contentModel.profileHeader.idRegCorp; // contentModel.profileHeader.idRegCorp;
-                        account.pfc_tax_no = contentModel.profileHeader.idTax; // contentModel.profileHeader.idTax;
-                        // contentModel.profileHeader.dateInCorporate;
-                        account.pfc_tac_branch = contentModel.profileHeader.corporateBranch; // contentModel.profileHeader.corporateBranch;
-                        // contentModel.profileHeader.econActivity;
+                        // contentModel.profileHeader?.contactPerson; 
+                        account.pfc_register_no = contentModel.profileHeader?.idRegCorp; // contentModel.profileHeader?.idRegCorp;
+                        account.pfc_tax_no = contentModel.profileHeader?.idTax; // contentModel.profileHeader?.idTax;
+                        // contentModel.profileHeader?.dateInCorporate;
+                        account.pfc_tac_branch = contentModel.profileHeader?.corporateBranch; // contentModel.profileHeader?.corporateBranch;
+                        // contentModel.profileHeader?.econActivity;
                         if (!string.IsNullOrEmpty(contentModel?.profileHeader?.econActivity.ToString()))
                         {
-                            account.pfc_economic_type = new OptionSetValue(Int32.Parse(OptionsetConvertor(contentModel.profileHeader.econActivity)));
+                            account.pfc_economic_type = new OptionSetValue(Int32.Parse(OptionsetConvertor(contentModel.profileHeader?.econActivity)));
                         }
-                        // contentModel.profileHeader.countryOrigin;
-                        account.pfc_polisy_nationality_code = contentModel.profileHeader.countryOrigin;
-                        // contentModel.profileHeader.language; // account, contact
+                        // contentModel.profileHeader?.countryOrigin;
+                        account.pfc_polisy_nationality_code = contentModel.profileHeader?.countryOrigin;
+                        // contentModel.profileHeader?.language; // account, contact
 
-                        switch (contentModel.profileHeader.language)
+                        switch (contentModel.profileHeader?.language)
                         {
                             case "J": account.pfc_language = new OptionSetValue(100000002); break; // JP
                             case "T": account.pfc_language = new OptionSetValue(100000003); break; // TH
                             case "E": account.pfc_language = new OptionSetValue(100000001); break; // ENG
                             default: account.pfc_language = new OptionSetValue(100000004); break;
                         }
-                        if (string.IsNullOrEmpty(contentModel.profileHeader.riskLevel))
+                        if (string.IsNullOrEmpty(contentModel.profileHeader?.riskLevel))
                         {
                             // do nothing
                         }
                         else
                         {
-                            switch (contentModel.profileHeader.riskLevel)
+                            switch (contentModel.profileHeader?.riskLevel)
                             {
                                 case "A": account.pfc_AMLO_flag = new OptionSetValue(100000001); break; // A
                                 case "B": account.pfc_AMLO_flag = new OptionSetValue(100000002); break; // B
@@ -135,45 +135,41 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                                 default: account.pfc_AMLO_flag = new OptionSetValue(); break;
                             }
                         }
-                        bool isVIP = false;
-                        if (contentModel.profileHeader.vipStatus.Equals("Y"))
-                        {
-                            isVIP = true;
-                        }
+                        bool isVIP = contentModel.profileHeader?.vipStatus?.ToString() =="Y";
                         account.pfc_customer_vip = isVIP; // bool
 
-                        // contactHeader 
+                        // contactHeader? 
 
-                        account.Telephone1 = TelephoneConvertor( contentModel.contactHeader.telephone1 ,contentModel.contactHeader.telephone1Ext);
-                        account.Telephone2 = TelephoneConvertor(contentModel.contactHeader.telephone2, contentModel.contactHeader.telephone2Ext);
-                        account.Telephone3 = TelephoneConvertor(contentModel.contactHeader.telephone3, contentModel.contactHeader.telephone3Ext);
-                        account.pfc_moblie_phone1 = contentModel.contactHeader.mobilePhone;
-                        account.EMailAddress1 = contentModel.contactHeader.emailAddress;
-                        account.pfc_line_id = contentModel.contactHeader.lineID;
-                        account.pfc_facebook = contentModel.contactHeader.facebook;
+                        account.Telephone1 = TelephoneConvertor( contentModel.contactHeader?.telephone1 ,contentModel.contactHeader?.telephone1Ext);
+                        account.Telephone2 = TelephoneConvertor(contentModel.contactHeader?.telephone2, contentModel.contactHeader?.telephone2Ext);
+                        account.Telephone3 = TelephoneConvertor(contentModel.contactHeader?.telephone3, contentModel.contactHeader?.telephone3Ext);
+                        account.pfc_moblie_phone1 = contentModel.contactHeader?.mobilePhone;
+                        account.EMailAddress1 = contentModel.contactHeader?.emailAddress;
+                        account.pfc_line_id = contentModel.contactHeader?.lineID;
+                        account.pfc_facebook = contentModel.contactHeader?.facebook;
                         account.pfc_source_data = new OptionSetValue(100000003);
 
                         // new 6 parameters from P'Guide
-                        account.pfc_telephone1 = contentModel.contactHeader.telephone1;
-                        account.pfc_telephone2 = contentModel.contactHeader.telephone2;
-                        account.pfc_telephone3 = contentModel.contactHeader.telephone3;
-                        account.pfc_fax = contentModel.contactHeader.fax;
-                        account.pfc_moblie_phone = contentModel.contactHeader.mobilePhone;
-                        account.pfc_emailaddress1 = contentModel.contactHeader.emailAddress;
+                        account.pfc_telephone1 = contentModel.contactHeader?.telephone1;
+                        account.pfc_telephone2 = contentModel.contactHeader?.telephone2;
+                        account.pfc_telephone3 = contentModel.contactHeader?.telephone3;
+                        account.pfc_fax = contentModel.contactHeader?.fax;
+                        account.pfc_moblie_phone = contentModel.contactHeader?.mobilePhone;
+                        account.pfc_emailaddress1 = contentModel.contactHeader?.emailAddress;
 
                         /*
-                        // addressHeader
-                        contentModel.addressHeader.address1;
-                        contentModel.addressHeader.address2;
-                        contentModel.addressHeader.address3;
-                        contentModel.addressHeader.subDistrictCode;
-                        contentModel.addressHeader.districtCode;
-                        contentModel.addressHeader.provinceCode;
-                        contentModel.addressHeader.postalCode;
-                        contentModel.addressHeader.country;
-                        contentModel.addressHeader.addressType;
-                        contentModel.addressHeader.latitude;
-                        contentModel.addressHeader.longtitude;
+                        // addressHeader?
+                        contentModel.addressHeader?.address1;
+                        contentModel.addressHeader?.address2;
+                        contentModel.addressHeader?.address3;
+                        contentModel.addressHeader?.subDistrictCode;
+                        contentModel.addressHeader?.districtCode;
+                        contentModel.addressHeader?.provinceCode;
+                        contentModel.addressHeader?.postalCode;
+                        contentModel.addressHeader?.country;
+                        contentModel.addressHeader?.addressType;
+                        contentModel.addressHeader?.latitude;
+                        contentModel.addressHeader?.longtitude;
                         */
 
                         /*
@@ -219,7 +215,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                     }
                     // Update Payee Additional Records
-                    else if (contentModel.generalHeader.clientAdditionalExistFlag.Equals("Y"))
+                    else if (contentModel.generalHeader?.clientAdditionalExistFlag?.ToString() == "Y")
                     {
                         // logic for update
 
@@ -237,11 +233,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     }
 
 
-                    //List<string> crmIdOutput = SearchCrmAccountPayeeId(data.generalHeader.cleansingId);
+                    //List<string> crmIdOutput = SearchCrmAccountPayeeId(data.generalHeader?.cleansingId);
 
                     //dataOutput.crmClientId = crmIdOutput[0]; // generate from crm
                     //// dataOutput.data = "Waiting for generating algorithm";
-                    ////dataOutput.data = contentModel.generalHeader.crmPayeeId;
+                    ////dataOutput.data = contentModel.generalHeader?.crmPayeeId;
                     //dataOutput.code = "200";
                     //dataOutput.transactionId = TransactionId;
                     //dataOutput.transactionDateTime = DateTime.Now;

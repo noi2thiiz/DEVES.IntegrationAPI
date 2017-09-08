@@ -306,10 +306,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             AddDebugInfo("Search Payee in SAP", SAPInqVendorIn);
 
-            var SAPInqVendorContentOut =
-                CallDevesServiceProxy<Model.SAP.SAPInquiryVendorOutputModel, Model.SAP.EWIResSAPInquiryVendorContentModel>(
-                    CommonConstant.ewiEndpointKeySAPInquiryVendor, SAPInqVendorIn);
-
+           //var SAPInqVendorContentOut =
+           //     CallDevesServiceProxy<Model.SAP.SAPInquiryVendorOutputModel, Model.SAP.EWIResSAPInquiryVendorContentModel>(
+           //         CommonConstant.ewiEndpointKeySAPInquiryVendor, SAPInqVendorIn);
+            var sapService = new SAPInquiryVendor(TransactionId,ControllerName);
+            EWIResSAPInquiryVendorContentModel SAPInqVendorContentOut = sapService.Execute((SAPInquiryVendorInputModel)SAPInqVendorIn);
             #endregion Search Payee in SAP
 
             var sapInfo = SAPInqVendorContentOut?.VendorInfo?.FirstOrDefault();

@@ -12,6 +12,7 @@ namespace DEVES.IntegrationAPI.Model.Polisy400
 {
     public class CLIENTCreateCorporateClientAndAdditionalInfoInputModel : BaseEWIRequestContentModel
     {
+       
         public CLIENTCreateCorporateClientAndAdditionalInfoInputModel()
         {
             DateTimeCustomFormat = CONST_FORMAT_DATE_POLISY400;

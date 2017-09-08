@@ -501,6 +501,7 @@
     <Compile Include="Logic\Services\CleansingService.cs" />
     <Compile Include="Logic\Services\CLIENTCreateCorporateClientAndAdditionalInfo.cs" />
     <Compile Include="Logic\Services\CLIENTCreatePersonalClientAndAdditionalInfoService.cs" />
+    <Compile Include="Logic\Services\CLIENTUpdateCorporateClientAndAdditionalInfoService.cs" />
     <Compile Include="Logic\Services\CLSCreateCorporateClient.cs" />
     <Compile Include="Logic\Services\CLSCreatePersonalService.cs" />
     <Compile Include="Logic\Services\CLSInquiryCLSCorporateClient.cs" />
@@ -511,6 +512,7 @@
     <Compile Include="Logic\Services\MOTORInquiryMasterASRH.cs" />
     <Compile Include="Logic\Services\MOTORRequestSurveyor.cs" />
     <Compile Include="Logic\Services\PolisyClientService.cs" />
+    <Compile Include="Logic\Services\RegisComplaintService.cs" />
     <Compile Include="Logic\Services\SAPCreateVendor.cs" />
     <Compile Include="Logic\Services\SAPInquiryVendor.cs" />
     <Compile Include="Logic\Services\SendSmsService.cs" />

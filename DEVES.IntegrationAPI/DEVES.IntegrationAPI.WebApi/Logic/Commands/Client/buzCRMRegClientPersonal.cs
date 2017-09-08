@@ -291,15 +291,16 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             RegClientPersonalInput.generalHeader.cleansingId = cleansingId;
 
             Console.WriteLine("Create:CLIENTCreatePersonalClientAndAdditionalInfo");
-            CLIENTCreatePersonalClientAndAdditionalInfoContentModel polCreateClientContent =
-                new CLIENTCreatePersonalClientAndAdditionalInfoContentModel();
+            
             BaseDataModel polCreatePersonIn =
                 DataModelFactory.GetModel(typeof(CLIENTCreatePersonalClientAndAdditionalInfoInputModel));
             polCreatePersonIn = TransformerFactory.TransformModel(RegClientPersonalInput, polCreatePersonIn);
-            polCreateClientContent =
-                CallDevesServiceProxy<CLIENTCreatePersonalClientAndAdditionalInfoOutputModel
-                        , CLIENTCreatePersonalClientAndAdditionalInfoContentModel>
-                    (CommonConstant.ewiEndpointKeyCLIENTCreatePersonalClient, polCreatePersonIn);
+           // polCreateClientContent =
+           //     CallDevesServiceProxy<CLIENTCreatePersonalClientAndAdditionalInfoOutputModel
+           //             , CLIENTCreatePersonalClientAndAdditionalInfoContentModel>
+           //         (CommonConstant.ewiEndpointKeyCLIENTCreatePersonalClient, polCreatePersonIn);
+            var clientService = new CLIENTCreatePersonalClientAndAdditionalInfoService(TransactionId,ControllerName);
+            CLIENTCreatePersonalClientAndAdditionalInfoContentModel polCreateClientContent = clientService.Execute((CLIENTCreatePersonalClientAndAdditionalInfoInputModel) polCreatePersonIn);
 
             if (string.IsNullOrEmpty(polCreateClientContent?.clientID))
             {
@@ -325,15 +326,15 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             }
 
 
-            BaseDataModel clsCreatePersonIn =
-                DataModelFactory.GetModel(typeof(CLSCreatePersonalClientInputModel));
+            BaseDataModel clsCreatePersonIn = DataModelFactory.GetModel(typeof(CLSCreatePersonalClientInputModel));
             clsCreatePersonIn = TransformerFactory.TransformModel(RegClientPersonalInput, clsCreatePersonIn);
 
-            var clsCreateClientContent =
-                CallDevesServiceProxy<CLSCreatePersonalClientOutputModel,
-                        CLSCreatePersonalClientContentOutputModel>
-                    (CommonConstant.ewiEndpointKeyCLSCreatePersonalClient, clsCreatePersonIn);
-
+           // var clsCreateClientContent =
+           //     CallDevesServiceProxy<CLSCreatePersonalClientOutputModel,
+           //             CLSCreatePersonalClientContentOutputModel>
+           //         (CommonConstant.ewiEndpointKeyCLSCreatePersonalClient, clsCreatePersonIn);
+            var clsService = new CLSCreatePersonalService(TransactionId,ControllerName);
+            var clsCreateClientContent = clsService.Execute((CLSCreatePersonalClientInputModel)clsCreatePersonIn);
 
             if (clsCreateClientContent.code != CONST_CODE_SUCCESS)
             {
