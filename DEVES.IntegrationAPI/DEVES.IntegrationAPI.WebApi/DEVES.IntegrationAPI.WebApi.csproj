@@ -408,6 +408,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\internal-service\TestRetrieveXRMController.cs" />
     <Compile Include="Controllers\isurvey-service\AccidentPrilimSurveyorReportController.cs" />
     <Compile Include="Controllers\admin-service\AdminServiceController.cs" />
     <Compile Include="Controllers\isurvey-service\AssignedSurveyorController.cs" />

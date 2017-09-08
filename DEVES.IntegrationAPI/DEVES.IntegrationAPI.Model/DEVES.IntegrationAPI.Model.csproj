@@ -156,6 +156,8 @@
     <Compile Include="SMS\SendSMSModel.cs" />
     <Compile Include="SubmitSurveyAssessmentResult\SubmitSurveyAssessmentResultInputModel.cs" />
     <Compile Include="SubmitSurveyAssessmentResult\SubmitSurveyAssessmentResultOutputModel.cs" />
+    <Compile Include="TestRetrieveXRM\TestRetrieveXRMInputModel.cs" />
+    <Compile Include="TestRetrieveXRM\TestRetrieveXRMOutputModel.cs" />
     <Compile Include="UpdateClaimInfo\UpdateClaimInfoInputModel.cs" />
     <Compile Include="UpdateClaimInfo\UpdateClaimInfoOutputModel_Fail.cs" />
     <Compile Include="UpdateClaimInfo\UpdateClaimInfoOutputModel_Pass.cs" />
