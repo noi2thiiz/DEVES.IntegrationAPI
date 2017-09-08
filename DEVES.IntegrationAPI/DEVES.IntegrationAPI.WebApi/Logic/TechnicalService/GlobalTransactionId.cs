@@ -53,7 +53,7 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
             {
                 var now = DateTime.Now.ToString("yyMMdd");
                 var month = DateTime.Now.ToString("yyMM");
-                var time = DateTime.Now.ToString("HHms");
+                var time = DateTime.Now.ToString("HHmmss");
                 var millisecond = DateTime.Now.ToString("fff");
                 if (logMonth == month)
                 {
@@ -68,7 +68,7 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
 
 
                 // int seed = rnd.Next(100, 999);
-                var globalId = appId + "-" + now + time + millisecond+ "-" + (logCount.ToString()).PadLeft(7, '0');
+                var globalId = appId + "-" + now +""+ time + millisecond+ "-" + (logCount.ToString()).PadLeft(7, '0');
                 if (false == globalIdList.ContainsKey(globalId))
                 {
                     globalIdList.Add(globalId, 0);
