@@ -46,7 +46,7 @@ namespace DEVES.IntegrationAPI.Model.RegPayeeCorporate
         public string message { get; set; }
         public string description { get; set; }
         public string transactionId { get; set; }
-        public DateTime transactionDateTime { get; set; } = DateTime.Now;
+        public DateTime? transactionDateTime { get; set; } = DateTime.Now;
         public RegPayeeCorporateDataOutputModel_Fail data { get; set; }
     }
 

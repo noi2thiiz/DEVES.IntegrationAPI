@@ -15,7 +15,7 @@ namespace DEVES.IntegrationAPI.Model.RegClaimRequestFromClaimDi
         public string complaintNo { get; set; }
         public string complaintStatus { get; set; }
         public string complaintStep { get; set; }
-        public DateTime complaintStepdate { get; set; }
+        public DateTime? complaintStepdate { get; set; }
 
     }
 }

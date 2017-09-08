@@ -10,6 +10,7 @@ using DEVES.IntegrationAPI.Model.RegPayeeCorporate;
 using DEVES.IntegrationAPI.Model.CLS;
 using DEVES.IntegrationAPI.Model.Polisy400;
 using DEVES.IntegrationAPI.Model.RegPayeePersonal;
+using DEVES.IntegrationAPI.Model.SAP;
 using DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData;
 using DEVES.IntegrationAPI.WebApi.Logic.DataBaseContracts;
 using DEVES.IntegrationAPI.WebApi.Logic.Services;
@@ -136,106 +137,31 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             if (string.IsNullOrEmpty(regPayeeCorporateInput?.generalHeader?.polisyClientId))
             {
                 if (string.IsNullOrEmpty(regPayeeCorporateInput?.generalHeader?.cleansingId))
-                {   //เก็บค่า newCleansingId ไว้ลบ
+                {
+                    //เก็บค่า newCleansingId ไว้ลบ
                     #region Create Payee in Cleansing
-                    AddDebugInfo("Create Payee in Cleansing");
 
-                    var service = new CLSCreateCorporateClient(TransactionId, ControllerName);
-                    CLSCreateCorporateClientContentOutputModel clsCreatePayeeContent = service.Execute(regPayeeCorporateInput);
-
-                    AddDebugInfo("Create Payee in Cleansing Output ", clsCreatePayeeContent);
-                    if (clsCreatePayeeContent?.code == CONST_CODE_SUCCESS)
-                    {
-                        //เก็บค่าไว้ลบ กรณีสร้างใหม่
-                        newCleansingId = clsCreatePayeeContent?.data?.cleansingId;
-                        if (regPayeeCorporateInput.generalHeader != null)
-                            regPayeeCorporateInput.generalHeader.cleansingId =
-                                clsCreatePayeeContent?.data?.cleansingId ?? "";
-
-                        outputPass.polisyClientId = clsCreatePayeeContent.data?.clientId;
-                        outputPass.corporateName1 = clsCreatePayeeContent.data?.corporateName1;
-                        outputPass.corporateName2 = clsCreatePayeeContent.data?.corporateName2;
-                    }
-                    else
-                    {
-                        regPayeeCorporateOutput.code = clsCreatePayeeContent?.code??AppConst.CODE_FAILED;
-                        regPayeeCorporateOutput.message = $"CLS Error:{clsCreatePayeeContent?.message}";
-                        regPayeeCorporateOutput.description = clsCreatePayeeContent?.description;
-                        outputPass.cleansingId = clsCreatePayeeContent?.data?.cleansingId ?? "";
-                        outputPass.polisyClientId = clsCreatePayeeContent?.data?.clientId??"";
-                        outputPass.corporateName1 = clsCreatePayeeContent?.data?.corporateName1??"";
-                        outputPass.corporateName2 = clsCreatePayeeContent?.data?.corporateName2??"";
-                        outputPass.corporateBranch = "";
-                        outputPass.sapVendorCode = "";
-                        outputPass.sapVendorGroupCode = "";
-                      
-
-                        regPayeeCorporateOutput.data.Add(outputPass);
-                        throw  new BuzErrorException(regPayeeCorporateOutput,"CLS");
-                    }
+                    CreatePayeeinCleansing(outputPass, regPayeeCorporateOutput);
 
                     #endregion Create Payee in Cleansing
                 }
                 //implement rollback
                 #region Create Payee in Polisy400
 
-                try
-                {
+                CreatePayeeInPolisy400(outputPass);
 
-                    var service = new CLIENTCreateCorporateClientAndAdditionalInfo(TransactionId, ControllerName);
-                    var polCreatePayeeContent = service.Execute(regPayeeCorporateInput);
-
-                    AddDebugInfo("Create Payee in Polisy400 Output ", polCreatePayeeContent);
-
-                    if (polCreatePayeeContent != null)
-                    {
-                        newPolisyClientId = polCreatePayeeContent?.clientID ?? "";
-
-                        regPayeeCorporateInput.generalHeader.polisyClientId = polCreatePayeeContent.clientID;
-
-                        outputPass.polisyClientId = polCreatePayeeContent.clientID;
-                    }
-                }
-            
-                catch (Exception e)
-                {
-                    Console.WriteLine("400 Error" + e.Message);
-                    AddDebugInfo("400 Error" + e.Message, e.StackTrace);
-                    //@TODO adHoc fix Please fill recipient type  มัน return success เลยถ้าไม่ได้ดักไว้ 
-                    if (!string.IsNullOrEmpty(newCleansingId))
-                    {
-                        AddDebugInfo("244:try rollback" + newCleansingId);
-                        var dltService = new CleansingClientService(TransactionId, ControllerName);
-                        dltService.RemoveByCleansingId(newCleansingId, "C");
-                    }
-                   
-                    throw;
-                }
                 #endregion Create Payee in Polisy400
             }
 
             #region Search Payee in SAP
 
-            Model.SAP.SAPInquiryVendorInputModel SAPInqVendorIn =
-                (Model.SAP.SAPInquiryVendorInputModel) DataModelFactory.GetModel(
-                    typeof(Model.SAP.SAPInquiryVendorInputModel));
-            AddDebugInfo("Search Payee in SAP", SAPInqVendorIn);
-            //SAPInqVendorIn = TransformerFactory.TransformModel(regPayeeCorporateInput, SAPInqVendorIn);
-          
+            var sapInqVendorContentOut = SearchPayeeInSAP();
+            //การใช้ FirstOrDefault นี้ถูกต้องแน่หรอ เพราะ SAP output อาจจะมีมากกว่า 1 รายการ
+            var sapInfo = sapInqVendorContentOut?.VendorInfo?.FirstOrDefault();
 
-            SAPInqVendorIn.TAX3 = regPayeeCorporateInput.profileHeader.idTax ?? "";
-        
-            SAPInqVendorIn.TAX4 = regPayeeCorporateInput.profileHeader.corporateBranch ?? "";
-            SAPInqVendorIn.PREVACC = regPayeeCorporateInput.generalHeader.polisyClientId ?? ""; 
-            SAPInqVendorIn.VCODE = regPayeeCorporateInput.sapVendorInfo.sapVendorCode ?? "";
-
-            var sapService = new SAPInquiryVendor(TransactionId, ControllerName);
-            var sapInqVendorContentOut = sapService.Execute(SAPInqVendorIn);
-
-            AddDebugInfo("Search Payee  in SAP Output", sapInqVendorContentOut);
             #endregion Search Payee in SAP
 
-            var sapInfo = sapInqVendorContentOut?.VendorInfo?.FirstOrDefault();
+
 
             if (string.IsNullOrEmpty(sapInfo?.VCODE))
             {
@@ -243,124 +169,39 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 //implement rollback
                 #region Create Payee in SAP
 
-                try
-                {
+                CreatePayeeInSap(outputPass);
 
-
-                    if (!ignoreSap)
-                    {
-                        //BaseDataModel SAPCreateVendorIn = DataModelFactory.GetModel(typeof(Model.SAP.SAPCreateVendorInputModel));
-                       
-                        var sapCreateVendorService = new SAPCreateVendor(TransactionId,ControllerName);
-                        var SAPCreateVendorContentOut = sapCreateVendorService.Execute(regPayeeCorporateInput);
-
-                        if (string.IsNullOrEmpty(SAPCreateVendorContentOut?.VCODE))
-                        {
-                            throw new Exception(SAPCreateVendorContentOut?.Message);
-                        }
-
-                        regPayeeCorporateInput.sapVendorInfo.sapVendorCode = SAPCreateVendorContentOut?.VCODE;
-                        outputPass.sapVendorCode = SAPCreateVendorContentOut?.VCODE;
-
-                        newSapVendorCode = SAPCreateVendorContentOut?.VCODE;
-                    }
-                  
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("SAP Error" + e.Message);
-                    AddDebugInfo("SAP Error" + e.Message,e.StackTrace);
-                    //@TODO adHoc fix Please fill recipient type  มัน return success เลยถ้าไม่ได้ดักไว้ 
-                    if (!string.IsNullOrEmpty(newCleansingId))
-                    {
-                        AddDebugInfo("273:try rollback" + newCleansingId);
-                        var clsdeleteService = new CleansingClientService(TransactionId, ControllerName);
-                        clsdeleteService.RemoveByCleansingId(newCleansingId, "C");
-                    }
-                    
-
-                    List<OutputModelFailDataFieldErrors> fieldError = MessageBuilder.Instance.ExtractSapCreateVendorFieldError<RegPayeeCorporateInputModel>(e.Message, regPayeeCorporateInput);
-                    if (fieldError.Any())
-                    {
-                        AddDebugInfo("FieldValidationException" + "SAP Error:" + e.Message);
-                       
-                     
-                         throw new FieldValidationException(fieldError, "Cannot create SAP Vendor:" + MessageBuilder.Instance.ConvertMessageSapToCrm(e.Message), ""); 
-                        
-
-                    }
-                    else
-                    {
-                        throw new FieldValidationException(fieldError, "SAP Error:" + MessageBuilder.Instance.ConvertMessageSapToCrm(e.Message), "");
-                      
-                    }
-                }
                 #endregion Create Payee in SAP
 
                 #region Create payee in CRM
 
-                try
-                {
-                    if (!ignoreCrm && !string.IsNullOrEmpty(regPayeeCorporateInput?.generalHeader?.cleansingId))
-                    {
-                        if (false==SpApiChkCustomerClient.Instance.CheckByCleansingId(regPayeeCorporateInput.generalHeader.cleansingId))
-                        {
-                            AddDebugInfo("Create payee in CRM");
-                            buzCreateCrmPayeeCorporate cmdCreateCrmPayee = new buzCreateCrmPayeeCorporate();
-                            cmdCreateCrmPayee.TransactionId = TransactionId;
-                            CreateCrmCorporateInfoOutputModel crmContentOutput =
-                                (CreateCrmCorporateInfoOutputModel)cmdCreateCrmPayee.Execute(regPayeeCorporateInput);
-
-                            if (crmContentOutput.code == CONST_CODE_SUCCESS)
-                            {
-                                //RegPayeeCorporateDataOutputModel_Pass dataOutPass = new RegPayeeCorporateDataOutputModel_Pass();
-                                //dataOutPass.polisyClientId = regPayeeCorporateInput.generalHeader.polisyClientId;
-                                //dataOutPass.sapVendorCode = regPayeeCorporateInput.sapVendorInfo.sapVendorCode;
-                                //dataOutPass.sapVendorGroupCode = regPayeeCorporateInput.sapVendorInfo.sapVendorGroupCode;
-                                //dataOutPass.personalName = regPayeeCorporateInput.profileInfo.personalName;
-                                //dataOutPass.personalSurname = regPayeeCorporateInput.profileInfo.personalSurname;
-
-                                outputPass.crmClientId = crmContentOutput?.crmClientId ?? "";
-                                outputPass.corporateBranch = regPayeeCorporateInput.profileHeader.corporateBranch;
-                                outputPass.sapVendorGroupCode = regPayeeCorporateInput.sapVendorInfo.sapVendorGroupCode;
-
-                                //regPayeeCorporateOutput.data.Add(dataOutPass);
-                            }
-                            else
-                            {
-                                AddDebugInfo("Cannot create Client in CRM :" + crmContentOutput.message, crmContentOutput);
-                                //regPayeeCorporateOutput.code = CONST_CODE_FAILED;
-                                //regPayeeCorporateOutput.message = crmContentOutput.message;
-                                //regPayeeCorporateOutput.description = crmContentOutput.description;
-                            }
-                        }
-                    }
-                }
-                catch (Exception e)
-                {
-                    //do not thing
-                    AddDebugInfo("Cannot create Client in CRM :" + e.Message, e.StackTrace);
-                }
-               
+                CreatePayeeInCrm(outputPass);
 
                 #endregion Create payee in CRM
             }
             else
-            {   
+            {
                 //regPayeeCorporateInput.sapVendorInfo.sapVendorCode = SAPInqVendorContentOut.VCODE;
+                #region Map SAP output to Api output
                 outputPass.sapVendorCode = sapInfo?.VCODE;
                 outputPass.sapVendorGroupCode = sapInfo?.VGROUP;
                 outputPass.corporateName1 = sapInfo?.NAME1;
                 outputPass.corporateName2 = sapInfo?.NAME2;
                 newSapVendorCode= sapInfo?.VCODE;
                 newSapVendorGroupCode = sapInfo?.VGROUP;
-
+                #endregion Map SAP output to Api output
 
             }
 
             //@TODO adHoc fix if fullname in null
             // Tranform จน งง ว่าข้อมูลไปยังไงมายังไง เลยต้องมา check อีกที
-           
+            FinalizeOuput(outputPass, regPayeeCorporateOutput);
+            return regPayeeCorporateOutput;
+        }
+
+        private void FinalizeOuput(RegPayeeCorporateDataOutputModel_Pass outputPass,
+            RegPayeeCorporateContentOutputModel regPayeeCorporateOutput)
+        {
             if (!string.IsNullOrEmpty(newPolisyClientId))
             {
                 outputPass.polisyClientId = newPolisyClientId;
@@ -396,20 +237,212 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             }
 
 
-
-
-            outputPass.sapVendorGroupCode = !string.IsNullOrEmpty(newSapVendorGroupCode)? newSapVendorGroupCode: regPayeeCorporateInput.sapVendorInfo.sapVendorGroupCode; ;
-             outputPass.corporateBranch = regPayeeCorporateInput.profileHeader.corporateBranch;
+            outputPass.sapVendorGroupCode = !string.IsNullOrEmpty(newSapVendorGroupCode)
+                ? newSapVendorGroupCode
+                : regPayeeCorporateInput.sapVendorInfo.sapVendorGroupCode;
+            ;
+            outputPass.corporateBranch = regPayeeCorporateInput.profileHeader.corporateBranch;
 
 
             regPayeeCorporateOutput.data.Add(outputPass);
-
-            //add debug info to model
-         
-            return regPayeeCorporateOutput;
         }
 
+        private void CreatePayeeInCrm(RegPayeeCorporateDataOutputModel_Pass outputPass)
+        {
+            try
+            {
+                if (!ignoreCrm && !string.IsNullOrEmpty(regPayeeCorporateInput?.generalHeader?.cleansingId))
+                {
+                    if (false == SpApiChkCustomerClient.Instance.CheckByCleansingId(regPayeeCorporateInput.generalHeader
+                            .cleansingId))
+                    {
+                        AddDebugInfo("Create payee in CRM");
+                        buzCreateCrmPayeeCorporate cmdCreateCrmPayee = new buzCreateCrmPayeeCorporate();
+                        cmdCreateCrmPayee.TransactionId = TransactionId;
+                        CreateCrmCorporateInfoOutputModel crmContentOutput =
+                            (CreateCrmCorporateInfoOutputModel) cmdCreateCrmPayee.Execute(regPayeeCorporateInput);
 
-        
+                        if (crmContentOutput.code == CONST_CODE_SUCCESS)
+                        {
+                            //RegPayeeCorporateDataOutputModel_Pass dataOutPass = new RegPayeeCorporateDataOutputModel_Pass();
+                            //dataOutPass.polisyClientId = regPayeeCorporateInput.generalHeader.polisyClientId;
+                            //dataOutPass.sapVendorCode = regPayeeCorporateInput.sapVendorInfo.sapVendorCode;
+                            //dataOutPass.sapVendorGroupCode = regPayeeCorporateInput.sapVendorInfo.sapVendorGroupCode;
+                            //dataOutPass.personalName = regPayeeCorporateInput.profileInfo.personalName;
+                            //dataOutPass.personalSurname = regPayeeCorporateInput.profileInfo.personalSurname;
+
+                            outputPass.crmClientId = crmContentOutput?.crmClientId ?? "";
+                            outputPass.corporateBranch = regPayeeCorporateInput.profileHeader.corporateBranch;
+                            outputPass.sapVendorGroupCode = regPayeeCorporateInput.sapVendorInfo.sapVendorGroupCode;
+
+                            //regPayeeCorporateOutput.data.Add(dataOutPass);
+                        }
+                        else
+                        {
+                            AddDebugInfo("Cannot create Client in CRM :" + crmContentOutput.message, crmContentOutput);
+                            //regPayeeCorporateOutput.code = CONST_CODE_FAILED;
+                            //regPayeeCorporateOutput.message = crmContentOutput.message;
+                            //regPayeeCorporateOutput.description = crmContentOutput.description;
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                //do not thing
+                AddDebugInfo("Cannot create Client in CRM :" + e.Message, e.StackTrace);
+            }
+        }
+
+        private void CreatePayeeInSap(RegPayeeCorporateDataOutputModel_Pass outputPass)
+        {
+            try
+            {
+                if (!ignoreSap)
+                {
+                    //BaseDataModel SAPCreateVendorIn = DataModelFactory.GetModel(typeof(Model.SAP.SAPCreateVendorInputModel));
+
+                    var sapCreateVendorService = new SAPCreateVendor(TransactionId, ControllerName);
+                    var SAPCreateVendorContentOut = sapCreateVendorService.Execute(regPayeeCorporateInput);
+
+                    if (string.IsNullOrEmpty(SAPCreateVendorContentOut?.VCODE))
+                    {
+                        throw new Exception(SAPCreateVendorContentOut?.Message);
+                    }
+
+                    regPayeeCorporateInput.sapVendorInfo.sapVendorCode = SAPCreateVendorContentOut?.VCODE;
+                    outputPass.sapVendorCode = SAPCreateVendorContentOut?.VCODE;
+
+                    newSapVendorCode = SAPCreateVendorContentOut?.VCODE;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("SAP Error" + e.Message);
+                AddDebugInfo("SAP Error" + e.Message, e.StackTrace);
+                //@TODO adHoc fix Please fill recipient type  มัน return success เลยถ้าไม่ได้ดักไว้ 
+                if (!string.IsNullOrEmpty(newCleansingId))
+                {
+                    AddDebugInfo("273:try rollback" + newCleansingId);
+                    var clsdeleteService = new CleansingClientService(TransactionId, ControllerName);
+                    clsdeleteService.RemoveByCleansingId(newCleansingId, "C");
+                }
+
+
+                List<OutputModelFailDataFieldErrors> fieldError =
+                    MessageBuilder.Instance.ExtractSapCreateVendorFieldError<RegPayeeCorporateInputModel>(e.Message,
+                        regPayeeCorporateInput);
+                if (fieldError.Any())
+                {
+                    AddDebugInfo("FieldValidationException" + "SAP Error:" + e.Message);
+
+
+                    throw new FieldValidationException(fieldError,
+                        "Cannot create SAP Vendor:" + MessageBuilder.Instance.ConvertMessageSapToCrm(e.Message), "");
+                }
+                else
+                {
+                    throw new FieldValidationException(fieldError,
+                        "SAP Error:" + MessageBuilder.Instance.ConvertMessageSapToCrm(e.Message), "");
+                }
+            }
+        }
+
+        private EWIResSAPInquiryVendorContentModel SearchPayeeInSAP()
+        {
+            Model.SAP.SAPInquiryVendorInputModel SAPInqVendorIn =
+                (Model.SAP.SAPInquiryVendorInputModel) DataModelFactory.GetModel(
+                    typeof(Model.SAP.SAPInquiryVendorInputModel));
+            AddDebugInfo("Search Payee in SAP", SAPInqVendorIn);
+            //SAPInqVendorIn = TransformerFactory.TransformModel(regPayeeCorporateInput, SAPInqVendorIn);
+
+
+            SAPInqVendorIn.TAX3 = regPayeeCorporateInput.profileHeader.idTax ?? "";
+
+            SAPInqVendorIn.TAX4 = regPayeeCorporateInput.profileHeader.corporateBranch ?? "";
+            SAPInqVendorIn.PREVACC = regPayeeCorporateInput.generalHeader.polisyClientId ?? "";
+            SAPInqVendorIn.VCODE = regPayeeCorporateInput.sapVendorInfo.sapVendorCode ?? "";
+
+            var sapService = new SAPInquiryVendor(TransactionId, ControllerName);
+            var sapInqVendorContentOut = sapService.Execute(SAPInqVendorIn);
+
+            AddDebugInfo("Search Payee  in SAP Output", sapInqVendorContentOut);
+            return sapInqVendorContentOut;
+        }
+
+        private void CreatePayeeInPolisy400(RegPayeeCorporateDataOutputModel_Pass outputPass)
+        {
+            try
+            {
+                var service = new CLIENTCreateCorporateClientAndAdditionalInfo(TransactionId, ControllerName);
+                var polCreatePayeeContent = service.Execute(regPayeeCorporateInput);
+
+                AddDebugInfo("Create Payee in Polisy400 Output ", polCreatePayeeContent);
+
+                if (polCreatePayeeContent != null)
+                {
+                    newPolisyClientId = polCreatePayeeContent?.clientID ?? "";
+
+                    regPayeeCorporateInput.generalHeader.polisyClientId = polCreatePayeeContent.clientID;
+
+                    outputPass.polisyClientId = polCreatePayeeContent.clientID;
+                }
+            }
+
+            catch (Exception e)
+            {
+                Console.WriteLine("400 Error" + e.Message);
+                AddDebugInfo("400 Error" + e.Message, e.StackTrace);
+                //@TODO adHoc fix Please fill recipient type  มัน return success เลยถ้าไม่ได้ดักไว้ 
+                if (!string.IsNullOrEmpty(newCleansingId))
+                {
+                    AddDebugInfo("244:try rollback" + newCleansingId);
+                    var dltService = new CleansingClientService(TransactionId, ControllerName);
+                    dltService.RemoveByCleansingId(newCleansingId, "C");
+                }
+
+                throw;
+            }
+        }
+
+        private void CreatePayeeinCleansing(RegPayeeCorporateDataOutputModel_Pass outputPass,
+            RegPayeeCorporateContentOutputModel regPayeeCorporateOutput)
+        {
+            AddDebugInfo("Create Payee in Cleansing");
+
+            var service = new CLSCreateCorporateClient(TransactionId, ControllerName);
+            CLSCreateCorporateClientContentOutputModel clsCreatePayeeContent = service.Execute(regPayeeCorporateInput);
+
+            AddDebugInfo("Create Payee in Cleansing Output ", clsCreatePayeeContent);
+            if (clsCreatePayeeContent?.code == CONST_CODE_SUCCESS)
+            {
+                //เก็บค่าไว้ลบ กรณีสร้างใหม่
+                newCleansingId = clsCreatePayeeContent?.data?.cleansingId;
+                if (regPayeeCorporateInput.generalHeader != null)
+                    regPayeeCorporateInput.generalHeader.cleansingId =
+                        clsCreatePayeeContent?.data?.cleansingId ?? "";
+
+                outputPass.polisyClientId = clsCreatePayeeContent.data?.clientId;
+                outputPass.corporateName1 = clsCreatePayeeContent.data?.corporateName1;
+                outputPass.corporateName2 = clsCreatePayeeContent.data?.corporateName2;
+            }
+            else
+            {
+                regPayeeCorporateOutput.code = clsCreatePayeeContent?.code ?? AppConst.CODE_FAILED;
+                regPayeeCorporateOutput.message = $"CLS Error:{clsCreatePayeeContent?.message}";
+                regPayeeCorporateOutput.description = clsCreatePayeeContent?.description;
+                outputPass.cleansingId = clsCreatePayeeContent?.data?.cleansingId ?? "";
+                outputPass.polisyClientId = clsCreatePayeeContent?.data?.clientId ?? "";
+                outputPass.corporateName1 = clsCreatePayeeContent?.data?.corporateName1 ?? "";
+                outputPass.corporateName2 = clsCreatePayeeContent?.data?.corporateName2 ?? "";
+                outputPass.corporateBranch = "";
+                outputPass.sapVendorCode = "";
+                outputPass.sapVendorGroupCode = "";
+
+
+                regPayeeCorporateOutput.data.Add(outputPass);
+                throw new BuzErrorException(regPayeeCorporateOutput, "CLS");
+            }
+        }
     }
 }

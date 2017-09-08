@@ -500,7 +500,9 @@
     <Compile Include="Logic\Services\BaseProxyService.cs" />
     <Compile Include="Logic\Services\CleansingService.cs" />
     <Compile Include="Logic\Services\CLIENTCreateCorporateClientAndAdditionalInfo.cs" />
+    <Compile Include="Logic\Services\CLIENTCreatePersonalClientAndAdditionalInfoService.cs" />
     <Compile Include="Logic\Services\CLSCreateCorporateClient.cs" />
+    <Compile Include="Logic\Services\CLSCreatePersonalService.cs" />
     <Compile Include="Logic\Services\CLSInquiryCLSCorporateClient.cs" />
     <Compile Include="Logic\Services\CLSInquiryCLSPersonalClient.cs" />
     <Compile Include="Logic\Services\COMPInquiryClientMaster.cs" />

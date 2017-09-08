@@ -16,7 +16,7 @@ namespace DEVES.IntegrationAPI.Model
         [JsonIgnore]
         public const string CONST_DATE_NULL_POLISY400 = "99999999";
         [JsonIgnore]
-        public const string CONST_DATE_NULL_CLS = "";
+        public const string CONST_DATE_NULL_CLS = ""; //1900-01-01 00:00:00
 
         [JsonIgnore]
         internal const string CONST_FORMAT_DATE_POLISY400 = "ddMMyyyy";
