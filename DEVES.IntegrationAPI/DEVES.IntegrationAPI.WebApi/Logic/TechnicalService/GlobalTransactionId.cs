@@ -46,43 +46,55 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
         private string logMonth = "";
         private string logDate = "";
         private Random rnd = new Random();
+
         public string GetNewGuid()
         {
-           
+            while (true)
+            {
                 var now = DateTime.Now.ToString("yyMMdd");
                 var month = DateTime.Now.ToString("yyMM");
                 var time = DateTime.Now.ToString("HHms");
+                var millisecond = DateTime.Now.ToString("fff");
                 if (logMonth == month)
                 {
                     ++logCount;
                 }
                 else
                 {
-                    logCount=0;
-                
+                    logCount = 0;
+
                     logMonth = month;
                 }
 
 
-            int seed = rnd.Next(1, 999);
-            var globalId = appId + "-" + now +  time +"-"+ (logCount.ToString()).PadLeft(7, '0');
-            globalIdList.Add(globalId,0);
-            try
-            {
-                HttpContext.Current.Items["GlobalTransactionID"] = globalId;
+                // int seed = rnd.Next(100, 999);
+                var globalId = appId + "-" + now + time + millisecond+ "-" + (logCount.ToString()).PadLeft(7, '0');
+                if (false == globalIdList.ContainsKey(globalId))
+                {
+                    globalIdList.Add(globalId, 0);
+
+                    try
+                    {
+                        HttpContext.Current.Items["GlobalTransactionID"] = globalId;
+                    }
+                    catch (Exception e)
+                    {
+                        //do nothing
+                    }
+
+                    return globalId;
+
+                }
+    
             }
-            catch (Exception e)
-            {
-                //do nothing
-            }
-            
-            return globalId;
         }
+
         Dictionary<string,int> globalIdList = new Dictionary<string, int>();
         public string GetNewGuid(string globalId)
         {
             try
             {
+
                 if (globalIdList.ContainsKey(globalId))
                 {
                     globalIdList[globalId]++;
