@@ -443,7 +443,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         private List<InquiryCrmPayeeListDataModel> InquiryCompClientMaster(InquiryCRMPayeeListInputModel searchCondition)
         {
             AddDebugInfo("call method COMPInquiryClientMaster", searchCondition);
-            var service = new COMPInquiryClientMaster(TransactionId, ControllerName);
+            var service = new COMPInquiryClientMasterService(TransactionId, ControllerName);
             var inqPolisyOut = service.Execute(new COMPInquiryClientMasterInputModel
             {
                 cltType = searchCondition?.clientType??"",
@@ -479,7 +479,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             AddDebugInfo("call method CLSInquiryCLSCorporateClient", searchCondition);
             try
             {
-                var service = new CLSInquiryCLSCorporateClient(TransactionId, ControllerName);
+                var service = new CLSInquiryCLSCorporateClientService(TransactionId, ControllerName);
                 var inqClsCorporateOut = service.Execute(new CLSInquiryCorporateClientInputModel
                 {
                     clientId = searchCondition?.polisyClientId ?? "",
@@ -568,7 +568,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             try
             {
                 AddDebugInfo("call method InquiryCLSPersonalClient", searchCondition);
-                var service = new CLSInquiryCLSPersonalClient(TransactionId, ControllerName);
+                var service = new CLSInquiryCLSPersonalClientService(TransactionId, ControllerName);
                 var clssearchCondition = new CLSInquiryPersonalClientInputModel
                 {
 

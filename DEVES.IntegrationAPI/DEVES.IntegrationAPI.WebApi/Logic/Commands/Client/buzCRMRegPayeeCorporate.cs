@@ -374,7 +374,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         {
             try
             {
-                var service = new CLIENTCreateCorporateClientAndAdditionalInfo(TransactionId, ControllerName);
+                var service = new CLIENTCreateCorporateClientAndAdditionalInfoService(TransactionId, ControllerName);
                 var polCreatePayeeContent = service.Execute(regPayeeCorporateInput);
 
                 AddDebugInfo("Create Payee in Polisy400 Output ", polCreatePayeeContent);
@@ -410,7 +410,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         {
             AddDebugInfo("Create Payee in Cleansing");
 
-            var service = new CLSCreateCorporateClient(TransactionId, ControllerName);
+            var service = new CLSCreateCorporateClientService(TransactionId, ControllerName);
             CLSCreateCorporateClientContentOutputModel clsCreatePayeeContent = service.Execute(regPayeeCorporateInput);
 
             AddDebugInfo("Create Payee in Cleansing Output ", clsCreatePayeeContent);

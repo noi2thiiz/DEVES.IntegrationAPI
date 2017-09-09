@@ -12,20 +12,20 @@ using DEVES.IntegrationAPI.Model.InquiryClientMaster;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 {
-    public class CLSInquiryCLSCorporateClient : BaseEwiServiceProxy
+    public class CLSInquiryCLSCorporateClientService : BaseEwiServiceProxy
     {
         #region Singleton
-        private static CLSInquiryCLSCorporateClient _instance;
+        private static CLSInquiryCLSCorporateClientService _instance;
 
         
 
-        public static CLSInquiryCLSCorporateClient Instance
+        public static CLSInquiryCLSCorporateClientService Instance
         {
             get
             {
     
                 if (_instance != null) return _instance;
-                 _instance = new CLSInquiryCLSCorporateClient();
+                 _instance = new CLSInquiryCLSCorporateClientService();
 
                 return _instance;
             }
@@ -33,13 +33,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 
         #endregion
 
-        public CLSInquiryCLSCorporateClient():base("")
+        public CLSInquiryCLSCorporateClientService():base("")
         {
             serviceName = "CLS_InquiryCLSCorporateClient";
             systemName = "CLS";
         }
 
-        public CLSInquiryCLSCorporateClient(string globalTransactionID, string controllerName = "") : base(globalTransactionID, controllerName)
+        public CLSInquiryCLSCorporateClientService(string globalTransactionID, string controllerName = "") : base(globalTransactionID, controllerName)
         {
             serviceName = "CLS_InquiryCLSCorporateClient";
             systemName = "CLS";

@@ -387,7 +387,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     clsCreateCorporateIn = TransformerFactory.TransformModel(regClientCorporateInput, clsCreateCorporateIn);
                   //  CLSCreateCorporateClientContentOutputModel clsCreateClientContent = CallDevesServiceProxy<CLSCreateCorporateClientOutputModel, CLSCreateCorporateClientContentOutputModel>
                   //      (CommonConstant.ewiEndpointKeyCLSCreateCorporateClient, clsCreateCorporateIn);
-                    var clsService = new CLSCreateCorporateClient(TransactionId,ControllerName);
+                    var clsService = new CLSCreateCorporateClientService(TransactionId,ControllerName);
                     CLSCreateCorporateClientContentOutputModel clsCreateClientContent =  clsService.Execute((CLSCreateCorporateClientInputModel)clsCreateCorporateIn);
 
                     if (clsCreateClientContent.code == CommonConstant.CODE_SUCCESS)
@@ -423,7 +423,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                             
                                     */
 
-                            var clientService = new CLIENTCreateCorporateClientAndAdditionalInfo(TransactionId,ControllerName);
+                            var clientService = new CLIENTCreateCorporateClientAndAdditionalInfoService(TransactionId,ControllerName);
                             CLIENTCreateCorporateClientAndAdditionalInfoContentModel polCreateClientContent = clientService.Execute((CLIENTCreateCorporateClientAndAdditionalInfoInputModel)polCreateCorporateIn);
 
                             regClientCorporateInput =
@@ -465,7 +465,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                             CallDevesServiceProxy<CLIENTCreateCorporateClientAndAdditionalInfoOutputModel
                                     , CLIENTCreateCorporateClientAndAdditionalInfoContentModel>
                                 (CommonConstant.ewiEndpointKeyCLIENTCreateCorporateClient, polCreateCorporateIn);*/
-                        var clientService = new CLIENTCreateCorporateClientAndAdditionalInfo(TransactionId,ControllerName);
+                        var clientService = new CLIENTCreateCorporateClientAndAdditionalInfoService(TransactionId,ControllerName);
                         CLIENTCreateCorporateClientAndAdditionalInfoContentModel polCreateClientContent =  clientService.Execute((CLIENTCreateCorporateClientAndAdditionalInfoInputModel)polCreateCorporateIn);
 
                         regClientCorporateInput =
@@ -492,7 +492,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                                     EWIResCOMPInquiryClientMasterContentModel>
                                 (CommonConstant.ewiEndpointKeyCOMPInquiryClient, compInqClientInput);*/
 
-                        var polService = new COMPInquiryClientMaster(TransactionId,ControllerName);
+                        var polService = new COMPInquiryClientMasterService(TransactionId,ControllerName);
                         EWIResCOMPInquiryClientMasterContentModel retCOMPInqClient =  polService.Execute((COMPInquiryClientMasterInputModel) compInqClientInput);
 
                         //Found in Polisy400

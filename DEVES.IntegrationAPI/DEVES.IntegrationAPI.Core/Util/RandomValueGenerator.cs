@@ -26,7 +26,7 @@ namespace DEVES.IntegrationAPI.Core.Util
 
         public static DateTime RandomDateTime()
         {
-            return DateTime.UtcNow.AddDays(new Random().Next(90));
+            return DateTime.UtcNow.AddDays(-(new Random().Next(90)));
         }
 
         public static string RandomOptions(string[] options)

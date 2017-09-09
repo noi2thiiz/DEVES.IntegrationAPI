@@ -17,7 +17,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services.Tests
         public void ExecuteTest()
         {
            
-            var service = new COMPInquiryClientMaster();
+            var service = new COMPInquiryClientMasterService();
             var result = service.Execute(new COMPInquiryClientMasterInputModel
             {
                 fullName = "พรชัย",

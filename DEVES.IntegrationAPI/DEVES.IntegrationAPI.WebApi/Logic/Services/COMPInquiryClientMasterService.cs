@@ -12,21 +12,21 @@ using DEVES.IntegrationAPI.Model.InquiryClientMaster;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 {
-    public class COMPInquiryClientMaster : BaseEwiServiceProxy
+    public class COMPInquiryClientMasterService : BaseEwiServiceProxy
     {
         #region Singleton
-        private static COMPInquiryClientMaster _instance;
+        private static COMPInquiryClientMasterService _instance;
 
         
 
-        public static COMPInquiryClientMaster Instance
+        public static COMPInquiryClientMasterService Instance
         {
             get
             {
               
              
                 if (_instance != null) return _instance;
-                _instance = new COMPInquiryClientMaster();
+                _instance = new COMPInquiryClientMasterService();
 
                 return _instance;
             }
@@ -34,13 +34,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 
         #endregion
 
-        public COMPInquiryClientMaster():base("")
+        public COMPInquiryClientMasterService():base("")
         {
             serviceName = "COMP_InquiryClientMaster";
             systemName = "COMP";
         }
 
-        public COMPInquiryClientMaster(string globalTransactionID, string controllerName = "") : base(globalTransactionID, controllerName)
+        public COMPInquiryClientMasterService(string globalTransactionID, string controllerName = "") : base(globalTransactionID, controllerName)
         {
             serviceName = "COMP_InquiryClientMaster";
             systemName = "COMP";

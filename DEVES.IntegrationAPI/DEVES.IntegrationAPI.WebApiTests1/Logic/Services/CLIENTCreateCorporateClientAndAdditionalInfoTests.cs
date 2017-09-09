@@ -16,7 +16,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services.Tests
         [TestMethod()]
         public void Execute_CLIENTCreateCorporateClientAndAdditionalInfoTest()
         {
-            var service = new CLIENTCreateCorporateClientAndAdditionalInfo("");
+            var service = new CLIENTCreateCorporateClientAndAdditionalInfoService("");
             var result = service.Execute(new CLIENTCreateCorporateClientAndAdditionalInfoInputModel
             {
                 telephones = "0927260990",

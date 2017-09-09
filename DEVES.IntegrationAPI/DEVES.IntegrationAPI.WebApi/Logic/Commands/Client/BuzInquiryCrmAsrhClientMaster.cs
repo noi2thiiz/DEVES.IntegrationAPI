@@ -275,7 +275,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         private CRMInquiryClientContentOutputModel InquiryCOMPClientMaster(InquiryClientMasterInputModel contentModel,
             CRMInquiryClientContentOutputModel crmInqContent)
         {
-            var compService = new COMPInquiryClientMaster(TransactionId, ControllerName);
+            var compService = new COMPInquiryClientMasterService(TransactionId, ControllerName);
 
             COMPInquiryClientMasterInputModel compInqClientInput = new COMPInquiryClientMasterInputModel();
             compInqClientInput =

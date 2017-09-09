@@ -90,7 +90,7 @@ namespace DEVES.IntegrationAPI.Model.CLS
         //"latitude": "",
         public string latitude { get; set; }
         //"longigude": "",
-        public string longigude { get; set; }
+        public string longitude { get; set; }
         //"OregNum": "",
         public string OregNum { get; set; }
         //"DelistFlag": "",

@@ -13,13 +13,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services.Tests
     [TestClass()]
     public class CLSInquiryCLSCorporateClientTests
     {
-        public CLSInquiryCLSCorporateClient service { get; set; }
+        public CLSInquiryCLSCorporateClientService service { get; set; }
 
         [TestMethod()]
         public void CLSInquiryCLSCorporateClientTest()
         {
            
-            service = new CLSInquiryCLSCorporateClient();
+            service = new CLSInquiryCLSCorporateClientService();
             Assert.IsNotNull(service);
         }
 
@@ -27,7 +27,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services.Tests
         public void Execute_CLSInquiryCLSCorporateClientTest()
         {
            
-            service = new CLSInquiryCLSCorporateClient();
+            service = new CLSInquiryCLSCorporateClientService();
             var result = service.Execute(new CLSInquiryCorporateClientInputModel
             {
                 corporateFullName="เทเวศ"
