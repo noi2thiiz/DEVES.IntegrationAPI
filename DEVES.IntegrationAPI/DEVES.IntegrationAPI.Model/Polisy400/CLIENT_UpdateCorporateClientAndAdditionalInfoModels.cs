@@ -21,64 +21,64 @@ namespace DEVES.IntegrationAPI.Model.Polisy400
 
 
         //"remark": "ทดสอบผ่าน Service Proxy Fulfill Create and Update Corporate",
-        public string remark { get; set; }
+        public string remark { get; set; } 
         //"address1": "43/21 ม.7",
-        public string address1 { get; set; }
+        public string address1 { get; set; } 
         //"address2": "เขตท่าจันทร์",
-        public string address2 { get; set; }
+        public string address2 { get; set; } 
         //"specialIndicator": "",
-        public string specialIndicator { get; set; }
+        public string specialIndicator { get; set; } 
         //"address3": "แขวงกรุงธน",
-        public string address3 { get; set; }
+        public string address3 { get; set; } 
 
-        public string address4 { get; set; }
+        public string address4 { get; set; } 
 
         //"capital": "สมุทรปราการ",
-        public string capital { get; set; }
+        public string capital { get; set; } 
         //"hospitalFlag": "Y",
-        public string hospitalFlag { get; set; }
+        public string hospitalFlag { get; set; } 
         //"facebook": "https://www.facebook.com/iknowyou5678",
-        public string facebook { get; set; }
+        public string facebook { get; set; } 
         //"solicitorBlackListFlag": "Y",
-        public string solicitorBlackListFlag { get; set; }
+        public string solicitorBlackListFlag { get; set; } 
         //"solicitorDelistFlag": "Y",
-        public string solicitorDelistFlag { get; set; }
+        public string solicitorDelistFlag { get; set; } 
         //"corporateStaffNo": "96",
-        public string corporateStaffNo { get; set; }
+        public string corporateStaffNo { get; set; } 
         //"vipStatus": "Y",
-        public string vipStatus { get; set; }
+        public string vipStatus { get; set; } 
         //"passportId": "4447889211",
-        public string passportId { get; set; }
+        public string passportId { get; set; } 
         //"emailAddress": "iknowyou5678@gmail.com",
-        public string emailAddress { get; set; }
+        public string emailAddress { get; set; } 
         //"fao": "0233333333",
-        public string fao { get; set; }
+        public string fao { get; set; } 
         //"telegram": "0233333333",
-        public string telegram { get; set; }
+        public string telegram { get; set; } 
         //"sTax": "0233333333",
-        public string sTax { get; set; }
+        public string sTax { get; set; } 
         //"country": "กรุงเทพมหานคร",
-        public string country { get; set; }
+        public string country { get; set; } 
         //"repairerTerminateDate": "Y",
-        public string repairerTerminateDate { get; set; }
+        public string repairerTerminateDate { get; set; } 
         //"solicitorOregNum": "96",
-        public string solicitorOregNum { get; set; }
+        public string solicitorOregNum { get; set; } 
         //"taxId": "559897",
-        public string taxId { get; set; }
+        public string taxId { get; set; } 
         //"longtitude": "144770.0",
-        public string longtitude { get; set; }
+        public string longtitude { get; set; } 
         //"assessorDelistFlag": "Y",
-        public string assessorDelistFlag { get; set; }
+        public string assessorDelistFlag { get; set; } 
         //"directMail": "isaidiknowyou5678@yahoo.com",
-        public string directMail { get; set; }
+        public string directMail { get; set; } 
         //"language": "T",
-        public string language { get; set; }
+        public string language { get; set; } 
         //"latitude": "1.3554787",
-        public string latitude { get; set; }
+        public string latitude { get; set; } 
         //"corporateName2": "Corporate Proxy",
-        public string corporateName2 { get; set; }
+        public string corporateName2 { get; set; } 
         //"corporateName1": "Case 2 Create and Update Corporate JSON",
-        public string corporateName1 { get; set; }
+        public string corporateName1 { get; set; } 
         [JsonIgnore]
         public DateTime? dateInCorporateDate { get; set; }
         public string dateInCorporate
@@ -104,65 +104,65 @@ namespace DEVES.IntegrationAPI.Model.Polisy400
             }
         }
         //"mailing": "isaidyouknowme@hotmail.com",
-        public string mailing { get; set; }
+        public string mailing { get; set; } 
         //"riskLevel": "R3",
-        public string riskLevel { get; set; }
+        public string riskLevel { get; set; } 
         //"assessorOregNum": "96",
-        public string assessorOregNum { get; set; }
+        public string assessorOregNum { get; set; } 
         //"telex": "023333333",
-        public string telex { get; set; }
+        public string telex { get; set; } 
         //"telephones": "023333333",
-        public string telephones { get; set; }
+        public string telephones { get; set; } 
 
         //"telephones2": "0833333333",
-        public string telephone2 { get; set; }
+        public string telephone2 { get; set; } 
 
         //"repairerFlag": "Y",
-        public string repairerFlag { get; set; }
+        public string repairerFlag { get; set; } 
         //"clientNumber": "16960644",
-        public string clientNumber { get; set; }
+        public string clientNumber { get; set; } 
         //"assessorTerminateDate": "04042016",
-        public string assessorTerminateDate { get; set; }
+        public string assessorTerminateDate { get; set; } 
         //"repairerOregNum": "96",
-        public string repairerOregNum { get; set; }
+        public string repairerOregNum { get; set; } 
         //"repairerDelistFlag": "Y",
-        public string repairerDelistFlag { get; set; }
+        public string repairerDelistFlag { get; set; } 
         //"countryOrigin": "N",
-        public string countryOrigin { get; set; }
+        public string countryOrigin { get; set; } 
         //"lineId": "789410",
-        public string lineId { get; set; }
+        public string lineId { get; set; } 
         //"assessorBlackListFlag": "Y",
-        public string assessorBlackListFlag { get; set; }
+        public string assessorBlackListFlag { get; set; } 
         //"idCard": "1101500772509",
-        public string idCard { get; set; }
+        public string idCard { get; set; } 
         //"facsimile": "15000",
-        public string facsimile { get; set; }
+        public string facsimile { get; set; } 
         //"clientStatus": "Y",
-        public string clientStatus { get; set; }
+        public string clientStatus { get; set; } 
         //"postCode": "10530",
-        public string postCode { get; set; }
+        public string postCode { get; set; } 
         //"repairerBlackListFlag": "Y",
-        public string repairerBlackListFlag { get; set; }
+        public string repairerBlackListFlag { get; set; } 
         //"econActivity": "Y",
-        public string econActivity { get; set; }
+        public string econActivity { get; set; } 
         //"checkFlag": "UPDATE",
-        public string checkFlag { get; set; }
+        public string checkFlag { get; set; } 
         //"cleansingId": "CLS-33333",
-        public string cleansingId { get; set; }
+        public string cleansingId { get; set; } 
         //"address5": "10530",
-        public string address5 { get; set; }
+        public string address5 { get; set; } 
         //"solicitorFlag": "Y",
-        public string solicitorFlag { get; set; }
+        public string solicitorFlag { get; set; } 
         //"address4": "ประเทศไทย",
         //public string address4xxx { get; set; }
         //"alientId": "-",
-        public string alientId { get; set; }
+        public string alientId { get; set; } 
         //"taxInNumber": "96",
-        public string taxInNumber { get; set; }
+        public string taxInNumber { get; set; } 
         //"driverlicense": "96",
-        public string driverlicense { get; set; }
+        public string driverlicense { get; set; } 
         //"assessorFlag": "Y",
-        public string assessorFlag { get; set; }
+        public string assessorFlag { get; set; } 
         //"solicitorTerminateDate": "04042016"
         public string solicitorTerminateDate { get; set; }
     }

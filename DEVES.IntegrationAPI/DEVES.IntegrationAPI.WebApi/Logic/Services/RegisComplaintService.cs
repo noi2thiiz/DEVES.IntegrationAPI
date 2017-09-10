@@ -17,11 +17,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
         {
             serviceName = "RegisComplaintService";
             systemName = "EWI";
+          
         }
 
         public EWIResponseContent Execute(Request_RegComplaintModel input)
         {
-
+            serviceEndpoint = AppConfig.Instance.Get(CommonConstant.EWI_ENDPOINT_RequestRegComplaint);
+            Console.WriteLine("serviceEndpoint=" + serviceEndpoint);
             var result = SendRequest(input, serviceEndpoint);
 
             var jss = new JavaScriptSerializer();

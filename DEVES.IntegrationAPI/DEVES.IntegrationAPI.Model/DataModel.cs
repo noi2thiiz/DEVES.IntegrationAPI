@@ -73,7 +73,7 @@ namespace DEVES.IntegrationAPI.Model
         public string transactionId { get; set; }
 
         [JsonProperty(Order = 5)]
-        public DateTime transactionDateTime { get; set; } = DateTime.Now;
+        public DateTime? transactionDateTime { get; set; } = DateTime.Now;
         [JsonProperty(Order = 6)]
         public TData data { get; set; }
 
