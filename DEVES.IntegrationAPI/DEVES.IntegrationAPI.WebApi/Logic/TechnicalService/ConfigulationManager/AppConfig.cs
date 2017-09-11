@@ -126,6 +126,7 @@ namespace DEVES.IntegrationAPI.WebApi
                 }
                 
                 Console.WriteLine("update config success");
+                Console.WriteLine(Config?.ToJson());
             }
             else
             {

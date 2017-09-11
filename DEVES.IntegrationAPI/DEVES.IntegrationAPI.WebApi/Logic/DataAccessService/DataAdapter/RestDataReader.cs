@@ -73,7 +73,7 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.DataAdapter
                 dbResult.Count = Int32.Parse(obje.total);
                 dbResult.Data = obje.data;
                 dbResult.Success = true;
-
+                Console.WriteLine("Load  Data Store Result : " + dbResult?.ToJson());
                 return dbResult;
             }
             catch (Exception e)
