@@ -155,7 +155,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                 AddDebugInfo("regClientCorporateInput.generalHeader.roleCode = G");
 
-                return createASRHCorporate(regClientCorporateInput);
+                return createGeneralCorporate(regClientCorporateInput);
                 //return createGeneralCorporate(regClientCorporateInput);
             }
             else
@@ -222,17 +222,15 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     {
                         try
                         {
-                            polisyClientId =
+                                polisyClientId =
                                 CreateCorporateClientAndAdditionalInfoInPolisy400(regClientCorporateInput, cleansingId);
                         }
                         catch (Exception)
                         {
                             //ถ้าสร้างไม่สำเร็จจะลบข้อมูลใน  CLS ออก
                             //ระวังอย่างแก้โค้ดจนเอา CleansingId ที่ไม่ได้สร้างใหม่มาลบ
-                            CleansingClientService.Instance.RemoveByCleansingId(cleansingId, "C");
-
-
-
+                            var delService = new CleansingClientService(TransactionId, ControllerName);
+                            delService.RemoveByCleansingId(cleansingId, "C");
                             throw;
                         }
                     }
@@ -251,8 +249,19 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 // ยกเว้น notCreatePolisyClientFlag =Y ไม่ต้องสร้าง
                 if (regClientCorporateInput?.generalHeader?.notCreatePolisyClientFlag != "Y")
                 {
-                    CreateCorporateClientAndAdditionalInfoInPolisy400(regClientCorporateInput,
-                        cleansingId);
+                    try
+                    {
+                        polisyClientId =
+                            CreateCorporateClientAndAdditionalInfoInPolisy400(regClientCorporateInput, cleansingId);
+                    }
+                    catch (Exception)
+                    {
+                        //ถ้าสร้างไม่สำเร็จจะลบข้อมูลใน  CLS ออก
+                        //ระวังอย่างแก้โค้ดจนเอา CleansingId ที่ไม่ได้สร้างใหม่มาลบ
+                        var delService = new CleansingClientService(TransactionId, ControllerName);
+                        delService.RemoveByCleansingId(cleansingId, "C");
+                        throw;
+                    }
                 }
             }
 
@@ -307,7 +316,85 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
         private string CreateCorporateClientInCLS(RegClientCorporateInputModel regClientCorporateInputModel)
         {
-            throw new NotImplementedException();
+
+            if (!string.IsNullOrEmpty(regClientCorporateInputModel?.generalHeader?.cleansingId))
+            {
+                return null;
+            }
+
+
+            BaseDataModel clsCreateCorporateIn = DataModelFactory.GetModel(typeof(CLSCreateCorporateClientInputModel));
+            clsCreateCorporateIn = TransformerFactory.TransformModel(regClientCorporateInputModel, clsCreateCorporateIn);
+
+            // var clsCreateClientContent =
+            //     CallDevesServiceProxy<CLSCreatePersonalClientOutputModel,
+            //             CLSCreatePersonalClientContentOutputModel>
+            //         (CommonConstant.ewiEndpointKeyCLSCreatePersonalClient, clsCreatePersonIn);
+            var clsService = new CLSCreateCorporateClientService(TransactionId, ControllerName);
+            var clsCreateClientContent = clsService.Execute((CLSCreateCorporateClientInputModel)clsCreateCorporateIn);
+
+            if (clsCreateClientContent.code != CONST_CODE_SUCCESS)
+            {
+                throw new BuzErrorException(
+                    clsCreateClientContent.code ?? AppConst.CODE_FAILED,
+                    $"CLS:{clsCreateClientContent.message}",
+                    clsCreateClientContent.description,
+                    "CLS",
+                    TransactionId);
+                //throw new Exception(String.Format("Error:{0}, Message:{1}", ewiRes.responseCode , ewiRes.responseMessage));
+            }
+
+            if (string.IsNullOrEmpty(clsCreateClientContent?.data?.cleansingId))
+            {
+                throw new BuzErrorException(
+                    "500",
+                    $"CLS Error: The service return success but not return cleansingId",
+                    "An error occurred from the external service (CLSCreateCorporateClient)",
+                    "CLS",
+                    TransactionId);
+                //throw new Exception(String.Format("Error:{0}, Message:{1}", ewiRes.responseCode , ewiRes.responseMessage));
+            }
+
+
+            //success
+            return clsCreateClientContent?.data?.cleansingId;
+        }
+
+        private string CreateCorporateClientAndAdditionalInfoInPolisy400(RegClientCorporateInputModel regClientCorporateInput, string cleansingId)
+        {
+            if (string.IsNullOrEmpty(cleansingId))
+            {
+                return null;
+            }
+            //RegClientPersonalInputModel RegClientPersonalInput = ObjectCopier.Clone(input);
+            regClientCorporateInput.generalHeader.cleansingId = cleansingId;
+
+            Console.WriteLine("Create:CLIENTCreateCorporateClientAndAdditionalInfo");
+
+            BaseDataModel polCreateCorporateIn =
+                DataModelFactory.GetModel(typeof(CLIENTCreatePersonalClientAndAdditionalInfoInputModel));
+            polCreateCorporateIn = TransformerFactory.TransformModel(regClientCorporateInput, polCreateCorporateIn);
+            // polCreateClientContent =
+            //     CallDevesServiceProxy<CLIENTCreatePersonalClientAndAdditionalInfoOutputModel
+            //             , CLIENTCreatePersonalClientAndAdditionalInfoContentModel>
+            //         (CommonConstant.ewiEndpointKeyCLIENTCreatePersonalClient, polCreatePersonIn);
+            var clientService = new CLIENTCreateCorporateClientAndAdditionalInfoService(TransactionId, ControllerName);
+            CLIENTCreateCorporateClientAndAdditionalInfoContentModel polCreateClientContent = clientService.Execute((CLIENTCreateCorporateClientAndAdditionalInfoInputModel)polCreateCorporateIn);
+
+            if (string.IsNullOrEmpty(polCreateClientContent?.clientID))
+            {
+
+                throw new BuzErrorException(
+                    "500",
+                    "Polisy400 Error :Cannot create Client in Polisy400",
+                    "",
+                    "Polisy400",
+                    TransactionId);
+                //throw new Exception(String.Format("Error:{0}, Message:{1}", ewiRes.responseCode , ewiRes.responseMessage));
+            }
+
+
+            return polCreateClientContent?.clientID;
         }
 
 
@@ -360,10 +447,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             }
         }
 
-        private string CreateCorporateClientAndAdditionalInfoInPolisy400(RegClientCorporateInputModel p0, string p1)
-        {
-            throw new NotImplementedException();
-        }
+        
 
         protected BaseDataModel createASRHCorporate(RegClientCorporateInputModel input)
         {
