@@ -61,8 +61,8 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.DataAdapter
 
                 
 
-                Console.WriteLine("Load  Data Store : " + endpoint);
-                Console.WriteLine(req.ToJson());
+                //Console.WriteLine("Load  Data Store : " + endpoint);
+               // Console.WriteLine(req.ToJson());
                 var client = new RESTClient(endpoint);
                 var result = client.Execute(req);
               
@@ -73,7 +73,7 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.DataAdapter
                 dbResult.Count = Int32.Parse(obje.total);
                 dbResult.Data = obje.data;
                 dbResult.Success = true;
-                Console.WriteLine("Load  Data Store Result : " + dbResult?.ToJson());
+               // Console.WriteLine("Load  Data Store Result : " + dbResult?.ToJson());
                 return dbResult;
             }
             catch (Exception e)
