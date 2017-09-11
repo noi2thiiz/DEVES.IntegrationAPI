@@ -125,6 +125,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                
                 filePath = startupPath+"/App_Data/JsonSchema/" +schemaFileName;
             }
+            Console.WriteLine("JSON Shema Path"+filePath);
 
                TraceDebugLogger.Instance.AddLog("schema filePath", filePath);
            
