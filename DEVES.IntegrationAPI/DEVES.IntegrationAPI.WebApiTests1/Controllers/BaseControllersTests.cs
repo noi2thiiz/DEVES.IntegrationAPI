@@ -27,7 +27,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
             }
 
             PropertyInfo prop2 = type.GetProperty("Configuration", BindingFlags.Public | BindingFlags.Instance);
-            if (null != prop && prop.CanWrite)
+            if (null != prop2 && prop2.CanWrite)
             {
                 prop2.SetValue(instance, new HttpConfiguration(), null);
             }
