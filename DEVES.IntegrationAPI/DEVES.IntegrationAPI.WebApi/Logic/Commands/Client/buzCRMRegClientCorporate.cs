@@ -372,7 +372,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             Console.WriteLine("Create:CLIENTCreateCorporateClientAndAdditionalInfo");
 
             BaseDataModel polCreateCorporateIn =
-                DataModelFactory.GetModel(typeof(CLIENTCreatePersonalClientAndAdditionalInfoInputModel));
+                DataModelFactory.GetModel(typeof(CLIENTCreateCorporateClientAndAdditionalInfoInputModel));
             polCreateCorporateIn = TransformerFactory.TransformModel(regClientCorporateInput, polCreateCorporateIn);
             // polCreateClientContent =
             //     CallDevesServiceProxy<CLIENTCreatePersonalClientAndAdditionalInfoOutputModel

@@ -152,7 +152,7 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
                 }
                 else
                 {
-                reader = new RestDataReader("ext");
+                     reader = new RestDataReader("ext");
                 }
 
               
@@ -163,11 +163,15 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
             Console.WriteLine(result.ToJson());
             if (result.Success)
             {
-                if (result.Count>0)
+                if (result.Count > 0)
                 {
-                    var output = (MaxTransactionEntity)result.Data[0];
+                    var output = (MaxTransactionEntity) result.Data[0];
 
                     return output;
+                }
+                else
+                {
+                    return new MaxTransactionEntity();
                 }
               
             }
