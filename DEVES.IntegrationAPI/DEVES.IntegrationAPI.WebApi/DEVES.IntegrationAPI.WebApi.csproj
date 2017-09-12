@@ -466,6 +466,7 @@
     <Compile Include="DataAccessService\QuerySQLAdapter\QuerySQLInternal.cs" />
     <Compile Include="DataAccessService\QuerySQLAdapter\QuerySQLOnline.cs" />
     <Compile Include="DataAccessService\QuerySQLAdapter\QuerySQLStretagy.cs" />
+    <Compile Include="DataAccessService\QuerySQLAdapter\SQLQueryManager.cs" />
     <Compile Include="DEVES_XRM.cs" />
     <Compile Include="EWIDatetimeConverter.cs" />
     <Compile Include="Global.asax.cs">
