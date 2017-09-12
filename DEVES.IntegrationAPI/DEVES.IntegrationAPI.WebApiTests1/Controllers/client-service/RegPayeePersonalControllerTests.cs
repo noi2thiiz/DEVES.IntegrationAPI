@@ -199,9 +199,8 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
             AssertRequiredField("generalHeader.roleCode", outputJson);
         }
 
-
         [TestMethod]
-        public void Post_RegPayeePersonalController_It_Should_Fail_When_Give_NotExisting_ClaimNotiNo_Test()
+        public void Post_RegPayeePersonalController_It_Should_Fail_When_Give_Empty_Input_Test()
         {
             /* Expected output
              {"stackTrace":null,"code":"400","message":"Invalid input(s)",
@@ -237,6 +236,270 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
             AssertRequiredField("profileInfo", outputJson);
             AssertRequiredField("addressInfo", outputJson);
             AssertRequiredField("sapVendorInfo", outputJson);
+
+        }
+
+        [TestMethod]
+        public void Post_RegPayeePersonalController_It_Should_Success_When_Give_Emtpy_BirthDate_Input_Test()
+        {
+            /* Expected Output
+             {"data":[{"cleansingId":"C2017-100002517","polisyClientId":"16972975","crmClientId":"201709-0000500","sapVendorCode":"16972975","sapVendorGroupCode":"DIR","personalName":"ทดสอบ0W2CLA38XY","personalSurname":"ทดสอบPOP20C63NO"}],"code":"200","message":"SUCCESS","description":null,"transactionId":"00-600912141811037-0000000","transactionDateTime":"2017-09-12T14:18:13.238996+07:00"}
+             */
+            //input ไม่ BirthDate
+            var personalName = "ทดสอบ" + RandomValueGenerator.RandomString(10);
+            var personalSurname = "ทดสอบ" + RandomValueGenerator.RandomString(10);
+            var idCitizen = "" + RandomValueGenerator.RandomNumber(13);
+            var jsonString = String.Format("{{  " +
+                                           "\"generalHeader\": {{   " +
+                                           "\"roleCode\": \"G\",   " +
+                                           "\"cleansingId\": \"\",   " +
+                                           "\"polisyClientId\": \"\",   " +
+                                           "\"crmPersonId\": \"\",   " +
+                                           "\"clientAdditionalExistFlag\": \"N\" }}, " +
+                                           "\"contactInfo\": {{   " +
+                                               "\"telephone1\": \"\",   " +
+                                               "\"telephone1Ext\": \"\",  " +
+                                               " \"telephone2\": \"\",  " +
+                                               " \"telephone2Ext\": \"\",   " +
+                                               "\"telephone3\": \"\",   " +
+                                               "\"mobilePhone\": \"\",   " +
+                                               "\"fax\": \"\",   " +
+                                               "\"emailAddress\": \"\",   " +
+                                               "\"lineID\": \"\",   " +
+                                               "\"facebook\": \"\" }}, " +
+                                           "\"sapVendorInfo\": {{  " +
+                                               " \"sapVendorGroupCode\": " +
+                                               "\"DIR\",   " +
+                                               "\"bankInfo\": {{     " +
+                                               "\"bankCountryCode\": \"\",    " +
+                                               " \"bankCode\": \"\",    " +
+                                               " \"bankBranchCode\": \"\",    " +
+                                               " \"bankAccount\": \"\",    " +
+                                               " \"accountHolder\": \"\",  " +
+                                               " \"paymentMethods\": \"\"   }},  " +
+                                               " \"withHoldingTaxInfo\": {{    " +
+                                           "         \"whtTaxCode\": \"\",     " +
+                                                    "\"receiptType\": \"\"   }} }}, " +
+                                           "\"addressInfo\": {{   " +
+                                               "\"address1\": \"1/212\",   " +
+                                               "\"address2\": \"\",   " +
+                                               "\"address3\": \"\",   " +
+                                               "\"subDistrictCode\": \"\",  " +
+                                               " \"districtCode\": \"\",   " +
+                                               "\"provinceCode\": \"10\",   " +
+                                               "\"postalCode\": \"11110\",   " +
+                                               "\"country\": \"00005\",   " +
+                                               "\"addressType\": \"\",   " +
+                                               "\"latitude\": \"\",   " +
+                                               "\"longtitude\": \"\" }}, " +
+                                           "\"profileInfo\": {{   " +
+                                               "\"salutation\": \"0001\",   " +
+                                               "\"personalName\": \"{0}\",   " +
+                                               "\"personalSurname\": \"{1}\",   " +
+                                               "\"sex\": \"M\",  " +
+                                               " \"idCitizen\": \"{2}\",   " +
+                                               "\"idPassport\": \"\",   " +
+                                               "\"idAlien\": \"\",   " +
+                                               "\"idDriving\": \"\",   " +
+                                               "\"birthDate\": \"\",   " +
+                                               "\"nationality\": \"00220\",  " +
+                                               " \"language\": \"\",   " +
+                                               "\"married\": \"\",   " +
+                                               "\"occupation\": \"\",   " +
+                                               "\"riskLevel\": \"\",  " +
+                                               " \"vipStatus\": \"\",   " +
+                                           "\"remark\": \"\" }}" +
+                                           "}}",
+                personalName, personalSurname, idCitizen);
+
+            // ระบุ  ที่ต้องการทดสอบ และ Method ที่ต้องการทดสอบ ในตัวอย่างนี้ต้องการ  ทดสอบ Method  Post  
+            var response = ExcecuteControllers<RegPayeePersonalController>(jsonString, "Post");
+
+            Assert.IsNotNull(response?.Result);
+            Console.WriteLine("==============output==================");
+            Console.WriteLine(response?.Result);
+
+            //แปลง string เป็น JObject
+            var outputJson = JObject.Parse(response?.Result);
+
+            // Assert Return code 200
+            Assert.AreEqual("200", outputJson["code"]?.ToString());
+
+        }
+
+        [TestMethod]
+        public void Post_RegPayeePersonalController_It_Should_Success_When_Give_Valid_BirthDate_Input_Test()
+        {
+            /* Expected Output
+             {"data":[{"cleansingId":"C2017-100002517","polisyClientId":"16972975","crmClientId":"201709-0000500","sapVendorCode":"16972975","sapVendorGroupCode":"DIR","personalName":"ทดสอบ0W2CLA38XY","personalSurname":"ทดสอบPOP20C63NO"}],"code":"200","message":"SUCCESS","description":null,"transactionId":"00-600912141811037-0000000","transactionDateTime":"2017-09-12T14:18:13.238996+07:00"}
+             */
+            //input มี BirthDate
+            var personalName = "ทดสอบ" + RandomValueGenerator.RandomString(10);
+            var personalSurname = "ทดสอบ" + RandomValueGenerator.RandomString(10);
+            var idCitizen = "" + RandomValueGenerator.RandomNumber(13);
+            var jsonString = String.Format("{{  " +
+                                           "\"generalHeader\": {{   " +
+                                           "\"roleCode\": \"G\",   " +
+                                           "\"cleansingId\": \"\",   " +
+                                           "\"polisyClientId\": \"\",   " +
+                                           "\"crmPersonId\": \"\",   " +
+                                           "\"clientAdditionalExistFlag\": \"N\" }}, " +
+                                           "\"contactInfo\": {{   " +
+                                               "\"telephone1\": \"\",   " +
+                                               "\"telephone1Ext\": \"\",  " +
+                                               " \"telephone2\": \"\",  " +
+                                               " \"telephone2Ext\": \"\",   " +
+                                               "\"telephone3\": \"\",   " +
+                                               "\"mobilePhone\": \"\",   " +
+                                               "\"fax\": \"\",   " +
+                                               "\"emailAddress\": \"\",   " +
+                                               "\"lineID\": \"\",   " +
+                                               "\"facebook\": \"\" }}, " +
+                                           "\"sapVendorInfo\": {{  " +
+                                               " \"sapVendorGroupCode\": " +
+                                               "\"DIR\",   " +
+                                               "\"bankInfo\": {{     " +
+                                               "\"bankCountryCode\": \"\",    " +
+                                               " \"bankCode\": \"\",    " +
+                                               " \"bankBranchCode\": \"\",    " +
+                                               " \"bankAccount\": \"\",    " +
+                                               " \"accountHolder\": \"\",  " +
+                                               " \"paymentMethods\": \"\"   }},  " +
+                                               " \"withHoldingTaxInfo\": {{    " +
+                                           "         \"whtTaxCode\": \"\",     " +
+                                                    "\"receiptType\": \"\"   }} }}, " +
+                                           "\"addressInfo\": {{   " +
+                                               "\"address1\": \"1/212\",   " +
+                                               "\"address2\": \"\",   " +
+                                               "\"address3\": \"\",   " +
+                                               "\"subDistrictCode\": \"\",  " +
+                                               " \"districtCode\": \"\",   " +
+                                               "\"provinceCode\": \"10\",   " +
+                                               "\"postalCode\": \"11110\",   " +
+                                               "\"country\": \"00005\",   " +
+                                               "\"addressType\": \"\",   " +
+                                               "\"latitude\": \"\",   " +
+                                               "\"longtitude\": \"\" }}, " +
+                                           "\"profileInfo\": {{   " +
+                                               "\"salutation\": \"0001\",   " +
+                                               "\"personalName\": \"{0}\",   " +
+                                               "\"personalSurname\": \"{1}\",   " +
+                                               "\"sex\": \"M\",  " +
+                                               " \"idCitizen\": \"{2}\",   " +
+                                               "\"idPassport\": \"\",   " +
+                                               "\"idAlien\": \"\",   " +
+                                               "\"idDriving\": \"\",   " +
+                                           "\"birthDate\": \"2017-01-01\",   " +
+                                               "\"nationality\": \"00220\",  " +
+                                               " \"language\": \"\",   " +
+                                               "\"married\": \"\",   " +
+                                               "\"occupation\": \"\",   " +
+                                               "\"riskLevel\": \"\",  " +
+                                               " \"vipStatus\": \"\",   " +
+                                           "\"remark\": \"\" }}" +
+                                           "}}",
+                personalName, personalSurname, idCitizen);
+
+            // ระบุ  ที่ต้องการทดสอบ และ Method ที่ต้องการทดสอบ ในตัวอย่างนี้ต้องการ  ทดสอบ Method  Post  
+            var response = ExcecuteControllers<RegPayeePersonalController>(jsonString, "Post");
+
+            Assert.IsNotNull(response?.Result);
+            Console.WriteLine("==============output==================");
+            Console.WriteLine(response?.Result);
+
+            //แปลง string เป็น JObject
+            var outputJson = JObject.Parse(response?.Result);
+
+            // Assert Return code 200
+            Assert.AreEqual("200", outputJson["code"]?.ToString());
+
+        }
+
+       // [TestMethod]  ยังไม่ผ่าน
+        public void Post_RegPayeePersonalController_It_Should_Success_When_Give_Null_BirthDate_Input_Test()
+        {
+            /* Expected Output
+             {"data":[{"cleansingId":"C2017-100002517","polisyClientId":"16972975","crmClientId":"201709-0000500","sapVendorCode":"16972975","sapVendorGroupCode":"DIR","personalName":"ทดสอบ0W2CLA38XY","personalSurname":"ทดสอบPOP20C63NO"}],"code":"200","message":"SUCCESS","description":null,"transactionId":"00-600912141811037-0000000","transactionDateTime":"2017-09-12T14:18:13.238996+07:00"}
+             */
+            //input มี BirthDate = null
+            var personalName = "ทดสอบ" + RandomValueGenerator.RandomString(10);
+            var personalSurname = "ทดสอบ" + RandomValueGenerator.RandomString(10);
+            var idCitizen = "" + RandomValueGenerator.RandomNumber(13);
+            var jsonString = String.Format("{{  " +
+                                           "\"generalHeader\": {{   " +
+                                           "\"roleCode\": \"G\",   " +
+                                           "\"cleansingId\": \"\",   " +
+                                           "\"polisyClientId\": \"\",   " +
+                                           "\"crmPersonId\": \"\",   " +
+                                           "\"clientAdditionalExistFlag\": \"N\" }}, " +
+                                           "\"contactInfo\": {{   " +
+                                               "\"telephone1\": \"\",   " +
+                                               "\"telephone1Ext\": \"\",  " +
+                                               " \"telephone2\": \"\",  " +
+                                               " \"telephone2Ext\": \"\",   " +
+                                               "\"telephone3\": \"\",   " +
+                                               "\"mobilePhone\": \"\",   " +
+                                               "\"fax\": \"\",   " +
+                                               "\"emailAddress\": \"\",   " +
+                                               "\"lineID\": \"\",   " +
+                                               "\"facebook\": \"\" }}, " +
+                                           "\"sapVendorInfo\": {{  " +
+                                               " \"sapVendorGroupCode\": " +
+                                               "\"DIR\",   " +
+                                               "\"bankInfo\": {{     " +
+                                               "\"bankCountryCode\": \"\",    " +
+                                               " \"bankCode\": \"\",    " +
+                                               " \"bankBranchCode\": \"\",    " +
+                                               " \"bankAccount\": \"\",    " +
+                                               " \"accountHolder\": \"\",  " +
+                                               " \"paymentMethods\": \"\"   }},  " +
+                                               " \"withHoldingTaxInfo\": {{    " +
+                                           "         \"whtTaxCode\": \"\",     " +
+                                                    "\"receiptType\": \"\"   }} }}, " +
+                                           "\"addressInfo\": {{   " +
+                                               "\"address1\": \"1/212\",   " +
+                                               "\"address2\": \"\",   " +
+                                               "\"address3\": \"\",   " +
+                                               "\"subDistrictCode\": \"\",  " +
+                                               " \"districtCode\": \"\",   " +
+                                               "\"provinceCode\": \"10\",   " +
+                                               "\"postalCode\": \"11110\",   " +
+                                               "\"country\": \"00005\",   " +
+                                               "\"addressType\": \"\",   " +
+                                               "\"latitude\": \"\",   " +
+                                               "\"longtitude\": \"\" }}, " +
+                                           "\"profileInfo\": {{   " +
+                                               "\"salutation\": \"0001\",   " +
+                                               "\"personalName\": \"{0}\",   " +
+                                               "\"personalSurname\": \"{1}\",   " +
+                                               "\"sex\": \"M\",  " +
+                                               " \"idCitizen\": \"{2}\",   " +
+                                               "\"idPassport\": \"\",   " +
+                                               "\"idAlien\": \"\",   " +
+                                               "\"idDriving\": \"\",   " +
+                                           "\"birthDate\": null,   " +
+                                               "\"nationality\": \"00220\",  " +
+                                               " \"language\": \"\",   " +
+                                               "\"married\": \"\",   " +
+                                               "\"occupation\": \"\",   " +
+                                               "\"riskLevel\": \"\",  " +
+                                               " \"vipStatus\": \"\",   " +
+                                           "\"remark\": \"\" }}" +
+                                           "}}",
+                personalName, personalSurname, idCitizen);
+
+            // ระบุ  ที่ต้องการทดสอบ และ Method ที่ต้องการทดสอบ ในตัวอย่างนี้ต้องการ  ทดสอบ Method  Post  
+            var response = ExcecuteControllers<RegPayeePersonalController>(jsonString, "Post");
+
+            Assert.IsNotNull(response?.Result);
+            Console.WriteLine("==============output==================");
+            Console.WriteLine(response?.Result);
+
+            //แปลง string เป็น JObject
+            var outputJson = JObject.Parse(response?.Result);
+
+            // Assert Return code 200
+            Assert.AreEqual("200", outputJson["code"]?.ToString());
 
         }
     }

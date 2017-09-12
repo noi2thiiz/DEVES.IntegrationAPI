@@ -21,7 +21,7 @@ namespace DEVES.IntegrationAPI.WebApi
             GlobalConfiguration.Configuration.MessageHandlers.Add(new ApiLogHandler());
             GlobalConfiguration.Configuration.Services.Add(typeof(IExceptionLogger), new TraceExceptionLogger());
             //GlobalConfiguration.Configuration.Services.Replace(typeof(IExceptionHandler), new GlobalExceptionHandler(config.Services.GetExceptionHandler()));
-           // config.Services.Replace(typeof(IExceptionHandler),
+            // config.Services.Replace(typeof(IExceptionHandler),
             //    new OopsExceptionHandler(config.Services.GetExceptionHandler()));
             AppBootstrap.Instance.Start();
 

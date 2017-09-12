@@ -27,7 +27,6 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             return ProcessRequest<buzCRMRegPayeePersonal, RegPayeePersonalInputModel>
                 (value, "RegPayeePersonal_Input_Schema.json");
 
-           
 
         }
 

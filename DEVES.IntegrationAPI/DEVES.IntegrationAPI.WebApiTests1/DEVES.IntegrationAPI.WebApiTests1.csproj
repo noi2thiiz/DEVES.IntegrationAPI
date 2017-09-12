@@ -77,11 +77,12 @@
   <ItemGroup>
     <Compile Include="Controllers\BaseControllersTests.cs" />
     <Compile Include="Controllers\claim-service\UpdateClaimInfoControllerTests.cs" />
+    <Compile Include="Controllers\client-service\RegPayeeCorporateControllerTests.cs" />
     <Compile Include="Controllers\client-service\RegPayeePersonalControllerTests.cs" />
-    <Compile Include="Controllers\CRMInquiryClientMasterControllerTests.cs" />
-    <Compile Include="Controllers\InquiryCRMPayeeListControllerTests.cs" />
-    <Compile Include="Controllers\RegClientPersonalControllerTests.cs" />
-    <Compile Include="Controllers\RequestCleansingIdControllerTests.cs" />
+    <Compile Include="Controllers\client-service\CRMInquiryClientMasterControllerTests.cs" />
+    <Compile Include="Controllers\client-service\InquiryCRMPayeeListControllerTests.cs" />
+    <Compile Include="Controllers\client-service\RegClientPersonalControllerTests.cs" />
+    <Compile Include="Controllers\client-service\RequestCleansingIdControllerTests.cs" />
     <Compile Include="Controllers\SendSMSControllerTests.cs" />
     <Compile Include="Controllers\SubmitSurveyAssessmentResultControllerTests.cs" />
     <Compile Include="DataAccessService\DataAdapter\RESTClient\RESTClientTests.cs" />
