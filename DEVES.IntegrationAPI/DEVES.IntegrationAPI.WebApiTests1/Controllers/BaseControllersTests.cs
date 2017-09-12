@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using DEVES.IntegrationAPI.WebApi.Templates;
 using Microsoft.Crm.Sdk.Messages;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json.Linq;
 
 namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
@@ -36,15 +37,39 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
 
     
             // Act
-
             object input = JObject.Parse(jsonString);
             HttpResponseMessage response = (HttpResponseMessage)theMethod.Invoke(instance, new []{ input });
            // HttpResponseMessage response = (HttpResponseMessage)instance.Post(input);
-
             return response?.Content?.ReadAsStringAsync();
             
+        }
 
-         
+
+        protected void AssertRequiredField(string profileinfoPersonalname, JObject outputJson)
+        {
+            Assert.IsNotNull(outputJson["data"]["fieldErrors"], "data.fieldErrors should not null");
+
+            var fieldErrors = outputJson["data"]["fieldErrors"].ToArray();
+            var filedErrorFound = false;
+            foreach (var field  in fieldErrors)
+            {
+                if (field["name"]?.ToString()== profileinfoPersonalname)
+                {
+                    filedErrorFound = true;
+                    var message = field["message"]?.ToString() ?? "";
+                    if (!(message == "Required field must not be null" || message.Contains("is not defined in enum")  || message== "Required properties are missing from object"))
+                    {
+                        Assert.Fail($"Assert Required field {profileinfoPersonalname} Expect<Required field must not be null> but <{field["message"]?.ToString()}>");
+                    }
+                }
+             
+            }
+            if (!filedErrorFound)
+            {
+                Assert.Fail($"Assert Required field {profileinfoPersonalname} but not found in fieldErrors list");
+            }
+           
+
         }
     }
 }
