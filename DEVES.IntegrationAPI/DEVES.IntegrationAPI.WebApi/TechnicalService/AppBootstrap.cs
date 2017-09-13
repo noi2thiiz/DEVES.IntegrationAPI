@@ -9,6 +9,7 @@ using DEVES.IntegrationAPI.WebApi.Logic;
 using DEVES.IntegrationAPI.WebApi.TechnicalService;
 using DEVES.IntegrationAPI.WebApi.TechnicalService.TransactionLogger;
 using DEVES.IntegrationAPI.WebApi.Templates;
+using DEVES.IntegrationAPI.WebApi.DataAccessService.QuerySQLAdapter;
 
 namespace DEVES.IntegrationAPI.WebApi
 {
@@ -55,6 +56,8 @@ namespace DEVES.IntegrationAPI.WebApi
             ProvinceMasterData.Instance.Init();
             TypeOfLossMasterData.Instance.Init();
 
+            // [[North]] set sql
+            QuerySqlService.Instance.Start();
 
 
 

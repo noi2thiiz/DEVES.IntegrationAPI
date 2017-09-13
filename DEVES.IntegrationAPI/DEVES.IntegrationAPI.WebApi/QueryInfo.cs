@@ -16,9 +16,7 @@ namespace DEVES.IntegrationAPI.WebApi
                                                     DECLARE @CurrentUserCode AS NVARCHAR(20) = 'G001';
                                                     EXEC [dbo].[sp_CustomApp_RequestSurveyor_Incident] @TicketNumber, @CurrentUserCode"
         */
-        public static string SQL_RequestSurveyor = @"DECLARE @IncidentId AS UNIQUEIDENTIFIER = '{0}';
-                                                     DECLARE @CurrentUserId AS UNIQUEIDENTIFIER = '{1}';
-                                                     EXEC [dbo].[sp_CustomApp_RequestSurveyor_Incident] @IncidentId, @CurrentUserId;";
+        public string SQL_RequestSurveyor = @"DECLARE @IncidentId AS UNIQUEIDENTIFIER = '{0}'; DECLARE @CurrentUserId AS UNIQUEIDENTIFIER = '{1}'; EXEC [dbo].[sp_CustomApp_RequestSurveyor_Incident] @IncidentId, @CurrentUserId;";
 
         public static string SQL_InquiryPolicyMotorList = @"DECLARE @policyNo AS NVARCHAR(100) = '{0}'
                                                     DECLARE @chassisNo AS NVARCHAR(100) = '{1}'

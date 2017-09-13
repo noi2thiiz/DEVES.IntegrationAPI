@@ -10,6 +10,8 @@ using Newtonsoft.Json;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using DEVES.IntegrationAPI.WebApi.Logic.Services;
+using DEVES.IntegrationAPI.WebApi.Controllers;
+using DEVES.IntegrationAPI.Model.QuerySQL;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
@@ -60,81 +62,20 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             return iSurveyOutput;
         }
 
-        private EWIResponseContent_ReqSur RequestSurveyorOniSurveyOld(string incidentId, string currentUserId)
-        {
-            RequestSurveyorInputModel iSurveyInputModel = Mapping(incidentId, currentUserId);
-
-            EWIRequest reqModel = new EWIRequest()
-            {
-                username = AppConfig.GetEwiUsername(),
-                password = AppConfig.GetEwiPassword(),
-                uid = AppConfig.GetEwiUid(),
-                gid = AppConfig.GetEwiGid(),
-                token = "",
-                content = iSurveyInputModel
-            };
-
-            string jsonReqModel =
-                JsonConvert.SerializeObject(reqModel, Formatting.Indented, new EWIDatetimeConverter());
-
-            HttpClient client = new HttpClient();
-
-            // URL
-            // reqTime = DateTime.Now;
-            var crmEndpoint = CommonConstant.PROXY_ENDPOINT;
-            var ewiEndpoint = crmEndpoint +
-                              System.Configuration.ConfigurationManager.AppSettings["API_ENDPOINT_EWIPROXY_SERVICE"] + "MOTOR_RequestSurveyor";
-            Console.WriteLine(ewiEndpoint);
-
-
-            Console.WriteLine(jsonReqModel);
-            client.BaseAddress = new Uri(crmEndpoint + ewiEndpoint);
-            client.DefaultRequestHeaders.Accept.Clear();
-            var media = new MediaTypeWithQualityHeaderValue("application/json") { CharSet = "utf-8" };
-            client.DefaultRequestHeaders.Accept.Add(media);
-            client.DefaultRequestHeaders.Add("Accept-Encoding", "utf-8");
-
-            // + ENDPOINT
-
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, ewiEndpoint);
-            request.Content = new StringContent(jsonReqModel, System.Text.Encoding.UTF8, "application/json");
-            //request.Content = new StringContent(Dummy_Input(), System.Text.Encoding.UTF8, "application/json");
-            // LogAsync(request, jsonReqModel);
-            // check reponse 
-            HttpResponseMessage response = client.SendAsync(request).Result;
-            response.EnsureSuccessStatusCode();
-
-            EWIResponse_ReqSur ewiRes = response.Content.ReadAsAsync<EWIResponse_ReqSur>().Result;
-            // EWIResponseContent_ReqSur iSurveyOutput = (EWIResponseContent_ReqSur)ewiRes.content;
-            //resBody = ewiRes.ToJson();
-            // resTime = DateTime.Now;
-
-            EWIResponseContent_ReqSur iSurveyOutput = new EWIResponseContent_ReqSur();
-            // iSurveyOutput.eventid = ewiRes.content.ToString();
-            if (ewiRes.content.ToString().Equals("{}"))
-            {
-                iSurveyOutput.eventid = ewiRes.content.ToString();
-                iSurveyOutput.errorMessage = ewiRes.responseMessage.ToString();
-            }
-            else if (ewiRes.responseCode != "EWI-0000I")
-            {
-                iSurveyOutput.eventid = "ส่งข้อมูลเข้า i-Survey ไม่สำเร็จ" + "\n" + "กรุณากดอีกครั้งหรือติดต่อแผนก IT";
-                iSurveyOutput.errorMessage = "ส่งข้อมูลเข้า i-Survey ไม่สำเร็จ: " + ewiRes.responseMessage.ToString();
-            }
-            else
-            {
-                iSurveyOutput.eventid = ewiRes.content.ToString();
-                iSurveyOutput.errorMessage = null;
-            }
-            LogAsync(request, response);
-            return iSurveyOutput;
-        }
-
         private RequestSurveyorInputModel Mapping(string incidentId, string currentUserId)
         {
-            dt = new System.Data.DataTable();
-            dt = q.Queryinfo_RequestSurveyor(incidentId, currentUserId);
+            StrategySQLController query = new StrategySQLController();
+            string sqlCommand = string.Format(q.SQL_RequestSurveyor, incidentId, currentUserId).Trim('\n');
+            string dbName = "CRMQA_MSCRM";
+            string content = "{\"databaseName\": " + "\"" + dbName + "\"" + "," +
+                "\"sqlCommand\": " + "\"" + sqlCommand + "\"" + "}"
+                ;
+            QuerySQLOutputModel mappingOutput = new QuerySQLOutputModel();
+            mappingOutput = (QuerySQLOutputModel)query.Post(content);
 
+            dt = new System.Data.DataTable();
+            // dt = q.Queryinfo_RequestSurveyor(incidentId, currentUserId);
+            dt = mappingOutput.dt;
             RequestSurveyorInputModel rsModel = new RequestSurveyorInputModel();
 
             rsModel.CaseID = isStringNull("ticketNunber");
