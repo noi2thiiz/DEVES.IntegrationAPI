@@ -194,7 +194,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 // ยกเว้น notCreatePolisyClientFlag =Y ไม่ต้องสร้าง
                 if (RegClientPersonalInput?.generalHeader?.notCreatePolisyClientFlag != "Y")
                 {
-                    CreatePersonalClientAndAdditionalInfoInPolisy400(RegClientPersonalInput,
+                    polisyClientId = CreatePersonalClientAndAdditionalInfoInPolisy400(RegClientPersonalInput,
                         cleansingId);
                 }
             }
@@ -301,7 +301,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
            //         (CommonConstant.ewiEndpointKeyCLIENTCreatePersonalClient, polCreatePersonIn);
             var clientService = new CLIENTCreatePersonalClientAndAdditionalInfoService(TransactionId,ControllerName);
             CLIENTCreatePersonalClientAndAdditionalInfoContentModel polCreateClientContent = clientService.Execute((CLIENTCreatePersonalClientAndAdditionalInfoInputModel) polCreatePersonIn);
-
+            Console.WriteLine("polCreateClientContent.ToJson()");
+            Console.WriteLine(polCreateClientContent.ToJson());
             if (string.IsNullOrEmpty(polCreateClientContent?.clientID))
             {
                 

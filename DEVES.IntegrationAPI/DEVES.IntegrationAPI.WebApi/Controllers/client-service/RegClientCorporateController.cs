@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using DEVES.IntegrationAPI.WebApi.Logic;
 using DEVES.IntegrationAPI.Model.RegClientCorporate;
 using DEVES.IntegrationAPI.Core.Helper;
+using DEVES.IntegrationAPI.WebApi.Logic.Commands.Client;
 using DEVES.IntegrationAPI.WebApi.Templates;
 
 namespace DEVES.IntegrationAPI.WebApi.Controllers
@@ -18,7 +19,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
     {
         public object Post([FromBody]object value)
         {
-            return ProcessRequest<buzCRMRegClientCorporate, RegClientCorporateInputModel>
+            return ProcessRequest<BuzCrmRegClientCorporate, RegClientCorporateInputModel>
                 (value, "RegClientCorporate_Input_Schema.json");
             
         }

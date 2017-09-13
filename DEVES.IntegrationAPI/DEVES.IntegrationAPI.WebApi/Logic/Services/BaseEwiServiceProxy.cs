@@ -169,8 +169,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 
             var resendCount = 1;
             var LimitResend = 3;
-            while (resendCount <= LimitResend)
-            {
+           // while (resendCount <= LimitResend)
+            //{
                 ++resendCount;
                 try
                 {
@@ -225,15 +225,15 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
                            // }
                             //else
                             //{
-                                if (resendCount > LimitResend)
-                                {
+                                //if (resendCount > LimitResend)
+                                //{
                                     throw new BuzErrorException(
                                         responseContent["responseCode"].ToString(),
                                         $"{systemName} Error:{responseContent["responseMessage"]}",
                                         $"Error on execute '{serviceName}'",
                                         systemName,
                                         GlobalTransactionID);
-                                }
+                                //}
                                     
                            // }
                         }
@@ -272,7 +272,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
                         GlobalTransactionID);
 
                 }
-            }
+            //}
 
             throw new BuzErrorException(
                 "500",

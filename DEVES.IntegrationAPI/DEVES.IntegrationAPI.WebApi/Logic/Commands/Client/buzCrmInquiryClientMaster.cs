@@ -1,35 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-using DEVES.IntegrationAPI.Model;
-using DEVES.IntegrationAPI.Model.CLS;
+﻿using DEVES.IntegrationAPI.Model;
 using DEVES.IntegrationAPI.Model.InquiryClientMaster;
 using DEVES.IntegrationAPI.WebApi.Templates;
 
-namespace DEVES.IntegrationAPI.WebApi.Logic
+namespace DEVES.IntegrationAPI.WebApi.Logic.Commands.Client
 {
-    public class buzCrmInquiryClientMaster:BaseCommand
+    /// <summary>
+    /// Api Command Class
+    /// </summary>
+    public class BuzCrmInquiryClientMaster:BaseCommand
     {
 
-       
+
+        /// <summary>
+        /// สำหรับสืบค้นข้อมูล CLient โดยจะแยก role เป็นแบบ General กับ Asrh
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public override BaseDataModel Execute(object input)
         {
             InquiryClientMasterInputModel contentModel = (InquiryClientMasterInputModel)input;
-            BaseCommand cmd = new NullCommand();
+            BaseCommand cmd;
 
             if (contentModel.conditionHeader.roleCode == "G")
-            { 
-                cmd = new BuzInquiryCrmGeneralClient();
-                cmd.ControllerName = ControllerName;
-                cmd.TransactionId = TransactionId;
+            {
+                cmd = new BuzInquiryCrmGeneralClient
+                {
+                    ControllerName = ControllerName,
+                    TransactionId = TransactionId
+                };
             }
             else 
             {
-                cmd = new BuzInquiryCrmAsrhClientMaster();
-                cmd.ControllerName = ControllerName;
-                cmd.TransactionId = TransactionId;
+                cmd = new BuzInquiryCrmAsrhClientMaster
+                {
+                    ControllerName = ControllerName,
+                    TransactionId = TransactionId
+                };
             }
             
             return  cmd.Execute(input);

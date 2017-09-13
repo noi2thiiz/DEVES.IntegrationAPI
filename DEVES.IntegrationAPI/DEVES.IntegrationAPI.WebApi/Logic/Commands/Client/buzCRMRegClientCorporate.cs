@@ -1,59 +1,74 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using Newtonsoft.Json;
-using DEVES.IntegrationAPI.WebApi;
-using DEVES.IntegrationAPI.WebApi.Templates;
 using DEVES.IntegrationAPI.Model;
-using DEVES.IntegrationAPI.Model.RegClientCorporate;
 using DEVES.IntegrationAPI.Model.CLS;
 using DEVES.IntegrationAPI.Model.Polisy400;
-using DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData;
+using DEVES.IntegrationAPI.Model.RegClientCorporate;
 using DEVES.IntegrationAPI.WebApi.Logic.DataBaseContracts;
-using DEVES.IntegrationAPI.WebApi.Logic.Validator;
-using DEVES.IntegrationAPI.WebApi.Templates.Exceptions;
 using DEVES.IntegrationAPI.WebApi.Logic.Services;
+using DEVES.IntegrationAPI.WebApi.Logic.Validator;
+using DEVES.IntegrationAPI.WebApi.Templates;
+using DEVES.IntegrationAPI.WebApi.Templates.Exceptions;
 
-namespace DEVES.IntegrationAPI.WebApi.Logic
+namespace DEVES.IntegrationAPI.WebApi.Logic.Commands.Client
 {
-    public class buzCRMRegClientCorporate : BuzCommand
+    /// <summary>
+    /// 
+    /// </summary>
+    public class BuzCrmRegClientCorporate : BuzCommand
     {
-        //จะใช้เก็บค่า CleansingId เอาไว้ เพื่อใช้ลบออกจาก Cleansing หากมี service ใดๆที่ทำงานไม่สำเร็จ
-        protected string newCleansingId;
+        /// <summary>
+        /// ใช้เก็บค่า  CleansingId กรณีสร้างใหม่
+        /// </summary>
+        protected string NewCleansingId;
+        /// <summary>
+        /// 
+        /// </summary>
+        protected string CleansingId;
+        /// <summary>
+        /// 
+        /// </summary>
+        protected string PolisyClientId;
+        /// <summary>
+        /// 
+        /// </summary>
+        protected string CrmClientId;
 
-        protected string cleansingId;
 
-        protected string polisyClientId;
-        protected string crmClientId;
+        /// <summary>
+        /// 
+        /// </summary>
+        protected RegClientCorporateInputModel RegClientCorporateInput { get; set; }
 
-
-        protected RegClientCorporateInputModel regClientCorporateInput { get; set; }
-
+        /// <summary>
+        /// จัดการกับ nput ก่อนส่งเข้า process
+        /// </summary>
+        /// <exception cref="FieldValidationException"></exception>
         public void TranFormInput()
         {
-            if (regClientCorporateInput == null)
+            if (RegClientCorporateInput == null)
             {
-                regClientCorporateInput = new RegClientCorporateInputModel();
+                RegClientCorporateInput = new RegClientCorporateInputModel();
             }
-            if (regClientCorporateInput.addressHeader == null)
+            if (RegClientCorporateInput.addressHeader == null)
             {
-                regClientCorporateInput.addressHeader = new AddressHeaderModel();
-            }
-
-            if (regClientCorporateInput.profileHeader == null)
-            {
-                regClientCorporateInput.profileHeader = new ProfileHeaderModel();
+                RegClientCorporateInput.addressHeader = new AddressHeaderModel();
             }
 
-            if (regClientCorporateInput.contactHeader == null)
+            if (RegClientCorporateInput.profileHeader == null)
             {
-                regClientCorporateInput.contactHeader = new ContactHeaderModel();
+                RegClientCorporateInput.profileHeader = new ProfileHeaderModel();
             }
 
-            if (regClientCorporateInput.generalHeader == null)
+            if (RegClientCorporateInput.contactHeader == null)
             {
-                regClientCorporateInput.generalHeader = new GeneralHeaderModel();
+                RegClientCorporateInput.contactHeader = new ContactHeaderModel();
+            }
+
+            if (RegClientCorporateInput.generalHeader == null)
+            {
+                RegClientCorporateInput.generalHeader = new GeneralHeaderModel();
             }
 
             // Validate Master Data before sending to other services
@@ -61,61 +76,61 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
 
             //"profileHeader.countryOrigin"
-            regClientCorporateInput.profileHeader.countryOrigin = validator.TryConvertNationalityCode(
+            RegClientCorporateInput.profileHeader.countryOrigin = validator.TryConvertNationalityCode(
                 "profileHeader.countryOrigin",
-                regClientCorporateInput?.profileHeader?.countryOrigin);
+                RegClientCorporateInput?.profileHeader?.countryOrigin);
 
             //"addressHeader.country"
-            regClientCorporateInput.addressHeader.country = validator.TryConvertCountryCode(
+            RegClientCorporateInput.addressHeader.country = validator.TryConvertCountryCode(
                 "addressHeader.country",
-                regClientCorporateInput?.addressHeader?.country);
+                RegClientCorporateInput?.addressHeader?.country);
 
             //"addressHeader.provinceCode"
-            regClientCorporateInput.addressHeader.provinceCode = validator.TryConvertProvinceCode(
+            RegClientCorporateInput.addressHeader.provinceCode = validator.TryConvertProvinceCode(
                 "addressHeader.provinceCode",
-                regClientCorporateInput?.addressHeader?.provinceCode,
-                regClientCorporateInput?.addressHeader?.country);
+                RegClientCorporateInput?.addressHeader?.provinceCode,
+                RegClientCorporateInput?.addressHeader?.country);
 
             //"addressHeader.districtCode"
-            regClientCorporateInput.addressHeader.districtCode = validator.TryConvertDistrictCode(
+            RegClientCorporateInput.addressHeader.districtCode = validator.TryConvertDistrictCode(
                     "addressInfo.districtCode",
-                    regClientCorporateInput?.addressHeader?.districtCode,
-                    regClientCorporateInput?.addressHeader?.provinceCode)
+                    RegClientCorporateInput?.addressHeader?.districtCode,
+                    RegClientCorporateInput?.addressHeader?.provinceCode)
                 ;
 
             //"addressHeader.subDistrictCode"
-            regClientCorporateInput.addressHeader.subDistrictCode = validator.TryConvertSubDistrictCode(
+            RegClientCorporateInput.addressHeader.subDistrictCode = validator.TryConvertSubDistrictCode(
                 "addressInfo.subDistrictCode",
-                regClientCorporateInput?.addressHeader?.subDistrictCode,
-                regClientCorporateInput?.addressHeader?.districtCode,
-                regClientCorporateInput?.addressHeader?.provinceCode
+                RegClientCorporateInput?.addressHeader?.subDistrictCode,
+                RegClientCorporateInput?.addressHeader?.districtCode,
+                RegClientCorporateInput?.addressHeader?.provinceCode
             );
             //"addressHeader.addressType"
-            regClientCorporateInput.addressHeader.addressType = validator.TryConvertAddressTypeCode(
+            RegClientCorporateInput.addressHeader.addressType = validator.TryConvertAddressTypeCode(
                 "addressInfo.addressType",
-                regClientCorporateInput?.addressHeader?.addressType
+                RegClientCorporateInput?.addressHeader?.addressType
             );
 
 
             //"profileHeader.econActivity"
-            regClientCorporateInput.profileHeader.econActivity = validator.TryConvertEconActivityCode(
+            RegClientCorporateInput.profileHeader.econActivity = validator.TryConvertEconActivityCode(
                 "profileHeader.econActivity",
-                regClientCorporateInput?.profileHeader?.econActivity
+                RegClientCorporateInput?.profileHeader?.econActivity
             );
 
-            switch (regClientCorporateInput.generalHeader.roleCode)
+            switch (RegClientCorporateInput.generalHeader.roleCode)
             {
                 case "A":
-                    regClientCorporateInput.generalHeader.assessorFlag = "Y";
+                    RegClientCorporateInput.generalHeader.assessorFlag = "Y";
                     break;
                 case "S":
-                    regClientCorporateInput.generalHeader.solicitorFlag = "Y";
+                    RegClientCorporateInput.generalHeader.solicitorFlag = "Y";
                     break;
                 case "R":
-                    regClientCorporateInput.generalHeader.repairerFlag = "Y";
+                    RegClientCorporateInput.generalHeader.repairerFlag = "Y";
                     break;
                 case "H":
-                    regClientCorporateInput.generalHeader.hospitalFlag = "Y";
+                    RegClientCorporateInput.generalHeader.hospitalFlag = "Y";
                     break;
             }
 
@@ -126,6 +141,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        /// <exception cref="BuzErrorException"></exception>
         public override BaseDataModel ExecuteInput(object input)
         {
             RegClientCorporateContentOutputModel regClientCorporateOutput = new RegClientCorporateContentOutputModel();
@@ -135,7 +156,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             regClientCorporateOutput.code = CONST_CODE_SUCCESS;
 
 
-            regClientCorporateInput = (RegClientCorporateInputModel) input;
+            RegClientCorporateInput = (RegClientCorporateInputModel) input;
             TranFormInput();
 
 
@@ -143,8 +164,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             // เคสนี้เป็นข้อมูลลูกค้าที่ถูกสร้างตรงๆ ที่<<Polisy400>> ซึ่งข้อมูลนี้จะมีเลข CleansingId ในวันต่อมา 
             // และแค่มีเลข polisyClientId ก็ตอบโจทย์ของ Locus ในการเปิดเคลม
             // ในอนาคตหากจะต้องสร้าง เลข CleansingId ในเคสนี้ ต้องมาคุย Flow กันอีกที
-            if (string.IsNullOrEmpty(regClientCorporateInput?.generalHeader?.cleansingId) &&
-                !string.IsNullOrEmpty(regClientCorporateInput?.generalHeader?.polisyClientId))
+            if (string.IsNullOrEmpty(RegClientCorporateInput?.generalHeader?.cleansingId) &&
+                !string.IsNullOrEmpty(RegClientCorporateInput?.generalHeader?.polisyClientId))
             {
                 throw new BuzErrorException(
                     "400",
@@ -158,8 +179,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             //PG-05
             //เหตุการณ์นี้ไม่ควรส่งมาเพราะ มี Process การ Inquiry อยู่
             //(north)คิดว่าควรจะ error ตั้งแต่ Cleansing แล้ว เพราะมีข้อมูล dup อยู่ใน cls
-            if (!string.IsNullOrEmpty(regClientCorporateInput?.generalHeader?.cleansingId) &&
-                !string.IsNullOrEmpty(regClientCorporateInput?.generalHeader?.polisyClientId))
+            if (!string.IsNullOrEmpty(RegClientCorporateInput?.generalHeader?.cleansingId) &&
+                !string.IsNullOrEmpty(RegClientCorporateInput?.generalHeader?.polisyClientId))
             {
                 throw new BuzErrorException(
                     "400",
@@ -170,7 +191,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             }
 
 
-            if (!IsASRHValid(regClientCorporateInput))
+            if (!IsASRHValid(RegClientCorporateInput))
             {
                 // จริงๆ error นี้จะไม่ควรเกิดขึ้น แต่เขียนดักไว้ก่อน
                 AddDebugInfo(
@@ -187,62 +208,67 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                 //}
 
-            if (!string.IsNullOrEmpty(regClientCorporateInput?.generalHeader?.polisyClientId))
+            if (!string.IsNullOrEmpty(RegClientCorporateInput?.generalHeader?.polisyClientId))
             {
                 //ไม่ต้องไปสร้างใน 400 
-                polisyClientId = regClientCorporateInput?.generalHeader?.polisyClientId;
-                regClientCorporateInput.generalHeader.notCreatePolisyClientFlag = "Y";
+                PolisyClientId = RegClientCorporateInput?.generalHeader?.polisyClientId;
+                RegClientCorporateInput.generalHeader.notCreatePolisyClientFlag = "Y";
             }
 
-            if (regClientCorporateInput?.generalHeader?.roleCode == "G")
+            if (RegClientCorporateInput?.generalHeader?.roleCode == "G")
             {
                 AddDebugInfo("roleCode = G");
 
                // return CreateCorporateAsrhAndG(regClientCorporateInput);
-                return createGeneralCorporate(regClientCorporateInput);
+                return CreateGeneralCorporate(RegClientCorporateInput);
             }
             else
             {
                 AddDebugInfo("roleCode IN A S R H");
 
                 //return createGASRHCorporate(regClientCorporateInput);
-                return createASRHCorporate(regClientCorporateInput);
+                return CreateAsrhCorporate(RegClientCorporateInput);
             }
 
 
             ///////////////////////////////////////////////////////////////////////////////////////////////////
         }
 
-        protected BaseDataModel createGeneralCorporate(RegClientCorporateInputModel input)
+        /// <summary>
+        /// สร้าง Client ที่ Role = G
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        protected BaseDataModel CreateGeneralCorporate(RegClientCorporateInputModel input)
         {
             /////////////////////////////////PROCESS/////////////////////////////////////////////
 
             //1:Parameter CleansingId Does Not Contain Data
-            if (string.IsNullOrEmpty(regClientCorporateInput?.generalHeader?.cleansingId))
+            if (string.IsNullOrEmpty(RegClientCorporateInput?.generalHeader?.cleansingId))
             {
                 //1.1:Parameter polisy Client Id Does Not Contain Data
-                if (string.IsNullOrEmpty(regClientCorporateInput?.generalHeader?.polisyClientId))
+                if (string.IsNullOrEmpty(RegClientCorporateInput?.generalHeader?.polisyClientId))
                 {
                     //1.1.1:Create Client Cleansing
                     //ถ้า CLS สร้างไม่สำเร็จจะ  throw ไปเลย
-                    cleansingId = CreateCorporateClientInCLS(regClientCorporateInput);
+                    CleansingId = CreateCorporateClientInCls(RegClientCorporateInput);
 
 
                     //1.1.2:Create PersonalClient And Additional Poliisy 400
                     // ยกเว้น notCreatePolisyClientFlag =Y ไม่ต้องสร้าง
-                    if (regClientCorporateInput?.generalHeader?.notCreatePolisyClientFlag != "Y")
+                    if (RegClientCorporateInput?.generalHeader?.notCreatePolisyClientFlag != "Y")
                     {
                         try
                         {
-                            polisyClientId =
-                                CreateCorporateClientAndAdditionalInfoInPolisy400(regClientCorporateInput, cleansingId);
+                            PolisyClientId =
+                                CreateCorporateClientAndAdditionalInfoInPolisy400(RegClientCorporateInput, CleansingId);
                         }
                         catch (Exception)
                         {
                             //ถ้าสร้างไม่สำเร็จจะลบข้อมูลใน  CLS ออก
                             //ระวังอย่างแก้โค้ดจนเอา CleansingId ที่ไม่ได้สร้างใหม่มาลบ
                             var delService = new CleansingClientService(TransactionId, ControllerName);
-                            delService.RemoveByCleansingId(cleansingId, "C");
+                            delService.RemoveByCleansingId(CleansingId, "C");
                             throw;
                         }
                     }
@@ -253,40 +279,40 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             // สร้างเฉพาะใน 400 
             // กรณีนี้  ไม่ได้สร้าง CleansingId ใหม่จะไม่มีการ  rollback ถ้าสร้างใน  Polisy400 ไม่สำเร็จ
 
-            else if (false == string.IsNullOrEmpty(regClientCorporateInput?.generalHeader?.cleansingId))
+            else if (false == string.IsNullOrEmpty(RegClientCorporateInput?.generalHeader?.cleansingId))
             {
-                cleansingId = regClientCorporateInput?.generalHeader?.cleansingId;
+                CleansingId = RegClientCorporateInput?.generalHeader?.cleansingId;
                 //2.1:Create PersonalClient And Additional Poliisy 400 
                 // ยกเว้น notCreatePolisyClientFlag =Y ไม่ต้องสร้าง
-                if (regClientCorporateInput?.generalHeader?.notCreatePolisyClientFlag != "Y")
+                if (RegClientCorporateInput?.generalHeader?.notCreatePolisyClientFlag != "Y")
                 {
                     try
                     {
-                        polisyClientId =
-                            CreateCorporateClientAndAdditionalInfoInPolisy400(regClientCorporateInput, cleansingId);
+                        PolisyClientId =
+                            CreateCorporateClientAndAdditionalInfoInPolisy400(RegClientCorporateInput, CleansingId);
                     }
                     catch (Exception)
                     {
                         //ถ้าสร้างไม่สำเร็จจะลบข้อมูลใน  CLS ออก
                         //ระวังอย่างแก้โค้ดจนเอา CleansingId ที่ไม่ได้สร้างใหม่มาลบ
                         var delService = new CleansingClientService(TransactionId, ControllerName);
-                        delService.RemoveByCleansingId(cleansingId, "C");
+                        delService.RemoveByCleansingId(CleansingId, "C");
                         throw;
                     }
                 }
             }
 
-            AddDebugInfo("cleansingId : " + cleansingId);
+            AddDebugInfo("cleansingId : " + CleansingId);
 
             //3 create crm CleinInfo in CRM เพื่อเก็บ cleansingId   แต่ให้ค้นก่อนถ้าพบจะไม่สร้างซ้ำ
             try
             {
-                if (!string.IsNullOrEmpty(cleansingId))
+                if (!string.IsNullOrEmpty(CleansingId))
                 {
-                    if (false == SpApiChkCustomerClient.Instance.CheckByCleansingId(cleansingId))
+                    if (false == SpApiChkCustomerClient.Instance.CheckByCleansingId(CleansingId))
                     {
                         AddDebugInfo("CheckByCleansingId == false  ");
-                        crmClientId = CreateClientInCrm(regClientCorporateInput, cleansingId, polisyClientId);
+                        CrmClientId = CreateClientInCrm(RegClientCorporateInput, CleansingId, PolisyClientId);
                     }
                 }
             }
@@ -308,12 +334,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 {
                     new RegClientCorporateDataOutputModel_Pass
                     {
-                        cleansingId = cleansingId,
-                        polisyClientId = polisyClientId,
-                        crmClientId = crmClientId,
-                        corporateName1 = regClientCorporateInput?.profileHeader?.corporateName1 ?? "",
-                        corporateName2 = regClientCorporateInput?.profileHeader?.corporateName2 ?? "",
-                        corporateBranch = regClientCorporateInput?.profileHeader?.corporateBranch ?? ""
+                        cleansingId = CleansingId,
+                        polisyClientId = PolisyClientId,
+                        crmClientId = CrmClientId,
+                        corporateName1 = RegClientCorporateInput?.profileHeader?.corporateName1 ?? "",
+                        corporateName2 = RegClientCorporateInput?.profileHeader?.corporateName2 ?? "",
+                        corporateBranch = RegClientCorporateInput?.profileHeader?.corporateBranch ?? ""
                     }
                 }
             };
@@ -321,7 +347,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             // return createASRHCorporate(input);
         }
 
-        private string CreateCorporateClientInCLS(RegClientCorporateInputModel regClientCorporateInputModel)
+        private string CreateCorporateClientInCls(RegClientCorporateInputModel regClientCorporateInputModel)
         {
             if (!string.IsNullOrEmpty(regClientCorporateInputModel?.generalHeader?.cleansingId))
             {
@@ -406,32 +432,37 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         }
 
 
-        protected BaseDataModel createASRHCorporate(RegClientCorporateInputModel input)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        protected BaseDataModel CreateAsrhCorporate(RegClientCorporateInputModel input)
         {
             //parameter.cleansingId does not contain data
             // กรณีที่ไม่มีเลข polisyClientId แสดงว่าต้องการสร้าง client แต่ก่อนสร้างต้องไปสร้าง cleansing ก่อนเพื่อเอาเลข cleansingId
             // ในกรณีที่มีการสร้างเลข cleansingId ขึ้นมาใหม่ หากเกิด error  ต้องลบออกด้วย
-            if (string.IsNullOrEmpty(regClientCorporateInput?.generalHeader?.cleansingId)
-                && string.IsNullOrEmpty(regClientCorporateInput?.generalHeader?.polisyClientId))
+            if (string.IsNullOrEmpty(RegClientCorporateInput?.generalHeader?.cleansingId)
+                && string.IsNullOrEmpty(RegClientCorporateInput?.generalHeader?.polisyClientId))
             {
-                cleansingId = CreateCorporateClientInCLS(regClientCorporateInput);
+                CleansingId = CreateCorporateClientInCls(RegClientCorporateInput);
             }
 
 
             //parameter.polisyClientId does not contain data
             // ถ้าไม่ได้ระบุ polisyClientId แสดงว่าต้อง create
-            if (string.IsNullOrEmpty(regClientCorporateInput?.generalHeader?.polisyClientId))
+            if (string.IsNullOrEmpty(RegClientCorporateInput?.generalHeader?.polisyClientId))
             {
                 try
                 {
-                    polisyClientId =CreateCorporateClientAndAdditionalInfoInPolisy400(regClientCorporateInput, cleansingId);
+                    PolisyClientId =CreateCorporateClientAndAdditionalInfoInPolisy400(RegClientCorporateInput, CleansingId);
                 }
                 catch (Exception)
                 {
                     //ถ้าสร้างไม่สำเร็จจะลบข้อมูลใน  CLS ออก
                     //ระวังอย่างแก้โค้ดจนเอา CleansingId ที่ไม่ได้สร้างใหม่มาลบ
                     var delService = new CleansingClientService(TransactionId, ControllerName);
-                    delService.RemoveByCleansingId(cleansingId, "C");
+                    delService.RemoveByCleansingId(CleansingId, "C");
                     throw;
                 }
             }
@@ -443,7 +474,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 
                 try
                 {
-                    UpdateCorporateClientAndAdditionalInfoInPolisy400(regClientCorporateInput);
+                    UpdateCorporateClientAndAdditionalInfoInPolisy400(RegClientCorporateInput);
                 }
                 catch (Exception)
                 {
@@ -469,12 +500,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 {
                     new RegClientCorporateDataOutputModel_Pass
                     {
-                        cleansingId = cleansingId,
-                        polisyClientId = polisyClientId,
-                        crmClientId = crmClientId,
-                        corporateName1 = regClientCorporateInput?.profileHeader?.corporateName1 ?? "",
-                        corporateName2 = regClientCorporateInput?.profileHeader?.corporateName2 ?? "",
-                        corporateBranch = regClientCorporateInput?.profileHeader?.corporateBranch ?? ""
+                        cleansingId = CleansingId,
+                        polisyClientId = PolisyClientId,
+                        crmClientId = CrmClientId,
+                        corporateName1 = RegClientCorporateInput?.profileHeader?.corporateName1 ?? "",
+                        corporateName2 = RegClientCorporateInput?.profileHeader?.corporateName2 ?? "",
+                        corporateBranch = RegClientCorporateInput?.profileHeader?.corporateBranch ?? ""
                     }
                 }
             };
@@ -636,18 +667,18 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             RegClientCorporateDataOutputModel_Pass dataOutPass =
                 new RegClientCorporateDataOutputModel_Pass();
 
-            if (IsASRHValid(regClientCorporateInput))
+            if (IsASRHValid(RegClientCorporateInput))
             {
                 // create CLS if cleansingId and polisyClientId is null
-                if (string.IsNullOrEmpty(regClientCorporateInput.generalHeader.cleansingId) &&
-                    string.IsNullOrEmpty(regClientCorporateInput?.generalHeader?.polisyClientId))
+                if (string.IsNullOrEmpty(RegClientCorporateInput.generalHeader.cleansingId) &&
+                    string.IsNullOrEmpty(RegClientCorporateInput?.generalHeader?.polisyClientId))
                 {
                     AddDebugInfo("create CLS");
                     Console.WriteLine("create CLS");
                     BaseDataModel clsCreateCorporateIn =
                         DataModelFactory.GetModel(typeof(CLSCreateCorporateClientInputModel));
                     clsCreateCorporateIn =
-                        TransformerFactory.TransformModel(regClientCorporateInput, clsCreateCorporateIn);
+                        TransformerFactory.TransformModel(RegClientCorporateInput, clsCreateCorporateIn);
                     //  CLSCreateCorporateClientContentOutputModel clsCreateClientContent = CallDevesServiceProxy<CLSCreateCorporateClientOutputModel, CLSCreateCorporateClientContentOutputModel>
                     //      (CommonConstant.ewiEndpointKeyCLSCreateCorporateClient, clsCreateCorporateIn);
                     var clsService = new CLSCreateCorporateClientService(TransactionId, ControllerName);
@@ -659,18 +690,18 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         //TODO เอา ค่าที่ได้ไปเป็น output
                         if (!string.IsNullOrEmpty(clsCreateClientContent?.data?.cleansingId))
                         {
-                            newCleansingId = clsCreateClientContent?.data?.cleansingId;
+                            NewCleansingId = clsCreateClientContent?.data?.cleansingId;
                         }
                         if (!string.IsNullOrEmpty(clsCreateClientContent?.data?.cleansingId))
                         {
-                            newCleansingId = clsCreateClientContent?.data?.cleansingId;
+                            NewCleansingId = clsCreateClientContent?.data?.cleansingId;
                         }
 
-                        AddDebugInfo("create CLS newCleansingId = " + newCleansingId);
-                        regClientCorporateInput.generalHeader.cleansingId = newCleansingId;
+                        AddDebugInfo("create CLS newCleansingId = " + NewCleansingId);
+                        RegClientCorporateInput.generalHeader.cleansingId = NewCleansingId;
 
                         //กรณีมาจากหน้าจอ CRM  notCreatePolisyClientFlag == Y ไม่ต้องไปสร้างใน polisyClientId
-                        if (regClientCorporateInput.generalHeader.notCreatePolisyClientFlag != "Y")
+                        if (RegClientCorporateInput.generalHeader.notCreatePolisyClientFlag != "Y")
                         {
                             AddDebugInfo(
                                 "กรณีมาจากหน้าจอ CRM  notCreatePolisyClientFlag == Y ไม่ต้องไปสร้างใน polisyClientId",
@@ -680,7 +711,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                                 DataModelFactory.GetModel(
                                     typeof(CLIENTCreateCorporateClientAndAdditionalInfoInputModel));
                             polCreateCorporateIn =
-                                TransformerFactory.TransformModel(regClientCorporateInput, polCreateCorporateIn);
+                                TransformerFactory.TransformModel(RegClientCorporateInput, polCreateCorporateIn);
                             /*
                              CLIENTCreateCorporateClientAndAdditionalInfoContentModel polCreateClientContent =
                                  CallDevesServiceProxy<CLIENTCreateCorporateClientAndAdditionalInfoOutputModel
@@ -695,9 +726,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                                 clientService.Execute(
                                     (CLIENTCreateCorporateClientAndAdditionalInfoInputModel) polCreateCorporateIn);
 
-                            regClientCorporateInput =
+                            RegClientCorporateInput =
                                 (RegClientCorporateInputModel) TransformerFactory.TransformModel(polCreateClientContent,
-                                    regClientCorporateInput);
+                                    RegClientCorporateInput);
                         }
                     }
 
@@ -712,16 +743,16 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                             TransactionId);
                         //throw new Exception(String.Format("Error:{0}, Message:{1}", ewiRes.responseCode , ewiRes.responseMessage));
                     }
-                    regClientCorporateInput =
+                    RegClientCorporateInput =
                         (RegClientCorporateInputModel) TransformerFactory.TransformModel(clsCreateClientContent,
-                            regClientCorporateInput);
+                            RegClientCorporateInput);
                 }
 
                 // กรณีไม่มี เลข polisyClientId  แต่มี cleansingId ให้สร้างเฉพาะ 400
-                else if (string.IsNullOrEmpty(regClientCorporateInput?.generalHeader?.polisyClientId))
+                else if (string.IsNullOrEmpty(RegClientCorporateInput?.generalHeader?.polisyClientId))
                 {
                     //กรณีมาจากหน้าจอ CRM  notCreatePolisyClientFlag == Y ไม่ต้องไปสร้างใน polisyClientId
-                    if (regClientCorporateInput.generalHeader.notCreatePolisyClientFlag != "Y")
+                    if (RegClientCorporateInput.generalHeader.notCreatePolisyClientFlag != "Y")
                     {
                         AddDebugInfo("กรณีไม่มี เลข polisyClientId  แต่มี cleansingId ให้สร้างเฉพาะ 400",
                             @"string.IsNullOrEmpty(regClientCorporateInput.generalHeader.polisyClientId)&& !string.IsNullOrEmpty(regClientCorporateInput.generalHeader.cleansingId) ");
@@ -729,7 +760,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                         BaseDataModel polCreateCorporateIn =
                             DataModelFactory.GetModel(typeof(CLIENTCreateCorporateClientAndAdditionalInfoInputModel));
                         polCreateCorporateIn =
-                            TransformerFactory.TransformModel(regClientCorporateInput, polCreateCorporateIn);
+                            TransformerFactory.TransformModel(RegClientCorporateInput, polCreateCorporateIn);
                         /*CLIENTCreateCorporateClientAndAdditionalInfoContentModel polCreateClientContent =
                             CallDevesServiceProxy<CLIENTCreateCorporateClientAndAdditionalInfoOutputModel
                                     , CLIENTCreateCorporateClientAndAdditionalInfoContentModel>
@@ -740,14 +771,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                             clientService.Execute(
                                 (CLIENTCreateCorporateClientAndAdditionalInfoInputModel) polCreateCorporateIn);
 
-                        regClientCorporateInput =
+                        RegClientCorporateInput =
                             (RegClientCorporateInputModel) TransformerFactory.TransformModel(polCreateClientContent,
-                                regClientCorporateInput);
+                                RegClientCorporateInput);
                     }
                 }
 
                 //กรณี มี polisyClientId ให้ update
-                else if (!string.IsNullOrEmpty(regClientCorporateInput?.generalHeader?.polisyClientId))
+                else if (!string.IsNullOrEmpty(RegClientCorporateInput?.generalHeader?.polisyClientId))
                 {
                     AddDebugInfo(" to update ");
                     try
@@ -756,7 +787,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                             new COMPInquiryClientMasterInputModel();
                         compInqClientInput =
                             (COMPInquiryClientMasterInputModel) TransformerFactory.TransformModel(
-                                regClientCorporateInput, compInqClientInput);
+                                RegClientCorporateInput, compInqClientInput);
 
                         /*  EWIResCOMPInquiryClientMasterContentModel retCOMPInqClient =
                               CallDevesServiceProxy<COMPInquiryClientMasterOutputModel,
@@ -794,53 +825,53 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                             {
                                 updateClientPolisy400In =
                                     (CLIENTUpdateCorporateClientAndAdditionalInfoInputModel)
-                                    TransformerFactory.TransformModel(regClientCorporateInput,
+                                    TransformerFactory.TransformModel(RegClientCorporateInput,
                                         updateClientPolisy400In);
                                 updateClientPolisy400In.checkFlag = "CREATE";
                             }
-                            if (regClientCorporateInput?.generalHeader?.assessorFlag == "Y")
+                            if (RegClientCorporateInput?.generalHeader?.assessorFlag == "Y")
                             {
                                 updateClientPolisy400In.assessorFlag = "Y";
                                 updateClientPolisy400In.assessorBlackListFlag =
-                                    regClientCorporateInput.asrhHeader.assessorBlackListFlag;
+                                    RegClientCorporateInput.asrhHeader.assessorBlackListFlag;
                                 updateClientPolisy400In.assessorDelistFlag =
-                                    regClientCorporateInput.asrhHeader.assessorDelistFlag;
+                                    RegClientCorporateInput.asrhHeader.assessorDelistFlag;
                                 updateClientPolisy400In.assessorOregNum =
-                                    regClientCorporateInput.asrhHeader.assessorOregNum;
+                                    RegClientCorporateInput.asrhHeader.assessorOregNum;
                                 updateClientPolisy400In.assessorTerminateDate =
-                                    regClientCorporateInput.asrhHeader.assessorTerminateDate;
+                                    RegClientCorporateInput.asrhHeader.assessorTerminateDate;
                                 ;
                             }
 
-                            if (regClientCorporateInput?.generalHeader?.solicitorFlag == "Y")
+                            if (RegClientCorporateInput?.generalHeader?.solicitorFlag == "Y")
                             {
                                 updateClientPolisy400In.solicitorFlag = "Y";
                                 updateClientPolisy400In.solicitorBlackListFlag =
-                                    regClientCorporateInput.asrhHeader.solicitorBlackListFlag;
+                                    RegClientCorporateInput.asrhHeader.solicitorBlackListFlag;
                                 updateClientPolisy400In.solicitorDelistFlag =
-                                    regClientCorporateInput.asrhHeader.solicitorDelistFlag;
+                                    RegClientCorporateInput.asrhHeader.solicitorDelistFlag;
                                 updateClientPolisy400In.solicitorOregNum =
-                                    regClientCorporateInput.asrhHeader.solicitorOregNum;
+                                    RegClientCorporateInput.asrhHeader.solicitorOregNum;
                                 updateClientPolisy400In.solicitorTerminateDate =
-                                    regClientCorporateInput.asrhHeader.solicitorTerminateDate;
+                                    RegClientCorporateInput.asrhHeader.solicitorTerminateDate;
                                 ;
                             }
 
-                            if (regClientCorporateInput?.generalHeader?.repairerFlag == "Y")
+                            if (RegClientCorporateInput?.generalHeader?.repairerFlag == "Y")
                             {
                                 updateClientPolisy400In.repairerFlag = "Y";
                                 updateClientPolisy400In.repairerBlackListFlag =
-                                    regClientCorporateInput.asrhHeader.repairerBlackListFlag;
+                                    RegClientCorporateInput.asrhHeader.repairerBlackListFlag;
                                 updateClientPolisy400In.repairerDelistFlag =
-                                    regClientCorporateInput.asrhHeader.repairerDelistFlag;
+                                    RegClientCorporateInput.asrhHeader.repairerDelistFlag;
                                 updateClientPolisy400In.repairerOregNum =
-                                    regClientCorporateInput.asrhHeader.repairerOregNum;
+                                    RegClientCorporateInput.asrhHeader.repairerOregNum;
                                 updateClientPolisy400In.repairerTerminateDate =
-                                    regClientCorporateInput.asrhHeader.repairerTerminateDate;
+                                    RegClientCorporateInput.asrhHeader.repairerTerminateDate;
                                 ;
                             }
 
-                            if (regClientCorporateInput?.generalHeader?.hospitalFlag == "Y")
+                            if (RegClientCorporateInput?.generalHeader?.hospitalFlag == "Y")
                             {
                                 updateClientPolisy400In.hospitalFlag = "Y";
                             }
@@ -866,14 +897,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     {
                         Console.WriteLine("400 Error" + e.Message);
 
-                        if (!string.IsNullOrEmpty(newCleansingId))
+                        if (!string.IsNullOrEmpty(NewCleansingId))
                         {
                             //เมื่อเกิด error ใด ๆ ใน service อื่นให้ลบ
 
-                            AddDebugInfo("try rollback" + newCleansingId);
+                            AddDebugInfo("try rollback" + NewCleansingId);
 
                             var deleteResult =
-                                CleansingClientService.Instance.RemoveByCleansingId(newCleansingId, "C");
+                                CleansingClientService.Instance.RemoveByCleansingId(NewCleansingId, "C");
 
                             regClientCorporateOutput.code = CONST_CODE_FAILED;
                             regClientCorporateOutput.message = e.Message;
@@ -911,20 +942,20 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             }
 
             //3 create crm CleinInfo in CRM เพื่อเก็บ cleansingId   แต่ให้ค้นก่อนถ้าพบจะไม่สร้างซ้ำ
-            polisyClientId = regClientCorporateInput?.generalHeader?.polisyClientId ?? "";
-            cleansingId = newCleansingId ?? regClientCorporateInput?.generalHeader?.cleansingId;
-            Console.WriteLine(polisyClientId + ":" + cleansingId);
+            PolisyClientId = RegClientCorporateInput?.generalHeader?.polisyClientId ?? "";
+            CleansingId = NewCleansingId ?? RegClientCorporateInput?.generalHeader?.cleansingId;
+            Console.WriteLine(PolisyClientId + ":" + CleansingId);
             AddDebugInfo("create crm CleinInfo in CRM เพื่อเก็บ cleansingId   แต่ให้ค้นก่อนถ้าพบจะไม่สร้างซ้ำ",
-                polisyClientId + ":" + cleansingId);
-            if (!string.IsNullOrEmpty(cleansingId))
+                PolisyClientId + ":" + CleansingId);
+            if (!string.IsNullOrEmpty(CleansingId))
             {
                 AddDebugInfo("เริ่มสร้าง crm ");
-                if (false == SpApiChkCustomerClient.Instance.CheckByCleansingId(cleansingId))
+                if (false == SpApiChkCustomerClient.Instance.CheckByCleansingId(CleansingId))
                 {
                     try
                     {
-                        crmClientId = CreateClientInCrm(regClientCorporateInput, cleansingId, polisyClientId);
-                        AddDebugInfo("สร้างข้อมูลแล้ว =" + crmClientId);
+                        CrmClientId = CreateClientInCrm(RegClientCorporateInput, CleansingId, PolisyClientId);
+                        AddDebugInfo("สร้างข้อมูลแล้ว =" + CrmClientId);
                     }
                     catch (Exception e)
                     {
@@ -951,11 +982,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     dataOutPass =
                         new RegClientCorporateDataOutputModel_Pass
                         {
-                            cleansingId = regClientCorporateInput?.generalHeader?.cleansingId ?? "",
-                            polisyClientId = regClientCorporateInput?.generalHeader?.polisyClientId ?? "",
-                            corporateName1 = regClientCorporateInput?.profileHeader?.corporateName1 ?? "",
-                            corporateName2 = regClientCorporateInput?.profileHeader?.corporateName2 ?? "",
-                            corporateBranch = regClientCorporateInput?.profileHeader?.corporateBranch ?? ""
+                            cleansingId = RegClientCorporateInput?.generalHeader?.cleansingId ?? "",
+                            polisyClientId = RegClientCorporateInput?.generalHeader?.polisyClientId ?? "",
+                            corporateName1 = RegClientCorporateInput?.profileHeader?.corporateName1 ?? "",
+                            corporateName2 = RegClientCorporateInput?.profileHeader?.corporateName2 ?? "",
+                            corporateBranch = RegClientCorporateInput?.profileHeader?.corporateBranch ?? ""
                         };
 
 
@@ -969,12 +1000,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 regClientCorporateOutput.code = CONST_CODE_SUCCESS;
                 regClientCorporateOutput.message = AppConst.MESSAGE_SUCCESS;
 
-                dataOutPass.cleansingId = regClientCorporateInput.generalHeader.cleansingId;
-                dataOutPass.polisyClientId = regClientCorporateInput.generalHeader.polisyClientId;
-                dataOutPass.crmClientId = crmClientId;
-                dataOutPass.corporateName1 = regClientCorporateInput.profileHeader.corporateName1;
-                dataOutPass.corporateName2 = regClientCorporateInput.profileHeader.corporateName2;
-                dataOutPass.corporateBranch = regClientCorporateInput.profileHeader.corporateBranch;
+                dataOutPass.cleansingId = RegClientCorporateInput.generalHeader.cleansingId;
+                dataOutPass.polisyClientId = RegClientCorporateInput.generalHeader.polisyClientId;
+                dataOutPass.crmClientId = CrmClientId;
+                dataOutPass.corporateName1 = RegClientCorporateInput.profileHeader.corporateName1;
+                dataOutPass.corporateName2 = RegClientCorporateInput.profileHeader.corporateName2;
+                dataOutPass.corporateBranch = RegClientCorporateInput.profileHeader.corporateBranch;
 
                 regClientCorporateOutput.data.Add(dataOutPass);
             }

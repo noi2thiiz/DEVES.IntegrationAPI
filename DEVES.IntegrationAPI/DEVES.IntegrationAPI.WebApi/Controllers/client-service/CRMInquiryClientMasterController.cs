@@ -13,6 +13,7 @@ using DEVES.IntegrationAPI.Model.InquiryClientMaster;
 using System.Web;
 using DEVES.IntegrationAPI.Core.Helper;
 using DEVES.IntegrationAPI.Model.CLS;
+using DEVES.IntegrationAPI.WebApi.Logic.Commands.Client;
 using DEVES.IntegrationAPI.WebApi.Templates;
 using Swashbuckle.Swagger.Annotations;
 
@@ -27,7 +28,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             //remove redundant validate json schema code
             //+ Deserialize Input
             //InquiryClientMasterInputModel contentModel = DeserializeJson<InquiryClientMasterInputModel>(input.ToString());
-            return ProcessRequest<buzCrmInquiryClientMaster, InquiryClientMasterInputModel>
+            return ProcessRequest<BuzCrmInquiryClientMaster, InquiryClientMasterInputModel>
                 (value, "InquiryClientMaster_Input_Schema.json");
           
         }
