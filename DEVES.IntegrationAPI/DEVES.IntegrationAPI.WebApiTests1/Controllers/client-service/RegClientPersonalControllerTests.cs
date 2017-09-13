@@ -559,7 +559,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
                     'occupation' : '00002',
                     'riskLevel' : 'R1',
                     'vipStatus' : '{5}',
-                    'remark' : ' test BirthDate'
+                    'remark' : ' PG-01'
                 }},'contactInfo':{{
                     'telephone1' : '',
                     'telephone1Ext' :'',
@@ -690,7 +690,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
                     'occupation' : '00002',
                     'riskLevel' : 'R1',
                     'vipStatus' : '{5}',
-                    'remark' : ' test BirthDate'
+                    'remark' : ' PG-02'
                 }},'contactInfo':{{
                     'telephone1' : '',
                     'telephone1Ext' :'',
@@ -745,12 +745,13 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
 
         }
 
+       
         [TestMethod()]
         [Priority(3)]
         public void Post_RegClientPersonal_BusinessTest_PG_03()
         {
             /*Description
-             * ข้อมูลลูกค้าที่มีใน <<Cleansing>> แต่ไม่มีใน <<Polisy400>> และ <<CRM>> (เช่น ข้อมูลลูกค้าใน WorryFree)
+             * ข้อมูลลูกค้าที่มีใน <<Cleansing>> และ <<CRM>> แต่ไม่มีใน <<Polisy400>> (เช่น ข้อมูลลูกค้าใน WorryFree)
              *Input
              * roleCode = G	
              * cleansingId=not null	
@@ -760,21 +761,20 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
              *Expected API Action
              * ต้องยิงไปที่
              *   - CLIENT_CreatePersonalClientAndAdditionalInfo
-             *   - และสร้างข้อมูลใน CRM
              *  
              * ต้องเกิดข้อมูลใหม่ที่
              *  <<Polisy400>>
-             *  <<CRM>>
-
              */
 
 
             /*
              * Expected Output 
-            
+               success output
              */
 
 
+            //Prepare
+            #region cretae cleansingId
             // cretae cleansingId
             var service =
                 new CLSCreatePersonalService(Guid.NewGuid().ToString(), "UnitTest");
@@ -824,6 +824,10 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
             var cleansingId = result?.data?.cleansingId;
             Assert.IsFalse(string.IsNullOrEmpty(result?.data?.cleansingId), "error on create cleansingId");
 
+
+            #endregion cretae cleansingId
+
+
             // Arrange
             var controller = new RegClientPersonalController();
             controller.Request = new HttpRequestMessage();
@@ -858,7 +862,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
                     'occupation' : '00002',
                     'riskLevel' : 'R1',
                     'vipStatus' : '{5}',
-                    'remark' : ' test BirthDate'
+                    'remark' : ' PG-03'
                 }},'contactInfo':{{
                     'telephone1' : '',
                     'telephone1Ext' :'',
@@ -915,10 +919,226 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
 
 
 
+    }
+
+
+        public JToken Create_ClientPersonalNotCreatePolisyClient()
+        {
+
+            // Arrange
+            var controller = new RegClientPersonalController();
+            controller.Request = new HttpRequestMessage();
+            controller.Configuration = new HttpConfiguration();
+
+            // Act
+            var personalName = "ทดสอบ" + RandomValueGenerator.RandomString(10);
+            var personalSurname = "ทดสอบ" + RandomValueGenerator.RandomString(10);
+
+            string input = String.Format(@"
+            {{
+                'generalHeader':  
+                {{
+                    'roleCode': 'G',
+                    'cleansingId': '',
+                    'polisyClientId': '',
+                    'crmClientId': '',
+                    'clientAdditionalExistFlag': 'N',
+                    'notCreatePolisyClientFlag':'Y'
+                }},'profileInfo': {{
+                    'salutation': '0002',
+                    'personalName': '{0}',
+                    'personalSurname' : '{1}' ,
+                    'sex' : 'M',
+                    'idCitizen' :'{2}',
+                    'idPassport' : '',
+                    'idAlien' : '',
+                    'idDriving': '',
+                    'birthDate' :'',
+                    'nationality' : '',
+                    'language' : '{3}',
+                    'married' : '{4}',
+                    'occupation' : '',
+                    'riskLevel' : '',
+                    'vipStatus' : '{5}',
+                    'remark' : ' ClientPersonalNotCreatePolisy'
+                }},'contactInfo':{{
+                    'telephone1' : '',
+                    'telephone1Ext' :'',
+                    'telephone2' : '',
+                    'telephone2Ext' :'',
+                    'telephone3' : '',
+                    'telephone3Ext' : '',
+                    'mobilePhone' : '',
+                    'fax' : '',
+                    'emailAddress' :'',
+                    'lineID' : '',
+                    'facebook' : ''
+                }},'addressInfo':{{
+                    'address1' : '',
+                    'address2' : '',
+                    'address3' : '',
+                    'subDistrictCode' : '',
+                    'districtCode' : '',
+                    'provinceCode' : '',
+                    'postalCode' :'',
+                    'country' : '',
+                    'addressType' : '',
+                    'latitude' : '',
+                    'longtitude' : ''
+                }}
+             }}", personalName,
+                personalSurname,
+                RandomValueGenerator.RandomNumber(13),
+                RandomValueGenerator.RandomOptions(new[] { "E", "T" }),
+                RandomValueGenerator.RandomOptions(new[] { "M", "W" }),
+                RandomValueGenerator.RandomOptions(new[] { "Y", "N" }));
+
+            //Assert
+            var response = (HttpResponseMessage)controller.Post(JObject.Parse(input));
+            Console.WriteLine("==============output==================");
+            var output = response?.Content?.ReadAsStringAsync();
+            Assert.IsNotNull(output?.Result);
+            Console.WriteLine(output?.Result);
+            var outputJson = JObject.Parse(output?.Result);
+            Assert.AreEqual("200", outputJson["code"]?.ToString());
+            Assert.AreEqual(false, string.IsNullOrEmpty(outputJson["transactionId"]?.ToString()));
+            Assert.AreEqual(false, string.IsNullOrEmpty(outputJson["transactionDateTime"]?.ToString()));
+            Assert.AreEqual(false, string.IsNullOrEmpty(outputJson["message"]?.ToString()));
+
+            var outputData = outputJson["data"][0];
+            Assert.AreEqual(true, string.IsNullOrEmpty(outputData["polisyClientId"]?.ToString()), "ต้องไม่สร้างข้อมูลใน polisy400");
+            Assert.AreEqual(false, string.IsNullOrEmpty(outputData["cleansingId"]?.ToString()));
+            Assert.AreEqual(personalName, outputData["personalName"]?.ToString());
+            Assert.AreEqual(personalSurname, outputData["personalSurname"]?.ToString());
+
+            return outputData;
 
 
 
+        }
+        [TestMethod()]
+        [Priority(4)]
+        public void Post_RegClientPersonal_BusinessTest_PG_04()
+        {
+            /*Description
+             * ข้อมูลลูกค้าที่มีใน <<Cleansing>> แต่ไม่มีใน <<Polisy400>> และ <<CRM>> (เช่น ข้อมูลลูกค้าใน WorryFree)
+             *Input
+             * roleCode = G	
+             * cleansingId=    not  null	
+             * polisyClientId= null	
+             * crmClientId=    not null
+             * 
+             *Expected API Action
+             * ต้องยิงไปที่
+             *   - CLIENT_CreatePersonalClientAndAdditionalInfo
+             *   - และสร้างข้อมูลใน CRM
+             *  
+             * ต้องเกิดข้อมูลใหม่ที่
+             *  <<Polisy400>>
+             *  <<CRM>>
 
+             */
+
+
+            /*
+             * Expected Output 
+                success
+             */
+
+
+            //prepare
+           var preOutput =  Create_ClientPersonalNotCreatePolisyClient();
+            string cleansingId = preOutput["cleansingId"]?.ToString();
+            string crmClientId = preOutput["crmClientId"]?.ToString();
+            // Arrange
+            var controller = new RegClientPersonalController();
+            controller.Request = new HttpRequestMessage();
+            controller.Configuration = new HttpConfiguration();
+
+            // Act
+            var personalName = "ทดสอบ" + RandomValueGenerator.RandomString(10);
+            var personalSurname = "ทดสอบ" + RandomValueGenerator.RandomString(10);
+
+            string input = String.Format(@"
+            {{
+                'generalHeader':  
+                {{
+                    'roleCode': 'G',
+                    'cleansingId': '{6}',
+                    'polisyClientId': '',
+                    'crmClientId': '{7}',
+                    'clientAdditionalExistFlag': 'N'
+                }},'profileInfo': {{
+                    'salutation': '0002',
+                    'personalName': '{0}',
+                    'personalSurname' : '{1}' ,
+                    'sex' : 'M',
+                    'idCitizen' :'{2}',
+                    'idPassport' : '',
+                    'idAlien' : '',
+                    'idDriving': '',
+                    'birthDate' :'2009-04-22',
+                    'nationality' : '00203',
+                    'language' : '{3}',
+                    'married' : '{4}',
+                    'occupation' : '00002',
+                    'riskLevel' : 'R1',
+                    'vipStatus' : '{5}',
+                    'remark' : 'PG-04'
+                }},'contactInfo':{{
+                    'telephone1' : '',
+                    'telephone1Ext' :'',
+                    'telephone2' : '',
+                    'telephone2Ext' :'',
+                    'telephone3' : '',
+                    'telephone3Ext' : '',
+                    'mobilePhone' : '',
+                    'fax' : '',
+                    'emailAddress' :'',
+                    'lineID' : '',
+                    'facebook' : ''
+                }},'addressInfo':{{
+                    'address1' : '',
+                    'address2' : '',
+                    'address3' : '',
+                    'subDistrictCode' : '101001',
+                    'districtCode' : '1010',
+                    'provinceCode' : '10',
+                    'postalCode' :'10210',
+                    'country' : '00220',
+                    'addressType' : '01',
+                    'latitude' : '',
+                    'longtitude' : ''
+                }}
+             }}",
+                personalName,
+                personalSurname,
+                RandomValueGenerator.RandomNumber(13),
+                RandomValueGenerator.RandomOptions(new[] { "E", "T" }),
+                RandomValueGenerator.RandomOptions(new[] { "M", "W" }),
+                RandomValueGenerator.RandomOptions(new[] { "Y", "N" }),
+                cleansingId, 
+                crmClientId);
+
+            //Assert
+            var response = (HttpResponseMessage)controller.Post(JObject.Parse(input));
+            Console.WriteLine("==============output==================");
+            var output = response?.Content?.ReadAsStringAsync();
+            Assert.IsNotNull(output?.Result);
+            Console.WriteLine(output?.Result);
+
+            var outputJson = JObject.Parse(output?.Result);
+            Assert.AreEqual("200", outputJson["code"]?.ToString());
+
+            var outputData = outputJson["data"][0];
+            Assert.IsNotNull(outputData);
+            Assert.AreEqual(false, string.IsNullOrEmpty(outputData["polisyClientId"]?.ToString()), "ต้องเกิดข้อมูลใหม่ที่ POLISY400");
+            Assert.AreEqual(cleansingId, outputData["cleansingId"]?.ToString(), " CLS = input");
+            Assert.AreEqual(crmClientId, outputData["crmClientId"]?.ToString(), "CRM = input");
+
+          
+            Assert.AreEqual(personalName, outputData["personalName"]?.ToString());
+            Assert.AreEqual(personalSurname, outputData["personalSurname"]?.ToString());
 
 
         }

@@ -202,21 +202,28 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
 
             //3 create crm CleinInfo in CRM เพื่อเก็บ cleansingId   แต่ให้ค้นก่อนถ้าพบจะไม่สร้างซ้ำ
-            try
+            if (string.IsNullOrEmpty(RegClientPersonalInput?.generalHeader?.crmClientId))
             {
-                if (!string.IsNullOrEmpty(cleansingId))
+                try
                 {
-                    if (false==SpApiChkCustomerClient.Instance.CheckByCleansingId(cleansingId))
+                    if (!string.IsNullOrEmpty(cleansingId))
                     {
-                        crmClientId = CreateClientInCRM(RegClientPersonalInput, cleansingId, polisyClientId);
+                        if (false == SpApiChkCustomerClient.Instance.CheckByCleansingId(cleansingId))
+                        {
+                            crmClientId = CreateClientInCRM(RegClientPersonalInput, cleansingId, polisyClientId);
+                        }
+
                     }
-                   
+                }
+                catch (Exception e)
+                {
+                    AddDebugInfo("Cannot create Client in CRM :" + e.Message, e.StackTrace);
+                    //@TODO so something
                 }
             }
-            catch (Exception e)
+            else
             {
-                AddDebugInfo("Cannot create Client in CRM :" + e.Message, e.StackTrace);
-                //@TODO so something
+                crmClientId = RegClientPersonalInput?.generalHeader?.crmClientId;
             }
            
            
