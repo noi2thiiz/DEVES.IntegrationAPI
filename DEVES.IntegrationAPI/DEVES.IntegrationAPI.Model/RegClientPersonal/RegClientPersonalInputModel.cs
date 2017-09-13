@@ -22,6 +22,7 @@ namespace DEVES.IntegrationAPI.Model.RegClientPersonal
         public string clientAdditionalExistFlag { get; set; } = "";
         //ถ้า = Y  ไม่ต้องไปสร้าง  Create Polisy  (จะส่งมาจากหน้าจอ CRM)
         public string notCreatePolisyClientFlag { get; set; } = "N";
+        public string notCreateCrmClientFlag { get; set; } = "N";
     }
 
     public class ProfileInfoModel : BaseDataModel
