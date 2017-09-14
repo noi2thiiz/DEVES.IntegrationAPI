@@ -8,6 +8,8 @@ using CLS = DEVES.IntegrationAPI.Model.CLS;
 using DEVES.IntegrationAPI.WebApi.Templates;
 using DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData;
 using DEVES.IntegrationAPI.Core.Helper;
+using DEVES.IntegrationAPI.WebApi.TechnicalService;
+
 //TODO เพิ่ม Source Data= Integration
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
@@ -24,6 +26,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             CLS.CLSInquiryPersonalClientContentOutputModel srcContent = (CLS.CLSInquiryPersonalClientContentOutputModel)input;
             CRMInquiryClientContentOutputModel trgtContent = (CRMInquiryClientContentOutputModel)output;
+            TraceDebugLogger.Instance.AddLog("TransformCLSInquiryPersonalClientContentOut_to_CrmInquiryClientMasterContentOut", input);
             if (trgtContent == null)
             {
                 trgtContent = new CRMInquiryClientContentOutputModel();
@@ -49,6 +52,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     trgt.generalHeader.cleansingId = src?.cleansing_id?.Trim() ?? "";
                     trgt.generalHeader.polisyClientId = src?.clntnum?.Trim() ?? "";
                     trgt.generalHeader.sourceData = CommonConstant.CONST_SYSTEM_CLS;
+                    trgt.generalHeader.clientType = src?.clientType;
+                    trgt.profileInfo.clientStatus = src?.cltstat?.Trim().ToUpper() ?? "";
 
 
                     trgt.profileInfo.name1 = src?.lgivname?.Trim() ?? "";
@@ -102,12 +107,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     var addrInfo = src.addressListsCollection.FirstOrDefault<Model.CLS.CLSAddressListsCollectionModel>();
                     if (addrInfo != null)
                     {
-                        trgt.addressInfo.address = string.Join(CONST_CONCAT, addrInfo.address_1
-                                                                    , addrInfo.address_2
-                                                                    , addrInfo.address_3
-                                                                    , addrInfo.sub_district_display
-                                                                    , addrInfo.district_display
-                                                                    , addrInfo.province_display
+                        trgt.addressInfo.address = string.Join(CONST_CONCAT, addrInfo.address_1?.Trim() ?? ""
+                                                                    , addrInfo.address_2?.Trim() ?? ""
+                                                                    , addrInfo.address_3?.Trim() ?? ""
+                                                                    , addrInfo.sub_district_display?.Trim() ?? ""
+                                                                    , addrInfo.district_display?.Trim() ?? ""
+                                                                    , addrInfo.province_display?.Trim() ?? ""
                                                                     , addrInfo.postal_code)?.ReplaceMultiplSpacesWithSingleSpace();
                         
                         trgt.addressInfo.countryText = addrInfo?.cls_ctrycode_text?.Trim()??"";
@@ -122,8 +127,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                             Console.WriteLine(e.Message);
                         }
                        
-                        trgt.addressInfo.latitude = addrInfo.lattitude;
-                        trgt.addressInfo.longtitude = addrInfo.longtitude;
+                        trgt.addressInfo.latitude = addrInfo.lattitude?.Trim() ?? "";
+                        trgt.addressInfo.longitude = addrInfo.longitude?.Trim() ?? "";
                     }
                     //trgt.AddDebugInfo("TransformCLSInquiryPersonalClientContentOut_to_CrmInquiryClientMasterContentOut","");
                    // trgt.AddDebugInfo("Source Data", src);

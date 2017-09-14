@@ -4,16 +4,19 @@ using System.Linq;
 using System.Net.Http;
 using System.Web;
 using System.Web.Http;
+using System.Web.Http.Dispatcher;
 using DEVES.IntegrationAPI.Core.Helper;
 using DEVES.IntegrationAPI.Model;
 using DEVES.IntegrationAPI.Model.InquiryCRMPayeeList;
 using DEVES.IntegrationAPI.WebApi.TechnicalService;
+using DEVES.IntegrationAPI.WebApi.TechnicalService.Envelonment;
 using Newtonsoft.Json;
 
 namespace DEVES.IntegrationAPI.WebApi.Templates
 {
     public class BaseApiController:ApiController
     {
+       
 
         public string GetTransactionId()
         {
@@ -24,12 +27,23 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
 
                     Request.Properties["TransactionID"] = GlobalTransactionIdGenerator.Instance.GetNewGuid();
                 }
-
+                HttpContext.Current.Items["GlobalTransactionID"] = Request.Properties["TransactionID"];
                 return Request.Properties["TransactionID"].ToString();
             }
             catch (Exception)
             {
-                return  GlobalTransactionIdGenerator.Instance.GetNewGuid();
+                var newId = GlobalTransactionIdGenerator.Instance.GetNewGuid();
+
+                try
+                {
+                    HttpContext.Current.Items["GlobalTransactionID"] = newId;
+                }
+                catch (Exception e)
+                {
+                    //do nothing
+                }
+                
+                return newId;
             }
             
             
@@ -43,14 +57,34 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             // Console.WriteLine(value.ToJson());
 
             #region Initiate Command and Output Model
+            TraceDebugLogger.Instance.AddLog("ProcessRequest", value);
 
-            
             var type = typeof(TCommand);
             object instance = Activator.CreateInstance(type);
             BaseCommand cmd = (BaseCommand)instance;
             var outputFail = new OutputModelFail();
-
+          
             cmd.TransactionId = GetTransactionId();
+            try
+            {
+                //.Headers.Allow
+                var config = GlobalConfiguration.Configuration;
+                var controllerSelector = new DefaultHttpControllerSelector(config);
+                var descriptor = controllerSelector.SelectController(Request);
+               
+                cmd.ControllerName = "" + descriptor.ControllerName;
+                cmd.ApplicationName = AppEnvironment.Instance.GetApplicationName();
+                cmd.SiteName = AppEnvironment.Instance.GetSiteName();
+                
+
+            }
+            catch (Exception e)
+            {
+                TraceDebugLogger.Instance.AddLog("CreateInstance BuzCommand Exception" + e.Message, e.StackTrace);
+               // throw;
+            }
+
+            
 
             #endregion
 
@@ -67,6 +101,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             catch (Exception e)
             {
                 //output model
+                TraceDebugLogger.Instance.AddLog("Cannot parse JSON" + e.Message+ contentText, e.StackTrace);
                 outputFail.code = AppConst.CODE_INVALID_INPUT;
                 outputFail.message = AppConst.MESSAGE_INVALID_INPUT;
                 outputFail.description = "Cannot parse JSON:"+e.Message+ contentText;
@@ -90,19 +125,17 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                
                 filePath = startupPath+"/App_Data/JsonSchema/" +schemaFileName;
             }
+            Console.WriteLine("JSON Schema Path : "+filePath);
 
+               TraceDebugLogger.Instance.AddLog("schema filePath", filePath);
            
 
             if (!JsonHelper.TryValidateJson(contentText, filePath, out outvalidate))
             {
-               
+                TraceDebugLogger.Instance.AddLog("TryValidateJson1", outvalidate);
                 try
                 {
                  
-
-
-
-
                     List<string> errorMessage = JsonHelper.getReturnError();
                     foreach (var text in errorMessage)
                     {
@@ -133,6 +166,8 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                         }
                         else if (text.Contains("exceeds maximum length"))
                         {
+                            TraceDebugLogger.Instance.AddLog("exceeds maximum length", outvalidate);
+
                             bool isMessage = false;
                             int endMessage = 0;
                             int startName = 0;
@@ -278,14 +313,16 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
 
                     return Request.CreateResponse(outputFail);
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
                     //output model
+                    TraceDebugLogger.Instance.AddLog("Cannot parse JSON Exception" + e.Message + contentText, e.StackTrace);
                     outputFail.code = AppConst.CODE_INVALID_INPUT;
                     outputFail.message = AppConst.MESSAGE_INVALID_INPUT;
                     outputFail.description = "Cannot parse JSON" + outvalidate;
                     outputFail.transactionId = GetTransactionId();
                     outputFail.transactionDateTime = DateTime.Now;
+                    outputFail.stackTrace = e.StackTrace;
 
                     return Request.CreateResponse(outputFail);
                 }
@@ -295,8 +332,8 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                 var content = cmd.Execute(cmd.DeserializeJson<TInput>(value.ToString()));
                 return Request.CreateResponse(content);
             }
-
             
+
         }
 
    

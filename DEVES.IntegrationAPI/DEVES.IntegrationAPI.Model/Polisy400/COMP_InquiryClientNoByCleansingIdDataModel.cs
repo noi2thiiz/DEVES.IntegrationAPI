@@ -9,8 +9,8 @@ using Newtonsoft.Json;
 namespace DEVES.IntegrationAPI.Model.Polisy400
 {
     
-        public class COMPInquiryClientNoByCleansingIdInputModel : BaseDataModel
-        {
+        public class COMPInquiryClientNoByCleansingIdInputModel : BaseEWIRequestContentModel
+    {
 
             //"topRecord":"10"
             public string topRecord { set; get; } = "5";

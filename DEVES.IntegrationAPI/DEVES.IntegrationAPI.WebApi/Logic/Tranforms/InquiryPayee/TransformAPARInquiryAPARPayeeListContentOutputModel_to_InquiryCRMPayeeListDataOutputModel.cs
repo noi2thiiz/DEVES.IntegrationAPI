@@ -45,6 +45,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                             sourceData = CommonConstant.CONST_SYSTEM_APAR,
                             cleansingId = "",
                             polisyClientId = aparPayeeList?.polisyClntnum ?? "",
+                            clientType = aparPayeeList?.clientType ?? "",
                             sapVendorCode = aparPayeeList?.vendorCode ?? "",
                             sapVendorGroupCode = aparPayeeList?.vendorGroupCode ?? "",
 

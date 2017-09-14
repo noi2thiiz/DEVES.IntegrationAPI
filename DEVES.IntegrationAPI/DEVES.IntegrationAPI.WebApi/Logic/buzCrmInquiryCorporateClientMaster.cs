@@ -113,29 +113,40 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 {
 
                     crmInqContent = (CRMInquiryClientContentOutputModel)TransformerFactory.TransformModel(retCLSInqCorpClient, crmInqContent);
-
+                    bool crmDbError = false;
                     foreach (CRMInquiryClientOutputDataModel temp in crmInqContent.data)
                     {
 
                         string crmPolisyClientId = "";
                         string crmClientId = "";
+                        
 
                         try
                         {
-                            List<string> lstCrmClientId = SearchCrmAccountClientId(retCLSInqCorpClient.data.First().cleansing_id);
-                            if (lstCrmClientId != null && lstCrmClientId.Count == 1)
+                            if (false == crmDbError) //AdHoc fix timeout: เพื่อป้องกันกรณีที่เกิด error จากฐานข้อมูล crm แล้วจะทำให้ api ช่าไปหมด
                             {
-                              
-                                temp.generalHeader.crmClientId = lstCrmClientId.First();
-                            }
+                                    List<string> lstCrmClientId =
+                                    SearchCrmAccountClientId(retCLSInqCorpClient.data.First().cleansing_id);
+                                if (lstCrmClientId != null && lstCrmClientId.Count == 1)
+                                {
 
-                          
-                           
-                            bFoundIn_APAR_or_Master = true;
+                                    temp.generalHeader.crmClientId = lstCrmClientId.First();
+                                }
+
+
+
+                                bFoundIn_APAR_or_Master = true;
+                            }
+                            else
+                            {
+                                AddDebugInfo("xrmDbError:ป้องกันกรณีที่เกิด error จากฐานข้อมูล crm แล้วจะทำให้ api ช่าไปหมด จึงข้าม crm ไปทั้งหมดเลย ");
+                            }
+                            
                         }
         
                         catch (Exception e)
                         {
+                            crmDbError = true;
                            AddDebugInfo("Error on search crmClientId", "Error: " + e.Message + "--" + e.StackTrace);
                         }
 

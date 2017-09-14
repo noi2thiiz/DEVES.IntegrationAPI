@@ -10,7 +10,7 @@ using DEVES.IntegrationAPI.Model.EWI;
 namespace DEVES.IntegrationAPI.Model.SAP
 {
     //class SAPCreateVendorModels
-    public class SAPCreateVendorInputModel : BaseDataModel
+    public class SAPCreateVendorInputModel : BaseEWIRequestContentModel
     {
            // "VCODE": "2111",
         public string VCODE { get; set; } = "";

@@ -37,7 +37,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
         }
 
   
-        public class RemoveByCleansingIdInputModel :BaseDataModel
+        public class RemoveByCleansingIdInputModel : BaseEWIRequestContentModel
         {
             public string cleansing_id { get; set; }
         }

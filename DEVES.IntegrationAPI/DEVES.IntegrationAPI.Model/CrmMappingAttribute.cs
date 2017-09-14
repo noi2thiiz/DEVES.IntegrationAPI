@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,7 +16,7 @@ namespace DEVES.IntegrationAPI.Model
         [JsonIgnore]
         public const string CONST_DATE_NULL_POLISY400 = "99999999";
         [JsonIgnore]
-        public const string CONST_DATE_NULL_CLS = "1900-01-01 00:00:00";
+        public const string CONST_DATE_NULL_CLS = ""; //1900-01-01 00:00:00
 
         [JsonIgnore]
         internal const string CONST_FORMAT_DATE_POLISY400 = "ddMMyyyy";
@@ -33,15 +34,47 @@ namespace DEVES.IntegrationAPI.Model
         }
     }
 
+    public abstract class BaseEWIRequestContentModel : BaseDataModel
+    {
+        public BaseEWIRequestContentTransactionHeaderModel transactionHeader { get; set; }
+
+    }
+
+    public class BaseEWIRequestContentTransactionHeaderModel : BaseDataModel
+    {
+        
+
+        public string requestId { get; set; }
+        public string requestDateTime { get; set; } 
+        public string system { get; set; } = "CRM";
+        public string application { get; set; } = "xrmAPI";
+        public string service { get; set; } = "";
+
+    }
+
     public class DebugInfoDataModel : BaseDataModel
     {
         
     }
-    public class DataModelDebugInfo
+    //StackTrace stackTrace = new StackTrace();
+
+    // Get calling method name
+   // Console.WriteLine(stackTrace.GetFrame(1).GetMethod().Name);
+    public class DataModelDebugInfo: BaseDataModel
     {
         public string message { get; set; }
+    
+        public string methodName { get; set; }
+        public string className { get; set; }
+        public int line { get; set; }
+       
+   
+        public string timestamp { get; set; } = DateTime.Now.ToString();
+
         public dynamic info { get; set; }
-}
+      
+
+    }
 
     public abstract class BaseContentJsonServiceOutputModel : BaseDataModel
     {

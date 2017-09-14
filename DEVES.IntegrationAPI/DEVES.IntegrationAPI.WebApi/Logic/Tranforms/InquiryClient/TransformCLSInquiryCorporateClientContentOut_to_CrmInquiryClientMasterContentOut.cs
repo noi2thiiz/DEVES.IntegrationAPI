@@ -7,6 +7,7 @@ using DEVES.IntegrationAPI.Model.InquiryClientMaster;
 using CLS = DEVES.IntegrationAPI.Model.CLS;
 using DEVES.IntegrationAPI.WebApi.Templates;
 using DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData;
+using DEVES.IntegrationAPI.WebApi.TechnicalService;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
@@ -16,6 +17,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         {
             CLS.CLSInquiryCorporateClientContentOutputModel srcContent = (CLS.CLSInquiryCorporateClientContentOutputModel)input;
             CRMInquiryClientContentOutputModel trgtContent = (CRMInquiryClientContentOutputModel)output;
+            TraceDebugLogger.Instance.AddLog("TransformCLSInquiryCorporateClientContentOut_to_CrmInquiryClientMasterContentOut", input);
 
             if (srcContent == null)
             {
@@ -46,6 +48,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     trgt.generalHeader.cleansingId = src?.cleansing_id?.Trim() ?? "";
                     trgt.generalHeader.polisyClientId = src?.clntnum?.Trim() ?? "";
                     trgt.generalHeader.sourceData = CommonConstant.CONST_SYSTEM_CLS;
+                    trgt.generalHeader.clientType = src?.clientType;
 
                     trgt.profileInfo.name1 = src?.lgivname?.Trim() ?? "";
                     trgt.profileInfo.name2 = src?.lsurname?.Trim() ?? "";
@@ -55,14 +58,19 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     trgt.profileInfo.sex = "";
                     trgt.profileInfo.salutationText = "";
 
-                    
+                    trgt.profileInfo.vipStatus = src?.cls_vip??"";
+                    trgt.profileInfo.clientStatus = src?.cltstat?.Trim().ToUpper() ?? "";
+
+
+
 
 
 
 
                     // trgt.profileInfo.sex = src.cls_sex;
                     trgt.profileInfo.idTax = src?.cls_tax_no_new?.Trim() ?? "";
-                  
+                    trgt.profileInfo.corporateBranch = src?.corporate_staff_no?.Trim() ?? "";
+
                     try
                     {
                         trgt.profileInfo.occupationText=
@@ -88,13 +96,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     var addrInfo = src?.addressListsCollection?.FirstOrDefault<Model.CLS.CLSAddressListsCollectionModel>();
                     if (addrInfo != null)
                     {
-                        trgt.addressInfo.address = string.Join(CONST_CONCAT, addrInfo.address_1
-                                                                , addrInfo.address_2
-                                                                , addrInfo.address_3
-                                                                , addrInfo.sub_district_display
-                                                                , addrInfo.district_display
-                                                                , addrInfo.province_display
-                                                                , addrInfo.postal_code);
+                        trgt.addressInfo.address = string.Join(CONST_CONCAT, addrInfo.address_1?.Trim() ?? ""
+                                                                , addrInfo.address_2?.Trim() ?? ""
+                                                                , addrInfo.address_3?.Trim() ?? ""
+                                                                , addrInfo.sub_district_display?.Trim() ?? ""
+                                                                , addrInfo.district_display?.Trim() ?? ""
+                                                                , addrInfo.province_display?.Trim() ?? ""
+                                                                , addrInfo.postal_code?.Trim() ?? "");
                         trgt.addressInfo.countryText = addrInfo?.cls_ctrycode_text?.Trim()??"";
                       
                         try
@@ -108,8 +116,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                             Console.WriteLine("104:"+e.Message);
                         }
                       
-                        trgt.addressInfo.latitude = addrInfo?.lattitude;
-                        trgt.addressInfo.longtitude = addrInfo?.longtitude;
+                        trgt.addressInfo.latitude = addrInfo?.lattitude?.Trim() ?? "";
+                        trgt.addressInfo.longitude = addrInfo?.longitude?.Trim() ?? "";
                     }
                     // trgt.AddDebugInfo("TransformCLSInquiryCorporateClientContentOut_to_CrmInquiryClientMasterContentOut", "");
                     // trgt.AddDebugInfo("Source Data", src);

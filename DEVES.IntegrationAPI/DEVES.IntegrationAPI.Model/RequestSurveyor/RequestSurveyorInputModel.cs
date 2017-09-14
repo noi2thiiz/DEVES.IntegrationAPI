@@ -12,7 +12,7 @@ namespace DEVES.IntegrationAPI.Model.RequestSurveyor
         public string incidentId { get; set; }
         public string currentUserId { get; set; }
     }
-    public class RequestSurveyorInputModel:BaseDataModel
+    public class RequestSurveyorInputModel: BaseEWIRequestContentModel
     {
         public string CaseID { get; set; }
         public string claimNotiNo { get; set; }
@@ -26,8 +26,8 @@ namespace DEVES.IntegrationAPI.Model.RequestSurveyor
         public string driverTel { get; set; }
         public string currentVehicleLicense { get; set; }
         public string currentProvince { get; set; }
-        public DateTime eventDate { get; set; }
-        public DateTime activityDate { get; set; }
+        public DateTime? eventDate { get; set; }
+        public DateTime? activityDate { get; set; }
         public string eventDetail { get; set; }
         public string isCasualty { get; set; }
         public string eventLocation { get; set; }
@@ -42,7 +42,7 @@ namespace DEVES.IntegrationAPI.Model.RequestSurveyor
         public string appointLat { get; set; }
         public string appointLong { get; set; }
         public string appointLocation { get; set; }
-        public DateTime appointDate { get; set; }
+        public DateTime? appointDate { get; set; }
         public string appointName { get; set; }
         public string appointPhone { get; set; }
         public string contractName { get; set; }

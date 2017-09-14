@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using DEVES.IntegrationAPI.Core.Helper;
 using DEVES.IntegrationAPI.Model;
 using DEVES.IntegrationAPI.Model.InquiryClientMaster;
 using DEVES.IntegrationAPI.Model.CLS;
+using DEVES.IntegrationAPI.WebApi.TechnicalService;
 using DEVES.IntegrationAPI.WebApi.Templates;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
@@ -16,18 +18,26 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             InquiryClientMasterInputModel src = (InquiryClientMasterInputModel)input;
             CLSInquiryCorporateClientInputModel trgt = (CLSInquiryCorporateClientInputModel)output;
 
-            trgt.roleCode = src?.conditionHeader?.roleCode;
-            trgt.clientId = src?.conditionDetail?.polisyClientId??"";
-            trgt.corporateFullName = src?.conditionDetail?.clientFullname??"";
-            trgt.taxNo = src?.conditionDetail?.idCard??"";
+            TraceDebugLogger.Instance.AddLog("TransformCRMInquiryCRMClientMasterInput_to_CLSInquiryCorporateClientInputModel", input);
+
+            trgt.roleCode = src?.conditionHeader?.roleCode?.Trim() ?? "";
+            trgt.clientId = src?.conditionDetail?.polisyClientId?.Trim() ?? "";
+            trgt.corporateFullName = src?.conditionDetail?.clientFullname?.Trim() ?? "";
+            trgt.taxNo = src?.conditionDetail?.idCard?.Trim() ?? "";
+            //trgt.corporateBranch = "" + src.conditionDetail.corporateBranch;
+            //trgt.taxBranch = "" + src.conditionDetail.corporateBranch;
+            trgt.corporateStaffNo = "" + src?.conditionDetail?.corporateBranch?.Trim() ?? "";
+            trgt.cleansingId      = "" + src?.conditionDetail?.cleansingId?.Trim() ?? "";
             trgt.telephone = ""; 
             trgt.emailAddress = "";
             trgt.backDay = AppConst.COMM_BACK_DAY.ToString();
             if (string.IsNullOrEmpty(trgt.corporateFullName))
             {
-                trgt.corporateFullName = src?.conditionDetail?.clientName1 + " " + src?.conditionDetail?.clientName2;
+                trgt.corporateFullName = src?.conditionDetail?.clientName1+" "+src?.conditionDetail?.clientName2;
+
             }
-            trgt.corporateFullName = trgt.corporateFullName.Trim();
+
+            trgt.corporateFullName.ReplaceMultiplSpacesWithSingleSpace();
 
             return trgt;
         }

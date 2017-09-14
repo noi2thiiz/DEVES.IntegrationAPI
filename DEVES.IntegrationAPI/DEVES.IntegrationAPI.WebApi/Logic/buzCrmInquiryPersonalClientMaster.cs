@@ -91,20 +91,32 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 // Console.WriteLine(retCLSInqPersClient.ToJson());
                 crmInqContent = (CRMInquiryClientContentOutputModel)TransformerFactory.TransformModel(retCLSInqPersClient, crmInqContent);
 
-                foreach(CRMInquiryClientOutputDataModel temp in crmInqContent.data) {
+                bool crmDbError = false;
+                foreach (CRMInquiryClientOutputDataModel temp in crmInqContent.data) {
                     AddDebugInfo("loop foreach temp in crmInqContent.data", temp);
                     string crmPolisyClientId = "";
                     string crmClientId = "";
+                    
                     try
                     {
                         if (string.IsNullOrEmpty(temp.generalHeader.crmClientId))
                         {
-                            List<string> lstCrmClientId = SpApiCustomerClient.Instance.SearchCrmContactClientId("P", temp?.generalHeader?.cleansingId);
-                            //SearchCrmContactClientId(temp?.generalHeader?.cleansingId);
-                            if (lstCrmClientId != null && lstCrmClientId.Count == 1)
+                            if (false == crmDbError
+                            ) // //AdHoc fix timeout: เพื่อป้องกันกรณีที่เกิด error จากฐานข้อมูล crm แล้วจะทำให้ api ช่าไปหมด
                             {
+                                List<string> lstCrmClientId =
+                                    SpApiCustomerClient.Instance.SearchCrmContactClientId("P",
+                                        temp?.generalHeader?.cleansingId);
+                                //SearchCrmContactClientId(temp?.generalHeader?.cleansingId);
+                                if (lstCrmClientId != null && lstCrmClientId.Count == 1)
+                                {
 
-                                temp.generalHeader.crmClientId = lstCrmClientId.First();
+                                    temp.generalHeader.crmClientId = lstCrmClientId.First();
+                                }
+                            }
+                            else
+                            {
+                                AddDebugInfo("xrmDbError:ป้องกันกรณีที่เกิด error จากฐานข้อมูล crm แล้วจะทำให้ api ช่าไปหมด จึงข้าม crm ไปทั้งหมดเลย ");
                             }
                         }
                        
@@ -113,7 +125,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
                     catch (Exception e)
                     {
-                       
+                        crmDbError = true;
                         AddDebugInfo("Error on search crmClientId", "Error: "+e.Message+"--"+e.StackTrace);
                     }
 

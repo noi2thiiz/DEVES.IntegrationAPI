@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace DEVES.IntegrationAPI.Model.CLS
 {
-    public class CLSCreatePersonalClientInputModel : BaseDataModel
+    public class CLSCreatePersonalClientInputModel : BaseEWIRequestContentModel
     {
       
         //roleCode String	5	M G : General Client
@@ -153,7 +153,7 @@ namespace DEVES.IntegrationAPI.Model.CLS
         //"idDriving": "348347232",
         public string idDriving { get; set; }
         //"birthDate": "2017-07-02",
-        public DateTime birthDate { get; set; }
+        public DateTime? birthDate { get; set; }
         //"natioanality": "764",
         public string natioanality { get; set; }
         //"language": "T",

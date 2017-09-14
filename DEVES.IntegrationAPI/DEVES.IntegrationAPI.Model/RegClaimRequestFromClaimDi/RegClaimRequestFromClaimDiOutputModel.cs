@@ -13,7 +13,7 @@ namespace DEVES.IntegrationAPI.Model.RegClaimRequestFromClaimDi
         public string message { get; set; }
         public string description { get; set; }
         public string transactionId { get; set; }
-        public DateTime transactionDateTime { get; set; }
+        public DateTime? transactionDateTime { get; set; }
         public RegClaimRequestFromClaimDiDataOutputModel data { get; set; }
     }
 

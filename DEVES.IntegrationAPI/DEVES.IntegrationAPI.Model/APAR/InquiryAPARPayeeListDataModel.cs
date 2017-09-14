@@ -8,7 +8,7 @@ using DEVES.IntegrationAPI.Model.EWI;
 
 namespace DEVES.IntegrationAPI.Model.APAR
 {
-    public class InquiryAPARPayeeListInputModel : BaseDataModel
+    public class InquiryAPARPayeeListInputModel : BaseEWIRequestContentModel
     {
         public string polisyClntnum { get; set; } = "";
         public string vendorCode { get; set; } = "";
@@ -17,8 +17,7 @@ namespace DEVES.IntegrationAPI.Model.APAR
         public string taxBranchCode { get; set; } = "";
         public string clientType { get; set; } = "";
         public string requester { get; set; } = "";
-
-
+        public string cleansingId { get; set; } = "";
     }
 
     public class InquiryAPARPayeeOutputModel : BaseEWIResponseModel
@@ -58,6 +57,7 @@ namespace DEVES.IntegrationAPI.Model.APAR
         public string polisyClntnum { get; set; }
         public string faxNo { get; set; }
         public string fullName { get; set; }
-
+        public string clientType { get; set; }
+        
     }
 }

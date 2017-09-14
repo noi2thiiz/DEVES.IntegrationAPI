@@ -48,8 +48,9 @@
     <Reference Include="Microsoft.Xrm.Sdk">
       <HintPath>..\..\..\DEVES.IntegrationAPI5\DEVES.IntegrationAPI\SDK\Bin\Microsoft.Xrm.Sdk.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DEVES.IntegrationAPI.WebApi\bin\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Net.Http" />
@@ -74,8 +75,16 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Controllers\BaseControllersTests.cs" />
+    <Compile Include="Controllers\claim-service\ClaimRegistrationControllerTests.cs" />
+    <Compile Include="Controllers\claim-service\UpdateClaimInfoControllerTests.cs" />
+    <Compile Include="Controllers\claim-service\UpdateClaimNoControllerTests.cs" />
     <Compile Include="Controllers\CRMInquiryClientMasterControllerTests.cs" />
     <Compile Include="Controllers\InquiryCRMPayeeListControllerTests.cs" />
+    <Compile Include="Controllers\isurvey-service\AccidentPrilimSurveyorReportControllerTests.cs" />
+    <Compile Include="Controllers\isurvey-service\AssignedSurveyorControllerTests.cs" />
+    <Compile Include="Controllers\isurvey-service\RequestSurveyorControllerTests.cs" />
+    <Compile Include="Controllers\isurvey-service\UpdateSurveyStatusControllerTests.cs" />
     <Compile Include="Controllers\RegClientPersonalControllerTests.cs" />
     <Compile Include="Controllers\RequestCleansingIdControllerTests.cs" />
     <Compile Include="Controllers\SendSMSControllerTests.cs" />

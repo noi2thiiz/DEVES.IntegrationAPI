@@ -51,6 +51,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 trgt.vipStatus = src.profileInfo.vipStatus ?? "";
 
             }
+
             if (src.contactInfo != null)
             {
                 trgt.telephone1 = src.contactInfo.telephone1 ?? "";
@@ -65,7 +66,6 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 trgt.emailAddress = src.contactInfo.emailAddress ?? "";
                 trgt.lineID = src.contactInfo.lineID ?? "";
                 trgt.facebook = src.contactInfo.facebook ?? "";
-
 
             }
 

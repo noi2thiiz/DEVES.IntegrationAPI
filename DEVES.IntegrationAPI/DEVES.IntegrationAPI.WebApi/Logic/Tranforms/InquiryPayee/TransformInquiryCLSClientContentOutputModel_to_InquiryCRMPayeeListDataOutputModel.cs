@@ -32,12 +32,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 {
 
                     sourceData = CommonConstant.CONST_SYSTEM_CLS,
-                    cleansingId = clsData.cleansing_id,
-                    polisyClientId = clsData.clntnum,
+                    cleansingId = clsData.cleansing_id?.Trim() ?? "",
+                    clientType = clsData.clientType,
+                    polisyClientId = clsData.clntnum?.Trim() ?? "",
                     sapVendorCode = "",
-                    fullName = clsData.cls_full_name,
-                    taxNo = clsData.cls_fax,
-                    taxBranchCode = "",
+                    fullName = clsData.cls_full_name?.Trim() ?? "",
+                    taxNo = clsData.cls_fax?.Trim() ?? "",
+                    taxBranchCode = clsData.corporate_staff_no?.Trim() ?? "",
+                   
                     emcsMemHeadId = "",
                     emcsMemId = ""
 

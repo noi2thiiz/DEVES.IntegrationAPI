@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -17,6 +18,7 @@ using DEVES.IntegrationAPI.Model.CLS;
 using DEVES.IntegrationAPI.Model.EWI;
 using DEVES.IntegrationAPI.WebApi.Core.DataAdepter;
 using DEVES.IntegrationAPI.WebApi.TechnicalService;
+using DEVES.IntegrationAPI.WebApi.TechnicalService.Envelonment;
 using DEVES.IntegrationAPI.WebApi.TechnicalService.TransactionLogger;
 using DEVES.IntegrationAPI.WebApi.Templates;
 using DEVES.IntegrationAPI.WebApi.Templates.Exceptions;
@@ -41,7 +43,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
         // variables after this line will be contained in LOG
         protected HttpClient client = new HttpClient();
 
-        protected const string appName = "xrmAPI"; // Application
+        protected string appName = "xrmAPI"; // Application
+
+        protected string siteName = ""; // Application
+        protected string physicalPath = ""; // Application
+
         protected string serviceName = "";
         protected string systemName = "";
         protected string serviceEndpoint = "";
@@ -65,12 +71,36 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
         protected DateTime resTime = new DateTime(); // ResponseTimestamp
 
         protected string GlobalTransactionID = "";
+        private string TransactionID { get; set; }
         protected string ControllerName = "";
+
+        public void AddDebugInfo(string message, dynamic info,
+            [System.Runtime.CompilerServices.CallerMemberName] string memberName = "",
+            [System.Runtime.CompilerServices.CallerFilePath] string sourceFilePath = "",
+            [System.Runtime.CompilerServices.CallerLineNumber] int sourceLineNumber = 0)
+        {
+           // StackTrace stackTrace = new StackTrace();
+            TraceDebugLogger.Instance.AddDebugLogInfo(GlobalTransactionID, message, info, memberName, sourceFilePath, sourceLineNumber);
+            // debugInfo.AddDebugInfo(message, info);
+        }
+        public void AddDebugInfo(string message,
+            [System.Runtime.CompilerServices.CallerMemberName] string memberName = "",
+            [System.Runtime.CompilerServices.CallerFilePath] string sourceFilePath = "",
+            [System.Runtime.CompilerServices.CallerLineNumber] int sourceLineNumber = 0)
+        {
+           // StackTrace stackTrace = new StackTrace();
+            TraceDebugLogger.Instance.AddDebugLogInfo(GlobalTransactionID, message, message,  memberName, sourceFilePath, sourceLineNumber);
+            // debugInfo.AddDebugInfo(message, message);
+        }
 
         public BaseEwiServiceProxy(string globalTransactionID, string controllerName="")
         {
             SetGlobalTransactionID(globalTransactionID);
             SetControllerName(controllerName);
+            appName = AppEnvironment.Instance.GetApplicationName();
+            siteName = AppEnvironment.Instance.GetSiteName();
+            physicalPath = AppEnvironment.Instance.GetPhysicalPath();
+            
         }
 
         public void SetGlobalTransactionID(string id)
@@ -83,8 +113,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
             ControllerName = ctrlName;
         }
 
-        public RESTClientResult SendRequest(BaseDataModel JSON, string endpoint)
+        public RESTClientResult SendRequest(BaseEWIRequestContentModel JSON, string endpoint)
         {
+            TransactionID = GetTransactionId();
+            AddDebugInfo("SendRequest:" + serviceName, JSON);
             System.Diagnostics.Stopwatch timer = new Stopwatch();
             timer.Start();
             resTime = DateTime.Now;
@@ -92,6 +124,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
             var sv = endpoint.Split('/');
 
             serviceName = sv[sv.Length - 1];
+            JSON.transactionHeader = new BaseEWIRequestContentTransactionHeaderModel();
+            JSON.transactionHeader.requestDateTime = DateTime.Now.ToString(AppConst.TRANSACTION_DATE_TIME_CUSTOM_FORMAT, new CultureInfo("en-US"));
+            JSON.transactionHeader.requestId = TransactionID;
+            JSON.transactionHeader.application = appName;
+            JSON.transactionHeader.service = ControllerName;
+          
             EWIRequest reqModel = new EWIRequest()
             {
                 //user & password must be switch to get from calling k.Ton's API rather than fixed values.
@@ -151,7 +189,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
                 // Console.WriteLine(resBody);
 
 
-
+                AddDebugInfo("SendRequest Success:" , response);
                 LogRequest(request, response, timeTaken);
 
                 result.Content = ewiRes.Result;
@@ -171,14 +209,21 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
                 var responseContent = JObject.Parse(ewiRes.Result);
                 if (responseContent["responseCode"] != null)
                 {
-                    if (responseContent["responseCode"].ToString() != "EWI-0000I" && responseContent["responseCode"].ToString() != "EWI-1000E")
+                    if (responseContent["responseCode"].ToString() != "EWI-0000I")
                     {
-                        throw new BuzErrorException(
+                        if(responseContent["responseCode"].ToString() == "EWI-1000E")
+                        {
+
+                        }
+                        else
+                        {
+                            throw new BuzErrorException(
                             responseContent["responseCode"].ToString(),
                             $"{systemName} Error:{responseContent["responseMessage"]}",
                             $"Error on execute '{serviceName}'",
                             systemName,
                             GlobalTransactionID);
+                        }
                     }
 
 
@@ -198,10 +243,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
             }
             catch (BuzErrorException e)
             {
+                AddDebugInfo("SendRequest BuzErrorException:" + e.Message, e.StackTrace);
                 throw;
             }
             catch (Exception e)
             {
+                AddDebugInfo("SendRequest Exception:" + e.Message, e.StackTrace);
                 LogRequest(request);
 
                 throw new BuzErrorException(
@@ -262,12 +309,14 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
                 var apiLogEntry = new ApiLogEntry
                 {
                     Application = appName,
-                    TransactionID = GetTransactionId(req),
+                    TransactionID = TransactionID??GetTransactionId(req),
                     GlobalTransactionID = GlobalTransactionID,
                     Controller = ControllerName,
                     ServiceName = serviceName,
                     Activity = "consume",
                     User = user,
+                    SiteName = siteName,
+                    PhysicalPath = physicalPath,
                     Machine = machineName,
                     RequestIpAddress = ip,
                     RequestContentType = req.Headers.Accept.ToString(),/*reqHeader*/
@@ -285,7 +334,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
                     ResponseTimestamp = resTime,
                    
                     ResponseTime = responseTime,
-                    ResponseTimeTotalMilliseconds= responseTimeTotalMilliseconds
+                    ResponseTimeTotalMilliseconds= responseTimeTotalMilliseconds,
+                    Remark = "used BaseEwiServiceProxy"
 
 
 
@@ -333,11 +383,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
                 var apiLogEntry = new ApiLogEntry
                 {
                     Application = appName,
-                    TransactionID = GetTransactionId(req),
-                    Controller = "",
+                    TransactionID = TransactionID??GetTransactionId(req),
+                    Controller = ControllerName,
                     ServiceName = serviceName,
                     Activity = "consume:Send request",
                     User = user,
+                    SiteName = siteName,
+                    PhysicalPath = physicalPath,
                     Machine = machineName,
                     RequestIpAddress = ip,
                     RequestContentType = client.DefaultRequestHeaders?.Accept.ToString(),
@@ -350,7 +402,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
                     RequestHeaders = reqHeader,
                     RequestTimestamp = reqTime,
 
-                    ResponseTimestamp = resTime
+                    ResponseTimestamp = resTime,
+                    Remark = "used BaseEwiServiceProxy"
 
                 };
                 InMemoryLogData.Instance.AddLogEntry(apiLogEntry);

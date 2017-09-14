@@ -21,6 +21,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             trgt.taxNo = src.taxNo ?? "";
             trgt.taxBranchCode  =  src.taxBranchCode ?? "";
             trgt.emcsCode = src.emcsCode ?? "";
+            trgt.cleansingId = "" + src.cleansingId?.Trim() ?? "";
 
             return trgt;
         }

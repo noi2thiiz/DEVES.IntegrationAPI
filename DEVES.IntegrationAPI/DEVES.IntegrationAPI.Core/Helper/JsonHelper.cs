@@ -77,6 +77,7 @@ namespace DEVES.IntegrationAPI.Core.Helper
                     hostscreen = string.Empty,
                     content = null
                 };
+               
                 _log.ErrorFormat("ErrorCode: {0} {1} ErrorDescription: {2}", output.responseCode, Environment.NewLine, output.responseMessage);
                 return false;
             }

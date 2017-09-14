@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DEVES.IntegrationAPI.Model.SMS
 {
-    public class SendSMSInputModel : BaseDataModel
+    public class SendSMSInputModel : BaseEWIRequestContentModel
     {
         /// <summary>
         ///  ข้อความที่ต้องการส่ง.

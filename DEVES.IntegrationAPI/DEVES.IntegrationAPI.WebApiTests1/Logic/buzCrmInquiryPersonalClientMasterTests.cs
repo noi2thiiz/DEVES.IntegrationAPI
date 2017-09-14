@@ -21,7 +21,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
         {
            
 
-            var cmd = new buzCrmInquiryPersonalClientMaster();
+            var cmd = new buzCrmInquiryClientMaster();
             var result = cmd.Execute(new InquiryClientMasterInputModel
             {
                 conditionHeader = new ConditionHeaderModel

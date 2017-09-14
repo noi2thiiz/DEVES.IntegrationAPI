@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 
 namespace DEVES.IntegrationAPI.Model.CLS
 {
-    public class CLSCreateCorporateClientInputModel : BaseDataModel
+    public class CLSCreateCorporateClientInputModel : BaseEWIRequestContentModel
     {
        
         // "cleansingId": "",
