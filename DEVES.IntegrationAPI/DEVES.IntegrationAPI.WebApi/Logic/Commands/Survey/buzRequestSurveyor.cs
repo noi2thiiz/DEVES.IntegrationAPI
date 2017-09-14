@@ -12,6 +12,7 @@ using System.Net.Http.Headers;
 using DEVES.IntegrationAPI.WebApi.Logic.Services;
 using DEVES.IntegrationAPI.WebApi.Controllers;
 using DEVES.IntegrationAPI.Model.QuerySQL;
+using DEVES.IntegrationAPI.WebApi.Templates.Exceptions;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {

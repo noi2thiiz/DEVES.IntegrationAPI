@@ -436,6 +436,8 @@
     <Compile Include="Controllers\claim-service\UpdateClaimNoController.cs" />
     <Compile Include="Controllers\claim-service\UpdateCompliantStatusController.cs" />
     <Compile Include="Controllers\isurvey-service\UpdateSurveyStatusController.cs" />
+    <Compile Include="Controllers\StrategySQLController.cs" />
+    <Compile Include="Logic\Commands\Internal\buzQuerySQL.cs" />
     <Compile Include="Logic\DataAccessService\DataAdapter\DataReaderBase.cs" />
     <Compile Include="Logic\DataAccessService\DataAdapter\DbRequest.cs" />
     <Compile Include="Logic\DataAccessService\DataAdapter\DbResult.cs" />
@@ -491,6 +493,10 @@
     <Compile Include="Logic\CommonConstant.cs" />
     <Compile Include="Logic\Converter\MasterDataConvertor.cs" />
     <Compile Include="Logic\Converter\OptionSetConvertor.cs" />
+    <Compile Include="Logic\DataAccessService\QuerySQLAdapter\QuerySQLInternal.cs" />
+    <Compile Include="Logic\DataAccessService\QuerySQLAdapter\QuerySQLOnline.cs" />
+    <Compile Include="Logic\DataAccessService\QuerySQLAdapter\QuerySQLStretagy.cs" />
+    <Compile Include="Logic\DataAccessService\QuerySQLAdapter\SQLQueryManager.cs" />
     <Compile Include="Logic\DataBaseContracts\BaseDataBaseContracts.cs" />
     <Compile Include="Logic\DataBaseContracts\SpApiChkCustomerClient.cs" />
     <Compile Include="Logic\DataBaseContracts\SpApiCustomerClient.cs" />
