@@ -17,7 +17,15 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
     {
   
         [TestMethod()]
-        public JToken Post_CreateRegClientCorporate_Create_GeneralClient_Test()
+        public void Post_CreateRegClientCorporate_Create_GeneralClient_Test()
+        {
+
+            CreateGeneralClientCorporate();
+
+
+        }
+
+        public JToken CreateGeneralClientCorporate()
         {
 
             // Arrange
@@ -26,65 +34,62 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
             controller.Configuration = new HttpConfiguration();
 
             // Act
-            var personalName = "ทดสอบ" + RandomValueGenerator.RandomString(10);
-            var personalSurname = "ทดสอบ" + RandomValueGenerator.RandomString(10);
+            var corporateName1 = "ทดสอบ" + RandomValueGenerator.RandomString(10);
+            var corporateName2 = "ทดสอบ" + RandomValueGenerator.RandomString(10);
 
-            string input = String.Format(@"
-            {{
-                'generalHeader':  
-                {{
-                    'roleCode': 'G',
-                    'cleansingId': '',
-                    'polisyClientId': '',
-                    'crmClientId': '',
-                    'clientAdditionalExistFlag': 'N'
-                }},'profileInfo': {{
-                    'salutation': '0002',
-                    'personalName': '{0}',
-                    'personalSurname' : '{1}' ,
-                    'sex' : 'M',
-                    'idCitizen' :'{2}',
-                    'idPassport' : '',
-                    'idAlien' : '',
-                    'idDriving': '',
-                    'birthDate' :'',
-                    'nationality' : '',
-                    'language' : '{3}',
-                    'married' : '{4}',
-                    'occupation' : '',
-                    'riskLevel' : '',
-                    'vipStatus' : '{5}',
-                    'remark' : ' test post'
-                }},'contactInfo':{{
-                    'telephone1' : '',
-                    'telephone1Ext' :'',
-                    'telephone2' : '',
-                    'telephone2Ext' :'',
-                    'telephone3' : '',
-                    'telephone3Ext' : '',
-                    'mobilePhone' : '',
-                    'fax' : '',
-                    'emailAddress' :'',
-                    'lineID' : '',
-                    'facebook' : ''
-                }},'addressInfo':{{
-                    'address1' : '',
-                    'address2' : '',
-                    'address3' : '',
-                    'subDistrictCode' : '',
-                    'districtCode' : '',
-                    'provinceCode' : '',
-                    'postalCode' :'',
-                    'country' : '',
-                    'addressType' : '',
-                    'latitude' : '',
-                    'longtitude' : ''
-                }}
-             }}", personalName,
-                personalSurname,
+            string input = String.Format(@"{{
+                          'addressHeader': {{
+                            'address1': '84/3 หมู่ 2',
+                            'address2': 'ถ.ปู่เจ้าสมิงพราย',
+                            'address3': '',
+                            'subDistrictCode': '110407',
+                            'districtCode': '1104',
+                            'provinceCode': '11',
+                            'postalCode': '10130',
+                            'country': '00220',
+                            'addressType': '03',
+                            'latitude': '',
+                            'longitude': ''
+                          }},
+                          'generalHeader': {{
+                            'roleCode': 'G',
+                            'cleansingId': '',
+                            'polisyClientId': '',
+                            'crmClientId': '',
+                            'clientAdditionalExistFlag': 'N',
+                            'assessorFlag': 'N',
+                            'solicitorFlag': 'N',
+                            'repairerFlag': 'N',
+                            'hospitalFlag': 'N'
+                          }},
+                          'profileHeader': {{
+                            'corporateName1': '{0}',
+                            'corporateName2': '{1}',
+                            'contactPerson': '',
+                            'idRegCorp': '{2}',
+                            'idTax': '{2}',
+                            'dateInCorporate': '',
+                            'corporateBranch': '0000',
+                            'econActivity': '',
+                            'countryOrigin': '00203',
+                            'language': '{3}',
+                            'riskLevel': '{4}',
+                            'vipStatus': '{5}'
+                          }},
+                          'asrhHeader': {{
+                            'assessorOregNum': '',
+                            'assessorTerminateDate': '',
+                            'solicitorOregNum': '',
+                            'solicitorTerminateDate': '',
+                            'repairerOregNum': '',
+                            'repairerTerminateDate': ''
+                          }}
+                        }}",
+                corporateName1,
+                corporateName2,
                 RandomValueGenerator.RandomNumber(13),
                 RandomValueGenerator.RandomOptions(new[] { "E", "T" }),
-                RandomValueGenerator.RandomOptions(new[] { "M", "W" }),
+                RandomValueGenerator.RandomOptions(new[] { "", "R1" }),
                 RandomValueGenerator.RandomOptions(new[] { "Y", "N" }));
 
             //Assert
@@ -102,8 +107,210 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
             var outputData = outputJson["data"][0];
             Assert.AreEqual(false, string.IsNullOrEmpty(outputData["polisyClientId"]?.ToString()));
             Assert.AreEqual(false, string.IsNullOrEmpty(outputData["cleansingId"]?.ToString()));
-            Assert.AreEqual(personalName, outputData["personalName"]?.ToString());
-            Assert.AreEqual(personalSurname, outputData["personalSurname"]?.ToString());
+            Assert.AreEqual(corporateName1, outputData["corporateName1"]?.ToString());
+            Assert.AreEqual(corporateName2, outputData["corporateName2"]?.ToString());
+
+
+            return outputData;
+
+        }
+        [TestMethod()]
+        public void Post_CreateRegClientCorporate_Create_GeneralClient_NotCreatePolisyClient_Test()
+        {
+
+            CreateGeneralClientCorporate_NotCreatePolisyClient();
+
+
+        }
+        [TestMethod()]
+        public void Post_CreateRegClientCorporate_Create_GeneralClient_NotCreateCrmClient_Test()
+        {
+
+            CreateGeneralClientCorporate_NotCreateCrmClient();
+
+
+        }
+
+
+        public JToken CreateGeneralClientCorporate_NotCreatePolisyClient()
+        {
+
+            // Arrange
+            var controller = new RegClientCorporateController();
+            controller.Request = new HttpRequestMessage();
+            controller.Configuration = new HttpConfiguration();
+
+            // Act
+            var corporateName1 = "ทดสอบ" + RandomValueGenerator.RandomString(10);
+            var corporateName2 = "ทดสอบ" + RandomValueGenerator.RandomString(10);
+
+            string input = String.Format(@"{{
+                          'addressHeader': {{
+                            'address1': '84/3 หมู่ 2',
+                            'address2': 'ถ.ปู่เจ้าสมิงพราย',
+                            'address3': '',
+                            'subDistrictCode': '110407',
+                            'districtCode': '1104',
+                            'provinceCode': '11',
+                            'postalCode': '10130',
+                            'country': '00220',
+                            'addressType': '03',
+                            'latitude': '',
+                            'longitude': ''
+                          }},
+                          'generalHeader': {{
+                            'roleCode': 'G',
+                            'cleansingId': '',
+                            'polisyClientId': '',
+                            'crmClientId': '',
+                            'clientAdditionalExistFlag': 'N',
+                            'assessorFlag': 'N',
+                            'solicitorFlag': 'N',
+                            'repairerFlag': 'N',
+                            'hospitalFlag': 'N',
+                            'notCreatePolisyClientFlag':'Y'
+                          }},
+                          'profileHeader': {{
+                            'corporateName1': '{0}',
+                            'corporateName2': '{1}',
+                            'contactPerson': '',
+                            'idRegCorp': '{2}',
+                            'idTax': '{2}',
+                            'dateInCorporate': '',
+                            'corporateBranch': '0000',
+                            'econActivity': '',
+                            'countryOrigin': '00203',
+                            'language': '{3}',
+                            'riskLevel': '{4}',
+                            'vipStatus': '{5}'
+                          }},
+                          'asrhHeader': {{
+                            'assessorOregNum': '',
+                            'assessorTerminateDate': '',
+                            'solicitorOregNum': '',
+                            'solicitorTerminateDate': '',
+                            'repairerOregNum': '',
+                            'repairerTerminateDate': ''
+                          }}
+                        }}",
+                corporateName1,
+                corporateName2,
+                RandomValueGenerator.RandomNumber(13),
+                RandomValueGenerator.RandomOptions(new[] { "E", "T" }),
+                RandomValueGenerator.RandomOptions(new[] { "", "R1", "R2" }),
+                RandomValueGenerator.RandomOptions(new[] { "Y", "N" }));
+
+            //Assert
+            var response = (HttpResponseMessage)controller.Post(JObject.Parse(input));
+            Console.WriteLine("==============output==================");
+            var output = response?.Content?.ReadAsStringAsync();
+            Assert.IsNotNull(output?.Result);
+            Console.WriteLine(output?.Result);
+            var outputJson = JObject.Parse(output?.Result);
+            Assert.AreEqual("200", outputJson["code"]?.ToString());
+            Assert.AreEqual(false, string.IsNullOrEmpty(outputJson["transactionId"]?.ToString()));
+            Assert.AreEqual(false, string.IsNullOrEmpty(outputJson["transactionDateTime"]?.ToString()));
+            Assert.AreEqual(false, string.IsNullOrEmpty(outputJson["message"]?.ToString()));
+
+
+            var outputData = outputJson["data"][0];
+            Assert.AreEqual(true, string.IsNullOrEmpty(outputData["polisyClientId"]?.ToString()), "ต้องไม่สร้าง polisyClientId");
+            Assert.AreEqual(false, string.IsNullOrEmpty(outputData["cleansingId"]?.ToString()));
+            Assert.AreEqual(corporateName1, outputData["corporateName1"]?.ToString());
+            Assert.AreEqual(corporateName2, outputData["corporateName2"]?.ToString());
+
+
+            return outputData;
+
+
+        }
+
+        public JToken CreateGeneralClientCorporate_NotCreateCrmClient()
+        {
+
+            // Arrange
+            var controller = new RegClientCorporateController();
+            controller.Request = new HttpRequestMessage();
+            controller.Configuration = new HttpConfiguration();
+
+            // Act
+            var corporateName1 = "ทดสอบ" + RandomValueGenerator.RandomString(10);
+            var corporateName2 = "ทดสอบ" + RandomValueGenerator.RandomString(10);
+
+            string input = String.Format(@"{{
+                          'addressHeader': {{
+                            'address1': '84/3 หมู่ 2',
+                            'address2': 'ถ.ปู่เจ้าสมิงพราย',
+                            'address3': '',
+                            'subDistrictCode': '110407',
+                            'districtCode': '1104',
+                            'provinceCode': '11',
+                            'postalCode': '10130',
+                            'country': '00220',
+                            'addressType': '03',
+                            'latitude': '',
+                            'longitude': ''
+                          }},
+                          'generalHeader': {{
+                            'roleCode': 'G',
+                            'cleansingId': '',
+                            'polisyClientId': '',
+                            'crmClientId': '',
+                            'clientAdditionalExistFlag': 'N',
+                            'assessorFlag': 'N',
+                            'solicitorFlag': 'N',
+                            'repairerFlag': 'N',
+                            'hospitalFlag': 'N',
+                            'notCreateCrmClientFlag':'Y'
+                          }},
+                          'profileHeader': {{
+                            'corporateName1': '{0}',
+                            'corporateName2': '{1}',
+                            'contactPerson': '',
+                            'idRegCorp': '{2}',
+                            'idTax': '{2}',
+                            'dateInCorporate': '',
+                            'corporateBranch': '0000',
+                            'econActivity': '',
+                            'countryOrigin': '00203',
+                            'language': '{3}',
+                            'riskLevel': '{4}',
+                            'vipStatus': '{5}'
+                          }},
+                          'asrhHeader': {{
+                            'assessorOregNum': '',
+                            'assessorTerminateDate': '',
+                            'solicitorOregNum': '',
+                            'solicitorTerminateDate': '',
+                            'repairerOregNum': '',
+                            'repairerTerminateDate': ''
+                          }}
+                        }}",
+                corporateName1,
+                corporateName2,
+                RandomValueGenerator.RandomNumber(13),
+                RandomValueGenerator.RandomOptions(new[] { "E", "T" }),
+                RandomValueGenerator.RandomOptions(new[] { "", "R1", "R2" }),
+                RandomValueGenerator.RandomOptions(new[] { "Y", "N" }));
+
+            //Assert
+            var response = (HttpResponseMessage)controller.Post(JObject.Parse(input));
+            Console.WriteLine("==============output==================");
+            var output = response?.Content?.ReadAsStringAsync();
+            Assert.IsNotNull(output?.Result);
+            Console.WriteLine(output?.Result);
+            var outputJson = JObject.Parse(output?.Result);
+            Assert.AreEqual("200", outputJson["code"]?.ToString());
+            Assert.AreEqual(false, string.IsNullOrEmpty(outputJson["transactionId"]?.ToString()));
+            Assert.AreEqual(false, string.IsNullOrEmpty(outputJson["transactionDateTime"]?.ToString()));
+            Assert.AreEqual(false, string.IsNullOrEmpty(outputJson["message"]?.ToString()));
+
+            var outputData = outputJson["data"][0];
+            Assert.AreEqual(false, string.IsNullOrEmpty(outputData["polisyClientId"]?.ToString()));
+            Assert.AreEqual(false, string.IsNullOrEmpty(outputData["cleansingId"]?.ToString()));
+            Assert.AreEqual(true, string.IsNullOrEmpty(outputData["crmClientId"]?.ToString()), "ต้องไม่สร้าง crmClientId");
+            Assert.AreEqual(corporateName1, outputData["corporateName1"]?.ToString());
+            Assert.AreEqual(corporateName2, outputData["corporateName2"]?.ToString());
 
 
             return outputData;

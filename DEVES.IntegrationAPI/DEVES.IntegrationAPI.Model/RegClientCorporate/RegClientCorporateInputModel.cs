@@ -31,6 +31,8 @@ namespace DEVES.IntegrationAPI.Model.RegClientCorporate
         public string repairerFlag { get; set; }
         public string hospitalFlag { get; set; }
         public string notCreatePolisyClientFlag { get; set; } = "N";
+        public string notCreateCrmClientFlag { get; set; } = "N";
+        
     }
 
 

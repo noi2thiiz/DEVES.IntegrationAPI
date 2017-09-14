@@ -609,6 +609,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Commands.Client
         private string CreateClientInCrm(RegClientCorporateInputModel regClientCorporateInput, string cleansingId,
             string polisyClientId)
         {
+            if ("Y" == regClientCorporateInput?.generalHeader?.notCreateCrmClientFlag)
+            {
+                return null;
+            }
             if (string.IsNullOrEmpty(cleansingId))
             {
                 return null;
