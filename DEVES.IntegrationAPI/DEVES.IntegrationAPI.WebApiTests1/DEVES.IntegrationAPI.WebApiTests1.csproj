@@ -82,6 +82,7 @@
     <Compile Include="Controllers\claim-service\UpdateClaimNoControllerTests.cs" />
     <Compile Include="Controllers\client-service\CRMInquiryClientMasterControllerTests.cs" />
     <Compile Include="Controllers\client-service\InquiryCRMPayeeListControllerTests.cs" />
+    <Compile Include="Controllers\client-service\RegClientCorporateControllerTests.cs" />
     <Compile Include="Controllers\client-service\RegClientPersonalControllerTests.cs" />
     <Compile Include="Controllers\client-service\RegPayeeCorporateControllerTests.cs" />
     <Compile Include="Controllers\client-service\RegPayeePersonalControllerTests.cs" />

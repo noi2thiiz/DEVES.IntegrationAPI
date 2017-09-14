@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DEVES.IntegrationAPI.Core.Util;
+using DEVES.IntegrationAPI.WebApi.Logic.Services.Tests;
 using Newtonsoft.Json.Linq;
 
 namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
@@ -364,6 +365,753 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
 
         }
 
+
+        [TestMethod()]
+        [Priority(1)]
+        public void Post_RegPayeeCorporate_CG01_Test_Test()
+        {
+            /*Description
+              * สร้างใหม่ทั้งหมด
+              *Input
+              * roleCode = G	
+              * cleansingId=null=null	
+              * polisyClientId=null	
+              * crmClientId=null
+              * 
+              *Expected API Action
+              * ต้องยิงไปที่
+                - CLS_CreatePersonalClient
+                - CLIENT_CreatePersonalClientAndAdditionalInfo
+                - SAP_InquiryVendor
+                - SAP_CreateVendor
+                - และสร้างข้อมูลใน CRM
+
+              * ต้องเกิดข้อมูลใหม่ที่
+              *  <<Cleansing>>
+              *  <<Polisy400>>
+              *  <<SAP>>
+              *  <<CRM>>
+              */
+
+
+            /*
+             * Expected Output 
+             {"data":[{"cleansingId":"C2017-100002646","polisyClientId":"16973078","crmClientId":"201709-0000591","personalName":"ทดสอบC59PM01F4U","personalSurname":"ทดสอบ1DXVY5VYKR"}],"code":"200","message":"Success","description":"","transactionId":"00-600913150406827-0000000","transactionDateTime":"2017-09-13T15:04:24.9765239+07"}
+             */
+            var corporateName1 = "ทดสอบ" + RandomValueGenerator.RandomString(10);
+            var corporateName2 = "ทดสอบ" + RandomValueGenerator.RandomString(10);
+            var idTax = "" + RandomValueGenerator.RandomNumber(13);
+            string jsonInput = String.Format(@"{{
+                                  'addressHeader': {{
+                                    'address1': '84/3 หมู่ 2',
+                                    'address2': 'ถ.ปู่เจ้าสมิงพราย',
+                                    'address3': '',
+                                    'subDistrictCode': '110407',
+                                    'districtCode': '1104',
+                                    'provinceCode': '11',
+                                    'postalCode': '10130',
+                                    'country': '00220',
+                                    'addressType': '03',
+                                    'latitude': '',
+                                    'longitude': ''
+                                  }},
+                                  'generalHeader': {{
+                                    'roleCode': 'G',
+                                    'cleansingId': '',
+                                    'polisyClientId': '',
+                                    'crmClientId': '',
+                                    'clientAdditionalExistFlag': 'N',
+                                    'assessorFlag': 'N',
+                                    'solicitorFlag': 'N',
+                                    'repairerFlag': 'N',
+                                    'hospitalFlag': 'N'
+                                  }},
+                                  'profileHeader': {{
+                                    'corporateName1': '{0}',
+                                    'corporateName2': '{1}',
+                                    'contactPerson': '',
+                                    'idRegCorp': '{2}',
+                                    'idTax': '{2}',
+                                    'dateInCorporate': '',
+                                    'corporateBranch': '0000',
+                                    'econActivity': '',
+                                    'countryOrigin': '00203',
+                                    'language': '{3}',
+                                    'riskLevel': '{4}',
+                                    'vipStatus': '{5}'
+                                  }},
+                                  'asrhHeader': {{
+                                    'assessorOregNum': '',
+                                    'assessorTerminateDate': '',
+                                    'solicitorOregNum': '',
+                                    'solicitorTerminateDate': '',
+                                    'repairerOregNum': '',
+                                    'repairerTerminateDate': ''
+                                  }}
+                                }}", 
+                                corporateName1,
+                                corporateName2, 
+                                idTax,
+                                 RandomValueGenerator.RandomOptions(new[] { "E", "T" }),
+                                 RandomValueGenerator.RandomOptions(new[] { "","R1", "R2" }),
+                                 RandomValueGenerator.RandomOptions(new[] { "Y", "N" }));
+
+
+
+            // ระบุ Controller ที่ต้องการทดสอบ และ Method ที่ต้องการทดสอบ ในตัวอย่างนี้ต้องการ  ทดสอบ Method  Post  
+            var response = ExcecuteControllers<RegPayeeCorporateController>(jsonInput, "Post");
+            Console.WriteLine("==============output==================");
+            Assert.IsNotNull(response?.Result);
+            Console.WriteLine(response?.Result);
+
+            //แปลง string เป็น JObject
+            var outputJson = JObject.Parse(response?.Result);
+
+            // Assert Return code 200
+            Assert.AreEqual("200", outputJson["code"]?.ToString());
+
+            // ตรวจสอบค่าอื่นๆ 
+            Assert.IsNotNull(outputJson["data"][0], " data should not null");
+            Assert.IsFalse(string.IsNullOrEmpty(outputJson["data"][0]["cleansingId"]?.ToString()), " cleansingId should not null");
+            Assert.IsFalse(string.IsNullOrEmpty(outputJson["data"][0]["polisyClientId"]?.ToString()), " polisyClientId should not null");
+            Assert.IsFalse(string.IsNullOrEmpty(outputJson["data"][0]["crmClientId"]?.ToString()), " crmClientId should not null");
+            Assert.IsFalse(string.IsNullOrEmpty(outputJson["data"][0]["sapVendorCode"]?.ToString()), " sapVendorCode should not null");
+            Assert.IsFalse(string.IsNullOrEmpty(outputJson["data"][0]["sapVendorCode"]?.ToString()), " sapVendorCode should not null");
+            Assert.IsFalse(string.IsNullOrEmpty(outputJson["data"][0]["sapVendorGroupCode"]?.ToString()), " sapVendorGroupCode should not null");
+
+            Assert.AreEqual(corporateName1, outputJson["data"][0]["corporateName1"]?.ToString(), " personalName should Equal input");
+            Assert.AreEqual(corporateName2, outputJson["data"][0]["corporateName2"]?.ToString(), " personalSurname should Equal input");
+
+        }
+
+        [TestMethod()]
+        [Priority(2)]
+        public void Post_RegPayeeCorporate_CG02_Test_Test()
+        {
+            /*Description
+              * สร้างใหม่ทั้งหมด
+              *Input
+              * roleCode = G	
+              * cleansingId=null=null	
+              * polisyClientId=no tnull	
+              * crmClientId=null
+              * 
+              *Expected API Action
+              * ต้องยิงไปที่
+                - CLS_CreatePersonalClient
+                - CLIENT_CreatePersonalClientAndAdditionalInfo
+                - SAP_InquiryVendor
+                - SAP_CreateVendor
+                - และสร้างข้อมูลใน CRM
+
+              * ต้องเกิดข้อมูลใหม่ที่
+              *  <<Cleansing>>
+              *  <<Polisy400>>
+              *  <<SAP>>
+              *  <<CRM>>
+              */
+
+
+            /*
+             * Expected Output 
+             {"data":[{"cleansingId":"C2017-100002646","polisyClientId":"16973078","crmClientId":"201709-0000591","personalName":"ทดสอบC59PM01F4U","personalSurname":"ทดสอบ1DXVY5VYKR"}],"code":"200","message":"Success","description":"","transactionId":"00-600913150406827-0000000","transactionDateTime":"2017-09-13T15:04:24.9765239+07"}
+             */
+
+            //cretae polisy client id
+            var ctl = new CLIENTCreateCorporateClientAndAdditionalInfoTests();
+            string polisyClientId = ctl.Execute_CLIENTCreateCorporateClientAndAdditionalInfoTest();
+           
+
+
+            var corporateName1 = "ทดสอบ" + RandomValueGenerator.RandomString(10);
+            var corporateName2 = "ทดสอบ" + RandomValueGenerator.RandomString(10);
+            var idTax = "" + RandomValueGenerator.RandomNumber(13);
+            string jsonInput = String.Format(@"{{
+                                  'addressHeader': {{
+                                    'address1': '84/3 หมู่ 2',
+                                    'address2': 'ถ.ปู่เจ้าสมิงพราย',
+                                    'address3': '',
+                                    'subDistrictCode': '110407',
+                                    'districtCode': '1104',
+                                    'provinceCode': '11',
+                                    'postalCode': '10130',
+                                    'country': '00220',
+                                    'addressType': '03',
+                                    'latitude': '',
+                                    'longitude': ''
+                                  }},
+                                  'generalHeader': {{
+                                    'roleCode': 'G',
+                                    'cleansingId': '',
+                                    'polisyClientId': '{6}',
+                                    'crmClientId': '',
+                                    'clientAdditionalExistFlag': 'N',
+                                    'assessorFlag': 'N',
+                                    'solicitorFlag': 'N',
+                                    'repairerFlag': 'N',
+                                    'hospitalFlag': 'N'
+                                  }},
+                                  'profileHeader': {{
+                                    'corporateName1': '{0}',
+                                    'corporateName2': '{1}',
+                                    'contactPerson': '',
+                                    'idRegCorp': '{2}',
+                                    'idTax': '{2}',
+                                    'dateInCorporate': '',
+                                    'corporateBranch': '0000',
+                                    'econActivity': '',
+                                    'countryOrigin': '00203',
+                                    'language': '{3}',
+                                    'riskLevel': '{4}',
+                                    'vipStatus': '{5}'
+                                  }},
+                                  'asrhHeader': {{
+                                    'assessorOregNum': '',
+                                    'assessorTerminateDate': '',
+                                    'solicitorOregNum': '',
+                                    'solicitorTerminateDate': '',
+                                    'repairerOregNum': '',
+                                    'repairerTerminateDate': ''
+                                  }}
+                                }}",
+                                corporateName1,
+                                corporateName2,
+                                idTax,
+                                 RandomValueGenerator.RandomOptions(new[] { "E", "T" }),
+                                 RandomValueGenerator.RandomOptions(new[] { "", "R1", "R2" }),
+                                 RandomValueGenerator.RandomOptions(new[] { "Y", "N" }),
+                                  polisyClientId
+
+                                 );
+
+
+
+            // ระบุ Controller ที่ต้องการทดสอบ และ Method ที่ต้องการทดสอบ ในตัวอย่างนี้ต้องการ  ทดสอบ Method  Post  
+            var response = ExcecuteControllers<RegPayeeCorporateController>(jsonInput, "Post");
+            Console.WriteLine("==============output==================");
+            Assert.IsNotNull(response?.Result);
+            Console.WriteLine(response?.Result);
+
+            //แปลง string เป็น JObject
+            var outputJson = JObject.Parse(response?.Result);
+
+            // Assert Return code 200
+            Assert.AreEqual("200", outputJson["code"]?.ToString());
+
+            // ตรวจสอบค่าอื่นๆ 
+            Assert.IsNotNull(outputJson["data"][0], " data should not null");
+            Assert.IsFalse(string.IsNullOrEmpty(outputJson["data"][0]["cleansingId"]?.ToString()), " cleansingId should not null");
+            Assert.IsFalse(string.IsNullOrEmpty(outputJson["data"][0]["polisyClientId"]?.ToString()), " polisyClientId should not null");
+            Assert.IsFalse(string.IsNullOrEmpty(outputJson["data"][0]["crmClientId"]?.ToString()), " crmClientId should not null");
+            Assert.IsFalse(string.IsNullOrEmpty(outputJson["data"][0]["sapVendorCode"]?.ToString()), " sapVendorCode should not null");
+            Assert.IsFalse(string.IsNullOrEmpty(outputJson["data"][0]["sapVendorCode"]?.ToString()), " sapVendorCode should not null");
+            Assert.IsFalse(string.IsNullOrEmpty(outputJson["data"][0]["sapVendorGroupCode"]?.ToString()), " sapVendorGroupCode should not null");
+
+            Assert.AreEqual(corporateName1, outputJson["data"][0]["corporateName1"]?.ToString(), " personalName should Equal input");
+            Assert.AreEqual(corporateName2, outputJson["data"][0]["corporateName2"]?.ToString(), " personalSurname should Equal input");
+
+        }
+
+        [TestMethod()]
+        [Priority(3)]
+        public void Post_RegPayeeCorporate_CG03_Test_Test()
+        {
+            /*Description
+              * ข้อมูลที่มีแต่ใน <<CLS>>
+              *Input
+              * roleCode = G	
+              * cleansingId=null=not null	
+              * polisyClientId=null	
+              * crmClientId=null
+              * 
+              *Expected API Action
+              * ต้องยิงไปที่
+                 - CLIENT_CreatePersonalClientAndAdditionalInfo
+                 - SAP_InquiryVendor
+                 - SAP_CreateVendor
+                 - และสร้างข้อมูลใน CRM
+
+              * ต้องเกิดข้อมูลใหม่ที่
+              *  <<Polisy400>>
+              *  <<SAP>>
+              *  <<CRM>>
+              */
+
+
+            /*
+             * Expected Output 
+             * cleansingId = api input นอกนั้งสร้างใหม่
+             {"data":[{"cleansingId":"C2017-100002646","polisyClientId":"16973078","crmClientId":"201709-0000591","personalName":"ทดสอบC59PM01F4U","personalSurname":"ทดสอบ1DXVY5VYKR"}],"code":"200","message":"Success","description":"","transactionId":"00-600913150406827-0000000","transactionDateTime":"2017-09-13T15:04:24.9765239+07"}
+             */
+
+            //cretae cleansingId
+            var ctl = new CLSCreateCorporateClientTests();
+            string cleansingId = ctl.Execute_CLSCreateGeneralCorporateClientTest();
+
+
+            //Test
+            var corporateName1 = "ทดสอบ" + RandomValueGenerator.RandomString(10);
+            var corporateName2 = "ทดสอบ" + RandomValueGenerator.RandomString(10);
+            var idTax = "" + RandomValueGenerator.RandomNumber(13);
+            string jsonInput = String.Format(@"{{
+                                  'addressHeader': {{
+                                    'address1': '84/3 หมู่ 2',
+                                    'address2': 'ถ.ปู่เจ้าสมิงพราย',
+                                    'address3': '',
+                                    'subDistrictCode': '110407',
+                                    'districtCode': '1104',
+                                    'provinceCode': '11',
+                                    'postalCode': '10130',
+                                    'country': '00220',
+                                    'addressType': '03',
+                                    'latitude': '',
+                                    'longitude': ''
+                                  }},
+                                  'generalHeader': {{
+                                    'roleCode': 'G',
+                                    'cleansingId': '{6}',
+                                    'polisyClientId': '',
+                                    'crmClientId': '',
+                                    'clientAdditionalExistFlag': 'N',
+                                    'assessorFlag': 'N',
+                                    'solicitorFlag': 'N',
+                                    'repairerFlag': 'N',
+                                    'hospitalFlag': 'N'
+                                  }},
+                                  'profileHeader': {{
+                                    'corporateName1': '{0}',
+                                    'corporateName2': '{1}',
+                                    'contactPerson': '',
+                                    'idRegCorp': '{2}',
+                                    'idTax': '{2}',
+                                    'dateInCorporate': '',
+                                    'corporateBranch': '0000',
+                                    'econActivity': '',
+                                    'countryOrigin': '00203',
+                                    'language': '{3}',
+                                    'riskLevel': '{4}',
+                                    'vipStatus': '{5}'
+                                  }},
+                                  'asrhHeader': {{
+                                    'assessorOregNum': '',
+                                    'assessorTerminateDate': '',
+                                    'solicitorOregNum': '',
+                                    'solicitorTerminateDate': '',
+                                    'repairerOregNum': '',
+                                    'repairerTerminateDate': ''
+                                  }}
+                                }}",
+                                corporateName1,
+                                corporateName2,
+                                idTax,
+                                 RandomValueGenerator.RandomOptions(new[] { "E", "T" }),
+                                 RandomValueGenerator.RandomOptions(new[] { "", "R1", "R2" }),
+                                 RandomValueGenerator.RandomOptions(new[] { "Y", "N" }),
+                                 cleansingId
+
+                                 );
+
+
+
+            // ระบุ Controller ที่ต้องการทดสอบ และ Method ที่ต้องการทดสอบ ในตัวอย่างนี้ต้องการ  ทดสอบ Method  Post  
+            var response = ExcecuteControllers<RegPayeeCorporateController>(jsonInput, "Post");
+            Console.WriteLine("==============output==================");
+            Assert.IsNotNull(response?.Result);
+            Console.WriteLine(response?.Result);
+
+            //แปลง string เป็น JObject
+            var outputJson = JObject.Parse(response?.Result);
+
+            // Assert Return code 200
+            Assert.AreEqual("200", outputJson["code"]?.ToString());
+
+            // ตรวจสอบค่าอื่นๆ 
+            Assert.IsNotNull(outputJson["data"][0], " data should not null");
+            Assert.IsFalse(string.IsNullOrEmpty(outputJson["data"][0]["cleansingId"]?.ToString()), " cleansingId should not null");
+            Assert.IsFalse(string.IsNullOrEmpty(outputJson["data"][0]["polisyClientId"]?.ToString()), " polisyClientId should not null");
+            Assert.IsFalse(string.IsNullOrEmpty(outputJson["data"][0]["crmClientId"]?.ToString()), " crmClientId should not null");
+            Assert.IsFalse(string.IsNullOrEmpty(outputJson["data"][0]["sapVendorCode"]?.ToString()), " sapVendorCode should not null");
+            Assert.IsFalse(string.IsNullOrEmpty(outputJson["data"][0]["sapVendorCode"]?.ToString()), " sapVendorCode should not null");
+            Assert.IsFalse(string.IsNullOrEmpty(outputJson["data"][0]["sapVendorGroupCode"]?.ToString()), " sapVendorGroupCode should not null");
+
+            Assert.AreEqual(corporateName1, outputJson["data"][0]["corporateName1"]?.ToString(), " personalName should Equal input");
+            Assert.AreEqual(corporateName2, outputJson["data"][0]["corporateName2"]?.ToString(), " personalSurname should Equal input");
+
+        }
+
+        [TestMethod()]
+        [Priority(4)]
+        public void Post_RegPayeeCorporate_CG04_Test_Test()
+        {
+            /*Description
+              * ข้อมูลที่มีแต่ใน <<CLS>> และ <<CRM>>
+              *Input
+              * roleCode = G	
+              * cleansingId=not null	
+              * polisyClientId=null	
+              * crmClientId=not null
+              * 
+              *Expected API Action
+              * ต้องยิงไปที่
+                  - CLIENT_CreatePersonalClientAndAdditionalInfo
+                  - SAP_InquiryVendor
+                  - SAP_CreateVendor
+
+              * ต้องเกิดข้อมูลใหม่ที่
+              *  <<Polisy400>>
+              *  <<SAP>>
+              */
+
+
+            /*
+             * Expected Output 
+             * cleansingId = api input นอกนั้งสร้างใหม่
+             {"data":[{"cleansingId":"C2017-100002646","polisyClientId":"16973078","crmClientId":"201709-0000591","personalName":"ทดสอบC59PM01F4U","personalSurname":"ทดสอบ1DXVY5VYKR"}],"code":"200","message":"Success","description":"","transactionId":"00-600913150406827-0000000","transactionDateTime":"2017-09-13T15:04:24.9765239+07"}
+             */
+
+            //cretae cleansingId
+            var ctl = new CLSCreateCorporateClientTests();
+            string cleansingId = ctl.Execute_CLSCreateGeneralCorporateClientTest();
+
+
+            //Test
+            var corporateName1 = "ทดสอบ" + RandomValueGenerator.RandomString(10);
+            var corporateName2 = "ทดสอบ" + RandomValueGenerator.RandomString(10);
+            var idTax = "" + RandomValueGenerator.RandomNumber(13);
+            string jsonInput = String.Format(@"{{
+                                  'addressHeader': {{
+                                    'address1': '84/3 หมู่ 2',
+                                    'address2': 'ถ.ปู่เจ้าสมิงพราย',
+                                    'address3': '',
+                                    'subDistrictCode': '110407',
+                                    'districtCode': '1104',
+                                    'provinceCode': '11',
+                                    'postalCode': '10130',
+                                    'country': '00220',
+                                    'addressType': '03',
+                                    'latitude': '',
+                                    'longitude': ''
+                                  }},
+                                  'generalHeader': {{
+                                    'roleCode': 'G',
+                                    'cleansingId': '{6}',
+                                    'polisyClientId': '',
+                                    'crmClientId': '',
+                                    'clientAdditionalExistFlag': 'N',
+                                    'assessorFlag': 'N',
+                                    'solicitorFlag': 'N',
+                                    'repairerFlag': 'N',
+                                    'hospitalFlag': 'N'
+                                  }},
+                                  'profileHeader': {{
+                                    'corporateName1': '{0}',
+                                    'corporateName2': '{1}',
+                                    'contactPerson': '',
+                                    'idRegCorp': '{2}',
+                                    'idTax': '{2}',
+                                    'dateInCorporate': '',
+                                    'corporateBranch': '0000',
+                                    'econActivity': '',
+                                    'countryOrigin': '00203',
+                                    'language': '{3}',
+                                    'riskLevel': '{4}',
+                                    'vipStatus': '{5}'
+                                  }},
+                                  'asrhHeader': {{
+                                    'assessorOregNum': '',
+                                    'assessorTerminateDate': '',
+                                    'solicitorOregNum': '',
+                                    'solicitorTerminateDate': '',
+                                    'repairerOregNum': '',
+                                    'repairerTerminateDate': ''
+                                  }}
+                                }}",
+                                corporateName1,
+                                corporateName2,
+                                idTax,
+                                 RandomValueGenerator.RandomOptions(new[] { "E", "T" }),
+                                 RandomValueGenerator.RandomOptions(new[] { "", "R1", "R2" }),
+                                 RandomValueGenerator.RandomOptions(new[] { "Y", "N" }),
+                                 cleansingId
+
+                                 );
+
+
+
+            // ระบุ Controller ที่ต้องการทดสอบ และ Method ที่ต้องการทดสอบ ในตัวอย่างนี้ต้องการ  ทดสอบ Method  Post  
+            var response = ExcecuteControllers<RegPayeeCorporateController>(jsonInput, "Post");
+            Console.WriteLine("==============output==================");
+            Assert.IsNotNull(response?.Result);
+            Console.WriteLine(response?.Result);
+
+            //แปลง string เป็น JObject
+            var outputJson = JObject.Parse(response?.Result);
+
+            // Assert Return code 200
+            Assert.AreEqual("200", outputJson["code"]?.ToString());
+
+            // ตรวจสอบค่าอื่นๆ 
+            Assert.IsNotNull(outputJson["data"][0], " data should not null");
+            Assert.IsFalse(string.IsNullOrEmpty(outputJson["data"][0]["cleansingId"]?.ToString()), " cleansingId should not null");
+            Assert.IsFalse(string.IsNullOrEmpty(outputJson["data"][0]["polisyClientId"]?.ToString()), " polisyClientId should not null");
+            Assert.IsFalse(string.IsNullOrEmpty(outputJson["data"][0]["crmClientId"]?.ToString()), " crmClientId should not null");
+            Assert.IsFalse(string.IsNullOrEmpty(outputJson["data"][0]["sapVendorCode"]?.ToString()), " sapVendorCode should not null");
+            Assert.IsFalse(string.IsNullOrEmpty(outputJson["data"][0]["sapVendorCode"]?.ToString()), " sapVendorCode should not null");
+            Assert.IsFalse(string.IsNullOrEmpty(outputJson["data"][0]["sapVendorGroupCode"]?.ToString()), " sapVendorGroupCode should not null");
+
+            Assert.AreEqual(corporateName1, outputJson["data"][0]["corporateName1"]?.ToString(), " personalName should Equal input");
+            Assert.AreEqual(corporateName2, outputJson["data"][0]["corporateName2"]?.ToString(), " personalSurname should Equal input");
+
+        }
+
+        [TestMethod()]
+        [Priority(5)]
+        public void Post_RegPayeeCorporate_CG05_Test_Test()
+        {
+            /*Description
+              * ข้อมูลที่มีแต่ใน <<CLS>> และ <<POLISY400>>
+              *Input
+              * roleCode = G	
+              * cleansingId=null=not null	
+              * polisyClientId  =not null	
+              * crmClientId     =null
+              * 
+              *Expected API Action
+              * ต้องยิงไปที่
+                   - SAP_InquiryVendor
+                   - SAP_CreateVendor
+                   - และสร้างข้อมูลใน CRM
+
+              * ต้องเกิดข้อมูลใหม่ที่
+              *  <<SAP>>
+              *  <<CRM>>
+              */
+
+
+            /*
+             * Expected Output 
+             * cleansingId = api input นอกนั้งสร้างใหม่
+             {"data":[{"cleansingId":"C2017-100002646","polisyClientId":"16973078","crmClientId":"201709-0000591","personalName":"ทดสอบC59PM01F4U","personalSurname":"ทดสอบ1DXVY5VYKR"}],"code":"200","message":"Success","description":"","transactionId":"00-600913150406827-0000000","transactionDateTime":"2017-09-13T15:04:24.9765239+07"}
+             */
+
+            //cretae cleansingId
+            var ctl = new CLSCreateCorporateClientTests();
+            string cleansingId = ctl.Execute_CLSCreateGeneralCorporateClientTest();
+
+
+            //Test
+            var corporateName1 = "ทดสอบ" + RandomValueGenerator.RandomString(10);
+            var corporateName2 = "ทดสอบ" + RandomValueGenerator.RandomString(10);
+            var idTax = "" + RandomValueGenerator.RandomNumber(13);
+            string jsonInput = String.Format(@"{{
+                                  'addressHeader': {{
+                                    'address1': '84/3 หมู่ 2',
+                                    'address2': 'ถ.ปู่เจ้าสมิงพราย',
+                                    'address3': '',
+                                    'subDistrictCode': '110407',
+                                    'districtCode': '1104',
+                                    'provinceCode': '11',
+                                    'postalCode': '10130',
+                                    'country': '00220',
+                                    'addressType': '03',
+                                    'latitude': '',
+                                    'longitude': ''
+                                  }},
+                                  'generalHeader': {{
+                                    'roleCode': 'G',
+                                    'cleansingId': '{6}',
+                                    'polisyClientId': '',
+                                    'crmClientId': '',
+                                    'clientAdditionalExistFlag': 'N',
+                                    'assessorFlag': 'N',
+                                    'solicitorFlag': 'N',
+                                    'repairerFlag': 'N',
+                                    'hospitalFlag': 'N'
+                                  }},
+                                  'profileHeader': {{
+                                    'corporateName1': '{0}',
+                                    'corporateName2': '{1}',
+                                    'contactPerson': '',
+                                    'idRegCorp': '{2}',
+                                    'idTax': '{2}',
+                                    'dateInCorporate': '',
+                                    'corporateBranch': '0000',
+                                    'econActivity': '',
+                                    'countryOrigin': '00203',
+                                    'language': '{3}',
+                                    'riskLevel': '{4}',
+                                    'vipStatus': '{5}'
+                                  }},
+                                  'asrhHeader': {{
+                                    'assessorOregNum': '',
+                                    'assessorTerminateDate': '',
+                                    'solicitorOregNum': '',
+                                    'solicitorTerminateDate': '',
+                                    'repairerOregNum': '',
+                                    'repairerTerminateDate': ''
+                                  }}
+                                }}",
+                                corporateName1,
+                                corporateName2,
+                                idTax,
+                                 RandomValueGenerator.RandomOptions(new[] { "E", "T" }),
+                                 RandomValueGenerator.RandomOptions(new[] { "", "R1", "R2" }),
+                                 RandomValueGenerator.RandomOptions(new[] { "Y", "N" }),
+                                 cleansingId
+
+                                 );
+
+
+
+            // ระบุ Controller ที่ต้องการทดสอบ และ Method ที่ต้องการทดสอบ ในตัวอย่างนี้ต้องการ  ทดสอบ Method  Post  
+            var response = ExcecuteControllers<RegPayeeCorporateController>(jsonInput, "Post");
+            Console.WriteLine("==============output==================");
+            Assert.IsNotNull(response?.Result);
+            Console.WriteLine(response?.Result);
+
+            //แปลง string เป็น JObject
+            var outputJson = JObject.Parse(response?.Result);
+
+            // Assert Return code 200
+            Assert.AreEqual("200", outputJson["code"]?.ToString());
+
+            // ตรวจสอบค่าอื่นๆ 
+            Assert.IsNotNull(outputJson["data"][0], " data should not null");
+            Assert.IsFalse(string.IsNullOrEmpty(outputJson["data"][0]["cleansingId"]?.ToString()), " cleansingId should not null");
+            Assert.IsFalse(string.IsNullOrEmpty(outputJson["data"][0]["polisyClientId"]?.ToString()), " polisyClientId should not null");
+            Assert.IsFalse(string.IsNullOrEmpty(outputJson["data"][0]["crmClientId"]?.ToString()), " crmClientId should not null");
+            Assert.IsFalse(string.IsNullOrEmpty(outputJson["data"][0]["sapVendorCode"]?.ToString()), " sapVendorCode should not null");
+            Assert.IsFalse(string.IsNullOrEmpty(outputJson["data"][0]["sapVendorCode"]?.ToString()), " sapVendorCode should not null");
+            Assert.IsFalse(string.IsNullOrEmpty(outputJson["data"][0]["sapVendorGroupCode"]?.ToString()), " sapVendorGroupCode should not null");
+
+            Assert.AreEqual(corporateName1, outputJson["data"][0]["corporateName1"]?.ToString(), " personalName should Equal input");
+            Assert.AreEqual(corporateName2, outputJson["data"][0]["corporateName2"]?.ToString(), " personalSurname should Equal input");
+
+        }
+
+
+        [TestMethod()]
+        [Priority(6)]
+        public void Post_RegPayeeCorporate_CG06_Test_Test()
+        {
+            /*Description
+              * ข้อมูลที่มีใน <<CLS>> และ <<POLISY400>> และ <<CRM>> ทั้งหมดแล้ว
+              *Input
+              * roleCode = G	
+              * cleansingId=null=not null	
+              * polisyClientId  =not null	
+              * crmClientId     =not null
+              * 
+              *Expected API Action
+              * ต้องยิงไปที่
+                   - SAP_InquiryVendor
+                   - SAP_CreateVendor
+
+              * ต้องเกิดข้อมูลใหม่ที่
+              *  <<SAP>>
+              */
+
+
+            /*
+             * Expected Output 
+             * cleansingId = api input นอกนั้งสร้างใหม่
+             {"data":[{"cleansingId":"C2017-100002646","polisyClientId":"16973078","crmClientId":"201709-0000591","personalName":"ทดสอบC59PM01F4U","personalSurname":"ทดสอบ1DXVY5VYKR"}],"code":"200","message":"Success","description":"","transactionId":"00-600913150406827-0000000","transactionDateTime":"2017-09-13T15:04:24.9765239+07"}
+             */
+
+            //cretae cleansingId
+            var ctl = new CLSCreateCorporateClientTests();
+            string cleansingId = ctl.Execute_CLSCreateGeneralCorporateClientTest();
+
+
+            //Test
+            var corporateName1 = "ทดสอบ" + RandomValueGenerator.RandomString(10);
+            var corporateName2 = "ทดสอบ" + RandomValueGenerator.RandomString(10);
+            var idTax = "" + RandomValueGenerator.RandomNumber(13);
+            string jsonInput = String.Format(@"{{
+                                  'addressHeader': {{
+                                    'address1': '84/3 หมู่ 2',
+                                    'address2': 'ถ.ปู่เจ้าสมิงพราย',
+                                    'address3': '',
+                                    'subDistrictCode': '110407',
+                                    'districtCode': '1104',
+                                    'provinceCode': '11',
+                                    'postalCode': '10130',
+                                    'country': '00220',
+                                    'addressType': '03',
+                                    'latitude': '',
+                                    'longitude': ''
+                                  }},
+                                  'generalHeader': {{
+                                    'roleCode': 'G',
+                                    'cleansingId': '{6}',
+                                    'polisyClientId': '',
+                                    'crmClientId': '',
+                                    'clientAdditionalExistFlag': 'N',
+                                    'assessorFlag': 'N',
+                                    'solicitorFlag': 'N',
+                                    'repairerFlag': 'N',
+                                    'hospitalFlag': 'N'
+                                  }},
+                                  'profileHeader': {{
+                                    'corporateName1': '{0}',
+                                    'corporateName2': '{1}',
+                                    'contactPerson': '',
+                                    'idRegCorp': '{2}',
+                                    'idTax': '{2}',
+                                    'dateInCorporate': '',
+                                    'corporateBranch': '0000',
+                                    'econActivity': '',
+                                    'countryOrigin': '00203',
+                                    'language': '{3}',
+                                    'riskLevel': '{4}',
+                                    'vipStatus': '{5}'
+                                  }},
+                                  'asrhHeader': {{
+                                    'assessorOregNum': '',
+                                    'assessorTerminateDate': '',
+                                    'solicitorOregNum': '',
+                                    'solicitorTerminateDate': '',
+                                    'repairerOregNum': '',
+                                    'repairerTerminateDate': ''
+                                  }}
+                                }}",
+                                corporateName1,
+                                corporateName2,
+                                idTax,
+                                 RandomValueGenerator.RandomOptions(new[] { "E", "T" }),
+                                 RandomValueGenerator.RandomOptions(new[] { "", "R1", "R2" }),
+                                 RandomValueGenerator.RandomOptions(new[] { "Y", "N" }),
+                                 cleansingId
+
+                                 );
+
+
+
+            // ระบุ Controller ที่ต้องการทดสอบ และ Method ที่ต้องการทดสอบ ในตัวอย่างนี้ต้องการ  ทดสอบ Method  Post  
+            var response = ExcecuteControllers<RegPayeeCorporateController>(jsonInput, "Post");
+            Console.WriteLine("==============output==================");
+            Assert.IsNotNull(response?.Result);
+            Console.WriteLine(response?.Result);
+
+            //แปลง string เป็น JObject
+            var outputJson = JObject.Parse(response?.Result);
+
+            // Assert Return code 200
+            Assert.AreEqual("200", outputJson["code"]?.ToString());
+
+            // ตรวจสอบค่าอื่นๆ 
+            Assert.IsNotNull(outputJson["data"][0], " data should not null");
+            Assert.IsFalse(string.IsNullOrEmpty(outputJson["data"][0]["cleansingId"]?.ToString()), " cleansingId should not null");
+            Assert.IsFalse(string.IsNullOrEmpty(outputJson["data"][0]["polisyClientId"]?.ToString()), " polisyClientId should not null");
+            Assert.IsFalse(string.IsNullOrEmpty(outputJson["data"][0]["crmClientId"]?.ToString()), " crmClientId should not null");
+            Assert.IsFalse(string.IsNullOrEmpty(outputJson["data"][0]["sapVendorCode"]?.ToString()), " sapVendorCode should not null");
+            Assert.IsFalse(string.IsNullOrEmpty(outputJson["data"][0]["sapVendorCode"]?.ToString()), " sapVendorCode should not null");
+            Assert.IsFalse(string.IsNullOrEmpty(outputJson["data"][0]["sapVendorGroupCode"]?.ToString()), " sapVendorGroupCode should not null");
+
+            Assert.AreEqual(corporateName1, outputJson["data"][0]["corporateName1"]?.ToString(), " personalName should Equal input");
+            Assert.AreEqual(corporateName2, outputJson["data"][0]["corporateName2"]?.ToString(), " personalSurname should Equal input");
+
+        }
     }
 
 

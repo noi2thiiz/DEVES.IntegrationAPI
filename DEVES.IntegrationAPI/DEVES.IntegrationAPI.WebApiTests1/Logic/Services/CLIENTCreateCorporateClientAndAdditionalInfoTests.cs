@@ -14,7 +14,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services.Tests
     public class CLIENTCreateCorporateClientAndAdditionalInfoTests
     {
         [TestMethod()]
-        public void Execute_CLIENTCreateCorporateClientAndAdditionalInfoTest()
+        public string Execute_CLIENTCreateCorporateClientAndAdditionalInfoTest()
         {
             var service = new CLIENTCreateCorporateClientAndAdditionalInfoService("");
             var result = service.Execute(new CLIENTCreateCorporateClientAndAdditionalInfoInputModel
@@ -77,6 +77,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services.Tests
             Console.WriteLine(result.ToJson());
 
             Assert.AreEqual(false, string.IsNullOrEmpty(result.clientID), "clientID should not null");
+
+            return result.clientID;
         }
     }
 }
