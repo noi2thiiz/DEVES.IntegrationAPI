@@ -160,35 +160,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Commands.Client
             TranFormInput();
 
 
-            //case PG-02
-            // เคสนี้เป็นข้อมูลลูกค้าที่ถูกสร้างตรงๆ ที่<<Polisy400>> ซึ่งข้อมูลนี้จะมีเลข CleansingId ในวันต่อมา 
-            // และแค่มีเลข polisyClientId ก็ตอบโจทย์ของ Locus ในการเปิดเคลม
-            // ในอนาคตหากจะต้องสร้าง เลข CleansingId ในเคสนี้ ต้องมาคุย Flow กันอีกที
-            if (string.IsNullOrEmpty(RegClientCorporateInput?.generalHeader?.cleansingId) &&
-                !string.IsNullOrEmpty(RegClientCorporateInput?.generalHeader?.polisyClientId))
-            {
-                throw new BuzErrorException(
-                    "400",
-                    "The Service cannot process case:  'cleansingId' null and 'polisyClientId' not null",
-                    "",
-                    "CRM",
-                    TransactionId);
-            }
-
-
-            //PG-05
-            //เหตุการณ์นี้ไม่ควรส่งมาเพราะ มี Process การ Inquiry อยู่
-            //(north)คิดว่าควรจะ error ตั้งแต่ Cleansing แล้ว เพราะมีข้อมูล dup อยู่ใน cls
-            if (!string.IsNullOrEmpty(RegClientCorporateInput?.generalHeader?.cleansingId) &&
-                !string.IsNullOrEmpty(RegClientCorporateInput?.generalHeader?.polisyClientId))
-            {
-                throw new BuzErrorException(
-                    "400",
-                    "The Service cannot process case:  'cleansingId' not null and 'polisyClientId' not null",
-                    "",
-                    "CRM",
-                    TransactionId);
-            }
+            
 
 
             if (!IsASRHValid(RegClientCorporateInput))
@@ -212,14 +184,44 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Commands.Client
             {
                 //ไม่ต้องไปสร้างใน 400 
                 PolisyClientId = RegClientCorporateInput?.generalHeader?.polisyClientId;
-                RegClientCorporateInput.generalHeader.notCreatePolisyClientFlag = "Y";
+                //RegClientCorporateInput.generalHeader.notCreatePolisyClientFlag = "Y";
             }
 
             if (RegClientCorporateInput?.generalHeader?.roleCode == "G")
             {
                 AddDebugInfo("roleCode = G");
 
-               // return CreateCorporateAsrhAndG(regClientCorporateInput);
+                //case PG-02
+                // เคสนี้เป็นข้อมูลลูกค้าที่ถูกสร้างตรงๆ ที่<<Polisy400>> ซึ่งข้อมูลนี้จะมีเลข CleansingId ในวันต่อมา 
+                // และแค่มีเลข polisyClientId ก็ตอบโจทย์ของ Locus ในการเปิดเคลม
+                // ในอนาคตหากจะต้องสร้าง เลข CleansingId ในเคสนี้ ต้องมาคุย Flow กันอีกที
+                if (string.IsNullOrEmpty(RegClientCorporateInput?.generalHeader?.cleansingId) &&
+                    !string.IsNullOrEmpty(RegClientCorporateInput?.generalHeader?.polisyClientId))
+                {
+                    throw new BuzErrorException(
+                        "400",
+                        "The Service cannot process case:  'cleansingId' null and 'polisyClientId' not null",
+                        "",
+                        "CRM",
+                        TransactionId);
+                }
+
+
+                //PG-05
+                //เหตุการณ์นี้ไม่ควรส่งมาเพราะ มี Process การ Inquiry อยู่
+                //(north)คิดว่าควรจะ error ตั้งแต่ Cleansing แล้ว เพราะมีข้อมูล dup อยู่ใน cls
+                if (!string.IsNullOrEmpty(RegClientCorporateInput?.generalHeader?.cleansingId) &&
+                    !string.IsNullOrEmpty(RegClientCorporateInput?.generalHeader?.polisyClientId))
+                {
+                    throw new BuzErrorException(
+                        "400",
+                        "The Service cannot process case:  'cleansingId' not null and 'polisyClientId' not null",
+                        "",
+                        "CRM",
+                        TransactionId);
+                }
+
+                // return CreateCorporateAsrhAndG(regClientCorporateInput);
                 return CreateGeneralCorporate(RegClientCorporateInput);
             }
             else
@@ -447,30 +449,44 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Commands.Client
         /// <returns></returns>
         protected BaseDataModel CreateAsrhCorporate(RegClientCorporateInputModel input)
         {
-            //parameter.cleansingId does not contain data
-            // กรณีที่ไม่มีเลข polisyClientId แสดงว่าต้องการสร้าง client แต่ก่อนสร้างต้องไปสร้าง cleansing ก่อนเพื่อเอาเลข cleansingId
-            // ในกรณีที่มีการสร้างเลข cleansingId ขึ้นมาใหม่ หากเกิด error  ต้องลบออกด้วย
-            if (string.IsNullOrEmpty(RegClientCorporateInput?.generalHeader?.cleansingId)
-                && string.IsNullOrEmpty(RegClientCorporateInput?.generalHeader?.polisyClientId))
-            {
-                CleansingId = CreateCorporateClientInCls(RegClientCorporateInput);
-            }
-
+            string newCleansingId = "";
+            Console.WriteLine("CreateAsrhCorporate");
 
             //parameter.polisyClientId does not contain data
             // ถ้าไม่ได้ระบุ polisyClientId แสดงว่าต้อง create
             if (string.IsNullOrEmpty(RegClientCorporateInput?.generalHeader?.polisyClientId))
             {
+              
+                //parameter.cleansingId does not contain data
+                // กรณีที่ไม่มีเลข polisyClientId แสดงว่าต้องการสร้าง client แต่ก่อนสร้างต้องไปสร้าง cleansing ก่อนเพื่อเอาเลข cleansingId
+                // ในกรณีที่มีการสร้างเลข cleansingId ขึ้นมาใหม่ หากเกิด error  ต้องลบออกด้วย
+                if (string.IsNullOrEmpty(RegClientCorporateInput?.generalHeader?.cleansingId))
+                {
+                    Console.WriteLine("CreateCorporateClientInCls");
+                    newCleansingId  = CreateCorporateClientInCls(RegClientCorporateInput);
+                    CleansingId = newCleansingId;
+                }
+                else
+                {
+                    CleansingId = RegClientCorporateInput?.generalHeader?.cleansingId;
+                }
+
+
                 try
                 {
+                    Console.WriteLine("CreateCorporateClientAndAdditionalInfoInPolisy400");
                     PolisyClientId =CreateCorporateClientAndAdditionalInfoInPolisy400(RegClientCorporateInput, CleansingId);
                 }
                 catch (Exception)
                 {
                     //ถ้าสร้างไม่สำเร็จจะลบข้อมูลใน  CLS ออก
                     //ระวังอย่างแก้โค้ดจนเอา CleansingId ที่ไม่ได้สร้างใหม่มาลบ
-                    var delService = new CleansingClientService(TransactionId, ControllerName);
-                    delService.RemoveByCleansingId(CleansingId, "C");
+                    if (!string.IsNullOrEmpty(newCleansingId))
+                    {
+                        var delService = new CleansingClientService(TransactionId, ControllerName);
+                        delService.RemoveByCleansingId(newCleansingId, "C");
+                    }
+                    
                     throw;
                 }
             }
@@ -479,13 +495,15 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Commands.Client
             //parameter A S R H FLAG does not contain data เงื่อนไขนี้ยังไม่เข้าใจอยู่ดี
             else
             {
-                
+               
                 try
                 {
+                    Console.WriteLine("UpdateCorporateClientAndAdditionalInfoInPolisy400");
                     UpdateCorporateClientAndAdditionalInfoInPolisy400(RegClientCorporateInput);
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
+                    Console.WriteLine(e.Message);
                     //ถ้าสร้างไม่สำเร็จจะลบข้อมูลใน  CLS ออก
                     //ระวังอย่างแก้โค้ดจนเอา CleansingId ที่ไม่ได้สร้างใหม่มาลบ
                    // var delService = new CleansingClientService(TransactionId, ControllerName);
@@ -522,6 +540,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Commands.Client
             }
 
 
+            
+
+
             // return output
             return new RegClientCorporateContentOutputModel
             {
@@ -529,7 +550,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Commands.Client
                 transactionId = TransactionId,
                 code = AppConst.CODE_SUCCESS,
                 message = AppConst.MESSAGE_SUCCESS,
-                description = "Test",
+                description = "",
                 data = new List<RegClientCorporateDataOutputModel>
                 {
                     new RegClientCorporateDataOutputModel_Pass
@@ -547,8 +568,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Commands.Client
 
         private void UpdateCorporateClientAndAdditionalInfoInPolisy400(RegClientCorporateInputModel regClientCorporateInput)
         {
-            AddDebugInfo(" to update ");
-  
+            if (RegClientCorporateInput?.generalHeader?.notCreatePolisyClientFlag != "Y")
+            {
+                AddDebugInfo(" to update ");
+
                 COMPInquiryClientMasterInputModel compInqClientInput = new COMPInquiryClientMasterInputModel();
                 compInqClientInput =
                     (COMPInquiryClientMasterInputModel) TransformerFactory.TransformModel(regClientCorporateInput,
@@ -557,24 +580,58 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Commands.Client
 
 
                 var polService = new COMPInquiryClientMasterService(TransactionId, ControllerName);
-                EWIResCOMPInquiryClientMasterContentModel retCOMPInqClient =
-                    polService.Execute((COMPInquiryClientMasterInputModel) compInqClientInput);
+                EWIResCOMPInquiryClientMasterContentModel retCOMPInqClient = polService.Execute((COMPInquiryClientMasterInputModel) compInqClientInput);
 
-                //Found in Polisy400
-                if (retCOMPInqClient != null)
-                {
-                    COMPInquiryClientMasterContentClientListModel inqClientPolisy400Out =retCOMPInqClient.clientListCollection.First();
-                    CLIENTUpdateCorporateClientAndAdditionalInfoInputModel updateClientPolisy400In =
-                        (CLIENTUpdateCorporateClientAndAdditionalInfoInputModel) DataModelFactory.GetModel(
-                            typeof(CLIENTUpdateCorporateClientAndAdditionalInfoInputModel));
+               
+                Console.WriteLine("retCOMPInqClient");
+                Console.WriteLine(retCOMPInqClient?.ToJson());
+                if (retCOMPInqClient != null && retCOMPInqClient.clientListCollection.Any() )
+                {  // success InquiryClientMaster
 
-                //งง checkFlag UPDATE CREATE 
-                // ถ้าเขียนแบบนี้  checkFlag ก็คงเป็น UPDATE เสมอ
-                updateClientPolisy400In.checkFlag = "UPDATE";
+                    COMPInquiryClientMasterContentClientListModel inqClientPolisy400Out =retCOMPInqClient?.clientListCollection?.FirstOrDefault();
+                    Console.WriteLine("inqClientPolisy400Out.ToJson()");
+                    Console.WriteLine(inqClientPolisy400Out?.ToJson());
 
-                //ต้อง Map field retCOMPInqClient ไปเป็น  updateClientPolisy400In  ไม่ใช่เอามาจาก user input
+                    
 
-                if (regClientCorporateInput?.generalHeader?.assessorFlag == "Y")
+
+                    CLIENTUpdateCorporateClientAndAdditionalInfoInputModel
+                        updateClientPolisy400In =
+                            (CLIENTUpdateCorporateClientAndAdditionalInfoInputModel)
+                            DataModelFactory
+                                .GetModel(
+                                    typeof(
+                                        CLIENTUpdateCorporateClientAndAdditionalInfoInputModel
+                                    ));
+
+                    if ((inqClientPolisy400Out?.clientList?.assessorFlag == "Y"
+                         || inqClientPolisy400Out?.clientList?.solicitorFlag == "Y"
+                         || inqClientPolisy400Out?.clientList?.repairerFlag == "Y"
+                         || inqClientPolisy400Out?.clientList?.hospitalFlag == "Y") )
+                    {
+                        updateClientPolisy400In = (CLIENTUpdateCorporateClientAndAdditionalInfoInputModel)
+                            TransformerFactory.TransformModel(inqClientPolisy400Out,updateClientPolisy400In);
+                        updateClientPolisy400In.checkFlag = "UPDATE";
+
+                       
+                    }
+                    else
+                    {
+                        updateClientPolisy400In =
+                            (CLIENTUpdateCorporateClientAndAdditionalInfoInputModel)
+                            TransformerFactory.TransformModel(RegClientCorporateInput,
+                                updateClientPolisy400In);
+                        updateClientPolisy400In.checkFlag = "CREATE";
+                    }
+                    CleansingId = inqClientPolisy400Out?.clientList?.cleansingId;
+                    RegClientCorporateInput.generalHeader.cleansingId = inqClientPolisy400Out?.clientList?.cleansingId;
+                    RegClientCorporateInput.profileHeader.corporateName1 = inqClientPolisy400Out?.clientList?.name1;
+                    RegClientCorporateInput.profileHeader.corporateName2 = inqClientPolisy400Out?.clientList?.name2;
+                    RegClientCorporateInput.profileHeader.corporateBranch = inqClientPolisy400Out?.clientList?.corporateStaffNo;
+
+                    //ต้อง Map field retCOMPInqClient ไปเป็น  updateClientPolisy400In  ไม่ใช่เอามาจาก user input
+
+                    if (regClientCorporateInput?.generalHeader?.assessorFlag == "Y")
                     {
                         updateClientPolisy400In.assessorFlag = "Y";
                         updateClientPolisy400In.assessorBlackListFlag =
@@ -619,16 +676,25 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Commands.Client
                         updateClientPolisy400In.hospitalFlag = "Y";
                     }
 
-                   
-                    var clientService =new CLIENTUpdateCorporateClientAndAdditionalInfoService(TransactionId, ControllerName);
-                    clientService.Execute( updateClientPolisy400In);
+                    Console.WriteLine("updateClientPolisy400In.ToJson()");
+                    Console.WriteLine(updateClientPolisy400In?.ToJson());
+                    var clientService =
+                        new CLIENTUpdateCorporateClientAndAdditionalInfoService(TransactionId, ControllerName);
+                    clientService.Execute(updateClientPolisy400In);
                 }
                 else
                 {
+                    Console.WriteLine("Your Policy Client  Id  cannot be found in polisy400");
                     // regClientCorporateOutput.code = CONST_CODE_FAILED;
                     //regClientCorporateOutput.message = "Your Policy Client  Id  cannot be found";
                     throw new BuzErrorException("500", "Your Policy Client  Id  cannot be found in polisy400");
                 }
+            }
+            else
+            {
+                Console.WriteLine("notCreatePolisyClientFlag = Y");
+            }
+          
            
         }
 
@@ -851,7 +917,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Commands.Client
                                                 CLIENTUpdateCorporateClientAndAdditionalInfoInputModel
                                             ));
 
-                            if (true == retCOMPInqClient?.clientListCollection.Any())
+                            if 
+                                (inqClientPolisy400Out?.clientList?.assessorFlag == "Y"
+                                  || inqClientPolisy400Out?.clientList?.solicitorFlag == "Y"
+                                  || inqClientPolisy400Out?.clientList?.repairerFlag == "Y"
+                                  || inqClientPolisy400Out?.clientList?.hospitalFlag == "Y")
                             {
                                 updateClientPolisy400In =
                                     (CLIENTUpdateCorporateClientAndAdditionalInfoInputModel)
@@ -863,7 +933,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Commands.Client
                             {
                                 updateClientPolisy400In =
                                     (CLIENTUpdateCorporateClientAndAdditionalInfoInputModel)
-                                    TransformerFactory.TransformModel(RegClientCorporateInput,
+                                    TransformerFactory.TransformModel(inqClientPolisy400Out,
                                         updateClientPolisy400In);
                                 updateClientPolisy400In.checkFlag = "CREATE";
                             }

@@ -438,7 +438,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
              {
               "data": [
                 {
-                  "cleansingId": "C2017-100003034",
+                  "cleansingId": "C2017-50003034",
                   "polisyClientId": "16973429",
                   "crmClientId": "201709-0000916",
                   "corporateName1": "ทดสอบB4XUSVDAWS",
@@ -1233,7 +1233,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
              {
               "data": [
                 {
-                  "cleansingId": "C2017-100003034",
+                  "cleansingId": "C2017-50003034",
                   "polisyClientId": "16973429",
                   "crmClientId": "201709-0000916",
                   "corporateName1": "ทดสอบB4XUSVDAWS",
@@ -1379,7 +1379,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
              {
               "data": [
                 {
-                  "cleansingId": "C2017-100003034",
+                  "cleansingId": "C2017-50003034",
                   "polisyClientId": "16973429",
                   "crmClientId": "201709-0000916",
                   "corporateName1": "ทดสอบB4XUSVDAWS",
@@ -1533,7 +1533,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
             //cretae polisy client id
             var ctl = new CLIENTCreateCorporateClientAndAdditionalInfoTests();
             string polisyClientId = ctl.CreateAssessorClient();
-
+            System.Threading.Thread.Sleep(5000);
             // Arrange
             var controller = new RegClientCorporateController();
             controller.Request = new HttpRequestMessage();
@@ -1603,7 +1603,9 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
                 polisyClientId
 
                 );
-
+            
+            Console.WriteLine("==============input==================");
+            Console.WriteLine(input);
             //Assert
             var response = (HttpResponseMessage)controller.Post(JObject.Parse(input));
             Console.WriteLine("==============output==================");
@@ -1611,10 +1613,29 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
             Assert.IsNotNull(output?.Result);
             Console.WriteLine(output?.Result);
             var outputJson = JObject.Parse(output?.Result);
-            Assert.AreEqual("500", outputJson["code"]?.ToString());
+            Assert.AreEqual("200", outputJson["code"]?.ToString());
             Assert.AreEqual(false, string.IsNullOrEmpty(outputJson["transactionId"]?.ToString()));
             Assert.AreEqual(false, string.IsNullOrEmpty(outputJson["transactionDateTime"]?.ToString()));
-            Assert.AreEqual("The Service cannot process case:  'cleansingId' null and 'polisyClientId' not null", outputJson["message"]?.ToString());
+
+
+
+            var outputData = outputJson["data"][0];
+
+            //ค่าที่ต้องสร้างใหม่
+            Assert.AreEqual(false, string.IsNullOrEmpty(outputData["polisyClientId"]?.ToString()), "polisyClientId should not null");
+
+
+            //ค่าที่จะต้องไม่สร้าง
+            Assert.AreEqual(true, string.IsNullOrEmpty(outputData["cleansingId"]?.ToString()), "cleansingId should  null");
+            Assert.AreEqual(true, string.IsNullOrEmpty(outputData["crmClientId"]?.ToString()), "crmClientId should  null");
+
+            //ค่านี้อาจจะไม่ตรงกับ input เพราะต้องตรงกับ ข้อมูลที่ inquery มา
+            //Assert.AreEqual(corporateName1, outputData["corporateName1"]?.ToString(), "corporateName1 should equal input");
+            // Assert.AreEqual(corporateName2, outputData["corporateName2"]?.ToString(), "corporateName2 should equal input");
+            // Assert.AreEqual(corporateBranch, outputData["corporateBranch"]?.ToString(), "corporateBranch should equal input");
+
+            Assert.AreEqual(polisyClientId, outputData["polisyClientId"]?.ToString(), "polisyClientId should equal input");
+
 
 
 
@@ -1659,7 +1680,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
             //cretae polisy client id
             var ctl = new CLIENTCreateCorporateClientAndAdditionalInfoTests();
             string polisyClientId = ctl.CreateAssessorClient();
-
+            System.Threading.Thread.Sleep(5000);
             // Arrange
             var controller = new RegClientCorporateController();
             controller.Request = new HttpRequestMessage();
@@ -1715,8 +1736,8 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
                             'clientAdditionalExistFlag': 'N',
                             'assessorFlag': 'Y',
                             'solicitorFlag': 'N',
-                            'repairerFlag': 'N',
-                            'hospitalFlag': 'N'
+                            'repairerFlag': 'Y',
+                            'hospitalFlag': 'Y'
                           }}
                         }}",
                 corporateName1,
@@ -1730,6 +1751,8 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
 
                 );
 
+            Console.WriteLine("==============input==================");
+            Console.WriteLine(input);
             //Assert
             var response = (HttpResponseMessage)controller.Post(JObject.Parse(input));
             Console.WriteLine("==============output==================");
@@ -1737,10 +1760,29 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
             Assert.IsNotNull(output?.Result);
             Console.WriteLine(output?.Result);
             var outputJson = JObject.Parse(output?.Result);
-            Assert.AreEqual("500", outputJson["code"]?.ToString());
+            Assert.AreEqual("200", outputJson["code"]?.ToString());
             Assert.AreEqual(false, string.IsNullOrEmpty(outputJson["transactionId"]?.ToString()));
             Assert.AreEqual(false, string.IsNullOrEmpty(outputJson["transactionDateTime"]?.ToString()));
-            Assert.AreEqual("The Service cannot process case:  'cleansingId' null and 'polisyClientId' not null", outputJson["message"]?.ToString());
+
+
+
+            var outputData = outputJson["data"][0];
+
+            //ค่าที่ต้องสร้างใหม่
+            Assert.AreEqual(false, string.IsNullOrEmpty(outputData["polisyClientId"]?.ToString()), "polisyClientId should not null");
+
+
+            //ค่าที่จะต้องไม่สร้าง
+            Assert.AreEqual(true, string.IsNullOrEmpty(outputData["cleansingId"]?.ToString()), "cleansingId should  null");
+            Assert.AreEqual(true, string.IsNullOrEmpty(outputData["crmClientId"]?.ToString()), "crmClientId should  null");
+
+            ////ค่านี้อาจจะไม่ตรงกับ input เพราะต้องตรงกับ ข้อมูลที่ inquery มา
+           // Assert.AreEqual(corporateName1, outputData["corporateName1"]?.ToString(), "corporateName1 should equal input");
+           // Assert.AreEqual(corporateName2, outputData["corporateName2"]?.ToString(), "corporateName2 should equal input");
+           // Assert.AreEqual(corporateBranch, outputData["corporateBranch"]?.ToString(), "corporateBranch should equal input");
+
+            Assert.AreEqual(polisyClientId, outputData["polisyClientId"]?.ToString(), "polisyClientId should equal input");
+
 
 
 
@@ -1764,22 +1806,40 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
             - และสร้างข้อมูลใน CRM
            *  
            *ต้องเกิดข้อมูลใหม่ที่
-            - <<Polisy400>>
-            - <<CRM>>
+            ต้องเกิดข้อมูลใหม่ที่
+           <<Polisy400>>
+           <<CRM>>
+         และ ต้องมีข้อมูลใน Polisy400.ASRDPF
 
            */
 
             /* Expected Output
              * 
                Return SUCCESS
-               
+               {
+                  "data": [
+                    {
+                      "cleansingId": "C2017-50003431",
+                      "polisyClientId": "16973824",
+                      "crmClientId": "201709-0001206",
+                      "corporateName1": "ทดสอบJ00RN5PBQS",
+                      "corporateName2": "ทดสอบ2AOR3DWR3Z",
+                      "corporateBranch": "187026"
+                    }
+                  ],
+                  "code": "200",
+                  "message": "Success",
+                  "description": "Test",
+                  "transactionId": "00-600915023125948-0000001",
+                  "transactionDateTime": "2017-09-15T02:31:35.4031791+07:00"
+                }
              */
 
             //cretae polisy client id
             //cretae cleansingId
             var ctl = new CLSCreateCorporateClientTests();
             string cleansingId = ctl.CreateCLSCorporateClientTest("A");
-
+            System.Threading.Thread.Sleep(5000);
             // Arrange
             var controller = new RegClientCorporateController();
             controller.Request = new HttpRequestMessage();
@@ -1849,6 +1909,9 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
                 cleansingId
 
                 );
+
+            Console.WriteLine("==============input==================");
+            Console.WriteLine(input);
 
             //Assert
             var response = (HttpResponseMessage)controller.Post(JObject.Parse(input));
@@ -1896,22 +1959,40 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
             - และสร้างข้อมูลใน CRM
            *  
            *ต้องเกิดข้อมูลใหม่ที่
-            - <<Polisy400>>
-            - <<CRM>>
+            ต้องเกิดข้อมูลใหม่ที่
+           <<Polisy400>>
+           <<CRM>>
+         และ ต้องมีข้อมูลใน Polisy400.ASRDPF
 
            */
 
             /* Expected Output
              * 
                Return SUCCESS
-               
+               {
+                  "data": [
+                    {
+                      "cleansingId": "C2017-50003431",
+                      "polisyClientId": "16973824",
+                      "crmClientId": "201709-0001206",
+                      "corporateName1": "ทดสอบJ00RN5PBQS",
+                      "corporateName2": "ทดสอบ2AOR3DWR3Z",
+                      "corporateBranch": "187026"
+                    }
+                  ],
+                  "code": "200",
+                  "message": "Success",
+                  "description": "Test",
+                  "transactionId": "00-600915023125948-0000001",
+                  "transactionDateTime": "2017-09-15T02:31:35.4031791+07:00"
+                }
              */
 
             //cretae polisy client id
             //cretae cleansingId
             var ctl = new CLSCreateCorporateClientTests();
             string cleansingId = ctl.CreateCLSCorporateClientTest("A");
-
+            System.Threading.Thread.Sleep(5000);
             // Arrange
             var controller = new RegClientCorporateController();
             controller.Request = new HttpRequestMessage();
@@ -1981,6 +2062,9 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
                 cleansingId
 
                 );
+
+            Console.WriteLine("==============input==================");
+            Console.WriteLine(input);
 
             //Assert
             var response = (HttpResponseMessage)controller.Post(JObject.Parse(input));
@@ -2030,21 +2114,38 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
 
            *  
            *ต้องเกิดข้อมูลใหม่ที่
-            - <<Polisy400>>
+            <<Polisy400>>
+            และ ต้องมีข้อมูลใน Polisy400.ASRDPF
 
            */
 
             /* Expected Output
              * 
                Return SUCCESS
-               
+               {
+              "data": [
+                {
+                  "cleansingId": "C2017-50003461",
+                  "polisyClientId": "16973860",
+                  "crmClientId": "201709-0001233",
+                  "corporateName1": "ทดสอบXO030153OO",
+                  "corporateName2": "ทดสอบ0C9RK733RD",
+                  "corporateBranch": "148671"
+                }
+              ],
+              "code": "200",
+              "message": "Success",
+              "description": "",
+              "transactionId": "00-600915023504660-0000062",
+              "transactionDateTime": "2017-09-15T02:35:05.673237+07:00"
+            }
              */
 
-           
+
             var goutput = CreateClientCorporate("A","Y");
             string cleansingId = goutput["cleansingId"]?.ToString();
             string crmClientId = goutput["crmClientId"]?.ToString();
-
+            System.Threading.Thread.Sleep(5000);
             // Arrange
             var controller = new RegClientCorporateController();
             controller.Request = new HttpRequestMessage();
@@ -2166,20 +2267,37 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
            *  
            *ต้องเกิดข้อมูลใหม่ที่
             - <<Polisy400>>
+            และ ต้องมีข้อมูลใน Polisy400.ASRDPF
 
            */
 
             /* Expected Output
              * 
                Return SUCCESS
-               
+               {
+                  "data": [
+                    {
+                      "cleansingId": "C2017-50003461",
+                      "polisyClientId": "16973860",
+                      "crmClientId": "201709-0001233",
+                      "corporateName1": "ทดสอบXO030153OO",
+                      "corporateName2": "ทดสอบ0C9RK733RD",
+                      "corporateBranch": "148671"
+                    }
+                  ],
+                  "code": "200",
+                  "message": "Success",
+                  "description": "",
+                  "transactionId": "00-600915023504660-0000062",
+                  "transactionDateTime": "2017-09-15T02:35:05.673237+07:00"
+                }
              */
 
 
             var goutput = CreateClientCorporate("A", "Y");
             string cleansingId = goutput["cleansingId"]?.ToString();
             string crmClientId = goutput["crmClientId"]?.ToString();
-
+            System.Threading.Thread.Sleep(5000);
             // Arrange
             var controller = new RegClientCorporateController();
             controller.Request = new HttpRequestMessage();
@@ -2295,23 +2413,35 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
            * 
            *Expected API Action
            * ต้องยิงไปที่
-            - CLIENT_CreatePersonalClientAndAdditionalInfo
+             - COMP_InquiryClientMaster
+              - CLIENT_UpdateCorporateClientAndAdditionalInfo
+              และสร้างข้อมูลใน CRM
 
            *  
            *ต้องเกิดข้อมูลใหม่ที่
-            - <<Polisy400>>
+            ต้องมีข้อมูลใน Polisy400.ASRDPF
+             และ ต้องเกิดข้อมูลใหม่ที่ <<CRM>>
 
            */
 
             /* Expected Output
              * 
                {
-                  "code": "500",
-                  "message": "The Service cannot process case:  'cleansingId' not null and 'polisyClientId' not null",
+                  "data": [
+                    {
+                      "cleansingId": "C2017-50003508",
+                      "polisyClientId": "16973915",
+                      "crmClientId": "201709-0001275",
+                      "corporateName1": "ทดสอบVLK4LOXT3K",
+                      "corporateName2": "ทดสอบU2F9QRILXD",
+                      "corporateBranch": "0000"
+                    }
+                  ],
+                  "code": "200",
+                  "message": "Success",
                   "description": "",
-                  "transactionId": "00-600914164929717-0000001",
-                  "transactionDateTime": "2017-09-14T16:49:29.7194113+07:00",
-                  "data": null
+                  "transactionId": "00-600915030507996-0000012",
+                  "transactionDateTime": "2017-09-15T03:05:10.4569941+07:00"
                 }
                
              */
@@ -2321,7 +2451,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
             var goutput =  CreateClientCorporate("A", "Y","Y");
             string cleansingId = goutput["cleansingId"]?.ToString();
             string polisyClientId = goutput["polisyClientId"]?.ToString();
-
+            System.Threading.Thread.Sleep(5000);
             // Arrange
             var controller = new RegClientCorporateController();
             controller.Request = new HttpRequestMessage();
@@ -2400,10 +2530,23 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
             Assert.IsNotNull(output?.Result);
             Console.WriteLine(output?.Result);
             var outputJson = JObject.Parse(output?.Result);
-            Assert.AreEqual("500", outputJson["code"]?.ToString());
+            Assert.AreEqual("200", outputJson["code"]?.ToString());
             Assert.AreEqual(false, string.IsNullOrEmpty(outputJson["transactionId"]?.ToString()));
             Assert.AreEqual(false, string.IsNullOrEmpty(outputJson["transactionDateTime"]?.ToString()));
-            Assert.AreEqual("The Service cannot process case:  'cleansingId' not null and 'polisyClientId' not null", outputJson["message"]?.ToString());
+
+
+
+            var outputData = outputJson["data"][0];
+
+            
+            Assert.AreEqual(false, string.IsNullOrEmpty(outputData["polisyClientId"]?.ToString()), "polisyClientId should not null");
+            Assert.AreEqual(false, string.IsNullOrEmpty(outputData["cleansingId"]?.ToString()), "cleansingId should  not null");
+            Assert.AreEqual(false, string.IsNullOrEmpty(outputData["crmClientId"]?.ToString()), "crmClientId should not  null");
+
+            //ค่าที่จะต้องไม่สร้าง
+
+            Assert.AreEqual(cleansingId, outputData["cleansingId"]?.ToString(), "cleansingId should equal input");
+            Assert.AreEqual(polisyClientId, outputData["polisyClientId"]?.ToString(), "polisyClientId should equal input");
 
 
         }
@@ -2422,23 +2565,35 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
            * 
            *Expected API Action
            * ต้องยิงไปที่
-            - CLIENT_CreatePersonalClientAndAdditionalInfo
+             - COMP_InquiryClientMaster
+              - CLIENT_UpdateCorporateClientAndAdditionalInfo
+              และสร้างข้อมูลใน CRM
 
            *  
            *ต้องเกิดข้อมูลใหม่ที่
-            - <<Polisy400>>
+            ต้องมีข้อมูลใน Polisy400.ASRDPF
+             และ ต้องเกิดข้อมูลใหม่ที่ <<CRM>>
 
            */
 
             /* Expected Output
              * 
                {
-                  "code": "500",
-                  "message": "The Service cannot process case:  'cleansingId' not null and 'polisyClientId' not null",
+                  "data": [
+                    {
+                      "cleansingId": "C2017-50003508",
+                      "polisyClientId": "16973915",
+                      "crmClientId": "201709-0001275",
+                      "corporateName1": "ทดสอบVLK4LOXT3K",
+                      "corporateName2": "ทดสอบU2F9QRILXD",
+                      "corporateBranch": "0000"
+                    }
+                  ],
+                  "code": "200",
+                  "message": "Success",
                   "description": "",
-                  "transactionId": "00-600914164929717-0000001",
-                  "transactionDateTime": "2017-09-14T16:49:29.7194113+07:00",
-                  "data": null
+                  "transactionId": "00-600915030507996-0000012",
+                  "transactionDateTime": "2017-09-15T03:05:10.4569941+07:00"
                 }
                
              */
@@ -2448,7 +2603,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
             var goutput = CreateClientCorporate("A", "Y", "Y");
             string cleansingId = goutput["cleansingId"]?.ToString();
             string polisyClientId = goutput["polisyClientId"]?.ToString();
-
+            System.Threading.Thread.Sleep(5000);
             // Arrange
             var controller = new RegClientCorporateController();
             controller.Request = new HttpRequestMessage();
@@ -2527,10 +2682,23 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
             Assert.IsNotNull(output?.Result);
             Console.WriteLine(output?.Result);
             var outputJson = JObject.Parse(output?.Result);
-            Assert.AreEqual("500", outputJson["code"]?.ToString());
+            Assert.AreEqual("200", outputJson["code"]?.ToString());
             Assert.AreEqual(false, string.IsNullOrEmpty(outputJson["transactionId"]?.ToString()));
             Assert.AreEqual(false, string.IsNullOrEmpty(outputJson["transactionDateTime"]?.ToString()));
-            Assert.AreEqual("The Service cannot process case:  'cleansingId' not null and 'polisyClientId' not null", outputJson["message"]?.ToString());
+
+
+
+            var outputData = outputJson["data"][0];
+
+
+            Assert.AreEqual(false, string.IsNullOrEmpty(outputData["polisyClientId"]?.ToString()), "polisyClientId should not null");
+            Assert.AreEqual(false, string.IsNullOrEmpty(outputData["cleansingId"]?.ToString()), "cleansingId should  not null");
+            Assert.AreEqual(false, string.IsNullOrEmpty(outputData["crmClientId"]?.ToString()), "crmClientId should not  null");
+
+            //ค่าที่จะต้องไม่สร้าง
+
+            Assert.AreEqual(cleansingId, outputData["cleansingId"]?.ToString(), "cleansingId should equal input");
+            Assert.AreEqual(polisyClientId, outputData["polisyClientId"]?.ToString(), "polisyClientId should equal input");
 
 
         }
@@ -2572,11 +2740,11 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
 
             //cretae polisy client id
             //cretae cleansingId
-            var goutput =  CreateClientCorporate("A");
+            var goutput = CreateClientCorporate("A");
             string cleansingId = goutput["cleansingId"]?.ToString();
             string polisyClientId = goutput["polisyClientId"]?.ToString();
             string crmClientId = goutput["crmClientId"]?.ToString();
-
+            System.Threading.Thread.Sleep(5000);
             // Arrange
             var controller = new RegClientCorporateController();
             controller.Request = new HttpRequestMessage();
@@ -2656,12 +2824,27 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
             Assert.IsNotNull(output?.Result);
             Console.WriteLine(output?.Result);
             var outputJson = JObject.Parse(output?.Result);
-            Assert.AreEqual("500", outputJson["code"]?.ToString());
+            Assert.AreEqual("200", outputJson["code"]?.ToString());
             Assert.AreEqual(false, string.IsNullOrEmpty(outputJson["transactionId"]?.ToString()));
             Assert.AreEqual(false, string.IsNullOrEmpty(outputJson["transactionDateTime"]?.ToString()));
-            Assert.AreEqual("The Service cannot process case:  'cleansingId' not null and 'polisyClientId' not null", outputJson["message"]?.ToString());
 
 
+
+            var outputData = outputJson["data"][0];
+
+            //ค่าที่ต้องสร้างใหม่
+            Assert.AreEqual(false, string.IsNullOrEmpty(outputData["polisyClientId"]?.ToString()), "polisyClientId should not null");
+            Assert.AreEqual(false, string.IsNullOrEmpty(outputData["cleansingId"]?.ToString()), "cleansingId should  not null");
+            Assert.AreEqual(false, string.IsNullOrEmpty(outputData["crmClientId"]?.ToString()), "crmClientId should  not null");
+
+            //ค่าที่จะต้องไม่สร้าง
+            Assert.AreEqual(polisyClientId, outputData["polisyClientId"]?.ToString(), "polisyClientId should equal input");
+            Assert.AreEqual(cleansingId, outputData["cleansingId"]?.ToString(), "cleansingId should equal input");
+            Assert.AreEqual(crmClientId, outputData["crmClientId"]?.ToString(), "crmClientId should equal input");
+
+
+
+           
         }
 
         [TestMethod(), Priority(18)]
@@ -2705,7 +2888,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
             string cleansingId = goutput["cleansingId"]?.ToString();
             string polisyClientId = goutput["polisyClientId"]?.ToString();
             string crmClientId = goutput["crmClientId"]?.ToString();
-
+            System.Threading.Thread.Sleep(5000);
             // Arrange
             var controller = new RegClientCorporateController();
             controller.Request = new HttpRequestMessage();
@@ -2785,12 +2968,25 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
             Assert.IsNotNull(output?.Result);
             Console.WriteLine(output?.Result);
             var outputJson = JObject.Parse(output?.Result);
-            Assert.AreEqual("500", outputJson["code"]?.ToString());
+            Assert.AreEqual("200", outputJson["code"]?.ToString());
             Assert.AreEqual(false, string.IsNullOrEmpty(outputJson["transactionId"]?.ToString()));
             Assert.AreEqual(false, string.IsNullOrEmpty(outputJson["transactionDateTime"]?.ToString()));
-            Assert.AreEqual("The Service cannot process case:  'cleansingId' not null and 'polisyClientId' not null", outputJson["message"]?.ToString());
 
 
+
+            var outputData = outputJson["data"][0];
+
+           
+
+            //ค่าที่ต้องสร้างใหม่
+            Assert.AreEqual(false, string.IsNullOrEmpty(outputData["polisyClientId"]?.ToString()), "polisyClientId should not null");
+            Assert.AreEqual(false, string.IsNullOrEmpty(outputData["cleansingId"]?.ToString()), "cleansingId should  not null");
+            Assert.AreEqual(false, string.IsNullOrEmpty(outputData["crmClientId"]?.ToString()), "crmClientId should  not null");
+
+            //ค่าที่จะต้องไม่สร้าง
+            Assert.AreEqual(polisyClientId, outputData["polisyClientId"]?.ToString(), "polisyClientId should equal input");
+            Assert.AreEqual(cleansingId, outputData["cleansingId"]?.ToString(), "cleansingId should equal input");
+            Assert.AreEqual(crmClientId, outputData["crmClientId"]?.ToString(), "crmClientId should equal input");
         }
 
     }

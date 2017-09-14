@@ -198,7 +198,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services.Tests
                 address4 = "ต.บางบัวทอง อ.บางบัวทอง",
                 alientId = "",
                 taxInNumber = null,
-                driverlicense = ""
+                driverlicense = "",
+                assessorFlag = "Y"
 
 
             });

@@ -91,6 +91,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             //StackTrace stackTrace = new StackTrace();
             TraceDebugLogger.Instance.AddDebugLogInfo(TransactionId, message, info, memberName, sourceFilePath, sourceLineNumber);
             // debugInfo.AddDebugInfo(message, info);
+            Console.WriteLine(message);
         }
         public void AddDebugInfo(string message,
             [System.Runtime.CompilerServices.CallerMemberName] string memberName = "",
@@ -100,6 +101,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             //StackTrace stackTrace = new StackTrace();
             TraceDebugLogger.Instance.AddDebugLogInfo(TransactionId, message, message, memberName, sourceFilePath, sourceLineNumber);
             // debugInfo.AddDebugInfo(message, message);
+            Console.WriteLine(message);
         }
 
         //This is like the Main() function. And need to be implemented.
