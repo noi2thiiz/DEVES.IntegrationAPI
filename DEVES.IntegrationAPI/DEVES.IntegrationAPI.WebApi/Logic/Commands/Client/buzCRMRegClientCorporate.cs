@@ -226,7 +226,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Commands.Client
             {
                 AddDebugInfo("roleCode IN A S R H");
 
-                //return createGASRHCorporate(regClientCorporateInput);
+                //return createGASRHCorporate(RegClientCorporateInput);
                 return CreateAsrhCorporate(RegClientCorporateInput);
             }
 
@@ -495,6 +495,32 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Commands.Client
 
             }
 
+            AddDebugInfo("cleansingId : " + CleansingId);
+
+            //3 create crm CleinInfo in CRM เพื่อเก็บ cleansingId   แต่ให้ค้นก่อนถ้าพบจะไม่สร้างซ้ำ
+            if (string.IsNullOrEmpty(RegClientCorporateInput?.generalHeader?.crmClientId))
+            {
+                try
+                {
+                    if (!string.IsNullOrEmpty(CleansingId))
+                    {
+                        if (false == SpApiChkCustomerClient.Instance.CheckByCleansingId(CleansingId))
+                        {
+                            AddDebugInfo("CheckByCleansingId == false  ");
+                            CrmClientId = CreateClientInCrm(RegClientCorporateInput, CleansingId, PolisyClientId);
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    AddDebugInfo("Cannot create Client in CRM  : " + e.Message, e.StackTrace);
+                }
+            }
+            else
+            {
+                CrmClientId = RegClientCorporateInput?.generalHeader?.crmClientId;
+            }
+
 
             // return output
             return new RegClientCorporateContentOutputModel
@@ -503,7 +529,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Commands.Client
                 transactionId = TransactionId,
                 code = AppConst.CODE_SUCCESS,
                 message = AppConst.MESSAGE_SUCCESS,
-                description = "",
+                description = "Test",
                 data = new List<RegClientCorporateDataOutputModel>
                 {
                     new RegClientCorporateDataOutputModel_Pass
