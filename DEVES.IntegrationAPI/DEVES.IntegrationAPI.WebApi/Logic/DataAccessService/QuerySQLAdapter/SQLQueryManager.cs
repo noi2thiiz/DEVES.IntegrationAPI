@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using DEVES.IntegrationAPI.Model.QuerySQL;
 using System.Net;
+using System.Web.Configuration;
 
 namespace DEVES.IntegrationAPI.WebApi.DataAccessService.QuerySQLAdapter
 {
@@ -29,10 +30,16 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.QuerySQLAdapter
 
         public void Start()
         {
-            // string devesIP = "192.168.78.*";
-            string devesIP = "192.168.78";
+            string userIP = GetLocalIPAddress();
 
-            if (GetLocalIPAddress().Contains(devesIP))
+            // string internalClientIP = "192.168.78";
+            string internalClientIP = WebConfigurationManager.AppSettings["IPclientDeves"];
+            string serverQAIP = WebConfigurationManager.AppSettings["IPserverQA"];
+            string serverProd1IP = WebConfigurationManager.AppSettings["IPserverProduction1"];
+            string serverProd2IP = WebConfigurationManager.AppSettings["IPserverProduction2"];
+
+            
+            if (userIP.Contains(internalClientIP) || userIP.Equals(serverQAIP) || userIP.Equals(serverProd1IP) || userIP.Equals(serverProd2IP))
             {
                 sql = new QuerySQLInternal();
             }
@@ -40,7 +47,17 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.QuerySQLAdapter
             {
                 sql = new QuerySQLOnline();
             }
-
+            
+            /*
+            if (userIP.Contains(internalClientIP))
+            {
+                sql = new QuerySQLInternal();
+            }
+            else
+            {
+                sql = new QuerySQLOnline();
+            }
+            */
         }
 
         private static string GetLocalIPAddress()

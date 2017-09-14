@@ -13,6 +13,8 @@ using DEVES.IntegrationAPI.WebApi.Logic.Services;
 using DEVES.IntegrationAPI.WebApi.Controllers;
 using DEVES.IntegrationAPI.Model.QuerySQL;
 using DEVES.IntegrationAPI.WebApi.Templates.Exceptions;
+using DEVES.IntegrationAPI.WebApi.DataAccessService.QuerySQLAdapter;
+using DEVES.IntegrationAPI.WebApi.Templates;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
@@ -80,15 +82,20 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
         private RequestSurveyorInputModel Mapping(string incidentId, string currentUserId)
         {
-            StrategySQLController query = new StrategySQLController();
-            string sqlCommand = string.Format(q.SQL_RequestSurveyor, incidentId, currentUserId).Trim('\n');
-            string dbName = "CRMQA_MSCRM";
-            string content = "{\"databaseName\": " + "\"" + dbName + "\"" + "," +
-                "\"sqlCommand\": " + "\"" + sqlCommand + "\"" + "}"
-                ;
-            QuerySQLOutputModel mappingOutput = new QuerySQLOutputModel();
-            mappingOutput = (QuerySQLOutputModel)query.Post(content);
+            QuerySqlService sql = QuerySqlService.Instance;
 
+            string sqlCommand = string.Format(q.SQL_RequestSurveyor, incidentId, currentUserId).Trim('\n');
+
+            QuerySQLOutputModel mappingOutput = new QuerySQLOutputModel();
+
+            if (AppConst.IS_PRODUCTION)
+            {
+                 mappingOutput = sql.GetQuery("CRM_MSCRM", sqlCommand);
+            } else
+            {
+                 mappingOutput = sql.GetQuery("CRMQA_MSCRM", sqlCommand);
+            }
+            
             dt = new System.Data.DataTable();
             // dt = q.Queryinfo_RequestSurveyor(incidentId, currentUserId);
             dt = mappingOutput.dt;
