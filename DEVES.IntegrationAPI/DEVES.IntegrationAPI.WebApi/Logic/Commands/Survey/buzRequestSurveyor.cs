@@ -40,11 +40,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             }
             catch (BuzErrorException e)
             {
+                Console.WriteLine(e.StackTrace);
                 output.eventID = "";
                 output.errorMessage = e.Message;
             }
             catch (Exception e)
             {
+                Console.WriteLine(e.StackTrace);
                 output.eventID = "";
                 output.errorMessage = e.Message;
             }
@@ -85,7 +87,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             QuerySqlService sql = QuerySqlService.Instance;
 
             string sqlCommand = string.Format(q.SQL_RequestSurveyor, incidentId, currentUserId).Trim('\n');
-
+            Console.WriteLine(sqlCommand);
             QuerySQLOutputModel mappingOutput = new QuerySQLOutputModel();
 
             if (AppConst.IS_PRODUCTION)
@@ -93,7 +95,15 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                  mappingOutput = sql.GetQuery("CRM_MSCRM", sqlCommand);
             } else
             {
-                 mappingOutput = sql.GetQuery("CRMQA_MSCRM", sqlCommand);
+                try
+                {
+                    mappingOutput = sql.GetQuery("CRMQA_MSCRM", sqlCommand);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message+e.StackTrace);
+                }
+                 
             }
             
             dt = new System.Data.DataTable();
