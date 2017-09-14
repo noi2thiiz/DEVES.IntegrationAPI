@@ -305,21 +305,29 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Commands.Client
             AddDebugInfo("cleansingId : " + CleansingId);
 
             //3 create crm CleinInfo in CRM เพื่อเก็บ cleansingId   แต่ให้ค้นก่อนถ้าพบจะไม่สร้างซ้ำ
-            try
+            if (string.IsNullOrEmpty(RegClientCorporateInput?.generalHeader?.crmClientId))
             {
-                if (!string.IsNullOrEmpty(CleansingId))
+                try
                 {
-                    if (false == SpApiChkCustomerClient.Instance.CheckByCleansingId(CleansingId))
+                    if (!string.IsNullOrEmpty(CleansingId))
                     {
-                        AddDebugInfo("CheckByCleansingId == false  ");
-                        CrmClientId = CreateClientInCrm(RegClientCorporateInput, CleansingId, PolisyClientId);
+                        if (false == SpApiChkCustomerClient.Instance.CheckByCleansingId(CleansingId))
+                        {
+                            AddDebugInfo("CheckByCleansingId == false  ");
+                            CrmClientId = CreateClientInCrm(RegClientCorporateInput, CleansingId, PolisyClientId);
+                        }
                     }
                 }
+                catch (Exception e)
+                {
+                    AddDebugInfo("Cannot create Client in CRM  : " + e.Message, e.StackTrace);
+                }
             }
-            catch (Exception e)
+            else
             {
-                AddDebugInfo("Cannot create Client in CRM  : " + e.Message, e.StackTrace);
+                CrmClientId = RegClientCorporateInput?.generalHeader?.crmClientId;
             }
+            
 
 
             // return output
