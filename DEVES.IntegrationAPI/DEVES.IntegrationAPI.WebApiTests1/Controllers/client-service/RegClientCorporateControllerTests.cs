@@ -438,7 +438,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
              {
               "data": [
                 {
-                  "cleansingId": "C2017-50003034",
+                  "cleansingId": "C2017-100003034",
                   "polisyClientId": "16973429",
                   "crmClientId": "201709-0000916",
                   "corporateName1": "ทดสอบB4XUSVDAWS",
@@ -1233,7 +1233,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
              {
               "data": [
                 {
-                  "cleansingId": "C2017-50003034",
+                  "cleansingId": "C2017-100003034",
                   "polisyClientId": "16973429",
                   "crmClientId": "201709-0000916",
                   "corporateName1": "ทดสอบB4XUSVDAWS",
@@ -1379,7 +1379,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
              {
               "data": [
                 {
-                  "cleansingId": "C2017-50003034",
+                  "cleansingId": "C2017-100003034",
                   "polisyClientId": "16973429",
                   "crmClientId": "201709-0000916",
                   "corporateName1": "ทดสอบB4XUSVDAWS",
@@ -1533,7 +1533,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
             //cretae polisy client id
             var ctl = new CLIENTCreateCorporateClientAndAdditionalInfoTests();
             string polisyClientId = ctl.CreateAssessorClient();
-            System.Threading.Thread.Sleep(5000);
+            System.Threading.Thread.Sleep(10000);
             // Arrange
             var controller = new RegClientCorporateController();
             controller.Request = new HttpRequestMessage();
@@ -1680,7 +1680,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
             //cretae polisy client id
             var ctl = new CLIENTCreateCorporateClientAndAdditionalInfoTests();
             string polisyClientId = ctl.CreateAssessorClient();
-            System.Threading.Thread.Sleep(5000);
+            System.Threading.Thread.Sleep(10000);
             // Arrange
             var controller = new RegClientCorporateController();
             controller.Request = new HttpRequestMessage();
@@ -1819,7 +1819,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
                {
                   "data": [
                     {
-                      "cleansingId": "C2017-50003431",
+                      "cleansingId": "C2017-100003431",
                       "polisyClientId": "16973824",
                       "crmClientId": "201709-0001206",
                       "corporateName1": "ทดสอบJ00RN5PBQS",
@@ -1839,7 +1839,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
             //cretae cleansingId
             var ctl = new CLSCreateCorporateClientTests();
             string cleansingId = ctl.CreateCLSCorporateClientTest("A");
-            System.Threading.Thread.Sleep(5000);
+            System.Threading.Thread.Sleep(10000);
             // Arrange
             var controller = new RegClientCorporateController();
             controller.Request = new HttpRequestMessage();
@@ -1972,7 +1972,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
                {
                   "data": [
                     {
-                      "cleansingId": "C2017-50003431",
+                      "cleansingId": "C2017-100003431",
                       "polisyClientId": "16973824",
                       "crmClientId": "201709-0001206",
                       "corporateName1": "ทดสอบJ00RN5PBQS",
@@ -1992,7 +1992,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
             //cretae cleansingId
             var ctl = new CLSCreateCorporateClientTests();
             string cleansingId = ctl.CreateCLSCorporateClientTest("A");
-            System.Threading.Thread.Sleep(5000);
+            System.Threading.Thread.Sleep(10000);
             // Arrange
             var controller = new RegClientCorporateController();
             controller.Request = new HttpRequestMessage();
@@ -2125,7 +2125,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
                {
               "data": [
                 {
-                  "cleansingId": "C2017-50003461",
+                  "cleansingId": "C2017-100003461",
                   "polisyClientId": "16973860",
                   "crmClientId": "201709-0001233",
                   "corporateName1": "ทดสอบXO030153OO",
@@ -2145,7 +2145,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
             var goutput = CreateClientCorporate("A","Y");
             string cleansingId = goutput["cleansingId"]?.ToString();
             string crmClientId = goutput["crmClientId"]?.ToString();
-            System.Threading.Thread.Sleep(5000);
+            System.Threading.Thread.Sleep(10000);
             // Arrange
             var controller = new RegClientCorporateController();
             controller.Request = new HttpRequestMessage();
@@ -2277,7 +2277,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
                {
                   "data": [
                     {
-                      "cleansingId": "C2017-50003461",
+                      "cleansingId": "C2017-100003461",
                       "polisyClientId": "16973860",
                       "crmClientId": "201709-0001233",
                       "corporateName1": "ทดสอบXO030153OO",
@@ -2297,7 +2297,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
             var goutput = CreateClientCorporate("A", "Y");
             string cleansingId = goutput["cleansingId"]?.ToString();
             string crmClientId = goutput["crmClientId"]?.ToString();
-            System.Threading.Thread.Sleep(5000);
+            System.Threading.Thread.Sleep(10000);
             // Arrange
             var controller = new RegClientCorporateController();
             controller.Request = new HttpRequestMessage();
@@ -2429,7 +2429,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
                {
                   "data": [
                     {
-                      "cleansingId": "C2017-50003508",
+                      "cleansingId": "C2017-100003508",
                       "polisyClientId": "16973915",
                       "crmClientId": "201709-0001275",
                       "corporateName1": "ทดสอบVLK4LOXT3K",
@@ -2451,7 +2451,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
             var goutput =  CreateClientCorporate("A", "Y","Y");
             string cleansingId = goutput["cleansingId"]?.ToString();
             string polisyClientId = goutput["polisyClientId"]?.ToString();
-            System.Threading.Thread.Sleep(5000);
+            System.Threading.Thread.Sleep(10000);
             // Arrange
             var controller = new RegClientCorporateController();
             controller.Request = new HttpRequestMessage();
@@ -2581,7 +2581,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
                {
                   "data": [
                     {
-                      "cleansingId": "C2017-50003508",
+                      "cleansingId": "C2017-100003508",
                       "polisyClientId": "16973915",
                       "crmClientId": "201709-0001275",
                       "corporateName1": "ทดสอบVLK4LOXT3K",
@@ -2603,7 +2603,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
             var goutput = CreateClientCorporate("A", "Y", "Y");
             string cleansingId = goutput["cleansingId"]?.ToString();
             string polisyClientId = goutput["polisyClientId"]?.ToString();
-            System.Threading.Thread.Sleep(5000);
+            System.Threading.Thread.Sleep(10000);
             // Arrange
             var controller = new RegClientCorporateController();
             controller.Request = new HttpRequestMessage();
@@ -2744,7 +2744,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
             string cleansingId = goutput["cleansingId"]?.ToString();
             string polisyClientId = goutput["polisyClientId"]?.ToString();
             string crmClientId = goutput["crmClientId"]?.ToString();
-            System.Threading.Thread.Sleep(5000);
+            System.Threading.Thread.Sleep(10000);
             // Arrange
             var controller = new RegClientCorporateController();
             controller.Request = new HttpRequestMessage();
@@ -2888,7 +2888,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
             string cleansingId = goutput["cleansingId"]?.ToString();
             string polisyClientId = goutput["polisyClientId"]?.ToString();
             string crmClientId = goutput["crmClientId"]?.ToString();
-            System.Threading.Thread.Sleep(5000);
+            System.Threading.Thread.Sleep(10000);
             // Arrange
             var controller = new RegClientCorporateController();
             controller.Request = new HttpRequestMessage();
