@@ -13,11 +13,15 @@ using DEVES.IntegrationAPI.Model.ClaimRegistration;
 using DEVES.IntegrationAPI.WebApi.Logic.Services;
 using DEVES.IntegrationAPI.WebApi.Templates;
 using DEVES.IntegrationAPI.WebApi.Templates.Exceptions;
+using DEVES.IntegrationAPI.WebApi.DataAccessService.QuerySQLAdapter;
+using DEVES.IntegrationAPI.Model.QuerySQL;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
-    public class BuzClaimRegistrationCommand: BuzCommand
+    public class BuzClaimRegistrationCommand : BuzCommand
     {
+        QueryInfo q = new QueryInfo();
+        System.Data.DataTable dt = new System.Data.DataTable();
 
         public override BaseDataModel ExecuteInput(object input)
         {
@@ -32,28 +36,31 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             data.claimSurvInform = new LocusClaimsurvinformModel();
             BaseDataModel inputData = data;
 
+            /*
             //+ Call SQL to get data
             List<CommandParameter> listParam = new List<CommandParameter>();
-            listParam.Add(new CommandParameter("incidentId", contentModel.IncidentId ));
-            listParam.Add(new CommandParameter("CurrentUserId", contentModel.CurrentUserId ));
+            listParam.Add(new CommandParameter("incidentId", contentModel.IncidentId));
+            listParam.Add(new CommandParameter("CurrentUserId", contentModel.CurrentUserId));
             FillModelUsingSQL(ref inputData, CommonConstant.sqlcmd_Get_RegClaimInfo, listParam);
+            */
+            data = Mapping(contentModel.IncidentId.ToString(), contentModel.CurrentUserId.ToString());
 
             // Convert BaseDataModel tobe LocusInput and fix some variable (in case of "claimType = "O" <เตลมแห้ง>)
-            data = (LocusClaimRegistrationInputModel)inputData;
+            // data = (LocusClaimRegistrationInputModel)inputData;
             // transform some data that is required from polisy400
-            if (data.claimHeader.informByCrmId == null)
+            if (String.IsNullOrEmpty(data.claimHeader.informByCrmId))
             {
                 data.claimHeader.informByCrmId = data.claimHeader.submitByCrmId;
             }
-            if (data.claimHeader.informByCrmName == null)
+            if (String.IsNullOrEmpty(data.claimHeader.informByCrmName))
             {
                 data.claimHeader.informByCrmName = data.claimHeader.submitByCrmName;
             }
-            if (data.claimInform.informerOn == null)
+            if (String.IsNullOrEmpty(data.claimInform.informerOn.ToString()))
             {
                 data.claimInform.informerOn = DateTime.Now;
             }
-            if (data.claimAssignSurv.surveyTeam == null)
+            if (String.IsNullOrEmpty(data.claimAssignSurv.surveyTeam))
             {
                 data.claimAssignSurv.surveyTeam = "TEAM0099";
             }
@@ -75,10 +82,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             }
             */
             inputData = data;
-            
+
             //+ Call Locus_RegisterClaim through ServiceProxy
-            
-            string uid = GetDomainName(contentModel.CurrentUserId);
+
+            // string uid = GetDomainName(contentModel.CurrentUserId);
             LocusClaimRegistrationContentOutputModel ret = new LocusClaimRegistrationContentOutputModel();
             try
             {
@@ -197,36 +204,225 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             }
             catch (BuzErrorException e)
             {
-                AddDebugInfo("ClaimRegistration Error BuzErrorException:" + e.Message,e.StackTrace);
-                
+                AddDebugInfo("ClaimRegistration Error BuzErrorException:" + e.Message, e.StackTrace);
+
                 ClaimRegistrationDataOutputModel outputFail = new ClaimRegistrationDataOutputModel
                 {
                     claimID = null,
                     claimNo = null,
                     errorMessage = e.Message
                 };
-               
+
 
                 return outputFail;
             }
             catch (Exception e)
             {
                 AddDebugInfo("ClaimRegistration Error Exception:" + e.Message, e.StackTrace);
-               
+
                 ClaimRegistrationDataOutputModel outputFail = new ClaimRegistrationDataOutputModel
                 {
                     claimID = null,
                     claimNo = null,
                     errorMessage = e.Message
                 };
-               
+
 
                 return outputFail;
             }
 
-            
-            
-        
+
+
+
         }
+
+        private LocusClaimRegistrationInputModel Mapping(string incidentId, string currentUserId)
+        {
+            QuerySqlService sql = QuerySqlService.Instance;
+
+            string sqlCommand = string.Format(q.SQL_ClaimRegistration, incidentId, currentUserId).Trim('\n');
+            QuerySQLOutputModel mappingOutput = new QuerySQLOutputModel();
+
+            if (AppConst.IS_PRODUCTION)
+            {
+                mappingOutput = sql.GetQuery("CRM_MSCRM", sqlCommand);
+            }
+            else
+            {
+                try
+                {
+                    mappingOutput = sql.GetQuery("CRMQA_MSCRM", sqlCommand);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message + e.StackTrace);
+                }
+            }
+
+            dt = new System.Data.DataTable();
+            dt = mappingOutput.dt;
+
+            LocusClaimRegistrationInputModel rsModel = new LocusClaimRegistrationInputModel();
+            rsModel.claimHeader = new LocusClaimheaderModel();
+            rsModel.claimInform = new LocusClaiminformModel();
+            rsModel.claimAssignSurv = new LocusClaimassignsurvModel();
+            rsModel.claimSurvInform = new LocusClaimsurvinformModel();
+
+            // claimHeader
+            rsModel.claimHeader.premiumClass = isStringNull("premiumClass");
+            rsModel.claimHeader.ticketNumber = isStringNull("ticketNumber");
+            rsModel.claimHeader.claimNotiNo = isStringNull("claimNotiNo");
+            rsModel.claimHeader.claimNotiRefer = isStringNull("claimNotiRefer");
+            rsModel.claimHeader.policyNo = isStringNull("policyNo");
+            rsModel.claimHeader.fleetCarNo = isIntNull("fleetCarNo");
+            rsModel.claimHeader.policySeqNo = isIntNull("policySeqNo");
+            rsModel.claimHeader.renewalNo = isIntNull("renewalNo");
+            rsModel.claimHeader.barcode = isStringNull("barcode");
+            rsModel.claimHeader.insureCardNo = isStringNull("insureCardNo");
+            rsModel.claimHeader.policyIssueDate = isDateTimeNull("policyIssueDate");
+            rsModel.claimHeader.policyEffectiveDate = isDateTimeNull("policyEffectiveDate");
+            rsModel.claimHeader.policyExpiryDate = isDateTimeNull("policyExpiryDate");
+            rsModel.claimHeader.policyProductTypeCode = isStringNull("policyProductTypeCode");
+            rsModel.claimHeader.policyProductTypeName = isStringNull("policyProductTypeName");
+            rsModel.claimHeader.policyGarageFlag = isStringNull("policyGarageFlag");
+            rsModel.claimHeader.policyPaymentStatus = isStringNull("policyPaymentStatus");
+            rsModel.claimHeader.policyCarRegisterNo = isStringNull("policyCarRegisterNo");
+            rsModel.claimHeader.policyCarRegisterProv = isStringNull("policyCarRegisterProv");
+            rsModel.claimHeader.carChassisNo = isStringNull("carChassisNo");
+            rsModel.claimHeader.carVehicleType = isStringNull("carVehicleType");
+            rsModel.claimHeader.carVehicleModel = isStringNull("carVehicleModel");
+            rsModel.claimHeader.carVehicleYear = isStringNull("carVehicleYear");
+            rsModel.claimHeader.carVehicleBody = isStringNull("carVehicleBody");
+            rsModel.claimHeader.carVehicleSize = isStringNull("carVehicleSize");
+            rsModel.claimHeader.policyDeduct = isIntNull("policyDeduct");
+            rsModel.claimHeader.agentCode = isStringNull("agentCode");
+            rsModel.claimHeader.agentName = isStringNull("agentName");
+            rsModel.claimHeader.agentBranch = isStringNull("agentBranch ");
+            rsModel.claimHeader.vipCaseFlag = isStringNull("vipCaseFlag");
+            rsModel.claimHeader.privilegeLevel = isStringNull("privilegeLevel");
+            rsModel.claimHeader.highLossCaseFlag = isStringNull("highLossCaseFlag");
+            rsModel.claimHeader.legalCaseFlag = isStringNull("legalCaseFlag");
+            rsModel.claimHeader.claimNotiRemark = isStringNull("claimNotiRemark");
+            rsModel.claimHeader.claimType = isStringNull("claimType");
+            rsModel.claimHeader.informByCrmId = isStringNull("informByCrmId");
+            rsModel.claimHeader.informByCrmName = isStringNull("informByCrmName");
+            rsModel.claimHeader.submitByCrmId = isStringNull("submitByCrmId");
+            rsModel.claimHeader.submitByCrmName = isStringNull("submitByCrmName");
+            rsModel.claimHeader.serviceBranch = isStringNull("serviceBranch");
+            rsModel.claimHeader.policyAdditionalID = new Guid(dt.Rows[0]["pfc_policy_additionalId"].ToString());
+            rsModel.claimHeader.policyBranch = isStringNull("policyBranch");
+
+            // claimInform
+            rsModel.claimInform.informerClientId = isStringNull("informerClientId");
+            rsModel.claimInform.informerFullName = isStringNull("informerFullName");
+            rsModel.claimInform.informerMobile = isStringNull("informerMobile");
+            rsModel.claimInform.informerPhoneNo = isStringNull("informerPhoneNo");
+            rsModel.claimInform.driverClientId = isStringNull("driverClientId");
+            rsModel.claimInform.driverFullName = isStringNull("driverFullName");
+            rsModel.claimInform.driverMobile = isStringNull("driverMobile");
+            rsModel.claimInform.driverPhoneNo = isStringNull("driverPhoneNo");
+            rsModel.claimInform.insuredClientId = isStringNull("insuredClientId");
+            rsModel.claimInform.insuredFullName = isStringNull("insuredFullName");
+            rsModel.claimInform.insuredMobile = isStringNull("insuredMobile");
+            rsModel.claimInform.insuredPhoneNo = isStringNull("insuredPhoneNo");
+            rsModel.claimInform.relationshipWithInsurer = isStringNull("relationshipWithInsurer");
+            rsModel.claimInform.currentCarRegisterNo = isStringNull("currentCarRegisterNo");
+            rsModel.claimInform.currentCarRegisterProv = isStringNull("currentCarRegisterProv");
+            rsModel.claimInform.informerOn = isDateTimeNull("informerOn");
+            rsModel.claimInform.accidentOn = isDateTimeNull("accidentOn");
+            rsModel.claimInform.accidentDescCode = isStringNull("accidentDescCode");
+            rsModel.claimInform.accidentDesc = isStringNull("accidentDesc");
+            rsModel.claimInform.numOfExpectInjury = isIntNull("numOfExpectInjury");
+            rsModel.claimInform.accidentPlace = isStringNull("accidentPlace");
+            rsModel.claimInform.accidentLatitude = isStringNull("accidentLatitude");
+            rsModel.claimInform.accidentLongitude = isStringNull("accidentLongitude");
+            rsModel.claimInform.accidentProvn = isStringNull("accidentProvn");
+            rsModel.claimInform.accidentDist = isStringNull("accidentDist");
+            rsModel.claimInform.sendOutSurveyorCode = isStringNull("sendOutSurveyorCode");
+
+            // claimAssignSurv
+            rsModel.claimAssignSurv.surveyorCode = isStringNull("surveyorCode");
+            rsModel.claimAssignSurv.surveyorClientNumber = isStringNull("surveyorClientNumber");
+            rsModel.claimAssignSurv.surveyorName = isStringNull("surveyorName");
+            rsModel.claimAssignSurv.surveyorCompanyName = isStringNull("surveyorCompanyName");
+            rsModel.claimAssignSurv.surveyorCompanyMobile = isStringNull("surveyorCompanyMobile");
+            rsModel.claimAssignSurv.surveyorMobile = isStringNull("surveyorMobile");
+            rsModel.claimAssignSurv.surveyorType = isStringNull("surveyorType");
+            rsModel.claimAssignSurv.surveyTeam = isStringNull("surveyTeam");
+
+            // claimSurvInform
+            rsModel.claimSurvInform.deductibleFee = isIntNull("deductibleFee");
+            rsModel.claimSurvInform.excessFee = isIntNull("excessFee");
+            rsModel.claimSurvInform.reportAccidentResultDate = isDateTimeNull("reportAccidentResultDate");
+            rsModel.claimSurvInform.accidentLegalResult = isStringNull("accidentLegalResult");
+            rsModel.claimSurvInform.policeStation = isStringNull("policeStation");
+            rsModel.claimSurvInform.policeRecordId = isStringNull("policeRecordId");
+            rsModel.claimSurvInform.policeRecordDate = isDateTimeNull("policeRecordDate");
+            rsModel.claimSurvInform.policeBailFlag = isStringNull("policeBailFlag");
+            rsModel.claimSurvInform.damageOfPolicyOwnerCar = isStringNull("damageOfPolicyOwnerCar");
+            rsModel.claimSurvInform.numOfTowTruck = isIntNull("numOfTowTruck");
+            rsModel.claimSurvInform.nameOfTowCompany = isStringNull("nameOfTowCompany");
+            rsModel.claimSurvInform.detailOfTowEvent = isStringNull("detailOfTowEvent");
+            rsModel.claimSurvInform.numOfAccidentInjury = isIntNull("numOfAccidentInjury");
+            rsModel.claimSurvInform.detailOfAccidentInjury = isStringNull("detailOfAccidentInjury");
+            rsModel.claimSurvInform.numOfDeath = isIntNull("numOfDeath");
+            rsModel.claimSurvInform.detailOfDeath = isStringNull("detailOfDeath");
+            rsModel.claimSurvInform.caseOwnerCode = isStringNull("caseOwnerCode");
+            rsModel.claimSurvInform.caseOwnerFullName = isStringNull("caseOwnerFullName");
+
+            return rsModel;
+        }
+
+        protected string isStringNull(string a)
+        {
+            if (dt.Rows[0][a] == null)
+            {
+                return null;
+            }
+            else
+            {
+                return dt.Rows[0][a].ToString();
+            }
+        }
+        protected int isIntNull(string a)
+        {
+            if (string.IsNullOrEmpty(dt.Rows[0][a].ToString()))
+            {
+                return 0;
+            }
+            else
+            {
+                return Convert.ToInt32(dt.Rows[0][a]);
+            }
+        }
+        protected double isDoubleNull(string a)
+        {
+            if (string.IsNullOrEmpty(dt.Rows[0][a].ToString()))
+            {
+                return 0;
+            }
+            else
+            {
+                return Convert.ToDouble(dt.Rows[0][a]);
+            }
+        }
+
+        protected DateTime isDateTimeNull(string a)
+        {
+            string datetime = "";
+
+            if (String.IsNullOrEmpty(dt.Rows[0][a].ToString()))
+            {
+                datetime = null;
+            }
+            else
+            {
+                datetime = dt.Rows[0][a].ToString();
+            }
+
+            return Convert.ToDateTime(datetime);
+        }
+
+
     }
 }

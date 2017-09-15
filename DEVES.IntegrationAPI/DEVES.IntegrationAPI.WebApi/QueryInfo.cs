@@ -18,6 +18,8 @@ namespace DEVES.IntegrationAPI.WebApi
         */
         public string SQL_RequestSurveyor = @"DECLARE @IncidentId AS UNIQUEIDENTIFIER = '{0}'; DECLARE @CurrentUserId AS UNIQUEIDENTIFIER = '{1}'; EXEC [dbo].[sp_CustomApp_RequestSurveyor_Incident] @IncidentId, @CurrentUserId;";
 
+        public string SQL_ClaimRegistration = @"DECLARE @IncidentId AS UNIQUEIDENTIFIER = '{0}'; DECLARE @CurrentUserId AS UNIQUEIDENTIFIER = '{1}'; EXEC [dbo].[sp_CustomApp_RegClaimInfo_Incident] @IncidentId, @CurrentUserId;";
+
         public static string SQL_InquiryPolicyMotorList = @"DECLARE @policyNo AS NVARCHAR(100) = '{0}'
                                                     DECLARE @chassisNo AS NVARCHAR(100) = '{1}'
                                                     DECLARE @carRegisNo NVARCHAR(100) = '{2}'
