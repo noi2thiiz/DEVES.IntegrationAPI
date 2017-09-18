@@ -13,15 +13,15 @@ namespace DEVES.IntegrationAPI.WebApiTests1.Controllers.client_service.deves_tes
      Create/Inquiry ข้อมูลที่สร้างใหม่ โดยที่ยังไม่เคยมีข้อมูลลูกค้านี้ในระบบ Polisy400 และ Cleansing เลย >> จะทดสอบ Inquiry ที่ Cleansing ไม่ได้
      */
     [TestClass]
-    public class NonPayeeTest1
+    public class NonPayeePersonalTest
     {
         [TestMethod]
-        public void NonPayee_Integraton_Test()
+        public void NonPayee_Personal_Integraton_Test()
         {
             Console.WriteLine(
                 "\n\n\n================================================================================================");
             Console.WriteLine(
-                "\n==============1 Create New General Corporate====================================================");
+                "\n==============1 Create New General Personal====================================================");
             Console.WriteLine(
                 "\n================================================================================================");
             Create_New_General_Corporate_Case1();
@@ -30,7 +30,7 @@ namespace DEVES.IntegrationAPI.WebApiTests1.Controllers.client_service.deves_tes
             Console.WriteLine(
                 "\n\n\n=================================================================================================");
             Console.WriteLine(
-                "\n==============1.1 Inquiry Corporate Client in Case #1============================================");
+                "\n==============1.1 Inquiry Personal Client in Case #1============================================");
             Console.WriteLine(
                 "\n=================================================================================================");
             Inquiry_Fullname_Corporate_Client_in_Case_1();
@@ -38,14 +38,14 @@ namespace DEVES.IntegrationAPI.WebApiTests1.Controllers.client_service.deves_tes
             Console.WriteLine(
                 "\n\n\n=================================================================================================");
             Console.WriteLine(
-                "\n==============1.2 Inquiry Corporate Client in Case #1============================================");
+                "\n==============1.2 Inquiry Personal Client in Case #1============================================");
             Console.WriteLine(
                 "\n=================================================================================================");
             Inquiry_TaxId_Corporate_Client_in_Case_1();
             Console.WriteLine(
                 "\n\n\n=========================================================================================");
             Console.WriteLine(
-                "\n==============1.3 Inquiry Corporate Client in Case #1========================================");
+                "\n==============1.3 Inquiry Personal Client in Case #1========================================");
             Console.WriteLine(
                 "\n=============================================================================================");
             Inquiry_TaxId_and_TaxBranch_Corporate_Client_in_Case_1();
@@ -53,7 +53,7 @@ namespace DEVES.IntegrationAPI.WebApiTests1.Controllers.client_service.deves_tes
             Console.WriteLine(
                 "\n\n\n=========================================================================================");
             Console.WriteLine(
-                "\n==============1.4 Inquiry Corporate Client in Case #1========================================");
+                "\n==============1.4 Inquiry Personal Client in Case #1========================================");
             Console.WriteLine(
                 "\n=============================================================================================");
             Inquiry_PolisyClientId_Corporate_Client_in_Case_1();
@@ -61,7 +61,7 @@ namespace DEVES.IntegrationAPI.WebApiTests1.Controllers.client_service.deves_tes
             Console.WriteLine(
                 "\n\n\n=========================================================================================");
             Console.WriteLine(
-                "\n==============1.5 Inquiry Corporate Client in Case #1========================================");
+                "\n==============1.5 Inquiry Personal Client in Case #1========================================");
             Console.WriteLine(
                 "\n=============================================================================================");
             Inquiry_CleansingId_Corporate_Client_in_Case_1();
@@ -69,7 +69,7 @@ namespace DEVES.IntegrationAPI.WebApiTests1.Controllers.client_service.deves_tes
             Console.WriteLine(
                 "\n\n\n=========================================================================================");
             Console.WriteLine(
-                "\n============== 2 Create New General Corporate เปลี่ยนที่อยู่ และ TaxBranch==========================");
+                "\n============== 2 Create New General Personal เปลี่ยนที่อยู่ และ TaxBranch==========================");
             Console.WriteLine(
                 "\n=============================================================================================");
             Create_New_General_Corporate_Case2();
@@ -78,7 +78,7 @@ namespace DEVES.IntegrationAPI.WebApiTests1.Controllers.client_service.deves_tes
             Console.WriteLine(
                 "\n\n\n=================================================================================================");
             Console.WriteLine(
-                "\n==============2.1 Inquiry Corporate Client in Case #1============================================");
+                "\n==============2.1 Inquiry Personal Client in Case #1============================================");
             Console.WriteLine(
                 "\n=================================================================================================");
             Inquiry_Fullname_Corporate_Client_in_Case_2();
@@ -86,14 +86,14 @@ namespace DEVES.IntegrationAPI.WebApiTests1.Controllers.client_service.deves_tes
             Console.WriteLine(
                 "\n\n\n=================================================================================================");
             Console.WriteLine(
-                "\n==============2.2 Inquiry Corporate Client in Case #1============================================");
+                "\n==============2.2 Inquiry Personal Client in Case #1============================================");
             Console.WriteLine(
                 "\n=================================================================================================");
             Inquiry_TaxId_Corporate_Client_in_Case_2();
             Console.WriteLine(
                 "\n\n\n=========================================================================================");
             Console.WriteLine(
-                "\n==============2.3 Inquiry Corporate Client in Case #1========================================");
+                "\n==============2.3 Inquiry Personal Client in Case #1========================================");
             Console.WriteLine(
                 "\n=============================================================================================");
             Inquiry_TaxId_and_TaxBranch_Corporate_Client_in_Case_2();
@@ -101,7 +101,7 @@ namespace DEVES.IntegrationAPI.WebApiTests1.Controllers.client_service.deves_tes
             Console.WriteLine(
                 "\n\n\n=========================================================================================");
             Console.WriteLine(
-                "\n==============2.4 Inquiry Corporate Client in Case #1========================================");
+                "\n==============2.4 Inquiry Personal Client in Case #1========================================");
             Console.WriteLine(
                 "\n=============================================================================================");
             Inquiry_PolisyClientId_Corporate_Client_in_Case_2();
@@ -109,7 +109,7 @@ namespace DEVES.IntegrationAPI.WebApiTests1.Controllers.client_service.deves_tes
             Console.WriteLine(
                 "\n\n\n=========================================================================================");
             Console.WriteLine(
-                "\n==============2.5 Inquiry Corporate Client in Case #1========================================");
+                "\n==============2.5 Inquiry Personal Client in Case #1========================================");
             Console.WriteLine(
                 "\n=============================================================================================");
             Inquiry_CleansingId_Corporate_Client_in_Case_2();
@@ -118,7 +118,7 @@ namespace DEVES.IntegrationAPI.WebApiTests1.Controllers.client_service.deves_tes
             Console.WriteLine(
                 "\n\n\n=========================================================================================");
             Console.WriteLine(
-                "\n==============3 Create New General Corporate  ไม่ระบุที่อยู่ แต่ TaxBranch เดิมเหมือน Case #2 (Warning Create Duplicate) =============");
+                "\n==============3 Create New General Personal ไม่ระบุที่อยู่ แต่ CitizenID เดิมเหมือน Case #2 (Warning Create Duplicate) =============");
             Console.WriteLine(
                 "\n=============================================================================================");
             Create_New_General_Corporate_Case3();
@@ -128,7 +128,7 @@ namespace DEVES.IntegrationAPI.WebApiTests1.Controllers.client_service.deves_tes
             Console.WriteLine(
                 "\n\n\n=========================================================================================");
             Console.WriteLine(
-                "\n==============4 Create New General Corporate  Profile เดิมเหมือน Case #1 แต่เปลี่ยนที่อยู่ โดย TaxBranch เดิม (Executed Successfully) =============");
+                "\n==============4 Create New General Personal  Profile เดิมเหมือน Case #1 แต่เปลี่ยนที่อยู่ โดย TaxBranch เดิม (Executed Successfully) =============");
             Console.WriteLine(
                 "\n=============================================================================================");
             Create_New_General_Corporate_Case4();
@@ -138,7 +138,7 @@ namespace DEVES.IntegrationAPI.WebApiTests1.Controllers.client_service.deves_tes
             Console.WriteLine(
                 "\n\n\n=========================================================================================");
             Console.WriteLine(
-                "\n==============5 Create New General Corporate  Profile เดิมเหมือน Case #1 ทั้งหมด (Warning Create Duplicate)=============");
+                "\n==============5 Create New General Personal  Profile เดิมเหมือน Case #1 ทั้งหมด (Warning Create Duplicate)=============");
             Console.WriteLine(
                 "\n=============================================================================================");
             Create_New_General_Corporate_Case5();
@@ -147,7 +147,7 @@ namespace DEVES.IntegrationAPI.WebApiTests1.Controllers.client_service.deves_tes
             Console.WriteLine(
                 "\n\n\n=========================================================================================");
             Console.WriteLine(
-                "\n==============6 Create New General Corporate  Profile เดิมเหมือน Case #2 ทั้งหมด (Warning Create Duplicate)=============");
+                "\n==============6 Create New General Personal  Profile เดิมเหมือน Case #2 ทั้งหมด (Warning Create Duplicate)=============");
             Console.WriteLine(
                 "\n=============================================================================================");
             Create_New_General_Corporate_Case6();
@@ -157,7 +157,7 @@ namespace DEVES.IntegrationAPI.WebApiTests1.Controllers.client_service.deves_tes
             Console.WriteLine(
                 "\n\n\n=========================================================================================");
             Console.WriteLine(
-                "\n==============7 Create New General Corporate  Profile เดิมเหมือน Case #2 ทั้งหมด แต่เปลี่ยนที่อยู่โดยไม่ระบุ 'หมู่ที่' และ 'ถ.' (Warning Create Duplicate)=============");
+                "\n==============7 Create New General Personal  Profile เดิมเหมือน Case #2 ทั้งหมด แต่เปลี่ยนที่อยู่โดยไม่ระบุ 'หมู่ที่' และ 'ถ.' (Warning Create Duplicate)=============");
             Console.WriteLine(
                 "\n=============================================================================================");
             Create_New_General_Corporate_Case7();

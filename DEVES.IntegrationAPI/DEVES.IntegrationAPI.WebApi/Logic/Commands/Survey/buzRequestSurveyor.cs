@@ -38,6 +38,16 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             {
                 output.eventID = "";
                 output.errorMessage = e.Message;
+                if (e.Message.Contains("เลขรับแจ้งมีอยู่แล้วในระบบ"))
+                {
+                    iSurveyOutput.eventid = "";
+                    iSurveyOutput.errorMessage = "ส่งข้อมูลเข้า i-Survey ไม่สำเร็จ: เลขรับแจ้งมีอยู่แล้วในระบบ";
+                }
+                else
+                {
+                    iSurveyOutput.eventid = "";
+                    iSurveyOutput.errorMessage = "ส่งข้อมูลเข้า i-Survey ไม่สำเร็จ: " + e.Message;
+                }
             }
             catch (Exception e)
             {
