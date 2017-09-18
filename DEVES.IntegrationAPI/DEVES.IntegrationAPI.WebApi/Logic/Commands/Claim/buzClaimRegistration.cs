@@ -23,10 +23,20 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         QueryInfo q = new QueryInfo();
         System.Data.DataTable dt = new System.Data.DataTable();
 
+        Guid g = new Guid();
+        LocusClaimRegistrationInputModel inputTest = new LocusClaimRegistrationInputModel();
+
         public override BaseDataModel ExecuteInput(object input)
         {
+            bool isTesting = false;
+
             //+ Deserialize Input
             ClaimRegistrationInputModel contentModel = (ClaimRegistrationInputModel)input;
+
+            if(contentModel.IncidentId.ToString().Equals("99999999-9999-9999-9999-999999999999"))
+            {
+                isTesting = true;
+            }
 
             //+ Prepare input data model
             LocusClaimRegistrationInputModel data = new LocusClaimRegistrationInputModel();
@@ -43,7 +53,28 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             listParam.Add(new CommandParameter("CurrentUserId", contentModel.CurrentUserId));
             FillModelUsingSQL(ref inputData, CommonConstant.sqlcmd_Get_RegClaimInfo, listParam);
             */
-            data = Mapping(contentModel.IncidentId.ToString(), contentModel.CurrentUserId.ToString());
+
+            if (isTesting)
+            {
+                inputTest = UnitTest(contentModel);
+                data = inputTest;
+            }
+            else
+            {
+                data = Mapping(contentModel.IncidentId.ToString(), contentModel.CurrentUserId.ToString());
+            }
+            
+            if (data.claimHeader == null && data.claimInform == null && data.claimAssignSurv == null && data.claimSurvInform == null)
+            {
+                ClaimRegistrationContentOutputModel contentOutputFail = new ClaimRegistrationContentOutputModel();
+                contentOutputFail.data = new ClaimRegistrationDataOutputModel();
+                ClaimRegistrationDataOutputModel outputFail = new ClaimRegistrationDataOutputModel();
+                outputFail.claimID = null;
+                outputFail.claimNo = null;
+                outputFail.errorMessage = "ไม่พบ incidentId นี้ในระบบ CRM";
+
+                return outputFail;
+            }
 
             // Convert BaseDataModel tobe LocusInput and fix some variable (in case of "claimType = "O" <เตลมแห้ง>)
             // data = (LocusClaimRegistrationInputModel)inputData;
@@ -263,6 +294,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             dt = mappingOutput.dt;
 
             LocusClaimRegistrationInputModel rsModel = new LocusClaimRegistrationInputModel();
+
+            if (dt.Rows.Count == 0)
+            {
+                return rsModel;
+            }
+
             rsModel.claimHeader = new LocusClaimheaderModel();
             rsModel.claimInform = new LocusClaiminformModel();
             rsModel.claimAssignSurv = new LocusClaimassignsurvModel();
@@ -421,6 +458,111 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             }
 
             return Convert.ToDateTime(datetime);
+        }
+
+
+        protected LocusClaimRegistrationInputModel UnitTest(ClaimRegistrationInputModel contentModel)
+        {
+            // Create Case
+            ServiceContext svcContext;
+            var _serviceProxy = GetOrganizationServiceProxy(out svcContext);
+
+            Incident crmCase = new Incident
+            {
+                CustomerId = new Microsoft.Xrm.Sdk.EntityReference(Contact.EntityLogicalName, new Guid("4F2858B8-C3CE-E611-80D1-0050568D1874")),
+                OwnerId = new Microsoft.Xrm.Sdk.EntityReference(SystemUser.EntityLogicalName, new Guid("50529F88-2BE9-E611-80D4-0050568D1874"))
+            };
+
+            g = _serviceProxy.Create(crmCase);
+
+            var queryCase = from c in svcContext.IncidentSet
+                            where c.IncidentId == g
+                            select c;
+
+            // Retrieve Case
+            Incident incident = queryCase.FirstOrDefault<Incident>();
+            string ticketNo = incident.TicketNumber;
+
+            // Query claimNotiNo
+            string SQL_ClaimNotiNo = @"DECLARE @ticketNo AS NVARCHAR(20) = '{0}'; DECLARE @uniqueID AS UNIQUEIDENTIFIER = '{1}'; DECLARE @requestBy AS NVARCHAR(250) = '{2}'; DECLARE @resultCode AS NVARCHAR(10) DECLARE @resultDesc AS NVARCHAR(1000) select @uniqueID = ISNULL(IncidentId, @uniqueID) from dbo.IncidentBase a with(nolock) where a.TicketNumber = @ticketNo EXEC[dbo].[sp_ReqMotorClaimNotiNo] @uniqueID, @requestBy, @resultCode OUTPUT, @resultDesc OUTPUT select @ticketNo as [@ticketNo],@uniqueID as [@uniqueID],@requestBy as [@requestBy],@resultCode as [@resultCode], @resultDesc as [@resultDesc]";
+            string sqlCommand = string.Format(SQL_ClaimNotiNo, ticketNo, g, contentModel.CurrentUserId.ToString());
+
+            QuerySqlService sql = QuerySqlService.Instance;
+            QuerySQLOutputModel mappingOutput = new QuerySQLOutputModel();
+            mappingOutput = sql.GetQuery("CRMQA_MSCRM", sqlCommand);
+
+            // prepare variable for returning 
+            LocusClaimRegistrationInputModel inputMock = new LocusClaimRegistrationInputModel();
+            inputMock.claimHeader = new LocusClaimheaderModel();
+            inputMock.claimAssignSurv = new LocusClaimassignsurvModel();
+            inputMock.claimInform = new LocusClaiminformModel();
+            inputMock.claimSurvInform = new LocusClaimsurvinformModel();
+
+            // Mocking Variable to Case
+            inputMock.claimHeader.premiumClass = "MVS";
+            inputMock.claimHeader.ticketNumber = ticketNo;
+            inputMock.claimHeader.claimNotiNo = mappingOutput.dt.Rows[0]["@resultDesc"].ToString();
+            inputMock.claimHeader.policyNo = "V0756004";
+            inputMock.claimHeader.fleetCarNo = 1;
+            inputMock.claimHeader.policySeqNo = 1;
+            inputMock.claimHeader.renewalNo = 0;
+            inputMock.claimHeader.barcode = "2080003047183";
+            inputMock.claimHeader.policyIssueDate = Convert.ToDateTime("2015-12-17 00:00:00");
+            inputMock.claimHeader.policyEffectiveDate = Convert.ToDateTime("2016-01-29 00:00:00");
+            inputMock.claimHeader.policyExpiryDate = Convert.ToDateTime("2017-10-29 00:00:00");
+            inputMock.claimHeader.policyProductTypeCode = "FE";
+            inputMock.claimHeader.policyProductTypeName = "ประเภท 2++";
+            inputMock.claimHeader.policyGarageFlag = "N";
+            inputMock.claimHeader.policyPaymentStatus = "N";
+            inputMock.claimHeader.policyCarRegisterNo = "ษม7045";
+            inputMock.claimHeader.policyCarRegisterProv = "กท";
+            inputMock.claimHeader.carChassisNo = "MR053BK3005017550@";
+            inputMock.claimHeader.carVehicleModel = "TOYOTA CAMRY";
+            inputMock.claimHeader.carVehicleYear = "2004";
+            inputMock.claimHeader.carVehicleBody = "SEDAN";
+            inputMock.claimHeader.agentCode = "90001521";
+            inputMock.claimHeader.agentName = "หักส่วนลดหน้าตาราง";
+            inputMock.claimHeader.agentBranch = "00";
+            inputMock.claimHeader.vipCaseFlag = "N";
+            inputMock.claimHeader.privilegeLevel = "1";
+            inputMock.claimHeader.highLossCaseFlag = "N";
+            inputMock.claimHeader.legalCaseFlag = "N";
+            inputMock.claimHeader.claimNotiRemark = "วันที่เกิดเหตุ : 28-8-2017 เวลา 08:00 น.\n การเกิดเหตุ : คู่กรณีชนท้ายประกัน";
+            inputMock.claimHeader.claimType = "O";
+            inputMock.claimHeader.informByCrmId = "crmtest1";
+            inputMock.claimHeader.informByCrmName = "crm test1";
+            inputMock.claimHeader.submitByCrmId = "crmtest1";
+            inputMock.claimHeader.submitByCrmName = "crm test1";
+            inputMock.claimHeader.serviceBranch = "0";
+            inputMock.claimHeader.policyAdditionalID = new Guid("D78D5356-F4B6-E611-80CA-0050568D1874");
+            inputMock.claimHeader.policyBranch = "0";
+
+            inputMock.claimInform.informerClientId = "14514669";
+            inputMock.claimInform.informerFullName = "ธวัชชัย จันทน์แดง";
+            inputMock.claimInform.informerMobile = "0863156332";
+            inputMock.claimInform.driverClientId = "14514669";
+            inputMock.claimInform.driverFullName = "ธวัชชัย จันทน์แดง";
+            inputMock.claimInform.driverMobile = "0863156332";
+            inputMock.claimInform.insuredClientId = "10033581";
+            inputMock.claimInform.insuredFullName = "ธวัชชัย จันทน์แดง";
+            inputMock.claimInform.relationshipWithInsurer = "00";
+            inputMock.claimInform.currentCarRegisterNo = "ษม7045";
+            inputMock.claimInform.currentCarRegisterProv = "กท";
+            inputMock.claimInform.informerOn = Convert.ToDateTime("2017-08-30 17:36:00");
+            inputMock.claimInform.accidentOn = Convert.ToDateTime("2017-08-28 08:00:00");
+            inputMock.claimInform.accidentDescCode = "201";
+            inputMock.claimInform.accidentDesc = "วันที่เกิดเหตุ : 28-8-2017 เวลา 08:00 น.\n การเกิดเหตุ : คู่กรณีชนท้ายประกัน";
+            inputMock.claimInform.numOfExpectInjury = 0;
+            inputMock.claimInform.accidentPlace = "97 ถนน ดินสอ แขวง วัดบวรนิเวศ เขต พระนคร กรุงเทพมหานคร 10200 ประเทศไทย";
+            inputMock.claimInform.accidentLatitude = "13.757";
+            inputMock.claimInform.accidentLongitude = "100.502";
+            inputMock.claimInform.sendOutSurveyorCode = "01";
+
+            inputMock.claimAssignSurv.surveyTeam = "TEAM0099";
+
+            inputMock.claimSurvInform.policeBailFlag = "N";
+
+            return inputMock;
         }
 
 
