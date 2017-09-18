@@ -219,12 +219,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
                     {
                         if (responseContent["responseCode"].ToString() != "EWI-0000I")
                         {
-                           // if (responseContent["responseCode"].ToString() == "EWI-1000E")
-                           // {
+                            if (responseContent["responseCode"].ToString() == "EWI-1000E")
+                            {
 
-                           // }
-                            //else
-                            //{
+                            }
+                            else
+                            { 
                                 //if (resendCount > LimitResend)
                                 //{
                                     throw new BuzErrorException(
@@ -235,7 +235,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
                                         GlobalTransactionID);
                                 //}
                                     
-                           // }
+                            }
                         }
 
 

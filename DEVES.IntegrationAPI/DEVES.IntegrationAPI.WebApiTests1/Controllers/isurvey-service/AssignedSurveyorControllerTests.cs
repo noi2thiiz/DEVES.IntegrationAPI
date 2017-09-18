@@ -37,7 +37,7 @@ namespace DEVES.IntegrationAPI.WebApiTests1.Controllers.isurvey_service
                    ""surveyType"":""1"",
                    ""surveyTeam"":""TEAM0004""
                 }
-            ";
+             ";
 
             // ระบุ  ที่ต้องการทดสอบ และ Method ที่ต้องการทดสอบ ในตัวอย่างนี้ต้องการ  ทดสอบ Method  Post  
             var response = ExcecuteControllers<AssignedSurveyorController>(jsonString, "Post");
