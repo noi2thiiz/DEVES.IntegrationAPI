@@ -603,11 +603,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Commands.Client
                                     typeof(
                                         CLIENTUpdateCorporateClientAndAdditionalInfoInputModel
                                     ));
-
-                    if ((inqClientPolisy400Out?.clientList?.assessorFlag == "Y"
-                         || inqClientPolisy400Out?.clientList?.solicitorFlag == "Y"
-                         || inqClientPolisy400Out?.clientList?.repairerFlag == "Y"
-                         || inqClientPolisy400Out?.clientList?.hospitalFlag == "Y") )
+                    if (inqClientPolisy400Out?.clientList?.additionalExistFlag =="Y")
                     {
                         updateClientPolisy400In = (CLIENTUpdateCorporateClientAndAdditionalInfoInputModel)
                             TransformerFactory.TransformModel(inqClientPolisy400Out,updateClientPolisy400In);
@@ -619,8 +615,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Commands.Client
                     {
                         updateClientPolisy400In =
                             (CLIENTUpdateCorporateClientAndAdditionalInfoInputModel)
-                            TransformerFactory.TransformModel(RegClientCorporateInput,
-                                updateClientPolisy400In);
+                            TransformerFactory.TransformModel(RegClientCorporateInput,updateClientPolisy400In);
                         updateClientPolisy400In.checkFlag = "CREATE";
                     }
                     CleansingId = inqClientPolisy400Out?.clientList?.cleansingId;
