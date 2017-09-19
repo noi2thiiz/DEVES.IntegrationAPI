@@ -28,15 +28,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
         public override BaseDataModel ExecuteInput(object input)
         {
-            bool isTesting = false;
 
             //+ Deserialize Input
             ClaimRegistrationInputModel contentModel = (ClaimRegistrationInputModel)input;
-
-            if(contentModel.IncidentId.ToString().Equals("99999999-9999-9999-9999-999999999999"))
-            {
-                isTesting = true;
-            }
 
             //+ Prepare input data model
             LocusClaimRegistrationInputModel data = new LocusClaimRegistrationInputModel();
@@ -54,15 +48,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             FillModelUsingSQL(ref inputData, CommonConstant.sqlcmd_Get_RegClaimInfo, listParam);
             */
 
-            if (isTesting)
-            {
-                inputTest = UnitTest(contentModel);
-                data = inputTest;
-            }
-            else
-            {
-                data = Mapping(contentModel.IncidentId.ToString(), contentModel.CurrentUserId.ToString());
-            }
+            data = Mapping(contentModel.IncidentId.ToString(), contentModel.CurrentUserId.ToString());
+            
             
             if (data.claimHeader == null && data.claimInform == null && data.claimAssignSurv == null && data.claimSurvInform == null)
             {
@@ -412,7 +399,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
         protected string isStringNull(string a)
         {
-            if (dt.Rows[0][a] == null)
+            if (string.IsNullOrEmpty(dt.Rows[0][a].ToString()))
             {
                 return null;
             }
@@ -421,22 +408,22 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 return dt.Rows[0][a].ToString();
             }
         }
-        protected int isIntNull(string a)
+        protected int? isIntNull(string a)
         {
             if (string.IsNullOrEmpty(dt.Rows[0][a].ToString()))
             {
-                return 0;
+                return null;
             }
             else
             {
                 return Convert.ToInt32(dt.Rows[0][a]);
             }
         }
-        protected double isDoubleNull(string a)
+        protected double? isDoubleNull(string a)
         {
             if (string.IsNullOrEmpty(dt.Rows[0][a].ToString()))
             {
-                return 0;
+                return null;
             }
             else
             {
@@ -444,23 +431,27 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             }
         }
 
-        protected DateTime isDateTimeNull(string a)
+        protected DateTime? isDateTimeNull(string a)
         {
             string datetime = "";
 
             if (String.IsNullOrEmpty(dt.Rows[0][a].ToString()))
             {
                 datetime = null;
+
+                return null;
             }
             else
             {
                 datetime = dt.Rows[0][a].ToString();
+
+                return Convert.ToDateTime(datetime);
             }
 
-            return Convert.ToDateTime(datetime);
+            
         }
 
-
+        /*
         protected LocusClaimRegistrationInputModel UnitTest(ClaimRegistrationInputModel contentModel)
         {
             // Create Case
@@ -533,9 +524,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             inputMock.claimHeader.informByCrmName = "crm test1";
             inputMock.claimHeader.submitByCrmId = "crmtest1";
             inputMock.claimHeader.submitByCrmName = "crm test1";
-            inputMock.claimHeader.serviceBranch = "0";
+            inputMock.claimHeader.serviceBranch = "00";
             inputMock.claimHeader.policyAdditionalID = new Guid("D78D5356-F4B6-E611-80CA-0050568D1874");
-            inputMock.claimHeader.policyBranch = "0";
+            inputMock.claimHeader.policyBranch = "00";
 
             inputMock.claimInform.informerClientId = "14514669";
             inputMock.claimInform.informerFullName = "ธวัชชัย จันทน์แดง";
@@ -564,7 +555,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             return inputMock;
         }
-
+        */
 
     }
 }
