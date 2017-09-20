@@ -650,7 +650,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
         [Priority(2)]
         public void Post_RegPayeePersonal_PG02_Test()
         {
-            Console.Clear();
+            
             /*Description
             *Input
             * roleCode = G	
@@ -793,7 +793,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
         [Priority(3)]
         public void Post_RegPayeePersonal_PG03_Test()
         {
-            Console.Clear();
+            
             /*Description
             *Input
             * roleCode = G	
@@ -988,7 +988,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
         [Priority(4)]
         public void Post_RegPayeePersonal_PG04_Test()
         {
-            Console.Clear();
+            
             /*Description
             *Input
             * roleCode = G	
@@ -1145,7 +1145,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
         [Priority(5)]
         public void Post_RegPayeePersonal_PG05_Test()
         {
-            Console.Clear();
+            
             /*Description
             *Input
             * roleCode = G	
@@ -1292,7 +1292,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
         [Priority(6)]
         public void Post_RegPayeePersonal_PG06_Test()
         {
-            Console.Clear();
+            
             /*Description
             *Input
             * roleCode = G	
