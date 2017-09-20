@@ -625,7 +625,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Commands.Client
                     RegClientCorporateInput.profileHeader.corporateBranch = inqClientPolisy400Out?.clientList?.corporateStaffNo;
 
                     //ต้อง Map field retCOMPInqClient ไปเป็น  updateClientPolisy400In  ไม่ใช่เอามาจาก user input
-
+                    //ข้อมมูลในกลุ่ม ASRH Flag แก้ไม่ได้
                     if (regClientCorporateInput?.generalHeader?.assessorFlag == "Y")
                     {
                         updateClientPolisy400In.assessorFlag = "Y";
