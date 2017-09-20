@@ -84,7 +84,7 @@ namespace DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData
                     // Console.WriteLine(item.ToJSON());
                     try
                     {
-                        Console.WriteLine(item[fieldCodeName]?.GetType()?.ToString());
+                        //Console.WriteLine(item[fieldCodeName]?.GetType()?.ToString());
                         if (string.IsNullOrEmpty(fieldCodeName)) continue;
                         if (item[fieldCodeName]?.GetType()?.ToString() == "System.DBNull") continue;
 

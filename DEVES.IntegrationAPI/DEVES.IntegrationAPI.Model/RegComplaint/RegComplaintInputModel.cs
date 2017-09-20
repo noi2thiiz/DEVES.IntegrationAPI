@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 
 namespace DEVES.IntegrationAPI.Model.RegComplaint
 {
-    public class RegComplaintInputModel
+    public class RegComplaintInputModel : BaseDataModel
     {
         public string Ticketnumber { get; set; }
         public Guid IncidentId { get; set; }
         public Guid CurrentUserId { get; set; }
     }
 
-    public class Request_RegComplaintModel : BaseDataModel
+    public class Request_RegComplaintModel :  BaseEWIRequestContentModel
     {
         [CrmMapping(FieldName = "compResolve", Source = ENUMDataSource.srcSQL)]
         public string compResolve { get; set; } = "";

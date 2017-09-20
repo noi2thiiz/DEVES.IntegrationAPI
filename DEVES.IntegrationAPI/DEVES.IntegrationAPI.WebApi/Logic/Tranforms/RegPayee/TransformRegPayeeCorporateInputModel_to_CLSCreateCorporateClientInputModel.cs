@@ -75,7 +75,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 trgt.country = src.addressHeader.country?.Trim() ?? "";
                 trgt.addressType = src.addressHeader.addressType?.Trim() ?? "";
                 trgt.latitude = src.addressHeader.latitude?.Trim() ?? "";
-                trgt.longigude = src.addressHeader.longtitude?.Trim() ?? "";
+                trgt.longitude = src.addressHeader.longtitude?.Trim() ?? "";
             }
             trgt.isPayee = "Y";
             trgt.OregNum = "";

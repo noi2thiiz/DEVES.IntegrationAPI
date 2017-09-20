@@ -18,7 +18,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services.Tests
         public void Execute_CLSInquiryCLSPersonalClientTest()
         {
 
-            var service = new CLSInquiryCLSPersonalClient();
+            var service = new CLSInquiryCLSPersonalClientService();
             var result = service.Execute(new CLSInquiryPersonalClientInputModel
             {
                 personalFullName = "พรชัย"

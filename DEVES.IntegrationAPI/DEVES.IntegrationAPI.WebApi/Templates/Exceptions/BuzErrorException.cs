@@ -65,5 +65,17 @@ namespace DEVES.IntegrationAPI.WebApi.Templates.Exceptions
             SourceData = sourceData;
             OutputModel = regPayeeCorporateOutput;
         }
+
+        public object GetOutputModel()
+        {
+            return new
+            {
+                Code,
+                Message ,
+                Description ,
+                SourceError,
+                TransactionId,
+            };
+        }
     }
 }

@@ -190,30 +190,45 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 {
                     #region Create payee in CRM
 
-                    if (!ignoreCrm && !string.IsNullOrEmpty(RegPayeePersonalInput?.generalHeader?.cleansingId))
+                    if (!ignoreCrm)
                     {
-
-                        if (false == SpApiChkCustomerClient.Instance.CheckByCleansingId(RegPayeePersonalInput.generalHeader.cleansingId))
+                        if (string.IsNullOrEmpty(RegPayeePersonalInput?.generalHeader?.crmPersonId))
                         {
-                            AddDebugInfo("Create payee in CRM ");
-                            buzCreateCrmPayeePersonal cmdCreateCrmPayee = new buzCreateCrmPayeePersonal();
-                            cmdCreateCrmPayee.TransactionId = TransactionId;
-                            CreateCrmPersonInfoOutputModel crmContentOutput = (CreateCrmPersonInfoOutputModel)cmdCreateCrmPayee.Execute(RegPayeePersonalInput);
-                            if (crmContentOutput.code == CONST_CODE_SUCCESS)
+
+
+                            if (!string.IsNullOrEmpty(RegPayeePersonalInput?.generalHeader?.cleansingId))
                             {
-                                outputPass.crmClientId = crmContentOutput?.crmClientId ?? "";
+
+                                if (false == SpApiChkCustomerClient.Instance.CheckByCleansingId(RegPayeePersonalInput
+                                        .generalHeader.cleansingId))
+                                {
+                                    AddDebugInfo("Create payee in CRM ");
+                                    buzCreateCrmPayeePersonal cmdCreateCrmPayee = new buzCreateCrmPayeePersonal();
+                                    cmdCreateCrmPayee.TransactionId = TransactionId;
+                                    CreateCrmPersonInfoOutputModel crmContentOutput =
+                                        (CreateCrmPersonInfoOutputModel) cmdCreateCrmPayee.Execute(
+                                            RegPayeePersonalInput);
+                                    if (crmContentOutput.code == CONST_CODE_SUCCESS)
+                                    {
+                                        outputPass.crmClientId = crmContentOutput?.crmClientId ?? "";
+                                    }
+                                    else
+                                    {
+                                        AddDebugInfo("Cannot create Client in CRM :" + crmContentOutput.message,
+                                            crmContentOutput);
+                                        //regPayeePersonalOutput.code = CONST_CODE_FAILED;
+                                        //regPayeePersonalOutput.message = crmContentOutput.message;
+                                        //regPayeePersonalOutput.description = crmContentOutput.description;
+                                    }
+                                }
                             }
-                            else
-                            {
-                                AddDebugInfo("Cannot create Client in CRM :" + crmContentOutput.message, crmContentOutput);
-                                //regPayeePersonalOutput.code = CONST_CODE_FAILED;
-                                //regPayeePersonalOutput.message = crmContentOutput.message;
-                                //regPayeePersonalOutput.description = crmContentOutput.description;
-                            }
+                        }
+                        else
+                        {
+                            outputPass.crmClientId = RegPayeePersonalInput?.generalHeader?.crmPersonId;
                         }
                     }
 
-                    
                     #endregion Create payee in CRM
                 }
                 catch (Exception e)
@@ -306,10 +321,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             AddDebugInfo("Search Payee in SAP", SAPInqVendorIn);
 
-            var SAPInqVendorContentOut =
-                CallDevesServiceProxy<Model.SAP.SAPInquiryVendorOutputModel, Model.SAP.EWIResSAPInquiryVendorContentModel>(
-                    CommonConstant.ewiEndpointKeySAPInquiryVendor, SAPInqVendorIn);
-
+           //var SAPInqVendorContentOut =
+           //     CallDevesServiceProxy<Model.SAP.SAPInquiryVendorOutputModel, Model.SAP.EWIResSAPInquiryVendorContentModel>(
+           //         CommonConstant.ewiEndpointKeySAPInquiryVendor, SAPInqVendorIn);
+            var sapService = new SAPInquiryVendor(TransactionId,ControllerName);
+            EWIResSAPInquiryVendorContentModel SAPInqVendorContentOut = sapService.Execute((SAPInquiryVendorInputModel)SAPInqVendorIn);
             #endregion Search Payee in SAP
 
             var sapInfo = SAPInqVendorContentOut?.VendorInfo?.FirstOrDefault();

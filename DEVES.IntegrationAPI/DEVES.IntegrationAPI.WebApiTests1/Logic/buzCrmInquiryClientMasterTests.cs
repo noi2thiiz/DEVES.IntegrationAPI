@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using DEVES.IntegrationAPI.Model;
 using DEVES.IntegrationAPI.Model.InquiryClientMaster;
 using DEVES.IntegrationAPI.Model.InquiryCRMPayeeList;
+using DEVES.IntegrationAPI.WebApi.Logic.Commands.Client;
 using DEVES.IntegrationAPI.WebApi.Templates.Exceptions;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
@@ -21,7 +22,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
             
             try
             {
-                var cmd = new buzCrmInquiryClientMaster();
+                var cmd = new BuzCrmInquiryClientMaster();
                 var input = new InquiryClientMasterInputModel
                 {
                     conditionHeader = new ConditionHeaderModel
@@ -62,7 +63,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
            
             try
             {
-                var cmd = new buzCrmInquiryClientMaster();
+                var cmd = new BuzCrmInquiryClientMaster();
                 var input = new InquiryClientMasterInputModel
                 {
                     conditionHeader = new ConditionHeaderModel
@@ -104,7 +105,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
            
             try
             {
-                var cmd = new buzCrmInquiryClientMaster();
+                var cmd = new BuzCrmInquiryClientMaster();
                 var input = new InquiryClientMasterInputModel
                 {
                     conditionHeader = new ConditionHeaderModel
@@ -147,7 +148,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
            
             try
             {
-                var cmd = new buzCrmInquiryClientMaster();
+                var cmd = new BuzCrmInquiryClientMaster();
                 var input = new InquiryClientMasterInputModel
                 {
                     conditionHeader = new ConditionHeaderModel
@@ -190,7 +191,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
            
             try
             {
-                var cmd = new buzCrmInquiryClientMaster();
+                var cmd = new BuzCrmInquiryClientMaster();
                 var input = new InquiryClientMasterInputModel
                 {
                     conditionHeader = new ConditionHeaderModel
@@ -232,7 +233,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
            
             try
             {
-                var cmd = new buzCrmInquiryClientMaster();
+                var cmd = new BuzCrmInquiryClientMaster();
                 var input = new InquiryClientMasterInputModel
                 {
                     conditionHeader = new ConditionHeaderModel
@@ -274,7 +275,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
             
             try
             {
-                var cmd = new buzCrmInquiryClientMaster();
+                var cmd = new BuzCrmInquiryClientMaster();
                 var input = new InquiryClientMasterInputModel
                 {
                     conditionHeader = new ConditionHeaderModel
@@ -316,7 +317,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
             
             try
             {
-                var cmd = new buzCrmInquiryClientMaster();
+                var cmd = new BuzCrmInquiryClientMaster();
                 var input = new InquiryClientMasterInputModel
                 {
                     conditionHeader = new ConditionHeaderModel
@@ -373,7 +374,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
           
             try
             {
-                var cmd = new buzCrmInquiryClientMaster();
+                var cmd = new BuzCrmInquiryClientMaster();
                 var input = new InquiryClientMasterInputModel
                 {
                     conditionHeader = new ConditionHeaderModel
@@ -416,7 +417,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
             
             try
             {
-                var cmd = new buzCrmInquiryClientMaster();
+                var cmd = new BuzCrmInquiryClientMaster();
                 var input = new InquiryClientMasterInputModel
                 {
                     conditionHeader = new ConditionHeaderModel
@@ -458,7 +459,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
             
             try
             {
-                var cmd = new buzCrmInquiryClientMaster();
+                var cmd = new BuzCrmInquiryClientMaster();
                 var input = new InquiryClientMasterInputModel
                 {
                     conditionHeader = new ConditionHeaderModel

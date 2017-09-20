@@ -84,7 +84,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 trgt.addressType = src?.addressInfo?.addressType??"";
 
                 trgt.latitude = src?.addressInfo?.latitude??"";
-                trgt.longtitude = src?.addressInfo?.longtitude??"";
+                trgt.longitude = src?.addressInfo?.longtitude??"";
 
             }
 

@@ -80,7 +80,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             trgt.addressHeader.country = src.country;
             trgt.addressHeader.addressType = src.addressType;
             trgt.addressHeader.latitude = src.latitude;
-            trgt.addressHeader.longtitude = src.longigude;
+            trgt.addressHeader.longtitude = src.longitude;
 
 
 

@@ -23,17 +23,10 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
         public object Post([FromBody]object value)
         {
          
-            //var data = File.ReadAllText(HttpContext.Current.Server.MapPath("~/App_Data/TEST_Response_RegPayeeCorporate.json"));
-            //var contentOutput = JsonConvert.DeserializeObject(data);
-            //return Request.CreateResponse(contentOutput);
-
-            //buzCRMRegPayeePersonal cmdCrmRegPayee = new buzCRMRegPayeePersonal();
-            //cmdCrmRegPayee.TransactionId = GetTransactionId();
 
             return ProcessRequest<buzCRMRegPayeePersonal, RegPayeePersonalInputModel>
                 (value, "RegPayeePersonal_Input_Schema.json");
 
-           
 
         }
 

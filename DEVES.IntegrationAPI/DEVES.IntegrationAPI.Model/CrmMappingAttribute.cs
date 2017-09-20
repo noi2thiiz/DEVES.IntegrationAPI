@@ -36,10 +36,12 @@ namespace DEVES.IntegrationAPI.Model
 
     public abstract class BaseEWIRequestContentModel : BaseDataModel
     {
+        [JsonIgnore]
         public BaseEWIRequestContentTransactionHeaderModel transactionHeader { get; set; }
 
     }
-
+  
+    
     public class BaseEWIRequestContentTransactionHeaderModel : BaseDataModel
     {
         

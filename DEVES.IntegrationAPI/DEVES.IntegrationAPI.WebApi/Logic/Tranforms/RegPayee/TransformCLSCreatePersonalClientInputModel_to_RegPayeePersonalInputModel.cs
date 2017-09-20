@@ -90,7 +90,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             trgt.addressInfo.country = src.country;
             trgt.addressInfo.addressType = src.addressType;
             trgt.addressInfo.latitude = src.latitude;
-            trgt.addressInfo.longtitude = src.longtitude;
+            trgt.addressInfo.longtitude = src.longitude;
 
             return trgt;
         }

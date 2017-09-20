@@ -34,6 +34,8 @@ namespace DEVES.IntegrationAPI.WebApiTests1.Controllers.isurvey_service
             var outputJson = JObject.Parse(response?.Result);
             // Assert Return code 200
             Assert.AreEqual("ส่งข้อมูลเข้า i-Survey ไม่สำเร็จ: เลขรับแจ้งมีอยู่แล้วในระบบ", outputJson["errorMessage"]?.ToString());
+            //Assert.AreEqual("MOTOR Error:เลขรับแจ้งมีอยู่แล้วในระบบ", outputJson["errorMessage"]?.ToString());
+            //MOTOR Error:เลขรับแจ้งมีอยู่แล้วในระบบ
         }
 
     }

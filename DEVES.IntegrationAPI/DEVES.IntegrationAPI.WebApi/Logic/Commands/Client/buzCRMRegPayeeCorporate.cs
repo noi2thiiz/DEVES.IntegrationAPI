@@ -249,48 +249,59 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
         private void CreatePayeeInCrm(RegPayeeCorporateDataOutputModel_Pass outputPass)
         {
-            try
+            if (!ignoreCrm && string.IsNullOrEmpty(regPayeeCorporateInput?.generalHeader?.crmClientId))
             {
-                if (!ignoreCrm && !string.IsNullOrEmpty(regPayeeCorporateInput?.generalHeader?.cleansingId))
+                try
                 {
-                    if (false == SpApiChkCustomerClient.Instance.CheckByCleansingId(regPayeeCorporateInput.generalHeader
-                            .cleansingId))
+                    if (!ignoreCrm && !string.IsNullOrEmpty(regPayeeCorporateInput?.generalHeader?.cleansingId))
                     {
-                        AddDebugInfo("Create payee in CRM");
-                        buzCreateCrmPayeeCorporate cmdCreateCrmPayee = new buzCreateCrmPayeeCorporate();
-                        cmdCreateCrmPayee.TransactionId = TransactionId;
-                        CreateCrmCorporateInfoOutputModel crmContentOutput =
-                            (CreateCrmCorporateInfoOutputModel) cmdCreateCrmPayee.Execute(regPayeeCorporateInput);
-
-                        if (crmContentOutput.code == CONST_CODE_SUCCESS)
+                        if (false == SpApiChkCustomerClient.Instance.CheckByCleansingId(regPayeeCorporateInput
+                                .generalHeader
+                                .cleansingId))
                         {
-                            //RegPayeeCorporateDataOutputModel_Pass dataOutPass = new RegPayeeCorporateDataOutputModel_Pass();
-                            //dataOutPass.polisyClientId = regPayeeCorporateInput.generalHeader.polisyClientId;
-                            //dataOutPass.sapVendorCode = regPayeeCorporateInput.sapVendorInfo.sapVendorCode;
-                            //dataOutPass.sapVendorGroupCode = regPayeeCorporateInput.sapVendorInfo.sapVendorGroupCode;
-                            //dataOutPass.personalName = regPayeeCorporateInput.profileInfo.personalName;
-                            //dataOutPass.personalSurname = regPayeeCorporateInput.profileInfo.personalSurname;
+                            AddDebugInfo("Create payee in CRM");
+                            buzCreateCrmPayeeCorporate cmdCreateCrmPayee = new buzCreateCrmPayeeCorporate();
+                            cmdCreateCrmPayee.TransactionId = TransactionId;
+                            CreateCrmCorporateInfoOutputModel crmContentOutput =
+                                (CreateCrmCorporateInfoOutputModel) cmdCreateCrmPayee.Execute(regPayeeCorporateInput);
 
-                            outputPass.crmClientId = crmContentOutput?.crmClientId ?? "";
-                            outputPass.corporateBranch = regPayeeCorporateInput.profileHeader.corporateBranch;
-                            outputPass.sapVendorGroupCode = regPayeeCorporateInput.sapVendorInfo.sapVendorGroupCode;
+                            if (crmContentOutput.code == CONST_CODE_SUCCESS)
+                            {
+                                //RegPayeeCorporateDataOutputModel_Pass dataOutPass = new RegPayeeCorporateDataOutputModel_Pass();
+                                //dataOutPass.polisyClientId = regPayeeCorporateInput.generalHeader.polisyClientId;
+                                //dataOutPass.sapVendorCode = regPayeeCorporateInput.sapVendorInfo.sapVendorCode;
+                                //dataOutPass.sapVendorGroupCode = regPayeeCorporateInput.sapVendorInfo.sapVendorGroupCode;
+                                //dataOutPass.personalName = regPayeeCorporateInput.profileInfo.personalName;
+                                //dataOutPass.personalSurname = regPayeeCorporateInput.profileInfo.personalSurname;
 
-                            //regPayeeCorporateOutput.data.Add(dataOutPass);
-                        }
-                        else
-                        {
-                            AddDebugInfo("Cannot create Client in CRM :" + crmContentOutput.message, crmContentOutput);
-                            //regPayeeCorporateOutput.code = CONST_CODE_FAILED;
-                            //regPayeeCorporateOutput.message = crmContentOutput.message;
-                            //regPayeeCorporateOutput.description = crmContentOutput.description;
+                                outputPass.crmClientId = crmContentOutput?.crmClientId ?? "";
+                                outputPass.corporateBranch = regPayeeCorporateInput?.profileHeader?.corporateBranch;
+                                outputPass.sapVendorGroupCode = regPayeeCorporateInput?.sapVendorInfo?.sapVendorGroupCode;
+
+                                //regPayeeCorporateOutput.data.Add(dataOutPass);
+                            }
+                            else
+                            {
+                                AddDebugInfo("Cannot create Client in CRM :" + crmContentOutput.message,
+                                    crmContentOutput);
+                                //regPayeeCorporateOutput.code = CONST_CODE_FAILED;
+                                //regPayeeCorporateOutput.message = crmContentOutput.message;
+                                //regPayeeCorporateOutput.description = crmContentOutput.description;
+                            }
                         }
                     }
                 }
+                catch (Exception e)
+                {
+                    //do not thing
+                    AddDebugInfo("Cannot create Client in CRM :" + e.Message, e.StackTrace);
+                }
             }
-            catch (Exception e)
+            else
             {
-                //do not thing
-                AddDebugInfo("Cannot create Client in CRM :" + e.Message, e.StackTrace);
+                outputPass.crmClientId = regPayeeCorporateInput?.generalHeader?.crmClientId;
+                outputPass.corporateBranch = regPayeeCorporateInput?.profileHeader?.corporateBranch;
+                outputPass.sapVendorGroupCode = regPayeeCorporateInput?.sapVendorInfo?.sapVendorGroupCode;
             }
         }
 
@@ -374,7 +385,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         {
             try
             {
-                var service = new CLIENTCreateCorporateClientAndAdditionalInfo(TransactionId, ControllerName);
+                var service = new CLIENTCreateCorporateClientAndAdditionalInfoService(TransactionId, ControllerName);
                 var polCreatePayeeContent = service.Execute(regPayeeCorporateInput);
 
                 AddDebugInfo("Create Payee in Polisy400 Output ", polCreatePayeeContent);
@@ -410,7 +421,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         {
             AddDebugInfo("Create Payee in Cleansing");
 
-            var service = new CLSCreateCorporateClient(TransactionId, ControllerName);
+            var service = new CLSCreateCorporateClientService(TransactionId, ControllerName);
             CLSCreateCorporateClientContentOutputModel clsCreatePayeeContent = service.Execute(regPayeeCorporateInput);
 
             AddDebugInfo("Create Payee in Cleansing Output ", clsCreatePayeeContent);
