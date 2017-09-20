@@ -1,0 +1,28 @@
+version: 1.0.{build}
+pull_requests:
+  do_not_increment_build_number: true
+image: Visual Studio 2017
+configuration: Release
+platform: Any CPU
+assembly_info:
+  patch: true
+  file: '**\AssemblyInfo.*'
+  assembly_version: '{version}'
+  assembly_file_version: '{version}'
+  assembly_informational_version: '{version}'
+nuget:
+  project_feed: true
+  disable_publish_on_pr: true
+before_build:
+- cmd: nuget restore DEVES.IntegrationAPI\DEVES.IntegrationAPI.sln
+build:
+  project: DEVES.IntegrationAPI\DEVES.IntegrationAPI.sln
+  publish_nuget: true
+  publish_nuget_symbols: true
+  include_nuget_references: true
+  verbosity: quiet
+notifications:
+- provider: GitHubPullRequest
+  on_build_success: true
+  on_build_failure: false
+  on_build_status_changed: false
