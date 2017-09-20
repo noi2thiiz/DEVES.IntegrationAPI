@@ -212,7 +212,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         private List<CRMInquiryClientOutputDataModel> InquiryCLSPersonalClient(InquiryClientMasterInputModel searchCondition)
         {
             AddDebugInfo("call method InquiryCLSPersonalClient", searchCondition);
-            var service = new CLSInquiryCLSPersonalClient(TransactionId, ControllerName);
+            var service = new CLSInquiryCLSPersonalClientService(TransactionId, ControllerName);
             var inqClsOutput = service.Execute(searchCondition);
 
 
@@ -231,7 +231,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         private List<CRMInquiryClientOutputDataModel> InquiryCLSCorporateClient(InquiryClientMasterInputModel searchCondition)
         {
             AddDebugInfo("call method InquiryCLSCorporateClient", searchCondition);
-            var service = new CLSInquiryCLSCorporateClient(TransactionId, ControllerName);
+            var service = new CLSInquiryCLSCorporateClientService(TransactionId, ControllerName);
             var inqClsOutput = service.Execute(searchCondition);
 
 
@@ -249,7 +249,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
         private List<CRMInquiryClientOutputDataModel> InquiryCOMPClientMaster(InquiryClientMasterInputModel searchCondition)
         {
             AddDebugInfo("call method InquiryCOMPClientMaster", searchCondition);
-            var service = new COMPInquiryClientMaster(TransactionId, ControllerName);
+            var service = new COMPInquiryClientMasterService(TransactionId, ControllerName);
 
             var inqOutput = service.Execute(searchCondition);
 

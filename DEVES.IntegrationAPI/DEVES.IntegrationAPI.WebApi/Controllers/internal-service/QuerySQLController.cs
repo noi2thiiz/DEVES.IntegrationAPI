@@ -1,8 +1,12 @@
-﻿using DEVES.IntegrationAPI.Model.QuerySQL;
+﻿using DEVES.IntegrationAPI.Model;
+using DEVES.IntegrationAPI.Model.QuerySQL;
+using DEVES.IntegrationAPI.WebApi.DataAccessService.QuerySQLAdapter;
+using DEVES.IntegrationAPI.WebApi.Logic;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Web;
 using System.Web.Http;
@@ -11,8 +15,10 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
 {
     public class QuerySQLController : ApiController
     {
+
         public object Post([FromBody]object value)
         {
+            /*
             // Preparation Output
             QuerySQLOutputModel output = new QuerySQLOutputModel();
 
@@ -54,8 +60,13 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers
             output.sqlCommand = contentModel.sqlCommand;
             output.message = "Pass";
             output.dt = dt;
+            */
 
-            return Request.CreateResponse<QuerySQLOutputModel>(output);
+            buzQuerySQL query = new buzQuerySQL();
+            BaseDataModel output = query.Execute(value);
+
+            return Request.CreateResponse<BaseDataModel>(output);
+
         }
     }
 

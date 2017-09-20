@@ -78,7 +78,6 @@
     <Content Include="README.md" />
     <Content Include="soap.ashx" />
     <Content Include="xml.ashx" />
-    <None Include="Properties\PublishProfiles\XrmAPI.pubxml" />
     <None Include="xml.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -88,6 +87,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

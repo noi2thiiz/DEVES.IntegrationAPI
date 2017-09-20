@@ -17,12 +17,12 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services.Tests
         public void FindByCleansingClientIdTest()
         {
             
-            var result = PolisyClientService.Instance.FindByCleansingId("C2017-100000341","P");
+            var result = PolisyClientService.Instance.FindByCleansingId("C2017-100002158", "P");
             Console.WriteLine(result.ToJson());
             
             Assert.IsNotNull(result); 
-            Assert.AreEqual("16962218", result.clientNumber);
-            Assert.AreEqual("C2017-100000341", result.cleansingId);
+            Assert.AreEqual("16972697", result.clientNumber);
+            Assert.AreEqual("C2017-100002158", result.cleansingId);
         }
     }
 }

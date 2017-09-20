@@ -16,7 +16,7 @@ namespace DEVES.IntegrationAPI.Model.CreateCRMPersonalClientMaster
         public string message { get; set; }
         public string description { get; set; }
         public string transactionId { get; set; }
-        public DateTime transactionDateTime { get; set; }
+        public DateTime? transactionDateTime { get; set; }
         public CreateCRMPersonalClientMasterDataOutputModel_Pass data { get; set; }
     }
 
@@ -37,7 +37,7 @@ namespace DEVES.IntegrationAPI.Model.CreateCRMPersonalClientMaster
         public string message { get; set; }
         public string description { get; set; }
         public string transactionId { get; set; }
-        public DateTime transactionDateTime { get; set; }
+        public DateTime? transactionDateTime { get; set; }
         public CreateCRMPersonalClientMasterDataOutputModel_Fail data { get; set; }
     }
 

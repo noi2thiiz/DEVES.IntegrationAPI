@@ -12,9 +12,9 @@ using Microsoft.IdentityModel.Protocols.WSIdentity;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 {
-    public class CLSCreateCorporateClient : BaseEwiServiceProxy
+    public class CLSCreateCorporateClientService : BaseEwiServiceProxy
     {
-        public CLSCreateCorporateClient(string globalTransactionID, string controllerName = "") : base(globalTransactionID, controllerName)
+        public CLSCreateCorporateClientService(string globalTransactionID, string controllerName = "") : base(globalTransactionID, controllerName)
         {
             serviceName = "CLS_CreateCorporateClient";
             systemName = "CLS";

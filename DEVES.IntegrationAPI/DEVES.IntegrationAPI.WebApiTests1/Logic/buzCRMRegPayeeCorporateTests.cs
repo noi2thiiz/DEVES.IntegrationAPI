@@ -9,6 +9,7 @@ using DEVES.IntegrationAPI.Core.Util;
 using DEVES.IntegrationAPI.Model;
 using DEVES.IntegrationAPI.Model.RegClientCorporate;
 using DEVES.IntegrationAPI.Model.RegPayeeCorporate;
+using DEVES.IntegrationAPI.WebApi.Logic.Commands.Client;
 using AddressHeaderModel = DEVES.IntegrationAPI.Model.RegPayeeCorporate.AddressHeaderModel;
 using GeneralHeaderModel = DEVES.IntegrationAPI.Model.RegPayeeCorporate.GeneralHeaderModel;
 using ProfileHeaderModel = DEVES.IntegrationAPI.Model.RegPayeeCorporate.ProfileHeaderModel;
@@ -120,7 +121,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
                 }
             };
             Console.WriteLine(inputClient.ToJson());
-            var cmdClient = new buzCRMRegClientCorporate();
+            var cmdClient = new BuzCrmRegClientCorporate();
             var resultClient = cmdClient.Execute(inputClient);
             Console.WriteLine("==========RegClientCorporate. Result================");
             Console.WriteLine(resultClient.ToJson());

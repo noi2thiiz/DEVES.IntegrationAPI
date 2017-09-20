@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic.Services.Tests
 {
-    [TestClass()]
+    //[TestClass()]
     public class SendSmsServiceTests
     {
-        [TestMethod()]
+        //[TestMethod()]
         public void SendMessageTest()
         {
            

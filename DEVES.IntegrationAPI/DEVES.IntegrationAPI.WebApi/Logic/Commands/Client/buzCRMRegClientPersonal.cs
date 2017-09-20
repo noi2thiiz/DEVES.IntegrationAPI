@@ -194,7 +194,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 // ยกเว้น notCreatePolisyClientFlag =Y ไม่ต้องสร้าง
                 if (RegClientPersonalInput?.generalHeader?.notCreatePolisyClientFlag != "Y")
                 {
-                    CreatePersonalClientAndAdditionalInfoInPolisy400(RegClientPersonalInput,
+                    polisyClientId = CreatePersonalClientAndAdditionalInfoInPolisy400(RegClientPersonalInput,
                         cleansingId);
                 }
             }
@@ -202,22 +202,33 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
 
             //3 create crm CleinInfo in CRM เพื่อเก็บ cleansingId   แต่ให้ค้นก่อนถ้าพบจะไม่สร้างซ้ำ
-            try
-            {
-                if (!string.IsNullOrEmpty(cleansingId))
+            if ("Y" != RegClientPersonalInput?.generalHeader?.notCreateCrmClientFlag) { 
+             
+                if (string.IsNullOrEmpty(RegClientPersonalInput?.generalHeader?.crmClientId))
                 {
-                    if (false==SpApiChkCustomerClient.Instance.CheckByCleansingId(cleansingId))
+                    try
                     {
-                        crmClientId = CreateClientInCRM(RegClientPersonalInput, cleansingId, polisyClientId);
+                        if (!string.IsNullOrEmpty(cleansingId))
+                        {
+                            if (false == SpApiChkCustomerClient.Instance.CheckByCleansingId(cleansingId))
+                            {
+                                crmClientId = CreateClientInCRM(RegClientPersonalInput, cleansingId, polisyClientId);
+                            }
+
+                        }
                     }
-                   
+                    catch (Exception e)
+                    {
+                        AddDebugInfo("Cannot create Client in CRM :" + e.Message, e.StackTrace);
+                        //@TODO do nothing
+                    }
+                }
+                else
+                {
+                    crmClientId = RegClientPersonalInput?.generalHeader?.crmClientId;
                 }
             }
-            catch (Exception e)
-            {
-                AddDebugInfo("Cannot create Client in CRM :" + e.Message, e.StackTrace);
-                //@TODO so something
-            }
+            
            
            
 
@@ -291,16 +302,18 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             RegClientPersonalInput.generalHeader.cleansingId = cleansingId;
 
             Console.WriteLine("Create:CLIENTCreatePersonalClientAndAdditionalInfo");
-            CLIENTCreatePersonalClientAndAdditionalInfoContentModel polCreateClientContent =
-                new CLIENTCreatePersonalClientAndAdditionalInfoContentModel();
+            
             BaseDataModel polCreatePersonIn =
                 DataModelFactory.GetModel(typeof(CLIENTCreatePersonalClientAndAdditionalInfoInputModel));
             polCreatePersonIn = TransformerFactory.TransformModel(RegClientPersonalInput, polCreatePersonIn);
-            polCreateClientContent =
-                CallDevesServiceProxy<CLIENTCreatePersonalClientAndAdditionalInfoOutputModel
-                        , CLIENTCreatePersonalClientAndAdditionalInfoContentModel>
-                    (CommonConstant.ewiEndpointKeyCLIENTCreatePersonalClient, polCreatePersonIn);
-
+           // polCreateClientContent =
+           //     CallDevesServiceProxy<CLIENTCreatePersonalClientAndAdditionalInfoOutputModel
+           //             , CLIENTCreatePersonalClientAndAdditionalInfoContentModel>
+           //         (CommonConstant.ewiEndpointKeyCLIENTCreatePersonalClient, polCreatePersonIn);
+            var clientService = new CLIENTCreatePersonalClientAndAdditionalInfoService(TransactionId,ControllerName);
+            CLIENTCreatePersonalClientAndAdditionalInfoContentModel polCreateClientContent = clientService.Execute((CLIENTCreatePersonalClientAndAdditionalInfoInputModel) polCreatePersonIn);
+            Console.WriteLine("polCreateClientContent.ToJson()");
+            Console.WriteLine(polCreateClientContent.ToJson());
             if (string.IsNullOrEmpty(polCreateClientContent?.clientID))
             {
                 
@@ -325,15 +338,15 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             }
 
 
-            BaseDataModel clsCreatePersonIn =
-                DataModelFactory.GetModel(typeof(CLSCreatePersonalClientInputModel));
+            BaseDataModel clsCreatePersonIn = DataModelFactory.GetModel(typeof(CLSCreatePersonalClientInputModel));
             clsCreatePersonIn = TransformerFactory.TransformModel(RegClientPersonalInput, clsCreatePersonIn);
 
-            var clsCreateClientContent =
-                CallDevesServiceProxy<CLSCreatePersonalClientOutputModel,
-                        CLSCreatePersonalClientContentOutputModel>
-                    (CommonConstant.ewiEndpointKeyCLSCreatePersonalClient, clsCreatePersonIn);
-
+           // var clsCreateClientContent =
+           //     CallDevesServiceProxy<CLSCreatePersonalClientOutputModel,
+           //             CLSCreatePersonalClientContentOutputModel>
+           //         (CommonConstant.ewiEndpointKeyCLSCreatePersonalClient, clsCreatePersonIn);
+            var clsService = new CLSCreatePersonalService(TransactionId,ControllerName);
+            var clsCreateClientContent = clsService.Execute((CLSCreatePersonalClientInputModel)clsCreatePersonIn);
 
             if (clsCreateClientContent.code != CONST_CODE_SUCCESS)
             {

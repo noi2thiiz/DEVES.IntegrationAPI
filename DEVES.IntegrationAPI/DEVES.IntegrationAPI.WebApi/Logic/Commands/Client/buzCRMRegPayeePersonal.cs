@@ -190,30 +190,45 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 {
                     #region Create payee in CRM
 
-                    if (!ignoreCrm && !string.IsNullOrEmpty(RegPayeePersonalInput?.generalHeader?.cleansingId))
+                    if (!ignoreCrm)
                     {
-
-                        if (false == SpApiChkCustomerClient.Instance.CheckByCleansingId(RegPayeePersonalInput.generalHeader.cleansingId))
+                        if (string.IsNullOrEmpty(RegPayeePersonalInput?.generalHeader?.crmPersonId))
                         {
-                            AddDebugInfo("Create payee in CRM ");
-                            buzCreateCrmPayeePersonal cmdCreateCrmPayee = new buzCreateCrmPayeePersonal();
-                            cmdCreateCrmPayee.TransactionId = TransactionId;
-                            CreateCrmPersonInfoOutputModel crmContentOutput = (CreateCrmPersonInfoOutputModel)cmdCreateCrmPayee.Execute(RegPayeePersonalInput);
-                            if (crmContentOutput.code == CONST_CODE_SUCCESS)
+
+
+                            if (!string.IsNullOrEmpty(RegPayeePersonalInput?.generalHeader?.cleansingId))
                             {
-                                outputPass.crmClientId = crmContentOutput?.crmClientId ?? "";
+
+                                if (false == SpApiChkCustomerClient.Instance.CheckByCleansingId(RegPayeePersonalInput
+                                        .generalHeader.cleansingId))
+                                {
+                                    AddDebugInfo("Create payee in CRM ");
+                                    buzCreateCrmPayeePersonal cmdCreateCrmPayee = new buzCreateCrmPayeePersonal();
+                                    cmdCreateCrmPayee.TransactionId = TransactionId;
+                                    CreateCrmPersonInfoOutputModel crmContentOutput =
+                                        (CreateCrmPersonInfoOutputModel) cmdCreateCrmPayee.Execute(
+                                            RegPayeePersonalInput);
+                                    if (crmContentOutput.code == CONST_CODE_SUCCESS)
+                                    {
+                                        outputPass.crmClientId = crmContentOutput?.crmClientId ?? "";
+                                    }
+                                    else
+                                    {
+                                        AddDebugInfo("Cannot create Client in CRM :" + crmContentOutput.message,
+                                            crmContentOutput);
+                                        //regPayeePersonalOutput.code = CONST_CODE_FAILED;
+                                        //regPayeePersonalOutput.message = crmContentOutput.message;
+                                        //regPayeePersonalOutput.description = crmContentOutput.description;
+                                    }
+                                }
                             }
-                            else
-                            {
-                                AddDebugInfo("Cannot create Client in CRM :" + crmContentOutput.message, crmContentOutput);
-                                //regPayeePersonalOutput.code = CONST_CODE_FAILED;
-                                //regPayeePersonalOutput.message = crmContentOutput.message;
-                                //regPayeePersonalOutput.description = crmContentOutput.description;
-                            }
+                        }
+                        else
+                        {
+                            outputPass.crmClientId = RegPayeePersonalInput?.generalHeader?.crmPersonId;
                         }
                     }
 
-                    
                     #endregion Create payee in CRM
                 }
                 catch (Exception e)
@@ -306,10 +321,11 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
             AddDebugInfo("Search Payee in SAP", SAPInqVendorIn);
 
-            var SAPInqVendorContentOut =
-                CallDevesServiceProxy<Model.SAP.SAPInquiryVendorOutputModel, Model.SAP.EWIResSAPInquiryVendorContentModel>(
-                    CommonConstant.ewiEndpointKeySAPInquiryVendor, SAPInqVendorIn);
-
+           //var SAPInqVendorContentOut =
+           //     CallDevesServiceProxy<Model.SAP.SAPInquiryVendorOutputModel, Model.SAP.EWIResSAPInquiryVendorContentModel>(
+           //         CommonConstant.ewiEndpointKeySAPInquiryVendor, SAPInqVendorIn);
+            var sapService = new SAPInquiryVendor(TransactionId,ControllerName);
+            EWIResSAPInquiryVendorContentModel SAPInqVendorContentOut = sapService.Execute((SAPInquiryVendorInputModel)SAPInqVendorIn);
             #endregion Search Payee in SAP
 
             var sapInfo = SAPInqVendorContentOut?.VendorInfo?.FirstOrDefault();
@@ -322,18 +338,17 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             {
                 if (!ignoreSap)
                 {
-                    Model.SAP.SAPCreateVendorInputModel SAPCreateVendorIn =
-                        new Model.SAP.SAPCreateVendorInputModel();
-                    SAPCreateVendorIn =
-                        (Model.SAP.SAPCreateVendorInputModel) TransformerFactory.TransformModel(
-                            RegPayeePersonalInput, SAPCreateVendorIn);
+                    SAPCreateVendorInputModel SAPCreateVendorIn =new SAPCreateVendorInputModel();
+                    SAPCreateVendorIn =(SAPCreateVendorInputModel) TransformerFactory.TransformModel( RegPayeePersonalInput, SAPCreateVendorIn);
 
                     AddDebugInfo(" create SAP Vendor ", SAPCreateVendorIn);
 
-                    var SAPCreateVendorContentOut =
-                        CallDevesServiceProxy<Model.SAP.SAPCreateVendorOutputModel,
-                            Model.SAP.SAPCreateVendorContentOutputModel>(
-                            CommonConstant.ewiEndpointKeySAPCreateVendor, SAPCreateVendorIn);
+                    //var SAPCreateVendorContentOut =
+                    //    CallDevesServiceProxy<Model.SAP.SAPCreateVendorOutputModel,
+                    //        Model.SAP.SAPCreateVendorContentOutputModel>(
+                    //        CommonConstant.ewiEndpointKeySAPCreateVendor, SAPCreateVendorIn);
+                    var sapService = new SAPCreateVendor(TransactionId,ControllerName);
+                    var SAPCreateVendorContentOut = sapService.Execute(SAPCreateVendorIn);
 
                     if (string.IsNullOrEmpty(SAPCreateVendorContentOut?.VCODE))
                     {
@@ -356,8 +371,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 if (!string.IsNullOrEmpty(newCleansingId))
                 {
                     AddDebugInfo("rollback newCleansingId=" + newCleansingId);
-
-                    var deleteResult = CleansingClientService.Instance.RemoveByCleansingId(newCleansingId, "P");
+                    var delClientService = new CleansingClientService(TransactionId,ControllerName);
+                    var deleteResult = delClientService.RemoveByCleansingId(newCleansingId, "P");
                 }
 
                 List<OutputModelFailDataFieldErrors> fieldError =
@@ -381,11 +396,15 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
 
         private void CreatePayeeInCleansing(RegPayeePersonalContentOutputModel regPayeePersonalOutput)
         {
-            BaseDataModel clsCreatePersonalIn = DataModelFactory.GetModel(typeof(CLSCreatePersonalClientInputModel));
+            var clsCreatePersonalIn = DataModelFactory.GetModel(typeof(CLSCreatePersonalClientInputModel));
+
             clsCreatePersonalIn = TransformerFactory.TransformModel(RegPayeePersonalInput, clsCreatePersonalIn);
-            CLSCreatePersonalClientContentOutputModel clsCreatePayeeContent =
-                CallDevesServiceProxy<CLSCreatePersonalClientOutputModel, CLSCreatePersonalClientContentOutputModel>
-                    (CommonConstant.ewiEndpointKeyCLSCreatePersonalClient, clsCreatePersonalIn);
+                // CLSCreatePersonalClientContentOutputModel clsCreatePayeeContent =
+                // CallDevesServiceProxy<CLSCreatePersonalClientOutputModel, CLSCreatePersonalClientContentOutputModel>
+                // (CommonConstant.ewiEndpointKeyCLSCreatePersonalClient, clsCreatePersonalIn);
+            var clsService = new CLSCreatePersonalService(TransactionId,ControllerName);
+            CLSCreatePersonalClientContentOutputModel clsCreatePayeeContent = clsService.Execute((CLSCreatePersonalClientInputModel)clsCreatePersonalIn);
+
             //regPayeePersonalInput = (RegPayeePersonalInputModel)TransformerFactory.TransformModel(clsCreatePayeeContent, regPayeePersonalInput);
             if (clsCreatePayeeContent?.code == CONST_CODE_SUCCESS)
             {
@@ -422,10 +441,13 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 BaseDataModel polCreatePersonalIn =
                     DataModelFactory.GetModel(typeof(CLIENTCreatePersonalClientAndAdditionalInfoInputModel));
                 polCreatePersonalIn = TransformerFactory.TransformModel(RegPayeePersonalInput, polCreatePersonalIn);
-                CLIENTCreatePersonalClientAndAdditionalInfoContentModel polCreatePayeeContent =
-                    CallDevesServiceProxy<CLIENTCreatePersonalClientAndAdditionalInfoOutputModel
-                            , CLIENTCreatePersonalClientAndAdditionalInfoContentModel>
-                        (CommonConstant.ewiEndpointKeyCLIENTCreatePersonalClient, polCreatePersonalIn);
+                //  CLIENTCreatePersonalClientAndAdditionalInfoContentModel polCreatePayeeContent =
+                //  CallDevesServiceProxy<CLIENTCreatePersonalClientAndAdditionalInfoOutputModel
+                //  ,CLIENTCreatePersonalClientAndAdditionalInfoContentModel>
+                //  (CommonConstant.ewiEndpointKeyCLIENTCreatePersonalClient, polCreatePersonalIn);
+
+                var polService = new CLIENTCreatePersonalClientAndAdditionalInfoService(TransactionId,ControllerName);
+                CLIENTCreatePersonalClientAndAdditionalInfoContentModel polCreatePayeeContent = polService.Execute((CLIENTCreatePersonalClientAndAdditionalInfoInputModel) polCreatePersonalIn);
 
                 if (polCreatePayeeContent != null)
                 {
@@ -440,7 +462,9 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                     if (!string.IsNullOrEmpty(newCleansingId))
                     {
                         AddDebugInfo("try rollback" + newCleansingId);
-                        var deleteResult = CleansingClientService.Instance.RemoveByCleansingId(newCleansingId, "P");
+                        var delClientService = new CleansingClientService(TransactionId, ControllerName);
+                        var deleteResult = delClientService.RemoveByCleansingId(newCleansingId, "P");
+                        
                     }
                 }
             }
@@ -452,7 +476,8 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 if (!string.IsNullOrEmpty(newCleansingId))
                 {
                     AddDebugInfo("try rollback" + newCleansingId);
-                    var deleteResult = CleansingClientService.Instance.RemoveByCleansingId(newCleansingId, "P");
+                    var delClientService = new CleansingClientService(TransactionId, ControllerName);
+                    var deleteResult = delClientService.RemoveByCleansingId(newCleansingId, "P");
                 }
 
                 throw;

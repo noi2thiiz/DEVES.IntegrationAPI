@@ -9,29 +9,29 @@ namespace DEVES.IntegrationAPI.Model.CLS
     {
       
         //roleCode String	5	M G : General Client
-        public string roleCode { get; set; }
+        public string roleCode { get; set; } = "G";
         //clientId String	8	O
-        public string clientId { get; set; }
+        public string clientId { get; set; } = "";
         //crmPersonId String	20	O
-        public string crmPersonId { get; set; }
+        public string crmPersonId { get; set; } = "";
 
-        public string isPayee { get; set; }
+        public string isPayee { get; set; } = "";
         //salutation  String	8	M คำนำหน้าชื่อ
-        public string salutation { get; set; }
+        public string salutation { get; set; } = "";
         //personalName String	60	M ชื่อ
-        public string personalName { get; set; }
+        public string personalName { get; set; } = "";
         //personalSurname String	60	M นามสกุล
-        public string personalSurname { get; set; }
+        public string personalSurname { get; set; } = "";
         //sex String	1	M เพศลูกค้า
-        public string sex { get; set; }
+        public string sex { get; set; } = "";
         //idCitizen String	24	O หมายเลขบัตรประจำตัวประชาชน
-        public string idCitizen { get; set; }
+        public string idCitizen { get; set; } = "";
         //idPassport String	20	O หมายเลขบัตรหนังสือเดินทาง
-        public string idPassport { get; set; }
+        public string idPassport { get; set; } = "";
         //idAlien String	20	O หมายเลขบัตรต่างด้าว
-        public string idAlien { get; set; }
+        public string idAlien { get; set; } = "";
         //idDriving String	20	O หมายเลขบัตรใบขับขี่
-        public string idDriving { get; set; }
+        public string idDriving { get; set; } = "";
         //birthDate String	20	O วันเดือนปีเกิด
         public string birthDate {
             get
@@ -49,63 +49,64 @@ namespace DEVES.IntegrationAPI.Model.CLS
         [JsonIgnore]
         public DateTime? dtBirthDate { get; set; }
         //natioanality String	3	O Nationality
-        public string natioanality { get; set; }
+        public string natioanality { get; set; } = "";
         //language String	1	O ภาษา
-        public string language { get; set; }
+        public string language { get; set; } = "";
         //married String	1	O สถานะการสมรส
-        public string married { get; set; }
+        public string married { get; set; } = "";
         //occupation String	3	O อาชีพลูกค้า
-        public string occupation { get; set; }
+        public string occupation { get; set; } = "";
 
         //vipStatus String	1	O VIP
-        public string vipStatus { get; set; }
+        public string vipStatus { get; set; } = "";
 
         //telephone1 String	10	O เบอร์ติดต่อที่สะดวก(Contact Number)
-        public string telephone1 { get; set; }
+        public string telephone1 { get; set; } = "";
         //telephone1Ext String	5	O
-        public string telephone1Ext { get; set; }
+        public string telephone1Ext { get; set; } = "";
         //telephone2  String	10	O โทรศัพท์ลูกค้า(Office)
-        public string telephone2 { get; set; }
+        public string telephone2 { get; set; } = "";
         //telephone2Ext String	5	O
-        public string telephone2Ext { get; set; }
+        public string telephone2Ext { get; set; } = "";
         //telNo   String	10	O DID Tel No
-        public string telNo { get; set; }
+        public string telNo { get; set; } = "";
         //telNoExt String	5	O
-        public string telNoExt { get; set; }
+        public string telNoExt { get; set; } = "";
         //mobilePhone String	16	O
-        public string mobilePhone { get; set; }
+        public string mobilePhone { get; set; } = "";
         //fax String	16	O
-        public string fax { get; set; }
+        public string fax { get; set; } = "";
         //emailAddress    String	50	O อีเมล์
-        public string emailAddress { get; set; }
+        public string emailAddress { get; set; } = "";
         //lineID String	50	O Line ID
-        public string lineID { get; set; }
+        public string lineID { get; set; } = "";
         //facebook    String	100	O Facebook
-        public string facebook { get; set; }
+        public string facebook { get; set; } = "";
 
 
         //address1 String	30	O ที่อยู่ บรรทัดที่ 1
-        public string address1 { get; set; }
+        public string address1 { get; set; } = "";
         //address2 String	30	O ที่อยู่ บรรทัดที่ 2
-        public string address2 { get; set; }
+        public string address2 { get; set; } = "";
         //address3 String	30	O ที่อยู่ บรรทัดที่ 3
-        public string address3 { get; set; }
+        public string address3 { get; set; } = "";
         //subDistrictCode String	6	O ตำบล / แขวง
-        public string subDistrictCode { get; set; }
+        public string subDistrictCode { get; set; } = "";
         //districtCode    String	4	O อำเภอ / เขต
-        public string districtCode { get; set; }
+        public string districtCode { get; set; } = "";
         //provinceCode    String	2	O จังหวัด
-        public string provinceCode { get; set; }
+        public string provinceCode { get; set; } = "";
         //postalCode String	10	O ที่อยู่ -> รหัสไปรษณีย์
-        public string postalCode { get; set; }
+        public string postalCode { get; set; } = "";
         //country String	3	O ที่อยู่ -> ประเทศ
-        public string country { get; set; }
+        public string country { get; set; } = "";
         //addressType String	1	O
-        public string addressType { get; set; }
+        public string addressType { get; set; } = "";
         //latitude    String	20	O
-        public string latitude { get; set; }
+        public string latitude { get; set; } = "";
         //longtitude  String	20	O
-        public string longtitude { get; set; }
+        public string longitude { get; set; } = "";
+     
 
     }
   
@@ -153,7 +154,7 @@ namespace DEVES.IntegrationAPI.Model.CLS
         //"idDriving": "348347232",
         public string idDriving { get; set; }
         //"birthDate": "2017-07-02",
-        public DateTime birthDate { get; set; }
+        public DateTime? birthDate { get; set; }
         //"natioanality": "764",
         public string natioanality { get; set; }
         //"language": "T",
@@ -208,5 +209,6 @@ namespace DEVES.IntegrationAPI.Model.CLS
         public string addressType { get; set; }
         //"latitude": ""
         public string latitude { get; set; }
+        public string longitude { get; set; } 
     }
 }

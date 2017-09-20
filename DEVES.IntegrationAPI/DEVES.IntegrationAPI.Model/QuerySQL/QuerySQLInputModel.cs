@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DEVES.IntegrationAPI.Model.QuerySQL
 {
-    public class QuerySQLInputModel
+    public class QuerySQLInputModel : BaseDataModel
     {
         public string databaseName { get; set; }
         public string sqlCommand { get; set; }

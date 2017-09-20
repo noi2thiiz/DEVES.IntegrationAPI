@@ -46,46 +46,75 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
         private string logMonth = "";
         private string logDate = "";
         private Random rnd = new Random();
+
         public string GetNewGuid()
         {
-           
+            while (true)
+            {
                 var now = DateTime.Now.ToString("yyMMdd");
                 var month = DateTime.Now.ToString("yyMM");
-                var time = DateTime.Now.ToString("HHms");
+                var time = DateTime.Now.ToString("HHmmss");
+                var millisecond = DateTime.Now.ToString("fff");
                 if (logMonth == month)
                 {
                     ++logCount;
                 }
                 else
                 {
-                    logCount=0;
-                
+                    logCount = 0;
+
                     logMonth = month;
                 }
 
 
-            int seed = rnd.Next(1, 999);
-            var globalId = appId + "-" + now +  time +"-"+ (logCount.ToString()).PadLeft(7, '0');
-            globalIdList.Add(globalId,0);
-            HttpContext.Current.Items["GlobalTransactionID"] = globalId;
-            return globalId;
+                // int seed = rnd.Next(100, 999);
+                var globalId = appId + "-" + now +""+ time + millisecond+ "-" + (logCount.ToString()).PadLeft(7, '0');
+                if (false == globalIdList.ContainsKey(globalId))
+                {
+                    globalIdList.Add(globalId, 0);
+
+                    try
+                    {
+                        HttpContext.Current.Items["GlobalTransactionID"] = globalId;
+                    }
+                    catch (Exception e)
+                    {
+                        //do nothing
+                    }
+
+                    return globalId;
+
+                }
+    
+            }
         }
+
         Dictionary<string,int> globalIdList = new Dictionary<string, int>();
         public string GetNewGuid(string globalId)
         {
-            if (globalIdList.ContainsKey(globalId))
+            try
             {
-                globalIdList[globalId]++;
 
-                var lastId = globalIdList[globalId];
+                if (globalIdList.ContainsKey(globalId))
+                {
+                    globalIdList[globalId]++;
 
-              return globalId + "-" + (lastId.ToString()).PadLeft(3, '0');
+                    var lastId = globalIdList[globalId];
 
+                    return globalId + "-" + (lastId.ToString()).PadLeft(3, '0');
+
+                }
+                else
+                {
+                    return GetNewGuid();
+                }
             }
-            else
+            catch (Exception e)
             {
-                return GetNewGuid();
+                Console.WriteLine("Error On GetNewGuid:"+ e.Message);
+                return Guid.NewGuid().ToString();
             }
+           
         }
 
         public void ClearGlobalId(string globalId)
@@ -123,7 +152,7 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
                 }
                 else
                 {
-                reader = new RestDataReader("ext");
+                     reader = new RestDataReader("ext");
                 }
 
               
@@ -134,11 +163,15 @@ namespace DEVES.IntegrationAPI.WebApi.TechnicalService
             Console.WriteLine(result.ToJson());
             if (result.Success)
             {
-                if (result.Count>0)
+                if (result.Count > 0)
                 {
-                    var output = (MaxTransactionEntity)result.Data[0];
+                    var output = (MaxTransactionEntity) result.Data[0];
 
                     return output;
+                }
+                else
+                {
+                    return new MaxTransactionEntity();
                 }
               
             }

@@ -112,7 +112,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
                 //latitude    String	20	O
                 trgt.latitude = src.addressInfo.latitude?.Trim() ?? "";
                 //longtitude  String	20	O
-                trgt.longtitude = src.addressInfo.longitude?.Trim() ?? "";
+                trgt.longitude = src.addressInfo.longitude?.Trim() ?? "";
 
             }
             

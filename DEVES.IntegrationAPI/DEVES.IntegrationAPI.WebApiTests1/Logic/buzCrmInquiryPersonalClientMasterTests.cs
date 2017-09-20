@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Web.Script.Serialization;
 using DEVES.IntegrationAPI.Model.InquiryClientMaster;
 using DEVES.IntegrationAPI.Model.InquiryCRMPayeeList;
+using DEVES.IntegrationAPI.WebApi.Logic.Commands.Client;
 using DEVES.IntegrationAPI.WebApi.Templates;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
@@ -21,7 +22,7 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
         {
            
 
-            var cmd = new buzCrmInquiryClientMaster();
+            var cmd = new BuzCrmInquiryClientMaster();
             var result = cmd.Execute(new InquiryClientMasterInputModel
             {
                 conditionHeader = new ConditionHeaderModel

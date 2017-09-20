@@ -13,10 +13,10 @@ using Microsoft.IdentityModel.Protocols.WSIdentity;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic.Services
 {
-    public class CLIENTCreateCorporateClientAndAdditionalInfo: BaseEwiServiceProxy
+    public class CLIENTCreateCorporateClientAndAdditionalInfoService: BaseEwiServiceProxy
     {
        
-        public CLIENTCreateCorporateClientAndAdditionalInfo(string globalTransactionID, string controllerName = "") : base(globalTransactionID, controllerName)
+        public CLIENTCreateCorporateClientAndAdditionalInfoService(string globalTransactionID, string controllerName = "") : base(globalTransactionID, controllerName)
         {
             serviceName = "CLIENT_CreateCorporateClientAndAdditionalInfo";
             systemName = "COMP";

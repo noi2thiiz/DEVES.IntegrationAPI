@@ -91,6 +91,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             //StackTrace stackTrace = new StackTrace();
             TraceDebugLogger.Instance.AddDebugLogInfo(TransactionId, message, info, memberName, sourceFilePath, sourceLineNumber);
             // debugInfo.AddDebugInfo(message, info);
+            Console.WriteLine(message);
         }
         public void AddDebugInfo(string message,
             [System.Runtime.CompilerServices.CallerMemberName] string memberName = "",
@@ -100,205 +101,15 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             //StackTrace stackTrace = new StackTrace();
             TraceDebugLogger.Instance.AddDebugLogInfo(TransactionId, message, message, memberName, sourceFilePath, sourceLineNumber);
             // debugInfo.AddDebugInfo(message, message);
+            Console.WriteLine(message);
         }
 
         //This is like the Main() function. And need to be implemented.
         public abstract Model.BaseDataModel Execute(object input);
 
-        //internal Model.EWI.EWIResponse WrapModel(Model.BaseDataModel model)
-        //{
-        //    Model.EWI.EWIResponse res = new EWIResponse();
-        //    res.content = model;
-            
-        //}
+       
 
-        private bool ValidateJSON(string strJSON)
-        {
-            string typeName = this.GetType().Name;
-            throw new NotImplementedException();
-        }
-        /*
-        private string GetEwiUsername()
-        {
-
-            return AppConfig.Instance.Get("EWI_USERNAME") ?? "sysdynamic";
-        }
-        private string GetEwiPassword()
-        {
-
-            return AppConfig.Instance.Get("EWI_PASSWORD") ?? "REZOJUNtN04=";
-        }
-
-        private string GetEwiUid()
-        {
-
-            return AppConfig.Instance.Get("EWI_UID") ?? "DevesClaim";
-        }
-        private string GetEwiGid()
-        {
-
-            return AppConfig.Instance.Get("EWI_GID") ?? "DevesClaim";
-        }
-        */
-
-        internal BaseContentJsonProxyOutputModel CallDevesJsonProxy<T1>(string EWIendpointKey, BaseDataModel JSON, string UID=CONST_DEFAULT_UID) where T1 : BaseEWIResponseModel 
-        {
-            AddDebugInfo("CallDevesServiceProxy <T1>:" + serviceName, JSON);
-            EWIRequest reqModel = new EWIRequest()
-            {
-                //user & password must be switch to get from calling k.Ton's API rather than fixed values.
-                username = AppConfig.GetEwiUsername(),
-                password = AppConfig.GetEwiPassword(),
-                uid = AppConfig.GetEwiUid(),
-                gid = AppConfig.GetEwiGid(),
-                token = GetLatestToken(),
-                content = JSON
-            };
-
-            jsonReqModel = JsonConvert.SerializeObject(reqModel, Formatting.Indented, new EWIDatetimeConverter());
-
-            HttpClient client = new HttpClient();
-
-            client.DefaultRequestHeaders.Accept.Clear();
-            var media = new MediaTypeWithQualityHeaderValue("application/json") { CharSet = "utf-8" };
-            client.DefaultRequestHeaders.Accept.Add(media);
-            client.DefaultRequestHeaders.Add("Accept-Encoding", "utf-8");
-
-            // + ENDPOINT
-            string EWIendpoint = CommonConstant.PROXY_ENDPOINT+ GetEWIEndpoint(EWIendpointKey);
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, EWIendpoint);
-            request.Content = new StringContent(jsonReqModel, System.Text.Encoding.UTF8, "application/json");
-            //request.Headers.Add("ContentType", "application/json; charset=UTF-8");
-            // เช็ค check reponse 
-            LogAsync(request);
-            HttpResponseMessage response = client.SendAsync(request).Result;
-            response.EnsureSuccessStatusCode();
-           
-            //  Console.WriteLine("==========jsonReqModel========");
-            // Console.WriteLine(EWIendpoint);
-            //Console.WriteLine(jsonReqModel.ToJson());
-
-            T1 ewiRes = response.Content.ReadAsAsync<T1>().Result;
-            resBody = ewiRes.ToJson();
-            var sv = EWIendpoint.Split('/');
-            serviceName = sv[sv.Length - 1];
-
-            LogAsync(request, response);
-
-
-            // Console.WriteLine("==========response========");
-            // Console.WriteLine(ewiRes.ToJson());
-
-            BaseContentJsonProxyOutputModel output =  (BaseContentJsonProxyOutputModel)typeof(T1).GetProperty("content").GetValue(ewiRes);
-            if(output.message == null)
-            {
-                output.message = typeof(T1).GetProperty("responseCode").GetValue(ewiRes).ToString() + ": " + typeof(T1).GetProperty("responseMessage").GetValue(ewiRes).ToString();
-            }
-            return output;
-        }
-
-        internal T2 CallDevesServiceProxy<T1, T2>(string EWIendpointKey, BaseDataModel JSON, string UID = CONST_DEFAULT_UID) 
-                                        where T1 : BaseEWIResponseModel 
-                                        //where T2 : BaseContentJsonProxyOutputModel, BaseContentJsonServiceOutputModel
-        {
-            AddDebugInfo("CallDevesServiceProxy <T1, T2>:" + serviceName, JSON);
-            var limitTry = 1;
-            var countTry = 0;
-           
-               
-                while (countTry<= limitTry)
-                {
-                    countTry += 1;
-                    try
-                    {
-                        
-                    
-                    
-
-                    EWIRequest reqModel = new EWIRequest()
-                    {
-                        //user & password must be switch to get from calling k.Ton's API rather than fixed values.
-                        username = AppConfig.GetEwiUsername(),
-                        password = AppConfig.GetEwiPassword(),
-                        uid = AppConfig.GetEwiUid(),
-                        gid = AppConfig.GetEwiGid(),
-                        token = GetLatestToken(),
-                        content = JSON
-
-                    };
-
-
-                    jsonReqModel = JsonConvert.SerializeObject(reqModel, Formatting.Indented,
-                        new EWIDatetimeConverter(JSON.DateTimeCustomFormat));
-
-                    client = new HttpClient();
-
-                    client.DefaultRequestHeaders.Accept.Clear();
-                    var media = new MediaTypeWithQualityHeaderValue("application/json") {CharSet = "utf-8"};
-                    client.DefaultRequestHeaders.Accept.Add(media);
-                    //client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                    //client.DefaultRequestHeaders.Add("Accept-Encoding", "utf-8");
-
-
-                    // + ENDPOINT
-                    string EWIendpoint = CommonConstant.PROXY_ENDPOINT + GetEWIEndpoint(EWIendpointKey);
-                    reqTime = DateTime.Now;
-                    HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, EWIendpoint);
-                    // Console.WriteLine("==========jsonReqModel========");
-                    //Console.WriteLine(jsonReqModel.ToJson());
-                    //request.Headers.Add("ContentType", "application/json; charset=UTF-8");
-                    request.Content = new StringContent(jsonReqModel, System.Text.Encoding.UTF8, "application/json");
-                    //Console.WriteLine("==========request========");
-                    //Console.WriteLine(request.ToJson());
-                    // เช็ค check reponse 
-                    LogAsync(request);
-                    HttpResponseMessage response = client.SendAsync(request).Result;
-                    resTime = DateTime.Now;
-
-                    response.EnsureSuccessStatusCode();
-
-                    T1 ewiRes = response.Content.ReadAsAsync<T1>().Result;
-                    resBody = ewiRes.ToJson();
-                    string[] splitServiceName = ewiRes.ToString().Split('.');
-                    var sv = EWIendpoint.Split('/');
-                    serviceName = sv[sv.Length - 1];
-                    LogAsync(request, response);
-
-
-                    //Console.WriteLine("==========response========");
-                    // Console.WriteLine(ewiRes.ToJson());
-                    if (ewiRes.success)
-                    {
-
-                        T2 output = (T2) typeof(T1).GetProperty("content").GetValue(ewiRes);
-                        return output;
-                    }
-                    else
-                    {
-                        //CLSCreateCorporateClientOutputModel
-                        throw new BuzErrorException(
-                            "500",
-                            $"Error:{ewiRes.responseCode}, Message:{ewiRes.responseMessage}",
-                            $"An error occurred from the external service ({serviceName})",
-
-                            serviceName,
-                            TransactionId);
-                        //throw new Exception(String.Format("Error:{0}, Message:{1}", ewiRes.responseCode , ewiRes.responseMessage));
-                    }
-
-                    }
-                    catch (Exception)
-                    {
-                        if (countTry > limitTry)
-                        {
-                            throw;
-                        }
-                    }
-            } 
-            
-            return default(T2);
-        }
-
+       
         protected async Task<ApiLogEntry> LogAsync(HttpRequestMessage req, HttpResponseMessage res)
         {
             try
@@ -369,106 +180,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             return null;
         }
 
-        protected async Task<ApiLogEntry> LogAsync(HttpRequestMessage req)
-        {
-
-            // Request
-            // var reqContext = ((HttpContextBase)req.Properties["MS_HttpContext"]);
-
-            // Map Request vaule to global Variables (Request)
-            //user = reqContext.User.Identity.Name;
-            //ip = reqContext.Request.UserHostAddress;
-            //reqContentType = reqContext.Request.ContentType;
-            uri = req.RequestUri.ToString();
-            Console.WriteLine("======LOG======");
-            Console.WriteLine("======LOG======");
-            Console.WriteLine("======LOG======");
-            Console.WriteLine("RequestUri" + uri);
-            Console.WriteLine("RequestContentBody" + jsonReqModel);
-            reqMethod = req.Method.Method;
-            // routeTemplate = req.GetRouteData().Route.RouteTemplate;
-            reqHeader = req.Headers.ToString();
-
-            try
-            {
-                // requestRouteData = req.GetRouteData().ToJson();
-            }
-            catch (Exception e)
-            {
-                // do nothing
-            }
-            var sv = uri.Split('/');
-            serviceName = sv[sv.Length - 1];
-
-            // Map Request vaule to global Variables (Response)
-            resContentType = "";
-            // resBody = res.Content.Headers.ToString();
-            resStatus = "";
-         
-
-
-            var apiLogEntry = new ApiLogEntry
-            {
-                Application = appName,
-                TransactionID = TransactionId,
-                Controller = "",
-                ServiceName = serviceName,
-                Activity = "consume:Send request",
-                User = user,
-                Machine = machineName,
-                RequestIpAddress = ip,
-                RequestContentType = client.DefaultRequestHeaders?.Accept.ToString(),
-                RequestContentBody = jsonReqModel,
-                RequestUri = uri,
-                RequestMethod = reqMethod,
-                RequestRouteTemplate = routeTemplate,
-                RequestRouteData = requestRouteData,
-                RequestHeaders = reqHeader,
-                RequestTimestamp = reqTime,
-            
-                ResponseTimestamp = DateTime.Now
-            };
-            InMemoryLogData.Instance.AddLogEntry(apiLogEntry);
-
-            return null;
-        }
-
-
-        //internal string CallEWIService(string EWIendpointKey, BaseDataModel JSON)
-        //{
-        //    string UID = "ClaimMotor";
-        //    EWIRequest reqModel = new EWIRequest()
-        //    {
-        //        //user & password must be switch to get from calling k.Ton's API rather than fixed values.
-        //        username = "sysdynamic",
-        //        password = "REZOJUNtN04=",
-        //        uid = UID,
-        //        gid = UID,
-        //        token = GetLatestToken(),
-        //        content = JSON
-        //    };
-
-        //    string jsonReqModel = JsonConvert.SerializeObject(reqModel, Formatting.Indented, new EWIDatetimeConverter());
-
-        //    HttpClient client = new HttpClient();
-
-        //    client.DefaultRequestHeaders.Accept.Clear();
-        //    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-        //    client.DefaultRequestHeaders.Add("Accept-Encoding", "utf-8");
-
-        //    // + ENDPOINT
-        //    string EWIendpoint = GetEWIEndpoint(EWIendpointKey);
-        //    HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, EWIendpoint);
-        //    request.Content = new StringContent(jsonReqModel, System.Text.Encoding.UTF8, "application/json");
-
-        //    // เช็ค check reponse 
-        //    HttpResponseMessage response = client.SendAsync(request).Result;
-        //    response.EnsureSuccessStatusCode();
-
-        //    string strResult = response.Content.ReadAsStringAsync().Result;
-        //    return strResult;
-        //}
-
+      
         internal T DeserializeJson<T>(string contentText)
         {
             Console.WriteLine(contentText.ToString());
@@ -587,10 +299,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
         }
 
 
-        internal void SearchCrm( string fetchXML , ref BaseDataModel[] target )
-        {
-
-        }
+        /*
 
         internal void SearchCrm<T>(QueryExpression query, ref List<T> listTarget) where T : new()
         {
@@ -617,7 +326,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
 
         }
 
-
+        */
         internal OrganizationServiceProxy GetCrmServiceProxy()
         {
      
@@ -631,12 +340,12 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
                 }
   
         }
-
+/*
         string GetLatestToken()
         {
             return "";
         }
-
+        */
         internal string GetAppConfigurationSetting(string key)
         {
             try
@@ -657,6 +366,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
 
         }
 
+/*
         string GetEWIEndpoint(string key)
         {
             try
@@ -676,6 +386,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
 
           
         }
+        */
 
         enum ENUM_f_GetSystemUserByFieldInfo_Attr
         {

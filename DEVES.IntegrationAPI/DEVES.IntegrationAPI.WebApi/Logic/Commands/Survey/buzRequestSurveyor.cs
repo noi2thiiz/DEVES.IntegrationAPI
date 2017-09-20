@@ -10,7 +10,11 @@ using Newtonsoft.Json;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using DEVES.IntegrationAPI.WebApi.Logic.Services;
+using DEVES.IntegrationAPI.WebApi.Controllers;
+using DEVES.IntegrationAPI.Model.QuerySQL;
 using DEVES.IntegrationAPI.WebApi.Templates.Exceptions;
+using DEVES.IntegrationAPI.WebApi.DataAccessService.QuerySQLAdapter;
+using DEVES.IntegrationAPI.WebApi.Templates;
 
 namespace DEVES.IntegrationAPI.WebApi.Logic
 {
@@ -36,11 +40,23 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             }
             catch (BuzErrorException e)
             {
+                Console.WriteLine(e.StackTrace);
                 output.eventID = "";
                 output.errorMessage = e.Message;
+                if (e.Message.Contains("เลขรับแจ้งมีอยู่แล้วในระบบ"))
+                {
+                    iSurveyOutput.eventid = "";
+                    iSurveyOutput.errorMessage = "ส่งข้อมูลเข้า i-Survey ไม่สำเร็จ: เลขรับแจ้งมีอยู่แล้วในระบบ";
+                }
+                else
+                {
+                    iSurveyOutput.eventid = "";
+                    iSurveyOutput.errorMessage = "ส่งข้อมูลเข้า i-Survey ไม่สำเร็จ: " + e.Message;
+                }
             }
             catch (Exception e)
             {
+                Console.WriteLine(e.StackTrace);
                 output.eventID = "";
                 output.errorMessage = e.Message;
             }
@@ -76,81 +92,33 @@ namespace DEVES.IntegrationAPI.WebApi.Logic
             return iSurveyOutput;
         }
 
-        private EWIResponseContent_ReqSur RequestSurveyorOniSurveyOld(string incidentId, string currentUserId)
-        {
-            RequestSurveyorInputModel iSurveyInputModel = Mapping(incidentId, currentUserId);
-
-            EWIRequest reqModel = new EWIRequest()
-            {
-                username = AppConfig.GetEwiUsername(),
-                password = AppConfig.GetEwiPassword(),
-                uid = AppConfig.GetEwiUid(),
-                gid = AppConfig.GetEwiGid(),
-                token = "",
-                content = iSurveyInputModel
-            };
-
-            string jsonReqModel =
-                JsonConvert.SerializeObject(reqModel, Formatting.Indented, new EWIDatetimeConverter());
-
-            HttpClient client = new HttpClient();
-
-            // URL
-            // reqTime = DateTime.Now;
-            var crmEndpoint = CommonConstant.PROXY_ENDPOINT;
-            var ewiEndpoint = crmEndpoint +
-                              System.Configuration.ConfigurationManager.AppSettings["API_ENDPOINT_EWIPROXY_SERVICE"] + "MOTOR_RequestSurveyor";
-            Console.WriteLine(ewiEndpoint);
-
-
-            Console.WriteLine(jsonReqModel);
-            client.BaseAddress = new Uri(crmEndpoint + ewiEndpoint);
-            client.DefaultRequestHeaders.Accept.Clear();
-            var media = new MediaTypeWithQualityHeaderValue("application/json") { CharSet = "utf-8" };
-            client.DefaultRequestHeaders.Accept.Add(media);
-            client.DefaultRequestHeaders.Add("Accept-Encoding", "utf-8");
-
-            // + ENDPOINT
-
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, ewiEndpoint);
-            request.Content = new StringContent(jsonReqModel, System.Text.Encoding.UTF8, "application/json");
-            //request.Content = new StringContent(Dummy_Input(), System.Text.Encoding.UTF8, "application/json");
-            // LogAsync(request, jsonReqModel);
-            // check reponse 
-            HttpResponseMessage response = client.SendAsync(request).Result;
-            response.EnsureSuccessStatusCode();
-
-            EWIResponse_ReqSur ewiRes = response.Content.ReadAsAsync<EWIResponse_ReqSur>().Result;
-            // EWIResponseContent_ReqSur iSurveyOutput = (EWIResponseContent_ReqSur)ewiRes.content;
-            //resBody = ewiRes.ToJson();
-            // resTime = DateTime.Now;
-
-            EWIResponseContent_ReqSur iSurveyOutput = new EWIResponseContent_ReqSur();
-            // iSurveyOutput.eventid = ewiRes.content.ToString();
-            if (ewiRes.content.ToString().Equals("{}"))
-            {
-                iSurveyOutput.eventid = ewiRes.content.ToString();
-                iSurveyOutput.errorMessage = ewiRes.responseMessage.ToString();
-            }
-            else if (ewiRes.responseCode != "EWI-0000I")
-            {
-                iSurveyOutput.eventid = "ส่งข้อมูลเข้า i-Survey ไม่สำเร็จ" + "\n" + "กรุณากดอีกครั้งหรือติดต่อแผนก IT";
-                iSurveyOutput.errorMessage = "ส่งข้อมูลเข้า i-Survey ไม่สำเร็จ: " + ewiRes.responseMessage.ToString();
-            }
-            else
-            {
-                iSurveyOutput.eventid = ewiRes.content.ToString();
-                iSurveyOutput.errorMessage = null;
-            }
-            LogAsync(request, response);
-            return iSurveyOutput;
-        }
-
         private RequestSurveyorInputModel Mapping(string incidentId, string currentUserId)
         {
-            dt = new System.Data.DataTable();
-            dt = q.Queryinfo_RequestSurveyor(incidentId, currentUserId);
+            QuerySqlService sql = QuerySqlService.Instance;
 
+            string sqlCommand = string.Format(q.SQL_RequestSurveyor, incidentId, currentUserId).Trim('\n');
+            Console.WriteLine(sqlCommand);
+            QuerySQLOutputModel mappingOutput = new QuerySQLOutputModel();
+
+            if (AppConst.IS_PRODUCTION)
+            {
+                 mappingOutput = sql.GetQuery("CRM_MSCRM", sqlCommand);
+            } else
+            {
+                try
+                {
+                    mappingOutput = sql.GetQuery("CRMQA_MSCRM", sqlCommand);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message+e.StackTrace);
+                }
+                 
+            }
+            
+            dt = new System.Data.DataTable();
+            // dt = q.Queryinfo_RequestSurveyor(incidentId, currentUserId);
+            dt = mappingOutput.dt;
             RequestSurveyorInputModel rsModel = new RequestSurveyorInputModel();
 
             rsModel.CaseID = isStringNull("ticketNunber");

@@ -44,6 +44,8 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\DEVES.IntegrationAPI.WebApi.xml</DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="HtmlAgilityPack, Version=1.4.9.5, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
@@ -436,6 +438,8 @@
     <Compile Include="Controllers\claim-service\UpdateClaimNoController.cs" />
     <Compile Include="Controllers\claim-service\UpdateCompliantStatusController.cs" />
     <Compile Include="Controllers\isurvey-service\UpdateSurveyStatusController.cs" />
+    <Compile Include="Controllers\StrategySQLController.cs" />
+    <Compile Include="Logic\Commands\Internal\buzQuerySQL.cs" />
     <Compile Include="Logic\DataAccessService\DataAdapter\DataReaderBase.cs" />
     <Compile Include="Logic\DataAccessService\DataAdapter\DbRequest.cs" />
     <Compile Include="Logic\DataAccessService\DataAdapter\DbResult.cs" />
@@ -491,6 +495,10 @@
     <Compile Include="Logic\CommonConstant.cs" />
     <Compile Include="Logic\Converter\MasterDataConvertor.cs" />
     <Compile Include="Logic\Converter\OptionSetConvertor.cs" />
+    <Compile Include="Logic\DataAccessService\QuerySQLAdapter\QuerySQLInternal.cs" />
+    <Compile Include="Logic\DataAccessService\QuerySQLAdapter\QuerySQLOnline.cs" />
+    <Compile Include="Logic\DataAccessService\QuerySQLAdapter\QuerySQLStretagy.cs" />
+    <Compile Include="Logic\DataAccessService\QuerySQLAdapter\SQLQueryManager.cs" />
     <Compile Include="Logic\DataBaseContracts\BaseDataBaseContracts.cs" />
     <Compile Include="Logic\DataBaseContracts\SpApiChkCustomerClient.cs" />
     <Compile Include="Logic\DataBaseContracts\SpApiCustomerClient.cs" />
@@ -499,16 +507,20 @@
     <Compile Include="Logic\Services\BaseEwiServiceProxy.cs" />
     <Compile Include="Logic\Services\BaseProxyService.cs" />
     <Compile Include="Logic\Services\CleansingService.cs" />
-    <Compile Include="Logic\Services\CLIENTCreateCorporateClientAndAdditionalInfo.cs" />
-    <Compile Include="Logic\Services\CLSCreateCorporateClient.cs" />
-    <Compile Include="Logic\Services\CLSInquiryCLSCorporateClient.cs" />
-    <Compile Include="Logic\Services\CLSInquiryCLSPersonalClient.cs" />
-    <Compile Include="Logic\Services\COMPInquiryClientMaster.cs" />
+    <Compile Include="Logic\Services\CLIENTCreateCorporateClientAndAdditionalInfoService.cs" />
+    <Compile Include="Logic\Services\CLIENTCreatePersonalClientAndAdditionalInfoService.cs" />
+    <Compile Include="Logic\Services\CLIENTUpdateCorporateClientAndAdditionalInfoService.cs" />
+    <Compile Include="Logic\Services\CLSCreateCorporateClientService.cs" />
+    <Compile Include="Logic\Services\CLSCreatePersonalService.cs" />
+    <Compile Include="Logic\Services\CLSInquiryCLSCorporateClientService.cs" />
+    <Compile Include="Logic\Services\CLSInquiryCLSPersonalClientService.cs" />
+    <Compile Include="Logic\Services\COMPInquiryClientMasterService.cs" />
     <Compile Include="Logic\Services\LOCUSClaimRegistrationService.cs" />
     <Compile Include="Logic\Services\MOTORInquiryAPARPayeeList.cs" />
     <Compile Include="Logic\Services\MOTORInquiryMasterASRH.cs" />
     <Compile Include="Logic\Services\MOTORRequestSurveyor.cs" />
     <Compile Include="Logic\Services\PolisyClientService.cs" />
+    <Compile Include="Logic\Services\RegisComplaintService.cs" />
     <Compile Include="Logic\Services\SAPCreateVendor.cs" />
     <Compile Include="Logic\Services\SAPInquiryVendor.cs" />
     <Compile Include="Logic\Services\SendSmsService.cs" />
@@ -602,6 +614,7 @@
     <Compile Include="Templates\Exceptions\BuzErrorException.cs" />
     <Compile Include="Templates\Exceptions\AppErrorException.cs" />
     <Compile Include="Templates\FieldValidationException.cs" />
+    <Compile Include="Templates\IBaseApiController.cs" />
     <Compile Include="Templates\ICommand.cs" />
     <Compile Include="Templates\JSONExtension.cs" />
     <Compile Include="Templates\MessageBuilder.cs" />
@@ -670,6 +683,9 @@
     <None Include="Properties\PublishProfiles\FolderProfile2.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile20.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile21.pubxml" />
+    <None Include="Properties\PublishProfiles\FolderProfile22.pubxml" />
+    <None Include="Properties\PublishProfiles\FolderProfile23.pubxml" />
+    <None Include="Properties\PublishProfiles\FolderProfile24.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile3.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile4.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile5.pubxml" />
@@ -677,7 +693,6 @@
     <None Include="Properties\PublishProfiles\FolderProfile7.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile8.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile9.pubxml" />
-    <None Include="Properties\PublishProfiles\XrmAPI.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
+using System.Threading;
 using System.Web.Http;
 using Microsoft.Owin.Security.OAuth;
 using Newtonsoft.Json.Serialization;
@@ -21,8 +23,13 @@ namespace DEVES.IntegrationAPI.WebApi
             GlobalConfiguration.Configuration.MessageHandlers.Add(new ApiLogHandler());
             GlobalConfiguration.Configuration.Services.Add(typeof(IExceptionLogger), new TraceExceptionLogger());
             //GlobalConfiguration.Configuration.Services.Replace(typeof(IExceptionHandler), new GlobalExceptionHandler(config.Services.GetExceptionHandler()));
-           // config.Services.Replace(typeof(IExceptionHandler),
+            // config.Services.Replace(typeof(IExceptionHandler),
             //    new OopsExceptionHandler(config.Services.GetExceptionHandler()));
+
+            CultureInfo ci = new CultureInfo("en-US");
+            Thread.CurrentThread.CurrentCulture = ci;
+            Thread.CurrentThread.CurrentUICulture = ci;
+
             AppBootstrap.Instance.Start();
 
       

@@ -167,99 +167,119 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Services
             // request.Headers.Add("ContentType", "application/json; charset=UTF-8");
             request.Content = new StringContent(jsonReqModel, System.Text.Encoding.UTF8, "application/json");
 
-
-            try
-            {
-
-
-                HttpResponseMessage response = client.SendAsync(request).Result;
-                resTime = DateTime.Now;
-
-
-
-                response.EnsureSuccessStatusCode();
-                timer.Stop();
-
-                TimeSpan timeTaken = timer.Elapsed;
-
-                Task<string> ewiRes = response.Content.ReadAsStringAsync();
-                //T2 output = (T2)typeof(T1).GetProperty("content").GetValue(ewiRes);
-                resBody = ewiRes.Result;
-                resTime = DateTime.Now;
-                // Console.WriteLine(resBody);
-
-
-                AddDebugInfo("SendRequest Success:" , response);
-                LogRequest(request, response, timeTaken);
-
-                result.Content = ewiRes.Result;
-                result.StatusCode = response.StatusCode;
-
-                if (result.StatusCode != HttpStatusCode.OK)
+            var resendCount = 1;
+            var LimitResend = 3;
+           // while (resendCount <= LimitResend)
+            //{
+                ++resendCount;
+                try
                 {
 
-                    throw new BuzErrorException(
-                        "500",
-                        $"{systemName} Error: Error on execute '{serviceName}',The request failed or the service did not respond",
-                        $"Error on execute '{serviceName}',The request failed or the service did not respond",
-                        systemName,
-                        GlobalTransactionID);
-                }
 
-                var responseContent = JObject.Parse(ewiRes.Result);
-                if (responseContent["responseCode"] != null)
-                {
-                    if (responseContent["responseCode"].ToString() != "EWI-0000I")
+                    HttpResponseMessage response = client.SendAsync(request).Result;
+                    resTime = DateTime.Now;
+
+
+
+                    response.EnsureSuccessStatusCode();
+                    timer.Stop();
+
+                    TimeSpan timeTaken = timer.Elapsed;
+
+                    Task<string> ewiRes = response.Content.ReadAsStringAsync();
+                    //T2 output = (T2)typeof(T1).GetProperty("content").GetValue(ewiRes);
+                    resBody = ewiRes.Result;
+                    resTime = DateTime.Now;
+                    // Console.WriteLine(resBody);
+
+
+                    AddDebugInfo("SendRequest Success:", response);
+                    LogRequest(request, response, timeTaken);
+
+                    result.Content = ewiRes.Result;
+                    result.StatusCode = response.StatusCode;
+
+                    if (result.StatusCode != HttpStatusCode.OK)
                     {
-                        if(responseContent["responseCode"].ToString() == "EWI-1000E")
-                        {
-
-                        }
-                        else
-                        {
+                        //if (resendCount > LimitResend)
+                        //{
                             throw new BuzErrorException(
-                            responseContent["responseCode"].ToString(),
-                            $"{systemName} Error:{responseContent["responseMessage"]}",
-                            $"Error on execute '{serviceName}'",
-                            systemName,
-                            GlobalTransactionID);
-                        }
+                                "500",
+                                $"{systemName} Error: Error on execute '{serviceName}',The request failed or the service did not respond",
+                                $"Error on execute '{serviceName}',The request failed or the service did not respond",
+                                systemName,
+                                GlobalTransactionID);
+                        //}
+                        
+                        
                     }
 
+                    var responseContent = JObject.Parse(ewiRes.Result);
+                    if (responseContent["responseCode"] != null)
+                    {
+                        if (responseContent["responseCode"].ToString() != "EWI-0000I")
+                        {
+                            if (responseContent["responseCode"].ToString() == "EWI-1000E")
+                            {
+
+                            }
+                            else
+                            { 
+                                //if (resendCount > LimitResend)
+                                //{
+                                    throw new BuzErrorException(
+                                        responseContent["responseCode"].ToString(),
+                                        $"{systemName} Error:{responseContent["responseMessage"]}",
+                                        $"Error on execute '{serviceName}'",
+                                        systemName,
+                                        GlobalTransactionID);
+                                //}
+                                    
+                            }
+                        }
 
 
+
+
+                    }
+                    else
+                    {
+                        throw new BuzErrorException(
+                            "500",
+                            $"{systemName} Error: Error on execute '{serviceName}',The request failed or the service did not respond",
+                            $"Error on execute '{serviceName}',The request failed or the service did not respond",
+                            systemName,
+                            GlobalTransactionID);
+                    }
+
+                    return result;
                 }
-                else
+                catch (BuzErrorException e)
                 {
+                    AddDebugInfo("SendRequest BuzErrorException:" + e.Message, e.StackTrace);
+                    throw;
+                }
+                catch (Exception e)
+                {
+                    AddDebugInfo("SendRequest Exception:" + e.Message, e.StackTrace);
+                    LogRequest(request);
+
                     throw new BuzErrorException(
                         "500",
-                        $"{systemName} Error: Error on execute '{serviceName}',The request failed or the service did not respond",
-                        $"Error on execute '{serviceName}',The request failed or the service did not respond",
+                        $"{systemName} Error: Error on  execute {serviceName}, the request failed or the service did not respond",
+                        $"Error on execute '{serviceName}', {e.Message}",
                         systemName,
                         GlobalTransactionID);
+
                 }
+            //}
 
-                return result;
-            }
-            catch (BuzErrorException e)
-            {
-                AddDebugInfo("SendRequest BuzErrorException:" + e.Message, e.StackTrace);
-                throw;
-            }
-            catch (Exception e)
-            {
-                AddDebugInfo("SendRequest Exception:" + e.Message, e.StackTrace);
-                LogRequest(request);
-
-                throw new BuzErrorException(
-                    "500",
-                    $"{systemName} Error: Error on  execute {serviceName}, the request failed or the service did not respond",
-                    $"Error on execute '{serviceName}', {e.Message}",
-                    systemName,
-                    GlobalTransactionID);
-
-            }
-            
+            throw new BuzErrorException(
+                "500",
+                $"{systemName} Error: Error on execute '{serviceName}',The request failed or the service did not respond",
+                $"Error on execute '{serviceName}',The request failed or the service did not respond",
+                systemName,
+                GlobalTransactionID);
         }
       
         protected void LogRequest(HttpRequestMessage req, HttpResponseMessage res, TimeSpan t)

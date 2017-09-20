@@ -221,17 +221,17 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
             var listSearchResult = new List<InquiryCrmPayeeListDataModel>();
             listSearchResult.Add(new InquiryCrmPayeeListDataModel
             {
-                cleansingId = "C2017-100000341",
+                cleansingId = "C2017-100002158",
                 polisyClientId = ""
             });
             listSearchResult.Add(new InquiryCrmPayeeListDataModel
             {
-                cleansingId = "C2017-100000341",
+                cleansingId = "C2017-100002158",
                 polisyClientId = "0"
             });
             listSearchResult.Add(new InquiryCrmPayeeListDataModel
             {
-                cleansingId = "C2017-100000341"
+                cleansingId = "C2017-100002158"
             });
             listSearchResult.Add(new InquiryCrmPayeeListDataModel
             {
@@ -243,10 +243,10 @@ namespace DEVES.IntegrationAPI.WebApi.Logic.Tests
 
             Console.WriteLine(result.ToJson());
             Assert.IsNotNull(result);
-            Assert.AreEqual("16962218", result[0].polisyClientId);
-            Assert.AreEqual("16962218", result[1].polisyClientId);
-            Assert.AreEqual("16962218", result[2].polisyClientId);
-            Assert.AreEqual("", result[3].polisyClientId);
+            Assert.AreEqual("16972697", result[0].polisyClientId,"case 1");
+            Assert.AreEqual("16972697", result[1].polisyClientId, "case 2");
+            Assert.AreEqual("16972697", result[2].polisyClientId, "case 3");
+            Assert.AreEqual("", result[3].polisyClientId, "case 4");
 
         }
 
