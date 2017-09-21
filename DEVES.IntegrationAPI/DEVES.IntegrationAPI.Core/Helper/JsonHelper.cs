@@ -26,15 +26,24 @@ namespace DEVES.IntegrationAPI.Core.Helper
             returnError.Clear();
         }
 
+        public static List<Newtonsoft.Json.Schema.JsonValidator> jsonValidators  = new List<JsonValidator>();
+        public static JSchemaReaderSettings settings = new JSchemaReaderSettings
+        {
+            Validators = new List<Newtonsoft.Json.Schema.JsonValidator> { new CultureFormatValidator() }
+        };
+
+        public static void AddJsonValidator(Newtonsoft.Json.Schema.JsonValidator jsonValidator)
+        {
+            settings.Validators.Add(jsonValidator);
+            
+        }
+
         public static bool TryValidateJson(string jsontext, string filePath, out string output)
         {
             setReturnError();
             var validatedText = "TryValidateJson: {0}";
             output = string.Empty;
-            JSchemaReaderSettings settings = new JSchemaReaderSettings
-            {
-                   Validators = new List<Newtonsoft.Json.Schema.JsonValidator> { new CultureFormatValidator() }
-            };
+           
             try
             {
                 // throw new Exception("Newtonsoft.Json.Schema.JSchemaException: The free-quota limit of 1000 schema validations per hour has been reached.");

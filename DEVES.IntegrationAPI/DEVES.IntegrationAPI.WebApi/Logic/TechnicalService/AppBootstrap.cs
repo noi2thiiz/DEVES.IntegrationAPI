@@ -4,12 +4,14 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
+using DEVES.IntegrationAPI.Core.Helper;
 using DEVES.IntegrationAPI.WebApi.DataAccessService.MasterData;
 using DEVES.IntegrationAPI.WebApi.Logic;
 using DEVES.IntegrationAPI.WebApi.TechnicalService;
 using DEVES.IntegrationAPI.WebApi.TechnicalService.TransactionLogger;
 using DEVES.IntegrationAPI.WebApi.Templates;
 using DEVES.IntegrationAPI.WebApi.DataAccessService.QuerySQLAdapter;
+using DEVES.IntegrationAPI.WebApi.Logic.Validator;
 
 namespace DEVES.IntegrationAPI.WebApi
 {
@@ -58,6 +60,11 @@ namespace DEVES.IntegrationAPI.WebApi
 
             // [[North]] set sql
             QuerySqlService.Instance.Start();
+
+
+            // add custom data validator
+            JsonHelper.AddJsonValidator(new CountryOriginValidator());
+
 
 
 

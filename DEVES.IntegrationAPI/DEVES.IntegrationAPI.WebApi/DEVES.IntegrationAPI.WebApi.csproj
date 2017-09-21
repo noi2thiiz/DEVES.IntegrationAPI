@@ -440,6 +440,7 @@
     <Compile Include="Controllers\claim-service\UpdateCompliantStatusController.cs" />
     <Compile Include="Controllers\isurvey-service\UpdateSurveyStatusController.cs" />
     <Compile Include="Controllers\StrategySQLController.cs" />
+    <Compile Include="Controllers\test\TestJsonSchemaValidator.cs" />
     <Compile Include="Logic\Commands\Internal\buzQuerySQL.cs" />
     <Compile Include="Logic\DataAccessService\DataAdapter\DataReaderBase.cs" />
     <Compile Include="Logic\DataAccessService\DataAdapter\DbRequest.cs" />
@@ -582,6 +583,7 @@
     <Compile Include="Logic\Tranforms\RegPayee\TransformSAPInquiryVendorInputModel_to_RegPayeeCorporateInputModel.cs" />
     <Compile Include="Logic\Tranforms\RegPayee\TransformSAPInquiryVendorInputModel_to_RegPayeePersonalInputModel.cs" />
     <Compile Include="Logic\Tranforms\InquiryPayee\TransformSAPInquiryVendorOutputModel_to_InquiryCRMPayeeListDataOutputModel.cs" />
+    <Compile Include="Logic\Validator\CountryOriginValidator.cs" />
     <Compile Include="Logic\Validator\MasterDataValidator.cs" />
     <Compile Include="QueryInfo.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />

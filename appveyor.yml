@@ -21,6 +21,17 @@ build:
   publish_nuget_symbols: true
   include_nuget_references: true
   verbosity: quiet
+artifacts:
+- path: '\artifacts'
+  name: Artifact
+deploy:
+- provider: GitHub
+  auth_token:
+    secure: Afs1+gtlghMxVM2/Ol8Ku785TF4p4S8cx34kUtQuqKWAgnYkwKv5xCMh2D0u6d57
+  draft: true
+  force_update: true
+  on:
+    branch: master
 notifications:
 - provider: GitHubPullRequest
   on_build_success: true

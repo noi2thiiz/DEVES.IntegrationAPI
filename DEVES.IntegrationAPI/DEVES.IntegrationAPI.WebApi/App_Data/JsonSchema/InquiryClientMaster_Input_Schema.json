@@ -72,6 +72,11 @@
         "emcsCode": {
           "type": "string",
           "maxLength": 10
+        },
+        "testCountryOrigin": {
+          "type": "string",
+          "maxLength": 10,
+          "format": "countryOrigin"
         }
       }
     }
