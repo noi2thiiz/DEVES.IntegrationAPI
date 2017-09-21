@@ -196,7 +196,8 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             catch (Exception e)
             {
                 //C:\Users\patiw\Source\Repos\Production1\DEVES.IntegrationAPI\DEVES.IntegrationAPI.WebApiTests1\bin\Release
-                string startupPath = Environment.CurrentDirectory?.Replace(@"Tests1\bin\Release", "");
+                string startupPath = Environment.CurrentDirectory?.Replace(@"Tests\bin\Release", "");
+                startupPath = startupPath?.Replace(@"Tests\bin\Debug", "");
 
                 filePath = startupPath + "/App_Data/JsonSchema/" + GetAppConfigurationSetting(key).Replace("~/App_Data/JsonSchema/","");
             }

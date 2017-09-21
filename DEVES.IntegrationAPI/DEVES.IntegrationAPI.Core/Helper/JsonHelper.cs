@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web;
 using DEVES.IntegrationAPI.Core.JsonSchemaValidator;
 using DEVES.IntegrationAPI.Model;
@@ -53,6 +54,14 @@ namespace DEVES.IntegrationAPI.Core.Helper
                 var jsonObj = JObject.Parse(jsontext);
                 IList<ValidationError> errorMessages;
                 var valid = jsonObj.IsValid(schema, out errorMessages);
+
+                IList<string> errorMessagesString;
+                var valid2 = jsonObj.IsValid(schema, out errorMessagesString);
+                foreach (var msg in errorMessagesString)
+                {
+                    Console.WriteLine(msg);
+                }
+
                 _log.InfoFormat(validatedText, valid);
                 output = valid.ToString() + Environment.NewLine;
                 if (!valid)

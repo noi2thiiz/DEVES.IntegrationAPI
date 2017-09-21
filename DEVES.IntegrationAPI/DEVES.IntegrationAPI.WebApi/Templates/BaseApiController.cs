@@ -93,6 +93,7 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
             //TInput contentModel;
             try
             {
+                Console.WriteLine("try  Deserialize Object");
                 //try  Deserialize Object
                 JsonConvert.DeserializeObject<TInput>(contentText);
             }
@@ -111,18 +112,13 @@ namespace DEVES.IntegrationAPI.WebApi.Templates
           
 
             string outvalidate;
-            var filePath = "";
-            try
+            var filePath = AppEnvironment.Instance.GetJsonSchemaPhysicalPath(schemaFileName);
+            if (string.IsNullOrEmpty(filePath))
             {
-                 filePath = HttpContext.Current.Server.MapPath("~/App_Data/JsonSchema/" + schemaFileName);
+                throw new Exception("Json Schema file not found");
+
             }
-            catch (Exception)
-            {
-                //C:\Users\patiw\Source\Repos\Production1\DEVES.IntegrationAPI\DEVES.IntegrationAPI.WebApiTests1\bin\Release
-                string startupPath = Environment.CurrentDirectory?.Replace(@"Tests1\bin\Release","");
-               
-                filePath = startupPath+"/App_Data/JsonSchema/" +schemaFileName;
-            }
+            
             Console.WriteLine("JSON Schema Path : "+filePath);
 
                TraceDebugLogger.Instance.AddLog("schema filePath", filePath);
