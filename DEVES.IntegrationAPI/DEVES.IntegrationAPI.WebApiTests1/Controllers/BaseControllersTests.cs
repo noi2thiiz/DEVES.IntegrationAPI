@@ -57,7 +57,7 @@ namespace DEVES.IntegrationAPI.WebApi.Controllers.Tests
                 {
                     filedErrorFound = true;
                     var message = field["message"]?.ToString() ?? "";
-                    if (!(message == "Required field must not be null" || message.Contains("is not defined in enum")  || message== "Required properties are missing from object"))
+                    if (!(message == "Required field must not be null" || message.Contains("is not defined in enum")  || message== "Required properties are missing from object" || message== "Required field must not be null or empty"))
                     {
                         Assert.Fail($"Assert Required field {profileinfoPersonalname} Expect<Required field must not be null> but <{field["message"]?.ToString()}>");
                     }

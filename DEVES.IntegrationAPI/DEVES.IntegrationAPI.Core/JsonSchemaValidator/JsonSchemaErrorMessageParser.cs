@@ -30,16 +30,34 @@ namespace DEVES.IntegrationAPI.Core.JsonSchemaValidator
                     if (!match.Success) continue;
                     fieldName = match.Groups["field"].Value;
                     fieldMessage = match.Groups["message"].Value;
-
-                    foreach (var field in fieldName.Split(','))
+                    TransformMessage(fieldMessage, errorType,out fieldMessage, out errorType);
+                       foreach (var field in fieldName.Split(','))
                         outputFail.AddFieldError(field?.Trim(), fieldMessage, errorType);
                 }
                 else
                 {
+                    TransformMessage(fieldMessage, errorType, out fieldMessage, out errorType);
                     outputFail.AddFieldError(fieldName, fieldMessage, errorType);
                 }
             }
             return outputFail;
         }
+
+        private void TransformMessage(string fieldMessage, string errorType, out string newFieldMessage, out string newErrorType)
+        {
+            if (fieldMessage == "String '' is less than minimum length of 1.")
+            {
+                newFieldMessage = "Required field must not be null or empty";
+                newErrorType = "Required";
+
+
+            }
+            else
+            {
+                newFieldMessage = fieldMessage;
+                newErrorType = errorType;
+            }
+        }
     }
+    
 }
