@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.12
+VisualStudioVersion = 15.0.26730.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DEVES.IntegrationAPI.WebApi", "DEVES.IntegrationAPI.WebApi\DEVES.IntegrationAPI.WebApi.csproj", "{9E53BD0D-3233-4320-8445-C575920EB7E6}"
 EndProject
@@ -9,11 +9,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DEVES.IntegrationAPI.Model"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DEVES.IntegrationAPI.Core", "DEVES.IntegrationAPI.Core\DEVES.IntegrationAPI.Core.csproj", "{FA3FFF57-1EF3-4143-BA73-0233A653B435}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DEVES.IntegrationAPI.WebApiTests1", "DEVES.IntegrationAPI.WebApiTests1\DEVES.IntegrationAPI.WebApiTests1.csproj", "{9FF3536E-F4E1-4465-B7F7-3FBE1078C230}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DEVES.IntegrationAPI.CoreTests1", "DEVES.IntegrationAPI.CoreTests1\DEVES.IntegrationAPI.CoreTests1.csproj", "{EF302640-C4EC-4512-932A-52456B02C8E8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Proxy", "Proxy\Proxy.csproj", "{FAA9A191-FF3E-402B-8991-B278B49E9264}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DEVES.IntegrationAPI.WebApiTests", "DEVES.IntegrationAPI.WebApiTests\DEVES.IntegrationAPI.WebApiTests.csproj", "{CD09AFEB-7B81-49B1-8DA0-8CE157F8BACB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,10 +33,6 @@ Global
 		{FA3FFF57-1EF3-4143-BA73-0233A653B435}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA3FFF57-1EF3-4143-BA73-0233A653B435}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA3FFF57-1EF3-4143-BA73-0233A653B435}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9FF3536E-F4E1-4465-B7F7-3FBE1078C230}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9FF3536E-F4E1-4465-B7F7-3FBE1078C230}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9FF3536E-F4E1-4465-B7F7-3FBE1078C230}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9FF3536E-F4E1-4465-B7F7-3FBE1078C230}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EF302640-C4EC-4512-932A-52456B02C8E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EF302640-C4EC-4512-932A-52456B02C8E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EF302640-C4EC-4512-932A-52456B02C8E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -45,8 +41,15 @@ Global
 		{FAA9A191-FF3E-402B-8991-B278B49E9264}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FAA9A191-FF3E-402B-8991-B278B49E9264}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FAA9A191-FF3E-402B-8991-B278B49E9264}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD09AFEB-7B81-49B1-8DA0-8CE157F8BACB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD09AFEB-7B81-49B1-8DA0-8CE157F8BACB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD09AFEB-7B81-49B1-8DA0-8CE157F8BACB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD09AFEB-7B81-49B1-8DA0-8CE157F8BACB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5BA52CD1-B7DE-45C9-802E-4CC7503ED1A7}
 	EndGlobalSection
 EndGlobal

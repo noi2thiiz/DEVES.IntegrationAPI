@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("DEVES.IntegrationAPI.WebApiTests")]
+[assembly: AssemblyTitle("DEVES.IntegrationAPI.WebApiTests1")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("DEVES.IntegrationAPI.WebApiTests")]
+[assembly: AssemblyProduct("DEVES.IntegrationAPI.WebApiTests1")]
 [assembly: AssemblyCopyright("Copyright ©  2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("4fa3ba16-1b37-42f1-a316-219ef9f0d774")]
+[assembly: Guid("9ff3536e-f4e1-4465-b7f7-3fbe1078c230")]
 
 // Version information for an assembly consists of the following four values:
 //
