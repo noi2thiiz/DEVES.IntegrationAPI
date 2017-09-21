@@ -315,5 +315,20 @@
     "profileInfo",
     "addressInfo",
     "sapVendorInfo"
-  ]
+  ],
+  "anyOf": [
+    {
+      "properties": {
+        "fundRaiseId": {
+          "$ref": "#/definitions/nonEmptyString"
+        }
+      }
+    }
+  ],
+  "definitions": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
 }

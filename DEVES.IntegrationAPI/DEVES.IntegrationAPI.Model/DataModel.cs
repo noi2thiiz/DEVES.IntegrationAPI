@@ -28,9 +28,14 @@ namespace DEVES.IntegrationAPI.Model
         public string stackTrace { get; set; }
 
 
-        public void AddFieldError(string fieldName, string fieldMessage)
+        public void AddFieldError(string fieldName, string fieldMessage, string errorType="", string schema="")
         {
-            data.AddFieldError(fieldName, fieldMessage);
+            data.AddFieldError(fieldName, fieldMessage, errorType, schema);
+        }
+
+        public void AddOutputModelFailData(OutputModelFailData modelData)
+        {
+            data = modelData;
         }
     }
 
@@ -39,10 +44,10 @@ namespace DEVES.IntegrationAPI.Model
     {
         public List<OutputModelFailDataFieldErrors> fieldErrors { get; set; } = new List<OutputModelFailDataFieldErrors>();
 
-        public void AddFieldError(string fieldName, string fieldMessage)
+        public void AddFieldError(string fieldName, string fieldMessage, string errorType="", string schema="")
         {
-
-            fieldErrors.Add(new OutputModelFailDataFieldErrors(fieldName, fieldMessage));
+            
+            fieldErrors.Add(new OutputModelFailDataFieldErrors(fieldName, fieldMessage, errorType, schema));
         }
     }
 
@@ -51,12 +56,16 @@ namespace DEVES.IntegrationAPI.Model
     
         public string name { get; set; }
         public string message { get; set; }
+        public string errorType { get; set; }
+        public string schema { get; set; }
 
-        public OutputModelFailDataFieldErrors(string n, string m)
+        public OutputModelFailDataFieldErrors(string n, string m, string e="", string s="")
         {
            
             name = n;
             message = m;
+            errorType = e;
+            schema = s;
         }
     }
 

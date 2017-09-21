@@ -4,16 +4,19 @@ using Newtonsoft.Json.Schema;
 using System;
 using System.Collections.Generic;
 using System.Web;
+using DEVES.IntegrationAPI.Core.JsonSchemaValidator;
+using DEVES.IntegrationAPI.Model;
+using DEVES.IntegrationAPI.WebApi.Logic.Validator;
 
 namespace DEVES.IntegrationAPI.Core.Helper
 {
     public static class JsonHelper
     {
-        private static List<string> returnError = new List<string>();
+        private static List<ValidationError> returnError = new List<ValidationError>();
         private static readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(JsonHelper));
 
 
-        public static List<string> getReturnError()
+        public static List<ValidationError> getReturnError()
         {
             return returnError;
         }
@@ -28,14 +31,18 @@ namespace DEVES.IntegrationAPI.Core.Helper
             setReturnError();
             var validatedText = "TryValidateJson: {0}";
             output = string.Empty;
+            JSchemaReaderSettings settings = new JSchemaReaderSettings
+            {
+                   Validators = new List<Newtonsoft.Json.Schema.JsonValidator> { new CultureFormatValidator() }
+            };
             try
             {
                 // throw new Exception("Newtonsoft.Json.Schema.JSchemaException: The free-quota limit of 1000 schema validations per hour has been reached.");
                 _log.InfoFormat(validatedText, string.Empty);
                 var schemaText = FileHelper.ReadTextFile(filePath);
-                var schema = JSchema.Parse(schemaText);
+                var schema = JSchema.Parse(schemaText, settings);
                 var jsonObj = JObject.Parse(jsontext);
-                IList<string> errorMessages;
+                IList<ValidationError> errorMessages;
                 var valid = jsonObj.IsValid(schema, out errorMessages);
                 _log.InfoFormat(validatedText, valid);
                 output = valid.ToString() + Environment.NewLine;
@@ -54,8 +61,8 @@ namespace DEVES.IntegrationAPI.Core.Helper
             }
             catch (Exception ex)
             {
-                returnError.Add("Message: " + ex.ToString());
-                returnError.Add("StackTrace: " + ex.StackTrace);
+                //returnError.Add("Message: " + ex.ToString());
+                //returnError.Add("StackTrace: " + ex.StackTrace);
                 _log.ErrorFormat(validatedText, ex.Message);
                 _log.ErrorFormat(validatedText, ex.StackTrace);
                 return false;
@@ -82,6 +89,12 @@ namespace DEVES.IntegrationAPI.Core.Helper
                 return false;
             }
             return true;
+        }
+
+        public static OutputModelFailData GetErrorMessageOutputModel()
+        {
+            var parser = new JsonSchemaErrorMessageParser();
+            return parser.Parse(returnError);
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿{
 	"$schema": "http://json-schema.org/draft-04/schema#",
 	"type": "object",
-	"properties": {
+  "properties": {
     "clientType": {
       "type": "string",
       "enum": [
@@ -49,10 +49,10 @@
       "maxLength": 50
     },
     "emcsCode": {
-			"type": "string",
-			"maxLength": 10
-		}
-	},
+      "type": "string",
+      "maxLength": 10
+    }
+  },
 	"required": [
     "clientType",
     "roleCode",

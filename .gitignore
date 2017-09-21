@@ -253,3 +253,7 @@ paket-files/
 /DEVES.IntegrationAPI/DevesAPIConsoleAppForTest
 /PublicOutput
 /DevesWebApp/20-6-2560
+/DEVES.IntegrationAPI/DEVES.IntegrationAPI.WebApi/Web.config_For_Production.config
+/DEVES.IntegrationAPI/DEVES.IntegrationAPI.WebApi/Web_config_For_QA.config
+/DEVES.CustomApp/Web.config
+/DEVES.Application/DevesWebApp/Web.config

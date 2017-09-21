@@ -75,6 +75,8 @@
     <Compile Include="Helper\ObjectCopier.cs" />
     <Compile Include="Helper\ObjectHelper.cs" />
     <Compile Include="Helper\StringHelper.cs" />
+    <Compile Include="JsonSchemaValidator\Validator\CultureFormatValidator.cs" />
+    <Compile Include="JsonSchemaValidator\JsonSchemaErrorMessageParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\RandomValueGenerator.cs" />
   </ItemGroup>
