@@ -169,7 +169,6 @@
     <Compile Include="Logic\Validator\EconActivityValidatorTests.cs" />
     <Compile Include="Logic\Validator\MasterDataValidaterTests.cs" />
     <Compile Include="Logic\Validator\ProvinceCodeValidatorTests.cs" />
-    
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SetupAssemblyInitializer.cs" />
     <Compile Include="TechnicalService\Connection\ConnectionThreadSafeTests.cs" />
@@ -183,21 +182,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="obj\Debug\build.force" />
-    <None Include="obj\Debug\CoreCompileInputs.cache" />
-    <None Include="obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
-    <None Include="obj\Debug\DEVES.IntegrationAPI.WebApiTests.csproj.CoreCompileInputs.cache" />
-    <None Include="obj\Debug\DEVES.IntegrationAPI.WebApiTests1.csproj.CoreCompileInputs.cache" />
-    <None Include="obj\Debug\DEVES.IntegrationAPI.WebApiTests1.csprojResolveAssemblyReference.cache" />
-    <None Include="obj\Release\build.force" />
-    <None Include="obj\Release\CoreCompileInputs.cache" />
-    <None Include="obj\Release\DesignTimeResolveAssemblyReferencesInput.cache" />
-    <None Include="obj\Release\DEVES.IntegrationAPI.WebApiTests.csproj.CopyComplete" />
-    <None Include="obj\Release\DEVES.IntegrationAPI.WebApiTests.csproj.CoreCompileInputs.cache" />
-    <None Include="obj\Release\DEVES.IntegrationAPI.WebApiTests.csprojResolveAssemblyReference.cache" />
-    <None Include="obj\Release\DEVES.IntegrationAPI.WebApiTests1.csproj.CopyComplete" />
-    <None Include="obj\Release\DEVES.IntegrationAPI.WebApiTests1.csproj.CoreCompileInputs.cache" />
-    <None Include="obj\Release\DEVES.IntegrationAPI.WebApiTests1.csprojResolveAssemblyReference.cache" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -214,21 +198,7 @@
       <Name>DEVES.IntegrationAPI.WebApi</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="obj\Debug\DEVES.IntegrationAPI.WebApiTests1.csproj.FileListAbsolute.txt" />
-    <Content Include="obj\Debug\DEVES.IntegrationAPI.WebApiTests1.dll" />
-    <Content Include="obj\Debug\DEVES.IntegrationAPI.WebApiTests1.pdb" />
-    <Content Include="obj\Release\DEVES.IntegrationAPI.WebApiTests.csproj.FileListAbsolute.txt" />
-    <Content Include="obj\Release\DEVES.IntegrationAPI.WebApiTests.dll" />
-    <Content Include="obj\Release\DEVES.IntegrationAPI.WebApiTests.pdb" />
-    <Content Include="obj\Release\DEVES.IntegrationAPI.WebApiTests1.csproj.FileListAbsolute.txt" />
-    <Content Include="obj\Release\DEVES.IntegrationAPI.WebApiTests1.dll" />
-    <Content Include="obj\Release\DEVES.IntegrationAPI.WebApiTests1.pdb" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="obj\Debug\TempPE\" />
-    <Folder Include="obj\Release\TempPE\" />
-  </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>
